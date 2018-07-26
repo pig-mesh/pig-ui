@@ -67,10 +67,10 @@ export default {
     };
     return {
       loginForm: {
-        username: "admin",
-        password: "123456",
-        code: "",
-        randomStr: ""
+        username: '',
+        password: '',
+        code: '',
+        randomStr: ''
       },
       code: {
         src: "/admin/code",
