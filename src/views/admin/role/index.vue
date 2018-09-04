@@ -347,7 +347,7 @@ export default {
       });
     },
     updatePermession(roleId, roleCode) {
-      permissionUpd(roleId, this.$refs.menuTree.getCheckedKeys()).then(() => {
+      permissionUpd(roleId, this.$refs.menuTree.getCheckedKeys().join(',')).then(() => {
         this.dialogPermissionVisible = false;
         fetchTree()
           .then(response => {
