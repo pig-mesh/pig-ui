@@ -21,97 +21,97 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
-import NProgress from "nprogress"; // progress bar
-import "nprogress/nprogress.css"; // progress bar style
+import { mapState, mapGetters } from 'vuex'
+import NProgress from 'nprogress' // progress bar
+import 'nprogress/nprogress.css' // progress bar style
 export default {
-  name: "AvueIframe",
+  name: 'AvueIframe',
   data() {
     return {
-      urlPath: this.getUrlPath() //iframe src 路径
-    };
+      urlPath: this.getUrlPath() // iframe src 路径
+    }
   },
   created() {
-    NProgress.configure({ showSpinner: false });
+    NProgress.configure({ showSpinner: false })
   },
   mounted() {
-    this.load();
+    this.load()
   },
-  props: ["routerPath"],
+  props: ['routerPath'],
   watch: {
     $route: function() {
-      this.load();
+      this.load()
     },
     routerPath: function(val) {
       // 监听routerPath变化，改变src路径
-      this.urlPath = this.getUrlPath();
+      this.urlPath = this.getUrlPath()
     }
   },
   components: {
-    ...mapGetters(["tagList"]),
+    ...mapGetters(['tagList']),
     tagListNum: function() {
-      return this.tagList.length != 0;
+      return this.tagList.length != 0
     }
   },
   methods: {
     // 显示等待框
     show() {
-      NProgress.start();
+      NProgress.start()
     },
     // 隐藏等待狂
     hide() {
-      NProgress.done();
+      NProgress.done()
     },
     // 加载浏览器窗口变化自适应
     resize() {
       window.onresize = () => {
-        this.iframeInit();
-      };
+        this.iframeInit()
+      }
     },
     // 加载组件
     load() {
-      this.resize();
-      this.show();
+      this.resize()
+      this.show()
       this.$route.query.src = this.$route.query.src
-        ? this.$route.query.src.replace("$", "#")
-        : "";
-      //超时3s自动隐藏等待狂，加强用户体验
-      let time = 3;
+        ? this.$route.query.src.replace('$', '#')
+        : ''
+      // 超时3s自动隐藏等待狂，加强用户体验
+      let time = 3
       const timeFunc = setInterval(() => {
-        time--;
+        time--
         if (time == 0) {
-          this.hide();
-          clearInterval(timeFunc);
+          this.hide()
+          clearInterval(timeFunc)
         }
-      }, 1000);
-      this.iframeInit();
+      }, 1000)
+      this.iframeInit()
     },
-    //iframe窗口初始化
+    // iframe窗口初始化
     iframeInit() {
-      const iframe = this.$refs.iframe;
+      const iframe = this.$refs.iframe
       if (!iframe) {
-        return;
+        return
       }
-      const clientHeight = document.documentElement.clientHeight - 120;
-      iframe.style.height = `${clientHeight}px`;
+      const clientHeight = document.documentElement.clientHeight - 120
+      iframe.style.height = `${clientHeight}px`
       if (iframe.attachEvent) {
-        iframe.attachEvent("onload", () => {
-          this.hide();
-        });
+        iframe.attachEvent('onload', () => {
+          this.hide()
+        })
       } else {
         iframe.onload = () => {
-          this.hide();
-        };
+          this.hide()
+        }
       }
     },
     getUrlPath: function() {
-      //获取 iframe src 路径
-      let url = window.location.href;
-      url = url.replace("/myiframe", "");
-      return url;
+      // 获取 iframe src 路径
+      let url = window.location.href
+      url = url.replace('/myiframe', '')
+      return url
     }
   }
-};
+}
 </script>
 
 <style lang="scss">

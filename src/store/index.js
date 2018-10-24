@@ -31,7 +31,7 @@ const store = new Vuex.Store({
     errLog,
     tags
   },
-  getters,
+  getters
 })
 
 export default store
