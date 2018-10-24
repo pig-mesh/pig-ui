@@ -18,10 +18,10 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="filter-container">
-      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="类型" v-model="listQuery.type">
+      <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="类型" size="mini" v-model="listQuery.type">
       </el-input>
-      <el-button class="filter-item" type="primary" v-waves icon="search" @click="handleFilter">搜索</el-button>
-      <el-button v-if="sys_dict_add" class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" icon="edit">添加
+      <el-button class="filter-item" type="primary" size="mini" v-waves icon="search" @click="handleFilter">搜索</el-button>
+      <el-button v-if="sys_dict_add" class="filter-item" style="margin-left: 10px;" @click="handleCreate" type="primary" size="mini" icon="edit">添加
       </el-button>
     </div>
     <el-table :key='tableKey' :data="list" v-loading="listLoading" element-loading-text="给我一点时间" border fit highlight-current-row style="width: 99%">
@@ -67,7 +67,7 @@
       </el-table-column>
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
-          <el-button v-if="sys_dict_upd" size="small" type="success" @click="handleUpdate(scope.row)">编辑
+          <el-button v-if="sys_dict_upd" size="mini" type="success" @click="handleUpdate(scope.row)">编辑
           </el-button>
           <el-button v-if="sys_dict_del" size="mini" type="danger" @click="handleDelete(scope.row)">删除
           </el-button>
@@ -112,12 +112,12 @@
 </template>
 
 <script>
-import { fetchList, addObj, putObj, delObj } from "@/api/dict";
-import waves from "@/directive/waves/index.js"; // 水波纹指令
-import { mapGetters } from "vuex";
+import { fetchList, addObj, putObj, delObj } from '@/api/dict'
+import waves from '@/directive/waves/index.js' // 水波纹指令
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "table_sys_dict",
+  name: 'table_sys_dict',
   directives: {
     waves
   },
@@ -134,172 +134,172 @@ export default {
         value: [
           {
             required: true,
-            message: "数据值",
-            trigger: "blur"
+            message: '数据值',
+            trigger: 'blur'
           }
         ],
         label: [
           {
             required: true,
-            message: "标签名",
-            trigger: "blur"
+            message: '标签名',
+            trigger: 'blur'
           }
         ],
         type: [
           {
             required: true,
-            message: "类型",
-            trigger: "blur"
+            message: '类型',
+            trigger: 'blur'
           }
         ],
         description: [
           {
             required: true,
-            message: "描述",
-            trigger: "blur"
+            message: '描述',
+            trigger: 'blur'
           }
         ],
         sort: [
           {
             required: true,
-            message: "排序",
-            trigger: "blur"
+            message: '排序',
+            trigger: 'blur'
           }
         ],
         remarks: [
           {
             required: true,
-            message: "备注信息",
-            trigger: "blur"
+            message: '备注信息',
+            trigger: 'blur'
           }
         ]
       },
       form: {},
       dialogFormVisible: false,
-      dialogStatus: "",
+      dialogStatus: '',
       sys_dict_add: false,
       sys_dict_upd: false,
       sys_dict_del: false,
       textMap: {
-        update: "编辑",
-        create: "创建"
+        update: '编辑',
+        create: '创建'
       },
       tableKey: 0
-    };
+    }
   },
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(['permissions'])
   },
   filters: {
     statusFilter(status) {
       const statusMap = {
-        0: "有效",
-        1: "无效"
-      };
-      return statusMap[status];
+        0: '有效',
+        1: '无效'
+      }
+      return statusMap[status]
     }
   },
   created() {
-    this.getList();
-    this.sys_dict_add = this.permissions["sys_dict_add"];
-    this.sys_dict_upd = this.permissions["sys_dict_upd"];
-    this.sys_dict_del = this.permissions["sys_dict_del"];
+    this.getList()
+    this.sys_dict_add = this.permissions['sys_dict_add']
+    this.sys_dict_upd = this.permissions['sys_dict_upd']
+    this.sys_dict_del = this.permissions['sys_dict_del']
   },
   methods: {
     getList() {
-      this.listLoading = true;
-      this.listQuery.orderByField = "create_time";
-      this.listQuery.isAsc = false;
+      this.listLoading = true
+      this.listQuery.orderByField = 'create_time'
+      this.listQuery.isAsc = false
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.records;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
+        this.list = response.data.records
+        this.total = response.data.total
+        this.listLoading = false
+      })
     },
     handleFilter() {
-      this.listQuery.page = 1;
-      this.getList();
+      this.listQuery.page = 1
+      this.getList()
     },
     handleSizeChange(val) {
-      this.listQuery.limit = val;
-      this.getList();
+      this.listQuery.limit = val
+      this.getList()
     },
     handleCurrentChange(val) {
-      this.listQuery.page = val;
-      this.getList();
+      this.listQuery.page = val
+      this.getList()
     },
     handleDelete(row) {
       delObj(row).then(response => {
-        this.dialogFormVisible = false;
-        this.getList();
+        this.dialogFormVisible = false
+        this.getList()
         this.$notify({
-          title: "成功",
-          message: "删除成功",
-          type: "success",
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
           duration: 2000
-        });
-      });
+        })
+      })
     },
     handleUpdate(row) {
-      this.dialogStatus = "update";
-      this.dialogFormVisible = true;
-      this.form.id = row.id;
-      this.form.type = row.type;
-      this.form.value = row.value;
-      this.form.label = row.label;
-      this.form.description = row.description;
-      this.form.sort = row.sort;
-      this.form.remarks = row.remarks;
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.form.id = row.id
+      this.form.type = row.type
+      this.form.value = row.value
+      this.form.label = row.label
+      this.form.description = row.description
+      this.form.sort = row.sort
+      this.form.remarks = row.remarks
     },
     handleCreate() {
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
     },
     create(formName) {
-      const set = this.$refs;
+      const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           addObj(this.form).then(() => {
-            this.dialogFormVisible = false;
-            this.getList();
+            this.dialogFormVisible = false
+            this.getList()
             this.$notify({
-              title: "成功",
-              message: "创建成功",
-              type: "success",
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     cancel(formName) {
-      this.dialogFormVisible = false;
-      const set = this.$refs;
-      set[formName].resetFields();
+      this.dialogFormVisible = false
+      const set = this.$refs
+      set[formName].resetFields()
     },
     update(formName) {
-      const set = this.$refs;
+      const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          this.dialogFormVisible = false;
-          this.form.password = undefined;
+          this.dialogFormVisible = false
+          this.form.password = undefined
           putObj(this.form).then(() => {
-            this.dialogFormVisible = false;
-            this.getList();
+            this.dialogFormVisible = false
+            this.getList()
             this.$notify({
-              title: "成功",
-              message: "修改成功",
-              type: "success",
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     }
   }
-};
+}
 </script>
