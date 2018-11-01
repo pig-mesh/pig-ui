@@ -22,7 +22,7 @@
       <span align="center">
        <img src="https://img.shields.io/badge/Avue-1.5.4.RC1-green.svg" alt="Build Status">
         <img src="https://img.shields.io/badge/Spring%20Cloud-EdgwareSR4-orange.svg" alt="Coverage Status">
-        <img src="https://img.shields.io/badge/Spring%20Boot-1.5.13-blue.svg" alt="Downloads">
+        <img src="https://img.shields.io/badge/Spring%20Boot-1.5.15-blue.svg" alt="Downloads">
         <img src="https://img.shields.io/npm/v/npm.svg" alt="Version">
         <img src="https://img.shields.io/npm/l/vue.svg" alt="License">
       </span>
