@@ -32,18 +32,18 @@
 
 <script>
 export default {
-  name: "Error404",
+  name: 'Error404',
   methods: {
     backPage() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     goHome() {
       this.$router.push({
-        name: "/"
-      });
+        name: '/'
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @keyframes error404animation {

@@ -51,84 +51,84 @@
 </template>
 
 <script>
-import { randomLenNum } from "@/util/util";
-import { mapGetters } from "vuex";
+import { randomLenNum } from '@/util/util'
+import { mapGetters } from 'vuex'
 export default {
-  name: "userlogin",
+  name: 'userlogin',
   data() {
     const validateCode = (rule, value, callback) => {
-      if (this.code.value != value) {
-        this.loginForm.code = "";
-        this.refreshCode();
-        callback(new Error("请输入正确的验证码"));
+      if (this.code.value !== value) {
+        this.loginForm.code = ''
+        this.refreshCode()
+        callback(new Error('请输入正确的验证码'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       loginForm: {
-        username: "admin",
-        password: "123456",
-        code: "",
-        randomStr: ""
+        username: 'admin',
+        password: '123456',
+        code: '',
+        randomStr: ''
       },
       code: {
-        src: "/admin/code",
-        value: "",
+        src: '/admin/code',
+        value: '',
         len: 4,
-        type: "image"
+        type: 'image'
       },
       loginRules: {
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, message: "密码长度最少为6位", trigger: "blur" }
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '密码长度最少为6位', trigger: 'blur' }
         ],
         code: [
-          { required: true, message: "请输入验证码", trigger: "blur" },
-          { min: 4, max: 4, message: "验证码长度为4位", trigger: "blur" }
+          { required: true, message: '请输入验证码', trigger: 'blur' },
+          { min: 4, max: 4, message: '验证码长度为4位', trigger: 'blur' }
         ]
       },
-      passwordType: "password"
-    };
+      passwordType: 'password'
+    }
   },
   created() {
-    this.refreshCode();
+    this.refreshCode()
   },
   mounted() {},
   computed: {
-    ...mapGetters(["tagWel"])
+    ...mapGetters(['tagWel'])
   },
   props: [],
   methods: {
     refreshCode() {
-      this.loginForm.code = "";
-      this.loginForm.randomStr = randomLenNum(this.code.len, true);
-      this.code.type == "text"
+      this.loginForm.code = ''
+      this.loginForm.randomStr = randomLenNum(this.code.len, true)
+      this.code.type === 'text'
         ? (this.code.value = randomLenNum(this.code.len))
-        : (this.code.src = `${this.codeUrl}/${this.loginForm.randomStr}`);
+        : (this.code.src = `${this.codeUrl}/${this.loginForm.randomStr}`)
     },
     showPassword() {
-      this.passwordType == ""
-        ? (this.passwordType = "password")
-        : (this.passwordType = "");
+      this.passwordType === ''
+        ? (this.passwordType = 'password')
+        : (this.passwordType = '')
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
-          this.$store.dispatch("LoginByUsername", this.loginForm).then(
+          this.$store.dispatch('LoginByUsername', this.loginForm).then(
             res => {
-              this.$store.commit("ADD_TAG", this.tagWel);
-              this.$router.push({ path: this.tagWel.value });
+              this.$store.commit('ADD_TAG', this.tagWel)
+              this.$router.push({ path: this.tagWel.value })
             },
             error => {
-              this.refreshCode();
+              this.refreshCode()
             }
-          );
+          )
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

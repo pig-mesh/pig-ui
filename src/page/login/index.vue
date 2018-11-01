@@ -47,14 +47,14 @@
   </div>
 </template>
 <script>
-import userLogin from "./userlogin";
-import codeLogin from "./codelogin";
-import thirdLogin from "./thirdlogin";
-import topTheme from "../index/top/top-theme";
-import theme from "@/mixins/theme";
-import { mapGetters } from "vuex";
+import userLogin from './userlogin'
+import codeLogin from './codelogin'
+import thirdLogin from './thirdlogin'
+import topTheme from '../index/top/top-theme'
+import theme from '@/mixins/theme'
+import { mapGetters } from 'vuex'
 export default {
-  name: "login",
+  name: 'login',
   mixins: [theme()],
   components: {
     topTheme,
@@ -64,17 +64,17 @@ export default {
   },
   data() {
     return {
-      activeName: "user"
-    };
+      activeName: 'user'
+    }
   },
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["website"])
+    ...mapGetters(['website'])
   },
   props: [],
   methods: {}
-};
+}
 </script>
 
 <style lang="scss">

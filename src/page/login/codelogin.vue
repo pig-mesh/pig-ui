@@ -37,97 +37,97 @@
 </template>
 
 <script>
-const MSGINIT = "发送验证码",
-  MSGERROR = "验证码发送失败",
-  MSGSCUCCESS = "${time}秒后重发",
-  MSGTIME = 60;
-import { isvalidatemobile } from "@/util/validate";
-import { mapGetters } from "vuex";
-import request from "@/router/axios";
+const MSGINIT = '发送验证码',
+  MSGERROR = '验证码发送失败',
+  MSGSCUCCESS = '${time}秒后重发',
+  MSGTIME = 60
+import { isvalidatemobile } from '@/util/validate'
+import { mapGetters } from 'vuex'
+import request from '@/router/axios'
 export default {
-  name: "codelogin",
+  name: 'codelogin',
   data() {
     const validatePhone = (rule, value, callback) => {
       if (isvalidatemobile(value)[0]) {
-        callback(new Error(isvalidatemobile(value)[1]));
+        callback(new Error(isvalidatemobile(value)[1]))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     const validateCode = (rule, value, callback) => {
       if (value.length != 4) {
-        callback(new Error("请输入4位数的验证码"));
+        callback(new Error('请输入4位数的验证码'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       msgText: MSGINIT,
       msgTime: MSGTIME,
       msgKey: false,
       loginForm: {
-        mobile: "",
-        code: ""
+        mobile: '',
+        code: ''
       },
       loginRules: {
-        mobile: [{ required: true, trigger: "blur", validator: validatePhone }],
-        code: [{ required: true, trigger: "blur", validator: validateCode }]
+        mobile: [{ required: true, trigger: 'blur', validator: validatePhone }],
+        code: [{ required: true, trigger: 'blur', validator: validateCode }]
       }
-    };
+    }
   },
   created() {},
   mounted() {},
   computed: {
-    ...mapGetters(["tagWel"])
+    ...mapGetters(['tagWel'])
   },
   props: [],
   methods: {
     handleSend() {
-      if (this.msgKey) return;
+      if (this.msgKey) return
       if (!this.loginForm.mobile) {
-        this.$message.error("请输入手机号码");
+        this.$message.error('请输入手机号码')
       } else if (!/^1[34578]\d{9}$/.test(this.loginForm.mobile)) {
-        this.$message.error("手机号格式不正确");
+        this.$message.error('手机号格式不正确')
       } else {
         request({
-          url: "/admin/smsCode/" + this.loginForm.mobile,
-          method: "get"
+          url: '/admin/smsCode/' + this.loginForm.mobile,
+          method: 'get'
         }).then(response => {
           if (response.data.data) {
-            this.timer();
-            this.$message.success("验证码发送成功");
+            this.timer()
+            this.$message.success('验证码发送成功')
           } else {
-            this.$message.error(response.data.msg);
+            this.$message.error(response.data.msg)
           }
-        });
+        })
       }
-      this.msgText = MSGSCUCCESS.replace("${time}", this.msgTime);
-      this.msgKey = true;
+      this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime)
+      this.msgKey = true
       const time = setInterval(() => {
-        this.msgTime--;
-        this.msgText = MSGSCUCCESS.replace("${time}", this.msgTime);
+        this.msgTime--
+        this.msgText = MSGSCUCCESS.replace('${time}', this.msgTime)
         if (this.msgTime == 0) {
-          this.msgTime = MSGTIME;
-          this.msgText = MSGINIT;
-          this.msgKey = false;
-          clearInterval(time);
+          this.msgTime = MSGTIME
+          this.msgText = MSGINIT
+          this.msgKey = false
+          clearInterval(time)
         }
-      }, 1000);
+      }, 1000)
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store
-            .dispatch("LoginByPhone", this.loginForm)
+            .dispatch('LoginByPhone', this.loginForm)
             .then(response => {
-              this.$store.commit("ADD_TAG", this.tagWel);
-              this.$router.push({ path: this.tagWel.value });
-            });
+              this.$store.commit('ADD_TAG', this.tagWel)
+              this.$router.push({ path: this.tagWel.value })
+            })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style>

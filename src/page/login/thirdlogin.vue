@@ -23,22 +23,22 @@
 </template>
 
 <script>
-import qqCode from "@/assets/img/code/qq-code.jpg";
-import wechatCode from "@/assets/img/code/wechat-code.jpg";
+import qqCode from '@/assets/img/code/qq-code.jpg'
+import wechatCode from '@/assets/img/code/wechat-code.jpg'
 export default {
-  name: "thirdlogin",
+  name: 'thirdlogin',
   data() {
     return {
       qqCode: qqCode,
       wechatCode: wechatCode
-    };
+    }
   },
   created() {},
   mounted() {},
   computed: {},
   props: [],
   methods: {}
-};
+}
 </script>
 
 <style lang="scss" scoped>

@@ -34,7 +34,6 @@ axios.defaults.timeout = 30000
 // 跨域请求，允许保存cookie
 axios.defaults.withCredentials = true
 NProgress.configure({ showSpinner: false })// NProgress Configuration
-let msg
 // HTTPrequest拦截
 axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
@@ -51,8 +50,8 @@ axios.interceptors.response.use(data => {
   return data
 }, error => {
   NProgress.done()
-  let errMsg = error.toString()
-  let code = errMsg.substr(errMsg.indexOf('code') + 5)
+  const errMsg = error.toString()
+  const code = errMsg.substr(errMsg.indexOf('code') + 5)
   Message({
     message: errorCode[code] || errorCode['default'],
     type: 'error'

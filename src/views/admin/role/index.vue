@@ -106,7 +106,7 @@
     </el-dialog>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogPermissionVisible">
-      <el-tree class="filter-tree" :data="treeData" :default-checked-keys="checkedKeys" check-strictly node-key="id" highlight-current :props="defaultProps" show-checkbox ref="menuTree" :filter-node-method="filterNode" default-expand-all>
+      <el-tree class="filter-tree" :data="treeData" :default-checked-keys="checkedKeys" :check-strictly="false" node-key="id" highlight-current :props="defaultProps" show-checkbox ref="menuTree" :filter-node-method="filterNode" default-expand-all>
       </el-tree>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="updatePermession(roleId, roleCode)">更 新</el-button>
@@ -125,13 +125,13 @@ import {
   permissionUpd,
   fetchRoleTree,
   fetchDeptTree
-} from "@/api/role";
-import { fetchTree } from "@/api/menu";
-import { mapGetters } from "vuex";
-import waves from "@/directive/waves/index.js"; // 水波纹指令
+} from '@/api/role'
+import { fetchTree } from '@/api/menu'
+import { mapGetters } from 'vuex'
+import waves from '@/directive/waves/index.js' // 水波纹指令
 
 export default {
-  name: "table_role",
+  name: 'table_role',
   directives: {
     waves
   },
@@ -140,9 +140,10 @@ export default {
       treeData: [],
       treeDeptData: [],
       checkedKeys: [],
+      menuIds: '',
       defaultProps: {
-        children: "children",
-        label: "name"
+        children: 'children',
+        label: 'name'
       },
       list: null,
       total: null,
@@ -164,206 +165,227 @@ export default {
         roleName: [
           {
             required: true,
-            message: "角色名称",
-            trigger: "blur"
+            message: '角色名称',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "长度在 3 到 20 个字符",
-            trigger: "blur"
+            message: '长度在 3 到 20 个字符',
+            trigger: 'blur'
           }
         ],
         roleCode: [
           {
             required: true,
-            message: "角色标识",
-            trigger: "blur"
+            message: '角色标识',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "长度在 3 到 20 个字符",
-            trigger: "blur"
+            message: '长度在 3 到 20 个字符',
+            trigger: 'blur'
           }
         ],
         roleDesc: [
           {
             required: true,
-            message: "角色标识",
-            trigger: "blur"
+            message: '角色标识',
+            trigger: 'blur'
           },
           {
             min: 3,
             max: 20,
-            message: "长度在 3 到 20 个字符",
-            trigger: "blur"
+            message: '长度在 3 到 20 个字符',
+            trigger: 'blur'
           }
         ]
       },
-      statusOptions: ["0", "1"],
+      statusOptions: ['0', '1'],
       rolesOptions: undefined,
       dialogFormVisible: false,
       dialogDeptVisible: false,
       dialogPermissionVisible: false,
-      dialogStatus: "",
+      dialogStatus: '',
       textMap: {
-        update: "编辑",
-        create: "创建",
-        permission: "分配权限"
+        update: '编辑',
+        create: '创建',
+        permission: '分配权限'
       },
-      tableKey: 0,
       tableKey: 0,
       roleManager_btn_add: false,
       roleManager_btn_edit: false,
       roleManager_btn_del: false,
       roleManager_btn_perm: false
-    };
+    }
   },
   created() {
-    this.getList();
-    this.roleManager_btn_add = this.permissions["sys_role_add"];
-    this.roleManager_btn_edit = this.permissions["sys_role_edit"];
-    this.roleManager_btn_del = this.permissions["sys_role_del"];
-    this.roleManager_btn_perm = this.permissions["sys_role_perm"];
+    this.getList()
+    this.roleManager_btn_add = this.permissions['sys_role_add']
+    this.roleManager_btn_edit = this.permissions['sys_role_edit']
+    this.roleManager_btn_del = this.permissions['sys_role_del']
+    this.roleManager_btn_perm = this.permissions['sys_role_perm']
   },
   computed: {
-    ...mapGetters(["elements", "permissions"])
+    ...mapGetters(['elements', 'permissions'])
   },
   methods: {
     getList() {
-      this.listLoading = true;
+      this.listLoading = true
       fetchList(this.listQuery).then(response => {
-        this.list = response.data.records;
-        this.total = response.data.total;
-        this.listLoading = false;
-      });
+        this.list = response.data.records
+        this.total = response.data.total
+        this.listLoading = false
+      })
     },
     handleSizeChange(val) {
-      this.listQuery.limit = val;
-      this.getList();
+      this.listQuery.limit = val
+      this.getList()
     },
     handleCurrentChange(val) {
-      this.listQuery.page = val;
-      this.getList();
+      this.listQuery.page = val
+      this.getList()
     },
     handleCreate() {
-      this.resetTemp();
-      this.dialogStatus = "create";
-      this.dialogFormVisible = true;
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
     },
     handleUpdate(row) {
       getObj(row.roleId).then(response => {
-        this.form = response.data;
-        this.form.deptName = row.deptName;
-        this.form.roleDeptId = row.roleDeptId;
-        this.dialogFormVisible = true;
-        this.dialogStatus = "update";
-      });
+        this.form = response.data
+        this.form.deptName = row.deptName
+        this.form.roleDeptId = row.roleDeptId
+        this.dialogFormVisible = true
+        this.dialogStatus = 'update'
+      })
     },
     handlePermission(row) {
       fetchRoleTree(row.roleCode)
         .then(response => {
-          this.checkedKeys = response.data;
-          return fetchTree();
+          this.checkedKeys = response.data
+          return fetchTree()
         })
         .then(response => {
-          this.treeData = response.data;
-          this.dialogStatus = "permission";
-          this.dialogPermissionVisible = true;
-          this.roleId = row.roleId;
-          this.roleCode = row.roleCode;
-        });
+          this.treeData = response.data
+          this.checkedKeys = this.resolveAllLeafNodeId(this.treeData, this.checkedKeys, [])
+          this.dialogStatus = 'permission'
+          this.dialogPermissionVisible = true
+          this.roleId = row.roleId
+          this.roleCode = row.roleCode
+        })
+    },
+    /**
+     * 解析出所有的叶子节点id
+     * @param json 待解析的json串
+     * @param idArr 原始节点数组
+     * @param temp 临时存放节点id的数组
+     * @return 叶子节点id数组
+     */
+    resolveAllLeafNodeId(json, idArr, temp) {
+      for (let i = 0; i < json.length; i++) {
+        const item = json[i]
+        // 存在子节点，递归遍历;不存在子节点，将json的id添加到临时数组中
+        if (item.children && item.children.length !== 0) {
+          this.resolveAllLeafNodeId(item.children, idArr, temp)
+        } else {
+          temp.push(idArr.filter(id => id === item.id))
+        }
+      }
+      return temp
     },
     handleDept() {
       fetchDeptTree().then(response => {
-        this.treeDeptData = response.data;
-        this.dialogDeptVisible = true;
-      });
+        this.treeDeptData = response.data
+        this.dialogDeptVisible = true
+      })
     },
     filterNode(value, data) {
-      if (!value) return true;
-      return data.label.indexOf(value) !== -1;
+      if (!value) return true
+      return data.label.indexOf(value) !== -1
     },
     getNodeData(data) {
-      this.dialogDeptVisible = false;
-      this.form.roleDeptId = data.id;
-      this.form.deptName = data.name;
-      console.log(data);
+      this.dialogDeptVisible = false
+      this.form.roleDeptId = data.id
+      this.form.deptName = data.name
+      console.log(data)
     },
     handleDelete(row) {
       delObj(row.roleId).then(response => {
-        this.dialogFormVisible = false;
-        this.getList();
+        this.dialogFormVisible = false
+        this.getList()
         this.$notify({
-          title: "成功",
-          message: "删除成功",
-          type: "success",
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
           duration: 2000
-        });
-      });
+        })
+      })
     },
     create(formName) {
-      const set = this.$refs;
+      const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
           addObj(this.form).then(() => {
-            this.dialogFormVisible = false;
-            this.getList();
+            this.dialogFormVisible = false
+            this.getList()
             this.$notify({
-              title: "成功",
-              message: "创建成功",
-              type: "success",
+              title: '成功',
+              message: '创建成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     cancel(formName) {
-      this.dialogFormVisible = false;
-      this.$refs[formName].resetFields();
+      this.dialogFormVisible = false
+      this.$refs[formName].resetFields()
     },
     update(formName) {
-      const set = this.$refs;
+      const set = this.$refs
       set[formName].validate(valid => {
         if (valid) {
-          this.dialogFormVisible = false;
+          this.dialogFormVisible = false
           putObj(this.form).then(() => {
-            this.dialogFormVisible = false;
-            this.getList();
+            this.dialogFormVisible = false
+            this.getList()
             this.$notify({
-              title: "成功",
-              message: "修改成功",
-              type: "success",
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
               duration: 2000
-            });
-          });
+            })
+          })
         } else {
-          return false;
+          return false
         }
-      });
+      })
     },
     updatePermession(roleId, roleCode) {
-      permissionUpd(roleId, this.$refs.menuTree.getCheckedKeys().join(',')).then(() => {
-        this.dialogPermissionVisible = false;
+      this.menuIds = ''
+      this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
+      permissionUpd(roleId, this.menuIds).then(() => {
+        this.dialogPermissionVisible = false
         fetchTree()
           .then(response => {
-            this.treeData = response.data;
-            return fetchRoleTree(roleCode);
+            this.treeData = response.data
+            return fetchRoleTree(roleCode)
           })
           .then(response => {
-            this.checkedKeys = response.data;
+            this.checkedKeys = response.data
             this.$notify({
-              title: "成功",
-              message: "修改成功",
-              type: "success",
+              title: '成功',
+              message: '修改成功',
+              type: 'success',
               duration: 2000
-            });
-          });
-      });
+            })
+          })
+      })
     },
     resetTemp() {
       this.form = {
@@ -371,8 +393,8 @@ export default {
         roleName: undefined,
         roleCode: undefined,
         roleDesc: undefined
-      };
+      }
     }
   }
-};
+}
 </script>

@@ -1,5 +1,4 @@
 
-
 /*
  *    Copyright (c) 2018-2025, lengleng All rights reserved.
  *
@@ -18,7 +17,7 @@
  */
 
 export const getDic = (type) => {
-    return new Promise((resolve, reject) => {
-        resolve({ data: {} });
-    })
+  return new Promise((resolve, reject) => {
+    resolve({ data: {}})
+  })
 }

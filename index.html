@@ -33,29 +33,29 @@
 </head>
 
 <body>
-  <!--vue-ssr-outlet-->
-  <div id="app"></div>
-  <script src="<%= htmlWebpackPlugin.options.path %>/util/aes.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/util/crypto-js.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/util/mode-ecb.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/util/pad-zeropadding.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/store/1.3.20/store.js"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/vue/2.5.2/vue.min.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/vuex/2.4.1/vuex.min.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/vue-router/3.0.1/vue-router.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/axios/1.0.0/axios.min.js" charset="utf-8"></script>
-  <script src="<%= htmlWebpackPlugin.options.path %>/cdn/element-ui/2.3.8/index.js" charset="utf-8"></script>
-  <!-- 百度统计 -->
-  <script>
-    var _hmt = _hmt || [];
-    (function () {
-      var hm = document.createElement("script");
-      hm.src = "https://hm.baidu.com/hm.js?c1b8f9036f2b5eb6c31ec6e2835c30eb";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
+<!--vue-ssr-outlet-->
+<div id="app"></div>
+<script src="<%= htmlWebpackPlugin.options.path %>/util/aes.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/util/crypto-js.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/util/mode-ecb.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/util/pad-zeropadding.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/store/1.3.20/store.js"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/vue/2.5.2/vue.min.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/vuex/2.4.1/vuex.min.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/vue-router/3.0.1/vue-router.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/axios/1.0.0/axios.min.js" charset="utf-8"></script>
+<script src="<%= htmlWebpackPlugin.options.path %>/cdn/element-ui/2.3.8/index.js" charset="utf-8"></script>
+<!-- 百度统计 -->
+<script>
+  var _hmt = _hmt || [];
+  (function() {
+    const hm = document.createElement('script')
+    hm.src = 'https://hm.baidu.com/hm.js?c1b8f9036f2b5eb6c31ec6e2835c30eb'
+    var s = document.getElementsByTagName('script')[0]
+    s.parentNode.insertBefore(hm, s)
+  })()
 
-  </script>
+</script>
 </body>
 
 </html>
