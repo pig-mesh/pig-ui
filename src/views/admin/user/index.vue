@@ -230,7 +230,7 @@ export default {
           }
         ]
       },
-      statusOptions: ["0", "1"],
+      statusOptions: ["0", "9"],
       rolesOptions: [],
       dialogFormVisible: false,
       dialogDeptVisible: false,
