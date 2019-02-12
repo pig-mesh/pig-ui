@@ -10,7 +10,10 @@ import router from './router/router'
 import store from './store'
 import { loadStyle } from './util/util'
 import * as urls from '@/config/env'
-import { iconfontUrl, iconfontVersion } from '@/config/env'
+import {
+  iconfontUrl,
+  iconfontVersion
+} from '@/config/env'
 import * as filters from './filters' // 全局filter
 import './styles/common.scss'
 // 引入avue的包
@@ -18,8 +21,6 @@ import Avue from '@smallwei/avue/lib/index.js'
 // 引入avue的样式文件
 import '@smallwei/avue/lib/theme-chalk/index.css'
 import basicContainer from './components/basic-container/main'
-// 插件 json 展示
-import vueJsonTreeView from 'vue-json-tree-view'
 
 import { validatenull } from '@/util/validate'
 
@@ -28,8 +29,6 @@ Vue.prototype.validatenull = validatenull
 Vue.use(Avue, { menuType: 'text' })
 
 Vue.use(router)
-
-Vue.use(vueJsonTreeView)
 
 Vue.use(VueAxios, axios)
 
