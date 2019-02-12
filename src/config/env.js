@@ -5,7 +5,7 @@ let baseUrl = ''
 // 图表库为avue和pig2套地址
 let iconfontVersion = ['567566_qo5lxgtishg', '667895_vf6hgm08ubf']
 let iconfontUrl = `//at.alicdn.com/t/font_$key.css`
-let codeUrl = `/code`
+let codeUrl = `${window.location.origin}/code`
 let actUrl = `${window.location.origin}/act/modeler.html?modelId=`
 if (env.NODE_ENV == 'development') {
 
