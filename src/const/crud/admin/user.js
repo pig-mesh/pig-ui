@@ -115,6 +115,13 @@ export const tableOption = {
       trigger: 'blur'
     }]
   }, {
+    label: '部门',
+    prop: 'deptName',
+    overHidden: true,
+    addVisdiplay: false,
+    editVisdiplay: false,
+    span: 24,
+  }, {
     label: '状态',
     prop: 'lockFlag',
     type: 'select',
@@ -133,12 +140,11 @@ export const tableOption = {
       value: '9'
     }]
   }, {
-    width: 180,
+    width: 120,
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',
-    format: 'yyyy-MM-dd HH:mm',
-    valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    format: 'yyyy-MM-dd',
     editDisabled: true,
     addVisdiplay: false,
     span: 24

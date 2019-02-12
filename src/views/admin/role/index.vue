@@ -40,20 +40,6 @@
                      icon="el-icon-edit">添加
           </el-button>
         </template>
-        <template slot="dsScopeForm" slot-scope="scope">
-          <div v-if="form.dsType == 1">
-            <el-tree class="filter-tree"
-                     :data="dsScopeData"
-                     :check-strictly="true"
-                     node-key="id"
-                     highlight-current
-                     :props="defaultProps"
-                     ref="scopeTree"
-                     :default-checked-keys="checkedDsScope"
-                     show-checkbox>
-            </el-tree>
-          </div>
-        </template>
 
         <template slot="menu"
                   slot-scope="scope">
@@ -106,7 +92,6 @@
 <script>
   import {addObj, delObj, fetchList, fetchRoleTree, getObj, permissionUpd, putObj} from '@/api/admin/role'
   import {tableOption} from '@/const/crud/admin/role'
-  import {fetchTree} from '@/api/admin/dept'
   import {fetchMenuTree} from '@/api/admin/menu'
   import {mapGetters} from 'vuex'
 
@@ -115,10 +100,8 @@
     data() {
       return {
         tableOption: tableOption,
-        dsScopeData: [],
         treeData: [],
         checkedKeys: [],
-        checkedDsScope: [],
         defaultProps: {
           label: "name",
           value: 'id'
@@ -174,14 +157,6 @@
         this.$refs.crud.rowAdd();
       },
       handleOpenBefore(show, type) {
-        fetchTree().then(response => {
-          this.dsScopeData = response.data.data;
-          if (this.form.dsScope) {
-            this.checkedDsScope = (this.form.dsScope).split(",")
-          } else {
-            this.checkedDsScope = []
-          }
-        });
         show();
       },
       handleUpdate(row, index) {
@@ -249,9 +224,6 @@
         })
       },
       create(row, done, loading) {
-        if (this.form.dsType === 1){
-          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
-        }
         addObj(this.form).then(() => {
           this.getList(this.page)
           done();
@@ -266,9 +238,6 @@
         });
       },
       update(row, index, done, loading) {
-        if (this.form.dsType === 1){
-          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
-        }
         putObj(this.form).then(() => {
           this.getList(this.page)
           done();
