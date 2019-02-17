@@ -7,7 +7,7 @@
              src="/img/logo.png"
              alt="">
         <p class="title">{{website.infoTitle}}</p>
-        <p>©2019 v2.0.1</p>
+        <p>©2019 v2.0.2</p>
       </div>
       <div class="login-border">
         <div class="login-main">
