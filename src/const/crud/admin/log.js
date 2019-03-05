@@ -29,7 +29,6 @@ export const tableOption = {
   editBtn: false,
   delBtn: false,
   viewBtn: true,
-  dicUrl: '/admin/dict/type/log_type',
   props: {
     label: 'label',
     value: 'value'
@@ -38,7 +37,7 @@ export const tableOption = {
     label: '类型',
     prop: 'type',
     type: 'select',
-    dicData: 'log_type',
+    dicUrl: '/admin/dict/type/log_type',
     search: true
   }, {
     label: '标题',
