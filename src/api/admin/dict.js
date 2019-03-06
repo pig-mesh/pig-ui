@@ -27,7 +27,7 @@ export function fetchList (query) {
 
 export function addObj (obj) {
   return request({
-    url: '/admin/dict/',
+    url: '/admin/dict',
     method: 'post',
     data: obj
   })
@@ -49,7 +49,7 @@ export function delObj (row) {
 
 export function putObj (obj) {
   return request({
-    url: '/admin/dict/',
+    url: '/admin/dict',
     method: 'put',
     data: obj
   })

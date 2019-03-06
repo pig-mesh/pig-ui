@@ -77,7 +77,7 @@ export const getUserInfo = () => {
 
 export const logout = () => {
   return request({
-    url: '/auth/oauth/removeToken',
+    url: '/auth/oauth/logout',
     method: 'get'
   })
 }

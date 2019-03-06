@@ -17,13 +17,6 @@
 
 import request from '@/router/axios'
 
-export function roleList () {
-  return request({
-    url: '/admin/role/roleList',
-    method: 'get'
-  })
-}
-
 export function fetchList (query) {
   return request({
     url: '/admin/role/page',
