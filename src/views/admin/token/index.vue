@@ -29,7 +29,7 @@
         <template slot-scope="scope"
                   slot="menu">
           <el-button type="text"
-                     v-if="permissions.sys_client_del"
+                     v-if="permissions.sys_token_del"
                      icon="el-icon-delete"
                      size="mini"
                      plain
