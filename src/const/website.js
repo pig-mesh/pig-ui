@@ -1,7 +1,7 @@
 export default {
-  title: 'PigX',
-  logo: 'PigX',
-  key: 'pigx',   //配置主键,目前用于存储
+  title: 'Pig',
+  logo: 'Pig',
+  key: 'pig',   //配置主键,目前用于存储
   indexTitle: 'Pig 快速开发框架',
   whiteList: ['/login', '/404', '/401', '/lock'], // 配置无权限可以访问的页面
   whiteTagList: ['/login', '/404', '/401', '/lock' ], // 配置不添加tags页面 （'/advanced-router/mutative-detail/*'——*为通配符）
