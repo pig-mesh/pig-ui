@@ -35,7 +35,7 @@ export function fetchTree (query) {
 
 export function addObj (obj) {
   return request({
-    url: '/admin/dept/',
+    url: '/admin/dept',
     method: 'post',
     data: obj
   })
@@ -57,7 +57,7 @@ export function delObj (id) {
 
 export function putObj (obj) {
   return request({
-    url: '/admin/dept/',
+    url: '/admin/dept',
     method: 'put',
     data: obj
   })

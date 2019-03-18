@@ -10,6 +10,11 @@ import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 NProgress.configure({showSpinner: false})
 const lockPage = store.getters.website.lockPage // 锁屏页
+
+/**
+ * 导航守卫，相关内容可以参考:
+ * https://router.vuejs.org/zh/guide/advanced/navigation-guards.html
+ */
 router.beforeEach((to, from, next) => {
   // 缓冲设置
   if (to.meta.keepAlive === true && store.state.tags.tagList.some(ele => {

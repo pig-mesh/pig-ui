@@ -27,7 +27,7 @@ export function fetchList (query) {
 
 export function addObj (obj) {
   return request({
-    url: '/admin/client/',
+    url: '/admin/client',
     method: 'post',
     data: obj
   })

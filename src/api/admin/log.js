@@ -34,7 +34,7 @@ export function delObj (id) {
 
 export function addObj (obj) {
   return request({
-    url: '/admin/log/',
+    url: '/admin/log',
     method: 'post',
     data: obj
   })
@@ -49,16 +49,9 @@ export function getObj (id) {
 
 export function putObj (obj) {
   return request({
-    url: '/admin/log/',
+    url: '/admin/log',
     method: 'put',
     data: obj
   })
 }
 
-export function sendLogs (logsList) {
-  return request({
-    url: '/admin/log/logs',
-    method: 'post',
-    data: logsList
-  })
-}
