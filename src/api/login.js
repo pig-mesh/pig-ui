@@ -44,30 +44,6 @@ export const refreshToken = (refresh_token) => {
   })
 }
 
-export const loginByMobile = (mobile, code) => {
-  const grant_type = 'mobile'
-  return request({
-    url: '/auth/mobile/token/sms',
-    headers: {
-      'Authorization': 'Basic cGlnOnBpZw=='
-    },
-    method: 'post',
-    params: { mobile: 'SMS@' + mobile, code: code, grant_type }
-  })
-}
-
-export const loginBySocial = (state, code) => {
-  const grant_type = 'mobile'
-  return request({
-    url: '/auth/mobile/token/social',
-    headers: {
-      'Authorization': 'Basic cGlnOnBpZw=='
-    },
-    method: 'post',
-    params: { mobile: state + '@' + code, grant_type }
-  })
-}
-
 export const getUserInfo = () => {
   return request({
     url: '/admin/user/info',

@@ -28,7 +28,7 @@
   export default {
     name: "login",
     components: {
-      userLogin,
+      userLogin
     },
     data() {
       return {

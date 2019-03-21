@@ -1,6 +1,6 @@
 import {getStore, setStore} from '@/util/store'
 import {isURL} from '@/util/validate'
-import {getUserInfo, loginByMobile, loginBySocial, loginByUsername, logout, refreshToken} from '@/api/login'
+import {getUserInfo, loginByUsername, logout, refreshToken} from '@/api/login'
 import {deepClone, encryption} from '@/util/util'
 import webiste from '@/const/website'
 import {GetMenu} from '@/api/admin/menu'
@@ -55,36 +55,6 @@ const user = {
       })
       return new Promise((resolve, reject) => {
         loginByUsername(user.username, user.password, user.code, user.randomStr).then(response => {
-          const data = response.data
-          commit('SET_ACCESS_TOKEN', data.access_token)
-          commit('SET_REFRESH_TOKEN', data.refresh_token)
-          commit('SET_EXPIRES_IN', data.expires_in)
-          commit('CLEAR_LOCK')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    // 根据手机号登录
-    LoginByPhone({commit}, userInfo) {
-      return new Promise((resolve, reject) => {
-        loginByMobile(userInfo.mobile, userInfo.code).then(response => {
-          const data = response.data
-          commit('SET_ACCESS_TOKEN', data.access_token)
-          commit('SET_REFRESH_TOKEN', data.refresh_token)
-          commit('SET_EXPIRES_IN', data.expires_in)
-          commit('CLEAR_LOCK')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
-    // 根据OpenId登录
-    LoginBySocial({commit}, param) {
-      return new Promise((resolve, reject) => {
-        loginBySocial(param.state, param.code).then(response => {
           const data = response.data
           commit('SET_ACCESS_TOKEN', data.access_token)
           commit('SET_REFRESH_TOKEN', data.refresh_token)

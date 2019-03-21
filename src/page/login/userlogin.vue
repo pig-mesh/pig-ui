@@ -51,7 +51,6 @@
                  class="login-code-img"
                  @click="refreshCode"
                  v-else/>
-            <!-- <i class="icon-shuaxin login-code-icon" @click="refreshCode"></i> -->
           </div>
         </el-col>
       </el-row>
@@ -74,10 +73,6 @@ export default {
   data () {
 
     return {
-      socialForm: {
-          code: '',
-          state: ''
-      },
       loginForm: {
         username: "admin",
         password: "123456",
@@ -107,24 +102,6 @@ export default {
       passwordType: "password"
     };
   },
-  watch: {
-        $route() {
-            const params = this.$route.query
-            this.socialForm.state = params.state
-            this.socialForm.code = params.code
-            if (!validatenull(this.socialForm.state)) {
-                const loading = this.$loading({
-                    lock: true,
-                    text: `登录中,请稍后。。。`,
-                    spinner: 'el-icon-loading'
-                })
-                setTimeout(() => {
-                    loading.close()
-                }, 2000)
-                this.handleSocialLogin()
-            }
-        }
-    },
   created () {
     this.refreshCode();
   },
@@ -145,13 +122,6 @@ export default {
       this.passwordType == ''
         ? (this.passwordType = 'password')
         : (this.passwordType = '')
-    },
-    handleSocialLogin () {
-      this.$store.dispatch('LoginBySocial', this.socialForm).then(
-        () => {
-          this.$router.push({ path: this.tagWel.value });
-        }
-      )
     },
     handleLogin () {
       this.$refs.loginForm.validate(valid => {
