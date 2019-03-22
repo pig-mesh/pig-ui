@@ -4,7 +4,7 @@ const common = {
 
   state: {
     isCollapse: false,
-    isFullScren: false,
+    isFullScreen: false,
     isShade: false,
     screen: -1,
     isLock: getStore({ name: 'isLock' }) || false,
@@ -22,7 +22,7 @@ const common = {
       state.isCollapse = !state.isCollapse
     },
     SET_FULLSCREN: (state) => {
-      state.isFullScren = !state.isFullScren
+      state.isFullScreen = !state.isFullScreen
     },
     SET_SHOWCOLLAPSE: (state, active) => {
       state.showCollapse = active

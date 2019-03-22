@@ -22,10 +22,10 @@
       </el-tooltip>
       <el-tooltip v-if="showFullScren"
                   effect="dark"
-                  :content="isFullScren?'退出全屏':'全屏'"
+                  :content="isFullScreen?'退出全屏':'全屏'"
                   placement="bottom">
         <div class="top-bar__item">
-          <i :class="isFullScren?'icon-tuichuquanping':'icon-quanping'"
+          <i :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'"
              @click="handleScreen"></i>
         </div>
       </el-tooltip>
@@ -77,7 +77,7 @@
       }),
       ...mapGetters([
         "userInfo",
-        "isFullScren",
+        "isFullScreen",
         "tagWel",
         "tagList",
         "isCollapse",
