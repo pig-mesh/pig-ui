@@ -68,8 +68,8 @@
               </el-form-item>
               <el-form-item label="节点ID"
                             prop="menuId">
-                <el-input v-model="form.menuId"
-                          :disabled="formEdit || form.menuId"
+                <el-input v-model="form.menuId" type="number"
+                          :disabled="formEdit || formStatus === 'update'"
                           placeholder="请输入节点ID"></el-input>
               </el-form-item>
               <el-form-item label="标题"
@@ -77,18 +77,6 @@
                 <el-input v-model="form.name"
                           :disabled="formEdit"
                           placeholder="请输入标题"></el-input>
-              </el-form-item>
-              <el-form-item label="权限标识"
-                            prop="permission">
-                <el-input v-model="form.permission"
-                          :disabled="formEdit"
-                          placeholder="请输入权限标识"></el-input>
-              </el-form-item>
-              <el-form-item label="图标"
-                            prop="icon">
-                <el-input v-model="form.icon"
-                          :disabled="formEdit"
-                          placeholder="请输入图标"></el-input>
               </el-form-item>
               <el-form-item label="类型"
                             prop="type">
@@ -102,33 +90,46 @@
                              :value="item"></el-option>
                 </el-select>
               </el-form-item>
-              <el-form-item label="排序"
+
+              <el-form-item label="权限标识"
+                            prop="permission" v-if="form.type === '1'">
+                <el-input v-model="form.permission"
+                          :disabled="formEdit"
+                          placeholder="请输入权限标识"></el-input>
+              </el-form-item>
+              <el-form-item label="图标" v-if="form.type === '0'"
+                            prop="icon">
+                <el-input v-model="form.icon"
+                                       :disabled="formEdit"
+                                       placeholder="请输入图标"></el-input>
+              </el-form-item>
+              <el-form-item label="排序" v-if="form.type === '0'"
                             prop="sort">
                 <el-input type="number"
                           v-model="form.sort"
                           :disabled="formEdit"
                           placeholder="请输入排序"></el-input>
               </el-form-item>
-              <el-form-item label="前端组件"
+              <el-form-item label="前端组件" v-if="form.type === '0'"
                             prop="component">
                 <el-input v-model="form.component"
                           :disabled="formEdit"
                           placeholder="请输入描述"></el-input>
               </el-form-item>
-              <el-form-item label="前端地址"
+              <el-form-item label="前端地址" v-if="form.type === '0'"
                             prop="component">
                 <el-input v-model="form.path"
                           :disabled="formEdit"
                           placeholder="iframe嵌套地址"></el-input>
               </el-form-item>
-              <el-form-item label="路由缓冲"
+              <el-form-item label="路由缓冲" v-if="form.type === '0'"
                             prop="component">
                 <el-switch v-model="form.keepAlive"
                            :disabled="formEdit"
                            active-color="#13ce66"
                            inactive-color="#ff4949"
-                           :active-value='"1"'
-                           :inactive-value='"0"'>
+                           :active-value='"0"'
+                           :inactive-value='"1"'>
                 </el-switch>
               </el-form-item>
               <el-form-item v-if="formStatus == 'update'">
