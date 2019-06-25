@@ -6,15 +6,15 @@
           <a href="https://avue.top/#/pay" target="_blank">
             <img src="https://img.shields.io/badge/PigX-升级版-green.svg" alt="Build Status">
           </a>
-          <img src="https://img.shields.io/badge/Spring%20Boot-2.1.2.RELEASE-yellowgreen.svg" alt="Downloads">
-          <img src="https://img.shields.io/badge/Spring%20Cloud-Greenwich.RELEASE-blue.svg" alt="Coverage Status">
+          <img src="https://img.shields.io/badge/Spring%20Boot-2.1.6.RELEASE-yellowgreen.svg" alt="Downloads">
+          <img src="https://img.shields.io/badge/Spring%20Cloud-Greenwich.SR1-blue.svg" alt="Coverage Status">
         </span>
         <br/>
         <span>
           <el-collapse v-model="activeNames">
             <el-collapse-item title="PigX 完整的微服务架构" name="1">
-              <div>基于Spring Cloud Greenwich.RELEASE</div>
-              <div>基于Spring Boot 2.1.2.RELEASE</div>
+              <div>基于Spring Cloud Greenwich.SR1</div>
+              <div>基于Spring Boot 2.1.6.RELEASE</div>
             </el-collapse-item>
             <el-collapse-item title="PigX 完美的容器化支持" name="2">
               <div>支持docker部署</div>
