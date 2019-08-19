@@ -1,5 +1,6 @@
 import {validatenull} from './validate'
 import request from '@/router/axios'
+import * as CryptoJS from'crypto-js'
 
 // 表单序列化
 export const serialize = data => {

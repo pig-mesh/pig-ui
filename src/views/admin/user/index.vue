@@ -75,20 +75,20 @@
         </template>
         <template slot="deptIdForm"
                   slot-scope="scope">
-          <avue-crud-input v-model="form.deptId"
+          <avue-input v-model="form.deptId"
                            type="tree"
                            placeholder="请选择所属部门"
                            :node-click="getNodeData"
                            :dic="treeDeptData"
-                           :props="defaultProps"></avue-crud-input>
+                           :props="defaultProps"></avue-input>
         </template>
         <template slot="roleForm"
                   slot-scope="scope">
-          <avue-crud-select v-model="role"
+          <avue-select v-model="role"
                             multiple
                             placeholder="请选择角色"
                             :dic="rolesOptions"
-                            :props="roleProps"></avue-crud-select>
+                            :props="roleProps"></avue-select>
         </template>
       </avue-crud>
     </basic-container>

@@ -44,13 +44,13 @@ export const tableOption = {
     span: 24,
     hide: true,
     editDisabled: true,
-    addVisdiplay: false
+    addDisplay: false
   }, {
     fixed: true,
     label: '用户名',
     prop: 'username',
     editDisabled: true,
-    solt: true,
+    slot: true,
     search: true,
     span: 24,
     rules: [{
@@ -81,14 +81,14 @@ export const tableOption = {
   }, {
     label: '所属部门',
     prop: 'deptId',
-    formsolt: true,
-    solt: true,
+    formslot: true,
+    slot: true,
     span: 24,
     hide: true,
     rules: [{
       required: true,
       message: '请选择部门',
-      trigger: 'blur'
+      trigger: 'change'
     }]
   }, {
     label: '手机号',
@@ -105,8 +105,8 @@ export const tableOption = {
   }, {
     label: '角色',
     prop: 'role',
-    formsolt: true,
-    solt: true,
+    formslot: true,
+    slot: true,
     overHidden: true,
     span: 24,
     rules: [{
@@ -118,14 +118,14 @@ export const tableOption = {
     label: '部门',
     prop: 'deptName',
     overHidden: true,
-    addVisdiplay: false,
-    editVisdiplay: false,
+    addDisplay: false,
+    editDisplay: false,
     span: 24,
   }, {
     label: '状态',
     prop: 'lockFlag',
     type: 'select',
-    solt: true,
+    slot: true,
     span: 24,
     rules: [{
       required: true,
@@ -146,7 +146,7 @@ export const tableOption = {
     type: 'datetime',
     format: 'yyyy-MM-dd',
     editDisabled: true,
-    addVisdiplay: false,
+    addDisplay: false,
     span: 24
   }]
 }

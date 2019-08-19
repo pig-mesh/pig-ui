@@ -4,6 +4,10 @@ import Vue from 'vue'
 import axios from './router/axios'
 import VueAxios from 'vue-axios'
 import App from './App'
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+import Avue from '@smallwei/avue'
+import '@smallwei/avue/lib/index.css'
 import './permission' // 权限
 import './error' // 日志
 import router from './router/router'
@@ -16,21 +20,22 @@ import {
 } from '@/config/env'
 import * as filters from './filters' // 全局filter
 import './styles/common.scss'
-// 引入avue的包
-import Avue from '@smallwei/avue/lib/index.js'
-// 引入avue的样式文件
-import '@smallwei/avue/lib/theme-chalk/index.css'
 import basicContainer from './components/basic-container/main'
 
-import { validatenull } from '@/util/validate'
+debugger
+Vue.use(VueAxios, axios)
 
-Vue.prototype.validatenull = validatenull
+Vue.use(ElementUI, {
+  size: 'medium',
+  menuType: 'text'
+})
 
-Vue.use(Avue, { menuType: 'text' })
+Vue.use(Avue, {
+  size: 'medium',
+  menuType: 'text'
+})
 
 Vue.use(router)
-
-Vue.use(VueAxios, axios)
 
 // 注册全局容器
 Vue.component('basicContainer', basicContainer)
