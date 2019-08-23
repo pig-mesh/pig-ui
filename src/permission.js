@@ -36,7 +36,7 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(() => {
-          next({...to, replace: true})
+          next()
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
             next({path: '/login'})

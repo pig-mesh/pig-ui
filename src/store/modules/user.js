@@ -70,7 +70,7 @@ const user = {
       return new Promise((resolve, reject) => {
         getUserInfo().then((res) => {
           const data = res.data.data || {}
-          commit('SET_USERIFNO', data.sysUser)
+          commit('SET_USER_INFO', data.sysUser)
           commit('SET_ROLES', data.roles || [])
           commit('SET_PERMISSIONS', data.permissions || [])
           resolve(data)
@@ -170,7 +170,7 @@ const user = {
         type: 'session'
       })
     },
-    SET_USERIFNO: (state, userInfo) => {
+    SET_USER_INFO: (state, userInfo) => {
       state.userInfo = userInfo
     },
     SET_MENU: (state, menu) => {

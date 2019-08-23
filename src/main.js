@@ -22,7 +22,6 @@ import * as filters from './filters' // 全局filter
 import './styles/common.scss'
 import basicContainer from './components/basic-container/main'
 
-debugger
 Vue.use(VueAxios, axios)
 
 Vue.use(ElementUI, {
