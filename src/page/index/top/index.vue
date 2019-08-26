@@ -25,7 +25,7 @@
                   :content="isFullScreen?'退出全屏':'全屏'"
                   placement="bottom">
         <div class="top-bar__item">
-          <i :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'"
+          <i :class="isFullScreen?'icon-zuixiaohua':'icon-quanpingzuidahua'"
              @click="handleScreen"></i>
         </div>
       </el-tooltip>

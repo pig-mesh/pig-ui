@@ -200,12 +200,7 @@
                 addObj(this.form).then(() => {
                     this.getList(this.page);
                     done();
-                    this.$notify({
-                        title: "成功",
-                        message: "创建成功",
-                        type: "success",
-                        duration: 2000
-                    });
+                    this.$notify.success('创建成功')
                 }).catch(() => {
                     loading();
                 });
@@ -214,44 +209,21 @@
                 putObj(this.form).then(() => {
                     this.getList(this.page);
                     done();
-                    this.$notify({
-                        title: "成功",
-                        message: "修改成功",
-                        type: "success",
-                        duration: 2000
-                    });
+                    this.$notify.success('修改成功')
                 }).catch(() => {
                     loading();
                 });
             },
             deletes(row, index) {
-                this.$confirm(
-                    "此操作将永久删除该用户(用户名:" + row.username + "), 是否继续?",
-                    "提示",
-                    {
-                        confirmButtonText: "确定",
-                        cancelButtonText: "取消",
-                        type: "warning"
-                    }
+                this.$confirm("此操作将永久删除该用户(用户名:" + row.username + "), 是否继续?", "提示", {confirmButtonText: "确定",
+                        cancelButtonText: "取消", type: "warning"}
                 ).then(() => {
-                    delObj(row.userId)
-                        .then(() => {
-                            this.list.splice(index, 1);
-                            this.$notify({
-                                title: "成功",
-                                message: "删除成功",
-                                type: "success",
-                                duration: 2000
-                            });
-                        })
-                        .cache(() => {
-                            this.$notify({
-                                title: "失败",
-                                message: "删除失败",
-                                type: "error",
-                                duration: 2000
-                            });
-                        });
+                    delObj(row.userId).then(() => {
+                            this.getList(this.page);
+                            this.$notify.success('删除成功')
+                        }).catch(() => {
+                        this.$notify.error('删除失败')
+                    });
                 });
             }
         }

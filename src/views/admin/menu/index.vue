@@ -157,7 +157,7 @@
   import {mapGetters} from 'vuex'
 
   export default {
-    name: 'menu',
+    name: 'pigMenu',
     data() {
       return {
         list: null,
