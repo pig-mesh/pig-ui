@@ -4,12 +4,11 @@
  */
 import router from './router/router'
 import store from '@/store'
-import {getStore} from '@/util/store'
 import {validatenull} from '@/util/validate'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 NProgress.configure({showSpinner: false})
-const lockPage = store.getters.website.lockPage // 锁屏页
+let userInfoSyncFlag = false // 是否同步过用户信息
 
 /**
  * 导航守卫，相关内容可以参考:
@@ -34,8 +33,9 @@ router.beforeEach((to, from, next) => {
    if (to.path === '/login') {
       next({path: '/'})
     } else {
-      if (store.getters.roles.length === 0) {
+      if (store.getters.roles.length === 0&&!userInfoSyncFlag) {
         store.dispatch('GetUserInfo').then(() => {
+          userInfoSyncFlag = true
           next()
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
