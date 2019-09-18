@@ -27,7 +27,6 @@ export const tableOption = {
   searchSize: 'mini',
   addBtn: false,
   editBtn: false,
-  delBtn: false,
   viewBtn: true,
   props: {
     label: 'label',

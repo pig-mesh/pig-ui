@@ -79,20 +79,6 @@
           this.tableLoading = false
         })
       },
-      /**
-       * @title 打开新增窗口
-       * @detail 调用crud的handleadd方法即可
-       *
-       **/
-      handleAdd: function () {
-        this.$refs.crud.rowAdd()
-      },
-      handleEdit(row, index) {
-        this.$refs.crud.rowEdit(row, index)
-      },
-      handleDel(row, index) {
-        this.$refs.crud.rowDel(row, index)
-      },
       rowDel: function (row, index) {
         var _this = this
         this.$confirm('是否确认删除标签名为"' + row.label + '",数据类型为"' + row.type + '"的数据项?', '警告', {

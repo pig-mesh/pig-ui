@@ -51,10 +51,6 @@
         tableOption: tableOption
       }
     },
-    created() {
-    },
-    mounted: function () {
-    },
     computed: {
       ...mapGetters(['permissions']),
       permissionList() {
@@ -74,9 +70,6 @@
           this.page.total = response.data.data.total
           this.tableLoading = false
         })
-      },
-      handleDel(row, index) {
-        this.$refs.crud.rowDel(row, index)
       },
       rowDel: function (row, index) {
         var _this = this
