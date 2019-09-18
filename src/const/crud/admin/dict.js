@@ -24,8 +24,6 @@ export const tableOption = {
   refreshBtn: false,
   showClomnuBtn: false,
   searchSize: 'mini',
-  editBtn: false,
-  delBtn: false,
   column: [{
     width: 150,
     label: '数据值',
