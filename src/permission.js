@@ -8,7 +8,6 @@ import {validatenull} from '@/util/validate'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 NProgress.configure({showSpinner: false})
-let userInfoSyncFlag = false // 是否同步过用户信息
 
 /**
  * 导航守卫，相关内容可以参考:
@@ -33,9 +32,9 @@ router.beforeEach((to, from, next) => {
    if (to.path === '/login') {
       next({path: '/'})
     } else {
-      if (store.getters.roles.length === 0&&!userInfoSyncFlag) {
+      // NOTE: 当用户角色不存在时，会存在无限请求用户信息接口的问题
+      if (store.getters.roles.length === 0) {
         store.dispatch('GetUserInfo').then(() => {
-          userInfoSyncFlag = true
           next()
         }).catch(() => {
           store.dispatch('FedLogOut').then(() => {
