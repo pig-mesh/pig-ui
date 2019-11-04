@@ -14,7 +14,7 @@
           <el-collapse v-model="activeNames">
             <el-collapse-item title="PigX 完整的微服务架构" name="1">
               <div>基于Spring Cloud Greenwich.SR3</div>
-              <div>基于Spring Boot 2.1.8.RELEASE</div>
+              <div>基于Spring Boot 2.1.9.RELEASE</div>
             </el-collapse-item>
             <el-collapse-item title="PigX 完美的容器化支持" name="2">
               <div>支持docker部署</div>
