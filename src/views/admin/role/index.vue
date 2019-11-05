@@ -178,13 +178,6 @@
             this.roleCode = row.roleCode
           })
       },
-      /**
-       * 解析出所有的太监节点id
-       * @param json 待解析的json串
-       * @param idArr 原始节点数组
-       * @param temp 临时存放节点id的数组
-       * @return 太监节点id数组
-       */
       resolveAllEunuchNodeId(json, idArr, temp) {
         for (let i = 0; i < json.length; i++) {
           const item = json[i]
@@ -215,11 +208,7 @@
         }).then(() => {
           this.getList(this.page)
           this.list.splice(index, 1);
-          _this.$message({
-            showClose: true,
-            message: '删除成功',
-            type: 'success'
-          })
+          this.$notify.success('删除成功')
         }).catch(function () {
         })
       },
@@ -227,12 +216,7 @@
         addObj(this.form).then(() => {
           this.getList(this.page)
           done();
-          this.$notify({
-            title: '成功',
-            message: '创建成功',
-            type: 'success',
-            duration: 2000
-          })
+            this.$notify.success('创建成功')
         }).catch(() => {
           loading();
         });
@@ -241,36 +225,19 @@
         putObj(this.form).then(() => {
           this.getList(this.page)
           done();
-          this.$notify({
-            title: '成功',
-            message: '修改成功',
-            type: 'success',
-            duration: 2000
-          })
+          this.$notify.success('修改成功')
         }).catch(() => {
           loading();
         });
       },
-      updatePermession(roleId, roleCode) {
-        this.menuIds = ''
-        this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
-        permissionUpd(roleId, this.menuIds).then(() => {
-          this.dialogPermissionVisible = false
-          fetchMenuTree()
-            .then(response => {
-              this.form = response.data.data
-              return fetchRoleTree(roleId)
-            })
-            .then(response => {
-              this.checkedKeys = response.data
-              this.$notify({
-                title: '成功',
-                message: '修改成功',
-                type: 'success',
-                duration: 2000
-              })
-            })
-        })
+      updatePermession (roleId) {
+          this.menuIds = ''
+          this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
+          permissionUpd(roleId, this.menuIds).then(() => {
+              this.dialogPermissionVisible = false
+              this.$store.dispatch('GetMenu', false)
+              this.$notify.success('修改成功')
+          })
       }
     }
   }

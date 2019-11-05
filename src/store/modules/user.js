@@ -130,7 +130,7 @@ const user = {
     // 获取系统菜单
     GetMenu({
               commit
-            }) {
+            },type) {
       return new Promise(resolve => {
         GetMenu().then((res) => {
           const data = res.data.data
@@ -138,7 +138,7 @@ const user = {
           menu.forEach(ele => {
             addPath(ele)
           })
-          commit('SET_MENU', menu)
+          commit('SET_MENU', { type, menu })
           resolve(menu)
         })
       })
@@ -173,11 +173,12 @@ const user = {
     SET_USER_INFO: (state, userInfo) => {
       state.userInfo = userInfo
     },
-    SET_MENU: (state, menu) => {
-      state.menu = menu
+    SET_MENU: (state, params = {}) => {
+      let { menu, type } = params;
+      if (type !== false) state.menu = menu
       setStore({
         name: 'menu',
-        content: state.menu,
+        content: menu,
         type: 'session'
       })
     },
