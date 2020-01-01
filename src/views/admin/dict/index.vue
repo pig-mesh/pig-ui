@@ -27,6 +27,8 @@
                  @on-load="getList"
                  @row-update="handleUpdate"
                  @row-save="handleSave"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @search-change="searchChange"
                  @row-del="rowDel">
       </avue-crud>
@@ -60,11 +62,11 @@
     computed: {
       ...mapGetters(['permissions']),
       permissionList() {
-          return {
-              addBtn: this.vaildData(this.permissions.sys_dict_add, false),
-              editBtn: this.vaildData(this.permissions.sys_dict_edit, false),
-              delBtn: this.vaildData(this.permissions.sys_dict_del, false)
-          }
+        return {
+          addBtn: this.vaildData(this.permissions.sys_dict_add, false),
+          editBtn: this.vaildData(this.permissions.sys_dict_edit, false),
+          delBtn: this.vaildData(this.permissions.sys_dict_del, false)
+        }
       }
     },
     methods: {
@@ -134,8 +136,15 @@
           done()
         })
       },
-      searchChange(form) {
+      searchChange(form, done) {
         this.getList(this.page, form)
+        done()
+      },
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
       }
     }
   }

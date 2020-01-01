@@ -1,6 +1,5 @@
 <template>
-  <div class="login-container"
-       @keyup.enter.native="handleLogin">
+  <div class="login-container">
     <div class="login-weaper  animated bounceInDown">
       <div class="login-left">
         <img class="img"

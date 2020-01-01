@@ -24,6 +24,8 @@
                  :table-loading="tableLoading"
                  :option="tableOption"
                  @on-load="getList"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @refresh-change="refreshChange"
                  @search-change="searchChange">
         <template slot-scope="scope"
@@ -54,67 +56,67 @@
 </template>
 
 <script>
-    import {fetchList, handleDown} from '@/api/gen/gen'
-    import {formOption, tableOption} from '@/const/crud/gen/gen'
-    import {mapGetters} from 'vuex'
+  import {fetchList, handleDown} from '@/api/gen/gen'
+  import {formOption, tableOption} from '@/const/crud/gen/gen'
+  import {mapGetters} from 'vuex'
 
-    export default {
-        name: 'code-generator',
-        data() {
-            return {
-                tableData: [],
-                formData: {},
-                box: false,
-                page: {
-                    total: 0, // 总页数
-                    currentPage: 1, // 当前页数
-                    pageSize: 20 // 每页显示多少条
-                },
-                tableLoading: false,
-                tableOption: tableOption,
-                formOption: formOption
-            }
+  export default {
+    name: 'code-generator',
+    data() {
+      return {
+        tableData: [],
+        formData: {},
+        box: false,
+        page: {
+          total: 0, // 总页数
+          currentPage: 1, // 当前页数
+          pageSize: 20 // 每页显示多少条
         },
-        created() {
-        },
-        mounted: function () {
-        },
-        computed: {
-            ...mapGetters(['permissions'])
-        },
-        methods: {
-            getList(page, params) {
-                this.tableLoading = true
-                fetchList(Object.assign({
-                    current: page.currentPage,
-                    size: page.pageSize
-                }, params)).then(response => {
-                    this.tableData = response.data.data.records
-                    this.page.total = response.data.data.total
-                    this.tableLoading = false
-                })
-            },
-            handleDown: function (row, index) {
-                this.formData.tableName = row.tableName
-                this.box = true
-            },
-            /**
-             * 刷新回调
-             */
-            refreshChange() {
-                this.getList(this.page)
-            },
-            searchChange(form) {
-                this.getList(this.page, form)
-            },
-            gen(form, done) {
-                handleDown(this.formData).then(() => {
-                    this.box = true
-                })
-                done()
-            }
-        }
+        tableLoading: false,
+        tableOption: tableOption,
+        formOption: formOption
+      }
+    },
+    computed: {
+      ...mapGetters(['permissions'])
+    },
+    methods: {
+      getList(page, params) {
+        this.tableLoading = true
+        fetchList(Object.assign({
+          current: page.currentPage,
+          size: page.pageSize
+        }, params)).then(response => {
+          this.tableData = response.data.data.records
+          this.page.total = response.data.data.total
+          this.tableLoading = false
+        })
+      },
+      handleDown: function (row, index) {
+        this.formData.tableName = row.tableName
+        this.box = true
+      },
+      sizeChange(pageSize){
+        this.page.pageSize = pageSize
+      },
+      currentChange(current){
+        this.page.currentPage = current
+      },
+      refreshChange() {
+        this.getList(this.page)
+      },
+      searchChange(form, done) {
+        this.getList(this.page, form)
+        done()
+      },
+      gen(form, done) {
+        handleDown(this.formData).then(() => {
+          this.box = true
+        })
+        done()
+      }
     }
+  }
 </script>
 
 <style lang="scss" scoped>

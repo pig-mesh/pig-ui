@@ -27,6 +27,8 @@
                  @on-load="getList"
                  @search-change="searchChange"
                  @refresh-change="refreshChange"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @row-del="rowDel">
       </avue-crud>
     </basic-container>
@@ -55,9 +57,9 @@
     computed: {
       ...mapGetters(['permissions']),
       permissionList() {
-          return {
-              delBtn: this.vaildData(this.permissions.sys_log_del, false),
-          }
+        return {
+          delBtn: this.vaildData(this.permissions.sys_log_del, false),
+        }
       }
     },
     methods: {
@@ -74,7 +76,6 @@
         })
       },
       rowDel: function (row, index) {
-        var _this = this
         this.$confirm('是否确认删除ID为"' + row.id + '"的日志?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -83,23 +84,19 @@
           return delObj(row.id)
         }).then(data => {
           this.getList(this.page)
-          _this.$message({
-            showClose: true,
-            message: '删除成功',
-            type: 'success'
-          })
-        }).catch(function (err) {
+          this.$message.success('删除成功')
         })
       },
-      /**
-       * 搜索回调
-       */
-      searchChange(form) {
+      searchChange(form, done) {
         this.getList(this.page, form)
+        done()
       },
-      /**
-       * 刷新回调
-       */
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
+      },
       refreshChange() {
         this.getList(this.page)
       }

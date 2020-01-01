@@ -27,6 +27,8 @@
                  :before-open="handleOpenBefore"
                  @on-load="getList"
                  @search-change="handleFilter"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @refresh-change="handleRefreshChange"
                  @row-update="update"
                  @row-save="create">
@@ -90,7 +92,7 @@
 </template>
 
 <script>
-  import {addObj, delObj, fetchList, fetchRoleTree, getObj, permissionUpd, putObj} from '@/api/admin/role'
+  import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@/api/admin/role'
   import {tableOption} from '@/const/crud/admin/role'
   import {fetchMenuTree} from '@/api/admin/menu'
   import {mapGetters} from 'vuex'
@@ -149,18 +151,9 @@
       handleRefreshChange() {
         this.getList(this.page)
       },
-      handleFilter(param) {
-        this.page.page = 1;
+      handleFilter(param, done) {
         this.getList(this.page, param);
-      },
-      handleCreate() {
-        this.$refs.crud.rowAdd();
-      },
-      handleOpenBefore(show, type) {
-        show();
-      },
-      handleUpdate(row, index) {
-        this.$refs.crud.rowEdit(row, index);
+        done()
       },
       handlePermission(row) {
         fetchRoleTree(row.roleId)
@@ -198,8 +191,7 @@
         done();
       },
       handleDelete(row, index) {
-        var _this = this
-        this.$confirm('是否确认删除名称为"' + row.roleName + '"'+ '"的数据项?', '警告', {
+        this.$confirm('是否确认删除名称为"' + row.roleName + '"' + '"的数据项?', '警告', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -209,14 +201,13 @@
           this.getList(this.page)
           this.list.splice(index, 1);
           this.$notify.success('删除成功')
-        }).catch(function () {
         })
       },
       create(row, done, loading) {
         addObj(this.form).then(() => {
           this.getList(this.page)
           done();
-            this.$notify.success('创建成功')
+          this.$notify.success('创建成功')
         }).catch(() => {
           loading();
         });
@@ -230,14 +221,20 @@
           loading();
         });
       },
-      updatePermession (roleId) {
-          this.menuIds = ''
-          this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
-          permissionUpd(roleId, this.menuIds).then(() => {
-              this.dialogPermissionVisible = false
-              this.$store.dispatch('GetMenu', false)
-              this.$notify.success('修改成功')
-          })
+      updatePermession(roleId) {
+        this.menuIds = ''
+        this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
+        permissionUpd(roleId, this.menuIds).then(() => {
+          this.dialogPermissionVisible = false
+          this.$store.dispatch('GetMenu', false)
+          this.$notify.success('修改成功')
+        })
+      },
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
       }
     }
   }

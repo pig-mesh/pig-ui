@@ -25,6 +25,8 @@
                  :option="tableOption"
                  :permission="permissionList"
                  @on-load="getList"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @refresh-change="refreshChange"
                  @row-update="handleUpdate"
                  @row-save="handleSave"
@@ -60,11 +62,11 @@
     computed: {
       ...mapGetters(['permissions']),
       permissionList() {
-          return {
-              addBtn: this.vaildData(this.permissions.sys_client_add, false),
-              delBtn: this.vaildData(this.permissions.sys_client_del, false),
-              editBtn: this.vaildData(this.permissions.sys_client_edit, false)
-          }
+        return {
+          addBtn: this.vaildData(this.permissions.sys_client_add, false),
+          delBtn: this.vaildData(this.permissions.sys_client_del, false),
+          editBtn: this.vaildData(this.permissions.sys_client_edit, false)
+        }
       }
     },
     methods: {
@@ -79,22 +81,7 @@
           this.tableLoading = false
         })
       },
-      /**
-       * @title 打开新增窗口
-       * @detail 调用crud的handleadd方法即可
-       *
-       **/
-      handleAdd: function () {
-        this.$refs.crud.rowAdd()
-      },
-      handleEdit(row, index) {
-        this.$refs.crud.rowEdit(row, index)
-      },
-      handleDel(row, index) {
-        this.$refs.crud.rowDel(row, index)
-      },
       rowDel: function (row, index) {
-        var _this = this
         this.$confirm('是否确认删除ID为' + row.clientId, '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
@@ -102,58 +89,32 @@
         }).then(function () {
           return delObj(row.clientId)
         }).then(data => {
-          _this.tableData.splice(index, 1)
-          _this.$message({
-            showClose: true,
-            message: '删除成功',
-            type: 'success'
-          })
+          this.$message.success('删除成功')
           this.refreshChange()
-        }).catch(function (err) {
         })
       },
-      /**
-       * @title 数据更新
-       * @param row 为当前的数据
-       * @param index 为当前更新数据的行数
-       * @param done 为表单关闭函数
-       *
-       **/
       handleUpdate: function (row, index, done) {
         putObj(row).then(data => {
-          this.tableData.splice(index, 1, Object.assign({}, row))
-          this.$message({
-            showClose: true,
-            message: '修改成功',
-            type: 'success'
-          })
+          this.$message.success('修改成功')
           this.refreshChange()
           done()
         })
       },
-      /**
-       * @title 数据添加
-       * @param row 为当前的数据
-       * @param done 为表单关闭函数
-       *
-       **/
       handleSave: function (row, done) {
         addObj(row).then(data => {
-          this.tableData.push(Object.assign({}, row))
-          this.$message({
-            showClose: true,
-            message: '添加成功',
-            type: 'success'
-          })
+          this.$message.success('添加成功')
           this.refreshChange()
           done()
         })
       },
-      /**
-       * 刷新回调
-       */
       refreshChange() {
         this.getList(this.page)
+      },
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
       }
     }
   }

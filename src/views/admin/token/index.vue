@@ -25,6 +25,8 @@
                  :option="tableOption"
                  :permission="permissionList"
                  @on-load="getList"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  @refresh-change="refreshChange"
                  @row-del="rowDel">
       </avue-crud>
@@ -54,9 +56,9 @@
     computed: {
       ...mapGetters(['permissions']),
       permissionList() {
-          return {
-              delBtn: this.vaildData(this.permissions.sys_token_del, false),
-          }
+        return {
+          delBtn: this.vaildData(this.permissions.sys_token_del, false),
+        }
       }
     },
     methods: {
@@ -72,33 +74,26 @@
         })
       },
       rowDel: function (row, index) {
-        var _this = this
-        this.$confirm('是否强制' + row.username+ '下线?', '提示', {
+        this.$confirm('是否强制' + row.username + '下线?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(function () {
           return delObj(row.access_token)
         }).then(data => {
-          _this.tableData.splice(index, 1)
-          _this.$message({
-            showClose: true,
-            message: '删除成功',
-            type: 'success'
-          })
-        }).catch(function (err) {
+          this.$message.success('删除成功')
         })
       },
-      /**
-       * 刷新回调
-       */
       refreshChange() {
         this.getList(this.page)
+      },
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
       }
     }
   }
 </script>
-
-<style lang="scss" scoped>
-</style>
 

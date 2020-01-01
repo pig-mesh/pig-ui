@@ -23,6 +23,8 @@
                  v-model="form"
                  :page="page"
                  @on-load="getList"
+                 @size-change="sizeChange"
+                 @current-change="currentChange"
                  :table-loading="listLoading"
                  @search-change="handleFilter"
                  @refresh-change="handleRefreshChange"
@@ -97,137 +99,145 @@
 </template>
 
 <script>
-    import {addObj, delObj, fetchList, putObj} from "@/api/admin/user";
-    import {deptRoleList} from "@/api/admin/role";
-    import {fetchTree} from "@/api/admin/dept";
-    import {tableOption} from '@/const/crud/admin/user';
-    import {mapGetters} from "vuex";
+  import {addObj, delObj, fetchList, putObj} from "@/api/admin/user";
+  import {deptRoleList} from "@/api/admin/role";
+  import {fetchTree} from "@/api/admin/dept";
+  import {tableOption} from '@/const/crud/admin/user';
+  import {mapGetters} from "vuex";
 
-    export default {
-        name: "table_user",
-        data() {
-            return {
-                option: tableOption,
-                treeDeptData: [],
-                checkedKeys: [],
-                roleProps: {
-                    label: "roleName",
-                    value: 'roleId'
-                },
-                defaultProps: {
-                    label: "name",
-                    value: 'id',
-                },
-                page: {
-                    total: 0, // 总页数
-                    currentPage: 1, // 当前页数
-                    pageSize: 20, // 每页显示多少条,
-                    isAsc: false//是否倒序
-                },
-                list: [],
-                listLoading: true,
-                role: [],
-                form: {},
-                rolesOptions: [],
-            };
+  export default {
+    name: "table_user",
+    data() {
+      return {
+        option: tableOption,
+        treeDeptData: [],
+        checkedKeys: [],
+        roleProps: {
+          label: "roleName",
+          value: 'roleId'
         },
-        computed: {
-            ...mapGetters(["permissions"])
+        defaultProps: {
+          label: "name",
+          value: 'id',
         },
-        watch: {
-            role() {
-                this.form.role = this.role
-            }
+        page: {
+          total: 0, // 总页数
+          currentPage: 1, // 当前页数
+          pageSize: 20, // 每页显示多少条,
+          isAsc: false//是否倒序
         },
-        created() {
-            this.sys_user_add = this.permissions["sys_user_add"];
-            this.sys_user_edit = this.permissions["sys_user_edit"];
-            this.sys_user_del = this.permissions["sys_user_del"];
-        },
-        methods: {
-            getList(page, params) {
-                this.listLoading = true;
-                fetchList(Object.assign({
-                    current: page.currentPage,
-                    size: page.pageSize
-                }, params)).then(response => {
-                    this.list = response.data.data.records;
-                    this.page.total = response.data.data.total
-                    this.listLoading = false;
-                });
-            },
-            getNodeData(data) {
-                deptRoleList().then(response => {
-                    this.rolesOptions = response.data.data;
-                });
-            },
-            handleDept() {
-                fetchTree().then(response => {
-                    this.treeDeptData = response.data.data;
-                });
-            },
-            handleFilter(param) {
-                this.page.page = 1;
-                this.getList(this.page, param);
-            },
-            handleRefreshChange() {
-                this.getList(this.page)
-            },
-            handleCreate() {
-                this.$refs.crud.rowAdd();
-            },
-            handleOpenBefore(show, type) {
-                window.boxType = type;
-                this.handleDept();
-                if (['edit', 'views'].includes(type)) {
-                    this.role = [];
-                    for (var i = 0; i < this.form.roleList.length; i++) {
-                        this.role[i] = this.form.roleList[i].roleId;
-                    }
-                    deptRoleList().then(response => {
-                        this.rolesOptions = response.data.data;
-                    });
-                } else if (type === 'add') {
-                    this.role = [];
-                }
-                show();
-            },
-            handleUpdate(row, index) {
-                this.$refs.crud.rowEdit(row, index);
-                this.form.password = undefined
-            },
-            create(row, done, loading) {
-                addObj(this.form).then(() => {
-                    this.getList(this.page);
-                    done();
-                    this.$notify.success('创建成功')
-                }).catch(() => {
-                    loading();
-                });
-            },
-            update(row, index, done, loading) {
-                putObj(this.form).then(() => {
-                    this.getList(this.page);
-                    done();
-                    this.$notify.success('修改成功')
-                }).catch(() => {
-                    loading();
-                });
-            },
-            deletes(row, index) {
-                this.$confirm("此操作将永久删除该用户(用户名:" + row.username + "), 是否继续?", "提示", {confirmButtonText: "确定",
-                        cancelButtonText: "取消", type: "warning"}
-                ).then(() => {
-                    delObj(row.userId).then(() => {
-                            this.getList(this.page);
-                            this.$notify.success('删除成功')
-                        }).catch(() => {
-                        this.$notify.error('删除失败')
-                    });
-                });
-            }
+        list: [],
+        listLoading: true,
+        role: [],
+        form: {},
+        rolesOptions: [],
+      };
+    },
+    computed: {
+      ...mapGetters(["permissions"])
+    },
+    watch: {
+      role() {
+        this.form.role = this.role
+      }
+    },
+    created() {
+      this.sys_user_add = this.permissions["sys_user_add"];
+      this.sys_user_edit = this.permissions["sys_user_edit"];
+      this.sys_user_del = this.permissions["sys_user_del"];
+    },
+    methods: {
+      getList(page, params) {
+        this.listLoading = true;
+        fetchList(Object.assign({
+          current: page.currentPage,
+          size: page.pageSize
+        }, params)).then(response => {
+          this.list = response.data.data.records;
+          this.page.total = response.data.data.total
+          this.listLoading = false;
+        });
+      },
+      getNodeData(data) {
+        deptRoleList().then(response => {
+          this.rolesOptions = response.data.data;
+        });
+      },
+      handleDept() {
+        fetchTree().then(response => {
+          this.treeDeptData = response.data.data;
+        });
+      },
+      sizeChange(pageSize) {
+        this.page.pageSize = pageSize
+      },
+      currentChange(current) {
+        this.page.currentPage = current
+      },
+      handleFilter(param, done) {
+        this.getList(this.page, param);
+        done()
+      },
+      handleRefreshChange() {
+        this.getList(this.page)
+      },
+      handleCreate() {
+        this.$refs.crud.rowAdd();
+      },
+      handleOpenBefore(show, type) {
+        window.boxType = type;
+        this.handleDept();
+        if (['edit', 'views'].includes(type)) {
+          this.role = [];
+          for (var i = 0; i < this.form.roleList.length; i++) {
+            this.role[i] = this.form.roleList[i].roleId;
+          }
+          deptRoleList().then(response => {
+            this.rolesOptions = response.data.data;
+          });
+        } else if (type === 'add') {
+          this.role = [];
         }
-    };
+        show();
+      },
+      handleUpdate(row, index) {
+        this.$refs.crud.rowEdit(row, index);
+        this.form.password = undefined
+      },
+      create(row, done, loading) {
+        addObj(this.form).then(() => {
+          this.getList(this.page);
+          done();
+          this.$notify.success('创建成功')
+        }).catch(() => {
+          loading();
+        });
+      },
+      update(row, index, done, loading) {
+        putObj(this.form).then(() => {
+          this.getList(this.page);
+          done();
+          this.$notify.success('修改成功')
+        }).catch(() => {
+          loading();
+        });
+      },
+      deletes(row, index) {
+        this.$confirm("此操作将永久删除该用户(用户名:" + row.username + "), 是否继续?", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消", type: "warning"
+          }
+        ).then(() => {
+          delObj(row.userId).then(() => {
+            this.getList(this.page);
+            this.$notify.success('删除成功')
+          }).catch(() => {
+            this.$notify.error('删除失败')
+          });
+        });
+      }
+    }
+  };
 </script>
 <style lang="scss">
   .user {
