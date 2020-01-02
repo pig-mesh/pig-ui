@@ -30,6 +30,7 @@ export const tableOption = {
   indexLabel: '序号',
   stripe: true,
   menuAlign: 'center',
+  searchMenuSpan: 6,
   align: 'center',
   column: [{
     width: 150,

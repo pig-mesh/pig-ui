@@ -22,6 +22,7 @@ export const tableOption = {
   menuAlign: 'center',
   editBtn: false,
   delBtn: false,
+  searchMenuSpan: 6,
   align: 'center',
   addBtn: false,
   viewBtn:true,

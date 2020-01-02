@@ -21,6 +21,7 @@ export const tableOption = {
   stripe: true,
   menuAlign: 'center',
   align: 'center',
+  searchMenuSpan: 6,
   refreshBtn: false,
   showClomnuBtn: false,
   searchSize: 'mini',

@@ -23,6 +23,7 @@ export const tableOption = {
   menuWidth: 150,
   align: 'center',
   refreshBtn: true,
+  searchMenuSpan: 6,
   showClomnuBtn: false,
   searchSize: 'mini',
   addBtn: false,

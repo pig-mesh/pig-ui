@@ -33,6 +33,7 @@ export const tableOption = {
   indexLabel: '序号',
   stripe: true,
   menuAlign: 'center',
+  searchMenuSpan: 6,
   editBtn: false,
   delBtn: false,
   align: 'center',
