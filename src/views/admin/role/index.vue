@@ -24,7 +24,6 @@
                  :page="page"
                  v-model="form"
                  :table-loading="listLoading"
-                 :before-open="handleOpenBefore"
                  @on-load="getList"
                  @search-change="handleFilter"
                  @size-change="sizeChange"
@@ -147,6 +146,12 @@
           this.page.total = response.data.data.total
           this.listLoading = false
         })
+      },
+      handleCreate() {
+        this.$refs.crud.rowAdd();
+      },
+      handleUpdate(row, index) {
+        this.$refs.crud.rowEdit(row, index);
       },
       handleRefreshChange() {
         this.getList(this.page)
