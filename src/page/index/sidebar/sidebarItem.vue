@@ -113,7 +113,7 @@ export default {
           src: item[this.pathKey]
         }),
         query: item.query
-      });
+      }).catch(() => {});
     }
   }
 };
