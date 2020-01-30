@@ -16,7 +16,7 @@
   -->
 
 <template>
-  <div class="execution">
+  <div>
     <basic-container>
       <avue-crud ref="crud"
                  :page="page"

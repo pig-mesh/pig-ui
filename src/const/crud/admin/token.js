@@ -15,15 +15,6 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
-const DIC = {
-  vaild: [{
-    label: '否',
-    value: 'false'
-  }, {
-    label: '是',
-    value: 'true'
-  }]
-}
 export const tableOption = {
   border: true,
   index: true,
@@ -47,7 +38,7 @@ export const tableOption = {
     label: '令牌',
     prop: 'access_token',
     align: 'center',
-    'overHidden': true
+    overHidden: true
   }, {
     label: '类型',
     prop: 'token_type',
