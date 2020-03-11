@@ -8,6 +8,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Avue from '@smallwei/avue'
 import '@smallwei/avue/lib/index.css'
+import avueFormDesign from 'avue-plugin-formdesign'
 import './permission' // 权限
 import './error' // 日志
 import router from './router/router'
@@ -35,6 +36,8 @@ Vue.use(Avue, {
 })
 
 Vue.use(router)
+
+Vue.use(avueFormDesign);
 
 // 注册全局容器
 Vue.component('basicContainer', basicContainer)
