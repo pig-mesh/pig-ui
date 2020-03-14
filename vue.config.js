@@ -26,34 +26,14 @@ module.exports = {
   // 配置转发代理
   devServer: {
     proxy: {
-      '/auth': {
+      '/': {
         target: url,
         ws: true,
         pathRewrite: {
-          '^/auth': '/auth'
-        }
-      },
-      '/admin': {
-        target: url,
-        ws: true,
-        pathRewrite: {
-          '^/admin': '/admin'
-        }
-      },
-      '/code': {
-        target: url,
-        ws: true,
-        pathRewrite: {
-          '^/code': '/code'
-        }
-      },
-      '/gen': {
-        target: url,
-        ws: true,
-        pathRewrite: {
-          '^/gen': '/gen'
+          '^/': '/'
         }
       }
+      // v2.7.0 不需在配置前端代理
     }
   }
 }

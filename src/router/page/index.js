@@ -18,7 +18,7 @@ export default [{
         meta: {
             keepAlive: true,
             isTab: false,
-            isAuth: false
+            isAuth: true
         }
 
     },
