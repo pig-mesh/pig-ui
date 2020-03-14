@@ -1,29 +1,30 @@
 import {getStore, setStore} from '@/util/store'
-import {isURL} from '@/util/validate'
+import {isURL, validatenull} from '@/util/validate'
 import {getUserInfo, loginByUsername, logout, refreshToken} from '@/api/login'
 import {deepClone, encryption} from '@/util/util'
 import webiste from '@/const/website'
-import {GetMenu} from '@/api/admin/menu'
+import {getMenu} from '@/api/admin/menu'
 
 function addPath(ele, first) {
-  const propsConfig = webiste.menu.props
+  const menu = webiste.menu
+  const propsConfig = menu.props
   const propsDefault = {
-    label: propsConfig.label || 'label',
+    label: propsConfig.label || 'name',
     path: propsConfig.path || 'path',
     icon: propsConfig.icon || 'icon',
     children: propsConfig.children || 'children'
   }
+  const icon = ele[propsDefault.icon]
+  ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon
   const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0
-  if (!isChild && first) {
+  if (!isChild) ele[propsDefault.children] = []
+  if (!isChild && first && !isURL(ele[propsDefault.path])) {
     ele[propsDefault.path] = ele[propsDefault.path] + '/index'
-    return
+  } else {
+    ele[propsDefault.children].forEach(child => {
+      addPath(child)
+    })
   }
-  ele[propsDefault.children].forEach(child => {
-    if (!isURL(child[propsDefault.path])) {
-      child[propsDefault.path] = `${ele[propsDefault.path]}/${child[propsDefault.path] ? child[propsDefault.path] : 'index'}`
-    }
-    addPath(child)
-  })
 }
 
 const user = {
@@ -128,17 +129,16 @@ const user = {
       })
     },
     // 获取系统菜单
-    GetMenu({
-              commit
-            },type) {
+    GetMenu({commit}, obj) {
       return new Promise(resolve => {
-        GetMenu().then((res) => {
+        getMenu(obj.id).then((res) => {
           const data = res.data.data
           let menu = deepClone(data)
           menu.forEach(ele => {
             addPath(ele)
           })
-          commit('SET_MENU', { type, menu })
+          let type = obj.type
+          commit('SET_MENU', {type, menu})
           resolve(menu)
         })
       })
@@ -174,7 +174,7 @@ const user = {
       state.userInfo = userInfo
     },
     SET_MENU: (state, params = {}) => {
-      let { menu, type } = params;
+      let {menu, type} = params;
       if (type !== false) state.menu = menu
       setStore({
         name: 'menu',

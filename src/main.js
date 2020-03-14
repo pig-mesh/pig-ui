@@ -54,6 +54,7 @@ Object.keys(filters).forEach(key => {
 
 // 动态加载阿里云字体库
 iconfontVersion.forEach(ele => {
+  console.log(iconfontUrl.replace('$key', ele))
   loadStyle(iconfontUrl.replace('$key', ele))
 })
 

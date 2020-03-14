@@ -17,22 +17,23 @@
 
 import request from '@/router/axios'
 
-export function GetMenu () {
+export function getMenu(id) {
   return request({
     url: '/admin/menu',
+    params: {parentId: id},
     method: 'get'
   })
 }
 
-export function fetchMenuTree (query) {
+export function fetchMenuTree(lazy, parentId) {
   return request({
     url: '/admin/menu/tree',
     method: 'get',
-    params: query
+    params: {lazy: lazy, parentId: parentId}
   })
 }
 
-export function addObj (obj) {
+export function addObj(obj) {
   return request({
     url: '/admin/menu',
     method: 'post',
@@ -40,21 +41,21 @@ export function addObj (obj) {
   })
 }
 
-export function getObj (id) {
+export function getObj(id) {
   return request({
     url: '/admin/menu/' + id,
     method: 'get'
   })
 }
 
-export function delObj (id) {
+export function delObj(id) {
   return request({
     url: '/admin/menu/' + id,
     method: 'delete'
   })
 }
 
-export function putObj (obj) {
+export function putObj(obj) {
   return request({
     url: '/admin/menu',
     method: 'put',

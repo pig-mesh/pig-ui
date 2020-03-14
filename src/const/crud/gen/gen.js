@@ -79,14 +79,6 @@ export const formOption = {
       label: '注释',
       prop: 'comments',
       placeholder: '可为空，加载表备注'
-    },{
-      label: '前端风格',
-      prop: 'style',
-      type: 'radio',
-      slot: true,
-      border:true,
-      span: 24,
-      dicUrl: '/admin/dict/type/style_type',
     }
   ]
 }
