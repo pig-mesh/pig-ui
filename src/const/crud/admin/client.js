@@ -89,6 +89,7 @@ export const tableOption = {
     prop: 'autoapprove',
     align: 'center',
     type: 'radio',
+    border: true,
     dicData: DIC.vaild,
     rules: [{
       required: true,
