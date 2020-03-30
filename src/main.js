@@ -8,7 +8,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import Avue from '@smallwei/avue'
 import '@smallwei/avue/lib/index.css'
-import avueFormDesign from 'avue-plugin-formdesign'
+import avueFormDesign from 'pig-avue-form-design'
 import './permission' // 权限
 import './error' // 日志
 import router from './router/router'

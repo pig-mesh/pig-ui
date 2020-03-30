@@ -2,12 +2,12 @@ export default {
   title: 'Pig',
   logo: 'Pig',
   key: 'pig',   //配置主键,目前用于存储
-  indexTitle: 'Pig 快速开发框架',
+  indexTitle: 'pig 快速开发框架',
   whiteList: ['/login', '/404', '/401', '/lock'], // 配置无权限可以访问的页面
   whiteTagList: ['/login', '/404', '/401', '/lock' ], // 配置不添加tags页面 （'/advanced-router/mutative-detail/*'——*为通配符）
   lockPage: '/lock',
   tokenTime: 6000,
-  infoTitle: 'Pig 快速开发框架',
+  infoTitle: 'pig 快速开发框架',
   statusWhiteList: [428],
   // 配置首页不可关闭
   isFirstPage: false,

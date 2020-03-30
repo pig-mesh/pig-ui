@@ -1,6 +1,6 @@
 {
   "name": "pig-ui",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "private": true,
   "scripts": {
     "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org ",
@@ -9,8 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@smallwei/avue": "2.3.5",
-    "avue-plugin-formdesign": "^1.0.2",
+    "@smallwei/avue": "2.4.1",
     "avue-plugin-ueditor": "^0.0.6",
     "axios": "^0.19.0",
     "babel-polyfill": "^6.26.0",
@@ -19,6 +18,7 @@
     "element-ui": "^2.13.0",
     "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
+    "pig-avue-form-design": "1.1.6",
     "script-loader": "^0.7.2",
     "vue": "^2.6.10",
     "vue-axios": "^2.1.4",
@@ -26,7 +26,7 @@
     "vuex": "^3.1.1"
   },
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.11.0",
+    "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.8.0",
     "@vue/cli-service": "^3.11.0",
     "chai": "^4.2.0",

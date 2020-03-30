@@ -125,8 +125,9 @@ export const tableOption = {
   }, {
     label: '状态',
     prop: 'lockFlag',
-    type: 'select',
+    type: 'radio',
     slot: true,
+    border: true,
     span: 24,
     rules: [{
       required: true,
