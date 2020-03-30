@@ -1,7 +1,7 @@
 <template>
   <div class="webapp">
     <basic-container>
-      <avue-form-design :option="option"
+      <avue-form-design :options="options"
                         @submit="handleSubmit">
       </avue-form-design>
     </basic-container>
@@ -17,7 +17,7 @@
         data() {
             return {
                 box: true,
-                option: {
+                options: {
                     column: []
                 }
             }
@@ -43,7 +43,7 @@
                 }
                 getForm(params.tableName, params.dsName).then(response => {
                     if (!validatenull(response.data.data)) {
-                        this.option = JSON.parse(response.data.data)
+                        this.options = JSON.parse(response.data.data)
                     }
                 })
             }
