@@ -109,6 +109,20 @@
   import {addObj, delObj, fetchTree, getObj, putObj} from '@/api/admin/dept'
   import {mapGetters} from 'vuex'
 
+  import { getdetails } from '@/api/admin/dept'
+
+  var validatedeptname = (rule, value, callback) => {
+    getdetails(value).then(response => {
+      if (window.boxType === 'edit') callback()
+      let result = response.data.data
+      if (result !== null) {
+        callback(new Error('部门已经存在'))
+      } else {
+        callback()
+      }
+    })
+  }
+
   export default {
     name: 'dept',
     data() {
@@ -137,8 +151,12 @@
             {required: true, message: '请输入节点编号', trigger: 'blur'}
           ],
           name: [
-            {required: true, message: '请输入部门名称', trigger: 'blur'}
+            { required: true, message: '请输入部门名称', trigger: 'blur' },
+            {validator: validatedeptname, trigger: 'blur'}
           ],
+          orderNum: [
+            { required: false, message: '排序值', trigger: 'blur' },
+          ]
         },
         labelPosition: 'right',
         form: {

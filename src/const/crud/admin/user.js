@@ -27,6 +27,21 @@ var validateUsername = (rule, value, callback) => {
     }
   })
 }
+
+// 设置手机号的验证规则
+const checkPhone = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('请输入联系方式'))
+  } else {
+    const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+    if (reg.test(value)) {
+      callback()
+    } else {
+      return callback(new Error('请输入正确的电话'))
+    }
+  }
+}
+
 export const tableOption = {
   border: true,
   index: true,
@@ -97,12 +112,7 @@ export const tableOption = {
     type: 'phone',
     value: '',
     span: 24,
-    rules: [{
-      min: 6,
-      max: 20,
-      message: '长度在 11 个字符',
-      trigger: 'blur'
-    }]
+    rules: [ {validator: checkPhone, trigger: 'blur' }]
   }, {
     label: '角色',
     prop: 'role',
