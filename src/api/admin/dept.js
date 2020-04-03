@@ -62,3 +62,11 @@ export function putObj (obj) {
     data: obj
   })
 }
+
+export function getdetails (obj) {
+  return request({
+    url: '/admin/dept/details/' + obj,
+    method: 'get'
+  })
+}
+
