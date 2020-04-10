@@ -60,8 +60,11 @@ export default {
     tag() {
       this.setActive();
     },
-    contextmenuFlag() {
-      window.addEventListener("mousedown", this.watchContextmenu);
+    contextmenuFlag(contextmenuShow) {
+      // 只在右键菜单显示的时候监听鼠标点击事件
+      if (contextmenuShow) {
+        window.addEventListener("mousedown", this.watchContextmenu);
+      }
     }
   },
   computed: {
@@ -74,12 +77,11 @@ export default {
     }
   },
   methods: {
-    watchContextmenu() {
-      if (!this.$el.contains(event.target) || event.button !== 0) {
+    watchContextmenu(e) {
+      if (!this.$el.contains(e.target)) {
         this.contextmenuFlag = false;
+        window.removeEventListener("mousedown", this.watchContextmenu);
       }
-
-      window.removeEventListener("mousedown", this.watchContextmenu);
     },
     handleContextmenu(event) {
       let target = event.target;
