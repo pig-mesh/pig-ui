@@ -25,6 +25,7 @@
                  :option="tableOption"
                  :permission="permissionList"
                  @on-load="getList"
+                 :before-open="beforeOpen"
                  @size-change="sizeChange"
                  @current-change="currentChange"
                  @refresh-change="refreshChange"
@@ -115,6 +116,10 @@
       },
       currentChange(current) {
         this.page.currentPage = current
+      },
+      beforeOpen(show, type) {
+        window.boxType = type
+        show()
       }
     }
   }

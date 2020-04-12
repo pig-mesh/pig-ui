@@ -15,6 +15,8 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
+import {getObj} from '@/api/admin/client'
+
 const DIC = {
   vaild: [{
     label: '否',
@@ -24,6 +26,21 @@ const DIC = {
     value: 'true'
   }]
 }
+
+var validateClient = (rule, value, callback) => {
+  getObj(value).then(response => {
+    if (window.boxType === 'edit') {
+      return callback()
+    }
+    const result = response.data.data
+    if (result.length !== 0) {
+      callback(new Error('客户端已存在'))
+    } else {
+      callback()
+    }
+  })
+}
+
 export const tableOption = {
   border: true,
   index: true,
@@ -42,7 +59,7 @@ export const tableOption = {
       required: true,
       message: '请输入clientId',
       trigger: 'blur'
-    }]
+    }, {validator: validateClient, trigger: 'blur'}]
   }, {
     label: '密钥',
     prop: 'clientSecret',

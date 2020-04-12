@@ -61,27 +61,26 @@
       }
     },
     methods: {
-      rowSave(row,done,loading) {
+      rowSave(row,done) {
         if (validatenull(row.parentId)){
           row.parentId = -1
         }
-        addObj(row).then(() => {
-          done()
-          this.onLoad();
+        addObj(row).then(res => {
+          row.id = res.data.data.menuId;
+          done(row);
           this.$message.success("添加成功");
         });
       },
-      rowUpdate(row,index, done,loading) {
+      rowUpdate(row,index, done) {
         if (validatenull(row.parentId)){
           row.parentId = -1
         }
         putObj(row).then(() => {
-          done()
-          this.onLoad();
+          done(row)
           this.$message.success("修改成功");
         });
       },
-      rowDel(row) {
+      rowDel(row, index, done) {
         this.$confirm("确定将选择数据删除?", {
           confirmButtonText: "确定",
           cancelButtonText: "取消",
@@ -89,7 +88,7 @@
         }).then(() => {
           return delObj(row.id);
         }).then(() => {
-          this.onLoad();
+          done(row);
           this.$message.success("删除成功");
         });
       },
@@ -118,7 +117,7 @@
             item.addDisplay = this.form.type !== "1"
             item.editDisplay = this.form.type !== "1"
           }
-          // 不是按钮类型 要输入path
+          // 不是按钮类型 要输入icon
           if (item.prop === "icon") {
             item.addDisplay = this.form.type !== "1"
             item.editDisplay = this.form.type !== "1"

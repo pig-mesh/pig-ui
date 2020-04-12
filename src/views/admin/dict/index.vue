@@ -38,7 +38,7 @@
           <el-button
             v-if="permissions.sys_dict_add"
             type="text"
-            size="mini"
+            size="small"
             icon="el-icon-menu"
             @click="handleItem(scope.row,scope.index)">字典项
           </el-button>
@@ -153,6 +153,7 @@
       },
       searchChange(form, done) {
         this.searchForm = form
+        this.page.currentPage = 1
         this.getList(this.page, form)
         done()
       },
@@ -225,7 +226,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-</style>
-
