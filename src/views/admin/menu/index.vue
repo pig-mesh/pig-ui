@@ -26,7 +26,7 @@
         <el-table-column prop="path" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="type" label="类型" width="80" align="center">
           <template slot-scope="scope">
-            <el-tag type="success" v-if="scope.row.type === '0'">左菜单</el-tag>
+            <el-tag type="success" v-if="scope.row.type === '0'">菜单</el-tag>
             <el-tag type="info" v-if="scope.row.type === '1'">按钮</el-tag>
           </template>
         </el-table-column>
