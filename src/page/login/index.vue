@@ -6,7 +6,7 @@
              src="/img/logo.png"
              alt="">
         <p class="title">{{website.infoTitle}}</p>
-        <p>©2020 v2.7.2</p>
+        <p>©2020 v2.7.3</p>
       </div>
       <div class="login-border">
         <div class="login-main">
