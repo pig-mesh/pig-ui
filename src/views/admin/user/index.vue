@@ -77,12 +77,11 @@
         </template>
         <template slot="deptIdForm"
                   slot-scope="scope">
-          <avue-input v-model="form.deptId"
-                      type="tree"
+          <avue-input-tree v-model="form.deptId"
                       placeholder="请选择所属部门"
                       :node-click="getNodeData"
                       :dic="treeDeptData"
-                      :props="defaultProps"></avue-input>
+                      :props="defaultProps"></avue-input-tree>
         </template>
         <template slot="roleForm"
                   slot-scope="scope">
