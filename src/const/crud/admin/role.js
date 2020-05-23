@@ -64,7 +64,18 @@ export const tableOption = {
     label: '角色描述',
     prop: 'roleDesc',
     overHidden: true,
-    span: 24
+    span: 24,
+    rules: [{
+      required: true,
+      message: '角色描述不能为空',
+      trigger: 'blur'
+    },
+      {
+        min: 3,
+        max: 100,
+        message: '长度在 3 到 100 个字符',
+        trigger: 'blur'
+      }]
   }, {
     label: '创建时间',
     prop: 'createTime',

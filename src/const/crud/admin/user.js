@@ -89,6 +89,10 @@ export const tableOption = {
     hide: true,
     span: 24,
     rules: [{
+      required: true,
+      message: '密码不能为空',
+      trigger: 'blur'
+    },{
       min: 6,
       max: 20,
       message: '长度在 6 到 20 个字符',
@@ -112,7 +116,14 @@ export const tableOption = {
     type: 'phone',
     value: '',
     span: 24,
-    rules: [ {validator: checkPhone, trigger: 'blur' }]
+    rules: [ {
+      required: true,
+      message: '密码不能为空',
+      trigger: 'blur'
+    },{
+      validator: checkPhone,
+      trigger: 'blur'
+    }]
   }, {
     label: '角色',
     prop: 'role',
