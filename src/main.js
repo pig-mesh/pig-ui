@@ -26,12 +26,12 @@ import basicContainer from './components/basic-container/main'
 Vue.use(VueAxios, axios)
 
 Vue.use(ElementUI, {
-  size: 'medium',
+  size: 'small',
   menuType: 'text'
 })
 
 Vue.use(Avue, {
-  size: 'medium',
+  size: 'small',
   menuType: 'text'
 })
 

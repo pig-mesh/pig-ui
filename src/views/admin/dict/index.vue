@@ -38,7 +38,6 @@
           <el-button
             v-if="permissions.sys_dict_add"
             type="text"
-            size="small"
             icon="el-icon-menu"
             @click="handleItem(scope.row,scope.index)">字典项
           </el-button>

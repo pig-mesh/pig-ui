@@ -4,7 +4,7 @@
       <div class="banner-text">
         <span>
           <a href="https://avue.top/#/pay" target="_blank">
-            <img src="https://img.shields.io/badge/Avue-2.3.5-green.svg" alt="Build Status">
+            <img src="https://img.shields.io/badge/Element-2.13.0-green.svg" alt="Build Status">
           </a>
           <img src="https://img.shields.io/badge/Spring%20Boot-2.2.6.RELEASE-yellowgreen.svg" alt="Downloads">
           <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxton.SR3-blue.svg" alt="Coverage Status">

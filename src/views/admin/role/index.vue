@@ -38,7 +38,7 @@
             class="filter-item"
             type="primary"
             icon="el-icon-edit"
-            @click="handleCreate">添加
+            @click="$refs.crud.rowAdd()">添加
           </el-button>
         </template>
         <template slot="dsScopeForm" slot-scope="scope">
@@ -62,21 +62,18 @@
           <el-button
             v-if="roleManager_btn_edit"
             type="text"
-            size="mini"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row,scope.index)">编辑
           </el-button>
           <el-button
             v-if="roleManager_btn_del"
             type="text"
-            size="mini"
             icon="el-icon-delete"
             @click="handleDelete(scope.row,scope.index)">删除
           </el-button>
           <el-button
             v-if="roleManager_btn_perm"
             type="text"
-            size="mini"
             icon="el-icon-plus"
             @click="handlePermission(scope.row,scope.index)">权限
           </el-button>
@@ -105,24 +102,23 @@
            class="dialog-footer">
         <el-button
           type="primary"
-          size="small"
           @click="updatePermession(roleId)">更 新
         </el-button>
         <el-button
           type="default"
-          size="small"
-          @click="cancal()">取消</el-button>
+          @click="cancal()">取消
+        </el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import { addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj } from '@/api/admin/role'
-  import { tableOption } from '@/const/crud/admin/role'
-  import { fetchTree } from '@/api/admin/dept'
-  import { fetchMenuTree } from '@/api/admin/menu'
-  import { mapGetters } from 'vuex'
+  import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@/api/admin/role'
+  import {tableOption} from '@/const/crud/admin/role'
+  import {fetchTree} from '@/api/admin/dept'
+  import {fetchMenuTree} from '@/api/admin/menu'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'TableRole',
@@ -185,10 +181,8 @@
       },
       handleFilter(form) {
         this.searchForm = form
+        this.page.currentPage = 1
         this.getList(this.page, form)
-      },
-      handleCreate() {
-        this.$refs.crud.rowAdd()
       },
       handleOpenBefore(show) {
         fetchTree().then(response => {
@@ -204,7 +198,7 @@
       handleUpdate(row, index) {
         this.$refs.crud.rowEdit(row, index)
       },
-      cancal () {
+      cancal() {
         this.dialogPermissionVisible = false;
       },
       handlePermission(row) {
@@ -254,7 +248,7 @@
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
-        }).then(function() {
+        }).then(function () {
           return delObj(row.roleId)
         }).then(() => {
           this.getList(this.page)
@@ -285,12 +279,12 @@
           loading()
         })
       },
-      updatePermession (roleId) {
+      updatePermession(roleId) {
         this.menuIds = ''
         this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
         permissionUpd(roleId, this.menuIds).then(() => {
           this.dialogPermissionVisible = false
-          this.$store.dispatch('GetMenu', {type:false})
+          this.$store.dispatch('GetMenu', {type: false})
           this.$notify.success('修改成功')
         })
       }
@@ -302,15 +296,18 @@
   .el-dialog__wrapper {
     .el-dialog {
       width: 61% !important;
+
       .dialog-main-tree {
         max-height: 400px;
         overflow-y: auto;
       }
     }
+
     .el-form-item__label {
       width: 20% !important;
       padding-right: 20px;
     }
+
     .el-form-item__content {
       margin-left: 20% !important;
     }

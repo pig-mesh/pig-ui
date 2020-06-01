@@ -27,7 +27,7 @@
       </el-tabs>
       <el-dropdown class="avue-tags__menu">
         <el-button type="primary"
-                   size="mini">
+                   >
           更多
           <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>

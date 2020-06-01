@@ -35,8 +35,7 @@
         <template slot="menuLeft">
           <el-button v-if="sys_user_add"
                      class="filter-item"
-                     @click="handleCreate"
-                     size="small"
+                     @click="$refs.crud.rowAdd()"
                      type="primary"
                      icon="el-icon-edit">添加
           </el-button>
@@ -63,13 +62,11 @@
         <template slot="menu"
                   slot-scope="scope">
           <el-button v-if="sys_user_edit"
-                     size="small"
                      type="text"
                      icon="el-icon-edit"
                      @click="handleUpdate(scope.row,scope.index)">编辑
           </el-button>
           <el-button v-if="sys_user_del"
-                     size="small"
                      type="text"
                      icon="el-icon-delete"
                      @click="deletes(scope.row,scope.index)">删除
@@ -78,10 +75,10 @@
         <template slot="deptIdForm"
                   slot-scope="scope">
           <avue-input-tree v-model="form.deptId"
-                      placeholder="请选择所属部门"
-                      :node-click="getNodeData"
-                      :dic="treeDeptData"
-                      :props="defaultProps"></avue-input-tree>
+                           placeholder="请选择所属部门"
+                           :node-click="getNodeData"
+                           :dic="treeDeptData"
+                           :props="defaultProps"></avue-input-tree>
         </template>
         <template slot="roleForm"
                   slot-scope="scope">
@@ -162,11 +159,6 @@
           this.rolesOptions = response.data.data;
         });
       },
-      handleDept() {
-        fetchTree().then(response => {
-          this.treeDeptData = response.data.data;
-        });
-      },
       sizeChange(pageSize) {
         this.page.pageSize = pageSize
       },
@@ -174,28 +166,32 @@
         this.page.currentPage = current
       },
       handleFilter(param, done) {
+        this.page.currentPage = 1
         this.getList(this.page, param);
         done()
       },
       handleRefreshChange() {
         this.getList(this.page)
       },
-      handleCreate() {
-        this.$refs.crud.rowAdd();
-      },
       handleOpenBefore(show, type) {
-        window.boxType = type;
-        this.handleDept();
+        window.boxType = type
+        // 查询部门树
+        fetchTree().then(response => {
+          this.treeDeptData = response.data.data
+        })
+        // 查询角色列表
+        deptRoleList().then(response => {
+          this.rolesOptions = response.data.data
+        })
+        // 若是编辑、查看回显角色名称
         if (['edit', 'views'].includes(type)) {
-          this.role = [];
-          for (var i = 0; i < this.form.roleList.length; i++) {
+          this.role = []
+          for (let i = 0; i < this.form.roleList.length; i++) {
             this.role[i] = this.form.roleList[i].roleId;
           }
-          deptRoleList().then(response => {
-            this.rolesOptions = response.data.data;
-          });
         } else if (type === 'add') {
-          this.role = [];
+          // 若是添加角色列表设置为空
+          this.role = []
         }
         show();
       },
@@ -221,7 +217,7 @@
           loading();
         });
       },
-      deletes(row, index) {
+      deletes(row) {
         this.$confirm("此操作将永久删除该用户(用户名:" + row.username + "), 是否继续?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消", type: "warning"
@@ -238,20 +234,3 @@
     }
   };
 </script>
-<style lang="scss">
-  .user {
-    height: 100%;
-
-    &__tree {
-      padding-top: 3px;
-      padding-right: 20px;
-    }
-
-    &__main {
-      .el-card__body {
-        padding-top: 0;
-      }
-    }
-  }
-</style>
-

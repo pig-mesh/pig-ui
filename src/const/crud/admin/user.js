@@ -14,9 +14,12 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
-import { getDetails } from '@/api/admin/user'
+import {getDetails} from '@/api/admin/user'
 
-var validateUsername = (rule, value, callback) => {
+const validateUsername = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('请输入用户名'))
+  }
   getDetails(value).then(response => {
     if (window.boxType === 'edit') callback()
     let result = response.data.data
@@ -26,6 +29,18 @@ var validateUsername = (rule, value, callback) => {
       callback()
     }
   })
+}
+
+// 设置密码校验规则
+const checkPassword = (rule, value, callback) => {
+  if (window.boxType === 'edit') {
+    return callback()
+  }
+  if (!value) {
+    callback(new Error('请输入密码'))
+  } else {
+    callback()
+  }
 }
 
 // 设置手机号的验证规则
@@ -59,7 +74,7 @@ export const tableOption = {
     prop: 'userId',
     span: 24,
     hide: true,
-    editDisabled: true,
+    editDisplay: false,
     addDisplay: false
   }, {
     fixed: true,
@@ -73,13 +88,13 @@ export const tableOption = {
       required: true,
       message: '请输入用户名'
     },
-    {
-      min: 3,
-      max: 20,
-      message: '长度在 3 到 20 个字符',
-      trigger: 'blur'
-    },
-    { validator: validateUsername, trigger: 'blur' }
+      {
+        min: 3,
+        max: 20,
+        message: '长度在 3 到 20 个字符',
+        trigger: 'blur'
+      },
+      {validator: validateUsername, trigger: 'blur'}
     ]
   }, {
     label: '密码',
@@ -88,16 +103,7 @@ export const tableOption = {
     value: '',
     hide: true,
     span: 24,
-    rules: [{
-      required: true,
-      message: '密码不能为空',
-      trigger: 'blur'
-    },{
-      min: 6,
-      max: 20,
-      message: '长度在 6 到 20 个字符',
-      trigger: 'blur'
-    }]
+    rules: [{validator: checkPassword, trigger: 'blur'}]
   }, {
     label: '所属部门',
     prop: 'deptId',
@@ -116,11 +122,11 @@ export const tableOption = {
     type: 'phone',
     value: '',
     span: 24,
-    rules: [ {
+    rules: [{
       required: true,
       message: '密码不能为空',
       trigger: 'blur'
-    },{
+    }, {
       validator: checkPhone,
       trigger: 'blur'
     }]

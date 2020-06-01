@@ -58,7 +58,6 @@
     </el-form-item>
     <el-form-item>
       <el-button type="primary"
-                 size="small"
                  @click.native.prevent="handleLogin"
                  class="login-submit">登录</el-button>
     </el-form-item>
