@@ -4,27 +4,27 @@
       <div class="banner-text">
         <span>
           <a href="https://avue.top/#/pay" target="_blank">
-            <img src="https://img.shields.io/badge/Element-2.13.0-green.svg" alt="Build Status">
+            <img src="https://img.shields.io/badge/Element-2.13.2-green.svg" alt="Build Status">
           </a>
-          <img src="https://img.shields.io/badge/Spring%20Boot-2.2.6.RELEASE-yellowgreen.svg" alt="Downloads">
-          <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxton.SR3-blue.svg" alt="Coverage Status">
+          <img src="https://img.shields.io/badge/Spring%20Boot-2.3.1.RELEASE-yellowgreen.svg" alt="Downloads">
+          <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxton.SR5-blue.svg" alt="Coverage Status">
         </span>
         <br/>
         <span>
           <el-collapse v-model="activeNames">
-            <el-collapse-item title="PigX 完整的微服务架构" name="1">
-              <div>基于Spring Cloud Hoxton.SR2</div>
-              <div>基于Spring Boot 2.2.6.RELEASE</div>
+            <el-collapse-item name="1">
+              <div>基于Spring Cloud Hoxton.SR5</div>
+              <div>基于Spring Boot 2.3.1.RELEASE</div>
             </el-collapse-item>
-            <el-collapse-item title="PigX 完美的容器化支持" name="2">
+            <el-collapse-item name="2">
               <div>支持docker部署</div>
               <div>支持Rancher2 + Kubernetes部署</div>
             </el-collapse-item>
-            <el-collapse-item title="PigX 最终一致性分布式事务" name="3">
+            <el-collapse-item name="3">
               <div>基于开源LCN 分布式事务解决方案深度定制</div>
               <div>完美兼容2.X，优化集群部署，提升性能</div>
             </el-collapse-item>
-            <el-collapse-item title="其他功能" name="4">
+            <el-collapse-item name="4">
               <div>SAAS多租户</div>
               <div>Activiti工作流</div>
               <div><a href="https://pig4cloud.com/#/vip" target="_blank">详细介绍pigx </a></div>

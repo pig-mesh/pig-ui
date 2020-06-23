@@ -3,13 +3,13 @@
 
 
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-2.7-success.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Avue-2.3-green.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR3-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.2.RELEASE-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Pig-2.8-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Avue-2.6-green.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR5-blue.svg" alt="Coverage Status">
+ <img src="https://img.shields.io/badge/Spring%20Boot-2.3.RELEASE-blue.svg" alt="Downloads">
 </p>
    
-- based on Spring Cloud Hoxton 、Spring Boot 2.2、 OAuth2  RBAC web framework
+- based on Spring Cloud Hoxton 、Spring Boot 2.3、 OAuth2  RBAC web framework
 - Idea based on data-driven view,  if you don't use vue, you can get started quickly 
 - provide support for common containers like Docker、Kubernetes、Rancher2 
 - provide lambda 、stream api 、webflux production practice   
@@ -36,12 +36,12 @@
 
 dependencies | version
 ---|---
-Spring Boot |  2.2.7.RELEASE  
-Spring Cloud | Hoxton.SR3   
+Spring Boot |  2.3.1.RELEASE  
+Spring Cloud | Hoxton.SR5   
 Spring Security OAuth2 | 2.3.6
-Mybatis Plus | 3.3.1
-hutool | 5.3.3
-Avue | 2.5.2
+Mybatis Plus | 3.3.2
+hutool | 5.3.8
+Avue | 2.6.5
    
 
 
@@ -52,21 +52,23 @@ pig-ui  -- https://github.com/pigxcloud/pig-ui
 
 pig
 ├── pig-auth -- oauth-server[3000]
-├── pig-codegen -- graphical code generation[5002]
 └── pig-common 
      ├── pig-common-core -- tool core package
      ├── pig-common-datasource -- dynamic data source package
      ├── pig-common-log -- Log service package
      ├── pig-common-mybatis -- mybatis expand
      ├── pig-common-security -- security tools
-     └── pig-common-swagger -- api documentation
+     ├── pig-common-swagger -- api documentation
+     └── pig-common-sentinel -- sentinel auto fallbak
 ├── pig-register -- nacos server[8848]
 ├── pig-gateway -- spring cloud gateway[9999]
-├── pig-monitor -- spring boot admin[5001]
 └── pig-upms
      └── pig-upms-api -- user management system api
      └── pig-upms-biz -- user management system biz[4000]
-	 
+└── pig-visual
+     └── pig-monitor -- spring boot admin[5001]
+     ├── pig-codegen -- graphical code generation[5002]
+     └── pig-sentinel-dashboard -- sentinel dashboard [5003]	 
 ```
 #### Open source co-construction
 
