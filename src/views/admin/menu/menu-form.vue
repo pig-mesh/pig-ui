@@ -24,7 +24,7 @@
         </el-col>
       </el-row>
       <el-form-item label="图标" prop="icon" v-if="form.type === '0'">
-        <avue-icon-select v-model="form.icon" :icon-list="iconList"></avue-icon-select>
+        <avue-input-icon v-model="form.icon" :icon-list="iconList"></avue-input-icon>
       </el-form-item>
       <el-form-item label="名称" prop="name">
         <el-input v-model="form.name" placeholder="请输入菜单名称"/>
@@ -120,6 +120,8 @@
             getObj(id).then(response => {
               this.form = response.data.data
             })
+          } else {
+            this.form.menuId = undefined
           }
         })
       },

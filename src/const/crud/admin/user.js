@@ -119,12 +119,11 @@ export const tableOption = {
   }, {
     label: '手机号',
     prop: 'phone',
-    type: 'phone',
     value: '',
     span: 24,
     rules: [{
       required: true,
-      message: '密码不能为空',
+      message: '手机号不能为空',
       trigger: 'blur'
     }, {
       validator: checkPhone,

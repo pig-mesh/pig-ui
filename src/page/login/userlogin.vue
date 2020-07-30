@@ -94,8 +94,7 @@ export default {
           { min: 6, message: "密码长度最少为6位", trigger: "blur" }
         ],
         code: [
-          { required: true, message: "请输入验证码", trigger: "blur" },
-          { min: 4, max: 4, message: "验证码长度为4位", trigger: "blur" }
+          { required: true, message: "请输入验证码", trigger: "blur" }
         ]
       },
       passwordType: "password"
