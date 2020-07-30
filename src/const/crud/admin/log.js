@@ -62,5 +62,10 @@ export const tableOption = {
     type: 'datetime',
     format: 'yyyy-MM-dd HH:mm',
     valueFormat: 'yyyy-MM-dd HH:mm:ss'
+  }, {
+    width: 180,
+    label: '异常日志',
+    prop: 'exception',
+    hide: true
   }]
 }
