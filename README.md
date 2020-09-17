@@ -3,9 +3,9 @@
 
 
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-2.8-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Pig-2.9-success.svg" alt="Build Status">
  <img src="https://img.shields.io/badge/Avue-2.6-green.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR6-blue.svg" alt="Coverage Status">
+ <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR8-blue.svg" alt="Coverage Status">
  <img src="https://img.shields.io/badge/Spring%20Boot-2.3.RELEASE-blue.svg" alt="Downloads">
 </p>
    
@@ -15,7 +15,7 @@
 - provide lambda 、stream api 、webflux production practice   
 
 
-<a href="https://github.com/pigxcloud/pig/wiki/deploy-doc" target="_blank">Documentation</a> | <a target="_blank" href="http://pigx.pig4cloud.com"> PigX Online</a> | <a target="_blank" href="https://paper.pig4cloud.com/"> PigX Paper</a> | <a target="_blank" href="https://start.pig4cloud.com"> pig4cloud initializr</a>
+<a href="https://wiki.pig4cloud.com" target="_blank">Documentation</a> | <a target="_blank" href="http://pigx.pig4cloud.com"> PigX Online</a> | <a target="_blank" href="https://paper.pig4cloud.com/"> PigX Paper</a> | <a target="_blank" href="https://start.pig4cloud.com"> pig4cloud initializr</a>
     
 
 #### Quickly structure microservice applications  
@@ -36,13 +36,13 @@
 
 dependencies | version
 ---|---
-Spring Boot |  2.3.2.RELEASE  
-Spring Cloud | Hoxton.SR6   
-Spring Cloud Alibaba | 2.2.1.RELEASE
+Spring Boot |  2.3.3.RELEASE  
+Spring Cloud | Hoxton.SR8  
+Spring Cloud Alibaba | 2.2.2.RELEASE
 Spring Security OAuth2 | 2.3.6
-Mybatis Plus | 3.3.2
-hutool | 5.3.10
-Avue | 2.6.14
+Mybatis Plus | 3.4.0
+hutool | 5.4.2
+Avue | 2.6.15
    
 
 
@@ -79,23 +79,26 @@ pig
 
 3. mail: <a href="mailto:pig4cloud@qq.com">pig4cloud@qq.com</a>     
 
+#### License
+
+pig is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
+
 #### Free Class
 
 <table>
   <tr>
-    <td><a href="https://www.bilibili.com/video/av45084065" target="_blank"><img src="https://images.gitee.com/uploads/images/2020/0318/215612_b3d0375d_1824312.jpeg"></a></td>
-    <td><a href="https://www.bilibili.com/video/av77344954" target="_blank"><img src="https://images.gitee.com/uploads/images/2020/0318/215612_f6d298c4_1824312.jpeg"></a></td>
+    <td><a href="https://www.bilibili.com/video/av45084065" target="_blank"><img src="https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133006.png"></a></td>
+    <td><a href="https://www.bilibili.com/video/av77344954" target="_blank"><img src="https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133059.png"></a></td>
   </tr>
     <tr>
-    <td><a href="https://www.bilibili.com/video/BV1J5411476V" target="_blank"><img src="http://pigx.vip/20200504210206_YDYTOA_k3s.jpeg"></a></td>
-    <td><a href="https://www.bilibili.com/video/BV14p4y197K5" target="_blank"><img src="http://pigx.vip/20200504210257_yXZBSx_zerotier.jpeg"></a></td>
+    <td><a href="https://www.bilibili.com/video/BV1J5411476V" target="_blank"><img src="https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133114.png"></a></td>
+    <td><a href="https://www.bilibili.com/video/BV14p4y197K5" target="_blank"><img src="https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133124.png"></a></td>
   </tr>
 </table>
 
 #### Chat Group
 
-![](https://images.gitee.com/uploads/images/2020/0318/215612_66ede32c_1824312.jpeg)
-
+![](https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133142.png)
 
 #### Star history
 
