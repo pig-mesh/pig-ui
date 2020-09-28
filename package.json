@@ -6,6 +6,7 @@
     "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org ",
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "build:docker": "vue-cli-service build --dest='./docker/dist/'",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
