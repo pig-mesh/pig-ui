@@ -5,6 +5,7 @@ import errorCode from '@/const/errorCode'
 import router from "@/router/router"
 import {Message} from 'element-ui'
 import 'nprogress/nprogress.css'
+import qs from 'qs'
 import store from "@/store"; // progress bar style
 axios.defaults.timeout = 30000
 // 返回其他状态吗
@@ -31,6 +32,14 @@ axios.interceptors.request.use(config => {
     config.data = serialize(config.data)
     delete config.data.serialize
   }
+
+  // 处理get 请求的数组 springmvc 可以处理
+  if (config.method === 'get') {
+    config.paramsSerializer = function (params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
+  }
+
   return config
 }, error => {
   return Promise.reject(error)

@@ -61,7 +61,9 @@ export const tableOption = {
     prop: 'createTime',
     type: 'datetime',
     format: 'yyyy-MM-dd HH:mm',
-    valueFormat: 'yyyy-MM-dd HH:mm:ss'
+    valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    search: true,
+    searchRange: true
   }, {
     width: 180,
     label: '异常日志',
