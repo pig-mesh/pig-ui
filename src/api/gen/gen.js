@@ -12,7 +12,7 @@
  * Neither the name of the pig4cloud.com developer nor the names of its
  * contributors may be used to endorse or promote products derived from
  * this software without specific prior written permission.
- * Author: test
+ * Author: lengleng
  */
 
 import request from '@/router/axios'
@@ -22,6 +22,14 @@ export function fetchList(query) {
     url: '/gen/generator/page',
     method: 'get',
     params: query
+  })
+}
+
+export function preview(table) {
+  return request({
+    url: '/gen/generator/preview',
+    method: 'get',
+    params: table
   })
 }
 
@@ -77,7 +85,7 @@ export function handleDown(table) {
     data: table,
     responseType: 'arraybuffer'
   }).then((response) => { // 处理返回的文件流
-    const blob = new Blob([response.data], {type: 'application/zip'})
+    const blob = new Blob([response.data], { type: 'application/zip' })
     const filename = table.tableName + '.zip'
     const link = document.createElement('a')
     link.href = URL.createObjectURL(blob)
@@ -95,7 +103,7 @@ export function handleDown(table) {
 export function getForm(tableName, dsName) {
   return request({
     url: '/gen/form/info',
-    params: {tableName: tableName, dsName: dsName},
+    params: { tableName: tableName, dsName: dsName },
     method: 'get'
   })
 }
@@ -104,6 +112,7 @@ export function postForm(formInfo, tableName, dsId) {
   return request({
     url: '/gen/form/',
     method: 'post',
-    data: Object.assign({formInfo, tableName, dsId})
+    data: Object.assign({ formInfo, tableName, dsId })
   })
 }
+

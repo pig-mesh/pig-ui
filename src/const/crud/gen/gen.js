@@ -53,6 +53,8 @@ export const tableOption = {
 }
 
 export const formOption = {
+  submitBtn:false,
+  emptyBtn:false,
   submitText: '生成',
   column: [
     {
