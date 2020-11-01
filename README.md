@@ -18,12 +18,12 @@
 
 | 依赖                   | 版本          |
 | ---------------------- | ------------- |
-| Spring Boot            | 2.3.4.RELEASE |
+| Spring Boot            | 2.3.5.RELEASE |
 | Spring Cloud           | Hoxton.SR8    |
 | Spring Cloud Alibaba   | 2.2.3.RELEASE |
 | Spring Security OAuth2 | 2.3.6         |
 | Mybatis Plus           | 3.4.0         |
-| hutool                 | 5.4.4         |
+| hutool                 | 5.4.7         |
 | Avue                   | 2.6.16        |
 
 ### 模块说明
@@ -91,11 +91,16 @@ npm run build:docker && docker-compose up -d
 
 ```xml
 <!-- pig-gen archetype -->
-<dependency>
-    <groupId>com.pig4cloud.archetype</groupId>
-    <artifactId>pig-gen</artifactId>
-    <version>2.10.0</version>
-</dependency>
+# 在空文件夹执行以下命令，注意 windows 下  \ 修改成 ^
+mvn archetype:generate \
+       -DgroupId=com.pig4cloud \
+       -DartifactId=demo \
+       -Dversion=1.0.0-SNAPSHOT \
+       -Dpackage=com.pig4cloud.pig.demo \
+       -DarchetypeGroupId=com.pig4cloud.archetype \
+       -DarchetypeArtifactId=pig-gen \
+       -DarchetypeVersion=2.10.1 \
+       -DarchetypeCatalog=local
 ```
 
 ## 免费公开课

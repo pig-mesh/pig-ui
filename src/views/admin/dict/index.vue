@@ -38,6 +38,7 @@
           <el-button
             v-if="permissions.sys_dict_add"
             type="text"
+            size="small"
             icon="el-icon-menu"
             @click="handleItem(scope.row,scope.index)">字典项
           </el-button>
@@ -168,16 +169,16 @@
         this.itemPage.currentPage = 1
       },
       handleItem: function (row) {
-        this.getDictItemList(row.id, row.type)
+        this.dictId = row.id
+        this.dictType = row.type
+        this.getDictItemList()
       },
-      getDictItemList(dictId, type) {
-        this.dictType = type
-        this.dictId = dictId
+      getDictItemList() {
         this.dialogFormVisible = true
         fetchItemList(Object.assign({
           current: this.itemPage.currentPage,
           size: this.itemPage.pageSize
-        }, {dictId: dictId})).then(response => {
+        }, {dictId: this.dictId})).then(response => {
           this.tableDictItemData = response.data.data.records
           this.itemPage.total = response.data.data.total
         })
@@ -190,24 +191,24 @@
       handleItemSave: function (row, done) {
         addItemObj(row).then(() => {
           this.$message.success('添加成功')
-          this.getDictItemList(row.dictId, row.type)
+          this.getDictItemList()
           done()
         })
       },
       handleItemUpdate: function (row, index, done) {
         putItemObj(row).then(() => {
           this.$message.success('修改成功')
-          this.getDictItemList(row.dictId, row.type)
+          this.getDictItemList()
           done()
         })
       },
       itemSizeChange(pageSize) {
         this.itemPage.pageSize = pageSize
-        this.getDictItemList(this.dictId, this.type)
+        this.getDictItemList()
       },
       itemCurrentChange(current) {
         this.itemPage.currentPage = current
-        this.getDictItemList(this.dictId, this.type)
+        this.getDictItemList()
       },
       rowItemDel: function (row) {
         this.$confirm('是否确认删除数据为"' + row.label + '"的数据项?', '警告', {
@@ -217,7 +218,7 @@
         }).then(function () {
           return delItemObj(row.id)
         }).then(() => {
-          this.getDictItemList(row.dictId, row.type)
+          this.getDictItemList()
           this.$message.success('删除成功')
         }).catch(function () {
         })
@@ -225,3 +226,7 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+</style>
+

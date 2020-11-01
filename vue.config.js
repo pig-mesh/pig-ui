@@ -10,11 +10,11 @@ module.exports = {
   publicPath: publicPath,
   lintOnSave: true,
   productionSourceMap: false,
+  css: {
+    // 忽略 CSS order 顺序警告
+    extract: { ignoreOrder: true }
+  },
   chainWebpack: config => {
-    // 忽略的打包文件
-    config.externals({
-      'axios': 'axios'
-    })
     const entry = config.entry('app')
     entry
       .add('babel-polyfill')
@@ -33,7 +33,6 @@ module.exports = {
           '^/': '/'
         }
       }
-      // v2.7.0 不需在配置前端代理
     }
   }
 }

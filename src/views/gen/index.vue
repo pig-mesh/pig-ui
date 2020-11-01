@@ -71,7 +71,7 @@
           </el-button>
           <el-button
             type="text"
-            icon="icon-sheji"
+            icon="el-icon-edit"
             @click="handleDesign(scope.row, scope.index)"
             >设计
           </el-button>
