@@ -53,7 +53,7 @@
       </el-row>
       <avue-crud
         ref="crud"
-        :page="page"
+        :page.sync="page"
         :data="tableData"
         :table-loading="tableLoading"
         :option="tableOption"

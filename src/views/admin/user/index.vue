@@ -21,7 +21,7 @@
       <avue-crud :option="option"
                  ref="crud"
                  v-model="form"
-                 :page="page"
+                 :page.sync="page"
                  @on-load="getList"
                  @size-change="sizeChange"
                  @current-change="currentChange"

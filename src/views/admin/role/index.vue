@@ -22,7 +22,7 @@
         ref="crud"
         :option="tableOption"
         :data="list"
-        :page="page"
+        :page.sync="page"
         v-model="form"
         :table-loading="listLoading"
         :before-open="handleOpenBefore"
