@@ -15,6 +15,21 @@
  * Author: test
  */
 
+/**
+ * 
+ * @param {校验数据源名} rule 
+ * @param {*} value 
+ * @param {*} callback 
+ */
+var validateDsName = (rule, value, callback) => {
+  var re = /(?=.*[a-z])(?=.*_)/;
+  if (value && (!(re).test(value))) {
+    callback(new Error('数据源名称不合法, 组名_数据源名形式'))
+  } else {
+    callback()
+  }
+}
+
 export const tableOption = {
   selection: true,
   border: true,
@@ -53,8 +68,8 @@ export const tableOption = {
 }
 
 export const formOption = {
-  submitBtn:false,
-  emptyBtn:false,
+  submitBtn: false,
+  emptyBtn: false,
   submitText: '生成',
   column: [
     {
@@ -136,7 +151,8 @@ export const tableDsOption = {
       prop: 'name',
       rules: [
         { required: true, message: '请输入名称', trigger: 'blur' },
-        { max: 32, message: '长度在 32 个字符', trigger: 'blur' }
+        { max: 32, message: '长度在 32 个字符', trigger: 'blur' },
+        { validator: validateDsName, trigger: 'blur' }
       ]
     },
     {
