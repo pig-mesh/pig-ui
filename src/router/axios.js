@@ -1,5 +1,5 @@
+import axios from 'axios'
 import {serialize} from '@/util/util'
-import {getStore} from '../util/store'
 import NProgress from 'nprogress' // progress bar
 import errorCode from '@/const/errorCode'
 import router from "@/router/router"
