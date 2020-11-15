@@ -1,8 +1,7 @@
 <p align="center">
  <img src="https://img.shields.io/badge/Pig-2.10-success.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR8-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.3.RELEASE-blue.svg" alt="Downloads">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.3.RELEASE-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxto.SR9-blue.svg" alt="Coverage Status">
+ <img src="https://img.shields.io/badge/Spring%20Boot-2.3-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
 </p>
    
@@ -18,11 +17,11 @@
 
 | 依赖                   | 版本          |
 | ---------------------- | ------------- |
-| Spring Boot            | 2.3.5.RELEASE |
-| Spring Cloud           | Hoxton.SR8    |
+| Spring Boot            | 2.3.6.RELEASE |
+| Spring Cloud           | Hoxton.SR9    |
 | Spring Cloud Alibaba   | 2.2.3.RELEASE |
 | Spring Security OAuth2 | 2.3.6         |
-| Mybatis Plus           | 3.4.0         |
+| Mybatis Plus           | 3.4.1         |
 | hutool                 | 5.4.7         |
 | Avue                   | 2.6.16        |
 
@@ -89,7 +88,7 @@ npm run build:docker && docker-compose up -d
 
 ### 快速构架微服务
 
-```xml
+```bash
 <!-- pig-gen archetype -->
 # 在空文件夹执行以下命令，注意 windows 下  \ 修改成 ^
 mvn archetype:generate \
@@ -99,7 +98,7 @@ mvn archetype:generate \
        -Dpackage=com.pig4cloud.pig.demo \
        -DarchetypeGroupId=com.pig4cloud.archetype \
        -DarchetypeArtifactId=pig-gen \
-       -DarchetypeVersion=2.10.1 \
+       -DarchetypeVersion=2.10.2 \
        -DarchetypeCatalog=local
 ```
 
