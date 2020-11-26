@@ -98,7 +98,7 @@ mvn archetype:generate \
        -Dpackage=com.pig4cloud.pig.demo \
        -DarchetypeGroupId=com.pig4cloud.archetype \
        -DarchetypeArtifactId=pig-gen \
-       -DarchetypeVersion=2.10.2 \
+       -DarchetypeVersion=2.10.3 \
        -DarchetypeCatalog=local
 ```
 
