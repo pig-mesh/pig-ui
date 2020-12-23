@@ -6,28 +6,28 @@
           <a href="https://avue.top/#/pay" target="_blank">
             <img src="https://img.shields.io/badge/Element-2.13.6-green.svg" alt="Build Status">
           </a>
-          <img src="https://img.shields.io/badge/Spring%20Boot-2.3.5.RELEASE-yellowgreen.svg" alt="Downloads">
-          <img src="https://img.shields.io/badge/Spring%20Cloud-Hoxton.SR8-blue.svg" alt="Coverage Status">
+          <img src="https://img.shields.io/badge/Spring%20Boot-2.4.1-yellowgreen.svg" alt="Downloads">
+          <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
         </span>
         <br/>
         <span>
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
-              <div>基于Spring Cloud Hoxton.S8</div>
-              <div>基于Spring Boot 2.3.5.RELEASE</div>
+              <div>基于Spring Cloud 2020</div>
+              <div>基于Spring Boot 2.4.1</div>
             </el-collapse-item>
             <el-collapse-item name="2">
               <div>支持docker部署</div>
               <div>支持Rancher2 + Kubernetes部署</div>
             </el-collapse-item>
             <el-collapse-item name="3">
-              <div>基于开源LCN 分布式事务解决方案深度定制</div>
+              <div>基于Spring Security OAuth 2.0 深度定制</div>
               <div>完美兼容2.X，优化集群部署，提升性能</div>
             </el-collapse-item>
             <el-collapse-item name="4">
-              <div>SAAS多租户</div>
-              <div>Activiti工作流</div>
-              <div><a href="https://pig4cloud.com" target="_blank">详细介绍pigx </a></div>
+              <div>深度定制 Spring Cloud Alibaba 便于开发使用</div>
+              <div>完善监控流程，支持微服务全组件接入监控</div>
+              <div><a href="https://pig4cloud.com" target="_blank">详细介绍</a></div>
             </el-collapse-item>
           </el-collapse>
         </span>
