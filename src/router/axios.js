@@ -7,7 +7,11 @@ import {Message} from 'element-ui'
 import 'nprogress/nprogress.css'
 import qs from 'qs'
 import store from "@/store"; // progress bar style
+import {baseUrl} from '@/config/env'
+
 axios.defaults.timeout = 30000
+axios.defaults.baseURL = baseUrl
+
 // 返回其他状态吗
 axios.defaults.validateStatus = function (status) {
   return status >= 200 && status <= 500 // 默认的
