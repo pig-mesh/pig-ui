@@ -20,7 +20,6 @@
     "codemirror": "^5.58.1",
     "crypto-js": "^3.1.9-1",
     "element-ui": "^2.13.2",
-    "js-cookie": "^2.2.1",
     "nprogress": "^0.2.0",
     "script-loader": "^0.7.2",
     "vue": "^2.6.10",
