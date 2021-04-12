@@ -78,25 +78,27 @@
         this.dsForm.password = undefined
         show()
       },
-      handleUpdate: function (row, index, done) {
+      handleUpdate: function (row, index, done,loading) {
         putObj(row).then(res => {
           if (res.data.data){
+            done()
             this.$message.success('修改成功')
           }else {
+            loading()
             this.$message.error('修改失败，数据源不可访问')
           }
-          done()
           this.getDsList(this.dsPage)
         })
       },
-      handleSave: function (row, done) {
+      handleSave: function (row, done,loading) {
         addObj(row).then(res => {
           if (res.data.data){
+            done()
             this.$message.success('添加成功')
           }else {
+            loading()
             this.$message.error('添加失败，数据源不可访问')
           }
-          done()
           this.getDsList(this.dsPage)
         })
       },
