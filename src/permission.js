@@ -44,6 +44,13 @@ router.beforeEach((to, from, next) => {
       } else {
         const value = to.query.src || to.fullPath
         const label = to.query.name || to.name
+
+        // 针对外链跳转
+        if (value.includes('http') || value.includes('https')) {
+          window.open(value, '_blank')
+          return
+        }
+
         if (meta.isTab !== false && !validatenull(value) && !validatenull(label)) {
           store.commit('ADD_TAG', {
             label: label,
