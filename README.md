@@ -1,14 +1,14 @@
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-3.0-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Pig-3.2-success.svg" alt="Build Status">
  <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-2.4-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Spring%20Boot-2.5-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
 </p>
 
 
 ## 系统说明
 
-- 基于 Spring Cloud 2020 、Spring Boot 2.4、 OAuth2 的 RBAC **权限管理系统**
+- 基于 Spring Cloud 2020 、Spring Boot 2.5、 OAuth2 的 RBAC **权限管理系统**
 - 基于数据驱动视图的理念封装 element-ui，即使没有 vue 的使用经验也能快速上手
 - 提供对常见容器化支持 Docker、Kubernetes、Rancher2 支持
 - 提供 lambda 、stream api 、webflux 的生产实践
@@ -17,13 +17,13 @@
 
 | 依赖                   | 版本          |
 | ---------------------- | ------------- |
-| Spring Boot            | 2.4.5 |
-| Spring Cloud           | 2020.0.2    |
+| Spring Boot            | 2.5.2 |
+| Spring Cloud           | 2020.0.3    |
 | Spring Cloud Alibaba   | 2021.1|
 | Spring Security OAuth2 | 2.3.6         |
-| Mybatis Plus           | 3.4.2         |
-| hutool                 | 5.6.3         |
-| Avue                   | 2.6.16        |
+| Mybatis Plus           | 3.4.3         |
+| hutool                 | 5.7.3         |
+| Avue                   | 2.6.18        |
 
 ### 模块说明
 
@@ -98,7 +98,7 @@ mvn archetype:generate \
        -Dpackage=com.pig4cloud.pig.demo \
        -DarchetypeGroupId=com.pig4cloud.archetype \
        -DarchetypeArtifactId=pig-gen \
-       -DarchetypeVersion=3.1.2 \
+       -DarchetypeVersion=3.2.2 \
        -DarchetypeCatalog=local
 ```
 

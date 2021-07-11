@@ -23,5 +23,5 @@ let Router = new VueRouter({
 })
 AvueRouter.install(Router, Store)
 Router.$avueRouter.formatRoutes(Store.state.user.menu, true)
-Router.addRoute([...PageRouter, ...ViewsRouter])
+Router.addRoutes([...PageRouter, ...ViewsRouter])
 export default Router
