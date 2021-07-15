@@ -36,9 +36,6 @@ const user = {
       name: 'menu'
     }) || [],
     menuAll: [],
-    expires_in: getStore({
-      name: 'expires_in'
-    }) || '',
     access_token: getStore({
       name: 'access_token'
     }) || '',
@@ -59,7 +56,6 @@ const user = {
           const data = response.data
           commit('SET_ACCESS_TOKEN', data.access_token)
           commit('SET_REFRESH_TOKEN', data.refresh_token)
-          commit('SET_EXPIRES_IN', data.expires_in)
           commit('CLEAR_LOCK')
           resolve()
         }).catch(error => {
@@ -87,7 +83,6 @@ const user = {
           const data = response.data
           commit('SET_ACCESS_TOKEN', data.access_token)
           commit('SET_REFRESH_TOKEN', data.refresh_token)
-          commit('SET_EXPIRES_IN', data.expires_in)
           commit('CLEAR_LOCK')
           resolve()
         }).catch(error => {
@@ -104,7 +99,6 @@ const user = {
           commit('SET_USER_INFO', {})
           commit('SET_ACCESS_TOKEN', '')
           commit('SET_REFRESH_TOKEN', '')
-          commit('SET_EXPIRES_IN', '')
           commit('SET_ROLES', [])
           commit('DEL_ALL_TAG')
           commit('CLEAR_LOCK')
@@ -151,14 +145,6 @@ const user = {
       setStore({
         name: 'access_token',
         content: state.access_token,
-        type: 'session'
-      })
-    },
-    SET_EXPIRES_IN: (state, expires_in) => {
-      state.expires_in = expires_in
-      setStore({
-        name: 'expires_in',
-        content: state.expires_in,
         type: 'session'
       })
     },
