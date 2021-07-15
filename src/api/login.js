@@ -23,21 +23,33 @@ export const loginByUsername = (username, password, code, randomStr) => {
   return request({
     url: '/auth/oauth/token',
     headers: {
-      isToken:false,
-      'Authorization': 'Basic cGlnOnBpZw=='
+      isToken: false,
+      Authorization: 'Basic cGlnOnBpZw=='
     },
     method: 'post',
     params: { username, password, randomStr, code, grant_type, scope }
   })
 }
 
-export const refreshToken = (refresh_token) => {
+export const checkToken = token => {
+  return request({
+    url: '/auth/oauth/check_token',
+    headers: {
+      isToken: false,
+      Authorization: 'Basic cGlnOnBpZw=='
+    },
+    method: 'get',
+    params: { token }
+  })
+}
+
+export const refreshToken = refresh_token => {
   const grant_type = 'refresh_token'
   return request({
     url: '/auth/oauth/token',
     headers: {
-      'isToken': false,
-      'Authorization': 'Basic cGlnOnBpZw==',
+      isToken: false,
+      Authorization: 'Basic cGlnOnBpZw=='
     },
     method: 'post',
     params: { refresh_token, grant_type, scope }
