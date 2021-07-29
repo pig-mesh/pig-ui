@@ -12,6 +12,8 @@
 @import './sidebar.scss';
 // 动画
 @import './animate/vue-transition.scss';
+//主题
+@import './theme/index.scss';
 //适配
 @import './media.scss';
 //通用配置
@@ -60,4 +62,3 @@ a {
   text-align: center;
   font-size: 18px;
 }
-

@@ -1,7 +1,7 @@
 <template>
   <div class="avue-sidebar">
     <logo></logo>
-    <el-scrollbar style="height:100%">
+    <el-scrollbar>
       <div v-if="validatenull(menu)"
            class="avue-sidebar--tip">没有发现菜单
       </div>

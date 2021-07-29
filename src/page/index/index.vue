@@ -15,7 +15,7 @@
         <!-- 顶部标签卡 -->
         <tags/>
         <!-- 主体视图层 -->
-        <el-scrollbar style="height:100%">
+        <el-scrollbar>
           <keep-alive>
             <router-view class="avue-view"
                          v-if="$route.meta.$keepAlive"/>

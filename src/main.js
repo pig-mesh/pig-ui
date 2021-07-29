@@ -66,3 +66,7 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+
+//设置主题为 DB2
+
+document.body.className = 'theme-iview'
