@@ -32,79 +32,91 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import tags from './tags'
-  import top from './top/'
-  import sidebar from './sidebar/'
-  import admin from '@/util/admin';
-  import {validatenull} from '@/util/validate';
-  import {calcDate} from '@/util/date.js';
-  import {getStore} from '@/util/store.js';
+import { mapGetters } from 'vuex'
+import tags from './tags'
+import top from './top/'
+import sidebar from './sidebar/'
+import admin from '@/util/admin'
+import { validatenull } from '@/util/validate'
+import { calcDate } from '@/util/date.js'
+import { getStore } from '@/util/store.js'
+import { checkToken } from '../../api/login'
 
-  export default {
-    components: {
-      top,
-      tags,
-      sidebar
+export default {
+  components: {
+    top,
+    tags,
+    sidebar
+  },
+  name: 'index',
+  data () {
+    return {
+      //刷新token锁
+      refreshLock: false,
+      //刷新token的时间
+      refreshTime: '',
+    }
+  },
+  created () {
+    //实时检测刷新token
+    this.refreshToken()
+  },
+  destroyed () {
+    clearInterval(this.refreshTime)
+  },
+  mounted () {
+    this.init()
+  },
+  computed: mapGetters(['userInfo', 'isLock', 'isCollapse', 'website']),
+  props: [],
+  methods: {
+    showCollapse () {
+      this.$store.commit('SET_COLLAPSE')
     },
-    name: 'index',
-    data() {
-      return {
-        //刷新token锁
-        refreshLock: false,
-        //刷新token的时间
-        refreshTime: '',
+    // 屏幕检测
+    init () {
+      this.$store.commit('SET_SCREEN', admin.getScreen())
+      window.onresize = () => {
+        setTimeout(() => {
+          this.$store.commit('SET_SCREEN', admin.getScreen())
+        }, 0)
       }
     },
-    created() {
-      //实时检测刷新token
-      this.refreshToken()
-    },
-    destroyed() {
-      clearInterval(this.refreshTime)
-    },
-    mounted() {
-      this.init()
-    },
-    computed: mapGetters(['userInfo', 'isLock', 'isCollapse', 'website', 'expires_in']),
-    props: [],
-    methods: {
-      showCollapse() {
-        this.$store.commit("SET_COLLAPSE")
-      },
-      // 屏幕检测
-      init() {
-        this.$store.commit('SET_SCREEN', admin.getScreen())
-        window.onresize = () => {
-          setTimeout(() => {
-            this.$store.commit('SET_SCREEN', admin.getScreen())
-          }, 0);
+    // 实时检测刷新token
+    refreshToken () {
+      this.refreshTime = setInterval(() => {
+        const token = getStore({
+          name: 'access_token',
+          debug: true,
+        })
+
+        if (validatenull(token)) {
+          return
         }
-      },
-      // 实时检测刷新token
-      refreshToken() {
-        this.refreshTime = setInterval(() => {
-          const token = getStore({
-            name: 'access_token',
-            debug: true,
-          });
 
-          if (validatenull(token)) {
-            return;
+        checkToken(token.content).then(response => {
+          const expire = response && response.data && response.data.exp
+          if (expire) {
+            const expiredPeriod = expire * 1000 - new Date().getTime()
+            console.log('当前token过期时间',expiredPeriod,'毫秒')
+            // 小于半小时自动续约
+            if (expiredPeriod <= 30 * 60 * 1000) {
+              if (!this.refreshLock) {
+                this.refreshLock = true
+                this.$store
+                  .dispatch('RefreshToken')
+                  .catch(() => {
+                    clearInterval(this.refreshTime)
+                  })
+                this.refreshLock = false
+              }
+            }
           }
-
-          if (this.expires_in <= 1000 && !this.refreshLock) {
-            this.refreshLock = true
-            this.$store
-              .dispatch('RefreshToken')
-              .catch(() => {
-                clearInterval(this.refreshTime)
-              });
-            this.refreshLock = false
-          }
-          this.$store.commit("SET_EXPIRES_IN", this.expires_in - 10);
-        }, 10000);
-      }
+        }).catch(error => {
+          console.log(error)
+        })
+      }, 60000)
     }
   }
+}
 </script>
