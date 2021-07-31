@@ -16,10 +16,10 @@
  */
 
 /**
- * 
- * @param {校验数据源名} rule 
- * @param {*} value 
- * @param {*} callback 
+ *
+ * @param {校验数据源名} rule
+ * @param {*} value
+ * @param {*} callback
  */
 var validateDsName = (rule, value, callback) => {
   var re = /(?=.*[a-z])(?=.*_)/;
@@ -96,6 +96,19 @@ export const formOption = {
       label: '注释',
       prop: 'comments',
       placeholder: '可为空，加载表备注'
+    }, {
+      label: '前端风格',
+      prop: 'style',
+      type: 'radio',
+      border: true,
+      span: 24,
+      dicData: [{
+        label: '原生ELEMENT',
+        value: '1'
+      }, {
+        label: '数据驱动AVUE',
+        value: '0'
+      }]
     }
   ]
 }
@@ -127,6 +140,19 @@ export const formBatchOption = {
       label: '注释',
       prop: 'comments',
       placeholder: '可为空，加载表备注'
+    }, {
+      label: '前端风格',
+      prop: 'style',
+      type: 'radio',
+      span: 24,
+      border: true,
+      dicData: [{
+        label: '原生ELEMENT',
+        value: '1'
+      }, {
+        label: '数据驱动AVUE',
+        value: '0'
+      }]
     }
   ]
 }
@@ -150,9 +176,9 @@ export const tableDsOption = {
       label: '名称',
       prop: 'name',
       rules: [
-        { required: true, message: '请输入名称', trigger: 'blur' },
-        { max: 32, message: '长度在 32 个字符', trigger: 'blur' },
-        { validator: validateDsName, trigger: 'blur' }
+        {required: true, message: '请输入名称', trigger: 'blur'},
+        {max: 32, message: '长度在 32 个字符', trigger: 'blur'},
+        {validator: validateDsName, trigger: 'blur'}
       ]
     },
     {
@@ -164,23 +190,23 @@ export const tableDsOption = {
       minRows: 2,
       overHidden: true,
       rules: [
-        { required: true, message: '请输入jdbcUrl', trigger: 'blur' }
+        {required: true, message: '请输入jdbcUrl', trigger: 'blur'}
       ]
     },
     {
       label: '用户名',
       prop: 'username',
       rules: [
-        { required: true, message: '请输入用户名', trigger: 'blur' },
-        { max: 32, message: '长度在 32 个字符', trigger: 'blur' }
+        {required: true, message: '请输入用户名', trigger: 'blur'},
+        {max: 32, message: '长度在 32 个字符', trigger: 'blur'}
       ]
     },
     {
       label: '密码',
       prop: 'password',
       rules: [
-        { required: true, message: '请输入密码', trigger: 'blur' },
-        { max: 32, message: '长度在 32 个字符', trigger: 'blur' }
+        {required: true, message: '请输入密码', trigger: 'blur'},
+        {max: 32, message: '长度在 32 个字符', trigger: 'blur'}
       ]
     },
     {
