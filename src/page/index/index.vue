@@ -32,15 +32,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import {mapGetters} from 'vuex'
 import tags from './tags'
 import top from './top/'
 import sidebar from './sidebar/'
 import admin from '@/util/admin'
-import { validatenull } from '@/util/validate'
-import { calcDate } from '@/util/date.js'
-import { getStore } from '@/util/store.js'
-import { checkToken } from '../../api/login'
+import {checkToken} from '@/api/login'
 
 export default {
   components: {
@@ -49,7 +46,7 @@ export default {
     sidebar
   },
   name: 'index',
-  data () {
+  data() {
     return {
       //刷新token锁
       refreshLock: false,
@@ -57,24 +54,24 @@ export default {
       refreshTime: '',
     }
   },
-  created () {
+  created() {
     //实时检测刷新token
     this.refreshToken()
   },
-  destroyed () {
+  destroyed() {
     clearInterval(this.refreshTime)
   },
-  mounted () {
+  mounted() {
     this.init()
   },
   computed: mapGetters(['userInfo', 'isLock', 'isCollapse', 'website']),
   props: [],
   methods: {
-    showCollapse () {
+    showCollapse() {
       this.$store.commit('SET_COLLAPSE')
     },
     // 屏幕检测
-    init () {
+    init() {
       this.$store.commit('SET_SCREEN', admin.getScreen())
       window.onresize = () => {
         setTimeout(() => {
@@ -82,41 +79,11 @@ export default {
         }, 0)
       }
     },
-    // 实时检测刷新token
-    refreshToken () {
+    refreshToken() {
       this.refreshTime = setInterval(() => {
-        const token = getStore({
-          name: 'access_token',
-          debug: true,
-        })
-
-        if (validatenull(token)) {
-          return
-        }
-
-        checkToken(token.content).then(response => {
-          const expire = response && response.data && response.data.exp
-          if (expire) {
-            const expiredPeriod = expire * 1000 - new Date().getTime()
-            console.log('当前token过期时间',expiredPeriod,'毫秒')
-            // 小于半小时自动续约
-            if (expiredPeriod <= 30 * 60 * 1000) {
-              if (!this.refreshLock) {
-                this.refreshLock = true
-                this.$store
-                  .dispatch('RefreshToken')
-                  .catch(() => {
-                    clearInterval(this.refreshTime)
-                  })
-                this.refreshLock = false
-              }
-            }
-          }
-        }).catch(error => {
-          console.log(error)
-        })
+        checkToken(this.refreshLock, this.$store)
       }, 60000)
-    }
+    },
   }
 }
 </script>
