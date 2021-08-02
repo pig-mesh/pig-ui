@@ -15,6 +15,9 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 import request from '@/router/axios'
+import store from '@/store'
+
+
 const scope = 'server'
 
 export const loginByUsername = (username, password, code, randomStr) => {
@@ -27,19 +30,7 @@ export const loginByUsername = (username, password, code, randomStr) => {
       Authorization: 'Basic cGlnOnBpZw=='
     },
     method: 'post',
-    params: { username, password, randomStr, code, grant_type, scope }
-  })
-}
-
-export const checkToken = token => {
-  return request({
-    url: '/auth/oauth/check_token',
-    headers: {
-      isToken: false,
-      Authorization: 'Basic cGlnOnBpZw=='
-    },
-    method: 'get',
-    params: { token }
+    params: {username, password, randomStr, code, grant_type, scope}
   })
 }
 
@@ -52,7 +43,7 @@ export const refreshToken = refresh_token => {
       Authorization: 'Basic cGlnOnBpZw=='
     },
     method: 'post',
-    params: { refresh_token, grant_type, scope }
+    params: {refresh_token, grant_type, scope}
   })
 }
 
@@ -67,5 +58,42 @@ export const logout = () => {
   return request({
     url: '/auth/token/logout',
     method: 'delete'
+  })
+}
+
+/**
+ * 校验令牌，若有效期小于半小时自动续期
+ * @param refreshLock
+ */
+export const checkToken = (refreshLock, $store) => {
+  const token = store.getters.access_token
+
+  request({
+    url: '/auth/oauth/check_token',
+    headers: {
+      isToken: false,
+      Authorization: 'Basic cGlnOnBpZw=='
+    },
+    method: 'get',
+    params: {token}
+  }).then(response => {
+    const expire = response && response.data && response.data.exp
+    if (expire) {
+      const expiredPeriod = expire * 1000 - new Date().getTime()
+      console.log('当前token过期时间', expiredPeriod, '毫秒')
+      //小于半小时自动续约
+      if (expiredPeriod <= 30 * 60 * 1000) {
+        if (!refreshLock) {
+          refreshLock = true
+          $store.dispatch('RefreshToken')
+            .catch(() => {
+              clearInterval(this.refreshTime)
+            })
+          refreshLock = false
+        }
+      }
+    }
+  }).catch(error => {
+    console.error(error)
   })
 }
