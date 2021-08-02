@@ -2,8 +2,7 @@ import axios from 'axios'
 import {serialize} from '@/util/util'
 import NProgress from 'nprogress' // progress bar
 import errorCode from '@/const/errorCode'
-import router from "@/router/router"
-import {Message} from 'element-ui'
+import {Message, MessageBox} from 'element-ui'
 import 'nprogress/nprogress.css'
 import qs from 'qs'
 import store from "@/store"; // progress bar style
@@ -23,7 +22,7 @@ NProgress.configure({
 axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
   const isToken = (config.headers || {}).isToken === false
-  let token =  store.getters.access_token
+  let token = store.getters.access_token
   if (token && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + token// token
   }
@@ -36,7 +35,7 @@ axios.interceptors.request.use(config => {
   // 处理get 请求的数组 springmvc 可以处理
   if (config.method === 'get') {
     config.paramsSerializer = function (params) {
-      return qs.stringify(params, { arrayFormat: 'repeat' })
+      return qs.stringify(params, {arrayFormat: 'repeat'})
     }
   }
 
@@ -52,9 +51,18 @@ axios.interceptors.response.use(res => {
   const status = Number(res.status) || 200
   const message = res.data.msg || errorCode[status] || errorCode['default']
   if (status === 401) {
-    store.dispatch('FedLogOut').then(() => {
-      router.push({path: '/login'})
-    })
+    MessageBox.confirm('令牌状态已过期，请点击重新登录', '系统提示', {
+        confirmButtonText: '重新登录',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }
+    ).then(() => {
+      store.dispatch('LogOut').then(() => {
+        // 刷新登录页面，避免多次弹框
+        window.location.reload()
+      })
+    }).catch(() => {
+    });
     return
   }
 
