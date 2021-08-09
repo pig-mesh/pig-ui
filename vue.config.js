@@ -25,6 +25,7 @@ module.exports = {
   },
   // 配置转发代理
   devServer: {
+    port: 8080,
     proxy: {
       '/': {
         target: url,
