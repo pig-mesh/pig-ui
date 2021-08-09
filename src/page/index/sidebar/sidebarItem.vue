@@ -4,8 +4,7 @@
       <el-menu-item v-if="validatenull(item[childrenKey]) && vaildRoles(item)"
                     :index="item[pathKey]"
                     @click="open(item)"
-                    :key="item[labelKey]"
-                    :class="{'is-active':vaildAvtive(item)}">
+                    :key="item[labelKey]">
         <i :class="item[iconKey]"></i>
         <span slot="title"
               :alt="item[pathKey]">{{item[labelKey]}}</span>
@@ -21,7 +20,6 @@
         <template v-for="(child,cindex) in item[childrenKey]">
           <el-menu-item :index="child[pathKey],cindex"
                         @click="open(child)"
-                        :class="{'is-active':vaildAvtive(child)}"
                         v-if="validatenull(child[childrenKey])"
                         :key="child[labelKey]">
             <i :class="child[iconKey]"></i>
@@ -91,12 +89,6 @@ export default {
     }
   },
   methods: {
-    vaildAvtive(item) {
-      const groupFlag = (item["group"] || []).some(ele =>
-        this.$route.path.includes(ele)
-      );
-      return this.nowTagValue === item[this.pathKey] || groupFlag;
-    },
     vaildRoles(item) {
       item.meta = item.meta || {};
       return item.meta.roles ? item.meta.roles.includes(this.roles) : true;
