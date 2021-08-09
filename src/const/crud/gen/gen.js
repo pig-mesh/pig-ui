@@ -211,14 +211,14 @@ export const tableDsOption = {
     },
     {
       label: '创建时间',
-      prop: 'createDate',
+      prop: 'createTime',
       addDisplay: false,
       editDisplay: false,
       overHidden: true
     },
     {
       label: '更新时间',
-      prop: 'updateDate',
+      prop: 'updateTime',
       overHidden: true,
       addDisplay: false,
       editDisplay: false
