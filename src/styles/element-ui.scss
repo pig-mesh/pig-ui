@@ -1,3 +1,32 @@
+.el-menu--popup {
+  margin-left: -10px;
+  background-color: #fff;
+  .el-menu-item {
+    background-color: #001525;
+    span,
+    i {
+      color: rgb(184, 182, 187);
+    }
+    &.is-active {
+      background-color: #409eff;
+      span,
+      i {
+        color: #fff;
+      }
+      &:hover {
+        background-color: rgba(0, 0, 0, 1);
+      }
+    }
+    &:hover {
+      background-color: #001525;
+      i,
+      span {
+        color: #fff;
+      }
+    }
+  }
+}
+
 .el-dropdown-menu__item {
   font-size: 12px !important;
   line-height: 28px !important;
@@ -48,7 +77,6 @@
   z-index: 2048;
 }
 
-
 .el-col {
   margin-bottom: 8px;
 }
@@ -57,6 +85,10 @@
   padding: 0 !important;
 }
 
-.el-dropdown-menu__item--divided:before, .el-menu, .el-menu--horizontal > .el-menu-item:not(.is-disabled):focus, .el-menu--horizontal > .el-menu-item:not(.is-disabled):hover, .el-menu--horizontal > .el-submenu .el-submenu__title:hover {
+.el-dropdown-menu__item--divided:before,
+.el-menu,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):focus,
+.el-menu--horizontal > .el-menu-item:not(.is-disabled):hover,
+.el-menu--horizontal > .el-submenu .el-submenu__title:hover {
   background-color: transparent !important;
 }
