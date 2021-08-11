@@ -10,7 +10,7 @@
     <transition-group name="fade">
       <template v-if="!keyCollapse">
         <span class="avue-logo_title"
-              key="1">{{website.indexTitle}} </span>
+              key="1">{{website.title}} </span>
       </template>
     </transition-group>
   </div>

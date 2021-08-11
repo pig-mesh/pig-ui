@@ -2,48 +2,35 @@
   <div class="login-container">
     <div class="login-weaper  animated bounceInDown">
       <div class="login-left">
-        <img class="img"
-             src="/img/logo.png"
-             alt="">
-        <p class="title">{{website.infoTitle}}</p>
-        <p>©2021 v3.2.3</p>
+        <img class="img" src="/img/logo.png" alt="" />
+        <p class="title">{{ website.title }}</p>
+        <p>©{{ website.year }} {{ website.version }}</p>
       </div>
       <div class="login-border">
         <div class="login-main">
-          <userLogin v-if="activeName==='user'"></userLogin>
+          <userLogin v-if="activeName === 'user'"></userLogin>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import '@/styles/login.scss'
-  import userLogin from "./userlogin";
-  import {mapGetters} from "vuex";
-  import {getStore, setStore} from "@/util/store";
-  import {dateFormat} from "@/util/date";
-  import {validatenull} from "@/util/validate";
+import "@/styles/login.scss";
+import userLogin from "./userlogin";
+import { mapGetters } from "vuex";
 
-  export default {
-    name: "login",
-    components: {
-      userLogin
-    },
-    data() {
-      return {
-        activeName: "user"
-      };
-    },
-    watch: {},
-    created() {
-    },
-    mounted() {
-    },
-    computed: {
-      ...mapGetters(["website"])
-    },
-    props: [],
-    methods: {}
-  };
+export default {
+  name: "login",
+  components: {
+    userLogin
+  },
+  data() {
+    return {
+      activeName: "user"
+    };
+  },
+  computed: {
+    ...mapGetters(["website"])
+  }
+};
 </script>
-
