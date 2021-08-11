@@ -130,13 +130,17 @@
   }
   .el-input {
     input {
-      padding-bottom: 10px;
+      padding:20px 0 20px 40px;
       text-indent: 5px;
-      background: transparent;
-      border: none;
       border-radius: 0;
-      color: #333;
-      border-bottom: 1px solid rgb(235, 237, 242);
+    }
+    .el-input__suffix,.el-input__prefix{
+      display: flex;
+      align-items: center;
+      text-align: center;
+    }
+    .el-input__prefix{
+      margin-left: 8px;
     }
   }
 }

@@ -1,12 +1,12 @@
 <template>
   <div class="login-container">
     <div class="login-weaper  animated bounceInDown">
-      <div class="login-left">
+      <div class="login-left animate__animated animate__fadeInLeft">
         <img class="img" src="/img/logo.png" alt="" />
         <p class="title">{{ website.title }}</p>
         <p>©{{ website.year }} {{ website.version }}</p>
       </div>
-      <div class="login-border">
+      <div class="login-border animate__animated animate__fadeInRight">
         <div class="login-main">
           <userLogin v-if="activeName === 'user'"></userLogin>
         </div>
