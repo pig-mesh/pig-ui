@@ -62,6 +62,7 @@ export const tableOption = {
     type: 'datetime',
     format: 'yyyy-MM-dd HH:mm',
     valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    rangeSeparator: '-',
     search: true,
     searchRange: true
   }, {

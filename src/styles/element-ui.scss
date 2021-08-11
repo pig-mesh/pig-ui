@@ -1,24 +1,31 @@
 .el-menu--popup {
   margin-left: -10px;
   background-color: #fff;
+
   .el-menu-item {
     background-color: #001525;
+
     span,
     i {
       color: rgb(184, 182, 187);
     }
+
     &.is-active {
       background-color: #409eff;
+
       span,
       i {
         color: #fff;
       }
+
       &:hover {
         background-color: rgba(0, 0, 0, 1);
       }
     }
+
     &:hover {
       background-color: #001525;
+
       i,
       span {
         color: #fff;
@@ -39,6 +46,10 @@
 
 .el-scrollbar__view {
   height: 100%;
+}
+
+.el-scrollbar__thumb {
+  display: none !important;
 }
 
 .el-menu--horizontal {
