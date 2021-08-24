@@ -145,17 +145,17 @@ export default {
       page: {
         total: 0, // 总页数
         currentPage: 1, // 当前页数
-        pageSize: 20, // 每页显示多少条
+        pageSize: 10 // 每页显示多少条
       },
       // 预览参数
       preview: {
         open: false,
-        title: "代码预览",
+        title: "代码预览"
       },
       tableLoading: false,
       tableOption: tableOption,
       formOption: formOption,
-      formBatchOption: formBatchOption,
+      formBatchOption: formBatchOption
     };
   },
   created() {
@@ -168,23 +168,23 @@ export default {
         Object.assign(
           {
             current: page.currentPage,
-            size: page.pageSize,
+            size: page.pageSize
           },
           this.q
         )
-      ).then((response) => {
+      ).then(response => {
         this.tableData = response.data.data.records;
         this.page.total = response.data.data.total;
         this.tableLoading = false;
       });
     },
-    handleDesign: function (row) {
+    handleDesign: function(row) {
       this.$router.push({
         path: "/gen/design",
-        query: { tableName: row.tableName, dsName: this.q.dsName },
+        query: { tableName: row.tableName, dsName: this.q.dsName }
       });
     },
-    handleDown: function (row) {
+    handleDown: function(row) {
       this.formData.tableName = row.tableName;
       this.box = true;
     },
@@ -197,7 +197,7 @@ export default {
     refreshChange() {
       this.getList(this.page);
     },
-    handleView: function () {
+    handleView: function() {
       this.formData.dsName = this.q.dsName;
       this.preview.open = true;
     },
@@ -213,7 +213,7 @@ export default {
         });
     },
     getdataSourceList() {
-      fetchSelectDsList().then((response) => {
+      fetchSelectDsList().then(response => {
         this.dataSourceList = response.data.data;
       });
     },
@@ -245,11 +245,9 @@ export default {
         .catch(() => {
           done();
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style lang="scss" scoped>
-</style>
-
+<style lang="scss" scoped></style>
