@@ -89,7 +89,7 @@ export default {
         username: "admin",
         password: "123456",
         code: "",
-        redomStr: ""
+        randomStr: ""
       },
       checked: false,
       code: {
