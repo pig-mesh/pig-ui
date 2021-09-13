@@ -41,14 +41,14 @@
             @click="$refs.crud.rowAdd()">添加
           </el-button>
         </template>
-        <template slot="dsScopeForm" slot-scope="scope">
-          <div v-if="form.dsType == 1">
+        <template slot="scopeResourcesForm" slot-scope="scope">
+          <div v-if="form.scopeType == 5">
             <el-tree
               ref="scopeTree"
-              :data="dsScopeData"
+              :data="scopeResourcesData"
               :check-strictly="true"
               :props="defaultProps"
-              :default-checked-keys="checkedDsScope"
+              :default-checked-keys="checkedscopeResources"
               class="filter-tree"
               node-key="id"
               highlight-current
@@ -126,10 +126,10 @@
       return {
         searchForm: {},
         tableOption: tableOption,
-        dsScopeData: [],
+        scopeResourcesData: [],
         treeData: [],
         checkedKeys: [],
-        checkedDsScope: [],
+        checkedscopeResources: [],
         defaultProps: {
           label: 'name',
           value: 'id'
@@ -186,11 +186,11 @@
       },
       handleOpenBefore(show) {
         fetchTree().then(response => {
-          this.dsScopeData = response.data.data
-          if (this.form.dsScope) {
-            this.checkedDsScope = (this.form.dsScope).split(',')
+          this.scopeResourcesData = response.data.data
+          if (this.form.scopeResources) {
+            this.checkedscopeResources = (this.form.scopeResources).split(',')
           } else {
-            this.checkedDsScope = []
+            this.checkedscopeResources = []
           }
         })
         show()
@@ -256,8 +256,8 @@
         })
       },
       create(row, done, loading) {
-        if (this.form.dsType === 1) {
-          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
+        if (this.form.scopeType === 5) {
+          this.form.scopeResources = this.$refs.scopeTree.getCheckedKeys().join(',')
         }
         addObj(this.form).then(() => {
           this.getList(this.page)
@@ -268,8 +268,8 @@
         })
       },
       update(row, index, done, loading) {
-        if (this.form.dsType === 1) {
-          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
+        if (this.form.scopeType === 5) {
+          this.form.scopeResources = this.$refs.scopeTree.getCheckedKeys().join(',')
         }
         putObj(this.form).then(() => {
           this.getList(this.page)
