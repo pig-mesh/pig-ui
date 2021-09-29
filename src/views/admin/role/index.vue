@@ -25,7 +25,6 @@
         :page.sync="page"
         v-model="form"
         :table-loading="listLoading"
-        :before-open="handleOpenBefore"
         @on-load="getList"
         @search-change="handleFilter"
         @refresh-change="handleRefreshChange"
@@ -40,20 +39,6 @@
             icon="el-icon-edit"
             @click="$refs.crud.rowAdd()">添加
           </el-button>
-        </template>
-        <template slot="scopeResourcesForm" slot-scope="scope">
-          <div v-if="form.scopeType == 5">
-            <el-tree
-              ref="scopeTree"
-              :data="scopeResourcesData"
-              :check-strictly="true"
-              :props="defaultProps"
-              :default-checked-keys="checkedscopeResources"
-              class="filter-tree"
-              node-key="id"
-              highlight-current
-              show-checkbox/>
-          </div>
         </template>
 
         <template
@@ -116,7 +101,6 @@
 <script>
   import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@/api/admin/role'
   import {tableOption} from '@/const/crud/admin/role'
-  import {fetchTree} from '@/api/admin/dept'
   import {fetchMenuTree} from '@/api/admin/menu'
   import {mapGetters} from 'vuex'
 
@@ -126,10 +110,9 @@
       return {
         searchForm: {},
         tableOption: tableOption,
-        scopeResourcesData: [],
         treeData: [],
         checkedKeys: [],
-        checkedscopeResources: [],
+        checkedDsScope: [],
         defaultProps: {
           label: 'name',
           value: 'id'
@@ -183,17 +166,6 @@
         this.searchForm = form
         this.page.currentPage = 1
         this.getList(this.page, form)
-      },
-      handleOpenBefore(show) {
-        fetchTree().then(response => {
-          this.scopeResourcesData = response.data.data
-          if (this.form.scopeResources) {
-            this.checkedscopeResources = (this.form.scopeResources).split(',')
-          } else {
-            this.checkedscopeResources = []
-          }
-        })
-        show()
       },
       handleUpdate(row, index) {
         this.$refs.crud.rowEdit(row, index)
@@ -256,8 +228,8 @@
         })
       },
       create(row, done, loading) {
-        if (this.form.scopeType === 5) {
-          this.form.scopeResources = this.$refs.scopeTree.getCheckedKeys().join(',')
+        if (this.form.dsType === 1) {
+          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
         }
         addObj(this.form).then(() => {
           this.getList(this.page)
@@ -268,8 +240,8 @@
         })
       },
       update(row, index, done, loading) {
-        if (this.form.scopeType === 5) {
-          this.form.scopeResources = this.$refs.scopeTree.getCheckedKeys().join(',')
+        if (this.form.dsType === 1) {
+          this.form.dsScope = this.$refs.scopeTree.getCheckedKeys().join(',')
         }
         putObj(this.form).then(() => {
           this.getList(this.page)

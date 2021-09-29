@@ -77,35 +77,6 @@ export const tableOption = {
         trigger: 'blur'
       }]
   }, {
-    width: 120,
-    label: '数据权限',
-    prop: 'scopeType',
-    type: 'select',
-    span: 24,
-    rules: [
-      { required: true, message: '请选择数据权限类型', trigger: 'blur'}
-    ],
-    dicData: [{
-      label: '全部',
-      value: 0
-    }, {
-      label: '本人',
-      value: 1
-    }, {
-      label: '本人及子级',
-      value: 2
-    }, {
-      label: '本级',
-      value: 3
-    }, {
-      label: '本级及子级',
-      value: 4
-    }, {
-      label: '自定义',
-      value: 5
-    }],
-    'search': true,
-  }, {
     label: '',
     prop: 'scopeResources',
     formslot: true,
