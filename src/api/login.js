@@ -34,6 +34,19 @@ export const loginByUsername = (username, password, code, randomStr) => {
   })
 }
 
+export const loginByMobile = (mobile, code) => {
+  const grant_type = 'app'
+  return request({
+    url: '/auth/oauth/token',
+    headers: {
+      isToken: false,
+      'Authorization': 'Basic cGlnOnBpZw=='
+    },
+    method: 'post',
+    params: {mobile: mobile, code: code, grant_type}
+  })
+}
+
 export const refreshToken = refresh_token => {
   const grant_type = 'refresh_token'
   return request({
