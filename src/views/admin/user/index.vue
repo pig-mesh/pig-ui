@@ -120,7 +120,7 @@
         title="用户信息导入"
         url="/admin/user/import"
         temp-name="用户信息.xlsx"
-        temp-url="/admin/file/local-file/user.xlsx"
+        temp-url="/admin/sys-file/local/user.xlsx"
         @refreshDataList="handleRefreshChange"
       ></excel-upload>
     </basic-container>
