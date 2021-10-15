@@ -182,6 +182,16 @@ export const tableDsOption = {
       ]
     },
     {
+      label: '类型',
+      prop: 'driverClassName',
+      type: 'select',
+      dicUrl: '/admin/dict/type/ds_type',
+      search: true,
+      rules: [
+        {required: true, message: '请输入类型', trigger: 'blur'}
+      ]
+    },
+    {
       label: 'jdbcUrl',
       prop: 'url',
       type: 'textarea',
