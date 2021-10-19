@@ -1,6 +1,6 @@
 export default {
   year: "2021", // 首页显示的时间
-  version: "v3.3.5", // 控制首页显示的版本号
+  version: "v3.4.0", // 控制首页显示的版本号
   logo: "Pig",   // 侧边栏搜索的时候顶部展示的文案
   key: "pig", //配置主键,目前用于存储
   title: "pig 快速开发框架",

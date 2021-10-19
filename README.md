@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-3.2-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Pig-3.3-success.svg" alt="Build Status">
  <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
  <img src="https://img.shields.io/badge/Spring%20Boot-2.5-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
@@ -13,16 +13,30 @@
 - 提供对常见容器化支持 Docker、Kubernetes、Rancher2 支持
 - 提供 lambda 、stream api 、webflux 的生产实践
 
+## 文档视频
+
+[文档视频 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+
+[PIGX 在线体验 pigx.pig4cloud.com](http://pigx.pig4cloud.com)
+
+[产品白皮书 paper.pig4cloud.com](https://paper.pig4cloud.com)
+
+## 微信群 [禁广告]
+
+![1628762721](https://minio.pigx.vip/oss/1628762721.png)
+
+## 快速开始
+
 ### 核心依赖
 
-| 依赖                   | 版本          |
+| 依赖                   | 版本           |
 | ---------------------- | ------------- |
-| Spring Boot            | 2.5.2 |
-| Spring Cloud           | 2020.0.3    |
-| Spring Cloud Alibaba   | 2021.1|
+| Spring Boot            | 2.5.5         |
+| Spring Cloud           | 2020.0.4      |
+| Spring Cloud Alibaba   | 2021.1        |
 | Spring Security OAuth2 | 2.3.6         |
-| Mybatis Plus           | 3.4.3         |
-| hutool                 | 5.7.3         |
+| Mybatis Plus           | 3.4.3.5         |
+| hutool                 | 5.7.14        |
 | Avue                   | 2.6.18        |
 
 ### 模块说明
@@ -33,6 +47,7 @@ pig-ui  -- https://gitee.com/log4j/pig-ui
 pig
 ├── pig-auth -- 授权服务提供[3000]
 └── pig-common -- 系统公共模块
+     ├── pig-common-bom -- 全局依赖管理控制
      ├── pig-common-core -- 公共工具类核心包
      ├── pig-common-datasource -- 动态数据源包
      ├── pig-common-job -- xxl-job 封装
@@ -54,21 +69,17 @@ pig
      └── pig-xxl-job-admin -- 分布式定时任务管理台 [5004]
 ```
 
-## 文档视频
-
-[文档视频 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
-
-[PIGX 在线体验 pigx.pig4cloud.com](http://pigx.pig4cloud.com)
-
-[产品白皮书 paper.pig4cloud.com](https://paper.pig4cloud.com)
-
-## 快速开始
-
 ### 本地开发 运行
 
 pig 提供了详细的[部署文档 wiki.pig4cloud.com](https://www.yuque.com/pig4cloud/pig/vsdox9)，包括开发环境安装、服务端代码运行、前端代码运行等。
 
 请务必**完全按照**文档部署运行章节 进行操作，减少踩坑弯路！！
+
+### 定制自己微服务
+
+[PIG DIY](https://diy.pig4cloud.com)
+
+[PIG ARCHETYPE](https://archetype.pig4cloud.com)
 
 ### Docker 运行
 
@@ -86,22 +97,6 @@ cd pig-ui && npm install -g cnpm --registry=https://registry.npm.taobao.org
 npm run build:docker && docker-compose up -d
 ```
 
-### 快速构架微服务
-
-```bash
-<!-- pig-gen archetype -->
-# 在空文件夹执行以下命令，注意 windows 下  \ 修改成 ^
-mvn archetype:generate \
-       -DgroupId=com.pig4cloud \
-       -DartifactId=demo \
-       -Dversion=1.0.0-SNAPSHOT \
-       -Dpackage=com.pig4cloud.pig.demo \
-       -DarchetypeGroupId=com.pig4cloud.archetype \
-       -DarchetypeArtifactId=pig-gen \
-       -DarchetypeVersion=3.3.4 \
-       -DarchetypeCatalog=local
-```
-
 ## 免费公开课
 
 <table>
@@ -115,10 +110,6 @@ mvn archetype:generate \
   </tr>
 </table>
 
-## 微信群 [禁广告]
-
-![](https://gitee.com/pig4cloud/oss/raw/master/2020-9/20200901133142.png)
-
 ## 开源共建
 
 ### 开源协议
@@ -130,7 +121,7 @@ pig 开源软件遵循 [Apache 2.0 协议](https://www.apache.org/licenses/LICEN
 
 ### 其他说明
 
-1. 欢迎提交 [PR](https://dwz.cn/2KURd5Vf)，注意对应提交对应 `dev` 分支
+1. 欢迎提交 [PR](https://dwz.cn/2KURd5Vf)，注意对应提交对应 `dev` 分支 代码规范 [spring-javaformat](https://github.com/spring-io/spring-javaformat)
 
 2. 欢迎提交 [issue](https://gitee.com/log4j/pig/issues)，请写清楚遇到问题的原因、开发环境、复显步骤。
 
