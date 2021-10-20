@@ -110,9 +110,9 @@ export const encryption = params => {
       result[ele] = btoa(result[ele]);
     });
   } else {
+    key = CryptoJS.enc.Latin1.parse(key);
     param.forEach(ele => {
       var data = result[ele];
-      key = CryptoJS.enc.Latin1.parse(key);
       var iv = key;
       // 加密
       var encrypted = CryptoJS.AES.encrypt(data, key, {
