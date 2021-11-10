@@ -23,17 +23,23 @@ export const tableOption = {
   menuAlign: 'center',
   align: 'center',
   searchMenuSpan: 6,
-  viewBtn: true,
+  viewBtn: false,
   addBtn: false,
   editBtn: false,
   column: [{
     label: '用户ID',
-    prop: 'user_id',
-    align: 'center'
+    prop: 'id',
+    align: 'center',
+    slot: true
   }, {
     label: '用户名',
     prop: 'username',
-    align: 'center'
+    align: 'center',
+    slot: true
+  },{
+    label: "客户端",
+    prop: "clientId",
+    align: "center"
   }, {
     label: '令牌',
     prop: 'access_token',
