@@ -182,16 +182,6 @@ export const tableDsOption = {
       ]
     },
     {
-      label: '类型',
-      prop: 'driverClassName',
-      type: 'select',
-      dicUrl: '/admin/dict/type/ds_type',
-      search: true,
-      rules: [
-        {required: true, message: '请输入类型', trigger: 'blur'}
-      ]
-    },
-    {
       label: 'jdbcUrl',
       prop: 'url',
       type: 'textarea',
@@ -208,7 +198,7 @@ export const tableDsOption = {
       prop: 'username',
       rules: [
         {required: true, message: '请输入用户名', trigger: 'blur'},
-        {max: 32, message: '长度在 32 个字符', trigger: 'blur'}
+        {max: 64, message: '长度在 64 个字符', trigger: 'blur'}
       ]
     },
     {
@@ -216,7 +206,7 @@ export const tableDsOption = {
       prop: 'password',
       rules: [
         {required: true, message: '请输入密码', trigger: 'blur'},
-        {max: 32, message: '长度在 32 个字符', trigger: 'blur'}
+        {max: 64, message: '长度在 64 个字符', trigger: 'blur'}
       ]
     },
     {
