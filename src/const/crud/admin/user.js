@@ -64,6 +64,7 @@ export const tableOption = {
   stripe: true,
   menuAlign: 'center',
   searchMenuSpan: 6,
+  dialogWidth: '50%',
   editBtn: false,
   delBtn: false,
   align: 'center',

@@ -23,9 +23,11 @@ export const tableOption = {
   editBtn: false,
   delBtn: false,
   searchMenuSpan: 6,
+  menuWidth: 300,
+  dialogWidth: '50%',
   align: 'center',
   addBtn: false,
-  viewBtn:true,
+  viewBtn: true,
   column: [{
     label: '角色名称',
     prop: 'roleName',
@@ -35,12 +37,12 @@ export const tableOption = {
       message: '角色名称不能为空',
       trigger: 'blur'
     },
-    {
-      min: 3,
-      max: 20,
-      message: '长度在 3 到 20 个字符',
-      trigger: 'blur'
-    }]
+      {
+        min: 3,
+        max: 20,
+        message: '长度在 3 到 20 个字符',
+        trigger: 'blur'
+      }]
   }, {
     width: 120,
     label: '角色标识',
@@ -76,12 +78,6 @@ export const tableOption = {
         message: '长度在 3 到 100 个字符',
         trigger: 'blur'
       }]
-  }, {
-    label: '',
-    prop: 'scopeResources',
-    formslot: true,
-    showClomnu: false,
-    hide: true
   }, {
     label: '创建时间',
     prop: 'createTime',
