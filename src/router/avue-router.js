@@ -18,7 +18,6 @@ RouterPlugin.install = function(router, store) {
   this.$router.$avueRouter = {
     // 全局配置
     $website: this.$store.getters.website,
-    routerList: [],
     group: '',
     safe: this,
     // 设置标题
@@ -73,7 +72,6 @@ RouterPlugin.install = function(router, store) {
       if (aMenu.length === 0) return
       for (let i = 0; i < aMenu.length; i++) {
         const oMenu = aMenu[i]
-        if (this.routerList.includes(oMenu[propsDefault.path])) return
         const path = (() => {
           if (!oMenu[propsDefault.path]) {
             return
@@ -140,10 +138,7 @@ RouterPlugin.install = function(router, store) {
         aRouter.push(oRouter)
       }
       if (first) {
-        if (!this.routerList.includes(aRouter[0][propsDefault.path])) {
-          this.safe.$router.addRoutes(aRouter)
-          this.routerList.push(aRouter[0][propsDefault.path])
-        }
+        this.safe.$router.addRoutes(aRouter)
       } else {
         return aRouter
       }
