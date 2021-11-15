@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-3.3-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Pig-3.4-success.svg" alt="Build Status">
  <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
  <img src="https://img.shields.io/badge/Spring%20Boot-2.5-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
@@ -15,7 +15,9 @@
 
 ## 文档视频
 
-[文档视频 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+[ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+
+[ 配套视频 bilibili.com/video/BV12t411B7e9](https://www.bilibili.com/video/BV12t411B7e9)
 
 [PIGX 在线体验 pigx.pig4cloud.com](http://pigx.pig4cloud.com)
 
@@ -23,7 +25,7 @@
 
 ## 微信群 [禁广告]
 
-![1628762721](https://minio.pigx.vip/oss/1628762721.png)
+![](https://minio.pigx.vip/oss/1628762721.png)
 
 ## 快速开始
 
@@ -31,12 +33,12 @@
 
 | 依赖                   | 版本           |
 | ---------------------- | ------------- |
-| Spring Boot            | 2.5.5         |
+| Spring Boot            | 2.5.6         |
 | Spring Cloud           | 2020.0.4      |
 | Spring Cloud Alibaba   | 2021.1        |
 | Spring Security OAuth2 | 2.3.6         |
-| Mybatis Plus           | 3.4.3.5         |
-| hutool                 | 5.7.14        |
+| Mybatis Plus           | 3.4.3.4       |
+| hutool                 | 5.7.15        |
 | Avue                   | 2.6.18        |
 
 ### 模块说明
@@ -94,7 +96,8 @@ git clone https://gitee.com/log4j/pig-ui.git
 
 cd pig-ui && npm install -g cnpm --registry=https://registry.npm.taobao.org
 
-npm run build:docker && docker-compose up -d
+
+cnpm install && cnpm run build:docker && cd docker && docker-compose up -d
 ```
 
 ## 免费公开课
