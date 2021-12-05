@@ -16,12 +16,13 @@
  */
 import request from '@/router/axios'
 import store from '@/store'
-
+import qs from 'qs'
 
 const scope = 'server'
 
 export const loginByUsername = (username, password, code, randomStr) => {
   const grant_type = 'password'
+  let dataObj = qs.stringify({'username': username, 'password': password})
 
   return request({
     url: '/auth/oauth/token',
@@ -30,7 +31,8 @@ export const loginByUsername = (username, password, code, randomStr) => {
       Authorization: 'Basic cGlnOnBpZw=='
     },
     method: 'post',
-    params: {username, password, randomStr, code, grant_type, scope}
+    params: {randomStr, code, grant_type, scope},
+    data: dataObj
   })
 }
 

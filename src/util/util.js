@@ -1,4 +1,4 @@
-import { validatenull } from "./validate";
+import {validatenull} from "./validate";
 import request from "@/router/axios";
 import * as CryptoJS from "crypto-js";
 
@@ -103,29 +103,28 @@ export const setTheme = name => {
  *加密处理
  */
 export const encryption = params => {
-  let { data, type, param, key } = params;
+  let {data, type, param, key} = params;
   const result = JSON.parse(JSON.stringify(data));
   if (type === "Base64") {
     param.forEach(ele => {
       result[ele] = btoa(result[ele]);
     });
   } else {
-    key = CryptoJS.enc.Latin1.parse(key);
     param.forEach(ele => {
       var data = result[ele];
+      key = CryptoJS.enc.Latin1.parse(key);
       var iv = key;
       // 加密
       var encrypted = CryptoJS.AES.encrypt(data, key, {
         iv: iv,
-        mode: CryptoJS.mode.CBC,
-        padding: CryptoJS.pad.ZeroPadding
+        mode: CryptoJS.mode.CFB,
+        padding: CryptoJS.pad.NoPadding
       });
       result[ele] = encrypted.toString();
     });
   }
   return result;
 };
-
 /**
  * 浏览器判断是否全屏
  */
@@ -143,16 +142,17 @@ export const listenfullscreen = callback => {
   function listen() {
     callback();
   }
-  document.addEventListener("fullscreenchange", function() {
+
+  document.addEventListener("fullscreenchange", function () {
     listen();
   });
-  document.addEventListener("mozfullscreenchange", function() {
+  document.addEventListener("mozfullscreenchange", function () {
     listen();
   });
-  document.addEventListener("webkitfullscreenchange", function() {
+  document.addEventListener("webkitfullscreenchange", function () {
     listen();
   });
-  document.addEventListener("msfullscreenchange", function() {
+  document.addEventListener("msfullscreenchange", function () {
     listen();
   });
 };
@@ -320,7 +320,7 @@ export function downBlobFile(url, query, fileName) {
     link.download = fileName;
     document.body.appendChild(link);
     link.click();
-    window.setTimeout(function() {
+    window.setTimeout(function () {
       URL.revokeObjectURL(blob);
       document.body.removeChild(link);
     }, 0);

@@ -1,6 +1,6 @@
 {
   "name": "pig-ui",
-  "version": "3.4.1",
+  "version": "3.4.2",
   "private": true,
   "scripts": {
     "pre": "cnpm install || yarn --registry https://registry.npm.taobao.org || npm install --registry https://registry.npm.taobao.org ",
@@ -32,7 +32,7 @@
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
     "chai": "^4.2.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "4.14.1",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "2.6.10"
   },
