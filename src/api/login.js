@@ -42,7 +42,7 @@ export const loginByMobile = (mobile, code) => {
     url: '/auth/oauth/token',
     headers: {
       isToken: false,
-      'Authorization': 'Basic cGlnOnBpZw=='
+      'Authorization': 'Basic YXBwOmFwcA=='
     },
     method: 'post',
     params: {mobile: mobile, code: code, grant_type}
