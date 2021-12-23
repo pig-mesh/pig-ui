@@ -3,7 +3,6 @@
   "version": "3.4.2",
   "private": true,
   "scripts": {
-    "pre": "cnpm install || yarn --registry https://registry.npmmirror.com || npm install --registry https://registry.npmmirror.com ",
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:docker": "vue-cli-service build --dest=./docker/dist/",

@@ -94,10 +94,9 @@ cd pig && mvn clean install && docker-compose up -d
 # 下载并运行前端UI
 git clone https://gitee.com/log4j/pig-ui.git
 
-cd pig-ui && npm install -g cnpm --registry=https://registry.npm.taobao.org
+cd pig-ui && npm install
 
-
-cnpm install && cnpm run build:docker && cd docker && docker-compose up -d
+npm install && npm run build:docker && cd docker && docker-compose up -d
 ```
 
 ## 免费公开课
