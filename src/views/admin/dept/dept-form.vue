@@ -18,8 +18,8 @@
       <el-form-item label="部门名称" prop="name">
         <el-input v-model="form.name" placeholder="请输入菜单名称"/>
       </el-form-item>
-      <el-form-item label="排序" prop="sort">
-        <el-input-number v-model="form.sort" controls-position="right" :min="0"/>
+      <el-form-item label="排序" prop="sortOrder">
+        <el-input-number v-model="form.sortOrder" controls-position="right" :min="0"/>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -48,14 +48,14 @@ export default {
       visible: false,
       form: {
         name: undefined,
-        sort: 999
+        sortOrder: 999
       },
       // 表单校验
       rules: {
         name: [
           {required: true, message: "菜单名称不能为空", trigger: "blur"}
         ],
-        sort: [
+        sortOrder: [
           {required: true, message: "菜单顺序不能为空", trigger: "blur"}
         ]
       }

@@ -22,7 +22,7 @@
             <i :class="scope.row.icon"/>
           </template>
         </el-table-column>
-        <el-table-column prop="sort" label="排序" width="60"></el-table-column>
+        <el-table-column prop="sortOrder" label="排序" width="60"></el-table-column>
         <el-table-column prop="path" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="type" label="类型" width="80" align="center">
           <template slot-scope="scope">

@@ -44,9 +44,9 @@
       </el-form-item>
       <el-row>
         <el-col :span="12">
-          <el-form-item label="排序" prop="sort">
+          <el-form-item label="排序" prop="sortOrder">
             <el-input-number
-              v-model="form.sort"
+              v-model="form.sortOrder"
               controls-position="right"
               :min="0"
             />
@@ -100,14 +100,14 @@ export default {
         permission: undefined,
         type: "0",
         keepAlive: "0",
-        sort: 999
+        sortOrder: 999
       },
       // 表单校验
       rules: {
         name: [
           { required: true, message: "菜单名称不能为空", trigger: "blur" }
         ],
-        sort: [
+        sortOrder: [
           { required: true, message: "菜单顺序不能为空", trigger: "blur" }
         ],
         path: [
