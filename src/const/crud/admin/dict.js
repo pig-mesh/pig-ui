@@ -44,9 +44,9 @@ export const tableOption = {
       trigger: 'blur'
     }]
   }, {
-    label: '内置字典',
+    label: '字典类型',
     prop: 'systemFlag',
-    type: 'switch',
+    type: 'radio',
     dicUrl: '/admin/dict/type/dict_type',
     rules: [{
       required: true,
