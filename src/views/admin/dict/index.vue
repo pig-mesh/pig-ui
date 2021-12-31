@@ -32,6 +32,17 @@
         @size-change="sizeChange"
         @current-change="currentChange"
         @row-del="rowDel">
+        <template slot="menuLeft">
+          <el-button
+            v-if="permissions.sys_dict_del"
+            class="filter-item"
+            type="primary"
+            size="small"
+            icon="el-icon-refresh-left"
+            @click="handleClearDictCache"
+          >缓存
+          </el-button>
+        </template>
         <template
           slot-scope="scope"
           slot="menu">
@@ -62,13 +73,24 @@
         @current-change="itemCurrentChange"
         @row-update="handleItemUpdate"
         @row-save="handleItemSave"
-        @row-del="rowItemDel"/>
+        @row-del="rowItemDel">
+      </avue-crud>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import {addItemObj, addObj, delItemObj, delObj, fetchItemList, fetchList, putItemObj, putObj} from '@/api/admin/dict'
+import {
+  addItemObj,
+  addObj,
+  clearDictCache,
+  delItemObj,
+  delObj,
+  fetchItemList,
+  fetchList,
+  putItemObj,
+  putObj
+} from '@/api/admin/dict'
   import {tableDictItemOption, tableOption} from '@/const/crud/admin/dict'
   import {mapGetters} from 'vuex'
 
@@ -220,6 +242,12 @@
         }).then(() => {
           this.getDictItemList()
           this.$message.success('删除成功')
+        }).catch(function () {
+        })
+      },
+      handleClearDictCache: function () {
+        clearDictCache().then(() => {
+          this.$message.success('清除缓存成功')
         }).catch(function () {
         })
       }

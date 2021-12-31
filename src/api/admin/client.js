@@ -54,3 +54,11 @@ export function putObj (obj) {
     data: obj
   })
 }
+
+export function clearClientCache(){
+  return request({
+    url:'/admin/client/cache',
+    method:'delete'
+  })
+}
+

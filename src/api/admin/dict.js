@@ -99,3 +99,10 @@ export function remote(type) {
     method: 'get'
   })
 }
+
+export function clearDictCache(){
+  return request({
+    url:'/admin/dict/cache',
+    method:'delete'
+  })
+}

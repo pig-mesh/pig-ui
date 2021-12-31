@@ -32,15 +32,27 @@
                  @row-update="handleUpdate"
                  @row-save="handleSave"
                  @row-del="rowDel">
+        <template slot="menuLeft">
+          <el-button
+            v-if="permissions.sys_client_del"
+            class="filter-item"
+            type="primary"
+            size="small"
+            icon="el-icon-refresh-left"
+            @click="handleClearClientCache"
+          >缓存
+          </el-button>
+        </template>
       </avue-crud>
     </basic-container>
   </div>
 </template>
 
 <script>
-  import {addObj, delObj, fetchList, putObj} from '@/api/admin/client'
+import {addObj, clearClientCache, delObj, fetchList, putObj} from '@/api/admin/client'
   import {tableOption} from '@/const/crud/admin/client'
   import {mapGetters} from 'vuex'
+  import {clearDictCache} from "@/api/admin/dict";
 
   export default {
     name: 'client',
@@ -95,16 +107,20 @@
         })
       },
       handleUpdate: function (row, index, done) {
-        putObj(row).then(data => {
+        putObj(row).then(() => {
           this.$message.success('修改成功')
           this.refreshChange()
+          done()
+        }).catch(()=>{
           done()
         })
       },
       handleSave: function (row, done) {
-        addObj(row).then(data => {
+        addObj(row).then(() => {
           this.$message.success('添加成功')
           this.refreshChange()
+          done()
+        }).catch(()=>{
           done()
         })
       },
@@ -120,6 +136,12 @@
       beforeOpen(show, type) {
         window.boxType = type
         show()
+      },
+      handleClearClientCache: function () {
+        clearClientCache().then(() => {
+          this.$message.success('清除缓存成功')
+        }).catch(function () {
+        })
       }
     }
   }
