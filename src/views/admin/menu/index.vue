@@ -7,6 +7,10 @@
                      @click="addOrUpdateHandle(false)">
             添加
           </el-button>
+          <el-button v-if="permissions.sys_menu_del" icon="el-icon-refresh-left" type="primary"
+                     @click="handleClearMenuCache()">
+            缓存
+          </el-button>
         </el-form-item>
       </el-form>
 
@@ -63,11 +67,11 @@
 </template>
 
 <script>
-  import {delObj, fetchMenuTree} from '@/api/admin/menu'
-  import TableForm from './menu-form'
-  import {mapGetters} from 'vuex'
+import {clearMenuCache, delObj, fetchMenuTree} from '@/api/admin/menu'
+import TableForm from './menu-form'
+import {mapGetters} from 'vuex'
 
-  export default {
+export default {
     name: "Menu",
     components: {TableForm},
     data() {
@@ -111,6 +115,12 @@
         }).then(() => {
           this.getList();
           this.$message.success('删除成功')
+        })
+      },
+      handleClearMenuCache: function () {
+        clearMenuCache().then(() => {
+          this.$message.success('清除缓存成功')
+        }).catch(function () {
         })
       }
     }

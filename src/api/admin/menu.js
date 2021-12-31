@@ -62,3 +62,11 @@ export function putObj(obj) {
     data: obj
   })
 }
+
+export function clearMenuCache(){
+  return request({
+    url:'/admin/menu/cache',
+    method:'delete'
+  })
+}
+
