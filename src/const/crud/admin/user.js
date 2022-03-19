@@ -130,7 +130,7 @@ export const tableOption = {
       validator: checkPhone,
       trigger: 'blur'
     }]
-  }, {
+  },  {
     label: '角色',
     prop: 'role',
     formslot: true,
@@ -149,6 +149,19 @@ export const tableOption = {
     addDisplay: false,
     editDisplay: false,
     span: 24,
+  },{
+    label: '岗位',
+    prop: 'post',
+    width:168,
+    overHidden: true,
+    formslot: true,
+    slot: true,
+    span: 24,
+    rules: [{
+      required: true,
+      message: '请选择岗位',
+      trigger: 'blur'
+    }]
   }, {
     label: '状态',
     prop: 'lockFlag',

@@ -72,6 +72,11 @@
             <el-tag>{{ role.roleName }} </el-tag>&nbsp;&nbsp;
           </span>
         </template>
+        <template slot="post" slot-scope="scope">
+          <span v-for="(role, index) in scope.row.postList" :key="index">
+            <el-tag>{{ role.postName }} </el-tag>&nbsp;&nbsp;
+          </span>
+        </template>
         <template slot="deptId" slot-scope="scope">
           {{ scope.row.deptName }}
         </template>
@@ -112,6 +117,15 @@
             :props="roleProps"
           ></avue-select>
         </template>
+        <template slot="postForm" slot-scope="scope">
+          <avue-select
+            v-model="post"
+            multiple
+            placeholder="请选择岗位"
+            :dic="postOptions"
+            :props="postProps"
+          ></avue-select>
+        </template>
       </avue-crud>
 
       <!--excel 模板导入 -->
@@ -130,6 +144,7 @@
 <script>
 import { addObj, delObj, fetchList, putObj } from "@/api/admin/user";
 import { deptRoleList } from "@/api/admin/role";
+import {listPosts} from "@/api/admin/post";
 import { fetchTree } from "@/api/admin/dept";
 import { tableOption } from "@/const/crud/admin/user";
 import { mapGetters } from "vuex";
@@ -143,6 +158,10 @@ export default {
       option: tableOption,
       treeDeptData: [],
       checkedKeys: [],
+      postProps:{
+        label: "postName",
+        value: "postId"
+      },
       roleProps: {
         label: "roleName",
         value: "roleId"
@@ -160,8 +179,10 @@ export default {
       query: {},
       list: [],
       listLoading: true,
+      post: [],
       role: [],
       form: {},
+      postOptions:[],
       rolesOptions: []
     };
   },
@@ -171,6 +192,9 @@ export default {
   watch: {
     role() {
       this.form.role = this.role;
+    },
+    post() {
+      this.form.post = this.post;
     }
   },
   methods: {
@@ -186,6 +210,7 @@ export default {
         )
       ).then(response => {
         this.list = response.data.data.records;
+        console.table(this.list)
         this.page.total = response.data.data.total;
         this.listLoading = false;
       });
@@ -194,6 +219,9 @@ export default {
       deptRoleList().then(response => {
         this.rolesOptions = response.data.data;
       });
+      listPosts().then(response=>{
+        this.postOptions = response.data.data
+      })
     },
     sizeChange(pageSize) {
       this.page.pageSize = pageSize;
@@ -220,15 +248,24 @@ export default {
       deptRoleList().then(response => {
         this.rolesOptions = response.data.data;
       });
+      //查询岗位列表
+      listPosts().then(response=>{
+        this.postOptions = response.data.data
+      })
       // 若是编辑、查看回显角色名称
       if (["edit", "views"].includes(type)) {
         this.role = [];
         for (let i = 0; i < this.form.roleList.length; i++) {
           this.role[i] = this.form.roleList[i].roleId;
         }
+        this.post = []
+        for (let i = 0; i < this.form.postList.length; i++) {
+          this.post[i] = this.form.postList[i].postId;
+        }
       } else if (type === "add") {
         // 若是添加角色列表设置为空
         this.role = [];
+        this.post = [];
       }
       show();
     },
@@ -248,6 +285,7 @@ export default {
         });
     },
     update(row, index, done, loading) {
+      console.log('this.form',this.form)
       putObj(this.form)
         .then(() => {
           this.getList(this.page);
