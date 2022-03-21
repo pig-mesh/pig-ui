@@ -1,9 +1,12 @@
 export default {
   year: "2022", // 首页显示的时间
-  version: "v3.4.5", // 控制首页显示的版本号
+  version: "v3.4.7", // 控制首页显示的版本号
   logo: "Pig",   // 侧边栏搜索的时候顶部展示的文案
   key: "pig", //配置主键,目前用于存储
   title: "pig 快速开发框架",
+  formLoginClient: 'pig:pig',// 用户名密码登录的 client 信息
+  smsLoginClient: 'app:app',// 验证码登录的 client 信息
+  remainingTime: 1800000, // token 剩余多少毫秒执行刷新
   whiteList: ["/login", "/404", "/401", "/lock"], // 配置无权限可以访问的页面
   whiteTagList: ["/login", "/404", "/401", "/lock"], // 配置不添加tags页面 （'/advanced-router/mutative-detail/*'——*为通配符）
   lockPage: "/lock",

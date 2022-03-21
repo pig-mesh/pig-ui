@@ -17,6 +17,9 @@
 import request from '@/router/axios'
 import store from '@/store'
 import qs from 'qs'
+import {getStore, setStore} from "@/util/store.js";
+import website from "@/const/website.js";
+
 
 const scope = 'server'
 
@@ -24,11 +27,20 @@ export const loginByUsername = (username, password, code, randomStr) => {
   const grant_type = 'password'
   let dataObj = qs.stringify({'username': username, 'password': password})
 
+  let basicAuth = 'Basic ' + window.btoa(website.formLoginClient)
+
+  // 保存当前选中的 basic 认证信息
+  setStore({
+    name: 'basicAuth',
+    content: basicAuth,
+    type: 'session'
+  })
+
   return request({
     url: '/auth/oauth/token',
     headers: {
       isToken: false,
-      Authorization: 'Basic cGlnOnBpZw=='
+      Authorization: basicAuth
     },
     method: 'post',
     params: {randomStr, code, grant_type, scope},
@@ -38,11 +50,21 @@ export const loginByUsername = (username, password, code, randomStr) => {
 
 export const loginByMobile = (mobile, code) => {
   const grant_type = 'app'
+
+  let basicAuth = 'Basic ' + window.btoa(website.smsLoginClient)
+
+  // 保存当前选中的 basic 认证信息
+  setStore({
+    name: 'basicAuth',
+    content: basicAuth,
+    type: 'session'
+  })
+
   return request({
     url: '/auth/oauth/token',
     headers: {
       isToken: false,
-      'Authorization': 'Basic YXBwOmFwcA=='
+      'Authorization': basicAuth
     },
     method: 'post',
     params: {mobile: mobile, code: code, grant_type}
@@ -51,11 +73,14 @@ export const loginByMobile = (mobile, code) => {
 
 export const refreshToken = refresh_token => {
   const grant_type = 'refresh_token'
+  // 获取当前选中的 basic 认证信息
+  let basicAuth = getStore({name: 'basicAuth'})
+
   return request({
     url: '/auth/oauth/token',
     headers: {
       isToken: false,
-      Authorization: 'Basic cGlnOnBpZw=='
+      Authorization: basicAuth
     },
     method: 'post',
     params: {refresh_token, grant_type, scope}
@@ -82,12 +107,14 @@ export const logout = () => {
  */
 export const checkToken = (refreshLock, $store) => {
   const token = store.getters.access_token
+  // 获取当前选中的 basic 认证信息
+  let basicAuth = getStore({name: 'basicAuth'})
 
   request({
     url: '/auth/oauth/check_token',
     headers: {
       isToken: false,
-      Authorization: 'Basic cGlnOnBpZw=='
+      Authorization: basicAuth
     },
     method: 'get',
     params: {token}
@@ -97,7 +124,7 @@ export const checkToken = (refreshLock, $store) => {
       const expiredPeriod = expire * 1000 - new Date().getTime()
       console.log('当前token过期时间', expiredPeriod, '毫秒')
       //小于半小时自动续约
-      if (expiredPeriod <= 30 * 60 * 1000) {
+      if (expiredPeriod <= website.remainingTime) {
         if (!refreshLock) {
           refreshLock = true
           $store.dispatch('RefreshToken')

@@ -6,15 +6,15 @@
           <a href="https://avue.top/#/pay" target="_blank">
             <img src="https://img.shields.io/badge/Element-2.13.6-green.svg" alt="Build Status">
           </a>
-          <img src="https://img.shields.io/badge/Spring%20Boot-2.5.4-yellowgreen.svg" alt="Downloads">
-          <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status">
+          <img src="https://img.shields.io/badge/Spring%20Boot-2.6.4-yellowgreen.svg" alt="Downloads">
+          <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
         </span>
         <br/>
         <span>
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
-              <div>基于Spring Cloud 2020</div>
-              <div>基于Spring Boot 2.5.4</div>
+              <div>基于Spring Cloud 2021</div>
+              <div>基于Spring Boot 2.6.4</div>
             </el-collapse-item>
             <el-collapse-item name="2">
               <div>支持docker部署</div>
