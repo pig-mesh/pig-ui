@@ -39,6 +39,26 @@
             icon="el-icon-edit"
             @click="$refs.crud.rowAdd()">添加
           </el-button>
+          <el-button
+            v-if="permissions.sys_role_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            size="small"
+            icon="el-icon-upload"
+            @click="$refs.excelUpload.show()"
+          >导入
+          </el-button>
+          <el-button
+            v-if="permissions.sys_role_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            size="small"
+            icon="el-icon-download"
+            @click="exportExcel"
+          >导出
+          </el-button>
         </template>
 
         <template
@@ -67,6 +87,16 @@
           </el-button>
         </template>
       </avue-crud>
+
+      <!--excel 模板导入 -->
+      <excel-upload
+        ref="excelUpload"
+        title="角色信息导入"
+        url="/admin/role/import"
+        temp-name="角色信息.xlsx"
+        temp-url="/admin/sys-file/local/role.xlsx"
+        @refreshDataList="handleRefreshChange"
+      ></excel-upload>
     </basic-container>
     <el-dialog
       :visible.sync="dialogPermissionVisible"
@@ -106,9 +136,11 @@ import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@
 import {tableOption} from '@/const/crud/admin/role'
 import {fetchMenuTree} from '@/api/admin/menu'
 import {mapGetters} from 'vuex'
+import ExcelUpload from "@/components/upload/excel";
 
 export default {
   name: 'TableRole',
+  components: { ExcelUpload },
   data() {
     return {
       searchForm: {},
@@ -252,6 +284,9 @@ export default {
         this.$store.dispatch('GetMenu', {type: false})
         this.$notify.success('修改成功')
       })
+    },
+    exportExcel() {
+      this.downBlobFile("/admin/role/export",{}, "role.xlsx");
     }
   }
 }

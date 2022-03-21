@@ -11,23 +11,23 @@ export const tableOption = {
   "column": [
     {
       "type": "input",
-      "label": "岗位编码",
-      "prop": "postCode",
-      span: 24,
-      rules: [{
-        required: true,
-        message: '请输入岗位编码',
-        trigger: 'blur'
-      }]
-    },
-    {
-      "type": "input",
       "label": "岗位名称",
       "prop": "postName",
       span: 24,
       rules: [{
         required: true,
         message: '请输入岗位名称',
+        trigger: 'blur'
+      }]
+    },
+    {
+      "type": "input",
+      "label": "岗位标识",
+      "prop": "postCode",
+      span: 24,
+      rules: [{
+        required: true,
+        message: '请输入岗位标识',
         trigger: 'blur'
       }]
     },

@@ -39,19 +39,51 @@
             icon="el-icon-edit"
             @click="$refs.crud.rowAdd()">添加
           </el-button>
+          <el-button
+            v-if="permissions.sys_post_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            size="small"
+            icon="el-icon-upload"
+            @click="$refs.excelUpload.show()"
+          >导入
+          </el-button>
+          <el-button
+            v-if="permissions.sys_post_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            size="small"
+            icon="el-icon-download"
+            @click="exportExcel"
+          >导出
+          </el-button>
         </template>
       </avue-crud>
+
+      <!--excel 模板导入 -->
+      <excel-upload
+        ref="excelUpload"
+        title="岗位信息导入"
+        url="/admin/post/import"
+        temp-name="岗位信息.xlsx"
+        temp-url="/admin/sys-file/local/post.xlsx"
+        @refreshDataList="handleRefreshChange"
+      ></excel-upload>
     </basic-container>
   </div>
 </template>
 
 <script>
-import {fetchList, getObj, addObj, putObj, delObj} from '@/api/admin/post'
+import {addObj, delObj, fetchList, putObj} from '@/api/admin/post'
 import {tableOption} from '@/const/crud/admin/post'
 import {mapGetters} from 'vuex'
+import ExcelUpload from "@/components/upload/excel";
 
 export default {
   name: 'post',
+  components: { ExcelUpload },
   data() {
     return {
       searchForm: {},
@@ -76,6 +108,12 @@ export default {
     }
   },
   methods: {
+    exportExcel() {
+      this.downBlobFile("/admin/post/export",{}, "post.xlsx");
+    },
+    handleRefreshChange() {
+      this.getList(this.page)
+    },
     getList(page, params) {
       this.tableLoading = true
       fetchList(Object.assign({
