@@ -104,8 +104,7 @@ export const setTheme = name => {
  */
 export const encryption = params => {
   let {data, type, param, key} = params;
-  let result = JSON.parse(JSON.stringify(data));
-  if(type==="MD5") result = CryptoJS.MD5(data)
+  const result = JSON.parse(JSON.stringify(data));
   if (type === "Base64") {
     param.forEach(ele => {
       result[ele] = btoa(result[ele]);
