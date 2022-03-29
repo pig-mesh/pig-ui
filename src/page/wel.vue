@@ -14,7 +14,7 @@
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
               <div>基于Spring Cloud 2021</div>
-              <div>基于Spring Boot 2.6.4</div>
+              <div>基于Spring Boot 2.6.5</div>
             </el-collapse-item>
             <el-collapse-item name="2">
               <div>支持docker部署</div>
