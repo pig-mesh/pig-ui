@@ -21,13 +21,16 @@ import { iconfontUrl, iconfontVersion } from "@/config/env";
 import * as filters from "./filters"; // 全局filter
 import "./styles/common.scss";
 import basicContainer from "./components/basic-container/main";
-import DictResolver from '@/components/DictResolver' // 字典数据组件
-
-DictResolver.install()
+// 字典数据组件
+import DictResolver from '@/components/DictResolver'
+// 字典标签组件
+import DictTag from '@/components/DictTag'
 
 // 挂载常用全局方法，import 引入
 Vue.prototype.validatenull = validatenull;
 Vue.prototype.downBlobFile = downBlobFile;
+
+DictResolver.install()
 
 window.axios = axios;
 Vue.use(VueAxios, axios);
@@ -50,6 +53,7 @@ Vue.use(AvueFormDesign);
 
 // 注册全局容器
 Vue.component("basicContainer", basicContainer);
+Vue.component('DictTag', DictTag)
 
 // 加载相关url地址
 Object.keys(urls).forEach(key => {
