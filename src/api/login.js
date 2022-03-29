@@ -139,3 +139,14 @@ export const checkToken = (refreshLock, $store) => {
     console.error(error)
   })
 }
+
+/**
+ * 注册用户
+ */
+export const registerUser = (userInfo) => {
+  return request({
+    url: '/admin/user/registerUser',
+    method: 'post',
+    data:userInfo
+  })
+}
