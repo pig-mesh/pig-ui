@@ -21,6 +21,9 @@ import { iconfontUrl, iconfontVersion } from "@/config/env";
 import * as filters from "./filters"; // 全局filter
 import "./styles/common.scss";
 import basicContainer from "./components/basic-container/main";
+import DictResolver from '@/components/DictResolver' // 字典数据组件
+
+DictResolver.install()
 
 // 挂载常用全局方法，import 引入
 Vue.prototype.validatenull = validatenull;
