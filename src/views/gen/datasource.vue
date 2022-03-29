@@ -93,13 +93,15 @@
       handleSave: function (row, done,loading) {
         addObj(row).then(res => {
           if (res.data.data){
-            done()
-            this.$message.success('添加成功')
+            this.$message.success("添加成功");
+            done();
+            this.getDsList(this.dsPage);
           }else {
+            this.$message.error("添加失败，数据源不可访问");
             loading()
-            this.$message.error('添加失败，数据源不可访问')
           }
-          this.getDsList(this.dsPage)
+        }).catch(()=>{
+          loading()
         })
       },
       getDsList(page, params) {
