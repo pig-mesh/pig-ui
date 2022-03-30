@@ -145,7 +145,7 @@ export const checkToken = (refreshLock, $store) => {
  */
 export const registerUser = (userInfo) => {
   return request({
-    url: '/admin/user/registerUser',
+    url: '/admin/register/user',
     method: 'post',
     data:userInfo
   })
