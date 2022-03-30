@@ -16,7 +16,7 @@
  */
 import {getDetails} from '@/api/admin/user'
 
-const validateUsername = (rule, value, callback) => {
+export const validateUsername = (rule, value, callback) => {
   if (!value) {
     return callback(new Error('请输入用户名'))
   }
@@ -32,19 +32,21 @@ const validateUsername = (rule, value, callback) => {
 }
 
 // 设置密码校验规则
-const checkPassword = (rule, value, callback) => {
+export const checkPassword = (rule, value, callback) => {
   if (window.boxType === 'edit') {
     return callback()
   }
   if (!value) {
     callback(new Error('请输入密码'))
+  } else if (value.length <= 6) {
+    callback(new Error('请输入6位以上密码'))
   } else {
     callback()
   }
 }
 
 // 设置手机号的验证规则
-const checkPhone = (rule, value, callback) => {
+export const checkPhone = (rule, value, callback) => {
   if (!value) {
     callback(new Error('请输入联系方式'))
   } else {
@@ -130,7 +132,7 @@ export const tableOption = {
       validator: checkPhone,
       trigger: 'blur'
     }]
-  },  {
+  }, {
     label: '角色',
     prop: 'role',
     formslot: true,
@@ -149,10 +151,10 @@ export const tableOption = {
     addDisplay: false,
     editDisplay: false,
     span: 24,
-  },{
+  }, {
     label: '岗位',
     prop: 'post',
-    width:168,
+    width: 168,
     overHidden: true,
     formslot: true,
     slot: true,

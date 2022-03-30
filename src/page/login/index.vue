@@ -16,7 +16,7 @@
                @click.stop="activeName='user'">账号密码</a>
             <a href="#"
                @click.stop="activeName='code'">短信登录</a>
-            <a href="#"
+            <a href="#" v-if="website.register"
                @click.stop="activeName='register'">用户注册</a>
           </div>
         </div>

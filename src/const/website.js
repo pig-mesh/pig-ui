@@ -4,6 +4,7 @@ export default {
   logo: "Pig",   // 侧边栏搜索的时候顶部展示的文案
   key: "pig", //配置主键,目前用于存储
   title: "pig 快速开发框架",
+  register: true, //是否开启注册
   formLoginClient: 'pig:pig',// 用户名密码登录的 client 信息
   smsLoginClient: 'app:app',// 验证码登录的 client 信息
   remainingTime: 1800000, // token 剩余多少毫秒执行刷新

@@ -56,3 +56,14 @@ body,
 .avue--detail .el-col {
   margin-bottom: 0;
 }
+
+.avue-crud__tip {
+  height: 32px !important;
+  width: 100%;
+}
+
+.el-date-editor .el-range-separator {
+  padding: 0 5px;
+  width: auto !important;
+  color: #303133;
+}
