@@ -16,6 +16,7 @@
         :disabled="upload.isUploading"
         :on-progress="handleFileUploadProgress"
         :on-success="handleFileSuccess"
+        :on-error="handleFileError"
         :auto-upload="false"
         drag
       >
@@ -32,7 +33,7 @@
             style="font-size:12px;vertical-align: baseline;"
             @click="downExcelTemp"
             v-if="tempUrl"
-            >下载模板
+          >下载模板
           </el-link>
         </div>
       </el-upload>
@@ -60,7 +61,8 @@
               type="danger"
               v-for="error in scope.row.errors"
               :key="error"
-              >{{ error }}</el-tag
+            >{{ error }}
+            </el-tag
             >
           </template>
         </el-table-column>
@@ -100,7 +102,7 @@ export default {
     };
   },
   computed: {
-    headers: function() {
+    headers: function () {
       return {
         Authorization: "Bearer " + store.getters.access_token
       };
@@ -113,11 +115,14 @@ export default {
     handleFileUploadProgress() {
       this.upload.isUploading = true;
     },
+    handleFileError() {
+      this.$message.error('上传失败,数据格式不合法!')
+      this.upload.open = false;
+    },
     handleFileSuccess(response) {
       this.upload.isUploading = false;
       this.upload.open = false;
       this.$refs.upload.clearFiles();
-
       // 校验失败
       if (response.code === 1) {
         this.$message.error("导入失败，以下数据不合法");
