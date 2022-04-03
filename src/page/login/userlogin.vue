@@ -55,7 +55,7 @@
               class="login-code-img"
               @click="refreshCode"
               v-if="code.type == 'text'"
-              >{{ code.value }}</span
+            >{{ code.value }}</span
             >
             <img
               :src="code.src"
@@ -72,15 +72,17 @@
         type="primary"
         @click.native.prevent="handleLogin"
         class="login-submit"
-        >登录</el-button
+      >登录
+      </el-button
       >
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import { randomLenNum } from "@/util/util";
-import { mapGetters } from "vuex";
+import {randomLenNum} from "@/util/util";
+import {mapGetters} from "vuex";
+
 export default {
   name: "userlogin",
   data() {
@@ -100,13 +102,14 @@ export default {
       },
       loginRules: {
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" }
+          {required: true, message: "请输入用户名", trigger: "blur"},
+          {pattern: /^([a-z\u4e00-\u9fa5\d]*?)$/, message: "请输入小写字母", trigger: "blur"}
         ],
         password: [
-          { required: true, message: "请输入密码", trigger: "blur" },
-          { min: 6, message: "密码长度最少为6位", trigger: "blur" }
+          {required: true, message: "请输入密码", trigger: "blur"},
+          {min: 6, message: "密码长度最少为6位", trigger: "blur"}
         ],
-        code: [{ required: true, message: "请输入验证码", trigger: "blur" }]
+        code: [{required: true, message: "请输入验证码", trigger: "blur"}]
       },
       passwordType: "password"
     };
@@ -136,7 +139,7 @@ export default {
           this.$store
             .dispatch("LoginByUsername", this.loginForm)
             .then(() => {
-              this.$router.push({ path: this.tagWel.value });
+              this.$router.push({path: this.tagWel.value});
             })
             .catch(() => {
               this.refreshCode();
