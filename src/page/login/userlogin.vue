@@ -35,7 +35,7 @@
         <i slot="prefix" class="icon-mima"></i>
       </el-input>
     </el-form-item>
-    <el-form-item prop="code">
+    <el-form-item  prop="code" v-if="website.validateCode">
       <el-row :span="24">
         <el-col :span="16">
           <el-input
@@ -115,10 +115,12 @@ export default {
     };
   },
   created() {
-    this.refreshCode();
+    if(this.website.validateCode){
+      this.refreshCode();
+    }
   },
   computed: {
-    ...mapGetters(["tagWel"])
+    ...mapGetters(["tagWel","website"])
   },
   methods: {
     refreshCode() {
