@@ -54,3 +54,10 @@ export function putObj(obj) {
     data: obj
   })
 }
+
+export function onlineFile(bucketName, fileName) {
+  return request({
+    url: `/admin/sys-file/online/${bucketName}/${fileName}`,
+    method: 'get'
+  })
+}

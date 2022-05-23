@@ -40,6 +40,13 @@
             @click="download(scope.row, scope.index)"
             >下载
           </el-button>
+          <el-button
+            type="text"
+            size="small"
+            icon="el-icon-view"
+            @click="onlineFile(scope.row, scope.index)"
+            >在线浏览
+          </el-button>
         </template>
       </avue-crud>
     </basic-container>
@@ -47,7 +54,7 @@
 </template>
 
 <script>
-import { delObj, fetchList } from "@/api/admin/file";
+import { delObj, fetchList, onlineFile } from "@/api/admin/file";
 import { tableOption } from "@/const/crud/admin/file";
 import { mapGetters } from "vuex";
 
@@ -142,6 +149,11 @@ export default {
         this.getList(this.page);
       }
       done();
+    },
+    onlineFile(row, index) {
+      onlineFile(row.bucketName, row.fileName).then(res => {
+        window.open(res.data.data, '_blank')
+      })
     }
   }
 };
