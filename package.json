@@ -31,8 +31,8 @@
     "@vue/cli-plugin-babel": "^3.12.0",
     "@vue/cli-service": "^3.12.0",
     "chai": "^4.2.0",
-    "node-sass": "4.14.1",
-    "sass-loader": "^8.0.0",
+    "sass": "1.32.13",
+    "sass-loader": "10.1.1",
     "vue-template-compiler": "2.6.10"
   },
   "lint-staged": {
