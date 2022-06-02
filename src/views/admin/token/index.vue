@@ -29,12 +29,6 @@
                  @current-change="currentChange"
                  @refresh-change="refreshChange"
                  @row-del="rowDel">
-        <template slot="id" slot-scope="scope">
-          <span v-if="scope.row.user_info">{{ scope.row.user_info.id }}</span>
-        </template>
-        <template slot="username" slot-scope="scope">
-          <span v-if="scope.row.user_info">{{ scope.row.user_info.username }}</span>
-        </template>
       </avue-crud>
     </basic-container>
   </div>
