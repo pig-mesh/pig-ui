@@ -67,7 +67,7 @@ export const loginByMobile = (mobile, code) => {
       'Authorization': basicAuth
     },
     method: 'post',
-    params: {mobile: mobile, code: code, grant_type}
+    params: {mobile: mobile, code: code, grant_type, scope}
   })
 }
 
@@ -147,6 +147,6 @@ export const registerUser = (userInfo) => {
   return request({
     url: '/admin/register/user',
     method: 'post',
-    data:userInfo
+    data: userInfo
   })
 }
