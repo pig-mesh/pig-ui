@@ -61,7 +61,7 @@
 <script>
 import {registerUser} from "@/api/login";
 import {mapGetters} from "vuex";
-import {checkPassword, checkPhone} from '@/const/crud/admin/user'
+import {checkPassword, checkPhone, validateUsername} from '@/const/crud/admin/user'
 
 export default {
   name: "userRegister",
@@ -82,9 +82,8 @@ export default {
             trigger: 'blur'
           },
           {
-            pattern: /^([a-z\u4e00-\u9fa5\d]*?)$/,
-            message: "请输入小写字母",
-            trigger: "blur"
+            validator: validateUsername,
+            trigger: 'blur'
           }
         ],
         password: [
