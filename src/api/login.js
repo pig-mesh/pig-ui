@@ -37,7 +37,7 @@ export const loginByUsername = (username, password, code, randomStr) => {
   })
 
   return request({
-    url: '/auth/oauth/token',
+    url: '/auth/oauth2/token',
     headers: {
       isToken: false,
       Authorization: basicAuth
@@ -61,13 +61,13 @@ export const loginByMobile = (mobile, code) => {
   })
 
   return request({
-    url: '/auth/oauth/token',
+    url: '/auth/oauth2/token',
     headers: {
       isToken: false,
       'Authorization': basicAuth
     },
     method: 'post',
-    params: {mobile: mobile, code: code, grant_type}
+    params: {mobile: mobile, code: code, grant_type, scope}
   })
 }
 
@@ -77,7 +77,7 @@ export const refreshToken = refresh_token => {
   let basicAuth = getStore({name: 'basicAuth'})
 
   return request({
-    url: '/auth/oauth/token',
+    url: '/auth/oauth2/token',
     headers: {
       isToken: false,
       Authorization: basicAuth
@@ -111,7 +111,7 @@ export const checkToken = (refreshLock, $store) => {
   let basicAuth = getStore({name: 'basicAuth'})
 
   request({
-    url: '/auth/oauth/check_token',
+    url: '/auth/token/check_token',
     headers: {
       isToken: false,
       Authorization: basicAuth
@@ -147,6 +147,6 @@ export const registerUser = (userInfo) => {
   return request({
     url: '/admin/register/user',
     method: 'post',
-    data:userInfo
+    data: userInfo
   })
 }

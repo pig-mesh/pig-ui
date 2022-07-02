@@ -22,7 +22,3 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
-
-# Lock File
-package-lock.json
-yarn.lock

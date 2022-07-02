@@ -14,7 +14,7 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
-import {getDetails} from '@/api/admin/user'
+import {isExsit} from '@/api/admin/user'
 
 export const validateUsername = (rule, value, callback) => {
   if (!value) {
@@ -24,13 +24,13 @@ export const validateUsername = (rule, value, callback) => {
   if (!flag) {
     callback(new Error('用户名支持小写英文、数字、中文'))
   }
-  getDetails(value).then(response => {
+  isExsit({username: value}).then(response => {
     if (window.boxType === 'edit') callback()
     let result = response.data.data
-    if (result !== null) {
-      callback(new Error('用户名已经存在'))
+    if (result) {
+      return callback(new Error('用户名已经存在'))
     } else {
-      callback()
+      return callback()
     }
   })
 }
@@ -55,12 +55,21 @@ export const checkPhone = (rule, value, callback) => {
     callback(new Error('请输入联系方式'))
   } else {
     const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
-    if (reg.test(value)) {
-      callback()
-    } else {
+    if (!reg.test(value)) {
       return callback(new Error('请输入正确的电话'))
     }
   }
+
+  isExsit({phone: value}).then(response => {
+    if (window.boxType === 'edit') callback()
+    let result = response.data.data
+    debugger
+    if (result) {
+      return callback(new Error('手机号已经存在'))
+    } else {
+      return callback()
+    }
+  })
 }
 
 export const tableOption = {

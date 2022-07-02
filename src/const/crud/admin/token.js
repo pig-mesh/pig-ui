@@ -27,31 +27,26 @@ export const tableOption = {
   addBtn: false,
   editBtn: false,
   column: [{
-    label: '用户ID',
-    prop: 'id',
-    align: 'center',
-    slot: true
-  }, {
     label: '用户名',
     prop: 'username',
     align: 'center',
     slot: true
-  },{
+  }, {
     label: "客户端",
     prop: "clientId",
     align: "center"
   }, {
     label: '令牌',
-    prop: 'access_token',
+    prop: 'accessToken',
     align: 'center',
     overHidden: true
   }, {
-    label: '类型',
-    prop: 'token_type',
+    label: '创建时间',
+    prop: 'issuedAt',
     align: 'center'
   }, {
     label: '过期时间',
-    prop: 'expires_in',
+    prop: 'expiresAt',
     align: 'center'
   }]
 }
