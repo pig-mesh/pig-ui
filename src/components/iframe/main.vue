@@ -49,7 +49,7 @@ export default {
     show () {
       NProgress.start()
     },
-    // 隐藏等待狂
+    // 隐藏等待框
     hide () {
       NProgress.done()
     },
@@ -63,12 +63,12 @@ export default {
     load () {
       this.show()
       var flag = true //URL是否包含问号
-      if (this.$route.query.src.indexOf('?') == -1) {
+      if (this.$route.query.src.indexOf('?') === -1) {
         flag = false
       }
       var list = []
       for (var key in this.$route.query) {
-        if (key != 'src' && key != 'name') {
+        if (key !== 'src' && key !== 'name') {
           list.push(`${key}= this.$route.query[key]`)
         }
       }
@@ -86,7 +86,7 @@ export default {
       let time = 5
       const timeFunc = setInterval(() => {
         time--
-        if (time == 0) {
+        if (time === 0) {
           this.hide()
           clearInterval(timeFunc)
         }
