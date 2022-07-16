@@ -115,10 +115,14 @@ export const tableOption = {
     }]
   }, {
     label: '令牌时效',
+    type: 'number',
+    min: 60,
     prop: 'accessTokenValidity',
     align: 'center',
   }, {
     label: '刷新时效',
+    type: 'number',
+    min: 3600,
     prop: 'refreshTokenValidity',
     align: 'center',
   }, {
