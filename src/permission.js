@@ -54,7 +54,7 @@ router.beforeEach((to, from, next) => {
         // 针对外链跳转
         if (value.includes("http", "https")) {
           NProgress.done();
-          window.open(value, label, "_blank");
+          window.open(value, "_blank");
           return;
         }
 
