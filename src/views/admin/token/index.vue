@@ -16,109 +16,84 @@
   -->
 
 <template>
-  <div class="execution">
+  <div>
     <basic-container>
       <avue-crud ref="crud"
-                 v-model:page="page"
+                 :page.sync="page"
                  :data="tableData"
                  :table-loading="tableLoading"
                  :option="tableOption"
                  :permission="permissionList"
                  @on-load="getList"
-                 @search-change="searchChange"
-                 @refresh-change="refreshChange"
                  @size-change="sizeChange"
                  @current-change="currentChange"
-                 @row-del="handleDel">
-        <template #id="scope">
-          <span v-if="scope.row.user_info">{{ scope.row.user_info.id }}</span>
-        </template>
-        <template #username="scope">
-          <span v-if="scope.row.user_info">{{ scope.row.user_info.username }}</span>
-        </template>
-        <template #clientId="scope">
-          <span v-if="scope.row.client_id">{{ scope.row.client_id }}</span>
-        </template>
+                 @refresh-change="refreshChange"
+                 @row-del="rowDel">
       </avue-crud>
     </basic-container>
   </div>
 </template>
 
 <script>
-import { delObj, fetchList } from "@/api/admin/token";
-import { tableOption } from "@/const/crud/admin/token";
-import { mapGetters } from "vuex";
+import {delObj, fetchList} from '@/api/admin/token'
+import {tableOption} from '@/const/crud/admin/token'
+import {mapGetters} from 'vuex'
 
 export default {
-  name: "Token",
-  data () {
+  name: 'token',
+  data() {
     return {
       tableData: [],
       page: {
         total: 0, // 总页数
         currentPage: 1, // 当前页数
-        pageSize: 20, // 每页显示多少条
+        pageSize: 20 // 每页显示多少条
       },
       tableLoading: false,
-      tableOption: tableOption,
-    };
+      tableOption: tableOption
+    }
   },
-  created () { },
-  mounted: function () { },
   computed: {
-    ...mapGetters(["permissions"]),
-    permissionList () {
+    ...mapGetters(['permissions']),
+    permissionList() {
       return {
-        delBtn: this.validData(this.permissions.sys_token_del, false),
-      };
-    },
+        delBtn: this.vaildData(this.permissions.sys_token_del, false),
+      }
+    }
   },
   methods: {
-    getList (page, params) {
-      this.tableLoading = true;
-      fetchList(
-        Object.assign(
-          {
-            current: page.currentPage,
-            size: page.pageSize,
-          },
-          params
-        )
-      ).then((response) => {
-        this.tableData = response.data.data.records;
-        this.page.total = response.data.data.total;
-        this.tableLoading = false;
-      });
-    },
-    handleDel: function (row, index) {
-      var _this = this;
-      this.$confirm("是否强制" + row.access_token + "下线?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
+    getList(page, params) {
+      this.tableLoading = true
+      fetchList(Object.assign({
+        current: page.currentPage,
+        size: page.pageSize
+      }, params)).then(response => {
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
+        this.tableLoading = false
       })
-        .then(function () {
-          return delObj(row.access_token);
-        })
-        .then(() => {
-          _this.$message.success("强制下线成功");
-          this.getList(this.page);
-        });
     },
-    refreshChange () {
-      this.getList(this.page);
+    rowDel: function (row, index) {
+      this.$confirm('是否强制' + row.username + '下线?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(function () {
+        return delObj(row.accessToken)
+      }).then(data => {
+        this.$message.success('删除成功')
+      })
     },
-    sizeChange (pageSize) {
-      this.page.pageSize = pageSize;
+    refreshChange() {
+      this.getList(this.page)
     },
-    currentChange (current) {
-      this.page.currentPage = current;
+    sizeChange(pageSize) {
+      this.page.pageSize = pageSize
     },
-    searchChange (params, done) {
-      this.page.currentPage = 1;
-      this.getList(this.page, params);
-      done();
-    },
-  },
-};
+    currentChange(current) {
+      this.page.currentPage = current
+    }
+  }
+}
 </script>
+

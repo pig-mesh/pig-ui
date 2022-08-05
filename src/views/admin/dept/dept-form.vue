@@ -1,11 +1,8 @@
 <template>
   <!-- 添加或修改菜单对话框 -->
   <el-dialog :title="!form.deptId ? '新增': '修改'"
-             v-model="visible">
-    <el-form ref="dataForm"
-             :model="form"
-             :rules="rules"
-             label-width="80px">
+             :visible.sync="visible">
+    <el-form ref="dataForm" :model="form" :rules="rules" label-width="80px">
       <el-row>
         <el-col>
           <el-form-item label="上级部门">
@@ -13,41 +10,34 @@
                         :options="deptOptions"
                         :normalizer="normalizer"
                         :show-count="true"
-                        placeholder="选择上级菜单" />
+                        placeholder="选择上级菜单"
+            />
           </el-form-item>
         </el-col>
       </el-row>
-      <el-form-item label="部门名称"
-                    prop="name">
-        <el-input v-model="form.name"
-                  placeholder="请输入菜单名称" />
+      <el-form-item label="部门名称" prop="name">
+        <el-input v-model="form.name" placeholder="请输入菜单名称"/>
       </el-form-item>
-      <el-form-item label="排序"
-                    prop="sort">
-        <el-input-number v-model="form.sort"
-                         controls-position="right"
-                         :min="0" />
+      <el-form-item label="排序" prop="sortOrder">
+        <el-input-number v-model="form.sortOrder" controls-position="right" :min="0"/>
       </el-form-item>
     </el-form>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button type="primary"
-                   @click="dataFormSubmit">确 定</el-button>
-        <el-button @click="visible = false">取 消</el-button>
-      </div>
-    </template>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dataFormSubmit">确 定</el-button>
+      <el-button @click="visible = false">取 消</el-button>
+    </div>
   </el-dialog>
 </template>
 
 <script>
-import { addObj, fetchTree, getObj, putObj } from '@/api/admin/dept'
+import {addObj, fetchTree, getObj, putObj} from '@/api/admin/dept'
 import Treeselect from "@riophae/vue-treeselect"
 import "@riophae/vue-treeselect/dist/vue-treeselect.css"
 
 export default {
   name: "DeptForm",
-  components: { Treeselect },
-  data () {
+  components: {Treeselect},
+  data() {
     return {
       // 遮罩层
       loading: true,
@@ -57,21 +47,21 @@ export default {
       visible: false,
       form: {
         name: undefined,
-        sort: 999
+        sortOrder: 999
       },
       // 表单校验
       rules: {
         name: [
-          { required: true, message: "菜单名称不能为空", trigger: "blur" }
+          {required: true, message: "菜单名称不能为空", trigger: "blur"}
         ],
-        sort: [
-          { required: true, message: "菜单顺序不能为空", trigger: "blur" }
+        sortOrder: [
+          {required: true, message: "菜单顺序不能为空", trigger: "blur"}
         ]
       }
     };
   },
   methods: {
-    init (isEdit, id) {
+    init(isEdit, id) {
       if (id !== null) {
         this.form.parentId = id;
       }
@@ -89,7 +79,7 @@ export default {
       })
     },
     // 表单提交
-    dataFormSubmit () {
+    dataFormSubmit() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.form.parentId === undefined) {
@@ -113,15 +103,15 @@ export default {
       })
     },
     /** 查询菜单下拉树结构 */
-    getTreeselect () {
+    getTreeselect() {
       fetchTree().then(response => {
         this.deptOptions = []
-        const dept = { id: 0, name: '根部门', children: response.data.data };
+        const dept = {id: 0, name: '根部门', children: response.data.data};
         this.deptOptions.push(dept)
       });
     },
     /** 转换菜单数据结构 */
-    normalizer (node) {
+    normalizer(node) {
       if (node.children && !node.children.length) {
         delete node.children
       }

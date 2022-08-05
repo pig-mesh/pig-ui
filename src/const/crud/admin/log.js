@@ -23,9 +23,9 @@ export const tableOption = {
   menuWidth: 150,
   align: 'center',
   refreshBtn: true,
+  searchMenuSpan: 6,
   showClomnuBtn: false,
   searchSize: 'mini',
-  searchMenuSpan: 6,
   addBtn: false,
   editBtn: false,
   viewBtn: true,
@@ -62,7 +62,13 @@ export const tableOption = {
     type: 'datetime',
     format: 'yyyy-MM-dd HH:mm',
     valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    rangeSeparator: '-',
     search: true,
     searchRange: true
+  }, {
+    width: 180,
+    label: '异常日志',
+    prop: 'exception',
+    hide: true
   }]
 }

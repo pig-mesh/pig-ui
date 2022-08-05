@@ -7,6 +7,7 @@ import i18n from './lang/';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import Avue from '@smallwei/avue';
+import AvueFormDesign from '@sscfaith/avue-form-design';
 import '@smallwei/avue/lib/index.css';
 import { getScreen } from '@/util/index'
 import './permission';
@@ -31,4 +32,5 @@ app.use(store)
 app.use(router)
 app.use(ElementPlus)
 app.use(Avue, { axios })
+app.use(AvueFormDesign)
 app.mount('#app')

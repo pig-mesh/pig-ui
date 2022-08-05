@@ -1,9 +1,9 @@
 import { setToken, setRefreshToken } from '@/util/auth'
 import { getStore, setStore } from '@/util/store'
-import { loginByMobile, loginBySocial, loginByUsername, getUserInfo, logout, refreshToken } from '@/api/login'
+import { loginByMobile, loginByUsername, getUserInfo, logout, refreshToken } from '@/api/login'
 import { deepClone, encryption } from '@/util'
 import { formatPath } from '@/router/avue-router'
-import { getMenu, getTopMenu } from '@/api/admin/menu'
+import { getMenu } from '@/api/admin/menu'
 const user = {
   state: {
     userInfo: getStore({
@@ -29,7 +29,7 @@ const user = {
     LoginByUsername ({ commit }, userInfo) {
       const user = encryption({
         data: userInfo,
-        key: 'pigxpigxpigxpigx',
+        key: 'thanks,pig4cloud',
         param: ['password']
       })
       return new Promise((resolve, reject) => {
@@ -58,20 +58,7 @@ const user = {
         })
       })
     },
-    // 根据OpenId登录
-    LoginBySocial ({ commit }, param) {
-      return new Promise((resolve, reject) => {
-        loginBySocial(param.state, param.code).then(response => {
-          const data = response.data
-          commit('SET_ACCESS_TOKEN', data.access_token)
-          commit('SET_REFRESH_TOKEN', data.refresh_token)
-          commit('CLEAR_LOCK')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
-      })
-    },
+
     // 刷新token
     RefreshToken ({ commit, state }) {
       return new Promise((resolve, reject) => {
@@ -155,10 +142,7 @@ const user = {
     //顶部菜单
     GetTopMenu () {
       return new Promise(resolve => {
-        getTopMenu().then((res) => {
-          const data = res.data.data || []
-          resolve(data)
-        })
+        resolve([])
       })
     }
   },

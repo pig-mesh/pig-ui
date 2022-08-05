@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import PageRouter from './page/'
 import ViewsRouter from './views/'
 import AvueRouter from './avue-router';
@@ -6,7 +6,7 @@ import i18n from '@/lang'
 import Store from '@/store/'
 //创建路由
 const Router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [...PageRouter, ...ViewsRouter]
 })
 AvueRouter.install({

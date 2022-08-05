@@ -100,9 +100,9 @@ export function remote(type) {
   })
 }
 
-export function refreshCache() {
+export function clearDictCache(){
   return request({
-    url: '/admin/dict/sync',
-    method: 'put'
+    url:'/admin/dict/cache',
+    method:'delete'
   })
 }

@@ -1,6 +1,5 @@
 import { getStore, setStore } from '@/util/store'
 import dayjs from 'dayjs'
-import { sendLogs } from '@/api/admin/log'
 
 const logs = {
   state: {
@@ -10,12 +9,7 @@ const logs = {
     // 发送错误日志
     SendLogs ({ state, commit }) {
       return new Promise((resolve, reject) => {
-        sendLogs(state.logsList).then(() => {
-          commit('CLEAR_LOGS')
-          resolve()
-        }).catch(error => {
-          reject(error)
-        })
+        resolve()
       })
     }
   },

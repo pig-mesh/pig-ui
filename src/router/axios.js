@@ -27,6 +27,8 @@ axios.interceptors.request.use(config => {
   const TENANT_ID = getStore({ name: 'tenantId' })
   const isToken = (config.headers || {}).isToken === false
   const token = store.getters.access_token
+
+  console.log(token)
   if (token && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + token// token
   }
@@ -58,7 +60,7 @@ axios.interceptors.response.use(res => {
   const message = res.data.msg || errorCode[status] || errorCode['default']
 
   // 后台定义 424 针对令牌过去的特殊响应码
-  if (status === 424) {
+  if (status === 401) {
     ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '系统提示', {
       confirmButtonText: '重新登录',
       cancelButtonText: '取消',

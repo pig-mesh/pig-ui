@@ -28,7 +28,7 @@ export const tableOption = {
   column: [{
     label: '类型',
     prop: 'type',
-    'search': true,
+    search: true,
     editDisabled: true,
     rules: [{
       required: true,
@@ -45,18 +45,18 @@ export const tableOption = {
     }]
   }, {
     label: '字典类型',
-    prop: 'system',
-    type: 'select',
+    prop: 'systemFlag',
+    type: 'radio',
     dicUrl: '/admin/dict/type/dict_type',
     rules: [{
       required: true,
-      message: '请输入字典类型',
+      message: '请选择字典类型',
       trigger: 'blur'
     }],
     search: true
   }, {
     label: '备注信息',
-    prop: 'remarks'
+    prop: 'remark'
   }, {
     width: 150,
     label: '创建时间',
@@ -111,7 +111,7 @@ export const tableDictItemOption = {
     }]
   }, {
     label: '排序',
-    prop: 'sort',
+    prop: 'sortOrder',
     type: 'number',
     rules: [{
       required: true,
@@ -120,6 +120,6 @@ export const tableDictItemOption = {
     }]
   }, {
     label: '备注信息',
-    prop: 'remarks'
+    prop: 'remark'
   }]
 }

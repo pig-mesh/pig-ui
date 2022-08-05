@@ -2,14 +2,15 @@
  * 全局配置文件
  */
 export default {
-  title: 'PigX 快速开发框架',
-  subtitle: 'PigX',
+  title: 'Pig 快速开发框架',
+  subtitle: 'Pig',
   logo: "P",
-  indexTitle: "PigX 快速开发框架",
-  copyright: 'Copyright © 2021 pig4cloud.com. All rights reserved.',
-  key: 'pigx',//配置主键,目前用于存储
+  indexTitle: "Pig 快速开发框架",
+  copyright: 'Copyright © 2022 pig4cloud.com. All rights reserved.',
+  key: 'pig',//配置主键,目前用于存储
   lockPage: '/lock',
   tokenTime: 3000,
+  validateCode: true,
   websocket: false, // 是否开启websocket
   whiteList: ['/login', '/404', '/401', '/lock'], // 配置无权限可以访问的页面
   whiteTagList: ['/login', '/404', '/401', '/lock'], // 配置不添加tags页面 （'/advanced-router/mutative-detail/*'——*为通配符）

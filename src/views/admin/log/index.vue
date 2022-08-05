@@ -18,25 +18,30 @@
 <template>
   <div class="log">
     <basic-container>
-      <avue-crud ref="crud"
-                 v-model:page="page"
-                 :data="tableData"
-                 :table-loading="tableLoading"
-                 :option="tableOption"
-                 :permission="permissionList"
-                 @on-load="getList"
-                 @search-change="searchChange"
-                 @refresh-change="refreshChange"
-                 @size-change="sizeChange"
-                 @current-change="currentChange"
-                 @row-del="handleDel">
-        <template #menuLeft>
-          <el-button v-if="permissions.sys_log_del"
-                     class="filter-item"
-                     plain
-                     type="primary"
-                     icon="el-icon-download"
-                     @click="exportExcel">导出
+      <avue-crud
+        ref="crud"
+        :page.sync="page"
+        :data="tableData"
+        :table-loading="tableLoading"
+        :option="tableOption"
+        :permission="permissionList"
+        @on-load="getList"
+        @search-change="searchChange"
+        @refresh-change="refreshChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        @row-del="rowDel"
+      >
+        <template #menu-left="scope">
+          <el-button
+            v-if="permissions.sys_user_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            size="small"
+            icon="el-icon-download"
+            @click="exportExcel"
+            >导出
           </el-button>
         </template>
       </avue-crud>
@@ -50,41 +55,39 @@ import { tableOption } from "@/const/crud/admin/log";
 import { mapGetters } from "vuex";
 
 export default {
-  name: "Log",
-  data () {
+  name: "log",
+  data() {
     return {
       tableData: [],
-      searchForm: {},
       page: {
         total: 0, // 总页数
         currentPage: 1, // 当前页数
         pageSize: 20 // 每页显示多少条
       },
+      query: {},
       tableLoading: false,
       tableOption: tableOption
     };
   },
   computed: {
     ...mapGetters(["permissions"]),
-    permissionList () {
+    permissionList() {
       return {
-        delBtn: this.validData(this.permissions.sys_log_del, false)
+        delBtn: this.vaildData(this.permissions.sys_log_del, false)
       };
     }
   },
   methods: {
-    getList (page, params) {
+    getList(page, params) {
       this.tableLoading = true;
       fetchList(
         Object.assign(
           {
-            descs: ["create_time"],
-            ascs: ["time"],
+            descs: "create_time",
             current: page.currentPage,
             size: page.pageSize
           },
-          params,
-          this.searchForm
+          params
         )
       ).then(response => {
         this.tableData = response.data.data.records;
@@ -92,37 +95,36 @@ export default {
         this.tableLoading = false;
       });
     },
-    handleDel: function (row) {
+    rowDel: function(row, index) {
       this.$confirm('是否确认删除ID为"' + row.id + '"的日志?', "警告", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
-        .then(function () {
+        .then(function() {
           return delObj(row.id);
         })
-        .then(() => {
+        .then(data => {
           this.getList(this.page);
           this.$message.success("删除成功");
         });
     },
-    searchChange (form, done) {
-      this.searchForm = form;
-      this.page.currentPage = 1;
+    searchChange(form, done) {
+      this.query = form;
       this.getList(this.page, form);
       done();
     },
-    sizeChange (pageSize) {
+    sizeChange(pageSize) {
       this.page.pageSize = pageSize;
     },
-    currentChange (current) {
+    currentChange(current) {
       this.page.currentPage = current;
     },
-    refreshChange () {
+    refreshChange() {
       this.getList(this.page);
     },
-    exportExcel () {
-      this.downBlobFile("/admin/log/export", this.searchForm, "log.xlsx");
+    exportExcel() {
+      this.downBlobFile("/admin/log/export", this.query, "log.xlsx");
     }
   }
 };

@@ -41,13 +41,7 @@ export default [
       'icon-mysql',
       'icon-shejiyukaifa-',
       'icon-record',
-      'icon-biaodanbiaoqian',
-      'icon-TagAdd',
-      'icon-sucaisads',
-      'icon-huifu',
-      'icon-bangzhushouji',
-      'icon-icon-p_mrpbaobiao',
-      'icon-liuliang'
+      'icon-biaodanbiaoqian'
     ]
   }
 ]

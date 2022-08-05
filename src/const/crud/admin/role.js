@@ -14,16 +14,17 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
-import { rule } from "@/util/validateRules";
 export const tableOption = {
   border: true,
   index: true,
   indexLabel: '序号',
   stripe: true,
   menuAlign: 'center',
-  searchMenuSpan: 6,
   editBtn: false,
   delBtn: false,
+  searchMenuSpan: 6,
+  menuWidth: 300,
+  dialogWidth: '50%',
   align: 'center',
   addBtn: false,
   viewBtn: true,
@@ -31,65 +32,53 @@ export const tableOption = {
     label: '角色名称',
     prop: 'roleName',
     span: 24,
-    rules: [
-      { required: true, message: '角色名称不能为空', trigger: 'blur' },
-      { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' }
-    ],
-    'search': true,
+    rules: [{
+      required: true,
+      message: '角色名称不能为空',
+      trigger: 'blur'
+    },
+      {
+        min: 3,
+        max: 20,
+        message: '长度在 3 到 20 个字符',
+        trigger: 'blur'
+      }]
   }, {
+    width: 120,
     label: '角色标识',
     prop: 'roleCode',
     span: 24,
     editDisabled: true,
-    rules: [
-      { required: true, message: '角色标识不能为空', trigger: 'blur' },
-      { min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur'},
-      { validator: rule.validatorKey, trigger: 'blur'}
-    ],
-    'search': true,
+    rules: [{
+      required: true,
+      message: '角色标识不能为空',
+      trigger: 'blur'
+    },
+      {
+        min: 3,
+        max: 20,
+        message: '长度在 3 到 20 个字符',
+        trigger: 'blur'
+      }
+    ]
   }, {
     width: 150,
     label: '角色描述',
     prop: 'roleDesc',
     overHidden: true,
-    type: 'textarea',
     span: 24,
-    row: true,
-    minRows: 2,
-    rules: [
-      { max: 128, message: '长度在 128 个字符内', trigger: 'blur' }
-    ]
+    rules: [{
+      required: true,
+      message: '角色描述不能为空',
+      trigger: 'blur'
+    },
+      {
+        min: 3,
+        max: 100,
+        message: '长度在 3 到 100 个字符',
+        trigger: 'blur'
+      }]
   }, {
-    width: 120,
-    label: '数据权限',
-    prop: 'dsType',
-    type: 'select',
-    span: 24,
-    rules: [
-      { required: true, message: '请选择数据权限类型', trigger: 'blur'}
-    ],
-    dicData: [{
-      label: '全部',
-      value: 0
-    }, {
-      label: '自定义',
-      value: 1
-    }, {
-      label: '本级及子级',
-      value: 2
-    }, {
-      label: '本级',
-      value: 3
-    }],
-    'search': true,
-  }, {
-    label: '',
-    prop: 'dsScope',
-    formslot: true,
-    showClomnu: false,
-    hide: true
-  }, {
-    width: 120,
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',

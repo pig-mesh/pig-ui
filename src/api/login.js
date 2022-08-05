@@ -15,67 +15,75 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 import request from '@/router/axios'
-import qs from 'qs'
 import store from '@/store'
+import qs from 'qs'
+import {getStore, setStore} from "@/util/store.js";
+import website from "@/const/website.js";
+
 
 const scope = 'server'
 
 export const loginByUsername = (username, password, code, randomStr) => {
-  let grant_type = 'password'
+  const grant_type = 'password'
   let dataObj = qs.stringify({'username': username, 'password': password})
 
+  let basicAuth = 'Basic ' + window.btoa(website.formLoginClient)
+
+  // 保存当前选中的 basic 认证信息
+  setStore({
+    name: 'basicAuth',
+    content: basicAuth,
+    type: 'session'
+  })
+
   return request({
-    url: '/auth/oauth/token',
+    url: '/auth/oauth2/token',
     headers: {
       isToken: false,
-      'TENANT-ID': '1',
-      'Authorization': 'Basic cGlnOnBpZw=='
+      Authorization: basicAuth
     },
     method: 'post',
-    params: {randomStr, code, grant_type},
+    params: {randomStr, code, grant_type, scope},
     data: dataObj
   })
 }
 
-export const refreshToken = (refresh_token) => {
-  const grant_type = 'refresh_token'
+export const loginByMobile = (mobile, code) => {
+  const grant_type = 'app'
+
+  let basicAuth = 'Basic ' + window.btoa(website.smsLoginClient)
+
+  // 保存当前选中的 basic 认证信息
+  setStore({
+    name: 'basicAuth',
+    content: basicAuth,
+    type: 'session'
+  })
+
   return request({
-    url: '/auth/oauth/token',
+    url: '/auth/oauth2/token',
     headers: {
-      'isToken': false,
-      'TENANT-ID': '1',
-      'Authorization': 'Basic cGlnOnBpZw=='
+      isToken: false,
+      'Authorization': basicAuth
+    },
+    method: 'post',
+    params: {mobile: mobile, code: code, grant_type, scope}
+  })
+}
+
+export const refreshToken = refresh_token => {
+  const grant_type = 'refresh_token'
+  // 获取当前选中的 basic 认证信息
+  let basicAuth = getStore({name: 'basicAuth'})
+
+  return request({
+    url: '/auth/oauth2/token',
+    headers: {
+      isToken: false,
+      Authorization: basicAuth
     },
     method: 'post',
     params: {refresh_token, grant_type, scope}
-  })
-}
-
-export const loginByMobile = (mobile, code) => {
-  const grant_type = 'mobile'
-  return request({
-    url: '/auth/mobile/token/sms',
-    headers: {
-      isToken: false,
-      'TENANT-ID': '1',
-      'Authorization': 'Basic cGlnOnBpZw=='
-    },
-    method: 'post',
-    params: {mobile: 'SMS@' + mobile, code: code, grant_type}
-  })
-}
-
-export const loginBySocial = (state, code) => {
-  const grant_type = 'mobile'
-  return request({
-    url: '/auth/mobile/token/social',
-    headers: {
-      isToken: false,
-      'TENANT-ID': '1',
-      'Authorization': 'Basic cGlnOnBpZw=='
-    },
-    method: 'post',
-    params: {mobile: state + '@' + code, grant_type}
   })
 }
 
@@ -99,12 +107,14 @@ export const logout = () => {
  */
 export const checkToken = (refreshLock, $store) => {
   const token = store.getters.access_token
+  // 获取当前选中的 basic 认证信息
+  let basicAuth = getStore({name: 'basicAuth'})
 
   request({
-    url: '/auth/oauth/check_token',
+    url: '/auth/token/check_token',
     headers: {
       isToken: false,
-      Authorization: 'Basic cGlnOnBpZw=='
+      Authorization: basicAuth
     },
     method: 'get',
     params: {token}
@@ -112,8 +122,9 @@ export const checkToken = (refreshLock, $store) => {
     const expire = response && response.data && response.data.exp
     if (expire) {
       const expiredPeriod = expire * 1000 - new Date().getTime()
+      console.log('当前token过期时间', expiredPeriod, '毫秒')
       //小于半小时自动续约
-      if (expiredPeriod <= 30 * 60 * 1000) {
+      if (expiredPeriod <= website.remainingTime) {
         if (!refreshLock) {
           refreshLock = true
           $store.dispatch('RefreshToken')
@@ -126,5 +137,16 @@ export const checkToken = (refreshLock, $store) => {
     }
   }).catch(error => {
     console.error(error)
+  })
+}
+
+/**
+ * 注册用户
+ */
+export const registerUser = (userInfo) => {
+  return request({
+    url: '/admin/register/user',
+    method: 'post',
+    data: userInfo
   })
 }

@@ -19,193 +19,202 @@
   <div class="app-container calendar-list-container">
     <basic-container>
       <template>
-        <el-row>
-          <el-form
-            ref="ruleForm"
-            :model="ruleForm"
-            :rules="rules"
-            label-width="100px"
-            class="demo-ruleForm"
-          >
-            <el-col :span="12">
-              <div class="grid-content bg-purple">
-                <el-form-item label="头像">
-                  <el-upload
-                    :headers="headers"
-                    :show-file-list="false"
-                    :on-success="handleAvatarSuccess"
-                    class="avatar-uploader"
-                    action="/admin/sys-file/upload"
-                  >
-                    <img v-if="ruleForm.avatar" id="avatar" :src="avatarUrl" class="avatar" />
-                    <i v-else class="el-icon-plus avatar-uploader-icon" />
-                  </el-upload>
-                </el-form-item>
-                <el-form-item label="用户名" prop="username">
-                  <el-input v-model="ruleForm.username" type="text" disabled />
-                </el-form-item>
-                <el-form-item label="手机号" prop="phone">
-                  <el-input v-model="ruleForm.phone" placeholder="验证码登录使用" />
-                </el-form-item>
-
-                <el-form-item label="社交登录" prop="social">
-                  <a href="#" class="icon-weixin1" @click="handleClick('wechat')"></a>｜
-                  <a href="#" class="icon-qq" @click="handleClick('tencent')"></a> |
-                  <a href="#" class="icon-gitee-fill-round" @click="handleClick('gitee')"></a> |
-                  <a href="#" class="icon-C" @click="handleClick('osc')"></a>
-                </el-form-item>
-                <el-form-item label="原密码" prop="password">
-                  <el-input v-model="ruleForm.password" type="password" auto-complete="off" />
-                </el-form-item>
-                <el-form-item label="新密码" prop="newpassword1">
-                  <el-input v-model="ruleForm.newpassword1" type="password" auto-complete="off" />
-                </el-form-item>
-                <el-form-item label="确认密码" prop="newpassword2">
-                  <el-input v-model="ruleForm.newpassword2" type="password" auto-complete="off" />
-                </el-form-item>
-                <el-form-item>
-                  <el-button type="primary" @click="submitForm()">提交</el-button>
-                  <el-button @click="resetForm()">重置</el-button>
-                </el-form-item>
-              </div>
-            </el-col>
-          </el-form>
-        </el-row>
+        <el-tabs @tab-click="switchTab">
+          <el-tab-pane label='信息管理' name='userManager'/>
+          <el-tab-pane label='密码管理' name='passwordManager'/>
+        </el-tabs>
       </template>
+      <el-row>
+        <el-col :span="12">
+          <div class="grid-content bg-purple">
+            <el-form :model="ruleForm2"
+                     :rules="rules2"
+                     ref="ruleForm2"
+                     label-width="100px"
+                     v-if="switchStatus==='userManager'"
+                     class="demo-ruleForm">
+              <el-form-item label="用户名"
+                            prop="username">
+                <el-input type="text"
+                          v-model="ruleForm2.username"
+                          disabled></el-input>
+              </el-form-item>
+              <el-form-item label="手机号" prop="phone">
+                <el-input v-model="ruleForm2.phone" placeholder="验证码登录使用"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary"
+                           @click="submitForm('ruleForm2')">提交
+                </el-button>
+                <el-button @click="resetForm('ruleForm2')">重置</el-button>
+              </el-form-item>
+            </el-form>
+            <el-form :model="ruleForm2"
+                     :rules="rules2"
+                     ref="ruleForm2"
+                     label-width="100px"
+                     v-if="switchStatus==='passwordManager'"
+                     class="demo-ruleForm">
+              <el-form-item label="原密码"
+                            prop="password">
+                <el-input type="password"
+                          v-model="ruleForm2.password"
+                          auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="密码"
+                            prop="newpassword1">
+                <el-input type="password"
+                          v-model="ruleForm2.newpassword1"
+                          auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item label="确认密码"
+                            prop="newpassword2">
+                <el-input type="password"
+                          v-model="ruleForm2.newpassword2"
+                          auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary"
+                           @click="submitForm('ruleForm2')">提交
+                </el-button>
+                <el-button @click="resetForm('ruleForm2')">重置</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+      </el-row>
     </basic-container>
   </div>
 </template>
 
-<script>
-import { handleImg, openWindow } from "@/util";
-import { mapState } from "vuex";
-import store from "@/store";
-import { getStore, setStore } from "@/util/store";
-import { isValidateNoneMobile } from "@/util/validate";
-import { editInfo } from "@/api/admin/user";
 
-export default {
-  data() {
-    const validatePhone = (rule, value, callback) => {
-      if (isValidateNoneMobile(value)[0]) {
-        callback(new Error(isValidateNoneMobile(value)[1]));
-      } else {
-        callback();
-      }
-    };
-    const validatePass = (rule, value, callback) => {
-      if (this.ruleForm.password !== "") {
-        if (value !== this.ruleForm.newpassword1) {
-          callback(new Error("两次输入密码不一致!"));
+<script>
+  import {mapState} from 'vuex'
+  import store from "@/store";
+  import request from '@/router/axios'
+
+  export default {
+    data() {
+      var validatePass = (rule, value, callback) => {
+        if (this.ruleForm2.password !== '') {
+          if (value !== this.ruleForm2.newpassword1) {
+            callback(new Error('两次输入密码不一致!'))
+          } else {
+            callback()
+          }
         } else {
-          callback();
+          callback()
         }
-      } else {
-        callback();
       }
-    };
-    return {
-      avatarUrl: "",
-      headers: {
-        Authorization: "Bearer " + store.getters.access_token,
-      },
-      ruleForm: {
-        username: "",
-        password: "",
-        newpassword1: "",
-        newpassword2: "",
-        avatar: "",
-        phone: "",
-      },
-      rules: {
-        phone: [{ required: false, validator: validatePhone, trigger: "blur" }],
-        password: [
-          {
-            required: true,
-            min: 6,
-            message: "原密码不少于6位",
-            trigger: "blur",
-          },
-        ],
-        newpassword1: [
-          {
-            required: false,
-            min: 6,
-            message: "新密码不少于6位",
-            trigger: "blur",
-          },
-        ],
-        newpassword2: [
-          { required: false, validator: validatePass, trigger: "blur" },
-        ],
-      },
-    };
-  },
-  created() {
-    this.resetForm();
-  },
-  computed: {
-    ...mapState({
-      userInfo: (state) => state.user.userInfo,
-    }),
-  },
-  methods: {
-    submitForm() {
-      this.$refs.ruleForm.validate((valid) => {
-        if (!valid) {
-          return false;
+      return {
+        switchStatus: '',
+        avatarUrl: '',
+        show: false,
+        headers: {
+          Authorization: 'Bearer ' + store.getters.access_token
+        },
+        ruleForm2: {
+          username: '',
+          password: '',
+          newpassword1: '',
+          newpassword2: '',
+          avatar: '',
+          phone: ''
+        },
+        rules2: {
+          password: [{required: true, min: 6, message: '原密码不能为空且不少于6位', trigger: 'change'}],
+          newpassword1: [{required: false, min: 6, message: '不少于6位', trigger: 'change'}],
+          newpassword2: [{required: false, validator: validatePass, trigger: 'blur'}]
         }
-        editInfo(this.ruleForm).then((response) => {
-          this.$notify.success("修改成功");
-          // 修改后注销当前token,重新登录
-          this.$store.dispatch("LogOut").then(() => {
-            location.reload();
-          });
-        });
-      });
-    },
-    resetForm() {
-      this.ruleForm.password = undefined;
-      this.ruleForm.newpassword1 = undefined;
-      this.ruleForm.newpassword2 = undefined;
-      this.ruleForm.username = this.userInfo.username;
-      this.ruleForm.phone = this.userInfo.phone;
-      this.ruleForm.avatar = this.userInfo.avatar;
-      handleImg(this.userInfo.avatar, "avatar");
-      //判断是否选择了租户ID
-      const TENANT_ID = getStore({ name: "tenantId" });
-      if (TENANT_ID) {
-        this.headers["TENANT-ID"] = TENANT_ID; // 租户ID
       }
     },
-    handleAvatarSuccess(res, file) {
-      this.avatarUrl = URL.createObjectURL(file.raw);
-      this.ruleForm.avatar = res.data.url;
+    created() {
+      this.ruleForm2.username = this.userInfo.username
+      this.ruleForm2.phone = this.userInfo.phone
+      this.switchStatus = 'userManager'
     },
-    handleClick(thirdpart) {
-      let appid, client_id, redirect_uri, url;
-      redirect_uri = encodeURIComponent(
-        window.location.origin + "/#/authredirect"
-      );
-      if (thirdpart === "wechat") {
-        appid = "wxd1678d3f83b1d83a";
-        url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&redirect_uri=${redirect_uri}&state=WX-BIND&response_type=code&scope=snsapi_login#wechat_redirect`;
-      } else if (thirdpart === "tencent") {
-        client_id = "101322838";
-        url = `https://graph.qq.com/oauth2.0/authorize?response_type=code&state=QQ-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
-      } else if (thirdpart === "gitee") {
-        client_id =
-          "235ce26bbc59565b82c989aa3a407ce844cf59a7c5e0f9caa9bb3bf32cee5952";
-        url = `https://gitee.com/oauth/authorize?response_type=code&state=GITEE-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
-      } else if (thirdpart === "osc") {
-        client_id = "neIIqlwGsjsfsA6uxNqD";
-        url = `https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=${client_id}&state=OSC-BIND&redirect_uri=${redirect_uri}`;
+    computed: {
+      ...mapState({
+        userInfo: state => state.user.userInfo
+      }),
+    },
+    methods: {
+      switchTab(tab, event) {
+        this.switchStatus = tab.name
+      },
+      submitForm(formName) {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            request({
+              url: '/admin/user/edit',
+              method: 'put',
+              data: this.ruleForm2
+            }).then(response => {
+              if (response.data.data) {
+                this.$notify({
+                  title: '成功',
+                  message: '修改成功',
+                  type: 'success',
+                  duration: 2000
+                })
+                // 修改密码之后强制重新登录
+                if (this.switchStatus === 'passwordManager') {
+                  this.$store.dispatch('LogOut').then(() => {
+                    location.reload() // 为了重新实例化vue-router对象 避免bug
+                  })
+                }
+              } else {
+                this.$notify({
+                  title: '失败',
+                  message: response.data.msg,
+                  type: 'error',
+                  duration: 2000
+                })
+              }
+            }).catch(() => {
+              this.$notify({
+                title: '失败',
+                message: '修改失败',
+                type: 'error',
+                duration: 2000
+              })
+            })
+          } else {
+            return false
+          }
+        })
+      },
+      resetForm(formName) {
+        this.$refs[formName].resetFields()
       }
-      openWindow(url, thirdpart, 540, 540);
-    },
-  },
-};
+    }
+  }
 </script>
-<style lang="scss">
-@import "@/styles/info.scss";
+<style>
+  .avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+
+  .avatar-uploader-icon {
+    font-size: 28px!important;
+    color: #8c939d!important;
+    width: 178px!important;
+    height: 178px!important;
+    line-height: 178px!important;
+    text-align: center!important;
+  }
+
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

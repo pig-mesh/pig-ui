@@ -14,27 +14,72 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
-import {getDetails} from '@/api/admin/user'
+import {isExsit} from '@/api/admin/user'
 
-
-var validateUsername = (rule, value, callback) => {
-  getDetails(value).then(response => {
+export const validateUsername = (rule, value, callback) => {
+  if (!value) {
+    return callback(new Error('请输入用户名'))
+  }
+  let flag = new RegExp(/^([a-z\u4e00-\u9fa5\d]+?)$/).test(value)
+  if (!flag) {
+    callback(new Error('用户名支持小写英文、数字、中文'))
+  }
+  isExsit({username: value}).then(response => {
     if (window.boxType === 'edit') callback()
-    const result = response.data.data
-    if (result !== null) {
-      callback(new Error('用户名已经存在'))
+    let result = response.data.data
+    if (result) {
+      return callback(new Error('用户名已经存在'))
     } else {
-      callback()
+      return callback()
     }
   })
 }
+
+// 设置密码校验规则
+export const checkPassword = (rule, value, callback) => {
+  if (window.boxType === 'edit') {
+    return callback()
+  }
+  if (!value) {
+    callback(new Error('请输入密码'))
+  } else if (value.length <= 6) {
+    callback(new Error('请输入6位以上密码'))
+  } else {
+    callback()
+  }
+}
+
+// 设置手机号的验证规则
+export const checkPhone = (rule, value, callback) => {
+  if (!value) {
+    callback(new Error('请输入联系方式'))
+  } else {
+    const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
+    if (!reg.test(value)) {
+      return callback(new Error('请输入正确的电话'))
+    }
+  }
+
+  isExsit({phone: value}).then(response => {
+    if (window.boxType === 'edit') callback()
+    let result = response.data.data
+    debugger
+    if (result) {
+      return callback(new Error('手机号已经存在'))
+    } else {
+      return callback()
+    }
+  })
+}
+
 export const tableOption = {
   border: true,
   index: true,
   indexLabel: '序号',
   stripe: true,
   menuAlign: 'center',
-  searchMenuSpan:6,
+  searchMenuSpan: 6,
+  dialogWidth: '50%',
   editBtn: false,
   delBtn: false,
   align: 'center',
@@ -45,7 +90,7 @@ export const tableOption = {
     prop: 'userId',
     span: 24,
     hide: true,
-    editDisabled: true,
+    editDisplay: false,
     addDisplay: false
   }, {
     fixed: true,
@@ -74,12 +119,7 @@ export const tableOption = {
     value: '',
     hide: true,
     span: 24,
-    rules: [{
-      min: 6,
-      max: 20,
-      message: '长度在 6 到 20 个字符',
-      trigger: 'blur'
-    }]
+    rules: [{validator: checkPassword, trigger: 'blur'}]
   }, {
     label: '所属部门',
     prop: 'deptId',
@@ -87,7 +127,6 @@ export const tableOption = {
     slot: true,
     span: 24,
     hide: true,
-    dataType:"number",
     rules: [{
       required: true,
       message: '请选择部门',
@@ -99,9 +138,11 @@ export const tableOption = {
     value: '',
     span: 24,
     rules: [{
-      min: 11,
-      max: 11,
-      message: '长度在 11 个字符',
+      required: true,
+      message: '手机号不能为空',
+      trigger: 'blur'
+    }, {
+      validator: checkPhone,
       trigger: 'blur'
     }]
   }, {
@@ -117,11 +158,31 @@ export const tableOption = {
       trigger: 'blur'
     }]
   }, {
+    label: '部门',
+    prop: 'deptName',
+    overHidden: true,
+    addDisplay: false,
+    editDisplay: false,
+    span: 24,
+  }, {
+    label: '岗位',
+    prop: 'post',
+    width: 168,
+    overHidden: true,
+    formslot: true,
+    slot: true,
+    span: 24,
+    rules: [{
+      required: true,
+      message: '请选择岗位',
+      trigger: 'blur'
+    }]
+  }, {
     label: '状态',
     prop: 'lockFlag',
     type: 'radio',
     slot: true,
-    border:true,
+    border: true,
     span: 24,
     rules: [{
       required: true,
@@ -136,12 +197,11 @@ export const tableOption = {
       value: '9'
     }]
   }, {
-    width: 180,
+    width: 120,
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',
-    format: 'yyyy-MM-dd HH:mm',
-    valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    format: 'yyyy-MM-dd',
     editDisabled: true,
     addDisplay: false,
     span: 24

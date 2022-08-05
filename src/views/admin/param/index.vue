@@ -17,27 +17,31 @@
 <template>
   <div class="execution">
     <basic-container>
-      <avue-crud ref="crud"
-                 v-model:page="page"
-                 :data="tableData"
-                 :permission="permissionList"
-                 :table-loading="tableLoading"
-                 :before-open="beforeOpen"
-                 :option="tableOption"
-                 @on-load="getList"
-                 @search-change="searchChange"
-                 @refresh-change="refreshChange"
-                 @size-change="sizeChange"
-                 @current-change="currentChange"
-                 @row-update="handleUpdate"
-                 @row-save="handleSave"
-                 @row-del="rowDel">
-        <template #menuLeft>
-          <el-button v-if="permissions.admin_syspublicparam_del"
-                     class="filter-item"
-                     type="primary"
-                     icon="el-icon-refresh-left"
-                     @click="handleRefreshCache">刷新
+      <avue-crud
+        ref="crud"
+        :page.sync="page"
+        :data="tableData"
+        :permission="permissionList"
+        :table-loading="tableLoading"
+        :before-open="beforeOpen"
+        :option="tableOption"
+        @on-load="getList"
+        @search-change="searchChange"
+        @refresh-change="refreshChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        @row-update="handleUpdate"
+        @row-save="handleSave"
+        @row-del="rowDel">
+        <template slot="menuLeft">
+          <el-button
+            v-if="permissions.sys_publicparam_del"
+            class="filter-item"
+            type="primary"
+            size="small"
+            icon="el-icon-refresh-left"
+            @click="handleRefreshCache"
+          >缓存
           </el-button>
         </template>
       </avue-crud>
@@ -46,13 +50,13 @@
 </template>
 
 <script>
-import { addObj, delObj, fetchList, putObj, refreshCache } from '@/api/admin/sys-public-param'
-import { tableOption } from '@/const/crud/admin/sys-public-param'
-import { mapGetters } from 'vuex'
+import {addObj, delObj, fetchList, putObj, refreshCache} from '@/api/admin/sys-public-param'
+import {tableOption} from '@/const/crud/admin/sys-public-param'
+import {mapGetters} from 'vuex'
 
 export default {
   name: 'Syspublicparam',
-  data () {
+  data() {
     return {
       searchForm: {},
       tableData: [],
@@ -67,16 +71,16 @@ export default {
   },
   computed: {
     ...mapGetters(['permissions']),
-    permissionList () {
+    permissionList() {
       return {
-        addBtn: this.validData(this.permissions.admin_syspublicparam_add, false),
-        delBtn: this.validData(this.permissions.admin_syspublicparam_del, false),
-        editBtn: this.validData(this.permissions.admin_syspublicparam_edit, false)
+        addBtn: this.vaildData(this.permissions.sys_publicparam_add, false),
+        delBtn: this.vaildData(this.permissions.sys_publicparam_del, false),
+        editBtn: this.vaildData(this.permissions.sys_publicparam_edit, false)
       }
     }
   },
   methods: {
-    getList (page, params) {
+    getList(page, params) {
       this.tableLoading = true
       fetchList(Object.assign({
         descs: 'create_time',
@@ -101,7 +105,7 @@ export default {
         this.getList(this.page)
       })
     },
-    beforeOpen (show, type) {
+    beforeOpen(show, type) {
       window.boxType = type
       show()
     },
@@ -136,24 +140,24 @@ export default {
         loading()
       })
     },
-    searchChange (form, done) {
+    searchChange(form, done) {
       this.searchForm = form
       this.page.currentPage = 1
       this.getList(this.page, form)
       done()
     },
-    refreshChange () {
+    refreshChange() {
       this.getList(this.page)
     },
-    sizeChange (pageSize) {
+    sizeChange(pageSize) {
       this.page.pageSize = pageSize
     },
-    currentChange (current) {
+    currentChange(current) {
       this.page.currentPage = current
     },
     handleRefreshCache: function () {
       refreshCache().then(() => {
-        this.$message.success('同步成功')
+        this.$message.success('清除缓存成功')
       }).catch(function () {
       })
     }

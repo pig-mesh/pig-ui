@@ -55,18 +55,10 @@ export function putObj(obj) {
   })
 }
 
-export function getDetails(obj) {
+export function isExsit(params) {
   return request({
-    url: '/admin/user/details/' + obj,
-    method: 'get'
-  })
-}
-
-// 更改个人信息
-export function editInfo(obj) {
-  return request({
-    url: '/admin/user/edit',
-    method: 'put',
-    data: obj
+    url: '/admin/user/check/exsit',
+    method: 'get',
+    params: params
   })
 }

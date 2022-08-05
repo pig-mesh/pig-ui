@@ -25,14 +25,6 @@ export function getMenu(id) {
   })
 }
 
-export function getTopMenu() {
-  return request({
-    url: '/admin/menu',
-    params: {type: 'top'},
-    method: 'get'
-  })
-}
-
 export function fetchMenuTree(lazy, parentId) {
   return request({
     url: '/admin/menu/tree',
@@ -70,3 +62,11 @@ export function putObj(obj) {
     data: obj
   })
 }
+
+export function clearMenuCache(){
+  return request({
+    url:'/admin/menu/cache',
+    method:'delete'
+  })
+}
+

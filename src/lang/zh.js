@@ -1,6 +1,6 @@
 export default {
   tip: '提示',
-  title: 'PigX 快速开发框架',
+  title: 'Pig 快速开发框架',
   logoutTip: '退出系统, 是否继续?',
   submitText: '确定',
   cancelText: '取消',
@@ -69,7 +69,7 @@ export default {
   },
   login: {
     title: '登录 ',
-    info: 'PigX 快速开发框架',
+    info: 'Pig 快速开发框架',
     tenantId: '请输入租户ID',
     username: '请输入账号',
     password: '请输入密码',

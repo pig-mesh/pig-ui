@@ -1,40 +1,44 @@
 <template>
-  <el-form ref="loginForm"
-           :rules="loginRules"
-           :model="loginForm"
-           class="login-form"
-           status-icon
-           label-width="0">
+  <el-form
+    ref="loginForm"
+    :rules="loginRules"
+    :model="loginForm"
+    class="login-form"
+    status-icon
+    label-width="0"
+  >
     <el-form-item prop="mobile">
-      <el-input v-model="loginForm.mobile"
-                auto-complete="off"
-                placeholder="请输入手机号码"
-                @keyup.enter="handleLogin">
-        <template #prefix>
-          <i class="icon-iphone" />
-        </template>
+      <el-input
+        v-model="loginForm.mobile"
+        size="small"
+        auto-complete="off"
+        placeholder="请输入手机号码"
+        @keyup.enter.native="handleLogin"
+      >
+        <i slot="prefix" class="icon-iphone" />
       </el-input>
     </el-form-item>
     <el-form-item prop="code">
-      <el-input v-model="loginForm.code"
-                auto-complete="off"
-                placeholder="请输入验证码"
-                @keyup.enter="handleLogin">
-        <template #prefix>
-          <i class="icon-duanxin"
-             style="margin-top:6px;" />
-        </template>
-        <template #append>
-          <span :class="[{display:msgKey}]"
-                class="msg-text"
-                @click="handleSend">{{ msgText }}</span>
+      <el-input
+        v-model="loginForm.code"
+        size="small"
+        auto-complete="off"
+        placeholder="请输入验证码"
+        @keyup.enter.native="handleLogin"
+      >
+        <i slot="prefix" class="icon-duanxin" style="margin-top:6px;" />
+        <template slot="append">
+          <span :class="[{display:msgKey}]" class="msg-text" @click="handleSend">{{ msgText }}</span>
         </template>
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary"
-                 class="login-submit"
-                 @click.native.prevent="handleLogin">登录</el-button>
+      <el-button
+        size="small"
+        type="primary"
+        class="login-submit"
+        @click.native.prevent="handleLogin"
+      >登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -48,7 +52,7 @@ import { mapGetters } from "vuex";
 import request from "@/router/axios";
 export default {
   name: "Codelogin",
-  data () {
+  data() {
     const validatePhone = (rule, value, callback) => {
       if (isvalidatemobile(value)[0]) {
         callback(new Error(isvalidatemobile(value)[1]));
@@ -57,8 +61,8 @@ export default {
       }
     };
     const validateCode = (rule, value, callback) => {
-      if (value.length != 4) {
-        callback(new Error("请输入4位数的验证码"));
+      if (value.length !== 6) {
+        callback(new Error("请输入6位数的验证码"));
       } else {
         callback();
       }
@@ -81,14 +85,14 @@ export default {
     ...mapGetters(["tagWel"]),
   },
   methods: {
-    handleSend () {
+    handleSend() {
       // 判断是否可以发送（时间限制）
       if (this.msgKey) return;
       // 发送验证码
       this.$refs.loginForm.validateField("mobile", (valid) => {
         if (!valid) {
           request({
-            url: "/admin/mobile/" + this.loginForm.mobile,
+            url: "/admin/app/" + this.loginForm.mobile,
             method: "get",
           }).then((response) => {
             if (response.data.data) {
@@ -101,7 +105,7 @@ export default {
         }
       });
     },
-    handleLogin () {
+    handleLogin() {
       this.$refs.loginForm.validate((valid) => {
         if (valid) {
           this.$store.dispatch("LoginByPhone", this.loginForm).then(() => {
@@ -110,7 +114,7 @@ export default {
         }
       });
     },
-    timeCacl () {
+    timeCacl() {
       // 计时避免重复发送
       this.msgText = MSGSCUCCESS.replace("${time}", this.msgTime);
       this.msgKey = true;

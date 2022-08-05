@@ -6,7 +6,7 @@ const getters = {
   setting: state => state.common.setting,
   userInfo: state => state.user.userInfo,
   themeName: state => state.common.themeName,
-  isMacOs: (state, getters) => getters.themeName == 'mac-os',
+  isMacOs: (state, getters) => getters.themeName === 'mac-os',
   isRefresh: state => state.common.isRefresh,
   isSearch: state => state.common.isSearch,
   isHorizontal: state => state.common.setting.sidebar === 'horizontal',

@@ -1,61 +1,69 @@
 <template>
   <div>
     <!-- 导入对话框 -->
-    <el-dialog :title="title"
-               v-model="upload.open"
-               width="400px"
-               append-to-body>
-      <el-upload ref="upload"
-                 :limit="1"
-                 accept=".xlsx, .xls"
-                 :headers="headers"
-                 :action="url"
-                 :disabled="upload.isUploading"
-                 :on-progress="handleFileUploadProgress"
-                 :on-success="handleFileSuccess"
-                 :auto-upload="false"
-                 drag>
+    <el-dialog
+      :title="title"
+      :visible.sync="upload.open"
+      width="400px"
+      append-to-body
+    >
+      <el-upload
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="headers"
+        :action="url"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :on-error="handleFileError"
+        :auto-upload="false"
+        drag
+      >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
           将文件拖到此处，或
           <em>点击上传</em>
         </div>
-        <template #tip>
-          <div class="el-upload__tip text-center">
-            <span>仅允许导入xls、xlsx格式文件。</span>
-            <el-link type="primary"
-                     :underline="false"
-                     style="font-size:12px;vertical-align: baseline;"
-                     @click="downExcelTemp"
-                     v-if="tempUrl">下载模板
-            </el-link>
-          </div>
-        </template>
-      </el-upload>
-      <template #footer>
-        <div class="dialog-footer">
-          <el-button type="primary"
-                     @click="submitFileForm">确 定</el-button>
-          <el-button @click="upload.open = false">取 消</el-button>
+        <div class="el-upload__tip text-center" slot="tip">
+          <span>仅允许导入xls、xlsx格式文件。</span>
+          <el-link
+            type="primary"
+            :underline="false"
+            style="font-size:12px;vertical-align: baseline;"
+            @click="downExcelTemp"
+            v-if="tempUrl"
+          >下载模板
+          </el-link>
         </div>
-      </template>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
     </el-dialog>
 
     <!--校验失败错误数据-->
-    <el-dialog title="校验失败数据"
-               v-model="errorVisible">
+    <el-dialog title="校验失败数据" :visible.sync="errorVisible">
       <el-table :data="errorData">
-        <el-table-column property="lineNum"
-                         label="行号"
-                         width="50"></el-table-column>
-        <el-table-column property="errors"
-                         label="错误描述"
-                         show-overflow-tooltip>
-          <template #="scope">
-            <el-tag type="danger"
-                    v-for="error in scope.row.errors"
-                    :key="error">{{ error }}
-            </el-tag>
+        <el-table-column
+          property="lineNum"
+          label="行号"
+          width="50"
+        ></el-table-column>
+        <el-table-column
+          property="errors"
+          label="错误描述"
+          show-overflow-tooltip
+        >
+          <template slot-scope="scope">
+            <el-tag
+              type="danger"
+              v-for="error in scope.row.errors"
+              :key="error"
+            >{{ error }}
+            </el-tag
+            >
           </template>
         </el-table-column>
       </el-table>
@@ -78,9 +86,12 @@ export default {
     },
     tempUrl: {
       type: String
+    },
+    tempName: {
+      type: String
     }
   },
-  data () {
+  data() {
     return {
       upload: {
         open: false,
@@ -92,25 +103,26 @@ export default {
   },
   computed: {
     headers: function () {
-      const tenantId = store.getters.userInfo.tenantId
       return {
-        'Authorization': "Bearer " + store.getters.access_token,
-        'TENANT-ID': tenantId ? tenantId : '1'
+        Authorization: "Bearer " + store.getters.access_token
       };
     }
   },
   methods: {
-    downExcelTemp () {
-      this.downBlobFile(this.tempUrl, {}, "temp.xlsx");
+    downExcelTemp() {
+      this.downBlobFile(this.tempUrl, {}, this.tempName);
     },
-    handleFileUploadProgress () {
+    handleFileUploadProgress() {
       this.upload.isUploading = true;
     },
-    handleFileSuccess (response) {
+    handleFileError() {
+      this.$message.error('上传失败,数据格式不合法!')
+      this.upload.open = false;
+    },
+    handleFileSuccess(response) {
       this.upload.isUploading = false;
       this.upload.open = false;
       this.$refs.upload.clearFiles();
-
       // 校验失败
       if (response.code === 1) {
         this.$message.error("导入失败，以下数据不合法");
@@ -123,10 +135,10 @@ export default {
         this.$emit("refreshDataList");
       }
     },
-    submitFileForm () {
+    submitFileForm() {
       this.$refs.upload.submit();
     },
-    show () {
+    show() {
       this.upload.isUploading = false;
       this.upload.open = true;
     }

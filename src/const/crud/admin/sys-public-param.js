@@ -74,7 +74,7 @@ export const tableOption = {
     },
     {
       label: '类型',
-      prop: 'system',
+      prop: 'systemFlag',
       type: 'select',
       dicUrl: '/admin/dict/type/dict_type',
       rules: [{
