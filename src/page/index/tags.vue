@@ -122,6 +122,9 @@ export default {
       } else {
         tag = item;
       }
+      if (tag.value === this.tag.value || this.tag.value === "") {
+        return;
+      }
       this.$router.push({
         path: this.$router.$avueRouter.getPath({
           name: tag.label,
