@@ -40,6 +40,15 @@ router.beforeEach((to, from, next) => {
         store
           .dispatch("GetUserInfo")
           .then(() => {
+            const value = to.query.src || to.fullPath;
+            const label = to.query.name || to.name;
+            store.commit("ADD_TAG", {
+              label: label,
+              value: value,
+              params: to.params,
+              query: to.query,
+              group: router.$avueRouter.group || [],
+            });
             next();
           })
           .catch(() => {
