@@ -17,7 +17,7 @@ import store from "./store";
 import { loadStyle, downBlobFile } from "@/util/util";
 import { validatenull } from "@/util/validate";
 import * as urls from "@/config/env";
-import { iconfontUrl, iconfontVersion } from "@/config/env";
+import { iconfontVersion } from "@/config/env";
 import * as filters from "./filters"; // 全局filter
 import "./styles/common.scss";
 import basicContainer from "./components/basic-container/main";
@@ -67,8 +67,7 @@ Object.keys(filters).forEach(key => {
 
 // 动态加载阿里云字体库
 iconfontVersion.forEach(ele => {
-  console.log(iconfontUrl.replace("$key", ele));
-  loadStyle(iconfontUrl.replace("$key", ele));
+  loadStyle(ele);
 });
 
 Vue.config.productionTip = false;
