@@ -43,7 +43,7 @@ export const tableOption = {
       "label": "岗位排序",
       "prop": "postSort",
       "hide":true,
-      span:6
+      span: 8
     },
     {
       "type": "input",
