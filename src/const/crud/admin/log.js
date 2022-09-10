@@ -44,7 +44,8 @@ export const tableOption = {
     prop: 'title'
   }, {
     label: 'IP地址',
-    prop: 'remoteAddr'
+    prop: 'remoteAddr',
+    search: true
   }, {
     label: '请求方式',
     prop: 'method'

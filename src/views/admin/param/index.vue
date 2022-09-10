@@ -107,6 +107,7 @@ export default {
     },
     beforeOpen(show, type) {
       window.boxType = type
+      window.tableForm = this.$refs.crud.tableForm
       show()
     },
     /**

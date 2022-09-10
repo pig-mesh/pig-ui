@@ -22,7 +22,8 @@ import {getObj} from '@/api/admin/sys-public-param'
 
 var validateParam = (rule, value, callback) => {
   getObj(value).then(response => {
-    if (window.boxType === 'edit') callback()
+    // 编辑时候没有改动直接跳过校验
+    if (window.boxType === 'edit' && window.tableForm.publicKey === value) callback()
     const result = response.data.data
     if (result !== null) {
       callback(new Error('参数键已经存在'))
@@ -52,6 +53,7 @@ export const tableOption = {
     },
     {
       label: '键',
+      search: true,
       prop: 'publicKey',
       rules: [
         { required: true, message: '请输入键', trigger: 'blur' },
