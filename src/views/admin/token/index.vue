@@ -57,7 +57,7 @@ export default {
     ...mapGetters(['permissions']),
     permissionList() {
       return {
-        delBtn: this.vaildData(this.permissions.sys_token_del, false),
+        delBtn: this.validData(this.permissions.sys_token_del, false),
       }
     }
   },

@@ -24,7 +24,6 @@ export const tableOption = {
   refreshBtn: false,
   showClomnuBtn: false,
   searchMenuSpan: 6,
-  searchSize: 'mini',
   column: [{
     label: '类型',
     prop: 'type',

@@ -69,10 +69,7 @@ RouterPlugin.install = function (option = {}) {
               return modules['../page/index/layout.vue']
               // 判断是否为最终的页面视图
             } else {
-
-              console.log(`../${component}.vue`)
               let result = modules[`../${component}.vue`]
-              console.log(result)
               if(result){
                 result().then(mod => mod.default.name = path)
               }

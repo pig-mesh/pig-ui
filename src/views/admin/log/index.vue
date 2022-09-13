@@ -38,7 +38,6 @@
             class="filter-item"
             plain
             type="primary"
-            size="small"
             icon="el-icon-download"
             @click="exportExcel"
             >导出
@@ -73,7 +72,7 @@ export default {
     ...mapGetters(["permissions"]),
     permissionList() {
       return {
-        delBtn: this.vaildData(this.permissions.sys_log_del, false)
+        delBtn: this.validData(this.permissions.sys_log_del, false)
       };
     }
   },

@@ -37,7 +37,6 @@
             v-if="permissions.sys_dict_del"
             class="filter-item"
             type="primary"
-            size="small"
             icon="el-icon-refresh-left"
             @click="handleClearDictCache"
           >缓存
@@ -124,9 +123,9 @@ import {
       ...mapGetters(['permissions']),
       permissionList() {
         return {
-          addBtn: this.vaildData(this.permissions.sys_dict_add, false),
-          delBtn: this.vaildData(this.permissions.sys_dict_del, false),
-          editBtn: this.vaildData(this.permissions.sys_dict_edit, false)
+          addBtn: this.validData(this.permissions.sys_dict_add, false),
+          delBtn: this.validData(this.permissions.sys_dict_del, false),
+          editBtn: this.validData(this.permissions.sys_dict_edit, false)
         }
       }
     },

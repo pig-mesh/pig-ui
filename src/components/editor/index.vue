@@ -67,16 +67,16 @@ export default {
   margin-bottom: 10px;
 }
 
-.json-editor :deep(.CodeMirror) {
+:deep(.json-editor .CodeMirror) {
   font-size: 14px;
   overflow-y: auto;
   font-weight: normal
 }
 
-.json-editor :deep(.CodeMirror-scroll) {
+:deep(.json-editor .CodeMirror-scroll) {
 }
 
-.json-editor :deep(.cm-s-rubyblue span.cm-string) {
+:deep(.json-editor .cm-s-rubyblue span.cm-string) {
   color: #F08047;
 }
 </style>

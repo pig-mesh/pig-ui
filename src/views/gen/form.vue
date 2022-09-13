@@ -60,9 +60,9 @@
       ...mapGetters(['permissions']),
       permissionList() {
         return {
-          addBtn: this.vaildData(this.permissions.gen_form_add, false),
-          delBtn: this.vaildData(this.permissions.gen_form_del, false),
-          editBtn: this.vaildData(this.permissions.gen_form_edit, false)
+          addBtn: this.validData(this.permissions.gen_form_add, false),
+          delBtn: this.validData(this.permissions.gen_form_del, false),
+          editBtn: this.validData(this.permissions.gen_form_edit, false)
         };
       }
     },

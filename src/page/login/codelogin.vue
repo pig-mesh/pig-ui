@@ -10,7 +10,6 @@
     <el-form-item prop="mobile">
       <el-input
         v-model="loginForm.mobile"
-        size="small"
         auto-complete="off"
         placeholder="请输入手机号码"
         @keyup.enter.native="handleLogin"
@@ -21,7 +20,6 @@
     <el-form-item prop="code">
       <el-input
         v-model="loginForm.code"
-        size="small"
         auto-complete="off"
         placeholder="请输入验证码"
         @keyup.enter.native="handleLogin"
@@ -34,7 +32,6 @@
     </el-form-item>
     <el-form-item>
       <el-button
-        size="small"
         type="primary"
         class="login-submit"
         @click.native.prevent="handleLogin"

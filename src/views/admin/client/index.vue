@@ -37,7 +37,6 @@
             v-if="permissions.sys_client_del"
             class="filter-item"
             type="primary"
-            size="small"
             icon="el-icon-refresh-left"
             @click="handleClearClientCache"
           >缓存
@@ -76,9 +75,9 @@ import {addObj, clearClientCache, delObj, fetchList, putObj} from '@/api/admin/c
       ...mapGetters(['permissions']),
       permissionList() {
         return {
-          addBtn: this.vaildData(this.permissions.sys_client_add, false),
-          delBtn: this.vaildData(this.permissions.sys_client_del, false),
-          editBtn: this.vaildData(this.permissions.sys_client_edit, false)
+          addBtn: this.validData(this.permissions.sys_client_add, false),
+          delBtn: this.validData(this.permissions.sys_client_del, false),
+          editBtn: this.validData(this.permissions.sys_client_edit, false)
         }
       }
     },

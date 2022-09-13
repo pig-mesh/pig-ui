@@ -38,7 +38,6 @@
             v-if="permissions.sys_publicparam_del"
             class="filter-item"
             type="primary"
-            size="small"
             icon="el-icon-refresh-left"
             @click="handleRefreshCache"
           >缓存
@@ -73,9 +72,9 @@ export default {
     ...mapGetters(['permissions']),
     permissionList() {
       return {
-        addBtn: this.vaildData(this.permissions.sys_publicparam_add, false),
-        delBtn: this.vaildData(this.permissions.sys_publicparam_del, false),
-        editBtn: this.vaildData(this.permissions.sys_publicparam_edit, false)
+        addBtn: this.validData(this.permissions.sys_publicparam_add, false),
+        delBtn: this.validData(this.permissions.sys_publicparam_del, false),
+        editBtn: this.validData(this.permissions.sys_publicparam_edit, false)
       }
     }
   },

@@ -46,7 +46,6 @@
             class="filter-item"
             plain
             type="primary"
-            size="small"
             icon="el-icon-upload"
             @click="$refs.excelUpload.show()"
             >导入
@@ -55,7 +54,6 @@
             class="filter-item"
             plain
             type="primary"
-            size="small"
             icon="el-icon-download"
             @click="exportExcel"
             >导出

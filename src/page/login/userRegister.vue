@@ -9,7 +9,6 @@
   >
     <el-form-item prop="username">
       <el-input
-        size="small"
         @keyup.enter.native="handleRegister"
         v-model="registerForm.username"
         auto-complete="off"
@@ -20,7 +19,6 @@
     </el-form-item>
     <el-form-item prop="password">
       <el-input
-        size="small"
         @keyup.enter.native="handleRegister"
         :type="passwordType"
         v-model="registerForm.password"

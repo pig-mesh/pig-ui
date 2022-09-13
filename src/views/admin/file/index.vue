@@ -75,9 +75,9 @@ export default {
     ...mapGetters(["permissions"]),
     permissionList() {
       return {
-        addBtn: this.vaildData(this.permissions.sys_file_add, true),
-        delBtn: this.vaildData(this.permissions.sys_file_del, true),
-        editBtn: this.vaildData(this.permissions.sys_file_edit, false)
+        addBtn: this.validData(this.permissions.sys_file_add, true),
+        delBtn: this.validData(this.permissions.sys_file_del, true),
+        editBtn: this.validData(this.permissions.sys_file_edit, false)
       };
     }
   },

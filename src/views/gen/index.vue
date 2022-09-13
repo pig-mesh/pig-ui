@@ -53,7 +53,7 @@
       </el-row>
       <avue-crud
         ref="crud"
-        :page.sync="page"
+        v-model="page"
         :data="tableData"
         :table-loading="tableLoading"
         :option="tableOption"
@@ -78,7 +78,7 @@
         </template>
       </avue-crud>
 
-      <el-dialog :visible.sync="box" title="生成配置" width="50%" lock-scroll>
+      <el-dialog v-model="box" title="生成配置" width="50%" lock-scroll>
         <div class="pull-auto">
           <avue-form ref="formData" :option="formOption" v-model="formData">
             <template #menu-form="scope">
@@ -97,7 +97,7 @@
         </div>
       </el-dialog>
       <el-dialog
-        :visible.sync="boxBatch"
+        v-model="boxBatch"
         title="批量生成"
         width="50%"
         lock-scroll
@@ -115,7 +115,7 @@
     <!-- 预览界面 -->
     <el-dialog
       :title="preview.title"
-      :visible.sync="preview.open"
+      v-model="preview.open"
       width="80%"
       top="5vh"
       append-to-body

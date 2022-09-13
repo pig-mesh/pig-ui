@@ -44,7 +44,6 @@
             class="filter-item"
             plain
             type="primary"
-            size="small"
             icon="el-icon-upload"
             @click="$refs.excelUpload.show()"
           >导入
@@ -54,7 +53,6 @@
             class="filter-item"
             plain
             type="primary"
-            size="small"
             icon="el-icon-download"
             @click="exportExcel"
           >导出
@@ -101,9 +99,9 @@ export default {
     ...mapGetters(['permissions']),
     permissionList() {
       return {
-        addBtn: this.vaildData(this.permissions.sys_post_add, false),
-        delBtn: this.vaildData(this.permissions.sys_post_del, false),
-        editBtn: this.vaildData(this.permissions.sys_post_edit, false)
+        addBtn: this.validData(this.permissions.sys_post_add, false),
+        delBtn: this.validData(this.permissions.sys_post_del, false),
+        editBtn: this.validData(this.permissions.sys_post_edit, false)
       };
     }
   },

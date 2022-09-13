@@ -28,7 +28,6 @@ axios.interceptors.request.use(config => {
   const isToken = (config.headers || {}).isToken === false
   const token = store.getters.access_token
 
-  console.log(token)
   if (token && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + token// token
   }

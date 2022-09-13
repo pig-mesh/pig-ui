@@ -25,7 +25,6 @@ export const tableOption = {
   refreshBtn: true,
   searchMenuSpan: 6,
   showClomnuBtn: false,
-  searchSize: 'mini',
   addBtn: false,
   editBtn: false,
   viewBtn: true,

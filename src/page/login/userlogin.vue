@@ -9,7 +9,6 @@
   >
     <el-form-item prop="username">
       <el-input
-        size="small"
         @keyup.enter.native="handleLogin"
         v-model="loginForm.username"
         auto-complete="off"
@@ -39,7 +38,6 @@
       <el-row :span="24">
         <el-col :span="16">
           <el-input
-            size="small"
             @keyup.enter.native="handleLogin"
             :maxlength="code.len"
             v-model="loginForm.code"
