@@ -25,15 +25,11 @@ NProgress.configure({
 axios.defaults.baseURL = baseUrl;
 axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
-  const TENANT_ID = getStore({ name: 'tenantId' })
   const isToken = (config.headers || {}).isToken === false
   const token = store.getters.access_token
 
   if (token && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + token// token
-  }
-  if (TENANT_ID) {
-    config.headers['TENANT-ID'] = TENANT_ID // 租户ID
   }
 
   // headers中配置serialize为true开启序列化
@@ -47,7 +43,6 @@ axios.interceptors.request.use(config => {
       return qs.stringify(params, { arrayFormat: 'repeat' })
     }
   }
-
   return config
 }, error => {
   return Promise.reject(error)
@@ -87,6 +82,7 @@ axios.interceptors.response.use(res => {
   return res
 }, error => {
   // 处理 503 网络异常
+  console.log(error)
   if (error.response.status === 503) {
     ElMessage({
       message: error.response.data.msg,

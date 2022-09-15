@@ -23,21 +23,17 @@
       <el-input
           size="small"
           @keyup.enter.native="handleLogin"
-          :type="passwordType"
+          type="password"
           v-model="loginForm.password"
           auto-complete="off"
+          show-password
           placeholder="请输入密码"
       >
-        <template #suffix>
-          <i class="el-icon-view el-input__icon"
-             @click="showPassword"></i>
-        </template>
         <template #prefix>
           <i class="icon-mima"></i>
         </template>
 
       </el-input>
-      <i class="el-icon-view el-input__icon" @click="showPassword"></i>
     </el-form-item>
     <el-form-item prop="code" v-if="website.validateCode">
       <el-input
@@ -112,7 +108,6 @@ export default {
         ],
         code: [{required: true, message: "请输入验证码", trigger: "blur"}]
       },
-      passwordType: "password"
     };
   },
   created() {
@@ -130,11 +125,6 @@ export default {
       this.code.type === "text"
           ? (this.code.value = randomLenNum(this.code.len))
           : (this.code.src = `/api/code?randomStr=${this.loginForm.randomStr}`);
-    },
-    showPassword() {
-      this.passwordType === ""
-          ? (this.passwordType = "password")
-          : (this.passwordType = "");
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {

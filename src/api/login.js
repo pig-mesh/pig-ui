@@ -18,7 +18,7 @@ import request from '@/router/axios'
 import store from '@/store'
 import qs from 'qs'
 import {getStore, setStore} from "@/util/store.js";
-import website from "@/const/website.js";
+import website from '@/config/website'
 
 
 const scope = 'server'

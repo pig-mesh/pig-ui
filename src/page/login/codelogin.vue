@@ -14,7 +14,9 @@
         placeholder="请输入手机号码"
         @keyup.enter.native="handleLogin"
       >
-        <i slot="prefix" class="icon-iphone" />
+        <template #prefix>
+          <i class="icon-shouji2"></i>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item prop="code">
@@ -24,9 +26,13 @@
         placeholder="请输入验证码"
         @keyup.enter.native="handleLogin"
       >
-        <i slot="prefix" class="icon-duanxin" style="margin-top:6px;" />
-        <template slot="append">
-          <span :class="[{display:msgKey}]" class="msg-text" @click="handleSend">{{ msgText }}</span>
+        <template #prefix>
+          <i class="icon-yanzhengma"></i>
+        </template>
+        <template #append>
+          <span :class="[{display:msgKey}]" class="msg-text" @click="handleSend">
+           {{ msgText }}
+          </span>
         </template>
       </el-input>
     </el-form-item>
@@ -87,7 +93,7 @@ export default {
       if (this.msgKey) return;
       // 发送验证码
       this.$refs.loginForm.validateField("mobile", (valid) => {
-        if (!valid) {
+        if (valid) {
           request({
             url: "/admin/app/" + this.loginForm.mobile,
             method: "get",
@@ -133,7 +139,7 @@ export default {
 <style>
 .msg-text {
   display: block;
-  width: 60px;
+  width: 120px;
   font-size: 12px;
   text-align: center;
   cursor: pointer;

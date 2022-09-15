@@ -14,7 +14,9 @@
         auto-complete="off"
         placeholder="请输入用户名"
       >
-        <i slot="prefix" class="icon-yonghu"></i>
+        <template #prefix>
+          <i class="icon-yonghu"></i>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
@@ -30,7 +32,9 @@
           slot="suffix"
           @click="showPassword"
         ></i>
-        <i slot="prefix" class="icon-mima"></i>
+        <template #prefix>
+          <i class="icon-mima"></i>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item prop="phone">
@@ -41,7 +45,9 @@
         auto-complete="off"
         placeholder="请输入手机号"
       >
-        <i slot="prefix" class="el-icon-phone-outline"></i>
+        <template #prefix>
+          <i class="icon-shouji2"></i>
+        </template>
       </el-input>
     </el-form-item>
     <el-form-item>

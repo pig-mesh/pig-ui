@@ -6,6 +6,7 @@ import store from './store';
 import i18n from './lang/';
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import Avue from '@smallwei/avue';
 import AvueFormDesign from '@sscfaith/avue-form-design';
 import '@smallwei/avue/lib/index.css';
@@ -20,6 +21,9 @@ import dayjs from 'dayjs'
 import 'styles/common.scss';
 
 const app = createApp(App)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
 //注册全局容器
 app.component('basicContainer', basicContainer)
 app.component('basicBlock', basicBlock)

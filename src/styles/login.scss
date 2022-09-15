@@ -19,6 +19,13 @@
     background-repeat: no-repeat;
     background-size: auto 100%;
   }
+  .el-input-group__append{
+    padding: 0;
+    background-color: #fff;
+  }
+  .el-form-item{
+    margin-bottom: 20px !important;
+  }
 }
 .login-weaper {
   margin: 0 auto;
@@ -127,8 +134,7 @@
   }
   .el-input {
     input {
-      padding:20px 0 20px 40px;
-      text-indent: 5px;
+      padding:20px 0;
       border-radius: 0;
     }
     .el-input__suffix,.el-input__prefix{
@@ -141,12 +147,16 @@
     }
   }
 }
+
 .login-code {
   width: 100%;
   display: flex;
   align-items: center;
   .el-input{
     flex:auto
+  }
+  img{
+    padding: 0 10px;
   }
 }
 .login-code-img {

@@ -20,9 +20,9 @@ export const validateUsername = (rule, value, callback) => {
   if (!value) {
     return callback(new Error('请输入用户名'))
   }
-  let flag = new RegExp(/^([a-z\u4e00-\u9fa5\d]+?)$/).test(value)
+  let flag = new RegExp(/^([a-z\d]+?)$/).test(value)
   if (!flag) {
-    callback(new Error('用户名支持小写英文、数字、中文'))
+    callback(new Error('用户名支持小写英文、数字'))
   }
   isExsit({username: value}).then(response => {
     if (window.boxType === 'edit') callback()

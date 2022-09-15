@@ -21,21 +21,21 @@
           row-key="id"
           :tree-props="{children: 'children', hasChildren: 'hasChildrens'}">
         <el-table-column prop="name" label="菜单名称" :show-overflow-tooltip="true" width="180"></el-table-column>
-        <el-table-column prop="icon" label="图标" align="center" width="100">
+        <el-table-column prop="icon" label="图标" align="center" width="200" >
           <template #icon="scope">
             <i :class="scope.row.icon"/>
           </template>
         </el-table-column>
-        <el-table-column prop="sortOrder" label="排序" width="60"></el-table-column>
+        <el-table-column prop="sortOrder" label="排序" width="80"></el-table-column>
         <el-table-column prop="path" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="type" label="类型" width="80" align="center">
-          <template #menu-type="scope">
+          <template #="scope">
             <el-tag type="success" v-if="scope.row.type === '0'">菜单</el-tag>
             <el-tag type="info" v-if="scope.row.type === '1'">按钮</el-tag>
           </template>
         </el-table-column>
         <el-table-column prop="keepAlive" label="缓冲" width="80" align="center">
-          <template #menu-keepalive="scope">
+          <template #="scope">
             <el-tag type="info" v-if="scope.row.keepAlive === '0'">关闭</el-tag>
             <el-tag type="success" v-if="scope.row.keepAlive === '1'">开启</el-tag>
           </template>
