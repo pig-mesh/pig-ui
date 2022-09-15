@@ -59,25 +59,31 @@
           </el-button>
         </template>
 
-        <template #menu>
-          <el-link
+        <template #menu="{row,index,size}">
+          <el-button
+              text
               v-if="permissions.sys_role_edit"
               type="primary"
               icon="el-icon-edit"
-              @click="handleUpdate(scope.row,scope.index)">编辑
-          </el-link>
-          <el-link
+              :size="size"
+              @click="handleUpdate(row,index)">编辑
+          </el-button>
+          <el-button
+              text
               v-if="permissions.sys_role_perm"
               type="primary"
               icon="el-icon-plus"
-              @click="handlePermission(scope.row,scope.index)">权限
-          </el-link>
-          <el-link
+              :size="size"
+              @click="handlePermission(row,index)">权限
+          </el-button>
+          <el-button
+              text
               v-if="permissions.sys_role_del"
               type="primary"
               icon="el-icon-delete"
-              @click="handleDelete(scope.row,scope.index)">删除
-          </el-link>
+              :size="size"
+              @click="handleDelete(row,index)">删除
+          </el-button>
         </template>
       </avue-crud>
 
@@ -92,7 +98,7 @@
       ></excel-upload>
     </basic-container>
     <el-dialog
-        :visible.sync="dialogPermissionVisible"
+        v-model="dialogPermissionVisible"
         :close-on-click-modal="false"
         title="分配权限">
       <div class="dialog-main-tree">

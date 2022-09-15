@@ -63,7 +63,7 @@ export default {
     load () {
       this.show()
       var flag = true //URL是否包含问号
-      if (this.$route.query.src.indexOf('?') === -1) {
+      if (this.$route.query.url.indexOf('?') === -1) {
         flag = false
       }
       var list = []

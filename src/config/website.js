@@ -2,10 +2,10 @@
  * 全局配置文件
  */
 export default {
-  title: 'Pig 快速开发框架',
-  subtitle: 'Pig',
+  title: 'PIG 快速开发框架',
+  subtitle: 'PIG',
   logo: "P",
-  indexTitle: "Pig 快速开发框架",
+  indexTitle: "PIG 快速开发框架",
   copyright: 'Copyright © 2022 pig4cloud.com. All rights reserved.',
   key: 'pig',//配置主键,目前用于存储
   lockPage: '/lock',

@@ -43,27 +43,30 @@
           class-name="small-padding fixed-width"
         >
           <template #="scope">
-            <el-link
+            <el-button
+                text
               type="primary"
               icon="el-icon-plus"
               @click="addOrUpdateHandle(false, scope.row.id)"
               v-if="permissions.sys_dept_add"
               >新增
-            </el-link>
-            <el-link
+            </el-button>
+            <el-button
+                text
               type="primary"
               icon="el-icon-edit"
               @click="addOrUpdateHandle(true, scope.row.id)"
               v-if="permissions.sys_dept_edit"
               >修改
-            </el-link>
-            <el-link
+            </el-button>
+            <el-button
+                text
                 type="primary"
                 icon="el-icon-delete"
               @click="handleDelete(scope.row)"
               v-if="permissions.sys_dept_del"
               >删除
-            </el-link>
+            </el-button>
           </template>
         </el-table-column>
       </el-table>

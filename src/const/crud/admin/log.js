@@ -22,9 +22,6 @@ export const tableOption = {
   menuAlign: 'center',
   menuWidth: 150,
   align: 'center',
-  refreshBtn: true,
-  searchMenuSpan: 6,
-  showClomnuBtn: false,
   addBtn: false,
   editBtn: false,
   viewBtn: true,
@@ -43,7 +40,8 @@ export const tableOption = {
     prop: 'title'
   }, {
     label: 'IP地址',
-    prop: 'remoteAddr'
+    prop: 'remoteAddr',
+    search: true
   }, {
     label: '请求方式',
     prop: 'method'
@@ -59,8 +57,8 @@ export const tableOption = {
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',
-    format: 'yyyy-MM-dd HH:mm',
-    valueFormat: 'yyyy-MM-dd HH:mm:ss',
+    format: 'YYYY-MM-DD HH:mm',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss',
     rangeSeparator: '-',
     search: true,
     searchRange: true

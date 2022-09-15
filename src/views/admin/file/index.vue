@@ -33,18 +33,20 @@
         @row-del="rowDel"
       >
         <template #menu="scope">
-          <el-link
+          <el-button
+              text
             type="primary"
             icon="el-icon-download"
             @click="download(scope.row, scope.index)"
             >下载
-          </el-link>
-          <el-link
+          </el-button>
+          <el-button
+              text
             type="primary"
             icon="el-icon-view"
             @click="onlineFile(scope.row, scope.index)"
             >在线浏览
-          </el-link>
+          </el-button>
         </template>
       </avue-crud>
     </basic-container>

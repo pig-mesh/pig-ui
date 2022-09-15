@@ -7,7 +7,8 @@ import errorCode from '@/const/errorCode'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'nprogress/nprogress.css'
 import qs from 'qs'
-import store from '@/store' // progress bar style
+import store from '@/store'
+import {baseUrl} from "@/config/env"; // progress bar style
 axios.defaults.timeout = 30000
 // 返回其他状态吗
 axios.defaults.validateStatus = function (status) {
@@ -21,8 +22,8 @@ NProgress.configure({
 })
 
 // HTTPrequest拦截
+axios.defaults.baseURL = baseUrl;
 axios.interceptors.request.use(config => {
-  config.url = '/api' + config.url
   NProgress.start() // start progress bar
   const TENANT_ID = getStore({ name: 'tenantId' })
   const isToken = (config.headers || {}).isToken === false

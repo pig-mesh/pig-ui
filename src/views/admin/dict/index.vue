@@ -43,17 +43,18 @@
           </el-button>
         </template>
         <template #menu="scope">
-          <el-link
+          <el-button
+              text
             v-if="permissions.sys_dict_add"
             type="primary"
             icon="el-icon-menu"
             @click="handleItem(scope.row,scope.index)">字典项
-          </el-link>
+          </el-button>
         </template>
       </avue-crud>
     </basic-container>
     <el-dialog
-      :visible.sync="dialogFormVisible"
+      v-model="dialogFormVisible"
       title="字典项管理"
       width="90%"
       @close="dictItemVisible">

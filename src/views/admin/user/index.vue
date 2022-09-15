@@ -79,20 +79,22 @@
           <el-tag>{{ scope.label }}</el-tag>
         </template>
         <template #menu="scope">
-          <el-link
+          <el-button
+              text
             v-if="permissions.sys_user_edit"
             type="primary"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row, scope.index)"
             >编辑
-          </el-link>
-          <el-link
+          </el-button>
+          <el-button
+              text
             v-if="permissions.sys_user_del"
             type="primary"
             icon="el-icon-delete"
             @click="deletes(scope.row, scope.index)"
             >删除
-          </el-link>
+          </el-button>
         </template>
         <template  #deptId-form="scope">
           <avue-input-tree

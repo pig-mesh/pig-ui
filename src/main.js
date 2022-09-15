@@ -9,7 +9,7 @@ import 'element-plus/dist/index.css'
 import Avue from '@smallwei/avue';
 import AvueFormDesign from '@sscfaith/avue-form-design';
 import '@smallwei/avue/lib/index.css';
-import {getScreen} from '@/util/index'
+import {getScreen,downBlobFile} from '@/util/index'
 import './permission';
 import error from './error';
 import basicBlock from 'components/basic-block/main.vue'
@@ -26,12 +26,16 @@ app.component('basicBlock', basicBlock)
 app.config.globalProperties.$dayjs = dayjs
 app.config.globalProperties.website = website
 app.config.globalProperties.getScreen = getScreen
+app.config.globalProperties.downBlobFile = downBlobFile
 app.use(error);
 app.use(i18n)
 app.use(animate)
 app.use(store)
 app.use(router)
 app.use(ElementPlus)
-app.use(Avue, axios)
+app.use(Avue, {
+    axios,
+    tableSize:'small'
+})
 app.use(AvueFormDesign)
 app.mount('#app')

@@ -1,11 +1,11 @@
-import { viteMockServe } from "vite-plugin-mock";
+  import { viteMockServe } from "vite-plugin-mock";
 import { defineConfig, ConfigEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 const { resolve } = require('path')
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    port: 1888,
+    port: 8080,
     proxy: {
       '/api': {
         target: 'http://pig-gateway:9999',

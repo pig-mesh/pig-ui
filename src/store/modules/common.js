@@ -13,7 +13,6 @@ const common = {
     isSearch: false,
     isRefresh: true,
     isLock: getStore({ name: 'isLock' }),
-    themeName: getStore({ name: 'themeName' }) || 'default',
     lockPasswd: getStore({ name: 'lockPasswd' }) || '',
     website: website,
     setting: website.setting,

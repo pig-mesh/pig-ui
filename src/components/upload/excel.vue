@@ -2,23 +2,23 @@
   <div>
     <!-- 导入对话框 -->
     <el-dialog
-      :title="title"
-      :visible.sync="upload.open"
-      width="400px"
-      append-to-body
+        :title="title"
+        v-model="upload.open"
+        width="400px"
+        append-to-body
     >
       <el-upload
-        ref="upload"
-        :limit="1"
-        accept=".xlsx, .xls"
-        :headers="headers"
-        :action="url"
-        :disabled="upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :on-error="handleFileError"
-        :auto-upload="false"
-        drag
+          ref="upload"
+          :limit="1"
+          accept=".xlsx, .xls"
+          :headers="headers"
+          :action="baseUrl + url"
+          :disabled="upload.isUploading"
+          :on-progress="handleFileUploadProgress"
+          :on-success="handleFileSuccess"
+          :on-error="handleFileError"
+          :auto-upload="false"
+          drag
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
@@ -27,40 +27,43 @@
         </div>
         <div class="el-upload__tip text-center" slot="tip">
           <span>仅允许导入xls、xlsx格式文件。</span>
-          <el-link
-            type="primary"
-            :underline="false"
-            style="font-size:12px;vertical-align: baseline;"
-            @click="downExcelTemp"
-            v-if="tempUrl"
+          <el-button
+              text
+              type="primary"
+              :underline="false"
+              style="font-size:12px;vertical-align: baseline;"
+              @click="downExcelTemp"
+              v-if="tempUrl"
           >下载模板
-          </el-link>
+          </el-button>
         </div>
       </el-upload>
-      <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitFileForm">确 定</el-button>
-        <el-button @click="upload.open = false">取 消</el-button>
-      </div>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button type="primary" @click="submitFileForm">确 定</el-button>
+          <el-button @click="upload.open = false">取 消</el-button>
+        </div>
+      </template>
     </el-dialog>
 
     <!--校验失败错误数据-->
-    <el-dialog title="校验失败数据" :visible.sync="errorVisible">
+    <el-dialog title="校验失败数据" v-model="errorVisible">
       <el-table :data="errorData">
         <el-table-column
-          property="lineNum"
-          label="行号"
-          width="50"
+            property="lineNum"
+            label="行号"
+            width="100"
         ></el-table-column>
         <el-table-column
-          property="errors"
-          label="错误描述"
-          show-overflow-tooltip
+            property="errors"
+            label="错误描述"
+            show-overflow-tooltip
         >
-          <template slot-scope="scope">
+          <template #="scope">
             <el-tag
-              type="danger"
-              v-for="error in scope.row.errors"
-              :key="error"
+                type="danger"
+                v-for="error in scope.row.errors"
+                :key="error"
             >{{ error }}
             </el-tag
             >
@@ -73,6 +76,7 @@
 
 <script>
 import store from "@/store";
+import {baseUrl} from "../../config/env.js";
 
 export default {
   name: "ExcelUpload",
@@ -98,7 +102,8 @@ export default {
         isUploading: false
       },
       errorVisible: false,
-      errorData: []
+      errorData: [],
+      baseUrl: baseUrl,
     };
   },
   computed: {
