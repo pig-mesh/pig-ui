@@ -63,18 +63,20 @@
         @refresh-change="refreshChange"
       >
         <template #menu="scope">
-          <el-link
+          <el-button
+              text
             type="primary"
             icon="el-icon-check"
             @click="handleDown(scope.row, scope.index)"
             >生成
-          </el-link>
-          <el-link
+          </el-button>
+          <el-button
+              text
             type="primary"
             icon="el-icon-edit"
             @click="handleDesign(scope.row, scope.index)"
             >设计
-          </el-link>
+          </el-button>
         </template>
       </avue-crud>
 
