@@ -2,8 +2,7 @@ import Store from '@/store/'
 export default [{
   path: '/login',
   name: '登录页',
-  component: () =>
-    Store.getters.isMacOs ? import('@/mac/login.vue') : import('@/page/login/index.vue'),
+  component: () => import('@/page/login/index.vue'),
   meta: {
     keepAlive: true,
     isTab: false,
@@ -13,8 +12,7 @@ export default [{
 {
   path: '/lock',
   name: '锁屏页',
-  component: () =>
-    Store.getters.isMacOs ? import('@/mac/lock.vue') : import('@/page/lock/index.vue'),
+  component: () =>  import('@/page/lock/index.vue'),
   meta: {
     keepAlive: true,
     isTab: false,

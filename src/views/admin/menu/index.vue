@@ -21,8 +21,8 @@
           row-key="id"
           :tree-props="{children: 'children', hasChildren: 'hasChildrens'}">
         <el-table-column prop="name" label="菜单名称" :show-overflow-tooltip="true" width="180"></el-table-column>
-        <el-table-column prop="icon" label="图标" align="center" width="200" >
-          <template #icon="scope">
+        <el-table-column prop="icon" label="图标" align="center" width="100" >
+          <template #="scope">
             <i :class="scope.row.icon"/>
           </template>
         </el-table-column>

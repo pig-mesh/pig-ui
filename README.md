@@ -1,93 +1,153 @@
+<p align="center">
+<img src="https://img.shields.io/badge/Pig-3.5-success.svg" alt="Build Status">
+<img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
+<img src="https://img.shields.io/badge/Spring%20Boot-2.7-blue.svg" alt="Downloads">
+<img src="https://img.shields.io/badge/Vue-3.2-blue.svg" alt="Downloads">
+<img src="https://img.shields.io/github/license/pig-mesh/pig"/>
+</p>
 
-<p align="center"><a href="https://avuejs.com" target="_blank" rel="noopener noreferrer"><img width="100" src="https://avuejs.com/images/logo-bg.jpg" alt="Avue logo"></a></p>
+## 系统说明
 
-## 介绍
+- 基于 Spring Cloud 2021 、Spring Boot 2.7、 OAuth2 的 RBAC **权限管理系统**
+- 基于数据驱动视图的理念封装 element-plus，即使没有 vue 的使用经验也能快速上手
+- 提供对常见容器化支持 Docker、Kubernetes、Rancher2 支持
+- 提供 lambda 、stream api 、webflux 的生产实践
 
-基于 vue3.x + vite + element plus + vue-router + vuex，适配手机、平板、pc 的后台开源免费模板，希望减少工作量，帮助大家实现快速开发。
 
-## 地址
+## 文档视频
 
-[🎉 vue2.x + element-ui](https://gitee.com/smallweigit/avue-cli/tree/2.x/)
+[ 🚀🚀🚀 低代码数据可视化](http://datav.avuejs.com)
 
-[⚡️ vue3.x + element-plus](https://gitee.com/smallweigit/avue-cli)
+[ 配套文档 wiki.pigx.vip](https://wiki.pigx.vip)
 
-## 文档
+[ 配套视频 tv.pigx.vip](https://www.bilibili.com/video/BV12t411B7e9)
 
-[文档](https://www.kancloud.cn/smallwei/avue/579870)
-[文档说明](https://avuejs.com/doc/plugins/avue-cli)
+[PIGX 在线体验 pigx.pigx.vip](http://pigx.pigx.vip)
 
-## 预览
+[产品白皮书 paper.pigx.vip](https://paper.pigx.vip)
 
-[预览](https://cli.avuejs.com)
+## 微信群 [禁广告]
 
-## 开发
+![](https://minio.pigx.vip/oss/1648184189.png)
+
+
+<a href="https://apifox.cn/a1pigcloud" target="_blank"><img src="https://minio.pigx.vip/oss/1662368326.png" height="180" width="550"></a></td>
+## 快速开始
+
+### 核心依赖
+
+| 依赖                   | 版本         |
+| ---------------------- |------------|
+| Spring Boot            | 2.7.3      |
+| Spring Cloud           | 2021.0.4   |
+| Spring Cloud Alibaba   | 2021.0.4.0 |
+| Spring Authorization Server | 0.3.1      |
+| Mybatis Plus           | 3.5.2      |
+| hutool                 | 5.8.7      |
+| Avue                   | 2.6.18     |
+
+### 模块说明
+
+```lua
+pig-ui  -- https://gitee.com/log4j/pig-ui
+
+pig
+├── pig-auth -- 授权服务提供[3000]
+└── pig-common -- 系统公共模块
+├── pig-common-bom -- 全局依赖管理控制
+├── pig-common-core -- 公共工具类核心包
+├── pig-common-datasource -- 动态数据源包
+├── pig-common-job -- xxl-job 封装
+├── pig-common-log -- 日志服务
+├── pig-common-mybatis -- mybatis 扩展封装
+├── pig-common-seata -- 分布式事务
+├── pig-common-security -- 安全工具类
+├── pig-common-swagger -- 接口文档
+└── pig-common-feign -- feign 扩展封装
+├── pig-register -- Nacos Server[8848]
+├── pig-gateway -- Spring Cloud Gateway网关[9999]
+└── pig-upms -- 通用用户权限管理模块
+└── pig-upms-api -- 通用用户权限管理系统公共api模块
+└── pig-upms-biz -- 通用用户权限管理系统业务处理模块[4000]
+└── pig-visual
+└── pig-monitor -- 服务监控 [5001]
+├── pig-codegen -- 图形化代码生成 [5002]
+├── pig-sentinel-dashboard -- 流量高可用 [5003]
+└── pig-xxl-job-admin -- 分布式定时任务管理台 [5004]
+```
+
+### 本地开发 运行
+
+pig 提供了详细的[部署文档 wiki.pigx.vip](https://www.yuque.com/pig4cloud/pig/vsdox9)，包括开发环境安装、服务端代码运行、前端代码运行等。
+
+请务必**完全按照**文档部署运行章节 进行操作，减少踩坑弯路！！
+
+### 定制自己微服务
+
+[PIG DIY](https://pig4cloud.com/#/common/diy)
+
+[PIG ARCHETYPE](https://pig4cloud.com/#/common/archetype)
+
+### Docker 运行
 
 ```
-# 克隆项目
-git clone https://gitee.com/smallweigit/avue-cli.git
+# 下载并运行服务端代码
+git clone https://gitee.com/log4j/pig.git
 
-# 进入项目
-cd avue-cli
+cd pig && mvn clean install && docker-compose up -d
 
-# 安装依赖
-npm install --registry=https://registry.npm.taobao.org
+# 下载并运行前端UI
+git clone https://gitee.com/log4j/pig-ui.git
 
-# 启动服务
-npm run dev
+cd pig-ui && npm install -g cnpm --registry=https://registry.npm.taobao.org
 
+
+cnpm install && cnpm run build:docker && cd docker && docker-compose up -d
 ```
-## 功能
-- 登录/注销
-  - 用户名登录
-  - 验证码登录
-  - 第三方登陆(QQ,微信)
-  - 人脸识别登录
-- 错误的日志记录
-- 灵活的10+多款主题自由配置(mac 主题)
-- 路由权限、菜单权限、登录权限
-- 本地化持久存储api
-- 页面缓冲
-- 面向全屏幕尺寸的响应式适配能力
-- 对国际化的支持
-- 自动刷新token等机制
-- 全新的前端错误日志监控机制
-- 前端路由动态服务端加载
-- 无限极动态路由加载
-- 模块的可拆卸化,达到开箱即用
-- 更多。。。
 
-## 问答
+## 免费公开课
 
-有关问题和支持，请使用[issues](https://gitee.com/smallweigit/avue-cli/issues)或加入QQ群.
+<table>
+<tr>
+  <td><a href="https://www.bilibili.com/video/av45084065" target="_blank"><img src="https://minio.pigx.vip/oss/1655474345.jpg"></a></td>
+  <td><a href="https://www.bilibili.com/video/av77344954" target="_blank"><img src="https://minio.pigx.vip/oss/1656837143.jpg"></a></td>
+</tr>
+<tr>
+  <td><a href="https://www.bilibili.com/video/BV1J5411476V" target="_blank"><img src="https://minio.pigx.vip/oss/1655474369.jpg"></a></td>
+  <td><a href="https://www.bilibili.com/video/BV14p4y197K5" target="_blank"><img src="https://minio.pigx.vip/oss/1655474381.jpg"></a></td>
+</tr>
+</table>
 
-## issues
+## 开源共建
 
-打开问题之前，请务必提供详细的问题过程和截图，不符合准则的问题将会被拒绝.
+### 开源协议
 
-## Page
+pig 开源软件遵循 [Apache 2.0 协议](https://www.apache.org/licenses/LICENSE-2.0.html)。
+允许商业使用，但务必保留类作者、Copyright 信息。
 
-### 登陆
-<img src='https://avuejs.com/images/cli/1.png' width="700">
+![](https://minio.pigx.vip/oss/1655474288.jpg)
 
-### 主页
-<img src='https://avuejs.com/images/cli/2.png' width="700">
 
-### 炫酷主题
-<img src='https://avuejs.com/images/cli/3.png' width="700">
+### 其他说明
 
-### 第三方网站
-<img src='http://avuejs.com/images/cli/4.png' width="700">
+1. 欢迎提交 [PR](https://dwz.cn/2KURd5Vf)，注意对应提交对应 `dev` 分支
+代码规范 [spring-javaformat](https://github.com/spring-io/spring-javaformat)
 
-### 全局搜索
-<img src='http://avuejs.com/images/cli/5.png' width="700">
+<details>
+<summary>代码规范说明</summary>
 
-### mac主题
-<img src='http://avuejs.com/images/cli/6.png' width="700">
+1. 由于 <a href="https://github.com/spring-io/spring-javaformat" target="_blank">spring-javaformat</a>
+强制所有代码按照指定格式排版，未按此要求提交的代码将不能通过合并（打包）
+2. 如果使用 IntelliJ IDEA
+开发，请安装自动格式化软件 <a href="https://repo1.maven.org/maven2/io/spring/javaformat/spring-javaformat-intellij-idea-plugin/" target="_blank">
+  spring-javaformat-intellij-idea-plugin</a>
+3. 其他开发工具，请参考 <a href="https://github.com/spring-io/spring-javaformat" target="_blank">spring-javaformat</a>
+说明，或`提交代码前`在项目根目录运行下列命令（需要开发者电脑支持`mvn`命令）进行代码格式化
+```
+mvn spring-javaformat:apply
+```
+</details>
 
-<img src='http://avuejs.com/images/cli/7.png' width="700">
+2. 欢迎提交 [issue](https://gitee.com/log4j/pig/issues)，请写清楚遇到问题的原因、开发环境、复显步骤。
 
-## License
-
-[MIT](http://opensource.org/licenses/MIT)
-
-Copyright (c) 2017-present, Smallwei
+3. 联系作者 <a href="mailto:pig4cloud@qq.com">pig4cloud@qq.com</a>

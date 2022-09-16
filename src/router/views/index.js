@@ -3,7 +3,7 @@ import Store from '@/store/'
 
 export default [{
     path: '/wel',
-    component: () => Store.getters.isMacOs ? import('@/mac/index.vue') : import('@/page/index/index.vue'),
+    component: () =>  import('@/page/index/index.vue'),
     redirect: '/wel/index',
     children: [{
         path: 'index',
