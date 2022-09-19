@@ -40,8 +40,8 @@ export const tableOption = {
       label: '创建时间',
       prop: 'createTime',
       type: 'datetime',
-      format: 'yyyy-MM-dd HH:mm:ss',
-      valueFormat: 'yyyy-MM-dd HH:mm:ss'
+      format: 'YYYY-MM-DD HH:mm:ss',
+      valueFormat: 'YYYY-MM-DD HH:mm:ss'
     },
     {
       label: '表单信息',

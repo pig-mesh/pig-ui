@@ -21,7 +21,7 @@
           row-key="id"
           :tree-props="{children: 'children', hasChildren: 'hasChildrens'}">
         <el-table-column prop="name" label="菜单名称" :show-overflow-tooltip="true" width="180"></el-table-column>
-        <el-table-column prop="icon" label="图标" align="center" width="100" >
+        <el-table-column prop="icon" label="图标" align="center" width="100">
           <template #="scope">
             <i :class="scope.row.icon"/>
           </template>
@@ -30,14 +30,12 @@
         <el-table-column prop="path" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="type" label="类型" width="80" align="center">
           <template #="scope">
-            <el-tag type="success" v-if="scope.row.type === '0'">菜单</el-tag>
-            <el-tag type="info" v-if="scope.row.type === '1'">按钮</el-tag>
+            <dict-tag :options="menu_type_status" :value="scope.row.type"/>
           </template>
         </el-table-column>
         <el-table-column prop="keepAlive" label="缓冲" width="80" align="center">
           <template #="scope">
-            <el-tag type="info" v-if="scope.row.keepAlive === '0'">关闭</el-tag>
-            <el-tag type="success" v-if="scope.row.keepAlive === '1'">开启</el-tag>
+            <dict-tag :options="keepalive_status" :value="scope.row.type"/>
           </template>
         </el-table-column>
         <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
@@ -84,6 +82,16 @@ export default {
       menuList: [],
       // 菜单树选项
       menuOptions: [],
+      menu_type_status: [{
+        label: "菜单", value: '0', type: "success"
+      }, {
+        label: "按钮", value: '1', type: "info"
+      }],
+      keepalive_status: [{
+        label: "关闭", value: '0', type: "info"
+      }, {
+        label: "开启", value: '1', type: "success"
+      }]
     };
   },
   created() {

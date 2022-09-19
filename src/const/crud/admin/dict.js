@@ -46,6 +46,7 @@ export const tableOption = {
     label: '字典类型',
     prop: 'systemFlag',
     type: 'radio',
+    border: true,
     dicUrl: '/admin/dict/type/dict_type',
     rules: [{
       required: true,
@@ -63,8 +64,8 @@ export const tableOption = {
     type: 'datetime',
     addDisplay: false,
     editDisabled: true,
-    format: 'yyyy-MM-dd HH:mm',
-    valueFormat: 'yyyy-MM-dd HH:mm:ss'
+    format: 'YYYY-MM-DD HH:mm',
+    valueFormat: 'YYYY-MM-DD HH:mm:ss'
   }]
 }
 

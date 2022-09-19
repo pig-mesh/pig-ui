@@ -59,23 +59,23 @@
             >导出
           </el-button>
         </template>
-        <template slot="username" #username="scope">
+        <template  #username="scope">
           <span>{{ scope.row.username }}</span>
         </template>
-        <template slot="role" #role="scope">
+        <template  #role="scope">
           <span v-for="(role, index) in scope.row.roleList" :key="index">
             <el-tag>{{ role.roleName }} </el-tag>&nbsp;&nbsp;
           </span>
         </template>
-        <template slot="post" #post="scope">
+        <template  #post="scope">
           <span v-for="(role, index) in scope.row.postList" :key="index">
             <el-tag>{{ role.postName }} </el-tag>&nbsp;&nbsp;
           </span>
         </template>
-        <template slot="deptId" #deptName="scope">
+        <template  #deptName="scope">
           {{ scope.row.deptName }}
         </template>
-        <template slot="lockFlag" #lock="scope">
+        <template  #lockFlag="scope">
           <el-tag>{{ scope.label }}</el-tag>
         </template>
         <template #menu="scope">

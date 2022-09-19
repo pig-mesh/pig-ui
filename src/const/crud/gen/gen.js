@@ -60,7 +60,7 @@ export const tableOption = {
   }, {
     type: 'datetime',
     valueFormat: 'timestamp',
-    format: 'yyyy-MM-dd hh:mm:ss',
+    format: 'YYYY-MM-DD hh:mm:ss',
     label: '创建时间',
     prop: 'createTime',
     align: 'center'

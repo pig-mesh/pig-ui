@@ -15,7 +15,7 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
-import { rule } from "@/util/validateRules";
+import { rule } from "@/util/rule";
 
 import {getObj} from '@/api/admin/sys-public-param'
 

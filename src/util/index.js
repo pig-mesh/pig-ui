@@ -433,37 +433,3 @@ export const getScreen = (isCollapse) => {
         return isCollapse
     }
 }
-
-// 数据合并
-export function mergeRecursive(source, target) {
-    for (let index in target) {
-        try {
-            if (target[index].constructor === Object) {
-                source[index] = mergeRecursive(source[index], target[index]);
-            } else {
-                source[index] = target[index];
-            }
-        } catch (e) {
-            source[index] = target[index];
-        }
-    }
-    return source;
-}
-
-// 回显数据字典
-export function selectDictLabel(datas, value) {
-    if (value === undefined) {
-        return "";
-    }
-    let actions = [];
-    Object.keys(datas).some((key) => {
-        if (datas[key].value === ('' + value)) {
-            actions.push(datas[key].label);
-            return true;
-        }
-    })
-    if (actions.length === 0) {
-        actions.push(value);
-    }
-    return actions.join('');
-}

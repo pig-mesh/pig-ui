@@ -3,7 +3,7 @@ import Store from '@/store/'
 
 export default [{
     path: '/wel',
-    component: () =>  import('@/page/index/index.vue'),
+    component: () => import('@/page/index/index.vue'),
     redirect: '/wel/index',
     children: [{
         path: 'index',
@@ -12,16 +12,7 @@ export default [{
             i18n: 'dashboard'
         },
         component: () =>
-            import( /* webpackChunkName: "views" */ '@/views/wel/index.vue')
-    }, {
-        path: 'dashboard',
-        name: '控制台',
-        meta: {
-            i18n: 'dashboard',
-            menu: false,
-        },
-        component: () =>
-            import( /* webpackChunkName: "views" */ '@/views/wel/dashboard.vue')
+            import( /* webpackChunkName: "views" */ '@/page/wel.vue')
     }]
 }, {
     path: '/iframe',

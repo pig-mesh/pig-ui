@@ -201,7 +201,7 @@ export const tableOption = {
     label: '创建时间',
     prop: 'createTime',
     type: 'datetime',
-    format: 'yyyy-MM-dd',
+    format: 'YYYY-MM-DD',
     editDisabled: true,
     addDisplay: false,
     span: 24
