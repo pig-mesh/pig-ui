@@ -102,6 +102,7 @@ export const formOption = {
       type: 'radio',
       border: true,
       span: 24,
+      value: '0',
       dicData: [{
         label: '原生ELEMENT',
         value: '1'
@@ -146,6 +147,7 @@ export const formBatchOption = {
       type: 'radio',
       span: 24,
       border: true,
+      value: '0',
       dicData: [{
         label: '原生ELEMENT',
         value: '1'

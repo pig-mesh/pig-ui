@@ -21,7 +21,7 @@
       <avue-crud
         ref="data-source-settings-crud"
         v-model="dsForm"
-        :page.sync="dsPage"
+        :page.sync="page"
         :data="tableDsData"
         :option="tableDsOption"
         :before-open="handleOpenBefore"
@@ -47,7 +47,7 @@
         dataSourceList: [],
         tableDsData: [],
         box: false,
-        dsPage: {
+        page: {
           total: 0, // 总页数
           currentPage: 1, // 当前页数
           pageSize: 20 // 每页显示多少条
@@ -71,7 +71,7 @@
           return delObj(row.id)
         }).then(() => {
           this.$message.success('删除成功')
-          this.getDsList(this.dsPage)
+          this.getDsList(this.page)
         })
       },
       handleOpenBefore: function (show) {
@@ -87,7 +87,7 @@
             loading()
             this.$message.error('修改失败，数据源不可访问')
           }
-          this.getDsList(this.dsPage)
+          this.getDsList(this.page)
         })
       },
       handleSave: function (row, done,loading) {
@@ -95,7 +95,7 @@
           if (res.data.data){
             this.$message.success("添加成功");
             done();
-            this.getDsList(this.dsPage);
+            this.getDsList(this.page);
           }else {
             this.$message.error("添加失败，数据源不可访问");
             loading()
@@ -110,7 +110,7 @@
           size: page.pageSize
         }, params)).then(response => {
           this.tableDsData = response.data.data.records
-          this.dsPage.total = response.data.data.total
+          this.page.total = response.data.data.total
         })
       },
       sizeChange(pageSize) {
@@ -120,7 +120,7 @@
         this.page.currentPage = current
       },
       refreshDsChange() {
-        this.getDsList(this.dsPage)
+        this.getDsList(this.page)
       }
     }
   }

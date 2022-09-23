@@ -18,7 +18,7 @@
   <div class="execution">
     <basic-container>
       <avue-crud
-        ref="crud"
+        v-model="tableForm"
         :page.sync="page"
         :data="tableData"
         :permission="permissionList"
@@ -57,6 +57,7 @@ export default {
   name: 'Syspublicparam',
   data() {
     return {
+      tableForm:{},
       searchForm: {},
       tableData: [],
       page: {
@@ -106,6 +107,7 @@ export default {
     },
     beforeOpen(show, type) {
       window.boxType = type
+      window.tableForm = this.tableForm
       show()
     },
     /**

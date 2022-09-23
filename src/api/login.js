@@ -48,7 +48,7 @@ export const loginByUsername = (username, password, code, randomStr) => {
   })
 }
 
-export const loginByMobile = (mobile, code) => {
+export const loginByMobile = (smsForm) => {
   const grant_type = 'app'
 
   let basicAuth = 'Basic ' + window.btoa(website.smsLoginClient)
@@ -67,7 +67,7 @@ export const loginByMobile = (mobile, code) => {
       'Authorization': basicAuth
     },
     method: 'post',
-    params: {mobile: mobile, code: code, grant_type, scope}
+    params: {phone: smsForm.phone, code: smsForm.code, grant_type, scope}
   })
 }
 
@@ -148,5 +148,16 @@ export const registerUser = (userInfo) => {
     url: '/admin/register/user',
     method: 'post',
     data: userInfo
+  })
+}
+
+
+/**
+ * 发送短信
+ */
+export const sendSmsCode = (mobile) => {
+  return request({
+    url: "/admin/app/" + mobile,
+    method: "get",
   })
 }

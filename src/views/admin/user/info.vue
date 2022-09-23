@@ -18,66 +18,68 @@
 <template>
   <div class="app-container calendar-list-container">
     <basic-container>
-      <template>
-        <el-tabs @tab-click="switchTab">
-          <el-tab-pane label='信息管理' name='userManager'/>
-          <el-tab-pane label='密码管理' name='passwordManager'/>
-        </el-tabs>
-      </template>
+      <el-tabs @tab-click="switchTab">
+        <el-tab-pane label='信息管理' name='userManager'/>
+        <el-tab-pane label='密码管理' name='passwordManager'/>
+      </el-tabs>
       <el-row>
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-form :model="ruleForm2"
-                     :rules="rules2"
-                     ref="ruleForm2"
+            <el-form :model="userInfoForm"
+                     :rules="userInfoFormRules"
+                     ref="userInfoForm"
                      label-width="100px"
                      v-if="switchStatus==='userManager'"
                      class="demo-ruleForm">
               <el-form-item label="用户名"
                             prop="username">
                 <el-input type="text"
-                          v-model="ruleForm2.username"
-                          disabled></el-input>
+                          v-model="userInfoForm.username"
+                          disabled>
+                  <template #prefix>
+                    <i class="icon-yonghu"></i>
+                  </template>
+                </el-input>
               </el-form-item>
-              <el-form-item label="手机号" prop="phone">
-                <el-input v-model="ruleForm2.phone" placeholder="验证码登录使用"></el-input>
-              </el-form-item>
+              <!--    短信验证码发送          -->
+              <SendSmsCode v-model="userInfoForm" code-label="验证码" phone-label="手机号" lableWidth="100px"
+                           ref="smsCodeForm" @validatePhone="validatePhone"/>
               <el-form-item>
                 <el-button type="primary"
-                           @click="submitForm('ruleForm2')">提交
+                           @click="submitForm('userInfoForm')">提交
                 </el-button>
-                <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                <el-button @click="resetForm('userInfoForm')">重置</el-button>
               </el-form-item>
             </el-form>
-            <el-form :model="ruleForm2"
-                     :rules="rules2"
-                     ref="ruleForm2"
+            <el-form v-model="userInfoForm"
+                     :rules="userInfoFormRules"
+                     ref="userInfoForm"
                      label-width="100px"
                      v-if="switchStatus==='passwordManager'"
                      class="demo-ruleForm">
               <el-form-item label="原密码"
                             prop="password">
                 <el-input type="password"
-                          v-model="ruleForm2.password"
+                          v-model="userInfoForm.password"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item label="密码"
                             prop="newpassword1">
                 <el-input type="password"
-                          v-model="ruleForm2.newpassword1"
+                          v-model="userInfoForm.newpassword1"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item label="确认密码"
                             prop="newpassword2">
                 <el-input type="password"
-                          v-model="ruleForm2.newpassword2"
+                          v-model="userInfoForm.newpassword2"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary"
-                           @click="submitForm('ruleForm2')">提交
+                           @click="submitForm('userInfoForm')">提交
                 </el-button>
-                <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                <el-button @click="resetForm('userInfoForm')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -89,132 +91,92 @@
 
 
 <script>
-  import {mapState} from 'vuex'
-  import store from "@/store";
-  import request from '@/router/axios'
+import {mapState} from 'vuex'
+import {checkPhone} from "@/const/crud/admin/user.js";
+import SendSmsCode from "@/components/sms/sms.vue";
+import {editInfo} from "@/api/admin/user.js";
 
-  export default {
-    data() {
-      var validatePass = (rule, value, callback) => {
-        if (this.ruleForm2.password !== '') {
-          if (value !== this.ruleForm2.newpassword1) {
-            callback(new Error('两次输入密码不一致!'))
-          } else {
-            callback()
-          }
+export default {
+  components: {SendSmsCode},
+  data() {
+    var validatePass = (rule, value, callback) => {
+      if (this.userInfoForm.password !== '') {
+        if (value !== this.userInfoForm.newpassword1) {
+          callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
         }
-      }
-      return {
-        switchStatus: '',
-        avatarUrl: '',
-        show: false,
-        headers: {
-          Authorization: 'Bearer ' + store.getters.access_token
-        },
-        ruleForm2: {
-          username: '',
-          password: '',
-          newpassword1: '',
-          newpassword2: '',
-          avatar: '',
-          phone: ''
-        },
-        rules2: {
-          password: [{required: true, min: 6, message: '原密码不能为空且不少于6位', trigger: 'change'}],
-          newpassword1: [{required: false, min: 6, message: '不少于6位', trigger: 'change'}],
-          newpassword2: [{required: false, validator: validatePass, trigger: 'blur'}]
-        }
-      }
-    },
-    created() {
-      this.ruleForm2.username = this.userInfo.username
-      this.ruleForm2.phone = this.userInfo.phone
-      this.switchStatus = 'userManager'
-    },
-    computed: {
-      ...mapState({
-        userInfo: state => state.user.userInfo
-      }),
-    },
-    methods: {
-      switchTab(tab, event) {
-        this.switchStatus = tab.name
-      },
-      submitForm(formName) {
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            request({
-              url: '/admin/user/edit',
-              method: 'put',
-              data: this.ruleForm2
-            }).then(response => {
-              if (response.data.data) {
-                this.$notify({
-                  title: '成功',
-                  message: '修改成功',
-                  type: 'success',
-                  duration: 2000
-                })
-                // 修改密码之后强制重新登录
-                if (this.switchStatus === 'passwordManager') {
-                  this.$store.dispatch('LogOut').then(() => {
-                    location.reload() // 为了重新实例化vue-router对象 避免bug
-                  })
-                }
-              } else {
-                this.$notify({
-                  title: '失败',
-                  message: response.data.msg,
-                  type: 'error',
-                  duration: 2000
-                })
-              }
-            }).catch(() => {
-              this.$notify({
-                title: '失败',
-                message: '修改失败',
-                type: 'error',
-                duration: 2000
-              })
-            })
-          } else {
-            return false
-          }
-        })
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields()
+      } else {
+        callback()
       }
     }
+    return {
+      switchStatus: '',
+      show: false,
+      userInfoForm: {
+        username: '',
+        password: '',
+        newpassword1: '',
+        newpassword2: '',
+        phone: ''
+      },
+      userInfoFormRules: {
+        password: [{required: true, min: 6, message: '原密码不能为空且不少于6位', trigger: 'change'}],
+        newpassword1: [{required: false, min: 6, message: '不少于6位', trigger: 'change'}],
+        newpassword2: [{required: false, validator: validatePass, trigger: 'blur'}]
+      }
+    }
+  },
+  created() {
+    this.userInfoForm.username = this.userInfo.username
+    this.userInfoForm.phone = this.userInfo.phone
+    this.switchStatus = 'userManager'
+  },
+  computed: {
+    ...mapState({
+      userInfo: state => state.user.userInfo
+    }),
+  },
+  methods: {
+    switchTab(tab, event) {
+      this.switchStatus = tab.paneName
+    },
+    validatePhone(rule, value, callback) {
+      checkPhone(rule, value, callback)
+    },
+    submitForm(formName) {
+      if (this.switchStatus === 'userManager') {
+        this.$refs.smsCodeForm.validate((valid2) => {
+          if (valid2) {
+            this.edit()
+          }
+        })
+      }
+
+      if (this.switchStatus === 'passwordManager') {
+        this.$refs[formName].validate(valid => {
+          if (valid) {
+            this.edit()
+          }
+        })
+      }
+    },
+    resetForm(formName) {
+      this.$refs[formName].resetFields()
+    },
+    edit() {
+      editInfo(this.userInfoForm).then(response => {
+        if (response.data.data) {
+          // 更新个人信息
+          this.$store.dispatch('GetUserInfo')
+          this.$message.success("修改成功")
+        } else {
+          this.$message.error(response.data.msg)
+        }
+      }).catch(() => {
+        this.$message.error("修改失败")
+      })
+    }
   }
+}
 </script>
-<style>
-  .avatar-uploader .el-upload {
-    border: 1px dashed #d9d9d9;
-    border-radius: 6px;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .avatar-uploader .el-upload:hover {
-    border-color: #409EFF;
-  }
-
-  .avatar-uploader-icon {
-    font-size: 28px!important;
-    color: #8c939d!important;
-    width: 178px!important;
-    height: 178px!important;
-    line-height: 178px!important;
-    text-align: center!important;
-  }
-
-  .avatar {
-    width: 178px;
-    height: 178px;
-    display: block;
-  }
-</style>

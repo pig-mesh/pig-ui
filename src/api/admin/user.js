@@ -62,3 +62,12 @@ export function isExsit(params) {
     params: params
   })
 }
+
+// 更改个人信息
+export function editInfo(obj) {
+  return request({
+    url: '/admin/user/edit',
+    method: 'put',
+    data: obj
+  })
+}

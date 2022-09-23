@@ -52,7 +52,7 @@ export const checkPassword = (rule, value, callback) => {
 // 设置手机号的验证规则
 export const checkPhone = (rule, value, callback) => {
   if (!value) {
-    callback(new Error('请输入联系方式'))
+    callback(new Error('请输入手机号'))
   } else {
     const reg = /^1[3|4|5|7|8][0-9]\d{8}$/
     if (!reg.test(value)) {
@@ -63,7 +63,6 @@ export const checkPhone = (rule, value, callback) => {
   isExsit({phone: value}).then(response => {
     if (window.boxType === 'edit') callback()
     let result = response.data.data
-    debugger
     if (result) {
       return callback(new Error('手机号已经存在'))
     } else {

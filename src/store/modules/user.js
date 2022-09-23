@@ -45,9 +45,9 @@ const user = {
       })
     },
     // 根据手机号登录
-    LoginByPhone ({ commit }, userInfo) {
+    LoginByPhone ({ commit }, smsForm) {
       return new Promise((resolve, reject) => {
-        loginByMobile(userInfo.mobile, userInfo.code).then(response => {
+        loginByMobile(smsForm).then(response => {
           const data = response.data
           commit('SET_ACCESS_TOKEN', data.access_token)
           commit('SET_REFRESH_TOKEN', data.refresh_token)
@@ -109,7 +109,6 @@ const user = {
     // 注销session
     FedLogOut ({ commit }) {
       return new Promise(resolve => {
-        resetRouter();
         commit('SET_MENU', [])
         commit('SET_MENUALL_NULL', []);
         commit('SET_PERMISSIONS', [])
@@ -126,7 +125,6 @@ const user = {
     GetMenu ({ commit }, obj = {}) {
       // 记录用户点击顶部信息，保证刷新的时候不丢失
       commit('LIKE_TOP_MENUID', obj)
-
       return new Promise(resolve => {
         getMenu(obj.id).then((res) => {
           const data = res.data.data
