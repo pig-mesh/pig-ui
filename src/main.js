@@ -11,6 +11,7 @@ import Avue from '@smallwei/avue';
 import AvueFormDesign from '@sscfaith/avue-form-design';
 import '@smallwei/avue/lib/index.css';
 import {getScreen, downBlobFile} from '@/util/index'
+import dict from '@/util/dict'
 import './permission';
 import error from './error';
 import basicBlock from 'components/basic-block/main.vue'
@@ -36,6 +37,7 @@ app.config.globalProperties.$dayjs = dayjs
 app.config.globalProperties.website = website
 app.config.globalProperties.getScreen = getScreen
 app.config.globalProperties.downBlobFile = downBlobFile
+dict(app);
 app.use(error);
 app.use(i18n)
 app.use(animate)
