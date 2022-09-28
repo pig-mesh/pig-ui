@@ -7,9 +7,9 @@ export default (app) => {
       }
     },
     created () {
-      if (this.$options.dict) {
+      let list = this.$options.dict;
+      if (list) {
         let result = [];
-        let list = this.$options.dict;
         list.forEach(ele => {
           result.push(new Promise(resolve => {
             let obj = {}
