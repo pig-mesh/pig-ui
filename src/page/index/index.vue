@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import index from '@/mixins/index'
 import { validatenull } from '@/util/validate'
 import { mapGetters } from "vuex";
 import tags from "./tags.vue";
@@ -47,7 +46,6 @@ import logo from "./logo.vue";
 import top from "./top/index.vue";
 import sidebar from "./sidebar/index.vue";
 export default {
-  mixins: [index],
   components: {
     top,
     logo,

@@ -18,7 +18,7 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item prop="code" :label="codeLabel">
+    <el-form-item prop="code" :label="codeLabel" v-if="codeShow">
       <el-input
           v-model="smsForm.code"
           auto-complete="off"
@@ -39,6 +39,7 @@
 
 <script>
 import {sendSmsCode} from "@/api/login";
+import {validatenull} from "@/util/validate.js";
 
 const MSGINIT = "发送验证码",
     MSGSCUCCESS = "${time}秒后重发",
@@ -53,6 +54,10 @@ export default {
     codeLabel: {
       type: String
     },
+    codeShow: {
+      type: Boolean,
+      default: true
+    },
     lableWidth: {
       type: String
     },
@@ -63,20 +68,20 @@ export default {
       }
     }
   },
-  watch:{
+  watch: {
     smsForm: {
-      handler (val) {
-        this.$emit('input', val)
+      handler(val) {
+        this.$emit('"update:modelValue"', val)
       },
       deep: true,
-      immediate:true
+      immediate: true
     },
     modelValue: {
-      handler (val) {
+      handler(val) {
         this.smsForm = val
       },
       deep: true,
-      immediate:true
+      immediate: true
     },
   },
   data() {
@@ -84,7 +89,7 @@ export default {
       this.$emit('validatePhone', rule, value, callback)
     };
     const validateCode = (rule, value, callback) => {
-      if (value.length !== 6) {
+      if (validatenull(value) || value.length !== 6) {
         callback(new Error("请输入6位数的验证码"));
       } else {
         callback();

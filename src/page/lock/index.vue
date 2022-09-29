@@ -37,7 +37,9 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import { mapGetters } from "vuex";
+import dayjs from 'dayjs'
+
 export default {
   name: "lock",
   data () {
@@ -61,7 +63,7 @@ export default {
   props: [],
   methods: {
     getTime () {
-      this.time = this.$dayjs().format('YYYY年MM月DD日 HH:mm:ss')
+      this.time = this.dayjs.format('YYYY年MM月DD日 HH:mm:ss')
     },
     handleLogout () {
       this.$confirm("是否退出系统, 是否继续?", "提示", {

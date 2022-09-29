@@ -18,7 +18,7 @@
 
 <script>
 import {mapGetters} from "vuex";
-import SendSmsCode from "@/components/sms/sms.vue";
+import SendSmsCode from "@/components/Sms/index.vue";
 import {isvalidatemobile} from "@/util/validate.js";
 
 

@@ -3,11 +3,11 @@ export default (app) => {
   app.mixin({
     data () {
       return {
-        dict: {}
+        dicts: {}
       }
     },
     created () {
-      let list = this.$options.dict;
+      let list = this.$options.dicts;
       if (list) {
         let result = [];
         list.forEach(ele => {
@@ -15,7 +15,7 @@ export default (app) => {
             let obj = {}
             obj[ele] = []
             remote(ele).then(res => {
-              obj[ele] = res.data
+              obj[ele] = res.data.data
               resolve(obj)
             }).catch(() => {
               resolve(obj)
@@ -24,7 +24,7 @@ export default (app) => {
         })
         Promise.all(result).then(res => {
           res.forEach(ele => {
-            this.dict = Object.assign(this.dict, ele)
+            this.dict = Object.assign(this.dicts, ele)
           })
         })
       }

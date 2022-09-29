@@ -71,6 +71,9 @@
         @row-update="handleItemUpdate"
         @row-save="handleItemSave"
         @row-del="rowItemDel">
+        <template #type="scope">
+          <dict-tag :options="scope.dic" :value="scope.row.type"/>
+        </template>
       </avue-crud>
     </el-dialog>
   </div>
@@ -97,10 +100,10 @@ import {
       return {
         searchForm: {},
         form: {
-          type: undefined,
+          dictKey: undefined,
           dictId: undefined
         },
-        dictType: undefined,
+        dictKey: undefined,
         dictId: undefined,
         dialogFormVisible: false,
         tableData: [],
@@ -189,7 +192,7 @@ import {
       },
       handleItem: function (row) {
         this.dictId = row.id
-        this.dictType = row.type
+        this.dictKey = row.dictKey
         this.getDictItemList()
       },
       getDictItemList() {
@@ -203,7 +206,7 @@ import {
         })
       },
       handleBeforeOpen(done) {
-        this.form.type = this.dictType
+        this.form.dictKey = this.dictKey
         this.form.dictId = this.dictId
         done()
       },

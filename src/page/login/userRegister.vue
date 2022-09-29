@@ -53,7 +53,7 @@
 <script>
 import {registerUser} from "@/api/login";
 import {mapGetters} from "vuex";
-import SendSmsCode from "@/components/sms/sms.vue";
+import SendSmsCode from "@/components/Sms/index.vue";
 import {checkPassword, checkPhone, validateUsername} from '@/const/crud/admin/user'
 
 export default {

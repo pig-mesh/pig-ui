@@ -25,13 +25,13 @@ export const tableOption = {
   showClomnuBtn: false,
   searchMenuSpan: 6,
   column: [{
-    label: '类型',
-    prop: 'type',
+    label: '标识',
+    prop: 'dictKey',
     search: true,
     editDisabled: true,
     rules: [{
       required: true,
-      message: '请输入字典类型',
+      message: '请输入字典标识',
       trigger: 'blur'
     }]
   }, {
@@ -47,7 +47,7 @@ export const tableOption = {
     prop: 'systemFlag',
     type: 'radio',
     border: true,
-    dicUrl: '/admin/dict/type/dict_type',
+    dicUrl: '/admin/dict/key/dict_type',
     rules: [{
       required: true,
       message: '请选择字典类型',
@@ -80,8 +80,8 @@ export const tableDictItemOption = {
   showClomnuBtn: false,
   searchSize: 'mini',
   column: [{
-    label: '类型',
-    prop: 'type',
+    label: '标识',
+    prop: 'dictKey',
     addDisabled: true,
     editDisabled: true
   }, {
@@ -101,6 +101,18 @@ export const tableDictItemOption = {
       message: '请输入标签名',
       trigger: 'blur'
     }]
+  }, {
+    label: '展示类型',
+    prop: 'type',
+    type: 'select',
+    border: true,
+    dicUrl: '/admin/dict/key/dict_css_type',
+    rules: [{
+      // required: true,
+      message: '请选择展示类型',
+      trigger: 'blur'
+    }],
+    search: true
   }, {
     label: '描述',
     prop: 'description',

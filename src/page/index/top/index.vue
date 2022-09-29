@@ -28,7 +28,7 @@
       </div>
       <div class="top-user">
         <img class="top-bar__img"
-             :src="userInfo.avatar || '/img/head.png'">
+             :src="baseUrl + userInfo.avatar || '/img/head.png'">
         <el-dropdown>
           <span class="el-dropdown-link">
             {{ userInfo.username }}

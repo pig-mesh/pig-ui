@@ -30,12 +30,12 @@
         <el-table-column prop="path" label="组件路径" :show-overflow-tooltip="true"></el-table-column>
         <el-table-column prop="type" label="类型" width="80" align="center">
           <template #="scope">
-            <dict-tag :options="menu_type_status" :value="scope.row.type"/>
+            <dict-tag :options="dicts.menu_type_status" :value="scope.row.type"/>
           </template>
         </el-table-column>
         <el-table-column prop="keepAlive" label="缓冲" width="80" align="center">
           <template #="scope">
-            <dict-tag :options="keepalive_status" :value="scope.row.type"/>
+            <dict-tag :options="dicts.keepalive_status" :value="scope.row.type"/>
           </template>
         </el-table-column>
         <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
@@ -73,6 +73,7 @@ import {mapGetters} from 'vuex'
 export default {
   name: "Menu",
   components: {TableForm},
+  dicts: ["menu_type_status", "keepalive_status"],
   data() {
     return {
       addOrUpdateVisible: false,
@@ -81,17 +82,7 @@ export default {
       // 菜单表格树数据
       menuList: [],
       // 菜单树选项
-      menuOptions: [],
-      menu_type_status: [{
-        label: "菜单", value: '0', type: "success"
-      }, {
-        label: "按钮", value: '1', type: "info"
-      }],
-      keepalive_status: [{
-        label: "关闭", value: '0', type: "info"
-      }, {
-        label: "开启", value: '1', type: "success"
-      }]
+      menuOptions: []
     };
   },
   created() {

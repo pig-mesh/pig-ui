@@ -76,7 +76,6 @@
 
 <script>
 import store from "@/store";
-import {baseUrl} from "../../config/env.js";
 
 export default {
   name: "ExcelUpload",
@@ -102,8 +101,7 @@ export default {
         isUploading: false
       },
       errorVisible: false,
-      errorData: [],
-      baseUrl: baseUrl,
+      errorData: []
     };
   },
   computed: {

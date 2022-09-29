@@ -21,4 +21,5 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+*.iml
 *.sw*

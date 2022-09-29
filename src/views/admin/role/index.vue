@@ -136,7 +136,7 @@ import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@
 import {tableOption} from '@/const/crud/admin/role'
 import {fetchMenuTree} from '@/api/admin/menu'
 import {mapGetters} from 'vuex'
-import ExcelUpload from "@/components/upload/excel.vue";
+import ExcelUpload from "@/components/ExcelUpload/index.vue";
 
 export default {
   name: 'TableRole',

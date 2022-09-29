@@ -7,7 +7,7 @@
 </template>
 
 <script>
-  import Java from '@/components/editor/index.vue'
+  import Java from '@/components/Editor/index.vue'
   import {preview} from '@/api/gen/gen'
 
   export default {

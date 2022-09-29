@@ -93,9 +93,9 @@ export function putObj(obj) {
   })
 }
 
-export function remote(type) {
+export function remote(key) {
   return request({
-    url: '/admin/dict/type/' + type,
+    url: '/admin/dict/key/' + key,
     method: 'get'
   })
 }

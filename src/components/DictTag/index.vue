@@ -6,7 +6,7 @@
           :disable-transitions="true"
           :key="item.value"
           :index="index"
-          :type="item.type"
+          :type="item.type || ''"
         >
           {{ item.label }}
         </el-tag>

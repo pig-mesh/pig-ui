@@ -77,7 +77,7 @@
 import {addObj, delObj, fetchList, putObj} from '@/api/admin/post'
 import {tableOption} from '@/const/crud/admin/post'
 import {mapGetters} from 'vuex'
-import ExcelUpload from "@/components/upload/excel.vue";
+import ExcelUpload from "@/components/ExcelUpload/index.vue";
 
 export default {
   name: 'post',

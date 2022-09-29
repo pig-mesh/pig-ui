@@ -22,7 +22,7 @@ export default [{
         path: '',
         name: '',
         component: () =>
-            import( /* webpackChunkName: "views" */ '@/components/iframe/main.vue')
+            import( /* webpackChunkName: "views" */ '@/components/Iframe/main.vue')
     }]
 }, {
     path: '/info',

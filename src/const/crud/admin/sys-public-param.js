@@ -77,7 +77,7 @@ export const tableOption = {
       label: '类型',
       prop: 'systemFlag',
       type: 'select',
-      dicUrl: '/admin/dict/type/dict_type',
+      dicUrl: '/admin/dict/key/dict_type',
       rules: [{
         required: true,
         message: '请输入类型',
@@ -90,7 +90,7 @@ export const tableOption = {
       prop: 'status',
       width: 80,
       type: 'select',
-      dicUrl: '/admin/dict/type/status_type',
+      dicUrl: '/admin/dict/key/status_type',
       rules: [
         { required: true, message: '请输入值', trigger: 'blur' }
       ]
@@ -100,7 +100,7 @@ export const tableOption = {
       prop: 'publicType',
       width: 80,
       type: 'select',
-      dicUrl: '/admin/dict/type/param_type',
+      dicUrl: '/admin/dict/key/param_type',
       rules: [{
         required: true,
         message: '请选择类型',
