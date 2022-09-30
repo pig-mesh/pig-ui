@@ -45,6 +45,8 @@ import search from "./search.vue";
 import logo from "./logo.vue";
 import top from "./top/index.vue";
 import sidebar from "./sidebar/index.vue";
+import {checkToken} from '@/api/login.js'
+
 export default {
   components: {
     top,
@@ -59,6 +61,14 @@ export default {
       index: this
     };
   },
+  data() {
+    return {
+      //刷新token锁
+      refreshLock: false,
+      //刷新token的时间
+      refreshTime: '',
+    }
+  },
   computed: {
     ...mapGetters(["isHorizontal", "isRefresh", "isLock", "isCollapse", "isSearch", "menu"]),
     validSidebar () {
@@ -66,6 +76,13 @@ export default {
     }
   },
   props: [],
+  created() {
+    //实时检测刷新token
+    this.refreshToken()
+  },
+  destroyed() {
+    clearInterval(this.refreshTime)
+  },
   methods: {
     //打开菜单
     openMenu (item = {}) {
@@ -95,6 +112,11 @@ export default {
 
       });
     },
+    refreshToken() {
+      this.refreshTime = setInterval(() => {
+        checkToken(this.refreshLock, this.$store)
+      }, 10000)
+    }
   }
 };
 </script>

@@ -103,6 +103,8 @@ export const logout = () => {
 
 /**
  * 校验令牌，若有效期小于半小时自动续期
+ * 
+ * 定时任务请求后端接口返回实际的有效时间，不进行本地计算避免 客户端和服务器机器时钟不一致
  * @param refreshLock
  */
 export const checkToken = (refreshLock, $store) => {
