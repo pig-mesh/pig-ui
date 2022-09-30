@@ -25,7 +25,9 @@
           将文件拖到此处，或
           <em>点击上传</em>
         </div>
-        <div class="el-upload__tip text-center" slot="tip">
+
+        <template #tip>
+          <div class="el-upload__tip text-center">
           <span>仅允许导入xls、xlsx格式文件。</span>
           <el-button
               text
@@ -37,6 +39,7 @@
           >下载模板
           </el-button>
         </div>
+        </template>
       </el-upload>
       <template #footer>
         <div class="dialog-footer">
