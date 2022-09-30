@@ -130,7 +130,6 @@ const user = {
           const data = res.data.data
           let menu = deepClone(data);
           menu.forEach(ele => formatPath(ele, true));
-          let type = obj.type
           commit('SET_MENUALL', menu)
           commit('SET_MENU', menu)
           resolve(menu)

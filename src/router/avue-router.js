@@ -122,7 +122,7 @@ export const formatPath = (ele, first) => {
   const icon = ele[propsDefault.icon];
   ele[propsDefault.icon] = !icon ? propsDefault.iconDefault : icon;
   ele.meta = ele.meta || {}
-  const iframeComponent = 'components/iframe/main';
+  const iframeComponent = 'components/Iframe/main';
   const iframeSrc = (href) => {
     return href.replace(/&/g, "#")
   }
