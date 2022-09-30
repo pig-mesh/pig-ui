@@ -10,7 +10,7 @@
   "dependencies": {
     "element-plus": "^2.2.16",
     "@element-plus/icons-vue": "^0.2.4",
-    "@smallwei/avue": "^3.1.4",
+    "@smallwei/avue": "^3.1.6",
     "avue-form-design": "^3.0.0",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
@@ -21,7 +21,6 @@
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
     "qs": "^6.10.3",
-    "vite-plugin-mock": "^2.9.4",
     "vue": "^3.2.26",
     "vue-axios": "^2.1.2",
     "vue-i18n": "^9.1.2",
