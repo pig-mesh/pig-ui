@@ -4,8 +4,7 @@
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
-    "build:docker": "vite build --dest=./docker/dist/",
-    "serve": "vite preview --host"
+    "build:docker": "vite build --dest=./docker/dist/"
   },
   "dependencies": {
     "element-plus": "^2.2.16",
