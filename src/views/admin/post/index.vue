@@ -18,7 +18,7 @@
   <div class="execution">
     <basic-container>
       <avue-crud ref="crud"
-                 :page.sync="page"
+                 v-model:page="page"
                  :data="tableData"
                  :permission="permissionList"
                  :table-loading="tableLoading"

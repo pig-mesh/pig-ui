@@ -10,7 +10,7 @@
     "element-plus": "^2.2.16",
     "@element-plus/icons-vue": "^0.2.4",
     "@smallwei/avue": "^3.1.6",
-    "avue-form-design": "^3.0.0",
+    "avue-form-design": "^3.0.2",
     "animate.css": "^4.1.1",
     "axios": "^0.21.1",
     "benz-amr-recorder": "^1.1.3",

@@ -22,7 +22,7 @@
           :option="option"
           ref="crud"
           v-model="form"
-          :page.sync="page"
+          v-model:page="page"
           @on-load="getList"
           @size-change="sizeChange"
           @current-change="currentChange"

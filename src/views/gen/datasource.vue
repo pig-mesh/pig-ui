@@ -21,7 +21,7 @@
       <avue-crud
         ref="data-source-settings-crud"
         v-model="dsForm"
-        :page.sync="page"
+        v-model:page="page"
         :data="tableDsData"
         :option="tableDsOption"
         :before-open="handleOpenBefore"

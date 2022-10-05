@@ -20,7 +20,7 @@
     <basic-container>
       <avue-crud
         ref="crud"
-        :page.sync="page"
+        v-model:page="page"
         :data="tableData"
         :permission="permissionList"
         :table-loading="tableLoading"
@@ -60,7 +60,7 @@
       @close="dictItemVisible">
       <avue-crud
         ref="crudItem"
-        :page.sync="itemPage"
+        v-model:page="itemPage"
         :data="tableDictItemData"
         :permission="permissionList"
         v-model="form"

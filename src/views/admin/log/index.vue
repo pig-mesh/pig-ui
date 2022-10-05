@@ -20,7 +20,7 @@
     <basic-container>
       <avue-crud
         ref="crud"
-        :page.sync="page"
+        v-model:page="page"
         :data="tableData"
         :table-loading="tableLoading"
         :option="tableOption"
@@ -32,7 +32,7 @@
         @current-change="currentChange"
         @row-del="rowDel"
       >
-        <template #menu-left="scope">
+        <template #menu-left>
           <el-button
             v-if="permissions.sys_user_import_export"
             class="filter-item"

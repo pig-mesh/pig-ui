@@ -19,7 +19,7 @@
   <div class="execution">
     <basic-container>
       <avue-crud ref="crud"
-                 :page.sync="page"
+                 v-model:page="page"
                  :data="tableData"
                  :table-loading="tableLoading"
                  :option="tableOption"

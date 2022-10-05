@@ -19,7 +19,7 @@
     <basic-container>
       <avue-crud
         v-model="tableForm"
-        :page.sync="page"
+        v-model:page="page"
         :data="tableData"
         :permission="permissionList"
         :table-loading="tableLoading"
