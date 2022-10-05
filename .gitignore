@@ -23,7 +23,3 @@ yarn-error.log*
 *.sln
 *.iml
 *.sw*
-
-# lock file
-*.lock
-package-lock.json

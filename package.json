@@ -7,15 +7,15 @@
     "build:docker": "vite build --dest=./docker/dist/"
   },
   "dependencies": {
-    "element-plus": "^2.2.16",
     "@element-plus/icons-vue": "^0.2.4",
     "@smallwei/avue": "^3.1.6",
-    "avue-form-design": "^3.0.2",
     "animate.css": "^4.1.1",
+    "avue-form-design": "^3.0.2",
     "axios": "^0.21.1",
     "benz-amr-recorder": "^1.1.3",
     "codemirror": "^5.58.1",
     "crypto-js": "^4.1.1",
+    "element-plus": "^2.2.16",
     "js-cookie": "^3.0.1",
     "mockjs": "^1.1.0",
     "nprogress": "^0.2.0",
