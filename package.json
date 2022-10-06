@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^0.2.4",
-    "@smallwei/avue": "^3.1.6",
+    "@smallwei/avue": "^3.2.0",
     "animate.css": "^4.1.1",
     "avue-form-design": "^3.0.2",
     "axios": "^0.21.1",
