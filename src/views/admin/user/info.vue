@@ -26,7 +26,6 @@
         <el-col :span="12">
           <div class="grid-content bg-purple">
             <el-form :model="userInfoForm"
-                     :rules="userInfoFormRules"
                      ref="userInfoForm"
                      label-width="100px"
                      v-if="switchStatus==='userManager'"
@@ -56,35 +55,35 @@
                 <el-button @click="resetForm('userInfoForm')">重置</el-button>
               </el-form-item>
             </el-form>
-            <el-form v-model="userInfoForm"
-                     :rules="userInfoFormRules"
-                     ref="userInfoForm"
+            <el-form :model="passwordForm"
+                     :rules="passwordFormRules"
+                     ref="passwordForm"
                      label-width="100px"
                      v-if="switchStatus==='passwordManager'"
                      class="demo-ruleForm">
               <el-form-item label="原密码"
                             prop="password">
                 <el-input type="password"
-                          v-model="userInfoForm.password"
+                          v-model="passwordForm.password"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item label="密码"
                             prop="newpassword1">
                 <el-input type="password"
-                          v-model="userInfoForm.newpassword1"
+                          v-model="passwordForm.newpassword1"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item label="确认密码"
                             prop="newpassword2">
                 <el-input type="password"
-                          v-model="userInfoForm.newpassword2"
+                          v-model="passwordForm.newpassword2"
                           auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary"
-                           @click="submitForm('userInfoForm')">提交
+                           @click="submitForm('passwordForm')">提交
                 </el-button>
-                <el-button @click="resetForm('userInfoForm')">重置</el-button>
+                <el-button @click="resetForm('passwordForm')">重置</el-button>
               </el-form-item>
             </el-form>
           </div>
@@ -106,8 +105,9 @@ export default {
   components: {SendSmsCode, ImageUpload},
   data() {
     const validatePass = (rule, value, callback) => {
-      if (this.userInfoForm.password !== '') {
-        if (value !== this.userInfoForm.newpassword1) {
+      if (this.passwordForm.password !== '') {
+        if (value !== this.passwordForm.newpassword1) {
+          debugger
           callback(new Error('两次输入密码不一致!'))
         } else {
           callback()
@@ -121,13 +121,16 @@ export default {
       codeShow: false,
       userInfoForm: {
         username: '',
-        password: '',
-        newpassword1: '',
-        newpassword2: '',
         phone: '',
         avatar: ''
       },
-      userInfoFormRules: {
+      passwordForm:{
+        password: '',
+        newpassword1: '',
+        newpassword2: '',
+        phone: ''
+      },
+      passwordFormRules: {
         password: [{required: true, min: 6, message: '原密码不能为空且不少于6位', trigger: 'change'}],
         newpassword1: [{required: false, min: 6, message: '不少于6位', trigger: 'change'}],
         newpassword2: [{required: false, validator: validatePass, trigger: 'blur'}]
@@ -139,6 +142,7 @@ export default {
     this.switchStatus = 'userManager'
     this.userInfoForm.username = this.userInfo.username
     this.userInfoForm.phone = this.userInfo.phone
+    this.passwordForm.phone = this.userInfo.phone
     this.userInfoForm.avatar = this.userInfo.avatar
   },
   computed: {
@@ -164,7 +168,7 @@ export default {
       if (this.switchStatus === 'userManager') {
         this.$refs.smsCodeForm.validate((valid2) => {
           if (valid2) {
-            this.edit()
+            this.edit(this.userInfoForm)
           }
         })
       }
@@ -172,7 +176,7 @@ export default {
       if (this.switchStatus === 'passwordManager') {
         this.$refs[formName].validate(valid => {
           if (valid) {
-            this.edit()
+            this.edit(this.passwordForm)
           }
         })
       }
@@ -180,8 +184,8 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields()
     },
-    edit() {
-      editInfo(this.userInfoForm).then(response => {
+    edit(form) {
+      editInfo(form).then(response => {
         if (response.data.data) {
           // 更新Vuex个人信息
           this.$store.dispatch('GetUserInfo')

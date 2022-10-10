@@ -55,7 +55,7 @@ axios.interceptors.response.use(res => {
   const message = res.data.msg || errorCode[status] || errorCode['default']
 
   // 后台定义 424 针对令牌过去的特殊响应码
-  if (status === 401) {
+  if (status === 424) {
     ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '系统提示', {
       confirmButtonText: '重新登录',
       cancelButtonText: '取消',

@@ -14,6 +14,7 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
+import { validatenull } from '@/util/validate'
 import request from '@/router/axios'
 import store from '@/store'
 import qs from 'qs'
@@ -111,6 +112,10 @@ export const checkToken = (refreshLock, $store) => {
   const token = store.getters.access_token
   // 获取当前选中的 basic 认证信息
   let basicAuth = getStore({name: 'basicAuth'})
+
+  if(validatenull(token) || validatenull(basicAuth)){
+      return;
+  }
 
   request({
     url: '/auth/token/check_token',
