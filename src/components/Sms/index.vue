@@ -51,6 +51,10 @@ export default {
     phoneLabel: {
       type: String
     },
+    exist:{
+      type: Boolean,
+      default: false
+    },
     codeLabel: {
       type: String
     },
@@ -121,7 +125,8 @@ export default {
       // 发送验证码
       this.$refs.smsForm.validateField("phone", (valid) => {
         if (valid) {
-          sendSmsCode(this.smsForm.phone).then((response) => {
+          this.smsForm.exist = this.exist
+          sendSmsCode(this.smsForm).then((response) => {
             if (response.data.data) {
               this.$message.success("验证码发送成功");
               this.$emit('smsForm', this.smsForm)

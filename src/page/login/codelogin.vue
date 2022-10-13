@@ -4,7 +4,7 @@
       status-icon
       label-width="0"
   >
-    <SendSmsCode v-model="smsCodeForm" ref="smsCodeForm" @validatePhone="validatePhone"/>
+    <SendSmsCode v-model="smsCodeForm" exist="true" ref="smsCodeForm" @validatePhone="validatePhone"/>
     <el-form-item>
       <el-button
           type="primary"

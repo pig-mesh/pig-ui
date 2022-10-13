@@ -162,9 +162,10 @@ export const registerUser = (userInfo) => {
 /**
  * 发送短信
  */
-export const sendSmsCode = (mobile) => {
+export const sendSmsCode = (form) => {
   return request({
-    url: "/admin/app/" + mobile,
-    method: "get",
+    url: "/admin/app/sms",
+    method: 'post',
+    data: form
   })
 }
