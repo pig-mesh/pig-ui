@@ -19,7 +19,7 @@
         <span>{{ getTitle(item) }}</span>
       </template>
       <template
-      v-for="(child,cindex) in item[childrenKey]">
+        v-for="(child,cindex) in item[childrenKey]">
         <el-menu-item
           v-if="validatenull(child[childrenKey])"
           :key="cindex"

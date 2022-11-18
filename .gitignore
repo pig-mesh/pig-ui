@@ -22,3 +22,5 @@ yarn-error.log*
 *.sln
 *.iml
 *.sw*
+.idea
+.fleet

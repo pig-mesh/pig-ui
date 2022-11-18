@@ -96,7 +96,7 @@
           >删除
           </el-button>
         </template>
-        <template>
+        <template #deptId-form>
           <avue-input-tree
             v-model="form.deptId"
             placeholder="请选择所属部门"
@@ -105,7 +105,7 @@
             :props="defaultProps"
           ></avue-input-tree>
         </template>
-        <template>
+        <template #role-form>
           <avue-select
             v-model="role"
             multiple
@@ -114,7 +114,7 @@
             :props="roleProps"
           ></avue-select>
         </template>
-        <template>
+        <template #post-form>
           <avue-select
             v-model="post"
             multiple
