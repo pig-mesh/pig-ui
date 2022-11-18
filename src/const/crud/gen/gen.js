@@ -163,6 +163,7 @@ export const tableDsOption = {
   border: true,
   index: true,
   indexLabel: '序号',
+  indexWidth: 60,
   stripe: true,
   menuAlign: 'center',
   align: 'center',

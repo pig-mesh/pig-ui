@@ -2,6 +2,7 @@ export const tableOption = {
   'border': true,
   'index': true,
   'indexLabel': '序号',
+  'indexWidth': 60,
   'stripe': true,
   addBtn: false,
   'menuAlign': 'center',

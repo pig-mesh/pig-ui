@@ -1,4 +1,4 @@
-import {createApp} from 'vue'
+import { createApp } from 'vue'
 import 'element-plus/dist/index.css'
 import '@smallwei/avue/lib/index.css'
 import animate from 'animate.css'
@@ -8,8 +8,8 @@ import axios from '@/router/axios.js'
 import router from '@/router/index.js'
 import store from '@/store/index.js'
 import i18n from '@/lang/index.js'
-import {getScreen, downBlobFile} from '@/util/index.js'
-import {baseUrl} from '@/config/env.js'
+import { getScreen, downBlobFile } from '@/util/index.js'
+import { baseUrl } from '@/config/env.js'
 import dict from '@/util/dict.js'
 import '@/permission.js'
 import error from '@/error.js'
@@ -25,7 +25,7 @@ import App from './App.vue'
 window.axios = axios
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-    app.component(key, component)
+  app.component(key, component)
 }
 //注册全局容器
 app.component('basicContainer', basicContainer)
@@ -44,7 +44,7 @@ app.use(store)
 app.use(router)
 app.use(ElementPlus)
 app.use(Avue, {
-    axios
+  axios
 })
 app.use(AvueFormDesign)
 app.mount('#app')

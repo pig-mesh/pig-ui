@@ -18,6 +18,7 @@ export const tableOption = {
   border: true,
   index: true,
   indexLabel: '序号',
+  indexWidth: 60,
   stripe: true,
   menuAlign: 'center',
   align: 'center',
@@ -73,6 +74,8 @@ export const tableDictItemOption = {
   border: true,
   index: true,
   indexLabel: '序号',
+  'indexWidth': 60,
+
   stripe: true,
   menuAlign: 'center',
   align: 'center',
