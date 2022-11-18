@@ -1,10 +1,13 @@
 <template>
-  <div class="avue-contail"
-       :class="{'avue--collapse':isCollapse,}">
-    <div class="avue-layout"
-         :class="{'avue-layout--horizontal':isHorizontal}">
-      <div class="avue-sidebar"
-           v-show="validSidebar">
+  <div
+    class="avue-contail"
+    :class="{'avue--collapse':isCollapse,}">
+    <div
+      class="avue-layout"
+      :class="{'avue-layout--horizontal':isHorizontal}">
+      <div
+        v-show="validSidebar"
+        class="avue-sidebar">
         <!-- 左侧导航栏 -->
         <logo />
         <sidebar />
@@ -15,13 +18,15 @@
         <!-- 顶部标签卡 -->
         <tags />
         <transition name="fade-scale">
-          <search class="avue-view"
-                  v-show="isSearch"></search>
+          <search
+            v-show="isSearch"
+            class="avue-view"></search>
         </transition>
         <!-- 主体视图层 -->
-        <div id="avue-view"
-             v-show="!isSearch"
-             v-if="isRefresh">
+        <div
+          v-show="!isSearch"
+          v-if="isRefresh"
+          id="avue-view">
           <router-view #="{ Component }">
             <keep-alive :include="$store.getters.tagsKeep">
               <component :is="Component" />
@@ -39,15 +44,16 @@
 
 <script>
 import { validatenull } from '@/util/validate'
-import { mapGetters } from "vuex";
-import tags from "./tags.vue";
-import search from "./search.vue";
-import logo from "./logo.vue";
-import top from "./top/index.vue";
-import sidebar from "./sidebar/index.vue";
-import {checkToken} from '@/api/login.js'
+import { mapGetters } from 'vuex'
+import tags from './tags.vue'
+import search from './search.vue'
+import logo from './logo.vue'
+import top from './top/index.vue'
+import sidebar from './sidebar/index.vue'
+import { checkToken } from '@/api/login.js'
 
 export default {
+  name: 'index',
   components: {
     top,
     logo,
@@ -55,27 +61,25 @@ export default {
     search,
     sidebar
   },
-  name: "index",
-  provide () {
+  provide() {
     return {
       index: this
-    };
+    }
   },
   data() {
     return {
       //刷新token锁
       refreshLock: false,
       //刷新token的时间
-      refreshTime: '',
+      refreshTime: ''
     }
   },
   computed: {
-    ...mapGetters(["isHorizontal", "isRefresh", "isLock", "isCollapse", "isSearch", "menu"]),
-    validSidebar () {
-      return !((this.$route.meta || {}).menu == false || (this.$route.query || {}).menu == 'false')
+    ...mapGetters(['isHorizontal', 'isRefresh', 'isLock', 'isCollapse', 'isSearch', 'menu']),
+    validSidebar() {
+      return !((this.$route.meta || {}).menu === false || (this.$route.query || {}).menu === 'false')
     }
   },
-  props: [],
   created() {
     //实时检测刷新token
     this.refreshToken()
@@ -85,32 +89,32 @@ export default {
   },
   methods: {
     //打开菜单
-    openMenu (item = {}) {
-      this.$store.dispatch("GetMenu", item.id).then(data => {
+    openMenu(item = {}) {
+      this.$store.dispatch('GetMenu', item.id).then(data => {
         if (data.length !== 0) {
-          this.$router.$avueRouter.formatRoutes(data, true);
+          this.$router.$avueRouter.formatRoutes(data, true)
         }
         //当点击顶部菜单做的事件
         if (!validatenull(item)) {
-          let itemActive = {},
-            childItemActive = 0;
+          let itemActive = {}
+          const childItemActive = 0
           //vue-router路由
           if (item.path) {
-            itemActive = item;
+            itemActive = item
           } else {
-            if (this.menu[childItemActive].length == 0) {
-              itemActive = this.menu[childItemActive];
+            if (this.menu[childItemActive].length === 0) {
+              itemActive = this.menu[childItemActive]
             } else {
-              itemActive = this.menu[childItemActive].children[childItemActive];
+              itemActive = this.menu[childItemActive].children[childItemActive]
             }
           }
-          this.$store.commit('SET_MENUID', item);
+          this.$store.commit('SET_MENUID', item)
           this.$router.push({
             path: itemActive.path
-          });
+          })
         }
 
-      });
+      })
     },
     refreshToken() {
       this.refreshTime = setInterval(() => {
@@ -118,5 +122,5 @@ export default {
       }, 10000)
     }
   }
-};
+}
 </script>

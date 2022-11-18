@@ -15,8 +15,8 @@
       </el-form>
 
       <el-table
-        border
         v-loading="loading"
+        border
         :data="deptList"
         row-key="id"
         default-expand-all
@@ -44,28 +44,28 @@
         >
           <template #="scope">
             <el-button
-                text
+              v-if="permissions.sys_dept_add"
+              text
               type="primary"
               icon="el-icon-plus"
               @click="addOrUpdateHandle(false, scope.row.id)"
-              v-if="permissions.sys_dept_add"
-              >新增
+            >新增
             </el-button>
             <el-button
-                text
+              v-if="permissions.sys_dept_edit"
+              text
               type="primary"
               icon="el-icon-edit"
               @click="addOrUpdateHandle(true, scope.row.id)"
-              v-if="permissions.sys_dept_edit"
-              >修改
+            >修改
             </el-button>
             <el-button
-                text
-                type="primary"
-                icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
               v-if="permissions.sys_dept_del"
-              >删除
+              text
+              type="primary"
+              icon="el-icon-delete"
+              @click="handleDelete(scope.row)"
+            >删除
             </el-button>
           </template>
         </el-table-column>
@@ -81,12 +81,12 @@
 </template>
 
 <script>
-import { delObj, fetchTree } from "@/api/admin/dept";
-import TableForm from "./dept-form.vue";
-import { mapGetters } from "vuex";
+import { delObj, fetchTree } from '@/api/admin/dept'
+import TableForm from './dept-form.vue'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "Dept",
+  name: 'Dept',
   components: { TableForm },
   data() {
     return {
@@ -95,42 +95,42 @@ export default {
       loading: true,
       //表格树数据
       deptList: []
-    };
+    }
   },
   created() {
-    this.getList();
+    this.getList()
   },
   computed: {
-    ...mapGetters(["permissions"])
+    ...mapGetters(['permissions'])
   },
   methods: {
     addOrUpdateHandle(isEdit, id) {
-      this.addOrUpdateVisible = true;
+      this.addOrUpdateVisible = true
       this.$nextTick(() => {
-        this.$refs.addOrUpdate.init(isEdit, id);
-      });
+        this.$refs.addOrUpdate.init(isEdit, id)
+      })
     },
     getList() {
-      this.loading = true;
+      this.loading = true
       fetchTree().then(response => {
-        this.deptList = response.data.data;
-        this.loading = false;
-      });
+        this.deptList = response.data.data
+        this.loading = false
+      })
     },
     handleDelete(row) {
-      this.$confirm('是否确认删除名称为"' + row.name + '"的数据项?', "警告", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      this.$confirm('是否确认删除名称为"' + row.name + '"的数据项?', '警告', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(function() {
-          return delObj(row.id);
+          return delObj(row.id)
         })
         .then(() => {
-          this.getList();
-          this.$message.success("删除成功");
-        });
+          this.getList()
+          this.$message.success('删除成功')
+        })
     }
   }
-};
+}
 </script>

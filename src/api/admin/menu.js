@@ -20,7 +20,7 @@ import request from '@/router/axios'
 export function getMenu(id) {
   return request({
     url: '/admin/menu',
-    params: {parentId: id},
+    params: { parentId: id },
     method: 'get'
   })
 }
@@ -29,7 +29,7 @@ export function fetchMenuTree(lazy, parentId) {
   return request({
     url: '/admin/menu/tree',
     method: 'get',
-    params: {lazy: lazy, parentId: parentId}
+    params: { lazy: lazy, parentId: parentId }
   })
 }
 
@@ -63,10 +63,10 @@ export function putObj(obj) {
   })
 }
 
-export function clearMenuCache(){
+export function clearMenuCache() {
   return request({
-    url:'/admin/menu/cache',
-    method:'delete'
+    url: '/admin/menu/cache',
+    method: 'delete'
   })
 }
 

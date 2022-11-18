@@ -85,7 +85,7 @@ export default {
     phoneLogin: '手机号登录',
     thirdLogin: '第三方登录',
     msgText: '发送验证码',
-    msgSuccess: '秒后重发',
+    msgSuccess: '秒后重发'
   },
   navbar: {
     setting: '个人设置',

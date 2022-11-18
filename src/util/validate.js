@@ -60,7 +60,7 @@ export function validatAlphabets(str) {
 }
 
 /* 验证pad还是pc */
-export const vaildatePc = function () {
+export const vaildatePc = function() {
   const userAgentInfo = navigator.userAgent
   const Agents = ['Android', 'iPhone',
     'SymbianOS', 'Windows Phone',

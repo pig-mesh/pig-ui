@@ -46,7 +46,7 @@ export default {
     table: {
       rw: 'Work Tasks',
       nr: 'Work content',
-      sj: 'Working hours',
+      sj: 'Working hours'
     }
   },
   route: {
@@ -85,7 +85,7 @@ export default {
     thirdLogin: 'thirdLogin',
     faceLogin: 'faceLogin',
     msgText: 'send code',
-    msgSuccess: 'reissued code',
+    msgSuccess: 'reissued code'
   },
   navbar: {
     setting: 'setting',

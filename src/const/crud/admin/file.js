@@ -22,13 +22,13 @@ export const tableOption = {
   stripe: true,
   menuAlign: 'center',
   align: 'center',
-  viewBtn:false,
+  viewBtn: false,
   searchMenuSpan: 6,
-  editBtn:false,
+  editBtn: false,
   saveBtn: false,
   addBtn: true,
   column: [
-	  {
+    {
       label: '编号',
       prop: 'id',
       hide: true,
@@ -45,33 +45,33 @@ export const tableOption = {
         res: 'data'
       },
       tip: '上传同步至文件服务器',
-      action: "/admin/sys-file/upload"
+      action: '/admin/sys-file/upload'
     },
     {
       label: '空间',
       prop: 'bucketName',
-      overHidden:true,
+      overHidden: true,
       addDisplay: false
     },
-	  {
+    {
       label: '文件名',
       prop: 'fileName',
-      overHidden:true,
+      overHidden: true,
       search: true,
       addDisplay: false
     },
-	  {
+    {
       label: '原文件名',
       prop: 'original',
-      overHidden:true,
+      overHidden: true,
       addDisplay: false
     },
-	  {
+    {
       label: '文件类型',
       prop: 'type',
       addDisplay: false
     },
-	  {
+    {
       label: '文件大小',
       prop: 'fileSize',
       addDisplay: false
@@ -90,7 +90,7 @@ export const tableOption = {
       valueFormat: 'YYYY-MM-DD HH:mm:ss',
       editDisabled: true,
       addDisplay: false,
-      span: 24,
+      span: 24
     }
   ]
 }

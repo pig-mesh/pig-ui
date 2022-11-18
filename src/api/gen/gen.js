@@ -92,7 +92,7 @@ export function handleDown(table) {
     link.download = filename
     document.body.appendChild(link)
     link.click()
-    window.setTimeout(function () {
+    window.setTimeout(function() {
       URL.revokeObjectURL(blob)
       document.body.removeChild(link)
     }, 0)

@@ -49,15 +49,15 @@
 </template>
 
 <script>
-import {addObj, delObj, fetchList, putObj, refreshCache} from '@/api/admin/sys-public-param'
-import {tableOption} from '@/const/crud/admin/sys-public-param'
-import {mapGetters} from 'vuex'
+import { addObj, delObj, fetchList, putObj, refreshCache } from '@/api/admin/sys-public-param'
+import { tableOption } from '@/const/crud/admin/sys-public-param'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'Syspublicparam',
   data() {
     return {
-      tableForm:{},
+      tableForm: {},
       searchForm: {},
       tableData: [],
       page: {
@@ -92,12 +92,12 @@ export default {
         this.tableLoading = false
       })
     },
-    rowDel: function (row, index) {
+    rowDel: function(row, index) {
       this.$confirm('是否确认删除ID为' + row.publicId, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function () {
+      }).then(function() {
         return delObj(row.publicId)
       }).then(data => {
         this.getList(this.page)
@@ -117,7 +117,7 @@ export default {
      * @param done 为表单关闭函数
      *
      **/
-    handleUpdate: function (row, index, done, loading) {
+    handleUpdate: function(row, index, done, loading) {
       putObj(row).then(data => {
         this.$message.success('修改成功')
         done()
@@ -132,7 +132,7 @@ export default {
      * @param done 为表单关闭函数
      *
      **/
-    handleSave: function (row, done, loading) {
+    handleSave: function(row, done, loading) {
       addObj(row).then(data => {
         this.$message.success('添加成功')
         done()
@@ -156,10 +156,10 @@ export default {
     currentChange(current) {
       this.page.currentPage = current
     },
-    handleRefreshCache: function () {
+    handleRefreshCache: function() {
       refreshCache().then(() => {
         this.$message.success('清除缓存成功')
-      }).catch(function () {
+      }).catch(function() {
       })
     }
   }

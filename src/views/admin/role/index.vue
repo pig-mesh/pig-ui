@@ -19,111 +19,111 @@
   <div class="app-container calendar-list-container">
     <basic-container>
       <avue-crud
-          ref="crud"
-          :option="tableOption"
-          :data="list"
-          v-model:page="page"
-          v-model="form"
-          :table-loading="listLoading"
-          @on-load="getList"
-          @search-change="handleFilter"
-          @refresh-change="handleRefreshChange"
-          @row-update="update"
-          @row-save="create">
+        ref="crud"
+        v-model:page="page"
+        v-model="form"
+        :option="tableOption"
+        :data="list"
+        :table-loading="listLoading"
+        @on-load="getList"
+        @search-change="handleFilter"
+        @refresh-change="handleRefreshChange"
+        @row-update="update"
+        @row-save="create">
 
         <template #menu-left="{}">
           <el-button
-              v-if="permissions.sys_role_add"
-              class="filter-item"
-              type="primary"
-              icon="el-icon-edit"
-              @click="$refs.crud.rowAdd()">添加
+            v-if="permissions.sys_role_add"
+            class="filter-item"
+            type="primary"
+            icon="el-icon-edit"
+            @click="$refs.crud.rowAdd()">添加
           </el-button>
           <el-button
-              v-if="permissions.sys_role_import_export"
-              class="filter-item"
-              plain
-              type="primary"
-              icon="el-icon-upload"
-              @click="$refs.excelUpload.show()"
+            v-if="permissions.sys_role_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            icon="el-icon-upload"
+            @click="$refs.excelUpload.show()"
           >导入
           </el-button>
           <el-button
-              v-if="permissions.sys_role_import_export"
-              class="filter-item"
-              plain
-              type="primary"
-              icon="el-icon-download"
-              @click="exportExcel"
+            v-if="permissions.sys_role_import_export"
+            class="filter-item"
+            plain
+            type="primary"
+            icon="el-icon-download"
+            @click="exportExcel"
           >导出
           </el-button>
         </template>
 
         <template #menu="{row,index,size}">
           <el-button
-              text
-              v-if="permissions.sys_role_edit"
-              type="primary"
-              icon="el-icon-edit"
-              :size="size"
-              @click="handleUpdate(row,index)">编辑
+            v-if="permissions.sys_role_edit"
+            text
+            type="primary"
+            icon="el-icon-edit"
+            :size="size"
+            @click="handleUpdate(row,index)">编辑
           </el-button>
           <el-button
-              text
-              v-if="permissions.sys_role_perm"
-              type="primary"
-              icon="el-icon-plus"
-              :size="size"
-              @click="handlePermission(row,index)">权限
+            v-if="permissions.sys_role_perm"
+            text
+            type="primary"
+            icon="el-icon-plus"
+            :size="size"
+            @click="handlePermission(row,index)">权限
           </el-button>
           <el-button
-              text
-              v-if="permissions.sys_role_del"
-              type="primary"
-              icon="el-icon-delete"
-              :size="size"
-              @click="handleDelete(row,index)">删除
+            v-if="permissions.sys_role_del"
+            text
+            type="primary"
+            icon="el-icon-delete"
+            :size="size"
+            @click="handleDelete(row,index)">删除
           </el-button>
         </template>
       </avue-crud>
 
       <!--excel 模板导入 -->
       <excel-upload
-          ref="excelUpload"
-          title="角色信息导入"
-          url="/admin/role/import"
-          temp-name="角色信息.xlsx"
-          temp-url="/admin/sys-file/local/role.xlsx"
-          @refreshDataList="handleRefreshChange"
+        ref="excelUpload"
+        title="角色信息导入"
+        url="/admin/role/import"
+        temp-name="角色信息.xlsx"
+        temp-url="/admin/sys-file/local/role.xlsx"
+        @refreshDataList="handleRefreshChange"
       ></excel-upload>
     </basic-container>
     <el-dialog
-        v-model="dialogPermissionVisible"
-        :close-on-click-modal="false"
-        title="分配权限">
+      v-model="dialogPermissionVisible"
+      :close-on-click-modal="false"
+      title="分配权限">
       <div class="dialog-main-tree">
         <el-tree
-            ref="menuTree"
-            :data="treeData"
-            :default-checked-keys="checkedKeys"
-            :check-strictly="false"
-            :props="defaultProps"
-            :filter-node-method="filterNode"
-            class="filter-tree"
-            node-key="id"
-            highlight-current
-            show-checkbox
-            default-expand-all/>
+          ref="menuTree"
+          :data="treeData"
+          :default-checked-keys="checkedKeys"
+          :check-strictly="false"
+          :props="defaultProps"
+          :filter-node-method="filterNode"
+          class="filter-tree"
+          node-key="id"
+          highlight-current
+          show-checkbox
+          default-expand-all />
       </div>
       <template #footer>
         <div class="dialog-footer">
           <el-button
-              type="primary"
-              @click="updatePermession(roleId)">更 新
+            type="primary"
+            @click="updatePermession(roleId)">更 新
           </el-button>
           <el-button
-              type="default"
-              @click="cancal()">取消
+            type="default"
+            @click="cancal()">取消
           </el-button>
         </div>
       </template>
@@ -132,15 +132,15 @@
 </template>
 
 <script>
-import {addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj} from '@/api/admin/role'
-import {tableOption} from '@/const/crud/admin/role'
-import {fetchMenuTree} from '@/api/admin/menu'
-import {mapGetters} from 'vuex'
-import ExcelUpload from "@/components/ExcelUpload/index.vue";
+import { addObj, delObj, fetchList, fetchRoleTree, permissionUpd, putObj } from '@/api/admin/role'
+import { tableOption } from '@/const/crud/admin/role'
+import { fetchMenuTree } from '@/api/admin/menu'
+import { mapGetters } from 'vuex'
+import ExcelUpload from '@/components/ExcelUpload/index.vue'
 
 export default {
   name: 'TableRole',
-  components: {ExcelUpload},
+  components: { ExcelUpload },
   data() {
     return {
       searchForm: {},
@@ -164,7 +164,7 @@ export default {
       roleId: undefined,
       roleCode: undefined,
       rolesOptions: undefined,
-      dialogPermissionVisible: false,
+      dialogPermissionVisible: false
     }
   },
   computed: {
@@ -196,22 +196,22 @@ export default {
       this.$refs.crud.rowEdit(row, index)
     },
     cancal() {
-      this.dialogPermissionVisible = false;
+      this.dialogPermissionVisible = false
     },
     handlePermission(row) {
       fetchRoleTree(row.roleId)
-          .then(response => {
-            this.checkedKeys = response.data.data
-            return fetchMenuTree()
-          })
-          .then(response => {
-            this.treeData = response.data.data
-            // 解析出所有的太监节点
-            this.checkedKeys = this.resolveAllEunuchNodeId(this.treeData, this.checkedKeys, [])
-            this.dialogPermissionVisible = true
-            this.roleId = row.roleId
-            this.roleCode = row.roleCode
-          })
+        .then(response => {
+          this.checkedKeys = response.data.data
+          return fetchMenuTree()
+        })
+        .then(response => {
+          this.treeData = response.data.data
+          // 解析出所有的太监节点
+          this.checkedKeys = this.resolveAllEunuchNodeId(this.treeData, this.checkedKeys, [])
+          this.dialogPermissionVisible = true
+          this.roleId = row.roleId
+          this.roleCode = row.roleCode
+        })
     },
     /**
      * 解析出所有的太监节点id
@@ -240,12 +240,11 @@ export default {
       done()
     },
     handleDelete(row, index) {
-      var _this = this
       this.$confirm('是否确认删除名称为"' + row.roleName + '"' + '"的数据项?', '警告', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function () {
+      }).then(function() {
         return delObj(row.roleId)
       }).then(() => {
         this.getList(this.page)
@@ -281,12 +280,12 @@ export default {
       this.menuIds = this.$refs.menuTree.getCheckedKeys().join(',').concat(',').concat(this.$refs.menuTree.getHalfCheckedKeys().join(','))
       permissionUpd(roleId, this.menuIds).then(() => {
         this.dialogPermissionVisible = false
-        this.$store.dispatch('GetMenu', {type: false})
+        this.$store.dispatch('GetMenu', { type: false })
         this.$notify.success('修改成功')
       })
     },
     exportExcel() {
-      this.downBlobFile("/admin/role/export", {}, "role.xlsx");
+      this.downBlobFile('/admin/role/export', {}, 'role.xlsx')
     }
   }
 }

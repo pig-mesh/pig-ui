@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import { messages } from '@/lang/';
+import { messages } from '@/lang/'
 export default {
   computed: {
-    locale () {
-      let languageType = this.$store.getters.language
+    locale() {
+      const languageType = this.$store.getters.language
       return messages[languageType]
     }
   }

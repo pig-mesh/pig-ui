@@ -17,21 +17,22 @@
 <template>
   <div class="execution">
     <basic-container>
-      <avue-crud ref="crud"
-                 v-model:page="page"
-                 :data="tableData"
-                 :permission="permissionList"
-                 :table-loading="tableLoading"
-                 :option="tableOption"
-                 @on-load="getList"
-                 @search-change="searchChange"
-                 @refresh-change="refreshChange"
-                 @size-change="sizeChange"
-                 @current-change="currentChange"
-                 @row-update="handleUpdate"
-                 @row-save="handleSave"
-                 @row-del="rowDel">
-        <template #menu-left="scope">
+      <avue-crud
+        ref="crud"
+        v-model:page="page"
+        :data="tableData"
+        :permission="permissionList"
+        :table-loading="tableLoading"
+        :option="tableOption"
+        @on-load="getList"
+        @search-change="searchChange"
+        @refresh-change="refreshChange"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        @row-update="handleUpdate"
+        @row-save="handleSave"
+        @row-del="rowDel">
+        <template>
           <el-button
             v-if="permissions.sys_post_add"
             class="filter-item"
@@ -74,10 +75,10 @@
 </template>
 
 <script>
-import {addObj, delObj, fetchList, putObj} from '@/api/admin/post'
-import {tableOption} from '@/const/crud/admin/post'
-import {mapGetters} from 'vuex'
-import ExcelUpload from "@/components/ExcelUpload/index.vue";
+import { addObj, delObj, fetchList, putObj } from '@/api/admin/post'
+import { tableOption } from '@/const/crud/admin/post'
+import { mapGetters } from 'vuex'
+import ExcelUpload from '@/components/ExcelUpload/index.vue'
 
 export default {
   name: 'post',
@@ -102,12 +103,12 @@ export default {
         addBtn: this.validData(this.permissions.sys_post_add, false),
         delBtn: this.validData(this.permissions.sys_post_del, false),
         editBtn: this.validData(this.permissions.sys_post_edit, false)
-      };
+      }
     }
   },
   methods: {
     exportExcel() {
-      this.downBlobFile("/admin/post/export",{}, "post.xlsx");
+      this.downBlobFile('/admin/post/export', {}, 'post.xlsx')
     },
     handleRefreshChange() {
       this.getList(this.page)
@@ -125,35 +126,35 @@ export default {
         this.tableLoading = false
       })
     },
-    rowDel: function (row, index) {
+    rowDel: function(row, index) {
       this.$confirm('是否确认删除' + row.postName, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function () {
+      }).then(function() {
         return delObj(row.postId)
       }).then(data => {
         this.$message.success('删除成功')
         this.getList(this.page)
       })
     },
-    handleUpdate: function (row, index, done, loading) {
+    handleUpdate: function(row, index, done, loading) {
       putObj(row).then(data => {
         this.$message.success('修改成功')
         done()
         this.getList(this.page)
       }).catch(() => {
-        loading();
-      });
+        loading()
+      })
     },
-    handleSave: function (row, done, loading) {
+    handleSave: function(row, done, loading) {
       addObj(row).then(data => {
         this.$message.success('添加成功')
         done()
         this.getList(this.page)
       }).catch(() => {
-        loading();
-      });
+        loading()
+      })
     },
     sizeChange(pageSize) {
       this.page.pageSize = pageSize

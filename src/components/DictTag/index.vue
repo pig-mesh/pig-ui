@@ -3,8 +3,8 @@
     <template v-for="(item, index) in options">
       <template v-if="values.includes(item.value)">
         <el-tag
-          :disable-transitions="true"
           :key="item.value"
+          :disable-transitions="true"
           :index="index"
           :type="item.type || ''"
         >
@@ -17,27 +17,30 @@
 
 <script>
 export default {
-  name: "DictTag",
+  name: 'DictTag',
   props: {
     options: {
       type: Array,
-      default: null,
+      default: null
     },
-    value: [Number, String, Array],
+    value: {
+      type: [Number, String, Array],
+      default: null
+    }
   },
   computed: {
     values() {
       if (this.value !== null && typeof this.value !== 'undefined') {
-        return Array.isArray(this.value) ? this.value : [String(this.value)];
+        return Array.isArray(this.value) ? this.value : [String(this.value)]
       } else {
-        return [];
+        return []
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 <style scoped>
 .el-tag + .el-tag {
-  margin-left: 10px;
+    margin-left: 10px;
 }
 </style>

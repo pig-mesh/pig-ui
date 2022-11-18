@@ -1,18 +1,18 @@
 import { remote } from '@/api/admin/dict'
 export default (app) => {
   app.mixin({
-    data () {
+    data() {
       return {
         dicts: {}
       }
     },
-    created () {
-      let list = this.$options.dicts;
+    created() {
+      const list = this.$options.dicts
       if (list) {
-        let result = [];
+        const result = []
         list.forEach(ele => {
           result.push(new Promise(resolve => {
-            let obj = {}
+            const obj = {}
             obj[ele] = []
             remote(ele).then(res => {
               obj[ele] = res.data.data

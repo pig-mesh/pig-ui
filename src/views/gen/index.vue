@@ -42,11 +42,17 @@
         </el-col>
         <el-col :span="12">
           <div class="grid-content bg-purple">
-            <el-button type="primary" icon="el-icon-search" @click="search"
-              >搜索</el-button
+            <el-button
+              type="primary"
+              icon="el-icon-search"
+              @click="search"
+            >搜索</el-button
             >
-            <el-button type="primary" icon="el-icon-download" @click="openBatch"
-              >批量生成</el-button
+            <el-button
+              type="primary"
+              icon="el-icon-download"
+              @click="openBatch"
+            >批量生成</el-button
             >
           </div>
         </el-col>
@@ -64,35 +70,39 @@
       >
         <template #menu="scope">
           <el-button
-              text
+            text
             type="primary"
             icon="el-icon-check"
             @click="handleDown(scope.row, scope.index)"
-            >生成
+          >生成
           </el-button>
           <el-button
-              text
+            text
             type="primary"
             icon="el-icon-edit"
             @click="handleDesign(scope.row, scope.index)"
-            >设计
+          >设计
           </el-button>
         </template>
       </avue-crud>
 
       <el-dialog v-model="box" title="生成配置" width="50%" lock-scroll>
         <div class="pull-auto">
-          <avue-form ref="formData" :option="formOption" v-model="formData">
-            <template #menu-form="scope">
+          <avue-form ref="formData" v-model="formData" :option="formOption">
+            <template>
               <el-button
                 type="primary"
                 icon="el-icon-view"
                 plain
                 @click="handleView()"
-                >预览
+              >预览
               </el-button>
-              <el-button type="info" icon="el-icon-check" plain @click="gen()"
-                >下载
+              <el-button
+                type="info"
+                icon="el-icon-check"
+                plain
+                @click="gen()"
+              >下载
               </el-button>
             </template>
           </avue-form>
@@ -107,8 +117,8 @@
         <div class="pull-auto">
           <avue-form
             ref="formBatchData"
-            :option="formBatchOption"
             v-model="formBatchData"
+            :option="formBatchOption"
             @submit="batchGen"
           />
         </div>
@@ -116,24 +126,24 @@
     </basic-container>
     <!-- 预览界面 -->
     <el-dialog
-      :title="preview.title"
       v-model="preview.open"
+      :title="preview.title"
       width="80%"
       top="5vh"
       append-to-body
     >
-      <Preview :queryData="this.formData" v-if="preview.open" />
+      <Preview v-if="preview.open" :query-data="formData" />
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, fetchSelectDsList, handleDown } from "@/api/gen/gen";
-import { formBatchOption, formOption, tableOption } from "@/const/crud/gen/gen";
-import Preview from "./preview.vue";
+import { fetchList, fetchSelectDsList, handleDown } from '@/api/gen/gen'
+import { formBatchOption, formOption, tableOption } from '@/const/crud/gen/gen'
+import Preview from './preview.vue'
 
 export default {
-  name: "CodeGenerator",
+  name: 'CodeGenerator',
   components: { Preview },
   data() {
     return {
@@ -152,20 +162,20 @@ export default {
       // 预览参数
       preview: {
         open: false,
-        title: "代码预览"
+        title: '代码预览'
       },
       tableLoading: false,
       tableOption: tableOption,
       formOption: formOption,
       formBatchOption: formBatchOption
-    };
+    }
   },
   created() {
-    this.getdataSourceList();
+    this.getdataSourceList()
   },
   methods: {
     getList(page) {
-      this.tableLoading = true;
+      this.tableLoading = true
       fetchList(
         Object.assign(
           {
@@ -175,81 +185,81 @@ export default {
           this.q
         )
       ).then(response => {
-        this.tableData = response.data.data.records;
-        this.page.total = response.data.data.total;
-        this.tableLoading = false;
-      });
+        this.tableData = response.data.data.records
+        this.page.total = response.data.data.total
+        this.tableLoading = false
+      })
     },
     handleDesign: function(row) {
       this.$router.push({
-        path: "/gen/design",
+        path: '/gen/design',
         query: { tableName: row.tableName, dsName: this.q.dsName }
-      });
+      })
     },
     handleDown: function(row) {
-      this.formData.tableName = row.tableName;
-      this.box = true;
+      this.formData.tableName = row.tableName
+      this.box = true
     },
     sizeChange(pageSize) {
-      this.page.pageSize = pageSize;
+      this.page.pageSize = pageSize
     },
     currentChange(current) {
-      this.page.currentPage = current;
+      this.page.currentPage = current
     },
     refreshChange() {
-      this.getList(this.page);
+      this.getList(this.page)
     },
     handleView: function() {
-      this.formData.dsName = this.q.dsName;
-      this.preview.open = true;
+      this.formData.dsName = this.q.dsName
+      this.preview.open = true
     },
     gen(form, done) {
-      this.formData.dsName = this.q.dsName;
+      this.formData.dsName = this.q.dsName
       handleDown(this.formData)
         .then(() => {
-          done();
-          this.box = false;
+          done()
+          this.box = false
         })
         .catch(() => {
-          done();
-        });
+          done()
+        })
     },
     getdataSourceList() {
       fetchSelectDsList().then(response => {
-        this.dataSourceList = response.data.data;
-      });
+        this.dataSourceList = response.data.data
+      })
     },
     search() {
-      this.getList(this.page);
+      this.getList(this.page)
     },
     openBatch() {
       if (
         this.$refs.crud.tableSelect.length <= 1 ||
         this.$refs.crud.tableSelect.length > 10
       ) {
-        this.$message.error("选中表数量不合法，数量最少2个或最多为10个");
-        return false;
+        this.$message.error('选中表数量不合法，数量最少2个或最多为10个')
+        return false
       }
-      let tableName = [];
+      const tableName = []
       for (const table of this.$refs.crud.tableSelect) {
-        tableName.push(table.tableName);
+        tableName.push(table.tableName)
       }
-      this.formBatchData.tableName = tableName.join("-");
-      this.boxBatch = true;
+      this.formBatchData.tableName = tableName.join('-')
+      this.boxBatch = true
     },
     batchGen(form, done) {
-      this.formBatchData.dsName = this.q.dsName;
+      this.formBatchData.dsName = this.q.dsName
       handleDown(this.formBatchData)
         .then(() => {
-          done();
-          this.boxBatch = false;
+          done()
+          this.boxBatch = false
         })
         .catch(() => {
-          done();
-        });
+          done()
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped></style>

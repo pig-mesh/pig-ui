@@ -27,22 +27,22 @@ const common = {
       })
     },
     SET_COLLAPSE: (state) => {
-      state.isCollapse = !state.isCollapse;
+      state.isCollapse = !state.isCollapse
     },
     SET_IS_MENU: (state, menu) => {
-      state.isMenu = menu;
+      state.isMenu = menu
     },
     SET_IS_REFRESH: (state, refresh) => {
-      state.isRefresh = refresh;
+      state.isRefresh = refresh
     },
     SET_IS_SEARCH: (state, search) => {
-      state.isSearch = search;
+      state.isSearch = search
     },
     SET_FULLSCREN: (state) => {
-      state.isFullScren = !state.isFullScren;
+      state.isFullScren = !state.isFullScren
     },
     SET_LOCK: (state) => {
-      state.isLock = true;
+      state.isLock = true
       setStore({
         name: 'isLock',
         content: state.isLock,
@@ -50,14 +50,14 @@ const common = {
       })
     },
     SET_THEME_NAME: (state, themeName) => {
-      state.themeName = themeName;
+      state.themeName = themeName
       setStore({
         name: 'themeName',
-        content: state.themeName,
+        content: state.themeName
       })
     },
     SET_LOCK_PASSWD: (state, lockPasswd) => {
-      state.lockPasswd = lockPasswd;
+      state.lockPasswd = lockPasswd
       setStore({
         name: 'lockPasswd',
         content: state.lockPasswd,
@@ -65,16 +65,16 @@ const common = {
       })
     },
     CLEAR_LOCK: (state) => {
-      state.isLock = false;
-      state.lockPasswd = '';
+      state.isLock = false
+      state.lockPasswd = ''
       removeStore({
         name: 'lockPasswd',
         type: 'session'
-      });
+      })
       removeStore({
         name: 'isLock',
         type: 'session'
-      });
+      })
     },
     LIKE_TOP_MENUID: (state, obj) => {
       if (obj.id === undefined) {

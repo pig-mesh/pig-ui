@@ -6,12 +6,11 @@ const keyName = website.key + '-'
  * 存储localStorage
  */
 export const setStore = (params = {}) => {
-  let {
-    name,
+  const {
     content,
     type
   } = params
-  name = keyName + name
+  const name = keyName + params.name
   const obj = {
     dataType: typeof (content),
     content: content,
@@ -30,11 +29,8 @@ export const setStore = (params = {}) => {
  */
 
 export const getStore = (params = {}) => {
-  let {
-    name,
-    debug
-  } = params
-  name = keyName + name
+  const name = keyName + params.name
+  const debug = params.debug
   let obj = {}
   let content
   obj = window.sessionStorage.getItem(name)
@@ -63,11 +59,8 @@ export const getStore = (params = {}) => {
  * 删除localStorage
  */
 export const removeStore = (params = {}) => {
-  let {
-    name,
-    type
-  } = params
-  name = keyName + name
+  const name = keyName + params.name
+  const type = params.type
   if (type) {
     window.sessionStorage.removeItem(name)
   } else {

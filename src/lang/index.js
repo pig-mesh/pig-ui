@@ -11,10 +11,10 @@ export const messages = {
   },
   'zh-cn': {
     ...zhLocale,
-    ...elementZhLocale,
+    ...elementZhLocale
   }
 }
 export default createI18n({
   locale: Store.getters.language,
-  messages,
-});
+  messages
+})

@@ -22,7 +22,7 @@
  * @param {*} callback
  */
 var validateDsName = (rule, value, callback) => {
-  var re = /(?=.*[a-z])(?=.*_)/;
+  var re = /(?=.*[a-z])(?=.*_)/
   if (value && (!(re).test(value))) {
     callback(new Error('数据源名称不合法, 组名_数据源名形式'))
   } else {
@@ -178,9 +178,9 @@ export const tableDsOption = {
       label: '名称',
       prop: 'name',
       rules: [
-        {required: true, message: '请输入名称', trigger: 'blur'},
-        {max: 32, message: '长度在 32 个字符', trigger: 'blur'},
-        {validator: validateDsName, trigger: 'blur'}
+        { required: true, message: '请输入名称', trigger: 'blur' },
+        { max: 32, message: '长度在 32 个字符', trigger: 'blur' },
+        { validator: validateDsName, trigger: 'blur' }
       ]
     },
     {
@@ -192,23 +192,23 @@ export const tableDsOption = {
       minRows: 2,
       overHidden: true,
       rules: [
-        {required: true, message: '请输入jdbcUrl', trigger: 'blur'}
+        { required: true, message: '请输入jdbcUrl', trigger: 'blur' }
       ]
     },
     {
       label: '用户名',
       prop: 'username',
       rules: [
-        {required: true, message: '请输入用户名', trigger: 'blur'},
-        {max: 64, message: '长度在 64 个字符', trigger: 'blur'}
+        { required: true, message: '请输入用户名', trigger: 'blur' },
+        { max: 64, message: '长度在 64 个字符', trigger: 'blur' }
       ]
     },
     {
       label: '密码',
       prop: 'password',
       rules: [
-        {required: true, message: '请输入密码', trigger: 'blur'},
-        {max: 64, message: '长度在 64 个字符', trigger: 'blur'}
+        { required: true, message: '请输入密码', trigger: 'blur' },
+        { max: 64, message: '长度在 64 个字符', trigger: 'blur' }
       ]
     },
     {

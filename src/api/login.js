@@ -18,7 +18,7 @@ import { validatenull } from '@/util/validate'
 import request from '@/router/axios'
 import store from '@/store'
 import qs from 'qs'
-import {getStore, setStore} from "@/util/store.js";
+import { getStore, setStore } from '@/util/store.js'
 import website from '@/config/website'
 
 
@@ -26,9 +26,9 @@ const scope = 'server'
 
 export const loginByUsername = (username, password, code, randomStr) => {
   const grant_type = 'password'
-  let dataObj = qs.stringify({'username': username, 'password': password})
+  const dataObj = qs.stringify({ 'username': username, 'password': password })
 
-  let basicAuth = 'Basic ' + window.btoa(website.formLoginClient)
+  const basicAuth = 'Basic ' + window.btoa(website.formLoginClient)
 
   // 保存当前选中的 basic 认证信息
   setStore({
@@ -44,7 +44,7 @@ export const loginByUsername = (username, password, code, randomStr) => {
       Authorization: basicAuth
     },
     method: 'post',
-    params: {randomStr, code, grant_type, scope},
+    params: { randomStr, code, grant_type, scope },
     data: dataObj
   })
 }
@@ -52,7 +52,7 @@ export const loginByUsername = (username, password, code, randomStr) => {
 export const loginByMobile = (smsForm) => {
   const grant_type = 'app'
 
-  let basicAuth = 'Basic ' + window.btoa(website.smsLoginClient)
+  const basicAuth = 'Basic ' + window.btoa(website.smsLoginClient)
 
   // 保存当前选中的 basic 认证信息
   setStore({
@@ -68,14 +68,14 @@ export const loginByMobile = (smsForm) => {
       'Authorization': basicAuth
     },
     method: 'post',
-    params: {phone: smsForm.phone, code: smsForm.code, grant_type, scope}
+    params: { phone: smsForm.phone, code: smsForm.code, grant_type, scope }
   })
 }
 
 export const refreshToken = refresh_token => {
   const grant_type = 'refresh_token'
   // 获取当前选中的 basic 认证信息
-  let basicAuth = getStore({name: 'basicAuth'})
+  const basicAuth = getStore({ name: 'basicAuth' })
 
   return request({
     url: '/auth/oauth2/token',
@@ -84,7 +84,7 @@ export const refreshToken = refresh_token => {
       Authorization: basicAuth
     },
     method: 'post',
-    params: {refresh_token, grant_type, scope}
+    params: { refresh_token, grant_type, scope }
   })
 }
 
@@ -111,10 +111,10 @@ export const logout = () => {
 export const checkToken = (refreshLock, $store) => {
   const token = store.getters.access_token
   // 获取当前选中的 basic 认证信息
-  let basicAuth = getStore({name: 'basicAuth'})
+  const basicAuth = getStore({ name: 'basicAuth' })
 
-  if(validatenull(token) || validatenull(basicAuth)){
-      return;
+  if (validatenull(token) || validatenull(basicAuth)) {
+    return
   }
 
   request({
@@ -124,7 +124,7 @@ export const checkToken = (refreshLock, $store) => {
       Authorization: basicAuth
     },
     method: 'get',
-    params: {token}
+    params: { token }
   }).then(response => {
     const expire = response && response.data && response.data.exp
     if (expire) {
@@ -164,7 +164,7 @@ export const registerUser = (userInfo) => {
  */
 export const sendSmsCode = (form) => {
   return request({
-    url: "/admin/app/sms",
+    url: '/admin/app/sms',
     method: 'post',
     data: form
   })

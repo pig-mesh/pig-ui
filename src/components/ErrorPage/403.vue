@@ -12,8 +12,8 @@
         </div>
         <p class="error403-body-con-message">You don't have permission</p>
         <div class="error403-btn-con">
-          <el-link @click="goHome" size="large" style="width: 200px;" type="primary">返回首页</el-link>
-          <el-link @click="backPage" size="large" style="width: 200px;margin-left: 40px;" type="primary">返回上一页</el-link>
+          <el-link size="large" style="width: 200px;" type="primary" @click="goHome">返回首页</el-link>
+          <el-link size="large" style="width: 200px;margin-left: 40px;" type="primary" @click="backPage">返回上一页</el-link>
         </div>
       </el-card>
     </div>
@@ -22,18 +22,18 @@
 
 <script>
 export default {
-  name: "Error403",
+  name: 'Error403',
   methods: {
     backPage() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     goHome() {
       this.$router.push({
-        path: "/"
-      });
+        path: '/'
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @keyframes error403animation {

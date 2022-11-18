@@ -34,18 +34,18 @@
       >
         <template #menu="scope">
           <el-button
-              text
+            text
             type="primary"
             icon="el-icon-download"
             @click="download(scope.row, scope.index)"
-            >下载
+          >下载
           </el-button>
           <el-button
-              text
+            text
             type="primary"
             icon="el-icon-view"
             @click="onlineFile(scope.row, scope.index)"
-            >在线浏览
+          >在线浏览
           </el-button>
         </template>
       </avue-crud>
@@ -54,12 +54,12 @@
 </template>
 
 <script>
-import { delObj, fetchList, onlineFile } from "@/api/admin/file";
-import { tableOption } from "@/const/crud/admin/file";
-import { mapGetters } from "vuex";
+import { delObj, fetchList, onlineFile } from '@/api/admin/file'
+import { tableOption } from '@/const/crud/admin/file'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "sys-file",
+  name: 'sys-file',
   data() {
     return {
       searchForm: {},
@@ -71,25 +71,25 @@ export default {
       },
       tableLoading: false,
       tableOption: tableOption
-    };
+    }
   },
   computed: {
-    ...mapGetters(["permissions"]),
+    ...mapGetters(['permissions']),
     permissionList() {
       return {
         addBtn: this.validData(this.permissions.sys_file_add, true),
         delBtn: this.validData(this.permissions.sys_file_del, true),
         editBtn: this.validData(this.permissions.sys_file_edit, false)
-      };
+      }
     }
   },
   methods: {
     getList(page, params) {
-      this.tableLoading = true;
+      this.tableLoading = true
       fetchList(
         Object.assign(
           {
-            descs: "create_time",
+            descs: 'create_time',
             current: page.currentPage,
             size: page.pageSize
           },
@@ -98,57 +98,57 @@ export default {
         )
       )
         .then(response => {
-          this.tableData = response.data.data.records;
-          this.page.total = response.data.data.total;
-          this.tableLoading = false;
+          this.tableData = response.data.data.records
+          this.page.total = response.data.data.total
+          this.tableLoading = false
         })
         .catch(() => {
-          this.tableLoading = false;
-        });
+          this.tableLoading = false
+        })
     },
     rowDel: function(row, index) {
-      let _this = this;
-      this.$confirm("是否确认删除ID为" + row.id, "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+      const _this = this
+      this.$confirm('是否确认删除ID为' + row.id, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(function() {
-          return delObj(row.id);
+          return delObj(row.id)
         })
         .then(data => {
-          _this.$message.success("删除成功");
-          this.getList(this.page);
-        });
+          _this.$message.success('删除成功')
+          this.getList(this.page)
+        })
     },
     searchChange(form, done) {
-      this.searchForm = form;
-      this.page.currentPage = 1;
-      this.getList(this.page, form);
-      done();
+      this.searchForm = form
+      this.page.currentPage = 1
+      this.getList(this.page, form)
+      done()
     },
     refreshChange() {
-      this.getList(this.page);
+      this.getList(this.page)
     },
     sizeChange(pageSize) {
-      this.page.pageSize = pageSize;
+      this.page.pageSize = pageSize
     },
     currentChange(current) {
-      this.page.currentPage = current;
+      this.page.currentPage = current
     },
     download: function(row, index) {
       this.downBlobFile(
-        "/admin/sys-file/" + row.bucketName + "/" + row.fileName,
+        '/admin/sys-file/' + row.bucketName + '/' + row.fileName,
         this.searchForm,
         row.fileName
       )
     },
     uploadAfter(res, done, loading) {
       if (!this.validatenull(res.fileName)) {
-        this.$message.success("上传成功");
-        this.getList(this.page);
+        this.$message.success('上传成功')
+        this.getList(this.page)
       }
-      done();
+      done()
     },
     onlineFile(row, index) {
       onlineFile(row.bucketName, row.fileName).then(res => {
@@ -156,5 +156,5 @@ export default {
       })
     }
   }
-};
+}
 </script>

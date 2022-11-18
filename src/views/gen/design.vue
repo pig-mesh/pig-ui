@@ -1,9 +1,10 @@
 <template>
   <div class="webapp">
     <basic-container>
-      <avue-form-design :options="options"
-                        :showGithubStar="showGithubStar"
-                        @submit="handleSubmit">
+      <avue-form-design
+        :options="options"
+        :show-github-star="showGithubStar"
+        @submit="handleSubmit">
       </avue-form-design>
     </basic-container>
   </div>
@@ -11,8 +12,8 @@
 
 
 <script>
-import {getForm, postForm} from '@/api/gen/gen'
-import {validatenull} from "@/util/validate";
+import { getForm, postForm } from '@/api/gen/gen'
+import { validatenull } from '@/util/validate'
 
 export default {
   data() {
@@ -29,17 +30,17 @@ export default {
   },
   methods: {
     handleSubmit(json) {
-      let params = this.$route.query;
+      const params = this.$route.query
       if (validatenull(params)) {
         return false
       }
-      let result = JSON.stringify(json)
+      const result = JSON.stringify(json)
       postForm(result, params.tableName, params.dsName).then(response => {
         this.$message.success('生成并保存成功')
       })
     },
     getFormInfo() {
-      let params = this.$route.query;
+      const params = this.$route.query
       if (validatenull(params)) {
         return false
       }

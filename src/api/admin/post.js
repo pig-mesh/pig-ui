@@ -17,7 +17,7 @@
 
 import request from '@/router/axios'
 
-export function listPosts () {
+export function listPosts() {
   return request({
     url: '/admin/post/list',
     method: 'get'

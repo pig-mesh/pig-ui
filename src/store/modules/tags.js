@@ -13,7 +13,7 @@ const tagObj = {
 }
 
 // 处理首个标签
-function setFistTag (list) {
+function setFistTag(list) {
   if (list.length === 1) {
     list[0].close = false
   } else {

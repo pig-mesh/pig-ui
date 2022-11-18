@@ -1,12 +1,13 @@
 <template>
   <!-- 添加或修改菜单对话框 -->
-  <el-dialog :title="!form.deptId ? '新增': '修改'"
-             v-model="visible">
+  <el-dialog
+    v-model="visible"
+    :title="!form.deptId ? '新增': '修改'">
     <el-form ref="dataForm" :model="form" :rules="rules" label-width="80px">
       <el-row>
         <el-col :span="24">
           <el-form-item label="部门名称" prop="name">
-            <el-input v-model="form.name" placeholder="请输入菜单名称"/>
+            <el-input v-model="form.name" placeholder="请输入菜单名称" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -15,18 +16,18 @@
         <el-col :span="12">
           <el-form-item label="上级部门">
             <el-tree-select
-                v-model="form.parentId"
-                :data="deptOptions"
-                :props="{ value: 'id', label: 'name', children: 'children' }"
-                value-key="menuId"
-                placeholder="选择上级菜单"
-                check-strictly
+              v-model="form.parentId"
+              :data="deptOptions"
+              :props="{ value: 'id', label: 'name', children: 'children' }"
+              value-key="menuId"
+              placeholder="选择上级菜单"
+              check-strictly
             />
           </el-form-item>
         </el-col>
         <el-col :span="12">
           <el-form-item label="排序" prop="sortOrder">
-            <el-input-number v-model="form.sortOrder" controls-position="right" :min="0"/>
+            <el-input-number v-model="form.sortOrder" controls-position="right" :min="0" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -41,10 +42,10 @@
 </template>
 
 <script>
-import {addObj, fetchTree, getObj, putObj} from '@/api/admin/dept'
+import { addObj, fetchTree, getObj, putObj } from '@/api/admin/dept'
 
 export default {
-  name: "DeptForm",
+  name: 'DeptForm',
   data() {
     return {
       // 遮罩层
@@ -60,21 +61,21 @@ export default {
       // 表单校验
       rules: {
         name: [
-          {required: true, message: "菜单名称不能为空", trigger: "blur"}
+          { required: true, message: '菜单名称不能为空', trigger: 'blur' }
         ],
         sortOrder: [
-          {required: true, message: "菜单顺序不能为空", trigger: "blur"}
+          { required: true, message: '菜单顺序不能为空', trigger: 'blur' }
         ]
       }
-    };
+    }
   },
   methods: {
     init(isEdit, id) {
       if (id !== null) {
-        this.form.parentId = id;
+        this.form.parentId = id
       }
       this.visible = true
-      this.getTreeselect();
+      this.getTreeselect()
       this.$nextTick(() => {
         this.$refs['dataForm'].resetFields()
         if (isEdit) {
@@ -99,7 +100,7 @@ export default {
               this.$message.success('修改成功')
               this.visible = false
               this.$emit('refreshDataList')
-            });
+            })
           } else {
             addObj(this.form).then(data => {
               this.$message.success('添加成功')
@@ -114,9 +115,9 @@ export default {
     getTreeselect() {
       fetchTree().then(response => {
         this.deptOptions = []
-        const dept = {id: 0, name: '根部门', children: response.data.data};
+        const dept = { id: 0, name: '根部门', children: response.data.data }
         this.deptOptions.push(dept)
-      });
+      })
     },
     /** 转换菜单数据结构 */
     normalizer(node) {
@@ -131,5 +132,5 @@ export default {
       }
     }
   }
-};
+}
 </script>

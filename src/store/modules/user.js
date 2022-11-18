@@ -26,7 +26,7 @@ const user = {
   },
   actions: {
     // 根据用户名登录
-    LoginByUsername ({ commit }, userInfo) {
+    LoginByUsername({ commit }, userInfo) {
       const user = encryption({
         data: userInfo,
         key: 'thanks,pig4cloud',
@@ -45,7 +45,7 @@ const user = {
       })
     },
     // 根据手机号登录
-    LoginByPhone ({ commit }, smsForm) {
+    LoginByPhone({ commit }, smsForm) {
       return new Promise((resolve, reject) => {
         loginByMobile(smsForm).then(response => {
           const data = response.data
@@ -60,7 +60,7 @@ const user = {
     },
 
     // 刷新token
-    RefreshToken ({ commit, state }) {
+    RefreshToken({ commit, state }) {
       return new Promise((resolve, reject) => {
         refreshToken(state.refresh_token).then(response => {
           const data = response.data
@@ -74,7 +74,7 @@ const user = {
       })
     },
     // 查询用户信息
-    GetUserInfo ({ commit }) {
+    GetUserInfo({ commit }) {
       return new Promise((resolve, reject) => {
         getUserInfo().then((res) => {
           const data = res.data.data || {}
@@ -88,10 +88,10 @@ const user = {
       })
     },
     // 登出
-    LogOut ({ commit }) {
+    LogOut({ commit }) {
       return new Promise((resolve, reject) => {
         logout().then(() => {
-          commit('SET_MENUALL_NULL', []);
+          commit('SET_MENUALL_NULL', [])
           commit('SET_MENU', [])
           commit('SET_PERMISSIONS', [])
           commit('SET_USER_INFO', {})
@@ -107,10 +107,10 @@ const user = {
       })
     },
     // 注销session
-    FedLogOut ({ commit }) {
+    FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_MENU', [])
-        commit('SET_MENUALL_NULL', []);
+        commit('SET_MENUALL_NULL', [])
         commit('SET_PERMISSIONS', [])
         commit('SET_USER_INFO', {})
         commit('SET_ACCESS_TOKEN', '')
@@ -122,14 +122,14 @@ const user = {
       })
     },
     // 获取系统菜单
-    GetMenu ({ commit }, obj = {}) {
+    GetMenu({ commit }, obj = {}) {
       // 记录用户点击顶部信息，保证刷新的时候不丢失
       commit('LIKE_TOP_MENUID', obj)
       return new Promise(resolve => {
         getMenu(obj.id).then((res) => {
           const data = res.data.data
-          let menu = deepClone(data);
-          menu.forEach(ele => formatPath(ele, true));
+          const menu = deepClone(data)
+          menu.forEach(ele => formatPath(ele, true))
           commit('SET_MENUALL', menu)
           commit('SET_MENU', menu)
           resolve(menu)
@@ -137,7 +137,7 @@ const user = {
       })
     },
     //顶部菜单
-    GetTopMenu () {
+    GetTopMenu() {
       return new Promise(resolve => {
         resolve([])
       })
@@ -171,10 +171,10 @@ const user = {
       })
     },
     SET_MENUALL: (state, menuAll) => {
-      let menu = state.menuAll;
+      const menu = state.menuAll
       menuAll.forEach(ele => {
-        if (!menu.find(item => item.label == ele.label && item.path == ele.path)) {
-          menu.push(ele);
+        if (!menu.find(item => item.label === ele.label && item.path === ele.path)) {
+          menu.push(ele)
         }
       })
       state.menuAll = menu

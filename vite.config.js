@@ -23,6 +23,6 @@ export default defineConfig(({mode, command}) => {
                 "utils": resolve(__dirname, "./src/utils"),
             }
         },
-        plugins: createVitePlugins(env, command === 'build'),
+        plugins: createVitePlugins(env, command === 'build')
     }
 })

@@ -32,9 +32,9 @@ export const tableOption = {
     align: 'center',
     slot: true
   }, {
-    label: "客户端",
-    prop: "clientId",
-    align: "center"
+    label: '客户端',
+    prop: 'clientId',
+    align: 'center'
   }, {
     label: '令牌',
     prop: 'accessToken',

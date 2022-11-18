@@ -7,9 +7,9 @@
           <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
           <img src="https://img.shields.io/badge/Spring%20Boot-2.7-blue.svg" alt="Downloads">
           <img src="https://img.shields.io/badge/Vue-3.2-blue.svg" alt="Downloads">
-          <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
+          <img src="https://img.shields.io/github/license/pig-mesh/pig" />
         </span>
-        <br/>
+        <br />
         <span>
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {mapGetters} from 'vuex';
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'wel',
@@ -69,12 +69,12 @@ export default {
       let num = 0
       let count = 0
       let active = false
-      let timeoutstart = 5000
-      let timeoutend = 1000
-      let timespeed = 10
+      const timeoutstart = 5000
+      const timeoutend = 1000
+      const timespeed = 10
       setInterval(() => {
         if (this.isText) {
-          if (count == this.actor.length) {
+          if (count === this.actor.length) {
             active = true
           } else {
             active = false
@@ -82,7 +82,7 @@ export default {
           if (active) {
             num--
             this.text = this.actor.substr(0, num)
-            if (num == 0) {
+            if (num === 0) {
               this.isText = false
               setTimeout(() => {
                 count = 0
@@ -92,7 +92,7 @@ export default {
           } else {
             num++
             this.text = this.actor.substr(0, num)
-            if (num == this.actor.length) {
+            if (num === this.actor.length) {
               this.isText = false
               setTimeout(() => {
                 this.isText = true

@@ -1,15 +1,15 @@
 <template>
   <el-form
-      class="login-form"
-      status-icon
-      label-width="0"
+    class="login-form"
+    status-icon
+    label-width="0"
   >
-    <SendSmsCode v-model="smsCodeForm" exist="true" ref="smsCodeForm" @validatePhone="validatePhone"/>
+    <SendSmsCode ref="smsCodeForm" v-model="smsCodeForm" exist="true" @validatePhone="validatePhone" />
     <el-form-item>
       <el-button
-          type="primary"
-          class="login-submit"
-          @click.native.prevent="handleLogin"
+        type="primary"
+        class="login-submit"
+        @click.native.prevent="handleLogin"
       >登录
       </el-button>
     </el-form-item>
@@ -17,16 +17,16 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
-import SendSmsCode from "@/components/Sms/index.vue";
-import {isvalidatemobile} from "@/util/validate.js";
+import { mapGetters } from 'vuex'
+import SendSmsCode from '@/components/Sms/index.vue'
+import { isvalidatemobile } from '@/util/validate.js'
 
 
 export default {
-  name: "Codelogin",
-  components: {SendSmsCode},
+  name: 'Codelogin',
+  components: { SendSmsCode },
   computed: {
-    ...mapGetters(["tagWel"]),
+    ...mapGetters(['tagWel'])
   },
   data() {
     return {
@@ -36,20 +36,20 @@ export default {
   methods: {
     validatePhone(rule, value, callback) {
       if (isvalidatemobile(value)[0]) {
-        callback(new Error(isvalidatemobile(value)[1]));
+        callback(new Error(isvalidatemobile(value)[1]))
       } else {
-        callback();
+        callback()
       }
     },
     handleLogin() {
       this.$refs.smsCodeForm.validate((valid) => {
         if (valid) {
-          this.$store.dispatch("LoginByPhone", this.smsCodeForm).then(() => {
-            this.$router.push({path: this.tagWel.value});
-          });
+          this.$store.dispatch('LoginByPhone', this.smsCodeForm).then(() => {
+            this.$router.push({ path: this.tagWel.value })
+          })
         }
-      });
+      })
     }
-  },
-};
+  }
+}
 </script>

@@ -37,12 +37,12 @@ export const tableOption = {
       message: '角色名称不能为空',
       trigger: 'blur'
     },
-      {
-        min: 3,
-        max: 20,
-        message: '长度在 3 到 20 个字符',
-        trigger: 'blur'
-      }]
+    {
+      min: 3,
+      max: 20,
+      message: '长度在 3 到 20 个字符',
+      trigger: 'blur'
+    }]
   }, {
     width: 120,
     label: '角色标识',
@@ -54,12 +54,12 @@ export const tableOption = {
       message: '角色标识不能为空',
       trigger: 'blur'
     },
-      {
-        min: 3,
-        max: 20,
-        message: '长度在 3 到 20 个字符',
-        trigger: 'blur'
-      }
+    {
+      min: 3,
+      max: 20,
+      message: '长度在 3 到 20 个字符',
+      trigger: 'blur'
+    }
     ]
   }, {
     width: 150,
@@ -72,12 +72,12 @@ export const tableOption = {
       message: '角色描述不能为空',
       trigger: 'blur'
     },
-      {
-        min: 3,
-        max: 100,
-        message: '长度在 3 到 100 个字符',
-        trigger: 'blur'
-      }]
+    {
+      min: 3,
+      max: 100,
+      message: '长度在 3 到 100 个字符',
+      trigger: 'blur'
+    }]
   }, {
     label: '创建时间',
     prop: 'createTime',

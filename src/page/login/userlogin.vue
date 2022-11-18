@@ -1,18 +1,18 @@
 <template>
   <el-form
-      class="login-form"
-      status-icon
-      :rules="loginRules"
-      ref="loginForm"
-      :model="loginForm"
-      label-width="0"
+    ref="loginForm"
+    class="login-form"
+    status-icon
+    :rules="loginRules"
+    :model="loginForm"
+    label-width="0"
   >
     <el-form-item prop="username">
       <el-input
-          @keyup.enter.native="handleLogin"
-          v-model="loginForm.username"
-          auto-complete="off"
-          placeholder="请输入用户名"
+        v-model="loginForm.username"
+        auto-complete="off"
+        placeholder="请输入用户名"
+        @keyup.enter.native="handleLogin"
       >
         <template #prefix>
           <i class="icon-yonghu"></i>
@@ -21,13 +21,13 @@
     </el-form-item>
     <el-form-item prop="password">
       <el-input
-          size="small"
-          @keyup.enter.native="handleLogin"
-          type="password"
-          v-model="loginForm.password"
-          auto-complete="off"
-          show-password
-          placeholder="请输入密码"
+        v-model="loginForm.password"
+        size="small"
+        type="password"
+        auto-complete="off"
+        show-password
+        placeholder="请输入密码"
+        @keyup.enter.native="handleLogin"
       >
         <template #prefix>
           <i class="icon-mima"></i>
@@ -35,13 +35,13 @@
 
       </el-input>
     </el-form-item>
-    <el-form-item prop="code" v-if="website.validateCode">
+    <el-form-item v-if="website.validateCode" prop="code">
       <el-input
-          @keyup.enter.native="handleLogin"
-          :maxlength="code.len"
-          v-model="loginForm.code"
-          auto-complete="off"
-          placeholder="请输入验证码"
+        v-model="loginForm.code"
+        :maxlength="code.len"
+        auto-complete="off"
+        placeholder="请输入验证码"
+        @keyup.enter.native="handleLogin"
       >
         <template #prefix>
           <i class="icon-yanzhengma"></i>
@@ -49,16 +49,16 @@
         <template #append>
           <div class="login-code">
             <span
-                class="login-code-img"
-                @click="refreshCode"
-                v-if="code.type === 'text'"
+              v-if="code.type === 'text'"
+              class="login-code-img"
+              @click="refreshCode"
             >{{ code.value }}</span
             >
             <img
-                :src="code.src"
-                class="login-code-img"
-                @click="refreshCode"
-                v-else
+              v-else
+              :src="code.src"
+              class="login-code-img"
+              @click="refreshCode"
             />
           </div>
         </template>
@@ -66,9 +66,9 @@
     </el-form-item>
     <el-form-item>
       <el-button
-          type="primary"
-          @click.native.prevent="handleLogin"
-          class="login-submit"
+        type="primary"
+        class="login-submit"
+        @click.native.prevent="handleLogin"
       >登录
       </el-button
       >
@@ -77,71 +77,71 @@
 </template>
 
 <script>
-import {randomLenNum} from "@/util";
-import {mapGetters} from "vuex";
+import { randomLenNum } from '@/util'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: "userlogin",
+  name: 'userlogin',
   data() {
     return {
       loginForm: {
-        username: "admin",
-        password: "123456",
-        code: "",
-        randomStr: ""
+        username: 'admin',
+        password: '123456',
+        code: '',
+        randomStr: ''
       },
       checked: false,
       code: {
-        src: "/code",
-        value: "",
+        src: '/code',
+        value: '',
         len: 4,
-        type: "image"
+        type: 'image'
       },
       loginRules: {
         username: [
-          {required: true, message: "请输入用户名", trigger: "blur"},
-          {pattern: /^([a-z\u4e00-\u9fa5\d]*?)$/, message: "请输入小写字母", trigger: "blur"}
+          { required: true, message: '请输入用户名', trigger: 'blur' },
+          { pattern: /^([a-z\u4e00-\u9fa5\d]*?)$/, message: '请输入小写字母', trigger: 'blur' }
         ],
         password: [
-          {required: true, message: "请输入密码", trigger: "blur"},
-          {min: 6, message: "密码长度最少为6位", trigger: "blur"}
+          { required: true, message: '请输入密码', trigger: 'blur' },
+          { min: 6, message: '密码长度最少为6位', trigger: 'blur' }
         ],
-        code: [{required: true, message: "请输入验证码", trigger: "blur"}]
-      },
-    };
+        code: [{ required: true, message: '请输入验证码', trigger: 'blur' }]
+      }
+    }
   },
   created() {
     if (this.website.validateCode) {
-      this.refreshCode();
+      this.refreshCode()
     }
   },
   computed: {
-    ...mapGetters(["tagWel", "website"])
+    ...mapGetters(['tagWel', 'website'])
   },
   methods: {
     refreshCode() {
-      this.loginForm.code = "";
-      this.loginForm.randomStr = randomLenNum(this.code.len, true);
-      this.code.type === "text"
-          ? (this.code.value = randomLenNum(this.code.len))
-          : (this.code.src = `${this.baseUrl}/code?randomStr=${this.loginForm.randomStr}`);
+      this.loginForm.code = ''
+      this.loginForm.randomStr = randomLenNum(this.code.len, true)
+      this.code.type === 'text'
+        ? (this.code.value = randomLenNum(this.code.len))
+        : (this.code.src = `${this.baseUrl}/code?randomStr=${this.loginForm.randomStr}`)
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store
-              .dispatch("LoginByUsername", this.loginForm)
-              .then(() => {
-                this.$router.push({path: this.tagWel.value});
-              })
-              .catch(() => {
-                this.refreshCode();
-              });
+            .dispatch('LoginByUsername', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.tagWel.value })
+            })
+            .catch(() => {
+              this.refreshCode()
+            })
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style></style>

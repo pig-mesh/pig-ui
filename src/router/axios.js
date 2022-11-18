@@ -1,17 +1,16 @@
 
 import axios from 'axios'
 import { serialize } from '@/util'
-import { getStore } from '@/util/store'
 import NProgress from 'nprogress' // progress bar
 import errorCode from '@/const/errorCode'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import 'nprogress/nprogress.css'
 import qs from 'qs'
 import store from '@/store'
-import {baseUrl} from "@/config/env"; // progress bar style
+import { baseUrl } from '@/config/env' // progress bar style
 axios.defaults.timeout = 30000
 // 返回其他状态吗
-axios.defaults.validateStatus = function (status) {
+axios.defaults.validateStatus = function(status) {
   return status >= 200 && status <= 500 // 默认的
 }
 // 跨域请求，允许保存cookie
@@ -22,7 +21,7 @@ NProgress.configure({
 })
 
 // HTTPrequest拦截
-axios.defaults.baseURL = baseUrl;
+axios.defaults.baseURL = baseUrl
 axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
   const isToken = (config.headers || {}).isToken === false
@@ -39,7 +38,7 @@ axios.interceptors.request.use(config => {
   }
 
   if (config.method === 'get') {
-    config.paramsSerializer = function (params) {
+    config.paramsSerializer = function(params) {
       return qs.stringify(params, { arrayFormat: 'repeat' })
     }
   }
@@ -67,7 +66,7 @@ axios.interceptors.response.use(res => {
         window.location.reload()
       })
     }).catch(() => {
-    });
+    })
     return
   }
 

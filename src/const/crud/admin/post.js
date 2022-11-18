@@ -1,18 +1,18 @@
 export const tableOption = {
-  "border": true,
-  "index": true,
-  "indexLabel": "序号",
-  "stripe": true,
+  'border': true,
+  'index': true,
+  'indexLabel': '序号',
+  'stripe': true,
   addBtn: false,
-  "menuAlign": "center",
-  "align": "center",
-  "searchMenuSpan": 6,
+  'menuAlign': 'center',
+  'align': 'center',
+  'searchMenuSpan': 6,
   dialogWidth: '50%',
-  "column": [
+  'column': [
     {
-      "type": "input",
-      "label": "岗位名称",
-      "prop": "postName",
+      'type': 'input',
+      'label': '岗位名称',
+      'prop': 'postName',
       span: 24,
       rules: [{
         required: true,
@@ -21,9 +21,9 @@ export const tableOption = {
       }]
     },
     {
-      "type": "input",
-      "label": "岗位标识",
-      "prop": "postCode",
+      'type': 'input',
+      'label': '岗位标识',
+      'prop': 'postCode',
       span: 24,
       rules: [{
         required: true,
@@ -32,26 +32,26 @@ export const tableOption = {
       }]
     },
     {
-      "type": "textarea",
-      "label": "岗位描述",
-      "prop": "remark",
-      "hide":true,
+      'type': 'textarea',
+      'label': '岗位描述',
+      'prop': 'remark',
+      'hide': true,
       span: 24
     },
     {
-      "type": "input-number",
-      "label": "岗位排序",
-      "prop": "postSort",
-      "hide":true,
-      "value": 0,
-      span:8
+      'type': 'input-number',
+      'label': '岗位排序',
+      'prop': 'postSort',
+      'hide': true,
+      'value': 0,
+      span: 8
     },
     {
-      "type": "input",
-      "label": "创建时间",
-      "prop": "createTime",
-      "addDisplay": false,
-      "editDisabled": true,
+      'type': 'input',
+      'label': '创建时间',
+      'prop': 'createTime',
+      'addDisplay': false,
+      'editDisabled': true,
       span: 24
     }
   ]

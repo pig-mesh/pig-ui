@@ -1,64 +1,77 @@
 <template>
-  <i class="setting-icon el-icon-s-tools"
-     @click="show=true"></i>
-  <el-drawer append-to-body
-             :with-header="false"
-             v-model="show"
-             size="30%">
-    <div class="setting">
-      <h5>导航模式</h5>
-      <div class="setting-checkbox">
-        <el-tooltip class="item"
-                    effect="dark"
-                    content="侧边菜单布局"
-                    placement="top">
-          <div @click="setting.sidebar='vertical'"
-               class="setting-checkbox-item setting-checkbox-item--side">
-            <i v-if="!isHorizontal"
-               class="el-icon-check setting-checkbox--check">
-            </i>
+  <div>
+    <i
+      class="setting-icon el-icon-s-tools"
+      @click="show=true"></i>
+    <el-drawer
+      v-model="show"
+      append-to-body
+      :with-header="false"
+      size="30%">
+      <div class="setting">
+        <h5>导航模式</h5>
+        <div class="setting-checkbox">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="侧边菜单布局"
+            placement="top">
+            <div
+              class="setting-checkbox-item setting-checkbox-item--side"
+              @click="setting.sidebar='vertical'">
+              <i
+                v-if="!isHorizontal"
+                class="el-icon-check setting-checkbox--check">
+              </i>
+            </div>
+          </el-tooltip>
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="顶部菜单布局"
+            placement="top">
+            <div
+              class="setting-checkbox-item setting-checkbox-item--top"
+              @click="setting.sidebar='horizontal'">
+              <i
+                v-if="isHorizontal"
+                class="el-icon-check setting-checkbox--check">
+              </i>
+            </div>
+          </el-tooltip>
+        </div>
+        <h5>页面布局</h5>
+        <div class="setting-checkbox">
+          <div
+            v-for="(item,index) in list1"
+            :key="index"
+            class="setting-item">
+            {{ item.label }}:
+            <el-switch v-model="setting[item.value]">
+            </el-switch>
           </div>
-        </el-tooltip>
-        <el-tooltip class="item"
-                    effect="dark"
-                    content="顶部菜单布局"
-                    placement="top">
-          <div @click="setting.sidebar='horizontal'"
-               class="setting-checkbox-item setting-checkbox-item--top">
-            <i v-if="isHorizontal"
-               class="el-icon-check setting-checkbox--check">
-            </i>
+        </div>
+        <h5>功能调试</h5>
+        <div class="setting-checkbox">
+          <div
+            v-for="(item,index) in list2"
+            :key="index"
+            class="setting-item">
+            {{ item.label }}:
+            <el-switch v-model="setting[item.value]">
+            </el-switch>
           </div>
-        </el-tooltip>
-      </div>
-      <h5>页面布局</h5>
-      <div class="setting-checkbox">
-        <div class="setting-item"
-             v-for="(item,index) in list1"
-             :key="index">
-          {{item.label}}:
-          <el-switch v-model="setting[item.value]">
-          </el-switch>
         </div>
       </div>
-      <h5>功能调试</h5>
-      <div class="setting-checkbox">
-        <div class="setting-item"
-             v-for="(item,index) in list2"
-             :key="index">
-          {{item.label}}:
-          <el-switch v-model="setting[item.value]">
-          </el-switch>
-        </div>
-      </div>
-    </div>
-  </el-drawer>
+    </el-drawer>
+  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
+
 export default {
-  data () {
+  data() {
     return {
       show: false,
       list1: [{
@@ -90,25 +103,28 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["isHorizontal", 'setting']),
+    ...mapGetters(['isHorizontal', 'setting'])
   }
 }
 </script>
 
 
-<style lang="scss" >
+<style lang="scss">
 .setting {
   padding: 20px 10px;
+
   &-icon {
     font-size: 18px;
     color: #666;
   }
+
   &-item {
     display: flex;
     justify-content: space-between;
     font-size: 14px;
     margin-bottom: 8px;
   }
+
   &-checkbox {
     &--check {
       position: absolute;
@@ -117,6 +133,7 @@ export default {
       top: 50%;
       transform: translate(-50%, -50%);
     }
+
     &-item {
       display: inline-block;
       position: relative;
@@ -128,6 +145,7 @@ export default {
       border-radius: 4px;
       box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.18);
       cursor: pointer;
+
       &:before {
         position: absolute;
         top: 0;
@@ -137,6 +155,7 @@ export default {
         background-color: #fff;
         content: "";
       }
+
       &:after {
         position: absolute;
         top: 0;
@@ -146,16 +165,19 @@ export default {
         background-color: #fff;
         content: "";
       }
+
       &--side {
         &:before {
           z-index: 1;
           background-color: #001529;
           content: "";
         }
+
         &:after {
           background-color: #fff;
         }
       }
+
       &--top {
         &:after {
           background-color: #001529;

@@ -11,7 +11,7 @@ const store = createStore({
     logs,
     tags
   },
-  getters,
+  getters
 })
 
 export default store

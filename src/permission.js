@@ -8,22 +8,22 @@ import { validatenull } from '@/util/validate'
 import { getToken } from '@/util/auth'
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-NProgress.configure({ showSpinner: false });
-const lockPage = store.getters.website.lockPage; //锁屏页
+NProgress.configure({ showSpinner: false })
+const lockPage = store.getters.website.lockPage //锁屏页
 router.beforeEach((to, from, next) => {
-  const meta = to.meta || {};
+  const meta = to.meta || {}
   if (getToken()) {
     if (store.getters.isLock && to.path !== lockPage) { //如果系统激活锁屏，全部跳转到锁屏页
       next({ path: lockPage })
     } else if (to.path === '/login') { //如果登录成功访问登录页跳转到主页
       next({ path: '/' })
     } else {
-      const value = to.path;
+      const value = to.path
       const query = to.query
-      const label = query.name || to.name;
+      const label = query.name || to.name
       const meta = to.meta
       if (meta.target) {
-        window.open(query.url.replace(/#/g, "&"))
+        window.open(query.url.replace(/#/g, '&'))
         return
       } else if (meta.isTab !== false && !validatenull(value) && !validatenull(label)) {
         store.commit('ADD_TAG', {
@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
           params: to.params,
           query: to.query,
           meta: to.meta
-        });
+        })
       }
       next()
     }
@@ -47,11 +47,11 @@ router.beforeEach((to, from, next) => {
 })
 
 router.afterEach(to => {
-  NProgress.done();
-  let title = to.name;
-  let i18n = to.meta.i18n;
+  NProgress.done()
+  let title = to.name
+  const i18n = to.meta.i18n
   title = router.$avueRouter.generateTitle(title, i18n)
   //根据当前的标签也获取label的值动态设置浏览器标题
-  router.$avueRouter.setTitle(title);
+  router.$avueRouter.setTitle(title)
   store.commit('SET_IS_SEARCH', false)
-});
+})

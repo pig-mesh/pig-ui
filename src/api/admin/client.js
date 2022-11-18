@@ -17,7 +17,7 @@
 
 import request from '@/router/axios'
 
-export function fetchList (query) {
+export function fetchList(query) {
   return request({
     url: '/admin/client/page',
     method: 'get',
@@ -25,7 +25,7 @@ export function fetchList (query) {
   })
 }
 
-export function addObj (obj) {
+export function addObj(obj) {
   return request({
     url: '/admin/client',
     method: 'post',
@@ -33,21 +33,21 @@ export function addObj (obj) {
   })
 }
 
-export function getObj (id) {
+export function getObj(id) {
   return request({
     url: '/admin/client/' + id,
     method: 'get'
   })
 }
 
-export function delObj (id) {
+export function delObj(id) {
   return request({
     url: '/admin/client/' + id,
     method: 'delete'
   })
 }
 
-export function putObj (obj) {
+export function putObj(obj) {
   return request({
     url: '/admin/client',
     method: 'put',
@@ -55,10 +55,10 @@ export function putObj (obj) {
   })
 }
 
-export function clearClientCache(){
+export function clearClientCache() {
   return request({
-    url:'/admin/client/cache',
-    method:'delete'
+    url: '/admin/client/cache',
+    method: 'delete'
   })
 }
 

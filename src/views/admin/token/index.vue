@@ -18,26 +18,27 @@
 <template>
   <div>
     <basic-container>
-      <avue-crud ref="crud"
-                 v-model:page="page"
-                 :data="tableData"
-                 :table-loading="tableLoading"
-                 :option="tableOption"
-                 :permission="permissionList"
-                 @on-load="getList"
-                 @size-change="sizeChange"
-                 @current-change="currentChange"
-                 @refresh-change="refreshChange"
-                 @row-del="rowDel">
+      <avue-crud
+        ref="crud"
+        v-model:page="page"
+        :data="tableData"
+        :table-loading="tableLoading"
+        :option="tableOption"
+        :permission="permissionList"
+        @on-load="getList"
+        @size-change="sizeChange"
+        @current-change="currentChange"
+        @refresh-change="refreshChange"
+        @row-del="rowDel">
       </avue-crud>
     </basic-container>
   </div>
 </template>
 
 <script>
-import {delObj, fetchList} from '@/api/admin/token'
-import {tableOption} from '@/const/crud/admin/token'
-import {mapGetters} from 'vuex'
+import { delObj, fetchList } from '@/api/admin/token'
+import { tableOption } from '@/const/crud/admin/token'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'token',
@@ -57,7 +58,7 @@ export default {
     ...mapGetters(['permissions']),
     permissionList() {
       return {
-        delBtn: this.validData(this.permissions.sys_token_del, false),
+        delBtn: this.validData(this.permissions.sys_token_del, false)
       }
     }
   },
@@ -73,12 +74,12 @@ export default {
         this.tableLoading = false
       })
     },
-    rowDel: function (row, index) {
+    rowDel: function(row, index) {
       this.$confirm('是否强制' + row.username + '下线?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(function () {
+      }).then(function() {
         return delObj(row.accessToken)
       }).then(data => {
         this.$message.success('删除成功')

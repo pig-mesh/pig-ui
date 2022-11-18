@@ -2,23 +2,23 @@
   <div>
     <!-- 导入对话框 -->
     <el-dialog
-        :title="title"
-        v-model="upload.open"
-        width="400px"
-        append-to-body
+      v-model="upload.open"
+      :title="title"
+      width="400px"
+      append-to-body
     >
       <el-upload
-          ref="upload"
-          :limit="1"
-          accept=".xlsx, .xls"
-          :headers="headers"
-          :action="baseUrl + url"
-          :disabled="upload.isUploading"
-          :on-progress="handleFileUploadProgress"
-          :on-success="handleFileSuccess"
-          :on-error="handleFileError"
-          :auto-upload="false"
-          drag
+        ref="upload"
+        :limit="1"
+        accept=".xlsx, .xls"
+        :headers="headers"
+        :action="baseUrl + url"
+        :disabled="upload.isUploading"
+        :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess"
+        :on-error="handleFileError"
+        :auto-upload="false"
+        drag
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
@@ -28,17 +28,17 @@
 
         <template #tip>
           <div class="el-upload__tip text-center">
-          <span>仅允许导入xls、xlsx格式文件。</span>
-          <el-button
+            <span>仅允许导入xls、xlsx格式文件。</span>
+            <el-button
+              v-if="tempUrl"
               text
               type="primary"
               :underline="false"
               style="font-size:12px;vertical-align: baseline;"
               @click="downExcelTemp"
-              v-if="tempUrl"
-          >下载模板
-          </el-button>
-        </div>
+            >下载模板
+            </el-button>
+          </div>
         </template>
       </el-upload>
       <template #footer>
@@ -50,23 +50,23 @@
     </el-dialog>
 
     <!--校验失败错误数据-->
-    <el-dialog title="校验失败数据" v-model="errorVisible">
+    <el-dialog v-model="errorVisible" title="校验失败数据">
       <el-table :data="errorData">
         <el-table-column
-            property="lineNum"
-            label="行号"
-            width="100"
+          property="lineNum"
+          label="行号"
+          width="100"
         ></el-table-column>
         <el-table-column
-            property="errors"
-            label="错误描述"
-            show-overflow-tooltip
+          property="errors"
+          label="错误描述"
+          show-overflow-tooltip
         >
           <template #="scope">
             <el-tag
-                type="danger"
-                v-for="error in scope.row.errors"
-                :key="error"
+              v-for="error in scope.row.errors"
+              :key="error"
+              type="danger"
             >{{ error }}
             </el-tag
             >
@@ -78,23 +78,29 @@
 </template>
 
 <script>
-import store from "@/store";
+import store from '@/store'
 
 export default {
-  name: "ExcelUpload",
+  name: 'ExcelUpload',
   components: {},
   props: {
     url: {
-      type: String
+      type: String,
+      default: null
     },
     title: {
-      type: String
+      type: String,
+      default: null
+
     },
     tempUrl: {
-      type: String
+      type: String,
+      default: null
+
     },
     tempName: {
-      type: String
+      type: String,
+      default: null
     }
   },
   data() {
@@ -105,49 +111,49 @@ export default {
       },
       errorVisible: false,
       errorData: []
-    };
+    }
   },
   computed: {
-    headers: function () {
+    headers: function() {
       return {
-        Authorization: "Bearer " + store.getters.access_token
-      };
+        Authorization: 'Bearer ' + store.getters.access_token
+      }
     }
   },
   methods: {
     downExcelTemp() {
-      this.downBlobFile(this.tempUrl, {}, this.tempName);
+      this.downBlobFile(this.tempUrl, {}, this.tempName)
     },
     handleFileUploadProgress() {
-      this.upload.isUploading = true;
+      this.upload.isUploading = true
     },
     handleFileError() {
       this.$message.error('上传失败,数据格式不合法!')
-      this.upload.open = false;
+      this.upload.open = false
     },
     handleFileSuccess(response) {
-      this.upload.isUploading = false;
-      this.upload.open = false;
-      this.$refs.upload.clearFiles();
+      this.upload.isUploading = false
+      this.upload.open = false
+      this.$refs.upload.clearFiles()
       // 校验失败
       if (response.code === 1) {
-        this.$message.error("导入失败，以下数据不合法");
-        this.errorVisible = true;
-        this.errorData = response.data;
-        this.$refs.upload.clearFiles();
+        this.$message.error('导入失败，以下数据不合法')
+        this.errorVisible = true
+        this.errorData = response.data
+        this.$refs.upload.clearFiles()
       } else {
-        this.$message.success("导入成功");
+        this.$message.success('导入成功')
         // 刷新表格
-        this.$emit("refreshDataList");
+        this.$emit('refreshDataList')
       }
     },
     submitFileForm() {
-      this.$refs.upload.submit();
+      this.$refs.upload.submit()
     },
     show() {
-      this.upload.isUploading = false;
-      this.upload.open = true;
+      this.upload.isUploading = false
+      this.upload.open = true
     }
   }
-};
+}
 </script>

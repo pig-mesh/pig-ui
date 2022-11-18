@@ -13,8 +13,8 @@
         </div>
         <p class="error500-body-con-message">Oops! the server is wrong</p>
         <div class="error500-btn-con">
-          <el-link @click="goHome" size="large" style="width: 200px;" type="primary">返回首页</el-link>
-          <el-primary @click="backPage" size="large" style="width: 200px;margin-left: 40px;" type="primary">返回上一页</el-primary>
+          <el-link size="large" style="width: 200px;" type="primary" @click="goHome">返回首页</el-link>
+          <el-primary size="large" style="width: 200px;margin-left: 40px;" type="primary" @click="backPage">返回上一页</el-primary>
         </div>
       </el-card>
     </div>
@@ -23,18 +23,18 @@
 
 <script>
 export default {
-  name: "Error500",
+  name: 'Error500',
   methods: {
     backPage() {
-      this.$router.go(-1);
+      this.$router.go(-1)
     },
     goHome() {
       this.$router.push({
-        path: "/"
-      });
+        path: '/'
+      })
     }
   }
-};
+}
 </script>
 <style lang="scss" scoped>
 @keyframes error500animation {

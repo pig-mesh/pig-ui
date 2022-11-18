@@ -15,7 +15,7 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
-import {getObj} from '@/api/admin/client'
+import { getObj } from '@/api/admin/client'
 
 const DIC = {
   vaild: [{
@@ -59,7 +59,7 @@ export const tableOption = {
       required: true,
       message: '请输入clientId',
       trigger: 'blur'
-    }, {validator: validateClient, trigger: 'blur'}]
+    }, { validator: validateClient, trigger: 'blur' }]
   }, {
     label: '密钥',
     prop: 'clientSecret',
@@ -118,13 +118,13 @@ export const tableOption = {
     type: 'number',
     min: 60,
     prop: 'accessTokenValidity',
-    align: 'center',
+    align: 'center'
   }, {
     label: '刷新时效',
     type: 'number',
     min: 3600,
     prop: 'refreshTokenValidity',
-    align: 'center',
+    align: 'center'
   }, {
     label: '扩展信息',
     prop: 'additionalInformation',

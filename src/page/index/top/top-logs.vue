@@ -1,39 +1,48 @@
 <template>
   <span @click="logsFlag?'':handleOpen()">
-    <el-badge :value="logsFlag?'':logsLen"
-              :max="99">
+    <el-badge
+      :value="logsFlag?'':logsLen"
+      :max="99">
       <i class="icon-rizhi1"></i>
     </el-badge>
-    <el-dialog title="日志"
-               v-model="box"
-               width="60%"
-               append-to-body>
-      <el-button type="primary"
-                 icon="el-icon-upload"
-                 @click="send">上传服务器</el-button>
-      <el-button type="danger"
-                 icon="el-icon-delete"
-                 @click="clear">清空本地日志</el-button>
+    <el-dialog
+      v-model="box"
+      title="日志"
+      width="60%"
+      append-to-body>
+      <el-button
+        type="primary"
+        icon="el-icon-upload"
+        @click="send">上传服务器</el-button>
+      <el-button
+        type="danger"
+        icon="el-icon-delete"
+        @click="clear">清空本地日志</el-button>
       <el-table :data="logsList">
-        <el-table-column prop="type"
-                         label="类型"
-                         width="50px">
+        <el-table-column
+          prop="type"
+          label="类型"
+          width="50px">
         </el-table-column>
-        <el-table-column prop="url"
-                         label="地址"
-                         show-overflow-tooltip
-                         width="180">
+        <el-table-column
+          prop="url"
+          label="地址"
+          show-overflow-tooltip
+          width="180">
         </el-table-column>
-        <el-table-column prop="message"
-                         show-overflow-tooltip
-                         label="内容">
+        <el-table-column
+          prop="message"
+          show-overflow-tooltip
+          label="内容">
         </el-table-column>
-        <el-table-column prop="stack"
-                         show-overflow-tooltip
-                         label="错误堆栈">
+        <el-table-column
+          prop="stack"
+          show-overflow-tooltip
+          label="错误堆栈">
         </el-table-column>
-        <el-table-column prop="time"
-                         label="时间">
+        <el-table-column
+          prop="time"
+          label="时间">
         </el-table-column>
       </el-table>
     </el-dialog>
@@ -41,59 +50,59 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters } from 'vuex'
 export default {
-  name: "top-logs",
-  data () {
+  name: 'top-logs',
+  data() {
     return {
       box: false
-    };
+    }
   },
-  created () { },
-  mounted () { },
+  created() { },
+  mounted() { },
   computed: {
-    ...mapGetters(['logsList', "logsFlag", "logsLen"])
+    ...mapGetters(['logsList', 'logsFlag', 'logsLen'])
   },
   props: [],
   methods: {
-    handleOpen () {
-      this.box = true;
+    handleOpen() {
+      this.box = true
     },
-    send () {
-      this.$confirm("确定上传本地日志到服务器?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    send() {
+      this.$confirm('确定上传本地日志到服务器?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$store.dispatch("SendLogs").then(() => {
-            this.box = false;
+          this.$store.dispatch('SendLogs').then(() => {
+            this.box = false
             this.$message({
-              type: "success",
-              message: "发送成功!"
-            });
-          });
+              type: 'success',
+              message: '发送成功!'
+            })
+          })
         })
-        .catch(() => { });
+        .catch(() => { })
     },
-    clear () {
-      this.$confirm("确定清空本地日志记录?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
+    clear() {
+      this.$confirm('确定清空本地日志记录?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
-          this.$store.commit("CLEAR_LOGS");
-          this.box = false;
+          this.$store.commit('CLEAR_LOGS')
+          this.box = false
           this.$message({
-            type: "success",
-            message: "清空成功!"
-          });
+            type: 'success',
+            message: '清空成功!'
+          })
         })
-        .catch(() => { });
+        .catch(() => { })
     }
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

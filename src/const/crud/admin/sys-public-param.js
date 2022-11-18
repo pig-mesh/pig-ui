@@ -15,9 +15,9 @@
  * Author: lengleng (wangiegie@gmail.com)
  */
 
-import { rule } from "@/util/rule";
+import { rule } from '@/util/rule'
 
-import {getObj} from '@/api/admin/sys-public-param'
+import { getObj } from '@/api/admin/sys-public-param'
 
 
 var validateParam = (rule, value, callback) => {
@@ -47,7 +47,7 @@ export const tableOption = {
       rules: [
         { required: true, message: '请输名称', trigger: 'blur' },
         { max: 30, message: '长度在 30 个字符', trigger: 'blur' },
-        { validator: rule.validatorNameCn, trigger: 'blur'}
+        { validator: rule.validatorNameCn, trigger: 'blur' }
       ]
     },
     {
@@ -56,8 +56,8 @@ export const tableOption = {
       search: true,
       rules: [
         { required: true, message: '请输入键', trigger: 'blur' },
-        { validator: rule.validatorKey, trigger: 'blur'},
-        { validator: validateParam, trigger: 'blur'},
+        { validator: rule.validatorKey, trigger: 'blur' },
+        { validator: validateParam, trigger: 'blur' }
       ]
 
     },

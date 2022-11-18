@@ -30,7 +30,7 @@ export const tableOption = {
     {
       label: 'ID',
       prop: 'id',
-      hide: true,
+      hide: true
     },
     {
       label: '表名称',
