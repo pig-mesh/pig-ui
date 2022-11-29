@@ -89,7 +89,7 @@
       <el-dialog v-model="box" title="生成配置" width="50%" lock-scroll>
         <div class="pull-auto">
           <avue-form ref="formData" v-model="formData" :option="formOption">
-            <template>
+            <template #menu-form="{}">
               <el-button
                 type="primary"
                 icon="el-icon-view"
