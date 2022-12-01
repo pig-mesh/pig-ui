@@ -59,7 +59,7 @@
       </el-row>
       <avue-crud
         ref="crud"
-        v-model="page"
+        v-model:page="page"
         :data="tableData"
         :table-loading="tableLoading"
         :option="tableOption"
