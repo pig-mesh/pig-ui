@@ -141,6 +141,9 @@ export default {
         if (isEdit) {
           getObj(id).then(response => {
             this.form = response.data.data
+            if(!this.form.icon){
+              this.form.icon = undefined
+            }
           })
         } else {
           this.form.menuId = undefined
