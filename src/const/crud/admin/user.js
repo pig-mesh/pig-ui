@@ -184,6 +184,7 @@ export const tableOption = {
     slot: true,
     border: true,
     span: 24,
+    value: '0',
     dicUrl: '/admin/dict/key/user_lock_flag',
     rules: [{
       required: true,
