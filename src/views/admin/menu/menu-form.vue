@@ -20,6 +20,7 @@
               value-key="menuId"
               placeholder="选择上级菜单"
               check-strictly
+              default-expand-all
             />
           </el-form-item>
         </el-col>
@@ -155,7 +156,7 @@ export default {
       this.$refs['dataForm'].validate(valid => {
         if (valid) {
           if (this.form.parentId === undefined) {
-            this.form.parentId = -1
+            this.form.parentId = '-1'
           }
 
           if (this.form.menuId) {
@@ -178,7 +179,7 @@ export default {
     getTreeselect() {
       fetchMenuTree().then(response => {
         this.menuOptions = []
-        const menu = { id: -1, name: '根菜单', children: [] }
+        const menu = { id: '-1', name: '根菜单', children: [] }
         menu.children = response.data.data
         this.menuOptions.push(menu)
       })
