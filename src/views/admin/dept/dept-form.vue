@@ -19,9 +19,10 @@
               v-model="form.parentId"
               :data="deptOptions"
               :props="{ value: 'id', label: 'name', children: 'children' }"
-              value-key="menuId"
-              placeholder="选择上级菜单"
+              value-key="id"
               check-strictly
+              default-expand-all
+              placeholder="选择上级菜单"
             />
           </el-form-item>
         </el-col>
@@ -92,7 +93,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           if (this.form.parentId === undefined) {
-            this.form.parentId = 0
+            this.form.parentId = '0'
           }
 
           if (this.form.deptId) {
@@ -115,7 +116,7 @@ export default {
     getTreeselect() {
       fetchTree().then(response => {
         this.deptOptions = []
-        const dept = { id: 0, name: '根部门', children: response.data.data }
+        const dept = { id: '0', name: '根部门', children: response.data.data }
         this.deptOptions.push(dept)
       })
     },
