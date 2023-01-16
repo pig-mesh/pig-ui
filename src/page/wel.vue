@@ -3,7 +3,7 @@
     <basic-container>
       <div class="banner-text">
         <span>
-          <img src="https://img.shields.io/badge/Pig-3.5-success.svg" alt="Build Status">
+          <img src="https://img.shields.io/badge/Pig-3.6-success.svg" alt="Build Status">
           <img src="https://img.shields.io/badge/Spring%20Cloud-2021-blue.svg" alt="Coverage Status">
           <img src="https://img.shields.io/badge/Spring%20Boot-2.7-blue.svg" alt="Downloads">
           <img src="https://img.shields.io/badge/Vue-3.2-blue.svg" alt="Downloads">
@@ -14,7 +14,7 @@
           <el-collapse v-model="activeNames">
             <el-collapse-item name="1">
               <div>基于Spring Cloud 2021</div>
-              <div>基于Spring Boot 2.7.3</div>
+              <div>基于Spring Boot 2.7.7</div>
             </el-collapse-item>
             <el-collapse-item name="2">
               <div>支持docker部署</div>
