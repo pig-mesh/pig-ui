@@ -2,13 +2,13 @@
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
-				<i class="iconfont icon-ziti" :title="$t('message.user.title0')"></i>
+				<i class="iconfont icon-ziti" :title="$t('user.title0')"></i>
 			</div>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('message.user.dropdownLarge') }}</el-dropdown-item>
-					<el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{ $t('message.user.dropdownDefault') }}</el-dropdown-item>
-					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('message.user.dropdownSmall') }}</el-dropdown-item>
+					<el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('user.dropdownLarge') }}</el-dropdown-item>
+					<el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{ $t('user.dropdownDefault') }}</el-dropdown-item>
+					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('user.dropdownSmall') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
@@ -17,7 +17,7 @@
 				<i
 					class="iconfont"
 					:class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'"
-					:title="$t('message.user.title1')"
+					:title="$t('user.title1')"
 				></i>
 			</div>
 			<template #dropdown>
@@ -29,18 +29,18 @@
 			</template>
 		</el-dropdown>
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
-			<el-icon :title="$t('message.user.title2')">
+			<el-icon :title="$t('user.title2')">
 				<ele-Search />
 			</el-icon>
 		</div>
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
-			<i class="icon-skin iconfont" :title="$t('message.user.title3')"></i>
+			<i class="icon-skin iconfont" :title="$t('user.title3')"></i>
 		</div>
 		<div class="layout-navbars-breadcrumb-user-icon">
 			<el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
 				<template #reference>
 					<el-badge :is-dot="true">
-						<el-icon :title="$t('message.user.title4')">
+						<el-icon :title="$t('user.title4')">
 							<ele-Bell />
 						</el-icon>
 					</el-badge>
@@ -53,7 +53,7 @@
 		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
 			<i
 				class="iconfont"
-				:title="state.isScreenfull ? $t('message.user.title6') : $t('message.user.title5')"
+				:title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
 				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
 			></i>
 		</div>
@@ -67,12 +67,12 @@
 			</span>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item command="/home">{{ $t('message.user.dropdown1') }}</el-dropdown-item>
-					<el-dropdown-item command="wareHouse">{{ $t('message.user.dropdown6') }}</el-dropdown-item>
-					<el-dropdown-item command="/personal">{{ $t('message.user.dropdown2') }}</el-dropdown-item>
-					<el-dropdown-item command="/404">{{ $t('message.user.dropdown3') }}</el-dropdown-item>
-					<el-dropdown-item command="/401">{{ $t('message.user.dropdown4') }}</el-dropdown-item>
-					<el-dropdown-item divided command="logOut">{{ $t('message.user.dropdown5') }}</el-dropdown-item>
+					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
+					<el-dropdown-item command="wareHouse">{{ $t('user.dropdown6') }}</el-dropdown-item>
+					<el-dropdown-item command="/personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
+					<el-dropdown-item command="/404">{{ $t('user.dropdown3') }}</el-dropdown-item>
+					<el-dropdown-item command="/401">{{ $t('user.dropdown4') }}</el-dropdown-item>
+					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
@@ -142,16 +142,16 @@ const onHandleCommandClick = (path: string) => {
 		ElMessageBox({
 			closeOnClickModal: false,
 			closeOnPressEscape: false,
-			title: t('message.user.logOutTitle'),
-			message: t('message.user.logOutMessage'),
+			title: t('user.logOutTitle'),
+			message: t('user.logOutMessage'),
 			showCancelButton: true,
-			confirmButtonText: t('message.user.logOutConfirm'),
-			cancelButtonText: t('message.user.logOutCancel'),
+			confirmButtonText: t('user.logOutConfirm'),
+			cancelButtonText: t('user.logOutCancel'),
 			buttonSize: 'default',
 			beforeClose: (action, instance, done) => {
 				if (action === 'confirm') {
 					instance.confirmButtonLoading = true;
-					instance.confirmButtonText = t('message.user.logOutExit');
+					instance.confirmButtonText = t('user.logOutExit');
 					setTimeout(() => {
 						done();
 						setTimeout(() => {

@@ -52,13 +52,13 @@ const emit = defineEmits(['currentContextmenuClick']);
 const state = reactive({
 	isShow: false,
 	dropdownList: [
-		{ contextMenuClickId: 0, txt: 'message.tagsView.refresh', affix: false, icon: 'ele-RefreshRight' },
-		{ contextMenuClickId: 1, txt: 'message.tagsView.close', affix: false, icon: 'ele-Close' },
-		{ contextMenuClickId: 2, txt: 'message.tagsView.closeOther', affix: false, icon: 'ele-CircleClose' },
-		{ contextMenuClickId: 3, txt: 'message.tagsView.closeAll', affix: false, icon: 'ele-FolderDelete' },
+		{ contextMenuClickId: 0, txt: 'tagsView.refresh', affix: false, icon: 'ele-RefreshRight' },
+		{ contextMenuClickId: 1, txt: 'tagsView.close', affix: false, icon: 'ele-Close' },
+		{ contextMenuClickId: 2, txt: 'tagsView.closeOther', affix: false, icon: 'ele-CircleClose' },
+		{ contextMenuClickId: 3, txt: 'tagsView.closeAll', affix: false, icon: 'ele-FolderDelete' },
 		{
 			contextMenuClickId: 4,
-			txt: 'message.tagsView.fullscreen',
+			txt: 'tagsView.fullscreen',
 			affix: false,
 			icon: 'iconfont icon-fullscreen',
 		},

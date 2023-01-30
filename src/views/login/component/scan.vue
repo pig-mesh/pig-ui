@@ -3,7 +3,7 @@
 		<div ref="qrcodeRef"></div>
 		<div class="font12 mt20 login-msg">
 			<i class="iconfont icon-saoyisao mr5"></i>
-			<span>{{ $t('message.scan.text') }}</span>
+			<span>{{ $t('scan.text') }}</span>
 		</div>
 	</div>
 </template>

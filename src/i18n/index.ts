@@ -46,7 +46,7 @@ for (const key in itemize) {
 	messages[key] = {
 		name: key,
 		el: element[key].el,
-		message: mergeArrObj(itemize, key),
+		...mergeArrObj(itemize, key),
 	};
 }
 

@@ -5,7 +5,7 @@
 				<el-autocomplete
 					v-model="state.menuQuery"
 					:fetch-suggestions="menuSearch"
-					:placeholder="$t('message.user.searchPlaceholder')"
+					:placeholder="$t('user.searchPlaceholder')"
 					ref="layoutMenuAutocompleteRef"
 					@select="onHandleSelect"
 					:fit-input-width="true"

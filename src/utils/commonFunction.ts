@@ -45,11 +45,11 @@ export default function () {
 				//复制
 				toClipboard(text);
 				//下面可以设置复制成功的提示框等操作
-				ElMessage.success(t('message.layout.copyTextSuccess'));
+				ElMessage.success(t('layout.copyTextSuccess'));
 				resolve(text);
 			} catch (e) {
 				//复制失败
-				ElMessage.error(t('message.layout.copyTextError'));
+				ElMessage.error(t('layout.copyTextError'));
 				reject(e);
 			}
 		});

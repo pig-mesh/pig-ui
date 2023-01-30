@@ -30,7 +30,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="菜单名称">
-							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx" clearable></el-input>
+							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：router.xxx" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<template v-if="state.ruleForm.menuType === 'menu'">
