@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, {AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig} from 'axios';
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { Session } from '/@/utils/storage';
 import qs from 'qs';
@@ -16,8 +16,7 @@ const service: AxiosInstance = axios.create({
 });
 
 // 添加请求拦截器
-service.interceptors.request.use(
-	(config: AxiosRequestConfig) => {
+service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 		// 在发送请求之前做些什么 token
 		if (Session.get('token')) {
 			config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
