@@ -2,8 +2,8 @@
 	<div class="system-menu-container layout-pd">
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
+				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.search.menuName"> </el-input>
+				<el-button size="default" type="primary" class="ml10" @click="getTableData">
 					<el-icon>
 						<ele-Search />
 					</el-icon>
@@ -39,12 +39,7 @@
             <el-tag v-if="scope.row.keepAlive === '1'" type="success">开启</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="显示状态" show-overflow-tooltip>
-          <template #default="scope">
-            <el-tag v-if="scope.row.visible === '1'" type="success">显示</el-tag>
-            <el-tag v-if="scope.row.visible === '0'" type="info">隐藏</el-tag>
-          </template>
-        </el-table-column>
+        <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
@@ -74,13 +69,16 @@ const state = reactive({
 		data: [] as menuData[],
 		loading: true,
 	},
+  search: {
+    menuName: ''
+  }
 });
 
 // 获取路由数据，真实请从接口获取
 const getTableData = () => {
 	state.tableData.loading = true;
 
-  pageList().then(res => {
+  pageList(state.search).then(res => {
     state.tableData.data = res.data
   })
 

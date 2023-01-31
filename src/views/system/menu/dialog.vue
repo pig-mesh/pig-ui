@@ -70,13 +70,12 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import {defineAsyncComponent, onMounted, reactive, ref} from 'vue';
+import {defineAsyncComponent, nextTick, onMounted, reactive, ref} from 'vue';
 import {storeToRefs} from 'pinia';
 import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/i18n/index';
 import {info, pageList, update} from "/@/api/menu";
 import type {menuData} from './menu'
-import {Message} from "@element-plus/icons-vue";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -88,7 +87,7 @@ const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelect
 const menuDialogFormRef = ref();
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
-
+// 定义需要的数据
 const state = reactive({
   // 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
   ruleForm: {
@@ -112,7 +111,7 @@ const state = reactive({
   },
 });
 
-// 获取 pinia 中的路由
+// 从后端获取路由信息
 const getMenuData = async () => {
   pageList().then(res => {
     let menu: menuData;
@@ -150,9 +149,9 @@ const openDialog = (type: string, row?: any) => {
     state.dialog.title = '新增菜单';
     state.dialog.submitTxt = '新 增';
     // 清空表单，此项需加表单验证才能使用
-    // nextTick(() => {
-    // 	menuDialogFormRef.value.resetFields();
-    // });
+    nextTick(() => {
+    	menuDialogFormRef.value.resetFields();
+    });
   }
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
@@ -165,7 +164,7 @@ const closeDialog = () => {
 const onCancel = () => {
 	closeDialog();
 };
-// 提交
+// 保存数据
 const onSubmit = () => {
   // 保存 调用刷新
   if(state.dialog.type === 'edit'){
@@ -182,7 +181,7 @@ onMounted(() => {
   getMenuData();
 });
 
-// 暴露变量
+// 暴露变量 只有暴漏出来的变量 父组件才能使用
 defineExpose({
 	openDialog,
 });
