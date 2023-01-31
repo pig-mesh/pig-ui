@@ -31,7 +31,7 @@
  * Verify 验证码组件
  * @description 分发验证码使用
  * */
-import {computed, ref, toRefs, watchEffect, defineComponent, defineAsyncComponent} from 'vue';
+import {computed, ref, toRefs, watchEffect, defineAsyncComponent} from 'vue';
 const VerifySlide = defineAsyncComponent(() => import('/@/components/verifition/Verify/VerifySlide.vue'))
 const VerifyPoints = defineAsyncComponent(() => import('/@/components/verifition/Verify/VerifyPoints.vue'))
 
@@ -79,7 +79,7 @@ export default  {
     },
   },
   setup(props) {
-    const {captchaType, figure, arith, mode, vSpace, explain, imgSize, blockSize, barSize} = toRefs(props)
+    const {captchaType, mode } = toRefs(props)
     const clickShow = ref(false)
     const verifyType = ref(undefined)
     const componentType = ref(undefined)

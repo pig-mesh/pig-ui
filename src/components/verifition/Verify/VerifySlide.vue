@@ -49,8 +49,7 @@
 import {aesEncrypt} from "./../utils/ase"
 import {resetSize} from './../utils/util'
 import {reqCheck, reqGet} from "./../api/index"
-import {computed, defineComponent, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch} from 'vue';
-//  "captchaType":"blockPuzzle",
+import {computed, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch} from 'vue';
 export default {
   name: 'VerifySlide',
   props: {
@@ -222,9 +221,9 @@ export default {
       e = e || window.event
       if (status.value && isEnd.value == false) {
         if (!e.touches) {  //兼容PC端
-          var x = e.clientX;
+          let x = e.clientX;
         } else {           //兼容移动端
-          var x = e.touches[0].pageX;
+          let x = e.touches[0].pageX;
         }
         var bar_area_left = barArea.value.getBoundingClientRect().left;
         var move_block_left = x - bar_area_left //小方块相对于父元素的left值

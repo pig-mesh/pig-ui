@@ -48,10 +48,10 @@
      * VerifyPoints
      * @description 点选
      * */
-    import {resetSize, _code_chars, _code_color1, _code_color2} from './../utils/util'
+    import {resetSize} from './../utils/util'
     import {aesEncrypt} from "./../utils/ase"
     import {reqGet,reqCheck}  from "./../api/index"
-    import { computed, onMounted, reactive, ref,watch,nextTick,toRefs, watchEffect,getCurrentInstance} from 'vue';
+    import {  onMounted, reactive, ref,nextTick,toRefs, getCurrentInstance} from 'vue';
     export default {
         name: 'VerifyPoints',
         props: {
@@ -88,7 +88,7 @@
             }
         },
         setup(props,context){
-            const {mode,captchaType,vSpace,imgSize,barSize} = toRefs(props)
+            const {mode,captchaType} = toRefs(props)
             const { proxy } = getCurrentInstance();
             let secretKey = ref(''),           //后端返回的ase加密秘钥
                 checkNum = ref(3),             //默认需要点击的字数
