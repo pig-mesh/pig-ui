@@ -30,18 +30,13 @@
               <el-input v-model="state.ruleForm.name" clearable placeholder="格式：router.xxx"></el-input>
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="mb20">
-            <el-form-item label="名称" prop="name">
-              <el-input v-model="state.ruleForm.name" placeholder="请输入菜单名称"/>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12" class="mb20">
-            <el-form-item v-if="state.ruleForm.menuType !== '1'" label="路由地址" prop="path">
+          <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType !== '1'" >
+            <el-form-item label="路由地址" prop="path">
               <el-input v-model="state.ruleForm.path" placeholder="请输入路由地址"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="mb20">
-            <el-form-item v-if="state.ruleForm.menuType === '1'" label="权限标识" prop="permission">
+          <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '1'">
+            <el-form-item  label="权限标识" prop="permission">
               <el-input v-model="state.ruleForm.permission" maxlength="50" placeholder="请权限标识"/>
             </el-form-item>
           </el-col>
@@ -50,8 +45,8 @@
               <el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right"/>
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="mb20">
-            <el-form-item v-if="state.ruleForm.menuType !== '1'" label="路由缓冲" prop="keepAlive">
+          <el-col :span="12" class="mb20"  v-if="state.ruleForm.menuType !== '1'">
+            <el-form-item label="路由缓冲" prop="keepAlive">
               <el-radio-group v-model="state.ruleForm.keepAlive">
                 <el-radio-button label="0">否</el-radio-button>
                 <el-radio-button label="1">是</el-radio-button>
