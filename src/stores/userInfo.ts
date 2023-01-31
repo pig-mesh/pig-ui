@@ -28,18 +28,14 @@ export const useUserInfo = defineStore('userInfo', {
 				key: 'pigxpigxpigxpigx',
 				param: ['password']
 			})
-			console.log(user,'user')
-
-
 			return new Promise((resolve, reject) => {
 				login(user).then(res =>{
 					// 存储token 信息
-					console.log(res.data,'login data')
-					Session.set('token', res.data.access_token);
+					Session.set('token', res.access_token);
 					// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-					Cookies.set('userName', res.data.username);
+					Cookies.set('userName', res.username);
 					resolve(res)
-				}).then((err) => {
+				}).catch((err) => {
 					console.log(err)
 					reject(err)
 				})

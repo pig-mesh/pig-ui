@@ -220,10 +220,11 @@ export default {
     function move(e) {
       e = e || window.event
       if (status.value && isEnd.value == false) {
+        let x = null;
         if (!e.touches) {  //兼容PC端
-          let x = e.clientX;
+          x = e.clientX;
         } else {           //兼容移动端
-          let x = e.touches[0].pageX;
+          x = e.touches[0].pageX;
         }
         var bar_area_left = barArea.value.getBoundingClientRect().left;
         var move_block_left = x - bar_area_left //小方块相对于父元素的left值

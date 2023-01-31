@@ -4,7 +4,6 @@
 		<LockScreen v-if="themeConfig.isLockScreen" />
 		<Setings ref="setingsRef" v-show="themeConfig.lockScreenTime > 1" />
 		<CloseFull v-if="!themeConfig.isLockScreen" />
-		<Upgrade v-if="getVersion" />
 	</el-config-provider>
 </template>
 
@@ -34,15 +33,6 @@ const stores = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 
-// 获取版本号
-const getVersion = computed(() => {
-	let isVersion = false;
-	if (route.path !== '/login') {
-		// @ts-ignore
-		if ((Local.get('version') && Local.get('version') !== __VERSION__) || !Local.get('version')) isVersion = true;
-	}
-	return isVersion;
-});
 // 获取全局组件大小
 const getGlobalComponentSize = computed(() => {
 	return other.globalComponentSize();
