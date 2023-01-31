@@ -78,7 +78,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 界面显示
 			 */
 			// 是否开启侧边栏 Logo
-			isShowLogo: false,
+			isShowLogo: true,
 			// 初始化变量，用于 el-scrollbar 的高度更新，请勿删除
 			isShowLogoChange: false,
 			// 是否开启 Breadcrumb，强制经典、横向布局不显示
@@ -104,7 +104,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启水印
 			isWartermark: true,
 			// 水印文案
-			wartermarkText: 'vue-next-admin',
+			wartermarkText: 'PigX',
 
 			/**
 			 * 其它设置
@@ -137,9 +137,9 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题）
-			globalTitle: 'vue-next-admin',
+			globalTitle: 'PigX 快速开发框架',
 			// 网站副标题（登录页顶部文字）
-			globalViceTitle: 'vueNextAdmin',
+			globalViceTitle: 'PigX 快速开发框架',
 			// 网站副标题（登录页顶部文字）
 			globalViceTitleMsg: '专注、免费、开源、维护、解疑',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
@@ -147,6 +147,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'large'
 			globalComponentSize: 'large',
 		},
+
 	}),
 	actions: {
 		setThemeConfig(data: ThemeConfigState) {

@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
+import { login } from '/@//api/login/index'
+import other  from '/@/utils/other'
 
 /**
  * 用户信息
@@ -17,6 +19,33 @@ export const useUserInfo = defineStore('userInfo', {
 		},
 	}),
 	actions: {
+		async login(data: any){
+			data.grant_type = 'password'
+			data.scope = 'server'
+			// 密码加密
+			const user = other.encryption({
+				data: data,
+				key: 'pigxpigxpigxpigx',
+				param: ['password']
+			})
+			console.log(user,'user')
+
+
+			return new Promise((resolve, reject) => {
+				login(user).then(res =>{
+					// 存储token 信息
+					console.log(res.data,'login data')
+					Session.set('token', res.data.access_token);
+					// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
+					Cookies.set('userName', res.data.username);
+					resolve(res)
+				}).then((err) => {
+					console.log(err)
+					reject(err)
+				})
+			})
+
+		},
 		async setUserInfos() {
 			// 存储用户信息到浏览器缓存
 			if (Session.get('userInfo')) {

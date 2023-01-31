@@ -8,6 +8,8 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { i18n } from '/@/i18n/index';
 import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
+// @ts-ignore
+import * as CryptoJS from "crypto-js";
 
 // 引入组件
 const SvgIcon = defineAsyncComponent(() => import('/@/components/svgIcon/index.vue'));
@@ -172,6 +174,34 @@ export function handleOpenLink(val: RouteItem) {
 	else window.open(`${origin}${pathname}#${val.meta?.isLink}`);
 }
 
+
+/**
+ *加密处理
+ */
+export function encryption(params: any) {
+	let { data, type, param, key } = params;
+	const result = JSON.parse(JSON.stringify(data));
+	if (type === "Base64") {
+		param.forEach((ele: any) => {
+			result[ele] = btoa(result[ele]);
+		});
+	} else {
+		param.forEach((ele: any) => {
+			var data = result[ele];
+			key = CryptoJS.enc.Latin1.parse(key);
+			var iv = key;
+			// 加密
+			var encrypted = CryptoJS.AES.encrypt(data, key, {
+				iv: iv,
+				mode: CryptoJS.mode.CFB,
+				padding: CryptoJS.pad.NoPadding
+			});
+			result[ele] = encrypted.toString();
+		});
+	}
+	return result;
+};
+
 /**
  * 统一批量导出
  * @method elSvg 导出全局注册 element plus svg 图标
@@ -212,6 +242,9 @@ const other = {
 	handleOpenLink: (val: RouteItem) => {
 		handleOpenLink(val);
 	},
+	encryption: (data: any) => {
+		return encryption(data)
+	}
 };
 
 // 统一批量导出

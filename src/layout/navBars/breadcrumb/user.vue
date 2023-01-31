@@ -68,10 +68,7 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
-					<el-dropdown-item command="wareHouse">{{ $t('user.dropdown6') }}</el-dropdown-item>
 					<el-dropdown-item command="/personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
-					<el-dropdown-item command="/404">{{ $t('user.dropdown3') }}</el-dropdown-item>
-					<el-dropdown-item command="/401">{{ $t('user.dropdown4') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>

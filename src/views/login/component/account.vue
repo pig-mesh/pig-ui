@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.userName" clearable autocomplete="off">
+			<el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
@@ -27,28 +27,37 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation3">
-			<el-col :span="15">
-				<el-input
-					text
-					maxlength="4"
-					:placeholder="$t('account.accountPlaceholder3')"
-					v-model="state.ruleForm.code"
-					clearable
-					autocomplete="off"
-				>
-					<template #prefix>
-						<el-icon class="el-input__icon"><ele-Position /></el-icon>
-					</template>
-				</el-input>
-			</el-col>
-			<el-col :span="1"></el-col>
-			<el-col :span="8">
-				<el-button class="login-content-code" v-waves>1234</el-button>
-			</el-col>
-		</el-form-item>
+    <el-form-item>
+      <Verify
+          @success="verifySuccess"
+          :mode="'pop'"
+          :captchaType="'blockPuzzle'"
+          :imgSize="{ width: '330px', height: '155px' }"
+          ref="verifyref"
+      />
+    </el-form-item>
+<!--		<el-form-item class="login-animation3">-->
+<!--			<el-col :span="15">-->
+<!--				<el-input-->
+<!--					text-->
+<!--					maxlength="4"-->
+<!--					:placeholder="$t('account.accountPlaceholder3')"-->
+<!--					v-model="state.ruleForm.code"-->
+<!--					clearable-->
+<!--					autocomplete="off"-->
+<!--				>-->
+<!--					<template #prefix>-->
+<!--						<el-icon class="el-input__icon"><ele-Position /></el-icon>-->
+<!--					</template>-->
+<!--				</el-input>-->
+<!--			</el-col>-->
+<!--			<el-col :span="1"></el-col>-->
+<!--			<el-col :span="8">-->
+<!--				<el-button class="login-content-code" v-waves>1234</el-button>-->
+<!--			</el-col>-->
+<!--		</el-form-item>-->
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
+			<el-button type="primary" class="login-content-submit" round v-waves @click="handleLogin" :loading="state.loading.signIn">
 				<span>{{ $t('account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
@@ -56,7 +65,7 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import { reactive, computed } from 'vue';
+import {reactive, computed, defineAsyncComponent, ref} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -68,6 +77,9 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
+import { useUserInfo } from '/@/stores/userInfo'
+
+const Verify = defineAsyncComponent(() => import('/@/components/verifition/Verify.vue'))
 
 // 定义变量内容
 const { t } = useI18n();
@@ -78,26 +90,33 @@ const router = useRouter();
 const state = reactive({
 	isShowPassword: false,
 	ruleForm: {
-		userName: 'admin',
+    username: 'admin',
 		password: '123456',
-		code: '1234',
+		code: '',
+    randomStr: 'blockPuzzle'
 	},
 	loading: {
 		signIn: false,
 	},
 });
+// @ts-ignore
+const verifyref = ref<InstanceType<typeof Verify>>(null)
 
 // 时间获取
 const currentTime = computed(() => {
 	return formatAxis(new Date());
 });
+
+const handleLogin = () => {
+  verifyref.value.show();
+}
 // 登录
 const onSignIn = async () => {
 	state.loading.signIn = true;
 	// 存储 token 到浏览器缓存
-	Session.set('token', Math.random().toString(36).substr(0));
-	// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-	Cookies.set('userName', state.ruleForm.userName);
+  await useUserInfo().login(state.ruleForm)
+  // 进行登录
+
 	if (!themeConfig.value.isRequestRoutes) {
 		// 前端控制路由，2、请注意执行顺序
 		const isNoPower = await initFrontEndControlRoutes();
@@ -136,6 +155,11 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 	}
 	state.loading.signIn = false;
 };
+
+const verifySuccess = (params: any) => {
+  state.ruleForm.code = params.captchaVerification;
+  onSignIn()
+}
 </script>
 
 <style scoped lang="scss">
