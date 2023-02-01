@@ -4,7 +4,7 @@
         <el-row :gutter="35">
           <el-col :span="12" class="mb20">
             <el-form-item label="菜单类型">
-              <el-radio-group v-model="state.ruleForm.menuType">
+              <el-radio-group v-model="state.ruleForm.menType">
                 <el-radio-button label="0">左菜单</el-radio-button>
                 <el-radio-button label="1">按钮</el-radio-button>
                 <el-radio-button label="2">顶菜单</el-radio-button>
@@ -66,10 +66,8 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import {defineAsyncComponent, nextTick, onMounted, reactive, ref} from 'vue';
-import {storeToRefs} from 'pinia';
-import {useRoutesList} from '/@/stores/routesList';
 import {i18n} from '/@/i18n/index';
-import {info, pageList, update} from "/@/api/menu";
+import {info, pageList, update, addObj} from "/@/api/admin/menu";
 import type {menuData} from './menu'
 
 // 定义子组件向父组件传值/事件
@@ -80,11 +78,8 @@ const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelect
 
 // 定义变量内容
 const menuDialogFormRef = ref();
-const stores = useRoutesList();
-const { routesList } = storeToRefs(stores);
 // 定义需要的数据
 const state = reactive({
-  // 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
   ruleForm: {
     menuId: '',
     name: '',
@@ -106,7 +101,7 @@ const state = reactive({
   },
 });
 
-// 从后端获取路由信息
+// 从后端获取菜单信息
 const getMenuData = async () => {
   pageList().then(res => {
     let menu: menuData;
@@ -135,7 +130,6 @@ const openDialog = (type: string, row?: any) => {
   if (type === 'edit') {
     // 模拟数据，实际请走接口
     info(row.id).then(res => {
-      console.log(res.data, 'res.data')
       state.ruleForm = (res.data as menuData)
     })
     state.dialog.title = '修改菜单';
@@ -150,6 +144,7 @@ const openDialog = (type: string, row?: any) => {
   }
   state.dialog.type = type;
   state.dialog.isShowDialog = true;
+  getMenuData();
 };
 // 关闭弹窗
 const closeDialog = () => {
@@ -168,13 +163,15 @@ const onSubmit = () => {
       emit('refresh');
     }).catch(err => {
     })
+  }else{
+    addObj(state.ruleForm).then(() => {
+      closeDialog(); // 关闭弹窗
+      emit('refresh');
+    }).catch(err => {
+    })
   }
 
 };
-// 页面加载时
-onMounted(() => {
-  getMenuData();
-});
 
 // 暴露变量 只有暴漏出来的变量 父组件才能使用
 defineExpose({

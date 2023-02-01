@@ -57,7 +57,7 @@
 import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { pageList } from '/@/api/menu'
+import { pageList } from '/@/api/admin/menu'
 import type { menuData } from './menu'
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
