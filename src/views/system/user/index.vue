@@ -12,21 +12,22 @@
       </el-col>
       <el-col :span="20" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
-          <div class="system-user-search mb15">
-            <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px" v-model="state.queryForm.username"> </el-input>
-            <el-button size="default" type="primary" class="ml10" @click="getDataList">
-              <el-icon>
-                <ele-Search />
-              </el-icon>
-              查询
-            </el-button>
-            <el-button size="default" type="success" class="ml10" @click="userDialogRef.openDialog('add')">
-              <el-icon>
-                <ele-FolderAdd />
-              </el-icon>
-              新增用户
-            </el-button>
-          </div>
+          <el-row v-show="showSearch">
+            <div class="mb15">
+              <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px" v-model="state.queryForm.username"> </el-input>
+              <el-button size="default" icon="search" type="primary" class="ml10" @click="getDataList">
+                查询
+              </el-button>
+            </div>
+          </el-row>
+          <el-row style="margin-top: 20px">
+            <div class="mb15" style="width: 100%">
+              <el-button size="default" icon="folder-add" type="success" class="ml10" @click="userDialogRef.openDialog('add')">
+                新增用户
+              </el-button>
+              <right-tool-bar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-tool-bar>
+            </div>
+          </el-row>
           <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
             <el-table-column type="index" label="序号" width="60" />
             <el-table-column prop="username" label="用户名" show-overflow-tooltip></el-table-column>
@@ -74,7 +75,7 @@
 </template>
 
 <script setup lang="ts" name="systemUser">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
+import {defineAsyncComponent, reactive, onMounted, ref, Ref} from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
@@ -84,9 +85,12 @@ import {BasicTableProps, useTable} from '/@/hooks/table'
 const UserDialog = defineAsyncComponent(() => import('./form.vue'));
 const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
+const RightToolBar = defineAsyncComponent(() => import('/@/components/RightToolbar/index.vue'))
 
 // 定义变量内容
 const userDialogRef = ref();
+
+const showSearch : Ref<Boolean> = ref(true)
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
