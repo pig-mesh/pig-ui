@@ -3,49 +3,31 @@
     <el-row :gutter="20">
       <el-col :span="4" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
-          <div class="head-container">
-            <el-input
-                v-model="deptData.search.deptName"
-                placeholder="请输入部门名称"
-                clearable
-                prefix-icon="Search"
-                style="margin-bottom: 20px"
-                @change="getDeptTree"
-            />
-          </div>
-          <div class="head-container">
-            <el-tree
-                :data="deptData.deptList"
-                :props="{ label: 'name', children: 'children',value: 'id' }"
-                :expand-on-click-node="false"
-                ref="deptTreeRef"
-                :loading="deptData.loading"
-                node-key="id"
-                highlight-current
-                default-expand-all
-                @node-click="handleNodeClick"
-            />
-          </div>
+          <query-tree
+              @node-click="handleNodeClick"
+              :placeholder="deptData.placeholder"
+              :query="deptData.queryList"
+          />
         </el-card>
       </el-col>
       <el-col :span="20" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
           <div class="system-user-search mb15">
-            <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px" v-model="state.search.username"> </el-input>
-            <el-button size="default" type="primary" class="ml10" @click="getTableData">
+            <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px" v-model="state.queryForm.username"> </el-input>
+            <el-button size="default" type="primary" class="ml10" @click="getDataList">
               <el-icon>
                 <ele-Search />
               </el-icon>
               查询
             </el-button>
-            <el-button size="default" type="success" class="ml10" @click="onOpenAddUser('add')">
+            <el-button size="default" type="success" class="ml10" @click="userDialogRef.openDialog('add')">
               <el-icon>
                 <ele-FolderAdd />
               </el-icon>
               新增用户
             </el-button>
           </div>
-          <el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+          <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
             <el-table-column type="index" label="序号" width="60" />
             <el-table-column prop="username" label="用户名" show-overflow-tooltip></el-table-column>
             <el-table-column prop="name" label="姓名" show-overflow-tooltip></el-table-column>
@@ -69,31 +51,25 @@
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" width="100">
               <template #default="scope">
-                <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="onOpenEditUser('edit', scope.row)"
+                <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="userDialogRef.openDialog('edit', scope.row)"
                 >修改</el-button
                 >
                 <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination
-              @size-change="onHandleSizeChange"
-              @current-change="onHandleCurrentChange"
-              class="mt15"
-              :pager-count="5"
-              :page-sizes="[10, 20, 30]"
-              v-model:current-page="state.tableData.param.pageNum"
-              background
-              v-model:page-size="state.tableData.param.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="state.tableData.total"
+
+          <pagination
+              @size-change="sizeChangeHandle"
+              @current-change="currentChangeHandle"
+              v-bind="state.pagination"
           >
-          </el-pagination>
+          </pagination>
         </el-card>
       </el-col>
     </el-row>
 
-		<UserDialog ref="userDialogRef" @refresh="getTableData()" />
+		<UserDialog ref="userDialogRef" @refresh="getDataList()" />
 	</div>
 </template>
 
@@ -102,81 +78,49 @@ import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
+import {BasicTableProps, useTable} from '/@/hooks/table'
 
 // 引入组件
-const UserDialog = defineAsyncComponent(() => import('/@/views/system/user/dialog.vue'));
+const UserDialog = defineAsyncComponent(() => import('./form.vue'));
+const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
+const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 
 // 定义变量内容
 const userDialogRef = ref();
-const state = reactive({
-	tableData: {
-		data: [],
-		total: 0,
-		loading: false,
-		param: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-	},
-  search: {
+
+// 定义表格查询、后台调用的API
+const state: BasicTableProps = reactive<BasicTableProps>({
+  queryForm: {
     deptId: '',
     username: ''
-  }
+  },
+  pageList: pageList // H
 });
 
-const search = reactive({
-  deptName: ''
-})
+// 部门树使用的数据
 const deptData = reactive({
-  deptList: [],
-  search: {
-    deptName: ''
+  queryList: (name:String) => {
+    return depttree({
+      deptName: name
+    })
   },
-  loading: false
+  placeholder: '输入部门名称'
 })
 
-// 初始化表格数据
-const getTableData = () => {
-	state.tableData.loading = true;
-  pageList(state.search).then(res => {
-    state.tableData.data = res.data.records;
-    state.tableData.total = res.data.total;
-    state.tableData.loading = false;
-  }).catch(err => {
-    ElMessage.error(err.msg)
-    state.tableData.loading = false;
-  })
-};
+//  table hook
+const {
+  getDataList,
+  currentChangeHandle,
+  sizeChangeHandle
+} = useTable(state)
 
-// 获取部门数据
 
-const getDeptTree = () => {
-  deptData.loading = true
-  depttree(deptData.search).then(res => {
-    deptData.deptList = res.data
-  }).catch(err => {
-    ElMessage.error(err.msg)
-  }).finally(() => {
-    deptData.loading = false
-  })
-
-}
-
-// 点击数
+// 点击树
 const handleNodeClick = (e: any) => {
-  state.search.deptId = e.id
-  getTableData()
+  state.queryForm.deptId = e.id
+  getDataList()
 }
 
-
-// 打开新增用户弹窗
-const onOpenAddUser = (type: string) => {
-	userDialogRef.value.openDialog(type);
-};
-// 打开修改用户弹窗
-const onOpenEditUser = (type: string, row: any) => {
-	userDialogRef.value.openDialog(type, row);
-};
 // 删除用户
 const onRowDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
@@ -187,40 +131,11 @@ const onRowDel = (row: any) => {
 		.then(() => {
       // 删除用户的接口
       delObj(row.userId).then(res => {
-        getTableData();
+        getDataList();
         ElMessage.success('删除成功');
       }).catch(err => {
         ElMessage.error(err.msg)
       })
 		})
 };
-// 分页改变
-const onHandleSizeChange = (val: number) => {
-	state.tableData.param.pageSize = val;
-	getTableData();
-};
-// 分页改变
-const onHandleCurrentChange = (val: number) => {
-	state.tableData.param.pageNum = val;
-	getTableData();
-};
-// 页面加载时
-onMounted(() => {
-	getTableData();
-  getDeptTree();
-});
 </script>
-
-<style scoped lang="scss">
-.system-user-container {
-	:deep(.el-card__body) {
-		display: flex;
-		flex-direction: column;
-		flex: 1;
-		overflow: auto;
-		.el-table {
-			flex: 1;
-		}
-	}
-}
-</style>
