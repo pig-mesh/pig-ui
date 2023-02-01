@@ -141,7 +141,8 @@ const openDialog = (type: string, row: any) => {
 	if (type === 'edit') {
 		state.dialog.title = '修改用户';
 		state.dialog.submitTxt = '修 改';
-
+    state.role = []
+    state.post = []
     state.ruleForm = Object.assign(state.ruleForm,row)
     row.roleList.map((item: any) => {
       state.role.push(item.roleId)
