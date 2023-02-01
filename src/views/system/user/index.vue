@@ -45,8 +45,7 @@
             </el-table-column>
             <el-table-column label="状态" show-overflow-tooltip>
               <template #default="scope">
-                <el-tag v-if="scope.row.lockFlag === '0'" type="success">有效</el-tag>
-                <el-tag v-if="scope.row.lockFlag === '9'" type="success">锁定</el-tag>
+                <dict-tag :options="lock_flag" :value="scope.row.lockFlag"></dict-tag>
               </template>
             </el-table-column>
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
@@ -75,17 +74,21 @@
 </template>
 
 <script setup lang="ts" name="systemUser">
-import {defineAsyncComponent, reactive, onMounted, ref, Ref} from 'vue';
+import {defineAsyncComponent, reactive, onMounted, ref, Ref, toRefs} from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
 import {BasicTableProps, useTable} from '/@/hooks/table'
+import { useDict } from '/@/hooks/dict'
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('./form.vue'));
 const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 const RightToolBar = defineAsyncComponent(() => import('/@/components/RightToolbar/index.vue'))
+const DictTag  = defineAsyncComponent(() => import("/@/components/DictTag/index.vue"))
+// @ts-ignore
+const { lock_flag } = toRefs(useDict('lock_flag'))
 
 // 定义变量内容
 const userDialogRef = ref();

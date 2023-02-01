@@ -75,8 +75,7 @@
 					<el-col :span="12" class="mb20">
 						<el-form-item label="状态">
               <el-radio-group v-model="state.ruleForm.lockFlag">
-                <el-radio label="0" border>有效</el-radio>
-                <el-radio label="9" border>禁用</el-radio>
+                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border>{{item.label}}</el-radio>
               </el-radio-group>
 						</el-form-item>
 					</el-col>
@@ -93,15 +92,19 @@
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import {nextTick, reactive, ref, watchEffect} from 'vue';
-import {  getObj,addObj, putObj } from '/@/api/admin/user'
+import {nextTick, reactive, ref, toRefs, watchEffect} from 'vue';
+import {  addObj, putObj } from '/@/api/admin/user'
 import { list as roleList } from '/@/api/admin/role'
 import { list as postList } from '/@/api/admin/post'
 import { depttree } from '/@/api/admin/dept'
 import { ElMessage } from 'element-plus';
+import {useDict} from "/@/hooks/dict";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
+
+// @ts-ignore
+const { lock_flag } = toRefs(useDict('lock_flag'))
 // 定义变量内容
 const userDialogFormRef = ref();
 const state = reactive({

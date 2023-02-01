@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-for="(item, index) in options">
+    <template v-for="(item, index) in props.options">
       <template v-if="values.includes(item.value)">
         <span
           v-if="item.elTagType == 'default' || item.elTagType == ''"
@@ -11,7 +11,7 @@
         <el-tag
           v-else
           :disable-transitions="true"
-          :key="item.value + ''"
+          :key="item.value"
           :index="index"
           :type="item.elTagType === 'primary' ? '' : item.elTagType"
           :class="item.elTagClass"
@@ -21,7 +21,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts" name="dict-tag">
+import {computed} from "vue";
+
 const props = defineProps({
   // 数据
   options: {
@@ -33,6 +35,7 @@ const props = defineProps({
 })
 
 const values = computed(() => {
+  console.log(props.options,'options')
   if (props.value !== null && typeof props.value !== 'undefined') {
     return Array.isArray(props.value) ? props.value : [String(props.value)];
   } else {
