@@ -51,10 +51,10 @@
             <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
             <el-table-column label="操作" width="100">
               <template #default="scope">
-                <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="userDialogRef.openDialog('edit', scope.row)"
+                <el-button  size="small" text type="primary" @click="userDialogRef.openDialog('edit', scope.row)"
                 >修改</el-button
                 >
-                <el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+                <el-button size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -83,9 +83,7 @@ import { useDict } from '/@/hooks/dict'
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('./form.vue'));
-const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
-const RightToolBar = defineAsyncComponent(() => import('/@/components/RightToolbar/index.vue'))
 const DictTag  = defineAsyncComponent(() => import("/@/components/DictTag/index.vue"))
 // @ts-ignore
 const { lock_flag } = toRefs(useDict('lock_flag'))
@@ -116,6 +114,8 @@ const deptData = reactive({
 
 //  table hook
 const {
+  RightToolBar,
+  pagination,
   getDataList,
   currentChangeHandle,
   sizeChangeHandle

@@ -1,4 +1,4 @@
-import {onMounted} from "vue";
+import {defineAsyncComponent, onMounted} from "vue";
 import {ElMessage} from "element-plus";
 
 export interface BasicTableProps{
@@ -130,11 +130,17 @@ export function useTable(options?: BasicTableProps) {
         query()
     }
 
+    const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
+
+    const RightToolBar = defineAsyncComponent(() => import('/@/components/RightToolbar/index.vue'))
+
     return {
+        RightToolBar,
         getDataList,
         sizeChangeHandle,
         currentChangeHandle,
         sortChangeHandle,
+        pagination
     }
 
 }

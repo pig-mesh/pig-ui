@@ -3,16 +3,10 @@
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
 				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.search.menuName"> </el-input>
-				<el-button size="default" type="primary" class="ml10" @click="getTableData">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
+				<el-button size="default" icon="search" type="primary" class="ml10" @click="getTableData">
 					查询
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
+				<el-button size="default" icon="folder-add" type="success" class="ml10" @click="onOpenAddMenu">
 					新增菜单
 				</el-button>
 			</div>
@@ -60,7 +54,7 @@ import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList } from '/@/api/admin/menu'
 import type { menuData } from './menu'
 // 引入组件
-const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
+const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 
 // 定义变量内容
 const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();

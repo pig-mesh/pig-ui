@@ -8,3 +8,11 @@ export const list = (params?: Object) => {
         params
     })
 }
+
+export const pageList = (params?: Object) => {
+    return request({
+        url: '/admin/role/page',
+        method: "get",
+        params
+    })
+}
