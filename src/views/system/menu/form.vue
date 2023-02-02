@@ -65,8 +65,6 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import {defineAsyncComponent, nextTick, onMounted, reactive, ref} from 'vue';
-import {i18n} from '/@/i18n/index';
 import {info, pageList, update, addObj} from "/@/api/admin/menu";
 import type {menuData} from './menu'
 

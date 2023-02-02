@@ -92,7 +92,6 @@
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import {nextTick, reactive, ref, toRefs, watchEffect} from 'vue';
 import {  addObj, putObj } from '/@/api/admin/user'
 import { list as roleList } from '/@/api/admin/role'
 import { list as postList } from '/@/api/admin/post'
@@ -104,7 +103,7 @@ const emit = defineEmits(['refresh']);
 
 
 // @ts-ignore
-const { lock_flag } = toRefs(useDict('lock_flag'))
+const { lock_flag } = useDict('lock_flag')
 // 定义变量内容
 const userDialogFormRef = ref();
 const state = reactive({

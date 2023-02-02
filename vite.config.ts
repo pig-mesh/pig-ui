@@ -2,6 +2,9 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+// vue3 自动引入
+import AutoImport from 'unplugin-auto-import/vite'
+
 
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);
@@ -15,7 +18,14 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
-		plugins: [vue(), vueSetupExtend()],
+		plugins: [vue(), vueSetupExtend(),AutoImport({
+			imports: [
+				'vue',
+				'vue-router',
+				'pinia'
+			],
+			dts: './auto-imports.d.ts',
+		})],
 		root: process.cwd(),
 		resolve: { alias },
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,

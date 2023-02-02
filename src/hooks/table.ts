@@ -1,4 +1,3 @@
-import {defineAsyncComponent, onMounted} from "vue";
 import {ElMessage} from "element-plus";
 
 export interface BasicTableProps{
@@ -85,6 +84,7 @@ export function useTable(options?: BasicTableProps) {
             }).then(res => {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
+                ElMessage.success('删除成功');
             }).catch(err => {
                 ElMessage.error(err.msg)
             }).finally(() => {
@@ -130,17 +130,11 @@ export function useTable(options?: BasicTableProps) {
         query()
     }
 
-    const pagination = defineAsyncComponent(() =>  import('/@/components/Pagination/index.vue'))
-
-    const RightToolBar = defineAsyncComponent(() => import('/@/components/RightToolbar/index.vue'))
-
     return {
-        RightToolBar,
         getDataList,
         sizeChangeHandle,
         currentChangeHandle,
-        sortChangeHandle,
-        pagination
+        sortChangeHandle
     }
 
 }

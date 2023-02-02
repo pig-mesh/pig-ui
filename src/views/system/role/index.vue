@@ -14,7 +14,7 @@
           <el-button size="default" icon="folder-add" type="success" class="ml10" @click="roleDialogRef.openDialog('add')">
             新增用户
           </el-button>
-          <right-tool-bar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-tool-bar>
+          <right-toolbar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-toolbar>
         </div>
       </el-row>
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
@@ -46,14 +46,12 @@
 </template>
 
 <script setup lang="ts" name="systemRole">
-import {defineAsyncComponent, reactive, ref, Ref} from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import {BasicTableProps, useTable} from "/@/hooks/table";
 import { pageList } from "/@/api/admin/role";
 
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('./form.vue'));
-const DictTag  = defineAsyncComponent(() => import("/@/components/DictTag/index.vue"))
 // 定义变量内容
 const roleDialogRef = ref();
 
@@ -82,8 +80,6 @@ const dictType = ref([{
 
 //  table hook
 const {
-  RightToolBar,
-  pagination,
   getDataList,
   currentChangeHandle,
   sizeChangeHandle

@@ -25,7 +25,7 @@
               <el-button size="default" icon="folder-add" type="success" class="ml10" @click="userDialogRef.openDialog('add')">
                 新增用户
               </el-button>
-              <right-tool-bar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-tool-bar>
+              <right-toolbar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-toolbar>
             </div>
           </el-row>
           <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
@@ -35,12 +35,12 @@
             <el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
             <el-table-column label="岗位" show-overflow-tooltip>
               <template #default="scope">
-                <el-tag v-for="(item,index) in scope.row.postList" type="success">{{item.postName}}</el-tag>
+                <el-tag v-for="(item,index) in scope.row.postList" type="success" :key="index">{{item.postName}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="角色" show-overflow-tooltip>
               <template #default="scope">
-                <el-tag v-for="(item,index) in scope.row.roleList" type="success">{{item.roleName}}</el-tag>
+                <el-tag v-for="(item,index) in scope.row.roleList" type="success" :key="index">{{item.roleName}}</el-tag>
               </template>
             </el-table-column>
             <el-table-column label="状态" show-overflow-tooltip>
@@ -74,24 +74,22 @@
 </template>
 
 <script setup lang="ts" name="systemUser">
-import {defineAsyncComponent, reactive, onMounted, ref, Ref, toRefs} from 'vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
 import {BasicTableProps, useTable} from '/@/hooks/table'
 import { useDict } from '/@/hooks/dict'
+import {ElMessage, ElMessageBox} from "element-plus";
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('./form.vue'));
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
-const DictTag  = defineAsyncComponent(() => import("/@/components/DictTag/index.vue"))
 // @ts-ignore
-const { lock_flag } = toRefs(useDict('lock_flag'))
+const { lock_flag } = useDict('lock_flag')
 
 // 定义变量内容
 const userDialogRef = ref();
 
-const showSearch : Ref<Boolean> = ref(true)
+const showSearch = ref(true)
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -114,8 +112,6 @@ const deptData = reactive({
 
 //  table hook
 const {
-  RightToolBar,
-  pagination,
   getDataList,
   currentChangeHandle,
   sizeChangeHandle
@@ -137,7 +133,7 @@ const onRowDel = (row: any) => {
 	})
 		.then(() => {
       // 删除用户的接口
-      delObj(row.userId).then(res => {
+      delObj(row.userId).then(() => {
         getDataList();
         ElMessage.success('删除成功');
       }).catch(err => {

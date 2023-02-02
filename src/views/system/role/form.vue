@@ -57,12 +57,9 @@
 </template>
 
 <script setup lang="ts" name="systemRoleDialog">
-import {nextTick, reactive, ref} from 'vue';
-
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 import { depttree } from '/@/api/admin/dept'
-import { pageList } from '/@/api/admin/menu'
 
 // 定义变量内容
 const roleDialogFormRef = ref();

@@ -98,7 +98,6 @@ const onTabelRowDel = (row: RouteRecordRaw) => {
 		.then(() => {
 			ElMessage.success('删除成功');
 			getTableData();
-			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 		})
 		.catch(() => {});
 };
