@@ -32,27 +32,27 @@
             </div>
           </el-row>
           <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
-            <el-table-column type="index" label="序号" width="60" />
-            <el-table-column prop="username" label="用户名" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="name" label="姓名" show-overflow-tooltip></el-table-column>
-            <el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
-            <el-table-column label="岗位" show-overflow-tooltip>
+            <el-table-column type="index" :label="$t('sysuser.index')" width="60" />
+            <el-table-column prop="username" :label="$t('sysuser.username')" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="name" :label="$t('sysuser.name')" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="phone" :label="$t('sysuser.phone')" show-overflow-tooltip></el-table-column>
+            <el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
               <template #default="scope">
                 <el-tag v-for="(item,index) in scope.row.postList" type="success" :key="index">{{item.postName}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="角色" show-overflow-tooltip>
+            <el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
               <template #default="scope">
                 <el-tag v-for="(item,index) in scope.row.roleList" type="success" :key="index">{{item.roleName}}</el-tag>
               </template>
             </el-table-column>
-            <el-table-column label="状态" show-overflow-tooltip>
+            <el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
               <template #default="scope">
                 <dict-tag :options="lock_flag" :value="scope.row.lockFlag"></dict-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-            <el-table-column label="操作" width="100">
+            <el-table-column prop="createTime" :label="$t('sysuser.createTime')" show-overflow-tooltip></el-table-column>
+            <el-table-column :label="$t('sysuser.action')" width="100">
               <template #default="scope">
                 <el-button  size="small" text type="primary" @click="userDialogRef.openDialog('edit', scope.row)"
                 >修改</el-button

@@ -4,27 +4,27 @@
 			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
 				<el-row :gutter="35">
 					<el-col :span="12" class="mb20">
-						<el-form-item label="用户名">
+						<el-form-item :label="$t('sysuser.username')">
 							<el-input v-model="state.ruleForm.username" placeholder="请输入用户名" :disabled="state.dialog.type === 'edit'"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item label="密码">
+						<el-form-item :label="$t('sysuser.password')">
 							<el-input v-model="state.ruleForm.password" type="password" placeholder="请输入密码" clearable></el-input>
 						</el-form-item>
 					</el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item label="姓名">
+            <el-form-item :label="$t('sysuser.name')">
               <el-input v-model="state.ruleForm.name" placeholder="请输入姓名" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item label="手机号">
+            <el-form-item :label="$t('sysuser.phone')">
               <el-input v-model="state.ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
             </el-form-item>
           </el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item label="角色">
+						<el-form-item :label="$t('sysuser.role')">
 							<el-select v-model="state.role" placeholder="请选择" clearable class="w100" multiple>
                 <el-option
                     v-for="item in state.roleData"
@@ -36,7 +36,7 @@
 						</el-form-item>
 					</el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item label="岗位">
+            <el-form-item :label="$t('sysuser.post')">
               <el-select v-model="state.post" placeholder="请选择" clearable class="w100" multiple>
                 <el-option
                     v-for="item in state.postData"
@@ -48,7 +48,7 @@
             </el-form-item>
           </el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item label="部门">
+						<el-form-item :label="$t('sysuser.dept')">
               <el-tree-select
                   v-model="state.ruleForm.deptId"
                   :data="state.deptData"
@@ -73,7 +73,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item label="状态">
+						<el-form-item :label="$t('sysuser.lockFlag')">
               <el-radio-group v-model="state.ruleForm.lockFlag">
                 <el-radio :label="item.value" v-for="(item,index) in lock_flag" border :key="index">{{item.label}}</el-radio>
               </el-radio-group>
