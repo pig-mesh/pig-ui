@@ -75,7 +75,7 @@
 					<el-col :span="12" class="mb20">
 						<el-form-item label="状态">
               <el-radio-group v-model="state.ruleForm.lockFlag">
-                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border>{{item.label}}</el-radio>
+                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border :key="index">{{item.label}}</el-radio>
               </el-radio-group>
 						</el-form-item>
 					</el-col>

@@ -8,6 +8,8 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { i18n } from '/@/i18n/index';
 import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
+import request from "/@/utils/request";
+import { useMessage } from "/@/hooks/message";
 // @ts-ignore
 import * as CryptoJS from "crypto-js";
 
@@ -200,7 +202,42 @@ export function encryption(params: any) {
 		});
 	}
 	return result;
-};
+}
+
+/**
+ *
+ * @param url 目标下载接口
+ * @param query 查询参数
+ * @param fileName 文件名称
+ * @returns {*}
+ */
+export function downBlobFile(url:any, query: any, fileName:string) {
+	return request({
+		url: url,
+		method: "get",
+		responseType: "blob",
+		params: query
+	}).then(response => {
+		// 处理返回的文件流
+		const blob = response.data;
+		if (blob && blob.size === 0) {
+			useMessage().error("内容为空，无法下载");
+			return;
+		}
+		const link = document.createElement("a");
+		link.href = URL.createObjectURL(blob);
+		// @ts-ignore
+		link.download = fileName;
+		document.body.appendChild(link);
+		link.click();
+		window.setTimeout(function () {
+			URL.revokeObjectURL(blob);
+			document.body.removeChild(link);
+		}, 0);
+	});
+}
+
+
 
 /**
  * 统一批量导出
@@ -244,7 +281,11 @@ const other = {
 	},
 	encryption: (data: any) => {
 		return encryption(data)
+	},
+	downBlobFile: (url:any, query: any, fileName:string) => {
+		return downBlobFile(url, query, fileName)
 	}
+
 };
 
 // 统一批量导出

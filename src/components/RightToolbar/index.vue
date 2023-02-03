@@ -23,7 +23,6 @@
 </template>
 
 <script setup name="right-toolbar">
-import {computed, ref} from "vue";
 
 const props = defineProps({
   showSearch: {

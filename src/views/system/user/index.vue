@@ -22,8 +22,11 @@
           </el-row>
           <el-row style="margin-top: 20px">
             <div class="mb15" style="width: 100%">
-              <el-button size="default" icon="folder-add" type="success" class="ml10" @click="userDialogRef.openDialog('add')">
+              <el-button size="default" icon="folder-add" type="primary" class="ml10" @click="userDialogRef.openDialog('add')">
                 新增用户
+              </el-button>
+              <el-button size="default" icon="el-icon-upload" type="primary" class="ml10" @click="excelUploadRef.show()">
+                导入用户
               </el-button>
               <right-toolbar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-toolbar>
             </div>
@@ -65,11 +68,20 @@
               v-bind="state.pagination"
           >
           </pagination>
+
         </el-card>
       </el-col>
     </el-row>
 
 		<UserDialog ref="userDialogRef" @refresh="getDataList()" />
+
+    <upload-excel
+        ref="excelUploadRef"
+        title="用户信息导入"
+        url="/admin/user/import"
+        temp-url="/admin/sys-file/local/file/user.xlsx"
+        @refreshDataList="getDataList"
+    />
 	</div>
 </template>
 
@@ -78,7 +90,9 @@ import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
 import {BasicTableProps, useTable} from '/@/hooks/table'
 import { useDict } from '/@/hooks/dict'
-import {ElMessage, ElMessageBox} from "element-plus";
+import {ElMessageBox} from "element-plus";
+import {useMessage} from '/@/hooks/message'
+import UploadExcel from "/@/components/Upload/Excel.vue";
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -88,6 +102,8 @@ const { lock_flag } = useDict('lock_flag')
 
 // 定义变量内容
 const userDialogRef = ref();
+
+const excelUploadRef = ref();
 
 const showSearch = ref(true)
 
@@ -135,9 +151,9 @@ const onRowDel = (row: any) => {
       // 删除用户的接口
       delObj(row.userId).then(() => {
         getDataList();
-        ElMessage.success('删除成功');
+        useMessage().success("删除成功")
       }).catch(err => {
-        ElMessage.error(err.msg)
+        useMessage().error(err.msg)
       })
 		})
 };

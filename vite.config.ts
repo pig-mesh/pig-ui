@@ -38,11 +38,10 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			open: env.VITE_OPEN,
 			hmr: true,
 			proxy: {
-				'/api/': {
-					target: 'http://localhost:9999/',
+				'/admin': {
+					target: 'http://localhost:9999',
 					ws: true,
 					changeOrigin: true,
-					rewrite: (path) => path.replace(/^\/api/, ''),
 				},
 			},
 		},
