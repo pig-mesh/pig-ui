@@ -20,7 +20,7 @@
 					</el-col>
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="菜单权限">
-              <el-select v-model="state.dsType" placeholder="请选择" clearable class="w100">
+              <el-select v-model="state.ruleForm.dsType" placeholder="请选择" clearable class="w100">
                 <el-option
                     v-for="item in dictType"
                     :key="item.value"
@@ -30,11 +30,12 @@
               </el-select>
 						</el-form-item>
 					</el-col>
-          <el-col :span="24" class="mb20">
+          <el-col :span="24" class="mb20" v-if="state.ruleForm.dsType === 1">
             <el-form-item>
               <el-tree
                   show-checkbox
-                  :check-strictly="false"
+                  ref="deptTreeRef"
+                  :check-strictly="true"
                   :data="state.deptData"
                   :props="state.deptProps"
                   :default-checked-keys="state.checkedDsScope"
@@ -59,23 +60,27 @@
 <script setup lang="ts" name="systemRoleDialog">
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-import { depttree } from '/@/api/admin/dept'
+import { depttree} from '/@/api/admin/dept'
+import { useMessage } from "/@/hooks/message";
+import { addObj, putObj } from '/@/api/admin/role'
 
 // 定义变量内容
 const roleDialogFormRef = ref();
+const deptTreeRef = ref()
 const state = reactive({
 	ruleForm: {
     roleName: '',
     roleCode: '',
     roleDesc: '',
-    dsType: ''
+    dsType: 0,
+    dsScope: ''
 	},
 	deptData: [],
   checkedDsScope: [],
 	deptProps: {
 		children: 'children',
 		label: 'name',
-    value: 'value'
+    value: 'id'
 	},
 	dialog: {
 		isShowDialog: false,
@@ -87,16 +92,16 @@ const state = reactive({
 
 const dictType = ref([{
   label: '全部',
-  value: '0'
+  value: 0
 }, {
   label: '自定义',
-  value: '1'
+  value: 1
 }, {
   label: '本级及子级',
-  value: '2'
+  value: 2
 }, {
   label: '本级',
-  value: '3'
+  value: 3
 }])
 
 
@@ -117,9 +122,11 @@ const openDialog = (type: string, row: any) => {
 		// 清空表单，此项需加表单验证才能使用
 		nextTick(() => {
 			roleDialogFormRef.value.resetFields();
+      state.ruleForm = Object.assign({});
 		});
 	}
 	state.dialog.isShowDialog = true;
+  state.dialog.type = type
   getDeptData();
 };
 // 关闭弹窗
@@ -132,9 +139,28 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
-	closeDialog();
-	emit('refresh');
-	// if (state.dialog.type === 'add') { }
+  if(state.ruleForm.dsType === 1){
+    state.ruleForm.dsScope = deptTreeRef.value.getCheckedKeys().join(',')
+  }else{
+    state.ruleForm.dsScope = ''
+  }
+	if (state.dialog.type === 'add') {
+    addObj(state.ruleForm).then(() => {
+      useMessage().success("保存成功")
+      closeDialog(); // 关闭弹窗
+      emit('refresh');
+    }).catch(err =>{
+      useMessage().error(err.msg)
+    })
+  }else if(state.dialog.type === 'edit' ){
+    putObj(state.ruleForm).then(() => {
+      useMessage().success("保存成功")
+      closeDialog(); // 关闭弹窗
+      emit('refresh');
+    }).catch(err => {
+      useMessage().error(err.msg)
+    })
+  }
 };
 // 获取菜单结构数据
 const getDeptData = () => {

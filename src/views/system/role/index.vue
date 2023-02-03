@@ -46,9 +46,11 @@
 </template>
 
 <script setup lang="ts" name="systemRole">
-import { ElMessageBox, ElMessage } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import {BasicTableProps, useTable} from "/@/hooks/table";
-import { pageList } from "/@/api/admin/role";
+import { pageList,delObj } from "/@/api/admin/role";
+import {Ref} from "vue";
+import { useMessage } from "/@/hooks/message";
 
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -86,18 +88,20 @@ const {
 } = useTable(state)
 
 // 删除角色
-const onRowDel = (row: RowRoleType) => {
+const onRowDel = (row: any) => {
 	ElMessageBox.confirm(`此操作将永久删除角色名称：“${row.roleName}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
 		.then(() => {
-
-			getDataList();
-			ElMessage.success('删除成功');
+      delObj(row.roleId).then(() => {
+        getDataList();
+        useMessage().success('删除成功');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
 		})
-		.catch(() => {});
 };
 </script>
 

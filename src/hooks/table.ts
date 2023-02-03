@@ -84,7 +84,6 @@ export function useTable(options?: BasicTableProps) {
             }).then(res => {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
-                ElMessage.success('删除成功');
             }).catch(err => {
                 ElMessage.error(err.msg)
             }).finally(() => {
