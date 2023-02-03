@@ -28,10 +28,13 @@
           </template>
         </el-table-column>
 				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+				<el-table-column label="操作" width="150">
 					<template #default="scope">
 						<el-button size="small" text type="primary" @click="roleDialogRef.openDialog('edit', scope.row);">修改</el-button>
+
 						<el-button size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+
+						<el-button size="small" text type="primary" @click="permessionRef.openDialog(scope.row)">授权</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -42,6 +45,7 @@
       />
 		</div>
 		<RoleDialog ref="roleDialogRef" @refresh="getDataList()" />
+    <permession ref="permessionRef"></permession>
 	</div>
 </template>
 
@@ -54,8 +58,10 @@ import { useMessage } from "/@/hooks/message";
 
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('./form.vue'));
+const permession = defineAsyncComponent(() => import('./permession.vue'))
 // 定义变量内容
 const roleDialogRef = ref();
+const permessionRef = ref();
 
 const showSearch : Ref<Boolean> = ref(true)
 
