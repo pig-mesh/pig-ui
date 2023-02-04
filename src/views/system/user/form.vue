@@ -1,57 +1,51 @@
 <template>
-	<div class="system-user-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="60%">
-			<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
-				<el-row :gutter="35">
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.username')">
-							<el-input v-model="state.ruleForm.username" placeholder="请输入用户名" :disabled="state.dialog.type === 'edit'"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.password')">
-							<el-input v-model="state.ruleForm.password" type="password" placeholder="请输入密码" clearable></el-input>
-						</el-form-item>
-					</el-col>
+  <div class="system-user-dialog-container">
+    <el-dialog :title="dataForm.userId ? $t('common.editBtn'): $t('common.addBtn')" v-model="visible"
+               :close-on-click-modal="false" draggable>
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" size="default" label-width="90px">
+        <el-row :gutter="35">
           <el-col :span="12" class="mb20">
-            <el-form-item :label="$t('sysuser.name')">
-              <el-input v-model="state.ruleForm.name" placeholder="请输入姓名" clearable></el-input>
+            <el-form-item :label="$t('sysuser.username')" prop="username">
+              <el-input v-model="dataForm.username" :placeholder="dataForm.userId"
+                        :disabled="dataForm.userId !== ''"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item :label="$t('sysuser.phone')">
-              <el-input v-model="state.ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
+            <el-form-item :label="$t('sysuser.password')" prop="password">
+              <el-input v-model="dataForm.password" type="password" placeholder="请输入密码" clearable></el-input>
             </el-form-item>
           </el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.role')">
-							<el-select v-model="state.role" placeholder="请选择" clearable class="w100" multiple>
-                <el-option
-                    v-for="item in state.roleData"
-                    :key="item.roleId"
-                    :label="item.roleName"
-                    :value="item.roleId"
-                />
-							</el-select>
-						</el-form-item>
-					</el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item :label="$t('sysuser.post')">
-              <el-select v-model="state.post" placeholder="请选择" clearable class="w100" multiple>
-                <el-option
-                    v-for="item in state.postData"
-                    :key="item.postId"
-                    :label="item.postName"
-                    :value="item.postId"
-                />
+            <el-form-item :label="$t('sysuser.name')" prop="name">
+              <el-input v-model="dataForm.name" placeholder="请输入姓名" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.phone')" prop="phone">
+              <el-input v-model="dataForm.phone" placeholder="请输入手机号" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.role') " prop="role">
+              <el-select v-model="dataForm.role" placeholder="请选择" clearable class="w100" multiple>
+                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName"
+                           :value="item.roleId"/>
               </el-select>
             </el-form-item>
           </el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.dept')">
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.post')" prop="post">
+              <el-select v-model="dataForm.post" placeholder="请选择" clearable class="w100" multiple>
+                <el-option v-for="item in postData" :key="item.postId" :label="item.postName"
+                           :value="item.postId"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.dept')" prop="dept">
               <el-tree-select
-                  v-model="state.ruleForm.deptId"
-                  :data="state.deptData"
+                  v-model="dataForm.deptId"
+                  :data="deptData"
                   :props="{  value: 'id', label: 'name', children: 'children' }"
                   class="w100"
                   clearable
@@ -59,184 +53,232 @@
                   placeholder="请选择所属部门"
               >
               </el-tree-select>
-						</el-form-item>
-					</el-col>
+            </el-form-item>
+          </el-col>
 
-					<el-col :span="12" class="mb20">
-						<el-form-item label="邮箱">
-							<el-input v-model="state.ruleForm.email" placeholder="请输入" clearable></el-input>
-						</el-form-item>
-					</el-col>
           <el-col :span="12" class="mb20">
-						<el-form-item label="昵称">
-							<el-input v-model="state.ruleForm.nickname" placeholder="请输入昵称" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.lockFlag')">
-              <el-radio-group v-model="state.ruleForm.lockFlag">
-                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border :key="index">{{item.label}}</el-radio>
+            <el-form-item :label="$t('sysuser.email')" prop="email">
+              <el-input v-model="dataForm.email" placeholder="请输入" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.nickname')" prop="nickname">
+              <el-input v-model="dataForm.nickname" placeholder="请输入昵称" clearable></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
+              <el-radio-group v-model="dataForm.lockFlag">
+                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border :key="index">{{ item.label }}
+                </el-radio>
               </el-radio-group>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
-			<template #footer>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+      <template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
+					<el-button @click="visible = false" size="default">取 消</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
 				</span>
-			</template>
-		</el-dialog>
-	</div>
+      </template>
+    </el-dialog>
+  </div>
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import {  addObj, putObj } from '/@/api/admin/user'
-import { list as roleList } from '/@/api/admin/role'
-import { list as postList } from '/@/api/admin/post'
-import { depttree } from '/@/api/admin/dept'
-import { ElMessage } from 'element-plus';
+import {getObj, addObj, putObj, getDetails, getDetailsByPhone} from '/@/api/admin/user'
+import {list as roleList} from '/@/api/admin/role'
+import {list as postList} from '/@/api/admin/post'
+import {depttree} from '/@/api/admin/dept'
 import {useDict} from "/@/hooks/dict";
-// 定义子组件向父组件传值/事件
+import {useMessage} from "/@/hooks/message";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n()
+
+// 定义刷新表格emit
 const emit = defineEmits(['refresh']);
-
-
 // @ts-ignore
-const { lock_flag } = useDict('lock_flag')
+const {lock_flag} = useDict('lock_flag')
+
 // 定义变量内容
-const userDialogFormRef = ref();
-const state = reactive({
-	ruleForm: {
-    userId: '',
-    username: '',
-    password: '' as String | undefined,
-    salt: '',
-    wxOpenid: '',
-    qqOpenid: '',
-    lockFlag: '',
-    phone: '' as String | undefined,
-    deptId: '',
-    roleList: [],
-    postList: [],
-    nickname: '',
-    name: '',
-    email: '',
-    post: [] as String[],
-    role: [] as String[],
-	},
+const dataFormRef = ref();
+const visible = ref(false)
+const deptData = ref<any[]>([])
+const roleData = ref<any[]>([])
+const postData = ref<any[]>([])
+
+const dataForm = reactive({
+  userId: '',
+  username: '',
+  password: '' as String | undefined,
+  salt: '',
+  wxOpenid: '',
+  qqOpenid: '',
+  lockFlag: '0',
+  phone: '' as String | undefined,
+  deptId: '',
+  roleList: [],
+  postList: [],
+  nickname: '',
+  name: '',
+  email: '',
   post: [] as String[],
   role: [] as String[],
-	deptData: [], // 部门数据
-  postData: [], //岗位数据
-  roleData: [], //角色数据
-	dialog: {
-		isShowDialog: false,
-		type: '',
-		title: '',
-		submitTxt: '',
-	},
 });
 
+const validateUsername = (rule: any, value: any, callback: any) => {
+  const flag = new RegExp(/^([a-z\u4e00-\u9fa5\d]+?)$/).test(value)
+  if (!flag) {
+    callback(new Error('用户名支持小写英文、数字、中文'))
+  }
+
+  getDetails(value).then(response => {
+    if (dataForm.userId !== '') callback()
+    const result = response.data
+    if (result !== null) {
+      callback(new Error('用户名已经存在'))
+    } else {
+      callback()
+    }
+  })
+}
+
+const validatePhone = (rule: any, value: any, callback: any) => {
+  getDetailsByPhone(value).then(response => {
+    if (dataForm.userId !== '') callback()
+    const result = response.data
+    if (result !== null) {
+      callback(new Error('手机号已经存在'))
+    } else {
+      callback()
+    }
+  })
+}
+
+const dataRules = ref(
+    {
+      username: [{required: true, message: "用户名不能为空", trigger: "blur"}, {
+        min: 5,
+        max: 20,
+        message: "用户名称长度必须介于 5 和 20 之间",
+        trigger: "blur"
+      }, {validator: validateUsername, trigger: 'blur'}],
+      password: [{required: true, message: "密码不能为空", trigger: "blur"}, {
+        min: 6,
+        max: 20,
+        message: "用户密码长度必须介于 6 和 20 之间",
+        trigger: "blur"
+      }],
+      name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
+      dept: [{required: true, message: "部门不能为空", trigger: "blur"}],
+      role: [{required: true, message: "角色不能为空", trigger: "blur"}],
+      post: [{required: true, message: "岗位不能为空", trigger: "blur"}],
+      phone: [{required: true, message: "手机号不能为空", trigger: "blur"}, {
+        pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+        message: "请输入正确的手机号码",
+        trigger: "blur"
+      }, {validator: validatePhone, trigger: 'blur'}],
+      email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}]
+    }
+)
+
 // 打开弹窗
-const openDialog = (type: string, row: any) => {
-	if (type === 'edit') {
-		state.dialog.title = '修改用户';
-		state.dialog.submitTxt = '修 改';
-    state.role = []
-    state.post = []
-    state.ruleForm = Object.assign(state.ruleForm,row)
-    row.roleList.map((item: any) => {
-      state.role.push(item.roleId)
-    })
-    row.postList.map((item: any) => {
-      state.post.push(item.postId)
-    })
-    state.ruleForm.password = "******"
-	} else {
-		state.dialog.title = '新增用户';
-		state.dialog.submitTxt = '新 增';
-		// 清空表单，此项需加表单验证才能使用
-		nextTick(() => {
-			userDialogFormRef.value.resetFields();
-      state.ruleForm = Object.assign({})
-      state.role = []
-      state.post = []
-		});
-	}
-  state.dialog.type = type;
-	state.dialog.isShowDialog = true;
+const openDialog = (id: string) => {
+  visible.value = true
+  dataForm.userId = ''
+
+  // 重置表单数据
+  if (dataFormRef.value) {
+    dataFormRef.value.resetFields()
+  }
+
+  // 修改获取用户信息
+  if (id) {
+    dataForm.userId = id
+    getUserData(id)
+  }
+
   // 加载使用的数据
-	getDeptData();
-  getPostData();
-  getRoleData();
+  getDeptData()
+  getPostData()
+  getRoleData()
 };
-// 关闭弹窗
-const closeDialog = () => {
-	state.dialog.isShowDialog = false;
-};
-// 取消
-const onCancel = () => {
-	closeDialog();
-};
+
 // 提交
 const onSubmit = () => {
-	closeDialog();
-	emit('refresh');
-	if (state.dialog.type === 'edit') {
-    // 处理数据
-    if (state.ruleForm.phone && state.ruleForm.phone.indexOf("*") >= 0) {
-      state.ruleForm.phone = undefined;
+  // 更新方法
+  if (dataForm.userId) {
+    if (dataForm.phone && dataForm.phone.indexOf("*") >= 0) {
+      dataForm.phone = undefined
     }
-    if (state.ruleForm.password && state.ruleForm.password.indexOf("******") >= 0) {
-      state.ruleForm.password = undefined;
+    if (dataForm.password && dataForm.password.indexOf("******") >= 0) {
+      dataForm.password = undefined
     }
-    putObj(state.ruleForm).then(() => {
-      closeDialog(); // 关闭弹窗
+    putObj(dataForm).then(() => {
+      visible.value = false; // 关闭弹窗
       emit('refresh');
     }).catch(err => {
-      ElMessage.error(err.msg)
+      useMessage().error(err.msg)
     })
-  }else{
-    if (state.ruleForm.phone && state.ruleForm.phone.indexOf("*") > 0) {
-      state.ruleForm.phone = undefined;
+  } else {  // 新增方法
+    if (dataForm.phone && dataForm.phone.indexOf("*") > 0) {
+      dataForm.phone = undefined
     }
-    addObj(state.ruleForm).then(() => {
-      ElMessage.success("保存成功")
-      closeDialog(); // 关闭弹窗
-      emit('refresh');
+    addObj(dataForm).then(() => {
+      useMessage().success(t('as'))
+      visible.value = false // 关闭弹窗
+      emit('refresh')
     }).catch(err => {
-      ElMessage.error(err.msg)
+      useMessage().error(err.msg)
     })
   }
 };
 
-watchEffect(() => {
-  state.ruleForm.post = state.post;
-  state.ruleForm.role = state.role
-})
+// 初始化部门数据
+const getUserData = (id: string) => {
+  // 获取部门数据
+  getObj(id).then(res => {
+    Object.assign(dataForm, res.data)
+    if (res.data.roleList) {
+      dataForm.role = []
+      res.data.roleList.map((item: any) => {
+        dataForm.role.push(item.roleId)
+      })
+    }
+    if (res.data.postList) {
+      dataForm.post = []
+      res.data.postList.map((item: any) => {
+        dataForm.post.push(item.postId)
+      })
+    }
+  })
+};
+
 // 初始化部门数据
 const getDeptData = () => {
   // 获取部门数据
   depttree().then(res => {
-    state.deptData = res.data
+    deptData.value = res.data
   })
 };
+
 // 岗位数据
-const getPostData =() => {
+const getPostData = () => {
   postList().then(res => {
-    state.postData = res.data
+    postData.value = res.data
   })
 }
 // 角色数据
-const getRoleData =() => {
+const getRoleData = () => {
   roleList().then(res => {
-    state.roleData = res.data
+    roleData.value = res.data
   })
 }
 
 // 暴露变量
 defineExpose({
-	openDialog,
+  openDialog,
 });
 </script>

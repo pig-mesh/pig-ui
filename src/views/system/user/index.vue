@@ -1,49 +1,67 @@
 <template>
-	<div class="system-user-container layout-padding">
+  <div class="system-user-container layout-padding">
     <el-row :gutter="20">
       <el-col :span="4" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
-          <query-tree
-              @node-click="handleNodeClick"
-              :placeholder="deptData.placeholder"
-              :query="deptData.queryList"
-          />
+          <query-tree @node-click="handleNodeClick" :placeholder="$t('common.queryDeptTip')"
+            :query="deptData.queryList" />
         </el-card>
       </el-col>
       <el-col :span="20" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
-          <el-row v-show="showSearch">
-            <div class="mb15">
-              <el-input size="default" placeholder="请输入用户名称" style="max-width: 180px" v-model="state.queryForm.username"> </el-input>
-              <el-button size="default" icon="search" type="primary" class="ml10" @click="getDataList">
-                查询
+          <el-row v-show="showSearch" class="mb8">
+            <el-form :model="state.queryForm" ref="queryRef" :inline="true" label-width="68px">
+              <el-form-item :label="$t('sysuser.username')" prop="username">
+                <el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable
+                  style="width: 240px" @keyup.enter="getDataList" />
+              </el-form-item>
+              <el-form-item :label="$t('sysuser.phone')" prop="phone">
+                <el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable
+                  style="width: 240px" @keyup.enter="getDataList" />
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+                <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+              </el-form-item>
+            </el-form>
+          </el-row>
+          <el-row>
+            <div class="mb8" style="width: 100%">
+              <el-button size="default" icon="folder-add" type="primary" class="ml10"
+                @click="userDialogRef.openDialog()">
+                {{ $t('common.addBtn') }}
               </el-button>
+              <el-button size="default" icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
+                {{ $t('common.importBtn') }}
+              </el-button>
+              <el-button size="default" icon="Download" type="primary" class="ml10" @click="exportExcel">
+                {{ $t('common.exportBtn') }}
+              </el-button>
+              <el-button size="default" :disabled="multiple" icon="Delete" type="primary" class="ml10"
+                @click="handleDelete(undefined)">
+                {{ $t('common.delBtn') }}
+              </el-button>
+              <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
+                @queryTable="getDataList"></right-toolbar>
             </div>
           </el-row>
-          <el-row style="margin-top: 20px">
-            <div class="mb15" style="width: 100%">
-              <el-button size="default" icon="folder-add" type="primary" class="ml10" @click="userDialogRef.openDialog('add')">
-                新增用户
-              </el-button>
-              <el-button size="default" icon="el-icon-upload" type="primary" class="ml10" @click="excelUploadRef.show()">
-                导入用户
-              </el-button>
-              <right-toolbar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-toolbar>
-            </div>
-          </el-row>
-          <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
-            <el-table-column type="index" :label="$t('sysuser.index')" width="60" />
+          <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
+            @selection-change="handleSelectionChange">
+            <el-table-column type="selection" width="50" align="center" />
+            <el-table-column type="index" :label="$t('sysuser.index')" width="80" />
             <el-table-column prop="username" :label="$t('sysuser.username')" show-overflow-tooltip></el-table-column>
             <el-table-column prop="name" :label="$t('sysuser.name')" show-overflow-tooltip></el-table-column>
             <el-table-column prop="phone" :label="$t('sysuser.phone')" show-overflow-tooltip></el-table-column>
             <el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
               <template #default="scope">
-                <el-tag v-for="(item,index) in scope.row.postList" type="success" :key="index">{{item.postName}}</el-tag>
+                <el-tag v-for="(item, index) in scope.row.postList" type="success" :key="index">{{ item.postName }}
+                </el-tag>
               </template>
             </el-table-column>
             <el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
               <template #default="scope">
-                <el-tag v-for="(item,index) in scope.row.roleList" type="success" :key="index">{{item.roleName}}</el-tag>
+                <el-tag v-for="(item, index) in scope.row.roleList" type="success" :key="index">{{ item.roleName }}
+                </el-tag>
               </template>
             </el-table-column>
             <el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
@@ -51,87 +69,92 @@
                 <dict-tag :options="lock_flag" :value="scope.row.lockFlag"></dict-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" :label="$t('sysuser.createTime')" show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTime" :label="$t('sysuser.createTime')"
+              show-overflow-tooltip></el-table-column>
             <el-table-column :label="$t('sysuser.action')" width="100">
               <template #default="scope">
-                <el-button  size="small" text type="primary" @click="userDialogRef.openDialog('edit', scope.row)"
-                >修改</el-button
-                >
-                <el-button size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+                <el-button size="small" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"> {{
+                  $t('common.editBtn')
+                }}
+                </el-button>
+                <el-button size="small" text type="primary" @click="handleDelete(scope.row)">
+                  {{ $t('common.delBtn') }}
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
 
-          <pagination
-              @size-change="sizeChangeHandle"
-              @current-change="currentChangeHandle"
-              v-bind="state.pagination"
-          >
+          <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination">
           </pagination>
 
         </el-card>
       </el-col>
     </el-row>
 
-		<UserDialog ref="userDialogRef" @refresh="getDataList()" />
+    <user-form ref="userDialogRef" @refresh="getDataList()" />
 
-    <upload-excel
-        ref="excelUploadRef"
-        title="用户信息导入"
-        url="/admin/user/import"
-        temp-url="/admin/sys-file/local/file/user.xlsx"
-        @refreshDataList="getDataList"
-    />
-	</div>
+    <upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')" url="/admin/user/import"
+      temp-url="/admin/sys-file/local/file/user.xlsx" @refreshDataList="getDataList" />
+  </div>
 </template>
 
 <script setup lang="ts" name="systemUser">
 import { pageList, delObj } from '/@/api/admin/user'
 import { depttree } from '/@/api/admin/dept'
-import {BasicTableProps, useTable} from '/@/hooks/table'
+import { BasicTableProps, useTable } from '/@/hooks/table'
 import { useDict } from '/@/hooks/dict'
-import {ElMessageBox} from "element-plus";
-import {useMessage} from '/@/hooks/message'
-import UploadExcel from "/@/components/Upload/Excel.vue";
+import { ElMessageBox } from "element-plus"
+import { useMessage } from '/@/hooks/message'
 
-// 引入组件
-const UserDialog = defineAsyncComponent(() => import('./form.vue'));
+// 动态引入组件
+const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
-// @ts-ignore
+
 const { lock_flag } = useDict('lock_flag')
 
 // 定义变量内容
 const userDialogRef = ref();
-
 const excelUploadRef = ref();
-
+const queryRef = ref();
 const showSearch = ref(true)
+
+// 多选rows
+const selectObjs = ref([]);
+// 是否可以多选
+const multiple = ref(true);
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     deptId: '',
-    username: ''
+    username: '',
+    phone: ''
   },
   pageList: pageList // H
 });
 
 // 部门树使用的数据
 const deptData = reactive({
-  queryList: (name:String) => {
+  queryList: (name: String) => {
     return depttree({
       deptName: name
     })
-  },
-  placeholder: '输入部门名称'
+  }
 })
 
 //  table hook
 const {
   getDataList,
   currentChangeHandle,
-  sizeChangeHandle
+  sizeChangeHandle,
+  downBlobFile
 } = useTable(state)
+
+// 清空搜索条件
+const resetQuery = () => {
+  queryRef.value.resetFields()
+  getDataList()
+}
 
 
 // 点击树
@@ -140,14 +163,32 @@ const handleNodeClick = (e: any) => {
   getDataList()
 }
 
+// 多选事件
+const handleSelectionChange = (val: any) => {
+  selectObjs.value = val
+  multiple.value = !val.length
+};
+
+const exportExcel = () => {
+  downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx')
+}
+
 // 删除用户
-const onRowDel = (row: any) => {
-	ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(() => {
+const handleDelete = (row: any) => {
+  if (!row) {
+    selectObjs.value.forEach(val => {
+      handleDelete(val)
+    });
+    return
+  }
+
+
+  ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
+    confirmButtonText: '确认',
+    cancelButtonText: '取消',
+    type: 'warning',
+  })
+    .then(() => {
       // 删除用户的接口
       delObj(row.userId).then(() => {
         getDataList();
@@ -155,6 +196,6 @@ const onRowDel = (row: any) => {
       }).catch(err => {
         useMessage().error(err.msg)
       })
-		})
+    })
 };
 </script>

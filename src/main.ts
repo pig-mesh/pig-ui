@@ -11,16 +11,17 @@ import 'element-plus/dist/index.css';
 import elementIcons from '/@//components/svgIcon/svgicon'
 import '/@/theme/index.scss';
 import VueGridLayout from 'vue-grid-layout';
-import { Pagination,RightToolbar, DictTag, uploadExcel } from '/@/components/index'
+import { Pagination,RightToolbar, DictTag, UploadExcel } from '/@/components/index'
 
 
 
 const app = createApp(App);
 
+// 导入通用自定义组件
 app.component('DictTag', DictTag)
 app.component('Pagination', Pagination)
 app.component('RightToolbar', RightToolbar)
-app.component('uploadExcel', uploadExcel)
+app.component('uploadExcel', UploadExcel)
 
 directive(app);
 other.elSvg(app);

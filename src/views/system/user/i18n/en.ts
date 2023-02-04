@@ -10,6 +10,12 @@ export default {
         createTime: 'createTime',
         password: 'password',
         dept: 'dept',
-        action: 'action'
+        email: 'email',
+        nickname: 'nickname',
+        action: 'action',
+        inputUsernameTip: 'input username',
+        inputPhoneTip: 'input phone',
+        inputNameTip: 'input name',
+        importUserTip: 'user import'
     }
 }

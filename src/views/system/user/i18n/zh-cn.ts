@@ -10,6 +10,13 @@ export default {
         createTime: '创建时间',
         password: '密码',
         dept: '部门',
-        action: '操作'
-    }
+        action: '操作',
+        email: '邮箱',
+        nickname: '昵称',
+        inputUsernameTip: '请输入用户名',
+        inputPhoneTip: '请输入手机号',
+        inputNameTip: '请输入姓名',
+        importUserTip: '用户导入'
+    },
+
 }

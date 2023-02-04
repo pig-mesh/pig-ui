@@ -1,6 +1,8 @@
-import {ElMessage} from "element-plus";
+import { ElMessage } from "element-plus";
+import { useMessage } from "./message";
+import request from "/@/utils/request";
 
-export interface BasicTableProps{
+export interface BasicTableProps {
     // 是否在创建页面时，调用数据列表接口
     createdIsNeed?: boolean
     // 是否需要分页
@@ -21,7 +23,7 @@ export interface BasicTableProps{
     loading?: Boolean
 }
 
-export interface Pagination{
+export interface Pagination {
     // 排序字段
     order?: string
     // 是否升序
@@ -72,7 +74,7 @@ export function useTable(options?: BasicTableProps) {
     const state = mergeDefaultOptions(defaultOptions, options)
 
 
-    const query =() => {
+    const query = () => {
         if (state.pageList) {
             state.loading = true
             state.pageList({
@@ -129,11 +131,37 @@ export function useTable(options?: BasicTableProps) {
         query()
     }
 
+    //  下载文件
+    const downBlobFile = (url: string, query: any, fileName: string) => {
+        return request({
+            url: url,
+            method: 'get',
+            responseType: 'blob',
+            params: query
+        }).then(response => {
+            // 处理返回的文件流
+            if (response && response.size === 0) {
+                useMessage().error('内容为空，无法下载')
+                return
+            }
+            const link = document.createElement('a')
+            link.href = window.URL.createObjectURL(response)
+            link.download = fileName
+            document.body.appendChild(link)
+            link.click()
+            window.setTimeout(function () {
+                window.URL.revokeObjectURL(response)
+                document.body.removeChild(link)
+            }, 0)
+        })
+    }
+
     return {
         getDataList,
         sizeChangeHandle,
         currentChangeHandle,
-        sortChangeHandle
+        sortChangeHandle,
+        downBlobFile
     }
 
 }

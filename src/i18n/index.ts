@@ -16,12 +16,11 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 // element plus 自带国际化
 import enLocale from 'element-plus/lib/locale/lang/en';
 import zhcnLocale from 'element-plus/lib/locale/lang/zh-cn';
-import zhtwLocale from 'element-plus/lib/locale/lang/zh-tw';
 
 // 定义变量内容
 const messages = {};
-const element = { en: enLocale, 'zh-cn': zhcnLocale, 'zh-tw': zhtwLocale };
-const itemize = { en: [], 'zh-cn': [], 'zh-tw': [] };
+const element = { en: enLocale, 'zh-cn': zhcnLocale};
+const itemize = { en: [], 'zh-cn': [] };
 const modules: Record<string, any> = import.meta.glob('./**/*.ts', { eager: true });
 const pages: Record<string, any> = import.meta.glob('./../../**/**/**/i18n/*.ts', { eager: true });
 
