@@ -1,13 +1,12 @@
 <template>
   <div class="system-user-dialog-container">
-    <el-dialog :title="dataForm.userId ? $t('common.editBtn'): $t('common.addBtn')" v-model="visible"
-               :close-on-click-modal="false" draggable>
+    <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
+      :close-on-click-modal="false" draggable>
       <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" size="default" label-width="90px">
         <el-row :gutter="35">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
-              <el-input v-model="dataForm.username" :placeholder="dataForm.userId"
-                        :disabled="dataForm.userId !== ''"></el-input>
+              <el-input v-model="dataForm.username" placeholder="请输入用户名" :disabled="dataForm.userId !== ''"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
@@ -26,39 +25,31 @@
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
-            <el-form-item :label="$t('sysuser.role') " prop="role">
-              <el-select v-model="dataForm.role" placeholder="请选择" clearable class="w100" multiple>
-                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName"
-                           :value="item.roleId"/>
+            <el-form-item :label="$t('sysuser.role')" prop="role">
+              <el-select v-model="dataForm.role" placeholder="请选择角色" clearable class="w100" multiple>
+                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.post')" prop="post">
-              <el-select v-model="dataForm.post" placeholder="请选择" clearable class="w100" multiple>
-                <el-option v-for="item in postData" :key="item.postId" :label="item.postName"
-                           :value="item.postId"/>
+              <el-select v-model="dataForm.post" placeholder="请选择岗位" clearable class="w100" multiple>
+                <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.dept')" prop="dept">
-              <el-tree-select
-                  v-model="dataForm.deptId"
-                  :data="deptData"
-                  :props="{  value: 'id', label: 'name', children: 'children' }"
-                  class="w100"
-                  clearable
-                  check-strictly
-                  placeholder="请选择所属部门"
-              >
+              <el-tree-select v-model="dataForm.deptId" :data="deptData"
+                :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
+                placeholder="请选择所属部门">
               </el-tree-select>
             </el-form-item>
           </el-col>
 
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.email')" prop="email">
-              <el-input v-model="dataForm.email" placeholder="请输入" clearable></el-input>
+              <el-input v-model="dataForm.email" placeholder="请输入邮箱" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
@@ -69,7 +60,7 @@
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
               <el-radio-group v-model="dataForm.lockFlag">
-                <el-radio :label="item.value" v-for="(item,index) in lock_flag" border :key="index">{{ item.label }}
+                <el-radio :label="item.value" v-for="(item, index) in lock_flag" border :key="index">{{ item.label }}
                 </el-radio>
               </el-radio-group>
             </el-form-item>
@@ -77,30 +68,30 @@
         </el-row>
       </el-form>
       <template #footer>
-				<span class="dialog-footer">
-					<el-button @click="visible = false" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">确 定</el-button>
-				</span>
+        <span class="dialog-footer">
+          <el-button @click="visible = false" size="default">{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import {getObj, addObj, putObj, getDetails, getDetailsByPhone} from '/@/api/admin/user'
-import {list as roleList} from '/@/api/admin/role'
-import {list as postList} from '/@/api/admin/post'
-import {depttree} from '/@/api/admin/dept'
-import {useDict} from "/@/hooks/dict";
-import {useMessage} from "/@/hooks/message";
-import {useI18n} from "vue-i18n";
+import { getObj, addObj, putObj, getDetails, getDetailsByPhone } from '/@/api/admin/user'
+import { list as roleList } from '/@/api/admin/role'
+import { list as postList } from '/@/api/admin/post'
+import { depttree } from '/@/api/admin/dept'
+import { useDict } from "/@/hooks/dict";
+import { useI18n } from "vue-i18n";
+import { useMessage } from '/@/hooks/message';
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 // 定义刷新表格emit
 const emit = defineEmits(['refresh']);
 // @ts-ignore
-const {lock_flag} = useDict('lock_flag')
+const { lock_flag } = useDict('lock_flag')
 
 // 定义变量内容
 const dataFormRef = ref();
@@ -158,30 +149,30 @@ const validatePhone = (rule: any, value: any, callback: any) => {
 }
 
 const dataRules = ref(
-    {
-      username: [{required: true, message: "用户名不能为空", trigger: "blur"}, {
-        min: 5,
-        max: 20,
-        message: "用户名称长度必须介于 5 和 20 之间",
-        trigger: "blur"
-      }, {validator: validateUsername, trigger: 'blur'}],
-      password: [{required: true, message: "密码不能为空", trigger: "blur"}, {
-        min: 6,
-        max: 20,
-        message: "用户密码长度必须介于 6 和 20 之间",
-        trigger: "blur"
-      }],
-      name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
-      dept: [{required: true, message: "部门不能为空", trigger: "blur"}],
-      role: [{required: true, message: "角色不能为空", trigger: "blur"}],
-      post: [{required: true, message: "岗位不能为空", trigger: "blur"}],
-      phone: [{required: true, message: "手机号不能为空", trigger: "blur"}, {
-        pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-        message: "请输入正确的手机号码",
-        trigger: "blur"
-      }, {validator: validatePhone, trigger: 'blur'}],
-      email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}]
-    }
+  {
+    username: [{ required: true, message: "用户名不能为空", trigger: "blur" }, {
+      min: 5,
+      max: 20,
+      message: "用户名称长度必须介于 5 和 20 之间",
+      trigger: "blur"
+    }, { validator: validateUsername, trigger: 'blur' }],
+    password: [{ required: true, message: "密码不能为空", trigger: "blur" }, {
+      min: 6,
+      max: 20,
+      message: "用户密码长度必须介于 6 和 20 之间",
+      trigger: "blur"
+    }],
+    name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
+    dept: [{ required: true, message: "部门不能为空", trigger: "blur" }],
+    role: [{ required: true, message: "角色不能为空", trigger: "blur" }],
+    post: [{ required: true, message: "岗位不能为空", trigger: "blur" }],
+    phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, {
+      pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
+      message: "请输入正确的手机号码",
+      trigger: "blur"
+    }, { validator: validatePhone, trigger: 'blur' }],
+    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }]
+  }
 )
 
 // 打开弹窗
@@ -217,6 +208,7 @@ const onSubmit = () => {
       dataForm.password = undefined
     }
     putObj(dataForm).then(() => {
+      useMessage().success(t('common.editSuccessText'))
       visible.value = false; // 关闭弹窗
       emit('refresh');
     }).catch(err => {
@@ -227,7 +219,7 @@ const onSubmit = () => {
       dataForm.phone = undefined
     }
     addObj(dataForm).then(() => {
-      useMessage().success(t('as'))
+      useMessage().success(t('common.addSuccessText'))
       visible.value = false // 关闭弹窗
       emit('refresh')
     }).catch(err => {

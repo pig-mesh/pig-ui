@@ -36,9 +36,9 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 菜单设置
 			 */
 			// 默认菜单导航背景颜色
-			menuBar: '#545c64',
+			menuBar: '#001524',
 			// 默认菜单导航字体颜色
-			menuBarColor: '#eaeaea',
+			menuBarColor: '#EAEAEA',
 			// 默认菜单高亮背景色
 			menuBarActiveColor: 'rgba(0, 0, 0, 0.2)',
 			// 是否开启菜单背景颜色渐变
@@ -90,13 +90,13 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启 Tagsview 图标
 			isTagsviewIcon: false,
 			// 是否开启 TagsView 缓存
-			isCacheTagsView: false,
+			isCacheTagsView: true,
 			// 是否开启 TagsView 拖拽
 			isSortableTagsView: true,
 			// 是否开启 TagsView 共用
 			isShareTagsView: false,
 			// 是否开启 Footer 底部版权信息
-			isFooter: false,
+			isFooter: true,
 			// 是否开启灰色模式
 			isGrayscale: false,
 			// 是否开启色弱模式

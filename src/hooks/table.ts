@@ -1,5 +1,6 @@
-import {ElMessage} from "element-plus";
-import {useMessage} from "./message";
+import { ElMessage } from "element-plus";
+import other from "../utils/other";
+import { useMessage } from "./message";
 import request from "/@/utils/request";
 
 export interface BasicTableProps {
@@ -114,7 +115,7 @@ export function useTable(options?: BasicTableProps) {
 
     // 排序
     const sortChangeHandle = (data: any) => {
-        const {prop, order} = data
+        const { prop, order } = data
 
         if (prop && order) {
             state.pagination!.order = prop
@@ -133,27 +134,7 @@ export function useTable(options?: BasicTableProps) {
 
     //  下载文件
     const downBlobFile = (url: string, query: any, fileName: string) => {
-        return request({
-            url: url,
-            method: 'get',
-            responseType: 'blob',
-            params: query
-        }).then((response: any) => {
-            // 处理返回的文件流
-            if (response && response.size === 0) {
-                useMessage().error('内容为空，无法下载')
-                return
-            }
-            const link = document.createElement('a')
-            link.href = window.URL.createObjectURL(response)
-            link.download = fileName
-            document.body.appendChild(link)
-            link.click()
-            window.setTimeout(function () {
-                window.URL.revokeObjectURL(response)
-                document.body.removeChild(link)
-            }, 0)
-        })
+        return other.downBlobFile(url, query, fileName)
     }
 
     return {

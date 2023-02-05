@@ -219,7 +219,7 @@ export function downBlobFile(url:any, query: any, fileName:string) {
 		params: query
 	}).then(response => {
 		// 处理返回的文件流
-		const blob = response.data;
+		const blob = response;
 		if (blob && blob.size === 0) {
 			useMessage().error("内容为空，无法下载");
 			return;

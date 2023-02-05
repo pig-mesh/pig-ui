@@ -1,7 +1,7 @@
 <template>
-	<div class="system-dic-container layout-padding">
+	<div class="layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
-			<div class="system-user-search mb15">
+			<div class="mb15">
 				<el-input size="default" placeholder="请输入字典名称" style="max-width: 180px"> </el-input>
 				<el-button size="default" type="primary" class="ml10">
 					<el-icon>
