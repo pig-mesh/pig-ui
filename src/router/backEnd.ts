@@ -39,7 +39,6 @@ export async function initBackEndControlRoutes() {
     // 无 token 停止执行下一步
     if (!Session.get('token')) return false;
     // 触发初始化用户信息 pinia
-    // https://gitee.com/lyt-top/vue-next-admin/issues/I5F1HP
     await useUserInfo().setUserInfos();
     // 获取路由菜单数据
     const res = await getBackEndControlRoutes();

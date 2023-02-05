@@ -31,15 +31,25 @@ import request from '/@/utils/request';
  * @param data
  */
 export const login = (data: any) => {
-	let basicAuth = 'Basic ' + window.btoa('pig:pig')
-	return request({
-		url: '/admin/oauth2/token',
-		method: 'post',
-		params: data,
-		headers: {
-			isToken: false,
-			'TENANT-ID': '1',
-			'Authorization': basicAuth
-		}
-	})
+    let basicAuth = 'Basic ' + window.btoa('pig:pig')
+    return request({
+        url: '/admin/oauth2/token',
+        method: 'post',
+        params: data,
+        headers: {
+            isToken: false,
+            'TENANT-ID': '1',
+            'Authorization': basicAuth
+        }
+    })
+}
+
+/**
+ * 获取用户信息
+ */
+export const getUserInfo = () => {
+    return request({
+        url: '/admin/user/info',
+        method: 'get'
+    })
 }
