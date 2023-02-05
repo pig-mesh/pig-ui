@@ -1,51 +1,50 @@
-import { defineStore } from 'pinia';
+import {defineStore} from 'pinia';
 import Cookies from 'js-cookie';
-import { Session } from '/@/utils/storage';
-import { login } from '/@//api/login/index'
-import other  from '/@/utils/other'
+import {Session} from '/@/utils/storage';
+import {login} from '/@//api/login/index'
+import other from '/@/utils/other'
 
 /**
  * 用户信息
  * @methods setUserInfos 设置用户信息
  */
 export const useUserInfo = defineStore('userInfo', {
-	state: (): UserInfosState => ({
-		userInfos: {
-			userName: '',
-			photo: '',
-			time: 0,
-			roles: [],
-			authBtnList: [],
-		},
-	}),
-	actions: {
-		async login(data: any){
-			data.grant_type = 'password'
-			data.scope = 'server'
-			// 密码加密
-			const user = other.encryption({
-				data: data,
-				key: 'pigxpigxpigxpigx',
-				param: ['password']
-			})
-			return new Promise((resolve, reject) => {
-				login(user).then(res =>{
-					// 存储token 信息
-					Session.set('token', res.access_token);
-					// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-					Cookies.set('userName', res.username);
-					resolve(res)
-				}).catch((err) => {
-					console.log(err)
-					reject(err)
-				})
-			})
+    state: (): UserInfosState => ({
+        userInfos: {
+            userName: '',
+            photo: '',
+            time: 0,
+            roles: [],
+            authBtnList: [],
+        },
+    }),
+    actions: {
+        async login(data: any) {
+            data.grant_type = 'password'
+            data.scope = 'server'
+            // 密码加密
+            const user = other.encryption({
+                data: data,
+                key: 'pigxpigxpigxpigx',
+                param: ['password']
+            })
+            return new Promise((resolve, reject) => {
+                login(user).then(res => {
+                    // 存储token 信息
+                    Session.set('token', res.access_token);
+                    // 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
+                    Cookies.set('userName', res.username);
+                    resolve(res)
+                }).catch((err) => {
+                    reject(err)
+                })
+            })
 
-		},
-		async setUserInfos() {
-			// 存储用户信息到浏览器缓存
-			if (Session.get('userInfo')) {
-				this.userInfos = Session.get('userInfo');
+        },
+        async setUserInfos() {
+            // 存储用户信息到浏览器缓存
+            if (Session.get('userInfo')) {
+                this.userInfos = Session.get('userInfo');
 			} else {
 				const userInfos: any = await this.getApiUserInfo();
 				this.userInfos = userInfos;
@@ -76,7 +75,7 @@ export const useUserInfo = defineStore('userInfo', {
 					} else {
 						defaultRoles = testRoles;
 						defaultAuthBtnList = testAuthBtnList;
-					}
+            }
 					// 用户信息模拟数据
 					const userInfos = {
 						userName: userName,
@@ -91,6 +90,7 @@ export const useUserInfo = defineStore('userInfo', {
 					resolve(userInfos);
 				}, 0);
 			});
-		},
-	},
+        },
+
+    },
 });

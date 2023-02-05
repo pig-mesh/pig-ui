@@ -65,7 +65,6 @@ const handleNodeClick = (item: any) => {
 }
 
 const getDeptTree = () => {
-  console.log('3333')
   if(query instanceof Function){
     state.localLoading = true
     const result = query(unref(searchName))

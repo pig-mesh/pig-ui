@@ -1,63 +1,54 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
+			<el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
+				autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2">
-			<el-input
-				:type="state.isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('account.accountPlaceholder2')"
-				v-model="state.ruleForm.password"
-				autocomplete="off"
-			>
+			<el-input :type="state.isShowPassword ? 'text' : 'password'"
+				:placeholder="$t('account.accountPlaceholder2')" v-model="state.ruleForm.password" autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
+					<i class="iconfont el-input__icon login-content-password"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword"
-					>
+						@click="state.isShowPassword = !state.isShowPassword">
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
-    <el-form-item>
-      <Verify
-          @success="verifySuccess"
-          :mode="'pop'"
-          :captchaType="'blockPuzzle'"
-          :imgSize="{ width: '330px', height: '155px' }"
-          ref="verifyref"
-      />
-    </el-form-item>
-<!--		<el-form-item class="login-animation3">-->
-<!--			<el-col :span="15">-->
-<!--				<el-input-->
-<!--					text-->
-<!--					maxlength="4"-->
-<!--					:placeholder="$t('account.accountPlaceholder3')"-->
-<!--					v-model="state.ruleForm.code"-->
-<!--					clearable-->
-<!--					autocomplete="off"-->
-<!--				>-->
-<!--					<template #prefix>-->
-<!--						<el-icon class="el-input__icon"><ele-Position /></el-icon>-->
-<!--					</template>-->
-<!--				</el-input>-->
-<!--			</el-col>-->
-<!--			<el-col :span="1"></el-col>-->
-<!--			<el-col :span="8">-->
-<!--				<el-button class="login-content-code" v-waves>1234</el-button>-->
-<!--			</el-col>-->
-<!--		</el-form-item>-->
+		<el-form-item>
+			<Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'"
+				:imgSize="{ width: '330px', height: '155px' }" ref="verifyref" />
+		</el-form-item>
+		<!--		<el-form-item class="login-animation3">-->
+		<!--			<el-col :span="15">-->
+		<!--				<el-input-->
+		<!--					text-->
+		<!--					maxlength="4"-->
+		<!--					:placeholder="$t('account.accountPlaceholder3')"-->
+		<!--					v-model="state.ruleForm.code"-->
+		<!--					clearable-->
+		<!--					autocomplete="off"-->
+		<!--				>-->
+		<!--					<template #prefix>-->
+		<!--						<el-icon class="el-input__icon"><ele-Position /></el-icon>-->
+		<!--					</template>-->
+		<!--				</el-input>-->
+		<!--			</el-col>-->
+		<!--			<el-col :span="1"></el-col>-->
+		<!--			<el-col :span="8">-->
+		<!--				<el-button class="login-content-code" v-waves>1234</el-button>-->
+		<!--			</el-col>-->
+		<!--		</el-form-item>-->
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="handleLogin" :loading="state.loading.signIn">
+			<el-button type="primary" class="login-content-submit" round v-waves @click="handleLogin"
+				:loading="state.loading.signIn">
 				<span>{{ $t('account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
@@ -65,7 +56,7 @@
 </template>
 
 <script setup lang="ts" name="loginAccount">
-import {reactive, computed, defineAsyncComponent, ref} from 'vue';
+import { reactive, computed, defineAsyncComponent, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
@@ -89,10 +80,10 @@ const router = useRouter();
 const state = reactive({
 	isShowPassword: false,
 	ruleForm: {
-    username: 'admin',
+		username: 'admin',
 		password: '123456',
 		code: '',
-    randomStr: 'blockPuzzle'
+		randomStr: 'blockPuzzle'
 	},
 	loading: {
 		signIn: false,
@@ -107,26 +98,18 @@ const currentTime = computed(() => {
 });
 
 const handleLogin = () => {
-  verifyref.value.show();
+	verifyref.value.show();
 }
 // 登录
 const onSignIn = async () => {
 	state.loading.signIn = true;
 	// 存储 token 到浏览器缓存
-  await useUserInfo().login(state.ruleForm)
-  // 进行登录
+	await useUserInfo().login(state.ruleForm)
+	// 进行登录
 
-	if (!themeConfig.value.isRequestRoutes) {
-		// 前端控制路由，2、请注意执行顺序
-		const isNoPower = await initFrontEndControlRoutes();
-		signInSuccess(isNoPower);
-	} else {
-		// 模拟后端控制路由，isRequestRoutes 为 true，则开启后端控制路由
-		// 添加完动态路由，再进行 router 跳转，否则可能报错 No match found for location with path "/"
-		const isNoPower = await initBackEndControlRoutes();
-		// 执行完 initBackEndControlRoutes，再执行 signInSuccess
-		signInSuccess(isNoPower);
-	}
+	const isNoPower = await initBackEndControlRoutes();
+	// 执行完 initBackEndControlRoutes，再执行 signInSuccess
+	signInSuccess(isNoPower);
 };
 // 登录成功后的跳转
 const signInSuccess = (isNoPower: boolean | undefined) => {
@@ -156,14 +139,15 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 };
 
 const verifySuccess = (params: any) => {
-  state.ruleForm.code = params.captchaVerification;
-  onSignIn()
+	state.ruleForm.code = params.captchaVerification;
+	onSignIn()
 }
 </script>
 
 <style scoped lang="scss">
 .login-content-form {
 	margin-top: 20px;
+
 	@for $i from 1 through 4 {
 		.login-animation#{$i} {
 			opacity: 0;
@@ -173,20 +157,24 @@ const verifySuccess = (params: any) => {
 			animation-delay: calc($i/10) + s;
 		}
 	}
+
 	.login-content-password {
 		display: inline-block;
 		width: 20px;
 		cursor: pointer;
+
 		&:hover {
 			color: #909399;
 		}
 	}
+
 	.login-content-code {
 		width: 100%;
 		padding: 0;
 		font-weight: bold;
 		letter-spacing: 5px;
 	}
+
 	.login-content-submit {
 		width: 100%;
 		letter-spacing: 2px;

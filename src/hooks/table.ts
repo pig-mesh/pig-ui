@@ -1,5 +1,5 @@
-import { ElMessage } from "element-plus";
-import { useMessage } from "./message";
+import {ElMessage} from "element-plus";
+import {useMessage} from "./message";
 import request from "/@/utils/request";
 
 export interface BasicTableProps {
@@ -87,7 +87,7 @@ export function useTable(options?: BasicTableProps) {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
             }).catch(err => {
-                ElMessage.error(err.msg)
+                ElMessage.error(err.response.data.msg)
             }).finally(() => {
                 state.loading = false;
             })
@@ -114,7 +114,7 @@ export function useTable(options?: BasicTableProps) {
 
     // 排序
     const sortChangeHandle = (data: any) => {
-        const { prop, order } = data
+        const {prop, order} = data
 
         if (prop && order) {
             state.pagination!.order = prop
@@ -138,7 +138,7 @@ export function useTable(options?: BasicTableProps) {
             method: 'get',
             responseType: 'blob',
             params: query
-        }).then(response => {
+        }).then((response: any) => {
             // 处理返回的文件流
             if (response && response.size === 0) {
                 useMessage().error('内容为空，无法下载')

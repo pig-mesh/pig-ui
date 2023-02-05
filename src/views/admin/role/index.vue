@@ -12,7 +12,7 @@
       <el-row style="margin-top: 20px">
         <div class="mb15" style="width: 100%">
           <el-button size="default" icon="folder-add" type="success" class="ml10" @click="roleDialogRef.openDialog('add')">
-            新增用户
+            新增
           </el-button>
           <right-toolbar  v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px" @queryTable="getDataList"></right-toolbar>
         </div>

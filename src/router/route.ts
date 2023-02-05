@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router';
+import {RouteRecordRaw} from 'vue-router';
 
 /**
  * 建议：路由 path 路径与文件夹名称相同，找文件可浏览器地址找，方便定位文件位置
@@ -18,16 +18,16 @@ import { RouteRecordRaw } from 'vue-router';
 
 // 扩展 RouteMeta 接口
 declare module 'vue-router' {
-	interface RouteMeta {
-		title?: string;
-		isLink?: string;
-		isHide?: boolean;
-		isKeepAlive?: boolean;
-		isAffix?: boolean;
-		isIframe?: boolean;
-		roles?: string[];
-		icon?: string;
-	}
+    interface RouteMeta {
+        title?: string;
+        isLink?: string;
+        isHide?: boolean;
+        isKeepAlive?: boolean;
+        isAffix?: boolean;
+        isIframe?: boolean;
+        roles?: string[];
+        icon?: string;
+    }
 }
 
 /**
@@ -38,155 +38,16 @@ declare module 'vue-router' {
  * @returns 返回路由菜单数据
  */
 export const dynamicRoutes: Array<RouteRecordRaw> = [
-	{
-		path: '/',
-		name: '/',
-		component: () => import('/@/layout/index.vue'),
-		redirect: '/home',
-		meta: {
-			isKeepAlive: true,
-		},
-		children: [
-			{
-				path: '/home',
-				name: 'home',
-				component: () => import('/@/views/home/index.vue'),
-				meta: {
-					title: 'router.home',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: true,
-					isIframe: false,
-					roles: ['admin', 'common'],
-					icon: 'iconfont icon-shouye',
-				},
-			},
-			{
-				path: '/system',
-				name: 'system',
-				component: () => import('/@/layout/routerView/parent.vue'),
-				redirect: '/system/menu',
-				meta: {
-					title: 'router.system',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					roles: ['admin', 'common'],
-					icon: 'iconfont icon-xitongshezhi',
-				},
-				children: [
-					{
-						path: '/system/menu',
-						name: 'systemMenu',
-						component: () => import('/@/views/system/menu/index.vue'),
-						meta: {
-							title: 'router.systemMenu',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'iconfont icon-caidan',
-						},
-					},
-					{
-						path: '/system/role',
-						name: 'systemRole',
-						component: () => import('/@/views/system/role/index.vue'),
-						meta: {
-							title: 'router.systemRole',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'ele-ColdDrink',
-						},
-					},
-					{
-						path: '/system/user',
-						name: 'systemUser',
-						component: () => import('/@/views/system/user/index.vue'),
-						meta: {
-							title: 'router.systemUser',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'iconfont icon-icon-',
-						},
-					},
-					{
-						path: '/system/dept',
-						name: 'systemDept',
-						component: () => import('/@/views/system/dept/index.vue'),
-						meta: {
-							title: 'router.systemDept',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'ele-OfficeBuilding',
-						},
-					},
-					{
-						path: '/system/dic',
-						name: 'systemDic',
-						component: () => import('/@/views/system/dic/index.vue'),
-						meta: {
-							title: 'router.systemDic',
-							isLink: '',
-							isHide: false,
-							isKeepAlive: true,
-							isAffix: false,
-							isIframe: false,
-							roles: ['admin', 'common'],
-							icon: 'ele-SetUp',
-						},
-					},
-				],
-			},
-			{
-				path: '/personal',
-				name: 'personal',
-				component: () => import('/@/views/personal/index.vue'),
-				meta: {
-					title: 'router.personal',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					roles: ['admin', 'common'],
-					icon: 'iconfont icon-gerenzhongxin',
-				},
-			},
-			{
-				path: '/tools',
-				name: 'tools',
-				component: () => import('/@/views/tools/index.vue'),
-				meta: {
-					title: 'router.tools',
-					isLink: '',
-					isHide: false,
-					isKeepAlive: true,
-					isAffix: false,
-					isIframe: false,
-					roles: ['admin', 'common'],
-					icon: 'iconfont icon-gongju',
-				},
-			},
-		],
-	},
+    {
+        path: '/',
+        name: '/',
+        component: () => import('/@/layout/index.vue'),
+        redirect: '/home/index',
+        meta: {
+            isKeepAlive: true,
+        },
+        children: [],
+    },
 ];
 
 /**
@@ -194,24 +55,24 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
  * @link 参考：https://next.router.vuejs.org/zh/guide/essentials/history-mode.html#netlify
  */
 export const notFoundAndNoPower = [
-	{
-		path: '/:path(.*)*',
-		name: 'notFound',
-		component: () => import('/@/views/error/404.vue'),
-		meta: {
-			title: 'staticRoutes.notFound',
-			isHide: true,
-		},
-	},
-	{
-		path: '/401',
-		name: 'noPower',
-		component: () => import('/@/views/error/401.vue'),
-		meta: {
-			title: 'staticRoutes.noPower',
-			isHide: true,
-		},
-	},
+    {
+        path: '/:path(.*)*',
+        name: 'notFound',
+        component: () => import('/@/views/error/404.vue'),
+        meta: {
+            title: 'staticRoutes.notFound',
+            isHide: true,
+        },
+    },
+    {
+        path: '/401',
+        name: 'noPower',
+        component: () => import('/@/views/error/401.vue'),
+        meta: {
+            title: 'staticRoutes.noPower',
+            isHide: true,
+        },
+    }
 ];
 
 /**
@@ -221,12 +82,12 @@ export const notFoundAndNoPower = [
  * @returns 返回路由菜单数据
  */
 export const staticRoutes: Array<RouteRecordRaw> = [
-	{
-		path: '/login',
-		name: 'login',
-		component: () => import('/@/views/login/index.vue'),
-		meta: {
-			title: '登录',
-		},
-	}
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('/@/views/login/index.vue'),
+        meta: {
+            title: '登录',
+        },
+    }
 ];
