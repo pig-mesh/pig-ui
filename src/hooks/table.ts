@@ -1,7 +1,5 @@
 import { ElMessage } from "element-plus";
 import other from "../utils/other";
-import { useMessage } from "./message";
-import request from "/@/utils/request";
 
 export interface BasicTableProps {
     // 是否在创建页面时，调用数据列表接口
@@ -22,6 +20,8 @@ export interface BasicTableProps {
     pageList?: (...arg: any) => Promise<any>
     // loading
     loading?: Boolean
+
+    selectObjs: any[]
 }
 
 export interface Pagination {
@@ -59,7 +59,8 @@ export function useTable(options?: BasicTableProps) {
             layout: "total, sizes, prev, pager, next, jumper"
         } as Pagination,
         dataListSelections: [],
-        loading: false
+        loading: false,
+        selectObjs: []
     }
 
     const mergeDefaultOptions = (options: any, props: any): BasicTableProps => {
@@ -136,6 +137,7 @@ export function useTable(options?: BasicTableProps) {
     const downBlobFile = (url: string, query: any, fileName: string) => {
         return other.downBlobFile(url, query, fileName)
     }
+
 
     return {
         getDataList,
