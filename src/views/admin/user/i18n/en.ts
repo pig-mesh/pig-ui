@@ -12,7 +12,6 @@ export default {
         dept: 'dept',
         email: 'email',
         nickname: 'nickname',
-        action: 'action',
         inputUsernameTip: 'input username',
         inputPhoneTip: 'input phone',
         inputNameTip: 'input name',

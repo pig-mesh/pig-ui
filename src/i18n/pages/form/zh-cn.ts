@@ -9,6 +9,7 @@ export default {
         importBtn: '导入',
         queryDeptTip: '请输入部门名称',
         resetBtn: '重置',
+        action: '操作',
         editSuccessText: '修改成功',
         addSuccessText: '添加成功',
         delSuccessText: '删除成功',

@@ -10,6 +10,7 @@ export default {
 		importUserTip: 'import user',
 		queryDeptTip: 'input deptName',
 		resetBtn: 'reset',
+		action:'action',
 		editSuccessText: 'edit success',
 		addSuccessText: 'add success',
 		delSuccessText: 'delete success',

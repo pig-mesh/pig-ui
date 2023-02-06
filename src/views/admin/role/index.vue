@@ -50,7 +50,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" width="150">
+        <el-table-column :label="$('common.action')" width="150">
           <template #default="scope">
             <el-button size="small" text type="primary" v-auth="'sys_role_edit'"
               @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
@@ -149,7 +149,7 @@ const exportExcel = () => {
 // 删除角色
 const handleDelete = (row: any) => {
   if (!row) {
-    selectObjs.value.forEach(val => {
+    selectObjs.value.forEach((val: any) => {
       handleDelete(val)
     });
     return
@@ -160,7 +160,7 @@ const handleDelete = (row: any) => {
       delObj(row.roleId).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
-      }).catch(err => {
+      }).catch((err: any) => {
         useMessage().error(err.msg)
       })
     })

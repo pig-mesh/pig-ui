@@ -15,6 +15,7 @@
 		"element-plus": "^2.2.26",
 		"js-cookie": "^3.0.1",
 		"js-table2excel": "^1.0.3",
+		"echarts": "^5.4.1",
 		"mitt": "^3.0.0",
 		"nprogress": "^0.2.0",
 		"pinia": "^2.0.28",
