@@ -2,8 +2,8 @@
 	<div class="system-menu-container layout-pd">
 		<el-card shadow="hover">
 			<div class="mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.search.menuName"> </el-input>
-				<el-button size="default" icon="search" type="primary" class="ml10" @click="getTableData">
+				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.queryForm.menuName"> </el-input>
+				<el-button size="default" icon="search" type="primary" class="ml10" @click="getDataList">
 					查询
 				</el-button>
 				<el-button size="default" icon="folder-add" type="success" class="ml10" @click="onOpenAddMenu">
@@ -11,8 +11,8 @@
 				</el-button>
 			</div>
 			<el-table
-				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
+				:data="state.dataList"
+				v-loading="state.loading"
 				style="width: 100%"
 				row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -43,43 +43,33 @@
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
+		<MenuDialog ref="menuDialogRef" @refresh="getDataList()" />
 	</div>
 </template>
 
 <script setup lang="ts" name="systemMenu">
-import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { pageList } from '/@/api/admin/menu'
-import type { menuData } from './menu'
+import { useTable, BasicTableProps } from "/@/hooks/table";
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 
 // 定义变量内容
 const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();
-const state = reactive({
-	tableData: {
-		data: [] as menuData[],
-		loading: true,
-	},
-  search: {
+const state: BasicTableProps = reactive<BasicTableProps>({
+  pageList: pageList, // H
+  queryForm: {
     menuName: ''
-  }
+  },
+  isPage: false
 });
 
-// 获取路由数据，真实请从接口获取
-const getTableData = () => {
-	state.tableData.loading = true;
 
-  pageList(state.search).then(res => {
-    state.tableData.data = res.data
-  })
+const {
+  getDataList,
+} = useTable(state)
 
-	setTimeout(() => {
-		state.tableData.loading = false;
-	}, 500);
-};
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type: string) => {
 	menuDialogRef.value.openDialog(type);
@@ -97,12 +87,8 @@ const onTabelRowDel = (row: RouteRecordRaw) => {
 	})
 		.then(() => {
 			ElMessage.success('删除成功');
-			getTableData();
+      getDataList()
 		})
 		.catch(() => {});
 };
-// 页面加载时
-onMounted(() => {
-	getTableData();
-});
 </script>

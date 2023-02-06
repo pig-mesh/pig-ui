@@ -225,12 +225,14 @@ export function downBlobFile(url:any, query: any, fileName:string) {
 			return;
 		}
 		const link = document.createElement("a");
+		// @ts-ignore
 		link.href = URL.createObjectURL(blob);
 		// @ts-ignore
 		link.download = fileName;
 		document.body.appendChild(link);
 		link.click();
 		window.setTimeout(function () {
+			// @ts-ignore
 			URL.revokeObjectURL(blob);
 			document.body.removeChild(link);
 		}, 0);
