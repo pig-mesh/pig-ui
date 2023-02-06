@@ -10,6 +10,7 @@ export default {
         createTime: 'createTime',
         action: 'action',
         inputLogTypeTip: 'select logType',
-        inputCreateTimeTip: 'select createTime'
+        inputStartPlaceholderTip: 'Start Time',
+        inputEndPlaceholderTip: 'End TIme'
     }
 }

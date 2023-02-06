@@ -7,9 +7,15 @@
             <el-option v-for="item in log_type" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
-        <el-form-item :label="$t('syslog.createTime')" prop="createTime" :placeholder="$t('syslog.inputCreateTimeTip')">
-          <el-input v-model="state.queryForm.createTime" clearable
-                    style="width: 240px" @keyup.enter="getDataList" />
+        <el-form-item :label="$t('syslog.createTime')" prop="createTime">
+          <el-date-picker
+              v-model="state.queryForm.createTime"
+              value-format="YYYY-MM-DD HH:mm:ss"
+              type="datetimerange"
+              range-separator="To"
+              :start-placeholder="$t('syslog.inputStartPlaceholderTip')"
+              :end-placeholder="$t('syslog.inputEndPlaceholderTip')"
+          />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>

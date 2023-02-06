@@ -10,7 +10,8 @@ export default {
         createTime: '创建时间',
         action: '操作',
         inputLogTypeTip: '请选择类型',
-        inputCreateTimeTip: '选择时间'
+        inputStartPlaceholderTip: '开始时间',
+        inputEndPlaceholderTip: '结束时间'
     },
 
 }
