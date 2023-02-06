@@ -85,7 +85,7 @@ import { useI18n } from "vue-i18n";
 
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('./form.vue'));
-const permession = defineAsyncComponent(() => import('./permession.vue'))
+const Permession = defineAsyncComponent(() => import('./permession.vue'))
 const { t } = useI18n()
 
 // 定义变量内容
