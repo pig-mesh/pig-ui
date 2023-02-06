@@ -170,7 +170,7 @@ const dataRules = ref(
       pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
       message: "请输入正确的手机号码",
       trigger: "blur"
-    }, { validator: validatePhone, trigger: 'blur' }],
+    }, { validator: validatePhone, trigger: 'blur' }, { validator: validatePhone, trigger: 'blur' }],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }]
   }
 )
@@ -199,33 +199,40 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = () => {
-  // 更新方法
-  if (dataForm.userId) {
-    if (dataForm.phone && dataForm.phone.indexOf("*") >= 0) {
-      dataForm.phone = undefined
+  dataFormRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return false
     }
-    if (dataForm.password && dataForm.password.indexOf("******") >= 0) {
-      dataForm.password = undefined
+
+    // 更新方法
+    if (dataForm.userId) {
+      if (dataForm.phone && dataForm.phone.indexOf("*") >= 0) {
+        dataForm.phone = undefined
+      }
+      if (dataForm.password && dataForm.password.indexOf("******") >= 0) {
+        dataForm.password = undefined
+      }
+      putObj(dataForm).then(() => {
+        useMessage().success(t('common.editSuccessText'))
+        visible.value = false; // 关闭弹窗
+        emit('refresh');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
+    } else {  // 新增方法
+      if (dataForm.phone && dataForm.phone.indexOf("*") > 0) {
+        dataForm.phone = undefined
+      }
+      addObj(dataForm).then(() => {
+        useMessage().success(t('common.addSuccessText'))
+        visible.value = false // 关闭弹窗
+        emit('refresh')
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
     }
-    putObj(dataForm).then(() => {
-      useMessage().success(t('common.editSuccessText'))
-      visible.value = false; // 关闭弹窗
-      emit('refresh');
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  } else {  // 新增方法
-    if (dataForm.phone && dataForm.phone.indexOf("*") > 0) {
-      dataForm.phone = undefined
-    }
-    addObj(dataForm).then(() => {
-      useMessage().success(t('common.addSuccessText'))
-      visible.value = false // 关闭弹窗
-      emit('refresh')
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  }
+  })
+
 };
 
 // 初始化部门数据

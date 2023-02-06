@@ -1,6 +1,6 @@
 <template>
   <div class="system-role-dialog-container">
-    <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
+    <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
       <el-tree
           ref="menuTree"
           :data="state.treeData"
@@ -25,10 +25,14 @@
 </template>
 
 <script setup lang="ts" name="role-permession">
-import { fetchRoleTree, permissionUpd } from '/@/api/admin/role'
-import { pageList } from '/@/api/admin/menu'
-import { useMessage } from "/@/hooks/message";
+import {fetchRoleTree, permissionUpd} from '/@/api/admin/role'
+import {pageList} from '/@/api/admin/menu'
+import {useMessage} from "/@/hooks/message";
 import {Ref} from "vue";
+import {useI18n} from "vue-i18n";
+
+const {t} = useI18n();
+
 
 const menuTree = ref()
 
@@ -77,14 +81,16 @@ const onSubmit = () => {
   const menuIds = menuTree.value.getCheckedKeys().join(',').concat(',').concat(menuTree.value.getHalfCheckedKeys().join(','))
   permissionUpd(state.roleId, menuIds).then(() => {
     state.dialog.isShowDialog = false;
-    useMessage().success('修改成功')
+    useMessage().success(t('common.editSuccessText'))
   })
 
 }
 
-const resolveAllEunuchNodeId =(json: any[], idArr: any[], temp: any[]) => {
+const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[]) => {
   for (let i = 0; i < json.length; i++) {
     const item = json[i]
+    // 国际化
+    item.name = t(item.name)
     // 存在子节点，递归遍历;不存在子节点，将json的id添加到临时数组中
     if (item.children && item.children.length !== 0) {
       resolveAllEunuchNodeId(item.children, idArr, temp)

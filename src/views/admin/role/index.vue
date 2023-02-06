@@ -4,7 +4,7 @@
       <el-row shadow="hover" v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
           <el-form-item :label="$t('sysrole.roleName')" prop="roleName">
-            <el-input size="default" :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName" 
+            <el-input size="default" :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName"
               style="max-width: 180px" />
           </el-form-item>
           <el-form-item class="ml2">
@@ -53,14 +53,14 @@
         <el-table-column label="操作" width="150">
           <template #default="scope">
             <el-button size="small" text type="primary" v-auth="'sys_role_edit'"
-              @click="roleDialogRef.openDialog('edit', scope.row)">{{ $t('common.editBtn') }}</el-button>
+              @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
 
             <el-button size="small" text type="primary" v-auth="'sys_role_del'" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
             }}</el-button>
 
             <el-button size="small" text type="primary" v-auth="'sys_role_del'"
-              @click="permessionRef.openDialog(scope.row)">授权</el-button>
+              @click="permessionRef.openDialog(scope.row)">{{ $t('sysrole.permissionTip') }}</el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -4,5 +4,6 @@ export default {
         roleName: 'roleName',
         action: 'action',
         inputRoleNameTip: 'input roleName',
+        permissionTip: 'grant',
     }
 }
