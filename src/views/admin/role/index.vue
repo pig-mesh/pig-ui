@@ -4,11 +4,11 @@
       <el-row shadow="hover" v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
           <el-form-item :label="$t('sysrole.roleName')" prop="roleName">
-            <el-input size="default" :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName"
+            <el-input :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName"
               style="max-width: 180px" />
           </el-form-item>
           <el-form-item class="ml2">
-            <el-button size="default" icon="search" type="primary" @click="getDataList">
+            <el-button icon="search" type="primary" @click="getDataList">
               {{ $t('common.queryBtn') }}
             </el-button>
             <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
@@ -17,20 +17,19 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button size="default" icon="folder-add" type="primary" class="ml10" @click="roleDialogRef.openDialog()"
+          <el-button icon="folder-add" type="primary" class="ml10" @click="roleDialogRef.openDialog()"
             v-auth="'sys_role_add'">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button size="default" icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
+          <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
             v-auth="'sys_user_add'">
             {{ $t('common.importBtn') }}
           </el-button>
-          <el-button size="default" icon="Download" type="primary" class="ml10" @click="exportExcel"
-            v-auth="'sys_user_export'">
+          <el-button icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'sys_user_export'">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button size="default" :disabled="multiple" icon="Delete" type="primary" class="ml10"
-            v-auth="'sys_user_del'" @click="handleDelete(undefined)">
+          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_user_del'"
+            @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -50,17 +49,18 @@
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$('common.action')" width="150">
+        <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button size="small" text type="primary" v-auth="'sys_role_edit'"
+            <el-button text type="primary" v-auth="'sys_role_edit'"
               @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
 
-            <el-button size="small" text type="primary" v-auth="'sys_role_del'" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" v-auth="'sys_role_del'" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
             }}</el-button>
 
-            <el-button size="small" text type="primary" v-auth="'sys_role_del'"
-              @click="permessionRef.openDialog(scope.row)">{{ $t('sysrole.permissionTip') }}</el-button>
+            <el-button text type="primary" v-auth="'sys_role_del'" @click="permessionRef.openDialog(scope.row)">{{
+              $t('sysrole.permissionTip')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>

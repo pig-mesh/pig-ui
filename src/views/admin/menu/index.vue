@@ -36,9 +36,9 @@
         <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-						<el-button size="small" text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
-						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button   text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
+						<el-button   text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
+						<el-button   text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

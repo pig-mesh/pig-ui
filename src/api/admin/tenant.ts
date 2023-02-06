@@ -1,24 +1,16 @@
-import request from "/@/utils/request";
+import request from "/@/utils/request"
 
 export function fetchList(query?: Object) {
   return request({
-    url: '/admin/post/page',
+    url: '/admin/tenant/page',
     method: 'get',
     params: query
   })
 }
 
-export const list = (params?: Object) => {
-  return request({
-    url: '/admin/post/list',
-    method: "get",
-    params
-  })
-}
-
 export function addObj(obj?: Object) {
   return request({
-    url: '/admin/post',
+    url: '/admin/tenant',
     method: 'post',
     data: obj
   })
@@ -26,21 +18,22 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
   return request({
-    url: '/admin/post/' + id,
-    method: 'get'
+    url: '/admin/tenant',
+    method: 'get',
+    params: { id }
   })
 }
 
 export function delObj(id?: string) {
   return request({
-    url: '/admin/post/' + id,
+    url: '/admin/tenant/' + id,
     method: 'delete'
   })
 }
 
 export function putObj(obj?: Object) {
   return request({
-    url: '/admin/post',
+    url: '/admin/tenant',
     method: 'put',
     data: obj
   })

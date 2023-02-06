@@ -27,20 +27,19 @@
           </el-row>
           <el-row>
             <div class="mb8" style="width: 100%">
-              <el-button size="default" icon="folder-add" type="primary" class="ml10"
-                @click="userDialogRef.openDialog()" v-auth="'sys_user_add'">
+              <el-button icon="folder-add" type="primary" class="ml10" @click="userDialogRef.openDialog()"
+                v-auth="'sys_user_add'">
                 {{ $t('common.addBtn') }}
               </el-button>
-              <el-button size="default" icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
+              <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
                 v-auth="'sys_user_add'">
                 {{ $t('common.importBtn') }}
               </el-button>
-              <el-button size="default" icon="Download" type="primary" class="ml10" @click="exportExcel"
-                v-auth="'sys_user_export'">
+              <el-button icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'sys_user_export'">
                 {{ $t('common.exportBtn') }}
               </el-button>
-              <el-button size="default" :disabled="multiple" icon="Delete" type="primary" class="ml10"
-                v-auth="'sys_user_del'" @click="handleDelete(undefined)">
+              <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_user_del'"
+                @click="handleDelete(undefined)">
                 {{ $t('common.delBtn') }}
               </el-button>
               <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -75,12 +74,12 @@
               show-overflow-tooltip></el-table-column>
             <el-table-column :label="$t('common.action')" width="100">
               <template #default="scope">
-                <el-button size="small" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
+                <el-button   text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
                   v-auth="'sys_user_edit'"> {{
                     $t('common.editBtn')
                   }}
                 </el-button>
-                <el-button size="small" text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_user_del'">
+                <el-button   text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_user_del'">
                   {{ $t('common.delBtn') }}
                 </el-button>
               </template>
@@ -95,7 +94,7 @@
     </el-row>
 
     <user-form ref="userDialogRef" @refresh="getDataList()" />
-    
+
     <upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')" url="/admin/user/import"
       temp-url="/admin/sys-file/local/file/user.xlsx" @refreshDataList="getDataList" />
   </div>

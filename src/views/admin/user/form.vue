@@ -3,7 +3,7 @@
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
       :close-on-click-modal="false" draggable>
       <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" size="default" label-width="90px">
-        <el-row :gutter="35">
+        <el-row :gutter="24">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
               <el-input v-model="dataForm.username" placeholder="请输入用户名" :disabled="dataForm.userId !== ''"></el-input>
@@ -203,7 +203,6 @@ const onSubmit = () => {
     if (!valid) {
       return false
     }
-
     // 更新方法
     if (dataForm.userId) {
       if (dataForm.phone && dataForm.phone.indexOf("*") >= 0) {

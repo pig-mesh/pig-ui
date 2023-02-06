@@ -5,13 +5,14 @@ import router from './router';
 import { directive } from '/@/directive/index';
 import { i18n } from '/@/i18n/index';
 import other from '/@/utils/other';
+import { parseTime, parseDate } from '/@/utils/formatTime';
 
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import elementIcons from '/@//components/svgIcon/svgicon'
 import '/@/theme/index.scss';
 import VueGridLayout from 'vue-grid-layout';
-import { Pagination,RightToolbar, DictTag, UploadExcel } from '/@/components/index'
+import { Pagination, RightToolbar, DictTag, UploadExcel } from '/@/components/index'
 
 
 
@@ -22,6 +23,11 @@ app.component('DictTag', DictTag)
 app.component('Pagination', Pagination)
 app.component('RightToolbar', RightToolbar)
 app.component('uploadExcel', UploadExcel)
+
+// 全局方法挂载
+app.config.globalProperties.parseTime = parseTime
+app.config.globalProperties.parseDate = parseDate
+
 
 directive(app);
 other.elSvg(app);

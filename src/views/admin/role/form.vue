@@ -1,48 +1,46 @@
 <template>
-  <div class="system-role-dialog-container">
-    <el-dialog :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
-      :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="form" :rules="dataRules" size="default" label-width="90px">
-        <el-row :gutter="35">
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="角色名称" prop="roleName">
-              <el-input v-model="form.roleName" placeholder="请输入角色名称" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="角色标识" prop="roleCode">
-              <el-input v-model="form.roleCode" placeholder="请输入角色标识" clearable></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="角色描述" prop="roleDesc">
-              <el-input v-model="form.roleDesc" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-            <el-form-item label="菜单权限" prop="dsType">
-              <el-select v-model="form.dsType" placeholder="请选择" clearable class="w100">
-                <el-option v-for="item in dictType" :key="item.value" :label="item.label" :value="item.value" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="24" class="mb20" v-if="form.dsType === 1">
-            <el-form-item>
-              <el-tree show-checkbox ref="deptTreeRef" :check-strictly="true" :data="dataForm.deptData"
-                :props="dataForm.deptProps" :default-checked-keys="dataForm.checkedDsScope" node-key="id"
-                highlight-current default-expand-all />
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="visible = false" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
-        </span>
-      </template>
-    </el-dialog>
-  </div>
+  <el-dialog :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
+    :close-on-click-modal="false" draggable>
+    <el-form ref="dataFormRef" :model="form" :rules="dataRules"  label-width="90px">
+      <el-row :gutter="35">
+        <el-col :span="12" class="mb20">
+          <el-form-item label="角色名称" prop="roleName">
+            <el-input v-model="form.roleName" placeholder="请输入角色名称" clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="mb20">
+          <el-form-item label="角色标识" prop="roleCode">
+            <el-input v-model="form.roleCode" placeholder="请输入角色标识" clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-form-item label="角色描述" prop="roleDesc">
+            <el-input v-model="form.roleDesc" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+          <el-form-item label="菜单权限" prop="dsType">
+            <el-select v-model="form.dsType" placeholder="请选择" clearable class="w100">
+              <el-option v-for="item in dictType" :key="item.value" :label="item.label" :value="item.value" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="24" class="mb20" v-if="form.dsType === 1">
+          <el-form-item>
+            <el-tree show-checkbox ref="deptTreeRef" :check-strictly="true" :data="dataForm.deptData"
+              :props="dataForm.deptProps" :default-checked-keys="dataForm.checkedDsScope" node-key="id"
+              highlight-current default-expand-all />
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="visible = false" >{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup lang="ts" name="systemRoleDialog">import { rule } from '/@/utils/validate';
