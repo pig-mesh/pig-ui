@@ -2,9 +2,14 @@
 		<el-card shadow="hover" class="layout-padding-auto">
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
-          <el-form-item :label="$t('post.postName')" prop="postName">
-            <el-input  :placeholder="$t('post.inputpostNameTip')" v-model="state.queryForm.postName"
+          <el-form-item label="类型" prop="dictType">
+            <el-input  placeholder="请输入类型" v-model="state.queryForm.dictType"
                        style="max-width: 180px" />
+          </el-form-item>
+          <el-form-item label="字典类型" prop="systemFlag">
+            <el-select v-model="state.queryForm.systemFlag" clearable>
+              <el-option v-for="(item,index) in dict_type" :label="item.label" :value="item.value" :key="index"></el-option>
+            </el-select>
           </el-form-item>
           <el-form-item class="ml2">
             <el-button  icon="search" type="primary" @click="getDataList">
@@ -98,6 +103,7 @@ const showDictITem = (row: any) => {
 // 清空搜索条件
 const resetQuery = () => {
   queryRef.value.resetFields()
+  state.queryForm = {}
   getDataList()
 }
 // 删除操作
