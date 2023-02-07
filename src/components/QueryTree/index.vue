@@ -27,7 +27,7 @@ import {onMounted, reactive, ref, unref} from "vue";
 
 const emit = defineEmits(['search', 'nodeClick'])
 
-const {placeholder, props, query, loading, searchKey} = defineProps({
+const {placeholder, props, query, loading} = defineProps({
   props: {
     type: Object,
     default: () => {

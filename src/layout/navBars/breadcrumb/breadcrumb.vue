@@ -92,7 +92,6 @@ const initRouteSplit = (path: string) => {
 	getBreadcrumbList(routesList.value);
 
 	if (route.name === 'home' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
-	console.log('xx', routesList)
 	if (state.breadcrumbList.length > 0)
 		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
 };

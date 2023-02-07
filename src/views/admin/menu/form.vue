@@ -66,7 +66,7 @@ import {useMessage} from "/@/hooks/message";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 // 引入组件
-const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
+// const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 const visible = ref(false)
 // 定义变量内容
