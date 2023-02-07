@@ -1,132 +1,122 @@
 <template>
-	<div class="layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
-			<div class="mb15">
-				<el-input size="default" placeholder="请输入字典名称" style="max-width: 180px"> </el-input>
-				<el-button size="default" type="primary" class="ml10">
-					<el-icon>
-						<ele-Search />
-					</el-icon>
-					查询
-				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddDic('add')">
-					<el-icon>
-						<ele-FolderAdd />
-					</el-icon>
-					新增字典
-				</el-button>
-			</div>
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+          <el-form-item :label="$t('post.postName')" prop="postName">
+            <el-input  :placeholder="$t('post.inputpostNameTip')" v-model="state.queryForm.postName"
+                       style="max-width: 180px" />
+          </el-form-item>
+          <el-form-item class="ml2">
+            <el-button  icon="search" type="primary" @click="getDataList">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button icon="Refresh"  @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
+      <el-row>
+        <div class="mb8" style="width: 100%">
+          <el-button  icon="folder-add" type="primary" class="ml10" @click="dicDialogRef.openDialog()">
+            {{ $t('common.addBtn') }}
+          </el-button>
+          <el-button  :disabled="multiple" icon="Delete" type="primary" class="ml10"
+                      v-auth="'sys_dict_del'" @click="handleDelete(undefined)">
+            {{ $t('common.delBtn') }}
+          </el-button>
+          <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
+                         @queryTable="getDataList"></right-toolbar>
+        </div>
+      </el-row>
+			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
 				<el-table-column type="index" label="序号" width="50" />
-				<el-table-column prop="dicName" label="字典名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="fieldName" label="字段名" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="字典状态" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
-						<el-tag type="info" v-else>禁用</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="describe" label="字典描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="dictType" label="类型" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="systemFlag" label="字典类型" show-overflow-tooltip>
+          <template #default="scope">
+            <dict-tag :options="dict_type" :value="scope.row.systemFlag"></dict-tag>
+          </template>
+        </el-table-column>
+				<el-table-column prop="remarks" label="备注信息" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" width="100">
+
+				<el-table-column label="操作" width="200">
 					<template #default="scope">
 						<el-button   text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
-						<el-button   text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button   text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
+						<el-button   text type="primary" @click="showDictITem(scope.row)">字典项</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="state.tableData.param.pageNum"
-				background
-				v-model:page-size="state.tableData.param.pageSize"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="state.tableData.total"
-			>
-			</el-pagination>
+      <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
 		</el-card>
-		<DicDialog ref="dicDialogRef" @refresh="getTableData()" />
-	</div>
+		<DicDialog ref="dicDialogRef" @refresh="getDataList()" />
+  <dict-item-dialog ref="dictItemDialogRef"></dict-item-dialog>
+
 </template>
 
 <script setup lang="ts" name="systemDic">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
-import { ElMessageBox, ElMessage } from 'element-plus';
-
+import {BasicTableProps, useTable} from "/@/hooks/table";
+import {fetchList,delObj} from "/@/api/admin/dict";
+import {useMessage, useMessageBox} from "/@/hooks/message";
+import {useDict} from "/@/hooks/dict";
+import {useI18n} from "vue-i18n";
+const { dict_type } = useDict('dict_type')
 // 引入组件
-const DicDialog = defineAsyncComponent(() => import('/@/views/admin/dict/dialog.vue'));
-
+const DicDialog = defineAsyncComponent(() => import('./form.vue'));
+const DictItemDialog = defineAsyncComponent(() => import('./dictItem/index.vue'))
+const { t }  = useI18n()
 // 定义变量内容
 const dicDialogRef = ref();
-const state = reactive<SysDicState>({
-	tableData: {
-		data: [],
-		total: 0,
-		loading: false,
-		param: {
-			pageNum: 1,
-			pageSize: 10,
-		},
-	},
-});
+const dictItemDialogRef = ref()
+const queryRef = ref()
+const showSearch = ref(true)
+// 多选变量
+const selectObjs = ref([])
+const multiple = ref(true)
 
-// 初始化表格数据
-const getTableData = () => {
-	state.tableData.loading = true;
-	const data = [];
-	for (let i = 0; i < 2; i++) {
-		data.push({
-			dicName: i === 0 ? '角色标识' : '用户性别',
-			fieldName: i === 0 ? 'SYS_ROLE' : 'SYS_UERINFO',
-			describe: i === 0 ? '这是角色字典' : '这是用户性别字典',
-			status: true,
-			createTime: new Date().toLocaleString(),
-			list: [],
-		});
-	}
-	state.tableData.data = data;
-	state.tableData.total = state.tableData.data.length;
-	setTimeout(() => {
-		state.tableData.loading = false;
-	}, 500);
-};
-// 打开新增字典弹窗
-const onOpenAddDic = (type: string) => {
-	dicDialogRef.value.openDialog(type);
-};
+
+const state: BasicTableProps = reactive<BasicTableProps>({
+  queryForm: {},
+  pageList: fetchList
+})
+const {
+  getDataList,
+  currentChangeHandle,
+  sizeChangeHandle,
+} = useTable(state)
+
 // 打开修改字典弹窗
-const onOpenEditDic = (type: string, row: RowDicType) => {
+const onOpenEditDic = (type: string, row: any) => {
 	dicDialogRef.value.openDialog(type, row);
 };
-// 删除字典
-const onRowDel = (row: RowDicType) => {
-	ElMessageBox.confirm(`此操作将永久删除字典名称：“${row.dicName}”，是否继续?`, '提示', {
-		confirmButtonText: '确认',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
-		.then(() => {
-			getTableData();
-			ElMessage.success('删除成功');
-		})
-		.catch(() => {});
+
+const showDictITem = (row: any) => {
+  dictItemDialogRef.value.open(row)
+}
+
+
+// 清空搜索条件
+const resetQuery = () => {
+  queryRef.value.resetFields()
+  getDataList()
+}
+// 删除操作
+const handleDelete = (row: any) => {
+  if (!row) {
+    selectObjs.value.forEach((val: any) => {
+      handleDelete(val)
+    });
+    return
+  }
+
+  useMessageBox().confirm(t('common.delConfirmText') + row.postId)
+      .then(() => {
+        delObj(row.postId).then(() => {
+          getDataList();
+          useMessage().success(t('common.delSuccessText'));
+        }).catch((err: any) => {
+          useMessage().error(err.msg)
+        })
+      })
 };
-// 分页改变
-const onHandleSizeChange = (val: number) => {
-	state.tableData.param.pageSize = val;
-	getTableData();
-};
-// 分页改变
-const onHandleCurrentChange = (val: number) => {
-	state.tableData.param.pageNum = val;
-	getTableData();
-};
-// 页面加载时
-onMounted(() => {
-	getTableData();
-});
 </script>

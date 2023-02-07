@@ -32,6 +32,9 @@ service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
 
 // 添加响应拦截器
 service.interceptors.response.use((res: any) => {
+    if(res.data.code === 1){
+        throw res.data
+    }
     return res.data;
 }, error => {
     const status = Number(error.response.status) || 200

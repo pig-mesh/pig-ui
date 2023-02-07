@@ -6,7 +6,7 @@
 				<el-button icon="search" type="primary" class="ml10" @click="getDataList">
           {{ $t('common.queryBtn') }}
 				</el-button>
-				<el-button icon="folder-add" type="success" class="ml10" @click="onOpenAddMenu">
+				<el-button icon="folder-add" type="primary" class="ml10" @click="onOpenAddMenu" v-auth="'sys_menu_add'">
           {{ $t('common.addBtn') }}
 				</el-button>
 			</div>
