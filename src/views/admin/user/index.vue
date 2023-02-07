@@ -134,7 +134,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     username: '',
     phone: ''
   },
-  pageList: pageList // H
+  pageList: pageList
 });
 
 // 部门树使用的数据

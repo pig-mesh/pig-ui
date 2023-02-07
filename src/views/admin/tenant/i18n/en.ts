@@ -28,5 +28,7 @@ export default {
         inputcreateTimeTip: 'input createTime',
         inputupdateTimeTip: 'input updateTime',
         inputmenuIdTip: 'input menuId',
-    }
+   }, tenantmenu: {
+          name: 'tenantmenu', index: 'index', status: 'status', createTime: 'createTime',
+     }
 }

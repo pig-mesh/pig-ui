@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosRequestConfig, InternalAxiosRequestConfig} from 'axios';
+import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
 import errorCode from './errorCode'
 import {ElMessage, ElMessageBox} from 'element-plus';
 import {Session} from '/@/utils/storage';
