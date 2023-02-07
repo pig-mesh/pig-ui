@@ -1,32 +1,31 @@
 <template>
 	<div class="system-dept-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
-			<el-form ref="deptDialogFormRef" :model="state.form" size="default" label-width="90px">
+		<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="769px">
+			<el-form ref="deptDialogFormRef" :model="dataForm" size="default" label-width="90px" :rules="dataRules">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-						<el-form-item label="上级部门">
-              <el-tree-select v-model="state.form.parentId" :data="state.parentData"
+						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
+              <el-tree-select v-model="dataForm.parentId" :data="parentData"
                               :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
-                              placeholder="请选择上级部门">
-              </el-tree-select>
+                              :placeholder="$t('sysdept.inputparentIdTip')"/>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="部门名称">
-							<el-input v-model="state.form.name" placeholder="请输入部门名称" clearable></el-input>
+						<el-form-item :label="$t('sysdept.name')" prop="name">
+							<el-input v-model="dataForm.name" :placeholder="$t('sysdept.inputnameTip')" clearable/>
 						</el-form-item>
 					</el-col>
           <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-            <el-form-item label="排序">
-              <el-input-number v-model="state.form.sortOrder" placeholder="请输入部门名称" clearable></el-input-number>
+            <el-form-item :label="$t('sysdept.sortOrder')" prop="sortOrder">
+              <el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" clearable/>
             </el-form-item>
           </el-col>
 				</el-row>
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">取 消</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ state.dialog.submitTxt }}</el-button>
+					<el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -42,51 +41,45 @@ const emit = defineEmits(['refresh']);
 
 // 定义变量内容
 const deptDialogFormRef = ref();
-const state = reactive({
-	form: {
+const dataForm = reactive({
     parentId: '',
     deptId: '',
     name: '',
     sortOrder: 9999
-	},
-  parentData: [] as any[], // 部门数据
-	dialog: {
-		isShowDialog: false,
-		type: '',
-		title: '',
-		submitTxt: '',
-	},
-});
+})
+const parentData = ref<any[]>([])
+const visible = ref(false)
+
+
+const dataRules = ref({
+  parentId: [{ required: true, message: "上级部门不能为空", trigger: "blur" }],
+  name: [{ required: true, message: "部门名称不能为空", trigger: "blur" }],
+  sortOrder: [{ required: true, message: "排序不能为空", trigger: "blur" }],
+})
+
+
 
 // 打开弹窗
 const openDialog = (type: string, id: string) => {
 	if (type === 'edit') {
     getObj(id).then(res => {
-      state.form = Object.assign({},res.data)
+      Object.assign(dataForm,res.data)
     }).catch(err => {
       useMessage().error(err.msg)
     })
-		state.dialog.title = '修改部门';
-		state.dialog.submitTxt = '修 改';
 	} else {
-		state.dialog.title = '新增部门';
-		state.dialog.submitTxt = '新 增';
 		// 清空表单，此项需加表单验证才能使用
-
 		nextTick(() => {
-			deptDialogFormRef.value.resetFields();
-      state.form = Object.assign({
-        sortOrder: 9999
-      })
-      state.form.parentId = id
+			deptDialogFormRef?.value?.resetFields();
+      dataForm.parentId = id
 		});
 	}
-	state.dialog.isShowDialog = true;
+	visible.value = true
   getDeptData()
 };
 // 关闭弹窗
 const closeDialog = () => {
-	state.dialog.isShowDialog = false;
+  visible.value = false;
 };
 // 取消
 const onCancel = () => {
@@ -94,32 +87,38 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
-  if (state.dialog.type === 'edit') {
-    putObj(state.form).then(() => {
-      closeDialog(); // 关闭弹窗
-      emit('refresh');
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  } else {
-    addObj(state.form).then(() => {
-      closeDialog(); // 关闭弹窗
-      emit('refresh');
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  }
+  deptDialogFormRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return false
+    }
+    if (dataForm.deptId) {
+      putObj(dataForm).then(() => {
+        closeDialog(); // 关闭弹窗
+        emit('refresh');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
+    } else {
+      addObj(dataForm).then(() => {
+        closeDialog(); // 关闭弹窗
+        emit('refresh');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
+    }
+  })
+
 };
 
 // 从后端获取菜单信息
 const getDeptData = async () => {
   depttree().then(res => {
-    state.parentData = []
+    parentData.value = []
     const dept = {
       id: '-1', name: '根部门', children: [] as any[]
     };
     dept.children = res.data;
-    state.parentData.push(dept)
+    parentData.value.push(dept)
   })
 
 };

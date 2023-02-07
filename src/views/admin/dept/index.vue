@@ -2,12 +2,12 @@
 	<div class="system-dept-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
       <div class="mb15">
-        <el-input size="default" placeholder="请输入部门名称" style="max-width: 180px" v-model="state.queryForm.deptName"> </el-input>
-        <el-button size="default" icon="search" type="primary" class="ml10" @click="getDataList">
-          查询
+        <el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px" v-model="state.queryForm.deptName"> </el-input>
+        <el-button icon="search" type="primary" class="ml10" @click="getDataList">
+          {{ $t('common.queryBtn') }}
         </el-button>
-        <el-button size="default" icon="folder-add" type="success" class="ml10" @click="deptDialogRef.openDialog('add');">
-          新增菜单
+        <el-button  icon="folder-add" type="success" class="ml10" @click="deptDialogRef.openDialog('add');" v-auth="'sys_dept_add'">
+          {{ $t('common.addBtn') }}
         </el-button>
       </div>
 			<el-table
@@ -18,15 +18,14 @@
 				default-expand-all
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<el-table-column prop="name" label="部门名称" show-overflow-tooltip> </el-table-column>
-				<el-table-column prop="weight" label="排序" show-overflow-tooltip width="80">
-				</el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-				<el-table-column label="操作" show-overflow-tooltip width="200">
+				<el-table-column :label="$t('sysdept.name')" prop="name" width="400" show-overflow-tooltip> </el-table-column>
+				<el-table-column :label="$t('sysdept.weight')" prop="weight"  show-overflow-tooltip width="80"></el-table-column>
+				<el-table-column prop="createTime" :label="$t('sysdept.createTime')" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button   text type="primary" @click="onOpenAddDept('add',scope.row)">新增</el-button>
-						<el-button   text type="primary" @click="onOpenEditDept('edit', scope.row)">修改</el-button>
-						<el-button   text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button   text type="primary" @click="onOpenAddDept('add',scope.row)" v-auth="'sys_dept_add'"> {{ $t('common.addBtn') }}</el-button>
+						<el-button   text type="primary" @click="onOpenEditDept('edit', scope.row)" v-auth="'sys_dept_edit'">{{$t('common.editBtn') }}</el-button>
+						<el-button   text type="primary" @click="onTabelRowDel(scope.row)" v-auth="'sys_dept_del'"> {{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -49,7 +48,7 @@ const { t } = useI18n()
 const deptDialogRef = ref();
 
 const state: BasicTableProps = reactive<BasicTableProps>({
-  pageList: depttree, // H
+  pageList: depttree,
   queryForm: {
     deptName: ''
   },
