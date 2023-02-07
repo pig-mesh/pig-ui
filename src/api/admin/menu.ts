@@ -38,3 +38,11 @@ export const addObj = (data: Object) => {
         data: data
     })
 }
+
+export const delObj = (id:string) => {
+    return request({
+        url: '/admin/menu/' + id,
+        method: 'delete'
+    })
+}
+

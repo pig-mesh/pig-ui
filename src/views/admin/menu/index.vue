@@ -2,12 +2,12 @@
 	<div class="system-menu-container layout-pd">
 		<el-card shadow="hover">
 			<div class="mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.queryForm.menuName"> </el-input>
-				<el-button size="default" icon="search" type="primary" class="ml10" @click="getDataList">
-					查询
+				<el-input :placeholder="$t('sysmenu.inputNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"> </el-input>
+				<el-button icon="search" type="primary" class="ml10" @click="getDataList">
+          {{ $t('common.queryBtn') }}
 				</el-button>
-				<el-button size="default" icon="folder-add" type="success" class="ml10" @click="onOpenAddMenu">
-					新增菜单
+				<el-button icon="folder-add" type="success" class="ml10" @click="onOpenAddMenu">
+          {{ $t('common.addBtn') }}
 				</el-button>
 			</div>
 			<el-table
@@ -17,28 +17,28 @@
 				row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<el-table-column prop="name" label="菜单名称" show-overflow-tooltip ></el-table-column>
-				<el-table-column prop="sortOrder" label="排序" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
-        <el-table-column label="类型" show-overflow-tooltip>
+				<el-table-column prop="name" :label="$t('sysmenu.name')" show-overflow-tooltip ></el-table-column>
+				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="path" :label="$t('sysmenu.path')" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('sysmenu.menuType')" show-overflow-tooltip>
           <template #default="scope">
             <el-tag v-if="scope.row.menuType === '0'" type="success">左菜单</el-tag>
             <el-tag v-if="scope.row.menuType === '2'" type="success">顶菜单</el-tag>
             <el-tag v-if="scope.row.menuType === '1'" type="info">按钮</el-tag>
           </template>
         </el-table-column>
-        <el-table-column label="缓冲" show-overflow-tooltip>
+        <el-table-column :label="$t('sysmenu.keepAlive')" show-overflow-tooltip>
           <template #default="scope">
             <el-tag v-if="scope.row.keepAlive === '0'" type="info">关闭</el-tag>
             <el-tag v-if="scope.row.keepAlive === '1'" type="success">开启</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
-				<el-table-column label="操作" show-overflow-tooltip width="140">
+        <el-table-column prop="permission" :label="$t('sysmenu.permission')" :show-overflow-tooltip="true"></el-table-column>
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button   text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-						<el-button   text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
-						<el-button   text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
+						<el-button   text type="primary" @click="onOpenAddMenu('add')" v-auth="'sys_menu_add'"> {{ $t('common.addBtn') }}</el-button>
+						<el-button   text type="primary" @click="onOpenEditMenu('edit', scope.row)" v-auth="'sys_menu_edit'">{{$t('common.editBtn') }}</el-button>
+						<el-button   text type="primary" @click="onTabelRowDel(scope.row)" v-auth="'sys_menu_del'">{{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -49,9 +49,9 @@
 
 <script setup lang="ts" name="systemMenu">
 import { RouteRecordRaw } from 'vue-router';
-import { ElMessageBox, ElMessage } from 'element-plus';
-import { pageList } from '/@/api/admin/menu'
+import { pageList, delObj } from '/@/api/admin/menu'
 import { useTable, BasicTableProps } from "/@/hooks/table";
+import {useMessage, useMessageBox} from "/@/hooks/message";
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 
@@ -79,15 +79,14 @@ const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
 	menuDialogRef.value.openDialog(type, row);
 };
 // 删除当前行
-const onTabelRowDel = (row: RouteRecordRaw) => {
-	ElMessageBox.confirm(`此操作将永久删除路由：${row.path}, 是否继续?`, '提示', {
-		confirmButtonText: '删除',
-		cancelButtonText: '取消',
-		type: 'warning',
-	})
+const onTabelRowDel = (row: any) => {
+	useMessageBox().confirm(`此操作将永久删除路由：${row.name}`)
 		.then(() => {
-			ElMessage.success('删除成功');
-      getDataList()
+      delObj(row.id).then(() => {
+        useMessage().success('删除成功');
+        getDataList()
+      })
+
 		})
 		.catch(() => {});
 };
