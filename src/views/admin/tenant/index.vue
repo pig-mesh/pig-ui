@@ -29,9 +29,14 @@
             v-auth="'admin_systenant_add'">
             {{ $t('common.exportBtn') }}
           </el-button>
+
           <el-button  :disabled="multiple" icon="Delete" type="primary" class="ml10"
             v-auth="'admin_systenant_del'" @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
+          </el-button>
+
+          <el-button  type="primary" class="ml10" @click="handleTenantMenu()" v-auth="'admin_systenant_tenantmenu'">
+            {{ $t('tenantmenu.name') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
             @queryTable="getDataList"></right-toolbar>
@@ -80,6 +85,8 @@
     <!-- 导入excel -->
     <upload-excel ref="excelUploadRef" :title="$t('tenant.importTenantTip')" url="/admin/tenant/import"
       temp-url="/admin/sys-file/local/file/tenant.xlsx" @refreshDataList="getDataList" />
+
+    <tenant-menu ref="TenantMenuRef"></tenant-menu>
   </div>
 </template>
 
@@ -92,11 +99,13 @@ import { useDict } from "/@/hooks/dict";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const TenantMenu = defineAsyncComponent(() => import('./tenantMenu/index.vue'))
 const { t } = useI18n()
 
 // 定义变量内容
 const formDialogRef = ref()
 const excelUploadRef = ref()
+const TenantMenuRef = ref()
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
@@ -157,4 +166,9 @@ const handleDelete = (row: any) => {
       })
     })
 };
+
+const handleTenantMenu = () => {
+  TenantMenuRef.value.open()
+}
+
 </script>

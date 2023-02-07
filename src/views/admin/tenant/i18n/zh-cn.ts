@@ -28,5 +28,11 @@ export default {
         inputcreateTimeTip: '请输入创建',
         inputupdateTimeTip: '请输入更新时间',
         inputmenuIdTip: '请输入menuId',
+    },
+    tenantmenu: {
+        name: '租户套餐',
+        index: '序号',
+        status: '状态',
+        createTime: '创建',
     }
 }
