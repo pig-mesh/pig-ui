@@ -61,11 +61,11 @@
 <script setup lang="ts" name="systemMenuDialog">
 import { info, pageList, update, addObj } from "/@/api/admin/menu";
 import type { menuData } from './menu'
+import {useMessage} from "/@/hooks/message";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 // 引入组件
-const TreeSelect = defineAsyncComponent(() => import('/@/components/TreeSelect/index.vue'))
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 // 定义变量内容
@@ -155,12 +155,14 @@ const onSubmit = () => {
       closeDialog(); // 关闭弹窗
       emit('refresh');
     }).catch(err => {
+      useMessage().error(err.msg)
     })
   } else {
     addObj(state.ruleForm).then(() => {
       closeDialog(); // 关闭弹窗
       emit('refresh');
     }).catch(err => {
+      useMessage().error(err.msg)
     })
   }
 

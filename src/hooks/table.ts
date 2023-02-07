@@ -21,7 +21,7 @@ export interface BasicTableProps {
     // loading
     loading?: Boolean
 
-    selectObjs: any[]
+    selectObjs?: any[]
 }
 
 export interface Pagination {
