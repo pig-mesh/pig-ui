@@ -9,6 +9,7 @@ export default {
         tableName: 'tableName',
         className: 'className',
         tableComment: 'tableComment',
+        tableDesc: 'comment',
         author: 'author',
         email: 'email',
         packageName: 'packageName',

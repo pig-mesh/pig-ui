@@ -9,6 +9,7 @@ export default {
         tableName: '表名',
         className: '类名',
         tableComment: '说明',
+        tableDesc: '注释',
         author: '作者',
         email: '邮箱',
         packageName: '项目包名',
