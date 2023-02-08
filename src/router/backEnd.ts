@@ -84,7 +84,7 @@ export function setFilterRouteEnd() {
     let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
     // notFoundAndNoPower 防止 404、401 不在 layout 布局中，不设置的话，404、401 界面将全屏显示
     // 关联问题 No match found for location with path 'xxx'
-    console.log(filterRouteEnd,'filterRouteEnd')
+    console.log(filterRouteEnd, 'filterRouteEnd')
     filterRouteEnd[0].children = [...filterRouteEnd[0].children, ...notFoundAndNoPower];
     return filterRouteEnd;
 }
@@ -97,7 +97,7 @@ export function setFilterRouteEnd() {
  */
 export async function setAddRoute() {
     await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
-        console.log(route,'route')
+        console.log(route, 'route')
         router.addRoute(route);
     });
 }
@@ -143,10 +143,9 @@ export function backEndComponent(routes: any) {
 export function dynamicImport(dynamicViewsModules: Record<string, Function>, component: string) {
     const keys = Object.keys(dynamicViewsModules);
 
-
     const matchKeys = keys.filter((key) => {
         const k = key.replace(/..\/views|../, '');
-        return k.startsWith(`${component}`) || k.startsWith(`/${component}`);
+        return k.startsWith(`${component}.vue`) || k.startsWith(`/${component}.vue`);
     });
     if (matchKeys?.length === 1) {
         const matchKey = matchKeys[0];

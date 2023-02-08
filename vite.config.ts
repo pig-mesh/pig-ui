@@ -5,6 +5,8 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 // vue3 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
 
+// 按需加载
+import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import'
 
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);
@@ -18,13 +20,17 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
-		plugins: [vue(), vueSetupExtend(),AutoImport({
+		plugins: [vue(), vueSetupExtend(), AutoImport({
 			imports: [
 				'vue',
 				'vue-router',
 				'pinia'
 			],
 			dts: './auto-imports.d.ts',
+		}), createStyleImportPlugin({
+			resolves: [
+				VxeTableResolve()
+			],
 		})],
 		root: process.cwd(),
 		resolve: { alias },
@@ -40,6 +46,11 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			proxy: {
 				'/admin': {
 					target: 'http://localhost:9999',
+					ws: true,
+					changeOrigin: true,
+				},
+				'/gen': {
+					target: 'http://localhost:5003',
 					ws: true,
 					changeOrigin: true,
 				},

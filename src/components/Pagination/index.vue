@@ -1,16 +1,7 @@
 <template>
-  <el-pagination
-      @size-change="sizeChangeHandle"
-      @current-change="currentChangeHandle"
-      class="mt15"
-      :pager-count="5"
-      :page-sizes="prop.pageSizes"
-      v-model:current-page="prop.current"
-      background
-      v-model:page-size="prop.size"
-      :layout="prop.layout"
-      :total="prop.total"
-  >
+  <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" class="mt15" :pager-count="5"
+    :page-sizes="prop.pageSizes" v-model:current-page="prop.current" background v-model:page-size="prop.size"
+    :layout="prop.layout" :total="prop.total">
   </el-pagination>
 </template>
 
@@ -42,15 +33,11 @@ const prop = defineProps({
 })
 // 分页改变
 const sizeChangeHandle = (val: number) => {
-  emit('sizeChange',val)
+  emit('sizeChange', val)
 };
 // 分页改变
 const currentChangeHandle = (val: number) => {
-  emit('currentChange',val)
+  emit('currentChange', val)
 };
 
 </script>
-
-<style scoped>
-
-</style>

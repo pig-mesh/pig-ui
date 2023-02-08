@@ -89,12 +89,7 @@ export const staticConfigRoutes: Array<RouteRecordRaw> = [
         component: () => import('/@/views/personal/index.vue'),
         meta: {
             "title": "router.personal",
-            "isLink": "",
-            "isHide": false,
-            "isKeepAlive": true,
-            "isAffix": false,
-            "isIframe": false,
-            "icon": "iconfont icon-gerenzhongxin"
+            "isHide": true
         },
     }
 ];
