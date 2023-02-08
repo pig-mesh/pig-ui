@@ -1,5 +1,5 @@
 export default {
-   datasourceconf: {
+    datasourceconf: {
         index: 'index',
         importDatasourceConfTip: ' import DatasourceConf',
         id: 'id',
@@ -7,6 +7,7 @@ export default {
         url: 'url',
         username: 'username',
         password: 'password',
+        docBtn: 'doc',
         createTime: 'createTime',
         updateTime: 'updateTime',
         delFlag: 'delFlag',

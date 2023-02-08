@@ -20,11 +20,7 @@
           <el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
-            {{ $t('common.importBtn') }}
-          </el-button>
-          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10"
-            @click="handleDelete(undefined)">
+          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -42,6 +38,11 @@
         <el-table-column prop="createTime" :label="t('datasourceconf.createTime')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
+
+            <el-button text type="primary" @click="downloadDoc(scope.row.name)">{{
+              $t('datasourceconf.docBtn')
+            }}</el-button>
+
             <el-button text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
               $t('common.editBtn')
             }}</el-button>
@@ -65,6 +66,7 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObj } from "/@/api/gen/datasource";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
+import { downBlobFile } from "/@/utils/other";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -72,7 +74,6 @@ const { t } = useI18n()
 
 // 定义变量内容
 const formDialogRef = ref()
-const excelUploadRef = ref()
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
@@ -92,6 +93,10 @@ const {
   sizeChangeHandle,
 } = useTable(state)
 
+
+const downloadDoc = (dsName: string) => {
+  downBlobFile('/gen/dsconf/doc', { dsName }, `${dsName}.html`)
+}
 
 // 清空搜索条件
 const resetQuery = () => {
