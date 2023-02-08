@@ -51,7 +51,7 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button @click="visible = false" size="default">{{ $t('common.cancelButtonText') }}</el-button>
         <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
       </span>
     </template>
@@ -89,7 +89,7 @@ const state = reactive({
 });
 
 // 从后端获取菜单信息
-const getMenuData = async () => {
+const getMenuData = () => {
   state.parentData = []
   pageList().then(res => {
     let menu: menuData;
@@ -141,27 +141,20 @@ const openDialog = (type: string, row?: any) => {
   visible.value = true;
   getMenuData();
 };
-// 关闭弹窗
-const closeDialog = () => {
-  visible.value = false;
-};
-// 取消
-const onCancel = () => {
-  closeDialog();
-};
+
 // 保存数据
 const onSubmit = () => {
   // 保存 调用刷新
   if (state.ruleForm.menuId) {
     update(state.ruleForm).then(() => {
-      closeDialog(); // 关闭弹窗
+      visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)
     })
   } else {
     addObj(state.ruleForm).then(() => {
-      closeDialog(); // 关闭弹窗
+      visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)

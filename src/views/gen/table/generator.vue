@@ -169,7 +169,7 @@ const generatorHandle = () => {
 		// 生成代码，zip压缩包
 
 		if (dataForm.generatorType === 0) {
-			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, 'file.zip')
+			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, `${dataForm.tableName}.zip`)
 			visible.value = false
 			return
 		}

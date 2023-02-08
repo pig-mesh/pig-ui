@@ -21,14 +21,14 @@ export interface BasicTableProps {
     // loading
     loading?: Boolean
 
-    selectObjs?: any[]
+    selectObjs?: any[],
+
+    descs?: string
+
+    ascs?: string
 }
 
 export interface Pagination {
-    // 排序字段
-    order?: string
-    // 是否升序
-    asc?: boolean
     // 当前页码
     current?: number
     // 每页数
@@ -50,8 +50,6 @@ export function useTable(options?: BasicTableProps) {
         queryForm: {},
         dataList: [],
         pagination: {
-            order: '',
-            asc: false,
             current: 1,
             size: 10,
             total: 0,
@@ -60,7 +58,9 @@ export function useTable(options?: BasicTableProps) {
         } as Pagination,
         dataListSelections: [],
         loading: false,
-        selectObjs: []
+        selectObjs: [],
+        descs: '',
+        ascs: ''
     }
 
     const mergeDefaultOptions = (options: any, props: any): BasicTableProps => {
@@ -83,8 +83,8 @@ export function useTable(options?: BasicTableProps) {
                 ...state.queryForm,
                 current: state.pagination?.current,
                 size: state.pagination?.size,
-                order: state.pagination?.order,
-                asc: state.pagination?.asc,
+                descs: state.descs,
+                ascs: state.ascs
             }).then(res => {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
@@ -114,20 +114,6 @@ export function useTable(options?: BasicTableProps) {
         query();
     };
 
-    // 排序
-    const sortChangeHandle = (data: any) => {
-        const { prop, order } = data
-
-        if (prop && order) {
-            state.pagination!.order = prop
-            state.pagination!.asc = order === 'ascending'
-        } else {
-            state.pagination!.order = ''
-        }
-
-        query()
-    }
-
     const getDataList = () => {
         state.pagination!.current = 1
         query()
@@ -143,7 +129,6 @@ export function useTable(options?: BasicTableProps) {
         getDataList,
         sizeChangeHandle,
         currentChangeHandle,
-        sortChangeHandle,
         downBlobFile
     }
 

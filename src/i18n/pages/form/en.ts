@@ -18,6 +18,7 @@ export default {
 		delConfirmText: 'This operation will permanently delete',
 		confirmButtonText: 'confirm',
 		cancelButtonText: 'cancel',
+		download: 'download'
 	},
 	message: {
 		box: {
