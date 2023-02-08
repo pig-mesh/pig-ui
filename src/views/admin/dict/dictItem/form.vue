@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-dialog-container">
-    <el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')"  width="60%">
+    <el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="60%">
       <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" size="default">
         <el-row :gutter="35">
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20" v-if="dataForm.id">
@@ -36,10 +36,10 @@
         </el-row>
       </el-form>
       <template #footer>
-				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
-				</span>
+        <span class="dialog-footer">
+          <el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+        </span>
       </template>
     </el-dialog>
   </div>
@@ -47,7 +47,7 @@
 
 <script setup lang="ts" name="dict-item-form">
 import { getItemObj, addItemObj, putItemObj } from '/@/api/admin/dict'
-import {useMessage} from "/@/hooks/message";
+import { useMessage } from "/@/hooks/message";
 
 
 // 定义子组件向父组件传值/事件
@@ -64,7 +64,7 @@ const dataForm = reactive({
   value: '',
   label: '',
   description: '',
-  sortOrder: '',
+  sortOrder: 0,
   remarks: '',
 })
 
@@ -77,7 +77,7 @@ const openDialog = (row: any) => {
   dataForm.id = ''
   if (row?.id) {
     getItemObj(row.id).then(res => {
-      Object.assign(dataForm,res.data)
+      Object.assign(dataForm, res.data)
     })
   } else {
     // 清空表单，此项需加表单验证才能使用
@@ -106,7 +106,7 @@ const onSubmit = () => {
     }).catch(err => {
       useMessage().error(err.msg)
     })
-  }else{
+  } else {
     addItemObj(dataForm).then(() => {
       closeDialog(); // 关闭弹窗
       emit('refresh');

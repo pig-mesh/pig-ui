@@ -1,4 +1,6 @@
 <template>
+  <div class="layout-padding">
+
     <el-card class="layout-padding-auto" shadow="hover">
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
@@ -61,6 +63,7 @@
       <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle">
       </pagination>
     </el-card>
+  </div>
 </template>
 
 <script lang="ts" setup>

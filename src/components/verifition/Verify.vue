@@ -98,7 +98,6 @@ export default  {
      * @description 刷新
      * */
     const refresh = () => {
-      console.log(instance.value);
       if (instance.value.refresh) {
         instance.value.refresh()
       }
