@@ -16,6 +16,7 @@ export default {
         delConfirmText: '此操作将永久删除',
         confirmButtonText: '确认',
         cancelButtonText: '取消',
+        download: '下载'
     },
     message: {
         box: {

@@ -20,14 +20,10 @@
           <el-table-column prop="type" :label="t('file.type')" show-overflow-tooltip/>
           <el-table-column prop="fileSize" :label="t('file.fileSize')" show-overflow-tooltip/>
           <el-table-column prop="createTime" :label="t('file.createTime')" show-overflow-tooltip/>
-        <el-table-column :label="$t('common.action')" width="150">
+        <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button size="small" text type="primary" v-auth="'admin_file_edit'"
-              @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
-
-            <el-button size="small" text type="primary" v-auth="'sys_file_del'" @click="handleDelete(scope.row)">{{
-              $t('common.delBtn')
-            }}</el-button>
+            <el-button size="small" text type="primary" v-auth="'sys_file_del'" @click="handleDelete(scope.row)">{{$t('common.delBtn') }}</el-button>
+            <el-button type="primary" text @click="download(scope.row, scope.index)">{{$t('common.download') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -43,6 +39,7 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObj } from "/@/api/admin/file";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
+import {downBlobFile} from "/@/utils/other";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -68,7 +65,6 @@ const {
   getDataList,
   currentChangeHandle,
   sizeChangeHandle,
-  downBlobFile
 } = useTable(state)
 
 
@@ -84,6 +80,10 @@ const handleSelectionChange = (val: any) => {
   multiple.value = !val.length
 }
 
+const download = (row: any) =>  {
+  downBlobFile("/admin/sys-file/" + row.bucketName + "/" + row.fileName, null, row.fileName
+  );
+}
 
 // 删除操作
 const handleDelete = (row: any) => {
