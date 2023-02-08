@@ -98,7 +98,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     dsName: ''
   },
-  pageList: fetchList
+  pageList: fetchList,
+  createdIsNeed: false
 })
 
 //  table hook
@@ -115,6 +116,7 @@ onMounted(() => {
     datasourceList.value = res.data
     // 默认去第一个数据源
     state.queryForm.dsName = datasourceList.value[0].name
+    getDataList()
   })
 })
 
