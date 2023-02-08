@@ -52,7 +52,10 @@ export const useTableFieldSubmitApi = (dsName: string, tableName: string, fieldL
   return request.put('/gen/table/field/' + dsName + '/' + tableName, fieldList)
 }
 
-// 生成代码（自定义目录）
-export const useGeneratorApi = (tableIds: any[]) => {
-  return request.post('/gen/generator/code', tableIds)
+export const useGeneratorPreviewApi = (tableId: any) => {
+  return request({
+    url: '/gen/generator/preview',
+    method: 'get',
+    params: { tableId: tableId }
+  })
 }

@@ -3,6 +3,7 @@ export default {
         syncBtn: '同步',
         designBtn: '设计',
         genBtn: '生成',
+        prewBtn: '预览',
     },
     table: {
         index: '序号',

@@ -68,7 +68,7 @@
     <!-- 编辑  -->
     <edit-dialog ref="formDialogRef" @refresh="getDataList()" />
 
-    <!-- 生成配置 -->
+    <!-- 生成-->
     <generator-dialog ref="generatorRef" @refreshDataList="getDataList" />
 
   </div>
@@ -89,6 +89,7 @@ const { t } = useI18n()
 // 定义变量内容
 const formDialogRef = ref()
 const generatorRef = ref()
+
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)

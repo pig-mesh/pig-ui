@@ -70,11 +70,15 @@
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="visible = false">取消</el-button>
+			<el-button @click="previewRef.openDialog(dataForm.id)">{{
+				$t('gen.prewBtn')
+			}}</el-button>
 			<el-button type="primary" @click="submitHandle()">保存</el-button>
 			<el-button type="danger" @click="generatorHandle()">生成代码</el-button>
 		</template>
 	</el-dialog>
+	<!-- 预览 -->
+	<preview-dialog ref="previewRef" />
 </template>
 
 <script setup lang="ts">
@@ -83,9 +87,12 @@ import { putObj, useTableApi } from '/@/api/gen/table'
 import { useMessage } from '/@/hooks/message';
 import { downBlobFile } from '/@/utils/other';
 
+const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
+
 
 const emit = defineEmits(['refreshDataList'])
 const { t } = useI18n()
+const previewRef = ref()
 
 const visible = ref(false)
 const dataFormRef = ref()
