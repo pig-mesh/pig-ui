@@ -1,6 +1,8 @@
 export default {
     gen: {
-        genBtn: 'generator code'
+        syncBtn: 'sync',
+        designBtn: 'design',
+        genBtn: 'gen',
     },
     table: {
         index: 'index',

@@ -41,19 +41,22 @@
         <el-table-column prop="tableName" :label="t('table.tableName')" show-overflow-tooltip />
         <el-table-column prop="tableComment" :label="t('table.tableDesc')" show-overflow-tooltip />
         <el-table-column prop="createTime" :label="t('table.createTime')" show-overflow-tooltip />
-        <el-table-column :label="$t('common.action')" width="150">
+        <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button size="small" text type="primary"
+            <el-button text type="primary" @click="syncTable(state.queryForm.dsName, scope.row.tableName)">{{
+              $t('gen.syncBtn')
+            }}</el-button>
+            <el-button text type="primary"
               @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
-                $t('common.editBtn')
+                $t('gen.designBtn')
               }}</el-button>
 
-            <el-button size="small" text type="primary"
+            <el-button text type="primary"
               @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
                 $t('gen.genBtn')
               }}</el-button>
 
-            <el-button size="small" text type="primary" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
             }}</el-button>
           </template>
@@ -73,7 +76,7 @@
 
 <script setup lang="ts" name="systemTable">
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObj } from "/@/api/gen/table";
+import { fetchList, delObj, useSyncTableApi } from "/@/api/gen/table";
 import { list } from '/@/api/gen/datasource'
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
@@ -115,6 +118,13 @@ onMounted(() => {
     datasourceList.value = res.data
   })
 })
+
+// 同步表数据
+const syncTable = (dsName: string, tableName: string) => {
+  useSyncTableApi(dsName, tableName).then(() => {
+    useMessage().success(t('common.optSuccessText'));
+  })
+}
 
 // 清空搜索条件
 const resetQuery = () => {
