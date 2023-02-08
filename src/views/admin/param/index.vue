@@ -62,11 +62,11 @@
         </el-table-column>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button size="small" text type="primary"
+            <el-button text type="primary"
                        @click="formDialogRef.openDialog(scope.row.publicId)">{{ $t('common.editBtn') }}
             </el-button>
 
-            <el-button size="small" text type="primary" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" @click="handleDelete(scope.row)">{{
                 $t('common.delBtn')
               }}
             </el-button>
