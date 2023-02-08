@@ -41,11 +41,11 @@
         <el-table-column prop="createTime" :label="t('fieldtype.createTime')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button size="small" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
+            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
               $t('common.editBtn')
             }}</el-button>
 
-            <el-button size="small" text type="primary" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
             }}</el-button>
           </template>

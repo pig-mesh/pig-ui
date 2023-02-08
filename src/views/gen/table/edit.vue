@@ -208,6 +208,7 @@ const rowDrop = () => {
 }
 
 const getTable = (dsName: string, tableName: string) => {
+	fieldList.value = [] // 避免第一次数据初始化， 表格显示历史数据
 	useTableApi(dsName, tableName).then(res => {
 		fieldList.value = res.data.fieldList
 	})

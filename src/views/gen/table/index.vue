@@ -5,7 +5,7 @@
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
           <el-form-item label="数据源" prop="name">
             <el-select v-model="state.queryForm.dsName" style="width: 100%" placeholder="请选择数据源" @change="getDataList">
-              <el-option label="默认数据源" value=""></el-option>
+              <el-option label="默认数据源" value="master"></el-option>
               <el-option v-for="ds in datasourceList" :key="ds.id" :label="ds.name" :value="ds.name">
               </el-option>
             </el-select>
@@ -39,21 +39,24 @@
         <el-table-column type="selection" width="50" align="center" />
         <el-table-column type="index" :label="t('table.index')" width="80" />
         <el-table-column prop="tableName" :label="t('table.tableName')" show-overflow-tooltip />
-        <el-table-column prop="tableComment" :label="t('table.tableComment')" show-overflow-tooltip />
+        <el-table-column prop="tableComment" :label="t('table.tableDesc')" show-overflow-tooltip />
         <el-table-column prop="createTime" :label="t('table.createTime')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button size="small" text type="primary"
+            <el-button text type="primary" @click="syncTable(state.queryForm.dsName, scope.row.tableName)">{{
+              $t('gen.syncBtn')
+            }}</el-button>
+            <el-button text type="primary"
               @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
-                $t('common.editBtn')
+                $t('gen.designBtn')
               }}</el-button>
 
-            <el-button size="small" text type="primary"
+            <el-button text type="primary"
               @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
                 $t('gen.genBtn')
               }}</el-button>
 
-            <el-button size="small" text type="primary" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
             }}</el-button>
           </template>
@@ -73,7 +76,7 @@
 
 <script setup lang="ts" name="systemTable">
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObj } from "/@/api/gen/table";
+import { fetchList, delObj, useSyncTableApi } from "/@/api/gen/table";
 import { list } from '/@/api/gen/datasource'
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
@@ -96,7 +99,7 @@ const datasourceList = ref()
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
-    dsName: ''
+    dsName: 'master'
   },
   pageList: fetchList,
   createdIsNeed: false
@@ -119,6 +122,13 @@ onMounted(() => {
     getDataList()
   })
 })
+
+// 同步表数据
+const syncTable = (dsName: string, tableName: string) => {
+  useSyncTableApi(dsName, tableName).then(() => {
+    useMessage().success(t('common.optSuccessText'));
+  })
+}
 
 // 清空搜索条件
 const resetQuery = () => {

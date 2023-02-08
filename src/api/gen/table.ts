@@ -38,6 +38,11 @@ export function putObj(obj?: Object) {
   })
 }
 
+export const useSyncTableApi = (dsName: string, tableName: string) => {
+  return request.get('/gen/table/sync/' + dsName + "/" + tableName)
+}
+
+
 export const useTableApi = (dsName: string, tableName: string) => {
   return request.get('/gen/table/' + dsName + "/" + tableName)
 }

@@ -1,6 +1,8 @@
 export default {
     gen: {
-        genBtn: '生成代码',
+        syncBtn: '同步',
+        designBtn: '设计',
+        genBtn: '生成',
     },
     table: {
         index: '序号',
@@ -9,6 +11,7 @@ export default {
         tableName: '表名',
         className: '类名',
         tableComment: '说明',
+        tableDesc: '注释',
         author: '作者',
         email: '邮箱',
         packageName: '项目包名',

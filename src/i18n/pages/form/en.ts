@@ -11,6 +11,7 @@ export default {
 		queryDeptTip: 'input deptName',
 		resetBtn: 'reset',
 		action:'action',
+		optSuccessText: 'operation success',
 		editSuccessText: 'edit success',
 		addSuccessText: 'add success',
 		delSuccessText: 'delete success',

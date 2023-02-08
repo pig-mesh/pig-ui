@@ -1,6 +1,8 @@
 export default {
     gen: {
-        genBtn: 'generator code'
+        syncBtn: 'sync',
+        designBtn: 'design',
+        genBtn: 'gen',
     },
     table: {
         index: 'index',
@@ -9,6 +11,7 @@ export default {
         tableName: 'tableName',
         className: 'className',
         tableComment: 'tableComment',
+        tableDesc: 'comment',
         author: 'author',
         email: 'email',
         packageName: 'packageName',
