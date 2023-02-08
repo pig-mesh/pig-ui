@@ -173,13 +173,6 @@ const generatorHandle = () => {
 			visible.value = false
 			return
 		}
-
-		// // 生成代码，自定义路径
-		// useGeneratorApi([dataForm.id]).then(() => {
-		// 	visible.value = false
-		// 	emit('refreshDataList')
-		// 	useMessage().success(t('common.addSuccessText'))
-		// })
 	})
 }
 

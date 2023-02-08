@@ -49,7 +49,6 @@ export const useUserInfo = defineStore('userInfo', {
                     authBtnList: res.data.permissions,
                 };
                 this.userInfos = userInfo
-                console.log(this.userInfos)
             })
         }
     },
