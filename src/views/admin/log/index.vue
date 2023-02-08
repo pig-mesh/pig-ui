@@ -89,7 +89,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     createTime: ''
   },
   selectObjs: [],
-  pageList: pageList // H
+  pageList: pageList,
+  ascs: 'time'
 });
 
 

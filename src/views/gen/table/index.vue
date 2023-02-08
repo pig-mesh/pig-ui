@@ -4,7 +4,7 @@
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
           <el-form-item label="数据源" prop="name">
-            <el-select v-model="state.queryForm.name" style="width: 100%" placeholder="请选择数据源" @change="getDataList">
+            <el-select v-model="state.queryForm.dsName" style="width: 100%" placeholder="请选择数据源" @change="getDataList">
               <el-option label="默认数据源" value=""></el-option>
               <el-option v-for="ds in datasourceList" :key="ds.id" :label="ds.name" :value="ds.name">
               </el-option>
@@ -41,15 +41,15 @@
         <el-table-column prop="tableName" :label="t('table.tableName')" show-overflow-tooltip />
         <el-table-column prop="tableComment" :label="t('table.tableComment')" show-overflow-tooltip />
         <el-table-column prop="createTime" :label="t('table.createTime')" show-overflow-tooltip />
-        <el-table-column :label="$t('common.action')" width="150">
+        <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
             <el-button size="small" text type="primary"
-              @click="formDialogRef.openDialog(state.queryForm.name, scope.row.tableName)">{{
+              @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
                 $t('common.editBtn')
               }}</el-button>
 
             <el-button size="small" text type="primary"
-              @click="generatorRef.openDialog(state.queryForm.name, scope.row.tableName)">{{
+              @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
                 $t('gen.genBtn')
               }}</el-button>
 
@@ -95,7 +95,9 @@ const multiple = ref(true)
 const datasourceList = ref()
 
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
+  queryForm: {
+    dsName: ''
+  },
   pageList: fetchList
 })
 
@@ -112,7 +114,7 @@ onMounted(() => {
   list().then(res => {
     datasourceList.value = res.data
     // 默认去第一个数据源
-    state.queryForm.name = datasourceList.value[0].name
+    state.queryForm.dsName = datasourceList.value[0].name
   })
 })
 
