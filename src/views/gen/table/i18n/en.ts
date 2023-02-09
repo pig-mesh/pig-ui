@@ -3,6 +3,7 @@ export default {
         syncBtn: 'sync',
         designBtn: 'design',
         genBtn: 'gen',
+        prewBtn: 'preview'
     },
     table: {
         index: 'index',

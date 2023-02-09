@@ -211,7 +211,7 @@ export function encryption(params: any) {
  * @param fileName 文件名称
  * @returns {*}
  */
-export function downBlobFile(url:any, query: any, fileName:string) {
+export function downBlobFile(url: any, query: any, fileName: string) {
 	return request({
 		url: url,
 		method: "get",
@@ -284,11 +284,42 @@ const other = {
 	encryption: (data: any) => {
 		return encryption(data)
 	},
-	downBlobFile: (url:any, query: any, fileName:string) => {
+	downBlobFile: (url: any, query: any, fileName: string) => {
 		return downBlobFile(url, query, fileName)
 	}
 
 };
+
+/**
+ * 列表结构转树结构
+ * @param data
+ * @param id
+ * @param parentId
+ * @param children
+ * @param rootId
+ * @returns {*}
+ */
+export function handleTree(data, id, parentId, children, rootId) {
+	id = id || 'id'
+	parentId = parentId || 'parentId'
+	children = children || 'children'
+	rootId = rootId || Math.min.apply(Math, data.map(item => {
+		return item[parentId]
+	})) || 0
+	//对源数据深度克隆
+	const cloneData = JSON.parse(JSON.stringify(data))
+	//循环所有项
+	const treeData = cloneData.filter(father => {
+		const branchArr = cloneData.filter(child => {
+			//返回每一项的子级数组
+			return father[id] === child[parentId]
+		})
+		branchArr.length > 0 ? father[children] = branchArr : ''
+		//返回第一层
+		return father[parentId] === rootId
+	})
+	return treeData !== '' ? treeData : data
+}
 
 // 统一批量导出
 export default other;
