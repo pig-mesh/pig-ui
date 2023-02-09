@@ -1,6 +1,36 @@
 <template>
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+          <el-form-item :label="$t('job.jobName')" prop="jobName">
+            <el-input v-model="state.queryForm.jobName" :placeholder="$t('job.inputjobNameTip')" clearable
+                      style="width: 240px" @keyup.enter="getDataList" />
+          </el-form-item>
+          <el-form-item :label="$t('job.jobGroup')" prop="jobGroup">
+            <el-input v-model="state.queryForm.jobGroup" :placeholder="$t('job.inputjobGroupTip')" clearable
+                      style="width: 240px" @keyup.enter="getDataList" />
+          </el-form-item>
+
+          <el-form-item :label="t('job.jobStatus')" prop="jobStatus">
+            <el-select v-model="state.queryForm.jobStatus" :placeholder="t('job.inputjobStatusTip')">
+              <el-option v-for="(item, index) in job_status" :key="index" :label="item.label"
+                         :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus">
+            <el-select v-model="state.queryForm.jobExecuteStatus" :placeholder="t('job.inputjobExecuteStatusTip')">
+              <el-option v-for="(item, index) in job_execute_status" :key="index" :label="item.label"
+                         :value="item.value"></el-option>
+            </el-select>
+          </el-form-item>
+
+          <el-form-item>
+            <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button class="ml10" formDialogRef icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
@@ -105,7 +135,12 @@ const selectObjs = ref([])
 const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
+  queryForm: {
+    jobName: '',
+    jobGroup: '',
+    jobStatus: '',
+    jobExecuteStatus: ''
+  },
   pageList: fetchList
 })
 
