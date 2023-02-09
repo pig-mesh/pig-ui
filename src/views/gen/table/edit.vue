@@ -1,5 +1,5 @@
 <template>
-	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false">
+	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">
 		<el-tabs v-model="activeName" @tab-click="handleClick">
 			<el-tab-pane label="属性设置" name="field">
 				<vxe-table ref="fieldTable" border row-key class="sortable-row-gen" :data="fieldList"
