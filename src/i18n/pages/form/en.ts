@@ -6,6 +6,7 @@ export default {
 		editBtn: 'edit',
 		delBtn: 'delete',
 		exportBtn: 'export',
+		refreshCacheBtn: 'refreshCache',
 		importBtn: 'import',
 		importUserTip: 'import user',
 		queryDeptTip: 'input deptName',

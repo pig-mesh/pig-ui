@@ -15,6 +15,10 @@
                      type="primary" @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
           </el-button>
+          <el-button class="ml10" formDialogRef icon="refresh-left"
+                     type="primary" @click="handleRefreshCache()">
+            {{ $t('common.refreshCacheBtn') }}
+          </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
                          @queryTable="getDataList"></right-toolbar>
         </div>
@@ -55,7 +59,7 @@
 
 <script lang="ts" name="systemSysOauthClientDetails" setup>
 import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObj, fetchList} from "/@/api/admin/client";
+import {delObj, fetchList, refreshCache} from "/@/api/admin/client";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useDict} from '/@/hooks/dict';
 import {useI18n} from "vue-i18n";
@@ -99,6 +103,13 @@ const handleSelectionChange = (val: any) => {
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/admin/client/export', state.queryForm, 'client.xlsx')
+}
+
+const handleRefreshCache = () => {
+  refreshCache().then(() => {
+    useMessage().success('同步成功')
+  }).catch(function () {
+  })
 }
 
 // 删除操作

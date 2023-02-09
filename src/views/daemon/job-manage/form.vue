@@ -49,11 +49,13 @@
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.cronExpression')" prop="cronExpression">
+            <el-popover ref="cronPopover" :width="550" trigger="click" placement="left" :visible="popoverVisible">
+              <template #default>
+                <crontab @fill="changeCron" @hide="popoverVis(false)" :expression="form.cronExpression"></crontab>
+              </template>
 
-            <el-popover ref="cronPopover" :width="550" trigger="click" placement="left">
-              <crontab @submit="changeCron" @close="cronPopover.hide()"></crontab>
               <template #reference>
-                <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')"/>
+                <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')" @click="popoverVis(true)"/>
               </template>
             </el-popover>
           </el-form-item>
@@ -92,8 +94,7 @@ import {addObj, getObj, putObj} from '/@/api/daemon/job'
 import {useI18n} from "vue-i18n"
 
 const emit = defineEmits(['refresh']);
-
-const Crontab = defineAsyncComponent(() => import('/@/components/Cron/index'))
+const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'))
 
 const {t} = useI18n();
 
@@ -125,6 +126,11 @@ const changeCron = (e: string) => {
   form.cronExpression = e
 }
 
+const popoverVis = (bol: boolean) => {
+  popoverVisible.value = bol
+}
+
+const popoverVisible = ref(false)
 // 定义校验规则
 const dataRules = ref({})
 
