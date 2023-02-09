@@ -2,39 +2,29 @@
   <el-dialog v-model="visible" :close-on-click-modal="false" fullscreen
              title="运行日志" draggable>
     <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%">
-      <el-table-column :label="t('job.jobName')" prop="jobName" show-overflow-tooltip width="120" fixed="left"/>
-      <el-table-column :label="t('job.jobGroup')" prop="jobGroup" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.jobStatus')" prop="jobStatus" show-overflow-tooltip width="120">
-        <template #default="scope">
-          <dict-tag :options="job_status" :value="scope.row.jobStatus"></dict-tag>
-        </template>
-      </el-table-column>
-      <el-table-column :label="t('job.jobExecuteStatus')" prop="jobExecuteStatus" show-overflow-tooltip width="120">
-        <template #default="scope">
-          <dict-tag :options="job_execute_status" :value="scope.row.jobExecuteStatus"></dict-tag>
-        </template>
-      </el-table-column>
-
-      <el-table-column :label="t('job.startTime')" prop="startTime" show-overflow-tooltip width="120"/>
-
-      <el-table-column :label="t('job.previousTime')" prop="previousTime" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.nextTime')" prop="nextTime" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.jobType')" prop="jobType" show-overflow-tooltip width="120">
+      <el-table-column prop="jobId" :label="t('job.jobId')" show-overflow-tooltip/>
+      <el-table-column prop="jobName" :label="t('job.jobName')" show-overflow-tooltip/>
+      <el-table-column prop="jobGroup" :label="t('job.jobGroup')" show-overflow-tooltip/>
+      <el-table-column prop="jobOrder" :label="t('job.jobOrder')" show-overflow-tooltip/>
+      <el-table-column prop="jobType" :label="t('job.jobType')" show-overflow-tooltip>
         <template #default="scope">
           <dict-tag :options="job_type" :value="scope.row.jobType"></dict-tag>
         </template>
       </el-table-column>
-      <el-table-column :label="t('job.executePath')" prop="executePath" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.className')" prop="className" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.methodName')" prop="methodName" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.methodParamsValue')" prop="methodParamsValue" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.cronExpression')" prop="cronExpression" show-overflow-tooltip width="120"/>
-      <el-table-column :label="t('job.misfirePolicy')" prop="misfirePolicy" show-overflow-tooltip width="200">
+      <el-table-column prop="executePath" :label="t('job.executePath')" show-overflow-tooltip/>
+      <el-table-column prop="className" :label="t('job.className')" show-overflow-tooltip/>
+      <el-table-column prop="methodName" :label="t('job.methodName')" show-overflow-tooltip/>
+      <el-table-column prop="methodParamsValue" :label="t('job.methodParamsValue')" show-overflow-tooltip/>
+      <el-table-column prop="cronExpression" :label="t('job.cronExpression')" show-overflow-tooltip/>
+      <el-table-column prop="jobMessage" :label="t('job.jobMessage')" show-overflow-tooltip/>
+      <el-table-column prop="jobLogStatus" :label="t('job.jobLogStatus')" show-overflow-tooltip>
         <template #default="scope">
-          <dict-tag :options="misfire_policy" :value="scope.row.misfirePolicy"></dict-tag>
+          <dict-tag :options="job_execute_status" :value="scope.row.jobLogStatus"></dict-tag>
         </template>
       </el-table-column>
-
+      <el-table-column prop="executeTime" :label="t('job.executeTime')" show-overflow-tooltip/>
+      <el-table-column prop="exceptionInfo" :label="t('job.exceptionInfo')" show-overflow-tooltip/>
+      <el-table-column prop="createTime" :label="t('job.createTime')" show-overflow-tooltip/>
     </el-table>
     <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
   </el-dialog>
@@ -44,8 +34,12 @@
 import {BasicTableProps, useTable} from "/@/hooks/table";
 import {fetchList} from "/@/api/daemon/job";
 import {useI18n} from "vue-i18n";
+import { useDict } from '/@/hooks/dict';
 const {t} = useI18n()
 const visible = ref(false)
+
+
+const { job_type,job_execute_status } = useDict('job_type','job_execute_status')
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {

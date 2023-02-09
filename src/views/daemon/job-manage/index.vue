@@ -62,7 +62,7 @@
 
             <el-button size="small" text type="primary" @click="handleShutDownJob(scope.row)">暂停</el-button>
 
-            <el-button size="small" text type="primary" @click="formDialogRef.openDialog(scope.row.jobId)">{{ $t('common.editBtn') }}</el-button>
+            <el-button size="small" text type="primary" @click="handleEditJob(scope.row)">{{ $t('common.editBtn') }}</el-button>
 
             <el-button size="small" text type="primary" @click="handleRunJob(scope.row)">执行</el-button>
 
@@ -139,13 +139,23 @@ const handleJobLog = (row: any) => {
   jobLogRef.value.openDialog(row.jobId)
 }
 
+const handleEditJob = (row: any) => {
+  const jobStatus = row.jobStatus;
+  if (jobStatus === "1" || jobStatus === "3") {
+    formDialogRef.value.openDialog(row.jobId)
+  }else {
+    useMessage().error("运行中定时任务不可修改，请先暂停后操作")
+  }
+
+}
+
 const handleStartJob = (row: any) =>{
   const jobStatus = row.jobStatus;
   if (jobStatus === "1" || jobStatus === "3"){
     useMessageBox().confirm("即将发布或启动(任务名称:" + row.jobName + "), 是否继续?").then(() => {
       startJobRa(row.jobId).then(() => {
         getDataList();
-        useMessage().success(t('common.delSuccessText'));
+        useMessage().success(t('common.optSuccessText'));
       }).catch((err: any) => {
         useMessage().error(err.msg)
       })
@@ -162,11 +172,13 @@ const handleShutDownJob = (row: any) => {
     useMessageBox().confirm("即将暂停(任务名称:" + row.jobName + "), 是否继续?").then(() => {
       shutDownJobRa(row.jobId).then(() => {
         getDataList();
-        useMessage().success(t('common.delSuccessText'));
+        useMessage().success(t('common.optSuccessText'));
       }).catch((err: any) => {
         useMessage().error(err.msg)
       })
     })
+  }else {
+    useMessage().error("已暂停，不要重复操作")
   }
 }
 
@@ -175,7 +187,7 @@ const handleRunJob = (row: any) => {
   useMessageBox().confirm("立刻执行一次任务(任务名称:" + row.jobName + "), 是否继续?",).then(() => {
     runJobRa(row.jobId).then(() => {
       getDataList();
-      useMessage().success(t('common.delSuccessText'));
+      useMessage().success(t('common.optSuccessText'));
     }).catch((err: any) => {
       useMessage().error(err.msg)
     })

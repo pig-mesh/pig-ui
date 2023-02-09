@@ -16,7 +16,10 @@
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.jobType')" prop="jobType">
-            <el-input v-model="form.jobType" :placeholder="t('job.inputjobTypeTip')"/>
+            <el-select v-model="form.jobType" :placeholder="t('job.jobType')">
+              <el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
+                         :value="item.value"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
 
@@ -46,7 +49,13 @@
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.cronExpression')" prop="cronExpression">
-            <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')"/>
+
+            <el-popover ref="cronPopover" :width="550" trigger="click" placement="left">
+              <crontab @submit="changeCron" @close="cronPopover.hide()"></crontab>
+              <template #reference>
+                <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')"/>
+              </template>
+            </el-popover>
           </el-form-item>
         </el-col>
 
@@ -84,13 +93,16 @@ import {useI18n} from "vue-i18n"
 
 const emit = defineEmits(['refresh']);
 
+const Crontab = defineAsyncComponent(() => import('/@/components/Cron/index'))
+
 const {t} = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
+const cronPopover = ref();
 const visible = ref(false)
 // 定义字典
-const {job_status, job_execute_status,misfire_policy} = useDict('job_status', 'job_execute_status','misfire_policy')
+const {job_status, job_execute_status,misfire_policy,job_type} = useDict('job_status', 'job_execute_status','misfire_policy','job_type')
 
 // 提交表单数据
 const form = reactive({
@@ -108,6 +120,10 @@ const form = reactive({
   jobExecuteStatus: '',
   remark: '',
 });
+
+const changeCron = (e: string) => {
+  form.cronExpression = e
+}
 
 // 定义校验规则
 const dataRules = ref({})
