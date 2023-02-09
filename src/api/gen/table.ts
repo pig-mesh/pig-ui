@@ -52,6 +52,14 @@ export const useTableFieldSubmitApi = (dsName: string, tableName: string, fieldL
   return request.put('/gen/table/field/' + dsName + '/' + tableName, fieldList)
 }
 
+export const useGeneratorCodeApi = (tableIds: any) => {
+  return request({
+    url: '/gen/generator/code',
+    method: 'get',
+    params: { tableIds: tableIds }
+  })
+}
+
 export const useGeneratorPreviewApi = (tableId: any) => {
   return request({
     url: '/gen/generator/preview',

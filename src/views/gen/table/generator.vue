@@ -56,8 +56,8 @@
 				<el-col :span="18" class="mb20">
 					<el-form-item label="生成方式" prop="generatorType">
 						<el-radio-group v-model="dataForm.generatorType">
-							<el-radio :label="0">zip压缩包</el-radio>
-							<el-radio :label="1">自定义路径</el-radio>
+							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>
+							<el-radio-button :label="1">自定义路径</el-radio-button>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { putObj, useTableApi } from '/@/api/gen/table'
+import { putObj, useTableApi, useGeneratorCodeApi } from '/@/api/gen/table'
 import { useMessage } from '/@/hooks/message';
 import { downBlobFile } from '/@/utils/other';
 
@@ -158,7 +158,7 @@ const submitHandle = () => {
 		putObj(dataForm).then(() => {
 			visible.value = false
 			emit('refreshDataList')
-			useMessage().success(t('common.editSuccessText'))
+			useMessage().success(t('common.optSuccessText'))
 		})
 	})
 }
@@ -174,11 +174,17 @@ const generatorHandle = () => {
 		await submitHandle()
 
 		// 生成代码，zip压缩包
-
 		if (dataForm.generatorType === 0) {
 			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, `${dataForm.tableName}.zip`)
 			visible.value = false
-			return
+		}
+
+		// 写入到指定目录
+		if (dataForm.generatorType === 1) {
+			useGeneratorCodeApi([dataForm.id].join(',')).then(() => {
+				useMessage().success(t('common.optSuccessText'))
+				visible.value = false
+			})
 		}
 	})
 }
