@@ -5,6 +5,7 @@ export default {
         addBtn: '新 增',
         editBtn: '修 改',
         delBtn: '删除',
+        refreshCacheBtn: '刷新缓存',
         exportBtn: '导出',
         importBtn: '导入',
         queryDeptTip: '请输入部门名称',

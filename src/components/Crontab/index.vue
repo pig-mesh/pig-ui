@@ -129,6 +129,7 @@ import CrontabMonth from "./month.vue"
 import CrontabWeek from "./week.vue"
 import CrontabYear from "./year.vue"
 import CrontabResult from "./result.vue"
+const { proxy } = getCurrentInstance()
 const emit = defineEmits(['hide', 'fill'])
 const props = defineProps({
     hideComponent: {
@@ -201,7 +202,7 @@ function tabCheck(index) {
     tabActive.value = index
 }
 // 由子组件触发，更改表达式组成的字段值
-function updateCrontabValue(name, value) {
+function updateCrontabValue(name, value, from) {
     crontabValueObj.value[name] = value
 }
 // 表单选项的子组件校验数字格式（通过-props传递）
