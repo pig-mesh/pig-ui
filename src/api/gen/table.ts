@@ -59,3 +59,10 @@ export const useGeneratorPreviewApi = (tableId: any) => {
     params: { tableId: tableId }
   })
 }
+
+export function fetchDictList() {
+  return request({
+    url: '/admin/dict/list',
+    method: 'get'
+  })
+}

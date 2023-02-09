@@ -2,7 +2,7 @@
 	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">
 		<el-tabs v-model="activeName" @tab-click="handleClick">
 			<el-tab-pane label="属性设置" name="field">
-				<vxe-table ref="fieldTable" border row-key class="sortable-row-gen" :data="fieldList"
+				<vxe-table ref="fieldTable" align="center" border row-key class="sortable-row-gen" :data="fieldList"
 					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
 					<vxe-column type="seq" width="60"></vxe-column>
 					<vxe-column width="60" title="拖动">
@@ -37,69 +37,37 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
-					<vxe-column field="primaryPk" title="主键">
+					<vxe-column field="primaryPk" title="主键" width="60">
 						<template #default="{ row }">
 							<vxe-checkbox v-model="row.primaryPk"></vxe-checkbox>
 						</template>
 					</vxe-column>
-				</vxe-table>
-			</el-tab-pane>
-			<el-tab-pane label="表单页面" name="form">
-				<vxe-table ref="formTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
-					:edit-config="{ trigger: 'click', mode: 'cell' }">
-					<vxe-column field="attrName" title="属性名"></vxe-column>
-					<vxe-column field="fieldComment" title="说明"></vxe-column>
-					<vxe-column field="formItem" title="表单显示">
+					<vxe-column field="fieldDict" title="字典类型" width="140">
 						<template #default="{ row }">
-							<vxe-checkbox v-model="row.formItem"></vxe-checkbox>
-						</template>
-					</vxe-column>
-					<vxe-column field="formRequired" title="表单必填">
-						<template #default="{ row }">
-							<vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
-						</template>
-					</vxe-column>
-					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
-					<vxe-column field="formType" title="表单类型">
-						<template #default="{ row }">
-							<vxe-select v-model="row.formType">
-								<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
+							<vxe-select v-model="row.fieldDict" filterable>
+								<vxe-option v-for="item in fieldDictList" :key="item.value" :value="item.value"
 									:label="item.label"></vxe-option>
 							</vxe-select>
 						</template>
 					</vxe-column>
-					<vxe-column field="formDict" title="表单字典类型" :edit-render="{ name: 'input' }"></vxe-column>
 				</vxe-table>
 			</el-tab-pane>
 			<el-tab-pane label="列表查询" name="third">
-				<vxe-table ref="gridTable" border row-key :data="fieldList" :checkbox-config="{ checkStrictly: true }"
-					:edit-config="{ trigger: 'click', mode: 'cell' }">
+				<vxe-table ref="gridTable" align="center" border row-key :data="fieldList"
+					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
 					<vxe-column field="attrName" title="属性名"></vxe-column>
 					<vxe-column field="fieldComment" title="说明"></vxe-column>
-					<vxe-column field="gridItem" title="列表显示">
+					<vxe-column field="gridItem" title="列表显示" width="100">
 						<template #default="{ row }">
 							<vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
 						</template>
 					</vxe-column>
-					<vxe-column field="gridSort" title="列表排序">
+					<vxe-column field="gridSort" title="是否排序" width="100">
 						<template #default="{ row }">
 							<vxe-checkbox v-model="row.gridSort"></vxe-checkbox>
 						</template>
 					</vxe-column>
-					<vxe-column field="queryItem" title="查询显示">
-						<template #default="{ row }">
-							<vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
-						</template>
-					</vxe-column>
-					<vxe-column field="queryType" title="查询方式">
-						<template #default="{ row }">
-							<vxe-select v-model="row.queryType">
-								<vxe-option v-for="item in queryList" :key="item.value" :value="item.value"
-									:label="item.label"></vxe-option>
-							</vxe-select>
-						</template>
-					</vxe-column>
-					<vxe-column field="queryFormType" title="查询表单类型">
+					<vxe-column field="queryFormType" title="查询表单类型" width="200">
 						<template #default="{ row }">
 							<vxe-select v-model="row.queryFormType">
 								<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
@@ -107,29 +75,76 @@
 							</vxe-select>
 						</template>
 					</vxe-column>
-					<vxe-column field="queryDict" title="查询字典类型" :edit-render="{ name: 'input' }"></vxe-column>
+					<vxe-column field="queryItem" title="查询显示" width="100">
+						<template #default="{ row }">
+							<vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
+						</template>
+					</vxe-column>
+					<vxe-column field="queryType" title="查询方式" width="200">
+						<template #default="{ row }">
+							<vxe-select v-model="row.queryType">
+								<vxe-option v-for="item in queryList" :key="item.value" :value="item.value"
+									:label="item.label"></vxe-option>
+							</vxe-select>
+						</template>
+					</vxe-column>
 				</vxe-table>
 			</el-tab-pane>
+			<el-tab-pane label="表单页面" name="form">
+				<vxe-table ref="formTable" align="center" border row-key :data="fieldList"
+					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
+					<vxe-column field="attrName" title="属性名"></vxe-column>
+					<vxe-column field="fieldComment" title="说明"></vxe-column>
+					<vxe-column field="formType" title="表单类型" width="200">
+						<template #default="{ row }">
+							<vxe-select v-model="row.formType">
+								<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
+									:label="item.label"></vxe-option>
+							</vxe-select>
+						</template>
+					</vxe-column>
+					<vxe-column field="formItem" title="表单显示" width="100">
+						<template #default="{ row }">
+							<vxe-checkbox v-model="row.formItem"></vxe-checkbox>
+						</template>
+					</vxe-column>
+					<vxe-column field="formRequired" title="表单必填" width="100">
+						<template #default="{ row }">
+							<vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
+						</template>
+					</vxe-column>
+					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
+				</vxe-table>
+			</el-tab-pane>
+
 		</el-tabs>
 		<template #footer>
 			<el-button @click="visible = false">取消</el-button>
-			<el-button type="primary" @click="submitHandle()">确定</el-button>
+			<el-button @click="previewHandle()">{{
+				$t('gen.prewBtn')
+			}}</el-button> <el-button type="primary" @click="submitHandle()">确定</el-button>
 		</template>
+		<!-- 预览 -->
+		<preview-dialog ref="previewRef" />
 	</el-drawer>
 </template>
 
 <script setup lang="ts">
 import { TabsPaneContext } from 'element-plus/es'
 import Sortable from 'sortablejs'
-import { useTableFieldSubmitApi, useTableApi } from '/@/api/gen/table'
+import { useTableFieldSubmitApi, useTableApi, fetchDictList } from '/@/api/gen/table'
 import { fetchList } from '/@/api/gen/fieldtype'
 import { VxeTableInstance } from 'vxe-table'
 import { useMessage } from '/@/hooks/message'
 import { useI18n } from 'vue-i18n'
 
+const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
+
 const { t } = useI18n();
 
+const previewRef = ref()
 const activeName = ref()
+const tableId = ref('')
 const fieldTable = ref<VxeTableInstance>()
 const formTable = ref<VxeTableInstance>()
 const gridTable = ref<VxeTableInstance>()
@@ -147,6 +162,7 @@ const visible = ref(false)
 const sortable = ref() as any
 
 const typeList = ref([]) as any
+const fieldDictList = ref([]) as any
 const dsName = ref()
 const tableName = ref()
 
@@ -157,6 +173,7 @@ const fillList = reactive([
 	{ label: 'UPDATE', value: 'UPDATE' },
 	{ label: 'INSERT_UPDATE', value: 'INSERT_UPDATE' }
 ])
+
 
 const queryList = reactive([
 	{ label: '=', value: '=' },
@@ -191,6 +208,7 @@ const openDialog = (dName: string, tName: string) => {
 	rowDrop()
 	getTable(dName, tName)
 	getFieldTypeList()
+	getDictList()
 }
 
 const rowDrop = () => {
@@ -210,6 +228,7 @@ const rowDrop = () => {
 const getTable = (dsName: string, tableName: string) => {
 	fieldList.value = [] // 避免第一次数据初始化， 表格显示历史数据
 	useTableApi(dsName, tableName).then(res => {
+		tableId.value = res.data.id
 		fieldList.value = res.data.fieldList
 	})
 }
@@ -219,18 +238,34 @@ const getFieldTypeList = async () => {
 
 	// 获取数据
 	const { data } = await fetchList()
+
 	// 设置属性类型值
 	data.records.forEach((item: any) => typeList.value.push({ label: item.attrType, value: item.columnType }))
 	// 增加Object类型
 	typeList.value.push({ label: 'Object', value: 'Object' })
 }
 
+const getDictList = () => {
+	fetchDictList().then((res) => {
+		for (const item of res.data) {
+			fieldDictList.value.push({ label: item.description, value: item.dictType })
+		}
+	})
+}
+
 // 表单提交
 const submitHandle = () => {
-	useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
+	return useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
 		useMessage().success(t('common.addSuccessText'))
 		visible.value = false // 关闭弹窗
 		emit('refreshDataList')
+	})
+}
+
+// 预览设计
+const previewHandle = () => {
+	submitHandle().then(() => {
+		previewRef.value.openDialog(tableId.value)
 	})
 }
 

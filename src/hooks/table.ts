@@ -21,11 +21,7 @@ export interface BasicTableProps {
     // loading
     loading?: Boolean
 
-    selectObjs?: any[],
-
-    descs?: string
-
-    ascs?: string
+    selectObjs?: any[]
 }
 
 export interface Pagination {
@@ -58,9 +54,7 @@ export function useTable(options?: BasicTableProps) {
         } as Pagination,
         dataListSelections: [],
         loading: false,
-        selectObjs: [],
-        descs: '',
-        ascs: ''
+        selectObjs: []
     }
 
     const mergeDefaultOptions = (options: any, props: any): BasicTableProps => {
@@ -83,8 +77,6 @@ export function useTable(options?: BasicTableProps) {
                 ...state.queryForm,
                 current: state.pagination?.current,
                 size: state.pagination?.size,
-                descs: state.descs,
-                ascs: state.ascs
             }).then(res => {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
@@ -114,6 +106,20 @@ export function useTable(options?: BasicTableProps) {
         query();
     };
 
+    // 排序触发事件
+    const sortChangeHandle = (column: any) => {
+        const prop = other.toUnderline(column.prop);
+        if (column.order === 'descending') {
+            state.queryForm!.descs.push(prop)
+            state.queryForm!.ascs.splice(state.queryForm!.ascs.indexOf(prop), 1)
+        }
+        if (column.order === 'ascending') {
+            state.queryForm!.ascs.push(prop)
+            state.queryForm!.descs.splice(state.queryForm!.descs.indexOf(prop), 1)
+        }
+        query();
+    }
+
     const getDataList = () => {
         state.pagination!.current = 1
         query()
@@ -129,6 +135,7 @@ export function useTable(options?: BasicTableProps) {
         getDataList,
         sizeChangeHandle,
         currentChangeHandle,
+        sortChangeHandle,
         downBlobFile
     }
 

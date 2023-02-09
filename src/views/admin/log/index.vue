@@ -36,7 +36,7 @@
         </div>
       </el-row>
       <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
-        @selection-change="handleSelectionChange">
+        @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
         <el-table-column align="center" type="selection" width="50" />
         <el-table-column :label="$t('syslog.index')" type="index" width="80" />
         <el-table-column :label="$t('syslog.logType')" show-overflow-tooltip>
@@ -46,11 +46,11 @@
         </el-table-column>
         <el-table-column :label="$t('syslog.title')" prop="title" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('syslog.remoteAddr')" prop="remoteAddr" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.remoteAddr')" prop="remoteAddr" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('syslog.method')" prop="method" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('syslog.serviceId')" prop="serviceId" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.createTime')" prop="createTime" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('syslog.createTime')" prop="createTime" width="200" sortable="custom"
+          show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="100">
           <template #default="scope">
             <el-button v-auth="'sys_user_del'" size="small" text type="primary" @click="handleDelete(scope.row)">
@@ -86,14 +86,16 @@ const selectObjs = ref([]);
 // 是否可以多选
 const multiple = ref(true);
 
+
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     logType: '',
-    createTime: ''
+    createTime: '',
+    descs: ['create_time'],
+    ascs: [],
   },
   selectObjs: [],
-  pageList: pageList,
-  ascs: 'time'
+  pageList: pageList
 });
 
 
@@ -102,6 +104,7 @@ const {
   downBlobFile,
   getDataList,
   currentChangeHandle,
+  sortChangeHandle,
   sizeChangeHandle
 } = useTable(state)
 
