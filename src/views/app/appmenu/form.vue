@@ -39,7 +39,7 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType !== '1'">
-          <el-form-item :label="$t('sysmenu.keepAlive')" prop="keepAlive">
+          <el-form-item :label="$t('sysmenu.visible')" prop="visible">
             <el-radio-group v-model="state.ruleForm.visible">
               <el-radio-button label="1">显示</el-radio-button>
               <el-radio-button label="0">隐藏</el-radio-button>

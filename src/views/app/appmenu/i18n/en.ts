@@ -5,7 +5,7 @@ export default {
         sortOrder: 'sortOrder',
         path: 'path',
         menuType: 'menuType',
-        keepAlive: 'keepAlive',
+        visible: 'visible',
         permission: 'permission',
         inputNameTip: 'input name',
         parentId: 'parent menu'

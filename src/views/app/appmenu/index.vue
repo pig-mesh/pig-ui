@@ -19,15 +19,14 @@
 				<el-table-column prop="path" :label="$t('appmenu.path')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('appmenu.menuType')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag v-if="scope.row.menuType === '0'" type="success">左菜单</el-tag>
-						<el-tag v-if="scope.row.menuType === '2'" type="success">顶菜单</el-tag>
-						<el-tag v-if="scope.row.menuType === '1'" type="info">按钮</el-tag>
+						<el-tag v-if="scope.row.menuType === '0'" type="success">页面</el-tag>
+						<el-tag v-if="scope.row.menuType === '2'" type="success">按钮</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('appmenu.keepAlive')" show-overflow-tooltip>
+				<el-table-column :label="$t('appmenu.visible')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag v-if="scope.row.keepAlive === '0'" type="info">关闭</el-tag>
-						<el-tag v-if="scope.row.keepAlive === '1'" type="success">开启</el-tag>
+						<el-tag v-if="scope.row.visible === '0'" type="info">关闭</el-tag>
+						<el-tag v-if="scope.row.visible === '1'" type="success">开启</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="permission" :label="$t('appmenu.permission')"
