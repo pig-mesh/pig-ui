@@ -64,7 +64,9 @@ const form = reactive({
 });
 
 const dataRules = reactive({
-
+  name: [{ required: true, message: '套餐名称不能为空', trigger: 'blur' }],
+  status: [{ required: true, message: '套餐状态不能为空', trigger: 'blur' }],
+  menuIds: [{ required: true, message: '套餐菜单不能为空', trigger: 'blur' }]
 })
 
 const menuData = ref<any[]>([])
@@ -101,6 +103,7 @@ const onSubmit = () => {
   loading.value = true
   dataFormRef.value.validate((valid: boolean) => {
     if (!valid) {
+      loading.value = false
       return false
     }
     form.menuIds = [...menuTreeRef.value.getCheckedKeys(),...menuTreeRef.value.getHalfCheckedKeys()].join(",")

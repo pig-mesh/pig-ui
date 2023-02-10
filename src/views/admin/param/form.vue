@@ -88,14 +88,21 @@ const form = reactive({
   publicName: '',
   publicKey: '',
   publicValue: '',
-  status: '',
+  status: '0',
   validateCode: '',
   publicType: '',
-  systemFlag: '',
+  systemFlag: '0',
 });
 
 // 定义校验规则
-const dataRules = ref({})
+const dataRules = reactive({
+  publicName: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+  publicKey: [{ required: true, message: '参数键不能为空', trigger: 'blur' }],
+  publicValue: [{ required: true, message: '参数值不能为空', trigger: 'blur' }],
+  status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+  validateCode: [{ required: true, message: '编码不能为空', trigger: 'blur' }],
+  publicType: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+})
 
 // 打开弹窗
 const openDialog = (id: string) => {

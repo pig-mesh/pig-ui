@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dic-dialog-container">
 		<el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')"  width="60%">
-      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" size="default">
+      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" size="default" :rules="dataRules">
         <el-row :gutter="35">
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
             <el-form-item label="类型" prop="dictType">
@@ -56,12 +56,16 @@ const dataForm = reactive({
   id: '',
   dictType: '',
   description: '',
-  systemFlag: '',
+  systemFlag: '0',
   remarks: '',
 })
 
 
-const dataRules = reactive({})
+const dataRules = reactive({
+  dictType: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+  systemFlag: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
+  description: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
+})
 
 
 // 打开弹窗
@@ -90,21 +94,27 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
-  if (dataForm.id) {
-    putObj(dataForm).then(() => {
-      closeDialog(); // 关闭弹窗
-      emit('refresh');
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  }else{
-    addObj(dataForm).then(() => {
-      closeDialog(); // 关闭弹窗
-      emit('refresh');
-    }).catch(err => {
-      useMessage().error(err.msg)
-    })
-  }
+  dicDialogFormRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return false
+    }
+    if (dataForm.id) {
+      putObj(dataForm).then(() => {
+        closeDialog(); // 关闭弹窗
+        emit('refresh');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
+    }else{
+      addObj(dataForm).then(() => {
+        closeDialog(); // 关闭弹窗
+        emit('refresh');
+      }).catch(err => {
+        useMessage().error(err.msg)
+      })
+    }
+  })
+
 };
 // 暴露变量
 defineExpose({

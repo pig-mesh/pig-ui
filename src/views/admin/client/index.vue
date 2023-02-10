@@ -30,7 +30,7 @@
         <el-table-column :label="t('client.clientId')" prop="clientId" show-overflow-tooltip/>
         <el-table-column :label="t('client.clientSecret')" prop="clientSecret" show-overflow-tooltip/>
         <el-table-column :label="t('client.scope')" prop="scope" show-overflow-tooltip/>
-        <el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip>
+        <el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip width="600px">
           <template #default="scope">
             <dict-tag :options="grant_types" :value="scope.row.authorizedGrantTypes"></dict-tag>
           </template>
