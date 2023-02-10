@@ -14,7 +14,7 @@ export default {
         updateBy: '修改人',
         createTime: '创建',
         updateTime: '更新时间',
-        menuId: 'menuId',
+        menuId: '租户套餐',
         inputidTip: '请输入租户id',
         inputnameTip: '请输入名',
         inputcodeTip: '请输入编码',
@@ -27,7 +27,7 @@ export default {
         inputupdateByTip: '请输入修改人',
         inputcreateTimeTip: '请输入创建',
         inputupdateTimeTip: '请输入更新时间',
-        inputmenuIdTip: '请输入menuId',
+        inputmenuIdTip: '请选择租户套餐',
     },
     tenantmenu: {
         name: '租户套餐',

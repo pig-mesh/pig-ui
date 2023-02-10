@@ -19,6 +19,14 @@
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20">
+          <el-form-item :span="12" :label="t('tenant.menuId')" prop="menuId">
+            <el-select v-model="form.menuId" :placeholder="t('tenant.inputmenuIdTip')" clearable class="w100">
+              <el-option v-for="item in menuData" :key="item.id" :label="item.name" :value="item.id" />
+            </el-select>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="12" class="mb20">
           <el-form-item :label="t('tenant.status')" prop="status">
             <el-radio-group v-model="form.status">
               <el-radio :label="item.value" v-for="(item, index) in status_type" border :key="index">{{ item.label }}
@@ -26,6 +34,7 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
+
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('tenant.startTime')" prop="startTime">
             <el-date-picker v-model="form.startTime" type="date" :placeholder="t('tenant.inputstartTimeTip')" />
@@ -53,6 +62,7 @@ import { useDict } from '/@/hooks/dict';
 const emit = defineEmits(['refresh']);
 import { useMessage } from "/@/hooks/message";
 import { getObj, addObj, putObj } from '/@/api/admin/tenant'
+import { menuList } from '/@/api/admin/tenant-menu'
 import { useI18n } from "vue-i18n"
 
 const { t } = useI18n();
@@ -81,6 +91,8 @@ const form = reactive({
   menuId: '',
 });
 
+const menuData = ref([])
+
 // 定义校验规则
 const dataRules = ref({
   name: [{ required: true, message: 'name不能为空', trigger: 'blur' }],
@@ -89,6 +101,7 @@ const dataRules = ref({
   startTime: [{ required: true, message: '开始时间不能为空', trigger: 'blur' }],
   endTime: [{ required: true, message: '结束时间不能为空', trigger: 'blur' }],
   status: [{ required: true, message: 'status不能为空', trigger: 'blur' }],
+  menuId: [{ required: true, message: '租户套餐不能为空', trigger: 'blur' }],
 })
 
 // 打开弹窗
@@ -106,6 +119,7 @@ const openDialog = (id: string) => {
     form.id = id
     getTenantData(id)
   }
+  getMenuList()
 };
 
 // 提交
@@ -143,6 +157,12 @@ const getTenantData = (id: string) => {
     Object.assign(form, res.data[0])
   })
 };
+
+const getMenuList = () => {
+  menuList().then((res: any) => {
+    menuData.value = res.data
+  })
+}
 
 // 暴露变量
 defineExpose({

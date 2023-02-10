@@ -14,7 +14,7 @@ export default {
         updateBy: 'updateBy',
         createTime: 'createTime',
         updateTime: 'updateTime',
-        menuId: 'menuId',
+        menuId: 'menuIds',
         inputidTip: 'input id',
         inputnameTip: 'input name',
         inputcodeTip: 'input code',

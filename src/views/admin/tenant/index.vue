@@ -21,10 +21,10 @@
             v-auth="'admin_systenant_add'">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button  icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
-            v-auth="'admin_systenant_add'">
-            {{ $t('common.importBtn') }}
-          </el-button>
+<!--          <el-button  icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"-->
+<!--            v-auth="'admin_systenant_add'">-->
+<!--            {{ $t('common.importBtn') }}-->
+<!--          </el-button>-->
           <el-button  icon="Download" type="primary" class="ml10" @click="exportExcel"
             v-auth="'admin_systenant_add'">
             {{ $t('common.exportBtn') }}

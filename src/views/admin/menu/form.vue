@@ -60,7 +60,6 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import { info, pageList, update, addObj } from "/@/api/admin/menu";
-import type { menuData } from './menu'
 import {useMessage} from "/@/hooks/message";
 
 // 定义子组件向父组件传值/事件
@@ -74,7 +73,7 @@ const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
-    menuId: '',
+    id: '',
     name: '',
     permission: '',
     parentId: '',
@@ -84,16 +83,15 @@ const state = reactive({
     menuType: '0',
     keepAlive: '',
     visible: ''
-  } as menuData,
-  parentData: [] as menuData[], // 上级菜单数据
+  } ,
+  parentData: [] as any[], // 上级菜单数据
 });
 
 // 从后端获取菜单信息
 const getMenuData = () => {
   state.parentData = []
   pageList().then(res => {
-    let menu: menuData;
-    menu = {
+    let menu = {
       createBy: "",
       createTime: "",
       delFlag: "",
@@ -107,7 +105,7 @@ const getMenuData = () => {
       updateBy: "",
       updateTime: "",
       visible: "",
-      id: '-1', name: '根菜单', children: [] as menuData[]
+      id: '-1', name: '根菜单', children: []
     };
     menu.children = res.data;
     state.parentData.push(menu)
@@ -126,11 +124,11 @@ const dataRules = reactive({
 })
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
-  if (row?.menuId) {
-    state.ruleForm.menuId = row.menuId
+  if (row?.id) {
+    state.ruleForm.id = row.id
     // 模拟数据，实际请走接口
     info(row.id).then(res => {
-      state.ruleForm = (res.data as menuData)
+      Object.assign(state.ruleForm,res.data)
     })
   } else {
     // 清空表单，此项需加表单验证才能使用
@@ -145,7 +143,7 @@ const openDialog = (type: string, row?: any) => {
 // 保存数据
 const onSubmit = () => {
   // 保存 调用刷新
-  if (state.ruleForm.menuId) {
+  if (state.ruleForm.id) {
     update(state.ruleForm).then(() => {
       visible.value = false;
       emit('refresh');
