@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus";
-import other from "../utils/other";
+import other, { deepMerge } from "../utils/other";
 
 export interface BasicTableProps {
     // 是否在创建页面时，调用数据列表接口
@@ -22,6 +22,10 @@ export interface BasicTableProps {
     loading?: Boolean
 
     selectObjs?: any[]
+
+    descs?: string[]
+
+    ascs?: string[]
 }
 
 export interface Pagination {
@@ -54,7 +58,9 @@ export function useTable(options?: BasicTableProps) {
         } as Pagination,
         dataListSelections: [],
         loading: false,
-        selectObjs: []
+        selectObjs: [],
+        descs: [],
+        ascs: []
     }
 
     const mergeDefaultOptions = (options: any, props: any): BasicTableProps => {
@@ -67,7 +73,7 @@ export function useTable(options?: BasicTableProps) {
     }
 
     // 覆盖默认值
-    const state = mergeDefaultOptions(defaultOptions, options)
+    const state = mergeDefaultOptions(defaultOptions,options)
 
 
     const query = () => {
@@ -77,10 +83,12 @@ export function useTable(options?: BasicTableProps) {
                 ...state.queryForm,
                 current: state.pagination?.current,
                 size: state.pagination?.size,
-            }).then(res => {
+                descs: state.descs,
+                ascs: state.ascs
+            }).then((res: any) => {
                 state.dataList = state.isPage ? res.data.records : res.data
                 state.pagination!.total = state.isPage ? res.data.total : 0
-            }).catch(err => {
+            }).catch((err: any) => {
                 ElMessage.error(err.data.msg)
             }).finally(() => {
                 state.loading = false;
@@ -110,12 +118,22 @@ export function useTable(options?: BasicTableProps) {
     const sortChangeHandle = (column: any) => {
         const prop = other.toUnderline(column.prop);
         if (column.order === 'descending') {
-            state.queryForm!.descs.push(prop)
-            state.queryForm!.ascs.splice(state.queryForm!.ascs.indexOf(prop), 1)
-        }
-        if (column.order === 'ascending') {
-            state.queryForm!.ascs.push(prop)
-            state.queryForm!.descs.splice(state.queryForm!.descs.indexOf(prop), 1)
+            state.descs?.push(prop)
+            if(state.ascs!.indexOf(prop) >=0){
+                state.ascs?.splice(state.ascs.indexOf(prop), 1)
+            }
+        }else if (column.order === 'ascending') {
+            state.ascs?.push(prop)
+            if(state.descs!.indexOf(prop) >=0){
+                state.descs?.splice(state.descs.indexOf(prop), 1)
+            }
+        }else{
+            if(state.ascs!.indexOf(prop) >=0){
+                state.ascs?.splice(state.ascs.indexOf(prop), 1)
+            }
+            if(state.descs!.indexOf(prop) >=0){
+                state.descs?.splice(state.descs.indexOf(prop), 1)
+            }
         }
         query();
     }

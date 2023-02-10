@@ -4,16 +4,8 @@
     <el-card class="layout-padding-auto" shadow="hover">
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
-          <el-form-item :label="$t('syslog.logType')" prop="logType">
-            <el-select v-model="state.queryForm.logType" :placeholder="$t('syslog.inputLogTypeTip')" clearable
-              class="w100">
-              <el-option v-for="item in log_type" :key="item.value" :label="item.label" :value="item.value" />
-            </el-select>
-          </el-form-item>
-          <el-form-item :label="$t('syslog.createTime')" prop="createTime">
-            <el-date-picker v-model="state.queryForm.createTime" value-format="YYYY-MM-DD HH:mm:ss" type="datetimerange"
-              range-separator="To" :start-placeholder="$t('syslog.inputStartPlaceholderTip')"
-              :end-placeholder="$t('syslog.inputEndPlaceholderTip')" />
+          <el-form-item :label="$t('systoken.username')" prop="username">
+            <el-input v-model="state.queryForm.username" :placeholder="$t('systoken.inputUsernameTip')"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
@@ -23,10 +15,6 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button size="default" icon="Download" type="primary" class="ml10" @click="exportExcel"
-            v-auth="'sys_user_export'">
-            {{ $t('common.exportBtn') }}
-          </el-button>
           <el-button size="default" :disabled="multiple" icon="Delete" type="primary" class="ml10"
             v-auth="'sys_user_del'" @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
@@ -38,19 +26,12 @@
       <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
         @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
         <el-table-column align="center" type="selection" width="50" />
-        <el-table-column :label="$t('syslog.index')" type="index" width="80" />
-        <el-table-column :label="$t('syslog.logType')" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="log_type" :value="scope.row.logType"></dict-tag>
-          </template>
-        </el-table-column>
-        <el-table-column :label="$t('syslog.title')" prop="title" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.remoteAddr')" prop="remoteAddr" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.method')" prop="method" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.serviceId')" prop="serviceId" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('syslog.createTime')" prop="createTime" width="200" sortable="custom"
-          show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.index')" type="index" width="80" />
+        <el-table-column :label="$t('systoken.userId')" prop="userId" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.username')" prop="username" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.clientId')" prop="clientId" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.expiresAt')" prop="expiresAt" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="100">
           <template #default="scope">
             <el-button v-auth="'sys_user_del'" size="small" text type="primary" @click="handleDelete(scope.row)">
@@ -68,15 +49,11 @@
 
 <script lang="ts" setup>
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { pageList, delObj } from "/@/api/admin/log";
+import { fetchList,delObj } from "/@/api/admin/token";
 import { useI18n } from 'vue-i18n'
 import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useDict } from "/@/hooks/dict";
 
-
-const { log_type } = useDict('log_type')
 const { t } = useI18n()
-
 // 定义变量内容
 const queryRef = ref();
 const showSearch = ref(true)
@@ -89,17 +66,14 @@ const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
-    logType: '',
-    createTime: ''
+    username: ''
   },
-  selectObjs: [],
-  pageList: pageList
+  pageList: fetchList
 });
 
 
 //  table hook
 const {
-  downBlobFile,
   getDataList,
   currentChangeHandle,
   sortChangeHandle,
@@ -119,10 +93,6 @@ const handleSelectionChange = (val: any) => {
   multiple.value = !val.length
 }
 
-// 导出excel
-const exportExcel = () => {
-  downBlobFile('/admin/log/export', state.queryForm, 'log.xlsx')
-}
 
 // 删除数据
 const handleDelete = (row: any) => {
@@ -133,9 +103,9 @@ const handleDelete = (row: any) => {
     return
   }
 
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.id} ?`).then(() => {
+  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.username} ?`).then(() => {
     // 删除用户的接口
-    delObj(row.id).then(() => {
+    delObj(row.accessToken).then(() => {
       getDataList();
       useMessage().success(t('common.delSuccessText'))
     }).catch(err => {

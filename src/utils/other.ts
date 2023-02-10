@@ -10,6 +10,8 @@ import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
 import request from "/@/utils/request";
 import { useMessage } from "/@/hooks/message";
+import { cloneDeep } from 'lodash-es';
+import { isObject } from './is';
 // @ts-ignore
 import * as CryptoJS from "crypto-js";
 
@@ -325,13 +327,14 @@ export function handleTree(data, id, parentId, children, rootId) {
 }
 
 /**
- * 
+ *
  * @param str 驼峰转下划线
  * @returns 下划线
  */
 export function toUnderline(str: string) {
 	return str.replace(/([A-Z])/g, "_$1").toLowerCase()
 }
+
 
 // 统一批量导出
 export default other;

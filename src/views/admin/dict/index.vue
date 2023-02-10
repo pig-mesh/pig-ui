@@ -37,14 +37,14 @@
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
         <el-table-column type="index" label="序号" width="50" />
         <el-table-column prop="dictType" label="类型" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="description" label="描述" show-overflow-tooltip sortable></el-table-column>
         <el-table-column prop="systemFlag" label="字典类型" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="dict_type" :value="scope.row.systemFlag"></dict-tag>
           </template>
         </el-table-column>
         <el-table-column prop="remarks" label="备注信息" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip sortable></el-table-column>
 
         <el-table-column label="操作" width="200">
           <template #default="scope">

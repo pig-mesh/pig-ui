@@ -132,7 +132,14 @@ const popoverVis = (bol: boolean) => {
 
 const popoverVisible = ref(false)
 // 定义校验规则
-const dataRules = ref({})
+const dataRules = reactive({
+  jobName: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
+  jobGroup: [{ required: true, message: '任务组名不能为空', trigger: 'blur' }],
+  jobType: [{ required: true, message: '任务类型不能为空', trigger: 'blur' }],
+  cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
+  misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
+
+})
 
 // 打开弹窗
 const openDialog = (id: string) => {
