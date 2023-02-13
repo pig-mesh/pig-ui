@@ -48,7 +48,7 @@ export async function initBackEndControlRoutes() {
     // 存储接口原始路由（未处理component），根据需求选择使用
     useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
     // 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-    dynamicRoutes[0].children = [...staticConfigRoutes,...await backEndComponent(res.data), ]
+    dynamicRoutes[0].children = [...staticConfigRoutes,...await backEndComponent(res.data)]
     // 添加动态路由
     await setAddRoute();
     // 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
@@ -126,7 +126,16 @@ export async function setBackEndControlRefreshRoutes() {
 export function backEndComponent(routes: any) {
     if (!routes) return;
     return routes.map((item: any) => {
-        if (item.path) item.component = dynamicImport(dynamicViewsModules, item.path as string);
+        if(item.path && item.path.startsWith('http')){
+            if(item.meta.isIframe){
+                item.component = () => import('/@/layout/routerView/iframes.vue')
+            }else{
+                item.component = () => import('/@/layout/routerView/link.vue')
+            }
+            item.path = '/iframes/' + window.btoa(item.path)
+        }else if (item.path){
+            item.component = dynamicImport(dynamicViewsModules, item.path as string);
+        }
         item.children && backEndComponent(item.children);
         return item;
     });

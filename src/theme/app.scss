@@ -118,6 +118,7 @@ body,
 	}
 	// 用于设置 iframe loading 时的高度（loading 垂直居中显示）
 	.layout-iframe {
+		height: 100%;
 		.el-loading-parent--relative {
 			height: 100%;
 		}

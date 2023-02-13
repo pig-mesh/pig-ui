@@ -29,7 +29,7 @@ const state = reactive<LinkViewState>({
 const onGotoFullPage = () => {
 	const { origin, pathname } = window.location;
 	if (verifyUrl(<string>state.isLink)) window.open(state.isLink);
-	else window.open(`${origin}${pathname}#${state.isLink}`);
+	else window.open(`${state.isLink}`);
 };
 // 监听路由的变化，设置内容
 watch(

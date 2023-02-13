@@ -173,7 +173,7 @@ export function handleOpenLink(val: RouteItem) {
 	const { origin, pathname } = window.location;
 	router.push(val.path);
 	if (verifyUrl(<string>val.meta?.isLink)) window.open(val.meta?.isLink);
-	else window.open(`${origin}${pathname}#${val.meta?.isLink}`);
+	else window.open(`${val.meta?.isLink}`);
 }
 
 /**

@@ -8,7 +8,9 @@ export default {
         keepAlive: '缓冲',
         permission: '权限标识',
         inputNameTip: '请输入菜单名称',
-        parentId: '上级菜单'
+        parentId: '上级菜单',
+        embedded: '是否内嵌',
+        visible: '是否显示'
     },
 
 }

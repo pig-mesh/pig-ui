@@ -8,6 +8,8 @@ export default {
         keepAlive: 'keepAlive',
         permission: 'permission',
         inputNameTip: 'input name',
-        parentId: 'parent menu'
+        parentId: 'parent menu',
+        embedded: 'embedded',
+        visible: 'visible'
     }
 }
