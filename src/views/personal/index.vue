@@ -19,7 +19,7 @@
 									<el-row>
 										<el-col :xs="24" :sm="8" class="personal-item mb6">
 											<div class="personal-item-label">昵称：</div>
-											<div class="personal-item-value">小柒</div>
+											<div class="personal-item-value">{{formData.nickname}}</div>
 										</el-col>
 										<el-col :xs="24" :sm="16" class="personal-item mb6">
 											<div class="personal-item-label">身份：</div>
@@ -117,6 +117,7 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { editInfo } from '/@/api/admin/user'
 import {useMessage} from "/@/hooks/message";
 import {Session} from "/@/utils/storage";
+import {rule} from "/@/utils/validate";
 
 // 定义变量内容
 const formData = reactive({
@@ -135,10 +136,16 @@ const formdataRef = ref()
 
 const ruleForm = reactive({
   password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
-  phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }],
+  phone: [{ required: true, message: "手机号不能为空", trigger: "blur" },{ validator: rule.validatePhone, trigger: 'blur' }],
   nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
   email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }],
-  name: [{ required: true, message: "姓名不能为空", trigger: "blur" }]
+  name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
+  newpassword1: [{
+    min: 6,
+    max: 20,
+    message: "用户密码长度必须介于 6 和 20 之间",
+    trigger: "blur"
+  }]
 })
 
 
