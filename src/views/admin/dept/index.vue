@@ -11,6 +11,12 @@
 					v-auth="'sys_dept_add'">
 					{{ $t('common.addBtn') }}
 				</el-button>
+        <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
+          {{ $t('common.importBtn') }}
+        </el-button>
+        <el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
+          {{ $t('common.exportBtn') }}
+        </el-button>
 			</div>
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="id"
 				default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
@@ -34,6 +40,8 @@
 			</el-table>
 		</el-card>
 		<dept-form ref="deptDialogRef" @refresh="getDataList()" />
+    <upload-excel ref="excelUploadRef" :title="$t('sysdept.importTip')" url="/admin/dept/import"
+                  temp-url="/admin/sys-file/local/file/dept.xlsx" @refreshDataList="getDataList" />
 	</div>
 </template>
 
@@ -42,6 +50,7 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { depttree, delObj } from "/@/api/admin/dept";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
+import {downBlobFile} from "/@/utils/other";
 
 // 引入组件
 const DeptForm = defineAsyncComponent(() => import('./form.vue'));
@@ -49,6 +58,8 @@ const { t } = useI18n()
 
 // 定义变量内容
 const deptDialogRef = ref();
+
+const excelUploadRef = ref();
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: depttree,
@@ -71,6 +82,11 @@ const onOpenAddDept = (type: string, row: any) => {
 const onOpenEditDept = (type: string, row: any) => {
 	deptDialogRef.value.openDialog(type, row.id);
 };
+
+// 导出excel
+const exportExcel = () => {
+  downBlobFile('/admin/dept/export', state.queryForm, 'dept.xlsx')
+}
 // 删除当前行
 const onTabelRowDel = (row: any) => {
 	useMessageBox().confirm(`${t('common.delConfirmText')}：${row.name} ?`)

@@ -9,5 +9,6 @@ export default {
         inputnameTip: 'input deptName',
         inputparentIdTip: 'select deptName',
         inputsortOrderTip: 'input sortOrder',
+        importTip: 'import dept'
     }
 }
