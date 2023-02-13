@@ -100,6 +100,20 @@ export const notFoundAndNoPower = [
  */
 export const staticConfigRoutes: Array<RouteRecordRaw> = [
     {
+        path: '/home',
+        name: 'home',
+        component: () => import('/@/views/home/index.vue'),
+        meta: {
+            title: 'router.home',
+            isLink: '',
+            isHide: false,
+            isKeepAlive: true,
+            isAffix: true,
+            isIframe: false,
+            icon: 'iconfont icon-shouye',
+        },
+    },
+    {
         path: '/personal',
         name: 'personal',
         component: () => import('/@/views/personal/index.vue'),

@@ -1,5 +1,5 @@
 import { ElMessage } from "element-plus";
-import other, { deepMerge } from "../utils/other";
+import other  from "../utils/other";
 
 export interface BasicTableProps {
     // 是否在创建页面时，调用数据列表接口

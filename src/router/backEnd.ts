@@ -25,25 +25,6 @@ const layouModules: any = import.meta.glob('../layout/routerView/*.{vue,tsx}');
 const viewsModules: any = import.meta.glob('../views/**/*.{vue,tsx}');
 const dynamicViewsModules: Record<string, Function> = Object.assign({}, { ...layouModules }, { ...viewsModules });
 
-const home = [
-    {
-        path: '/home',
-        name: 'home',
-        component: () => import('/@/views/home/index.vue'),
-        meta: {
-            title: 'router.home',
-            isLink: '',
-            isHide: false,
-            isKeepAlive: true,
-            isAffix: true,
-            isIframe: false,
-            icon: 'iconfont icon-shouye',
-        },
-    },
-]
-
-
-
 /**
  * 后端控制路由：初始化方法，防止刷新时路由丢失
  * @method NextLoading 界面 loading 动画开始执行
@@ -67,7 +48,7 @@ export async function initBackEndControlRoutes() {
     // 存储接口原始路由（未处理component），根据需求选择使用
     useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
     // 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-    dynamicRoutes[0].children = [...home,...await backEndComponent(res.data), ...staticConfigRoutes]
+    dynamicRoutes[0].children = [...staticConfigRoutes,...await backEndComponent(res.data), ]
     // 添加动态路由
     await setAddRoute();
     // 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
