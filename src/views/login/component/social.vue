@@ -2,31 +2,31 @@
   <div class="social-container">
     <div @click="handleClick('cas')">
       <span :style="{ backgroundColor: '#e6a23c' }" class="container">
-        <i class="iconfont icon-login" />
+        <i class="iconfont icon-login"/>
       </span>
       <p class="title">CAS</p>
     </div>
     <div @click="handleClick('wechat')">
       <span :style="{ backgroundColor: '#6ba2d6' }" class="container">
-        <i icon-class="wechat" class="iconfont icon-weixin" />
+        <i icon-class="wechat" class="iconfont icon-weixin"/>
       </span>
       <p class="title">微信</p>
     </div>
     <div @click="handleClick('tencent')">
       <span :style="{ backgroundColor: '#8dc349' }" class="container">
-        <i icon-class="qq" class="iconfont icon-qq" />
+        <i icon-class="qq" class="iconfont icon-qq"/>
       </span>
       <p class="title">QQ</p>
     </div>
     <div @click="handleClick('gitee')">
       <span :style="{ backgroundColor: '#bf3030' }" class="container">
-        <i icon-class="qq" class="iconfont icon-logo_gitee_icon" />
+        <i icon-class="qq" class="iconfont icon-logo_gitee_icon"/>
       </span>
       <p class="title">Gitee</p>
     </div>
     <div @click="handleClick('osc')">
       <span :style="{ backgroundColor: '#007B25' }" class="container">
-        <i icon-class="qq" class="iconfont icon-oschina" />
+        <i icon-class="qq" class="iconfont icon-oschina"/>
       </span>
       <p class="title">开源中国</p>
     </div>

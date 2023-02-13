@@ -30,7 +30,6 @@
 				<span>{{ $t('mobile.btnText') }}</span>
 			</el-button>
 		</el-form-item>
-		<div class="font12 mt30 login-animation4 login-msg">{{ $t('mobile.msgText') }}</div>
 	</el-form>
 </template>
 
@@ -116,10 +115,6 @@ const handleLogin = async () => {
 		letter-spacing: 2px;
 		font-weight: 300;
 		margin-top: 15px;
-	}
-
-	.login-msg {
-		color: var(--el-text-color-placeholder);
 	}
 }
 </style>

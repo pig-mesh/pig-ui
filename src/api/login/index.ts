@@ -121,18 +121,6 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
     })
 }
 
-
-/**
- * 注册用户
- */
-export const registerUser = (userInfo: object) => {
-    return request({
-        url: '/admin/register/user',
-        method: 'post',
-        data: userInfo
-    })
-}
-
 /**
  * 获取用户信息
  */

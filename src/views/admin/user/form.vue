@@ -1,7 +1,7 @@
 <template>
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
-      :close-on-click-modal="false" draggable>
+               :close-on-click-modal="false" draggable>
       <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" size="default" label-width="90px">
         <el-row :gutter="24">
           <el-col :span="12" class="mb20">
@@ -27,22 +27,23 @@
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.role')" prop="role">
               <el-select v-model="dataForm.role" placeholder="请选择角色" clearable class="w100" multiple>
-                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId" />
+                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.post')" prop="post">
               <el-select v-model="dataForm.post" placeholder="请选择岗位" clearable class="w100" multiple>
-                <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId" />
+                <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.dept')" prop="dept">
               <el-tree-select v-model="dataForm.deptId" :data="deptData"
-                :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
-                placeholder="请选择所属部门">
+                              :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable
+                              check-strictly
+                              placeholder="请选择所属部门">
               </el-tree-select>
             </el-form-item>
           </el-col>
@@ -78,21 +79,21 @@
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import { getObj, addObj, putObj, getDetails, getDetailsByPhone } from '/@/api/admin/user'
-import { list as roleList } from '/@/api/admin/role'
-import { list as postList } from '/@/api/admin/post'
-import { depttree } from '/@/api/admin/dept'
-import { useDict } from "/@/hooks/dict";
-import { useI18n } from "vue-i18n";
-import { useMessage } from '/@/hooks/message';
-import { rule } from '/@/utils/validate';
+import {getObj, addObj, putObj, validateUsername, validatePhone} from '/@/api/admin/user'
+import {list as roleList} from '/@/api/admin/role'
+import {list as postList} from '/@/api/admin/post'
+import {depttree} from '/@/api/admin/dept'
+import {useDict} from "/@/hooks/dict";
+import {useI18n} from "vue-i18n";
+import {useMessage} from '/@/hooks/message';
+import {rule} from '/@/utils/validate';
 
-const { t } = useI18n()
+const {t} = useI18n()
 
 // 定义刷新表格emit
 const emit = defineEmits(['refresh']);
 // @ts-ignore
-const { lock_flag } = useDict('lock_flag')
+const {lock_flag} = useDict('lock_flag')
 
 // 定义变量内容
 const dataFormRef = ref();
@@ -120,56 +121,40 @@ const dataForm = reactive({
   role: [] as String[],
 });
 
-const validateUsername = (rule: any, value: any, callback: any) => {
-  const flag = new RegExp(/^([a-z\u4e00-\u9fa5\d]+?)$/).test(value)
-  if (!flag) {
-    callback(new Error('用户名支持小写英文、数字、中文'))
-  }
-
-  getDetails(value).then(response => {
-    if (dataForm.userId !== '') callback()
-    const result = response.data
-    if (result !== null) {
-      callback(new Error('用户名已经存在'))
-    } else {
-      callback()
-    }
-  })
-}
-
-const validatePhone = (rule: any, value: any, callback: any) => {
-  getDetailsByPhone(value).then(response => {
-    if (dataForm.userId !== '') callback()
-    const result = response.data
-    if (result !== null) {
-      callback(new Error('手机号已经存在'))
-    } else {
-      callback()
-    }
-  })
-}
-
 const dataRules = ref(
-  {
-    username: [{ required: true, message: "用户名不能为空", trigger: "blur" }, {
-      min: 5,
-      max: 20,
-      message: "用户名称长度必须介于 5 和 20 之间",
-      trigger: "blur"
-    }, { validator: validateUsername, trigger: 'blur' }],
-    password: [{ required: true, message: "密码不能为空", trigger: "blur" }, {
-      min: 6,
-      max: 20,
-      message: "用户密码长度必须介于 6 和 20 之间",
-      trigger: "blur"
-    }],
-    name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-    dept: [{ required: true, message: "部门不能为空", trigger: "blur" }],
-    role: [{ required: true, message: "角色不能为空", trigger: "blur" }],
-    post: [{ required: true, message: "岗位不能为空", trigger: "blur" }],
-    phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, { validator: rule.validatePhone, trigger: 'blur' }, { validator: validatePhone, trigger: 'blur' }],
-    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }]
-  }
+    {
+      username: [{required: true, message: "用户名不能为空", trigger: "blur"}, {
+        min: 5,
+        max: 20,
+        message: "用户名称长度必须介于 5 和 20 之间",
+        trigger: "blur"
+      }, {
+        validator: (rule: any, value: any, callback: any) => {
+          validateUsername(rule, value, callback, dataForm.userId !== '')
+        }, trigger: 'blur'
+      }],
+      password: [{required: true, message: "密码不能为空", trigger: "blur"}, {
+        min: 6,
+        max: 20,
+        message: "用户密码长度必须介于 6 和 20 之间",
+        trigger: "blur"
+      }],
+      name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
+      dept: [{required: true, message: "部门不能为空", trigger: "blur"}],
+      role: [{required: true, message: "角色不能为空", trigger: "blur"}],
+      post: [{required: true, message: "岗位不能为空", trigger: "blur"}],
+      phone: [{required: true, message: "手机号不能为空", trigger: "blur"}, {
+        validator: rule.validatePhone,
+        trigger: 'blur'
+      }, {
+        validator: {
+          validator: (rule: any, value: any, callback: any) => {
+            validatePhone(rule, value, callback, dataForm.userId !== '')
+          }, trigger: 'blur'
+        }, trigger: 'blur'
+      }],
+      email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}]
+    }
 )
 
 // 打开弹窗

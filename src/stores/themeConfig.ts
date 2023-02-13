@@ -144,6 +144,8 @@ export const useThemeConfig = defineStore('themeConfig', {
             globalComponentSize: 'large',
             // 是否开启websocket 消息接受,
             isWebsocket: false,
+            // 是否开启注册
+            isRegister: true
         },
 
     }),

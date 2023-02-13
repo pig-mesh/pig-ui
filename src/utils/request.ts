@@ -1,35 +1,41 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, {AxiosInstance, InternalAxiosRequestConfig} from 'axios';
 import errorCode from './errorCode'
-import { ElMessage, ElMessageBox } from 'element-plus';
-import { Session } from '/@/utils/storage';
+import {ElMessage, ElMessageBox} from 'element-plus';
+import {Session, Local} from '/@/utils/storage';
 import qs from 'qs';
 
 // 配置新建一个 axios 实例
 const service: AxiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_URL,
     timeout: 50000,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {'Content-Type': 'application/json'},
     paramsSerializer: {
         serialize(params) {
-            return qs.stringify(params, { allowDots: true });
+            return qs.stringify(params, {allowDots: true});
         },
     },
 });
 
 // 添加请求拦截器
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    // get查询参数序列化
-    if (config.method === 'get') {
-        config.paramsSerializer = (params: any) => {
-            return qs.stringify(params, { arrayFormat: 'repeat' })
+        // get查询参数序列化
+        if (config.method === 'get') {
+            config.paramsSerializer = (params: any) => {
+                return qs.stringify(params, {arrayFormat: 'repeat'})
+            }
         }
-    }
-    // 在发送请求之前做些什么 token
-    if (Session.get('token')) {
-        config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
-    }
-    return config;
-},
+        // 统一增加 token
+        if (Session.get('token')) {
+            config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
+        }
+
+        // 统一增加租户信息
+        if (Local.get('tenantId')) {
+            config.headers!['TENANT-ID'] = Local.get('tenantId');
+        }
+
+        return config;
+    },
     (error) => {
         // 对请求错误做些什么
         return Promise.reject(error);
