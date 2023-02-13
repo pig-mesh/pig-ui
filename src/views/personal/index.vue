@@ -82,25 +82,54 @@
                   <el-input v-model="formData.password" placeholder="请输入密码" clearable type="password"></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="新密码" prop="newpassword1">
+              <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="mb20">
+                <el-form-item label="新密码" prop="newpassword1">
                   <el-input v-model="formData.newpassword1" clearable type="password"></el-input>
-								</el-form-item>
-							</el-col>
+                </el-form-item>
+              </el-col>
               <el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
                 <el-form-item label="确认密码" prop="newpassword2">
                   <el-input v-model="formData.newpassword2" clearable type="password"></el-input>
                 </el-form-item>
               </el-col>
-							<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24">
-								<el-form-item>
-									<el-button type="primary" @click="handleSaveUser">
-										<el-icon>
-											<ele-Position />
-										</el-icon>
-										更新个人信息
-									</el-button>
-								</el-form-item>
+              <el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="mb20">
+                <el-form-item label="社交登录" prop="social">
+                  <div @click="handleClick('wechat')">
+                    <span :style="{ backgroundColor: '#6ba2d6' }" class="container">
+                      <i class="iconfont icon-weixin" icon-class="wechat"/>
+                    </span>
+                    <p class="title">微信</p>
+                  </div>
+                  <div @click="handleClick('tencent')">
+                    <span :style="{ backgroundColor: '#8dc349' }" class="container">
+                      <i class="iconfont icon-qq" icon-class="qq"/>
+                    </span>
+                    <p class="title">QQ</p>
+                  </div>
+                  <div @click="handleClick('gitee')">
+                    <span :style="{ backgroundColor: '#bf3030' }" class="container">
+                      <i class="iconfont icon-logo_gitee_icon" icon-class="qq"/>
+                    </span>
+                    <p class="title">Gitee</p>
+                  </div>
+                  <div @click="handleClick('osc')">
+                    <span :style="{ backgroundColor: '#007B25' }" class="container">
+                      <i class="iconfont icon-oschina" icon-class="qq"/>
+                    </span>
+                    <p class="title">开源中国</p>
+                  </div>
+                </el-form-item>
+              </el-col>
+
+              <el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
+                <el-form-item>
+                  <el-button type="primary" @click="handleSaveUser">
+                    <el-icon>
+                      <ele-Position/>
+                    </el-icon>
+                    更新个人信息
+                  </el-button>
+                </el-form-item>
 							</el-col>
 						</el-row>
 					</el-form>
@@ -111,13 +140,14 @@
 </template>
 
 <script setup lang="ts" name="personal">
-import { reactive, computed } from 'vue';
-import { formatAxis } from '/@/utils/formatTime';
-import { useUserInfo } from '/@/stores/userInfo';
-import { editInfo } from '/@/api/admin/user'
+import {computed, reactive} from 'vue';
+import {formatAxis} from '/@/utils/formatTime';
+import {useUserInfo} from '/@/stores/userInfo';
+import {editInfo} from '/@/api/admin/user'
 import {useMessage} from "/@/hooks/message";
 import {Session} from "/@/utils/storage";
 import {rule} from "/@/utils/validate";
+import other, {openWindow} from "/@/utils/other";
 
 // 定义变量内容
 const formData = reactive({
@@ -190,8 +220,32 @@ const handleSaveUser = () =>{
 
 // 当前时间提示语
 const currentTime = computed(() => {
-	return formatAxis(new Date());
+  return formatAxis(new Date());
 });
+
+const handleClick = (thirdpart: string) => {
+  let appid, client_id, redirect_uri, url;
+  redirect_uri = encodeURIComponent(
+      window.location.origin + "/#/authredirect"
+  );
+  if (thirdpart === "wechat") {
+    appid = "wxd1678d3f83b1d83a";
+    url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&redirect_uri=${redirect_uri}&state=WX-BIND&response_type=code&scope=snsapi_login#wechat_redirect`;
+  } else if (thirdpart === "tencent") {
+    client_id = "101322838";
+    url = `https://graph.qq.com/oauth2.0/authorize?response_type=code&state=QQ-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
+  } else if (thirdpart === "gitee") {
+    client_id =
+        "235ce26bbc59565b82c989aa3a407ce844cf59a7c5e0f9caa9bb3bf32cee5952";
+    url = `https://gitee.com/oauth/authorize?response_type=code&state=GITEE-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
+  } else if (thirdpart === "osc") {
+    client_id = "neIIqlwGsjsfsA6uxNqD";
+    url = `https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=${client_id}&state=OSC-BIND&redirect_uri=${redirect_uri}`;
+  }
+  other.openWindow(url, thirdpart, 540, 540)
+}
+
+
 </script>
 
 <style scoped lang="scss">
