@@ -10,8 +10,6 @@ import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
 import request from "/@/utils/request";
 import { useMessage } from "/@/hooks/message";
-import { cloneDeep } from 'lodash-es';
-import { isObject } from './is';
 // @ts-ignore
 import * as CryptoJS from "crypto-js";
 
@@ -178,7 +176,42 @@ export function handleOpenLink(val: RouteItem) {
 	else window.open(`${origin}${pathname}#${val.meta?.isLink}`);
 }
 
+/**
+ * 打开小窗口
+ */
+export const openWindow = (url: string, title: string, w: number, h: number) => {
+	// Fixes dual-screen position                            Most browsers       Firefox
+	const dualScreenLeft =
+		window.screenLeft !== undefined ? window.screenLeft : screen.left;
+	const dualScreenTop =
+		window.screenTop !== undefined ? window.screenTop : screen.top;
 
+	const width = window.innerWidth
+		? window.innerWidth
+		: document.documentElement.clientWidth
+			? document.documentElement.clientWidth
+			: screen.width;
+	const height = window.innerHeight
+		? window.innerHeight
+		: document.documentElement.clientHeight
+			? document.documentElement.clientHeight
+			: screen.height;
+
+	const left = width / 2 - w / 2 + dualScreenLeft;
+	const top = height / 2 - h / 2 + dualScreenTop;
+	return window.open(
+		url,
+		title,
+		"toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=" +
+		w +
+		", height=" +
+		h +
+		", top=" +
+		top +
+		", left=" +
+		left
+	);
+};
 /**
  *加密处理
  */
@@ -291,9 +324,32 @@ const other = {
 	},
 	toUnderline: (str: string) => {
 		return toUnderline(str)
+	},
+	openWindow: (url: string, title: string, w: number, h: number) => {
+		return openWindow(url, title, w, h)
+	},
+	getQueryString: (url: string, paraName: string) => {
+		return getQueryString(url, paraName)
 	}
-
 };
+
+export function getQueryString(url: string, paraName: string) {
+	const arrObj = url.split("?");
+	if (arrObj.length > 1) {
+		const arrPara = arrObj[1].split("&");
+		let arr;
+		for (let i = 0; i < arrPara.length; i++) {
+			arr = arrPara[i].split("=");
+			// eslint-disable-next-line eqeqeq
+			if (arr != null && arr[0] == paraName) {
+				return arr[1];
+			}
+		}
+		return "";
+	} else {
+		return "";
+	}
+}
 
 /**
  * 列表结构转树结构

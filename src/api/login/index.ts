@@ -1,30 +1,5 @@
 import request from '/@/utils/request';
 
-/**
- * （不建议写成 request.post(xxx)，因为这样 post 时，无法 params 与 data 同时传参）
- *
- * 登录api接口集合
- * @method signIn 用户登录
- * @method signOut 用户退出登录
- */
-// export function useLoginApi() {
-// 	return {
-// 		signIn: (data: object) => {
-// 			return request({
-// 				url: '/user/signIn',
-// 				method: 'post',
-// 				data,
-// 			});
-// 		},
-// 		signOut: (data: object) => {
-// 			return request({
-// 				url: '/user/signOut',
-// 				method: 'post',
-// 				data,
-// 			});
-// 		},
-// 	};
-// }
 
 /**
  * 登录
@@ -43,6 +18,48 @@ export const login = (data: any) => {
         }
     })
 }
+
+export const loginByMobile = (mobile: any, code: any) => {
+    const grant_type = 'mobile'
+    const scope = 'server'
+    let basicAuth = 'Basic ' + window.btoa('app:app')
+
+    return request({
+        url: '/admin/oauth2/token',
+        headers: {
+            isToken: false,
+            'TENANT-ID': '1',
+            'Authorization': basicAuth
+        },
+        method: 'post',
+        params: { mobile: 'SMS@' + mobile, code: code, grant_type, scope }
+    })
+}
+
+export const loginBySocial = (state: string, code: string) => {
+    const grant_type = 'mobile'
+    const scope = 'server'
+    let basicAuth = 'Basic ' + window.btoa('social:social')
+
+    return request({
+        url: '/admin/oauth2/token',
+        headers: {
+            isToken: false,
+            'TENANT-ID': '1',
+            'Authorization': basicAuth
+        },
+        method: 'post',
+        params: { mobile: state + '@' + code, code: code, grant_type, scope }
+    })
+}
+
+export const sendMobileCode = (mobile: any) => {
+    return request({
+        url: "/admin/mobile/" + mobile,
+        method: "get",
+    })
+}
+
 
 /**
  * 获取用户信息

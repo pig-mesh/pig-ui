@@ -22,6 +22,7 @@ declare module 'vue-router' {
         title?: string;
         isLink?: string;
         isHide?: boolean;
+        isAuth?: boolean;
         isKeepAlive?: boolean;
         isAffix?: boolean;
         isIframe?: boolean;
@@ -123,6 +124,16 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         component: () => import('/@/views/login/index.vue'),
         meta: {
             title: '登录',
+            isAuth: false
         },
+    },
+    {
+        path: '/authredirect',
+        name: 'authredirect',
+        component: () => import('/@/views/login/component/authredirect.vue'),
+        meta: {
+            title: "登录",
+            isAuth: false
+        }
     }
 ];

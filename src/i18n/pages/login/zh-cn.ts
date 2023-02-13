@@ -3,6 +3,7 @@ export default {
 	label: {
 		one1: '用户名登录',
 		two2: '手机号登录',
+		three3: '社交登录'
 	},
 	link: {
 		one3: '第三方登录',

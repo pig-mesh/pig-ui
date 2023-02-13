@@ -85,6 +85,7 @@ import { depttree } from '/@/api/admin/dept'
 import { useDict } from "/@/hooks/dict";
 import { useI18n } from "vue-i18n";
 import { useMessage } from '/@/hooks/message';
+import { rule } from '/@/utils/validate';
 
 const { t } = useI18n()
 
@@ -166,11 +167,7 @@ const dataRules = ref(
     dept: [{ required: true, message: "部门不能为空", trigger: "blur" }],
     role: [{ required: true, message: "角色不能为空", trigger: "blur" }],
     post: [{ required: true, message: "岗位不能为空", trigger: "blur" }],
-    phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, {
-      pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-      message: "请输入正确的手机号码",
-      trigger: "blur"
-    }, { validator: validatePhone, trigger: 'blur' }, { validator: validatePhone, trigger: 'blur' }],
+    phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, { validator: rule.validatePhone, trigger: 'blur' }, { validator: validatePhone, trigger: 'blur' }],
     email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }]
   }
 )

@@ -3,6 +3,7 @@ export default {
 	label: {
 		one1: 'User name login',
 		two2: 'Mobile number',
+		three3: 'social login'
 	},
 	link: {
 		one3: 'Third party login',

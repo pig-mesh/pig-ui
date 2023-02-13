@@ -1,7 +1,6 @@
-import {defineStore} from 'pinia';
-import Cookies from 'js-cookie';
-import {Session} from '/@/utils/storage';
-import {getUserInfo, login} from '/@//api/login/index'
+import { defineStore } from 'pinia';
+import { Session } from '/@/utils/storage';
+import { getUserInfo, login, loginByMobile, loginBySocial } from '/@//api/login/index'
 import other from '/@/utils/other'
 
 /**
@@ -35,6 +34,32 @@ export const useUserInfo = defineStore('userInfo', {
                     Session.set('refresh_token', res.refresh_token);
                     resolve(res)
                 }).catch((err) => {
+                    reject(err)
+                })
+            })
+
+        },
+        async loginByMobile(data: any) {
+            return new Promise((resolve, reject) => {
+                loginByMobile(data.mobile, data.code).then((res: any) => {
+                    // 存储token 信息
+                    Session.set('token', res.access_token);
+                    Session.set('refresh_token', res.refresh_token);
+                    resolve(res)
+                }).catch((err: any) => {
+                    reject(err)
+                })
+            })
+
+        },
+        async loginBySocial(state: string, code: string) {
+            return new Promise((resolve, reject) => {
+                loginBySocial(state, code).then((res: any) => {
+                    // 存储token 信息
+                    Session.set('token', res.access_token);
+                    Session.set('refresh_token', res.refresh_token);
+                    resolve(res)
+                }).catch((err: any) => {
                     reject(err)
                 })
             })
