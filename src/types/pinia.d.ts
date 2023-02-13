@@ -82,6 +82,7 @@ declare interface ThemeConfigState {
 		columnsAsideLayout: string;
 		layout: string;
 		isRequestRoutes: boolean;
+		isWebsocket: boolean;
 		globalTitle: string;
 		globalViceTitle: string;
 		globalViceTitleMsg: string;
