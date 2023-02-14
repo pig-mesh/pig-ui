@@ -29,7 +29,8 @@
           <el-form-item :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes">
             <el-checkbox-group v-model="form.authorizedGrantTypes">
               <el-checkbox v-for="(item, index) in grant_types" :key="index"
-                           :label="item.value">{{item.label}}</el-checkbox>
+                           :label="item.value">{{ item.label }}
+              </el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-col>
@@ -74,7 +75,8 @@
 
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('client.additionalInformation')" prop="additionalInformation">
-            <el-input type="textarea" v-model="form.additionalInformation" :placeholder="t('client.inputAdditionalInformationTip')"/>
+            <el-input type="textarea" v-model="form.additionalInformation"
+                      :placeholder="t('client.inputAdditionalInformationTip')"/>
           </el-form-item>
         </el-col>
       </el-row>
@@ -83,15 +85,17 @@
         <el-collapse-item title="安全属性" name="1">
           <template #title>
             <el-icon class="header-icon">
-            <info-filled />
-          </el-icon>安全属性
+              <info-filled/>
+            </el-icon>
+            安全属性
           </template>
 
           <el-row>
             <el-col :span="12" class="mb20">
               <el-form-item :label="t('client.captchaFlag')" prop="captchaFlag">
                 <el-radio-group v-model="form.captchaFlag">
-                  <el-radio v-for="(item, index) in captcha_flag_types" :key="index" :label="item.value" border>{{ item.label }}
+                  <el-radio v-for="(item, index) in captcha_flag_types" :key="index" :label="item.value" border>
+                    {{ item.label }}
                   </el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -99,7 +103,8 @@
             <el-col :span="12" class="mb20">
               <el-form-item :label="t('client.encFlag')" prop="encFlag">
                 <el-radio-group v-model="form.encFlag">
-                  <el-radio v-for="(item, index) in enc_flag_types" :key="index" :label="item.value" border>{{ item.label }}
+                  <el-radio v-for="(item, index) in enc_flag_types" :key="index" :label="item.value" border>
+                    {{ item.label }}
                   </el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -107,7 +112,8 @@
             <el-col :span="12" class="mb20">
               <el-form-item :label="t('client.onlineQuantity')" prop="onlineQuantity">
                 <el-radio-group v-model="form.onlineQuantity">
-                  <el-radio v-for="(item, index) in enc_flag_types" :key="index" :label="item.value" border>{{ item.label }}
+                  <el-radio v-for="(item, index) in enc_flag_types" :key="index" :label="item.value" border>
+                    {{ item.label }}
                   </el-radio>
                 </el-radio-group>
               </el-form-item>
@@ -142,7 +148,12 @@ const {t} = useI18n();
 const dataFormRef = ref();
 const visible = ref(false)
 // 定义字典
-const {grant_types,common_status,captcha_flag_types,enc_flag_types} = useDict('grant_types','common_status','captcha_flag_types','enc_flag_types')
+const {
+  grant_types,
+  common_status,
+  captcha_flag_types,
+  enc_flag_types
+} = useDict('grant_types', 'common_status', 'captcha_flag_types', 'enc_flag_types')
 
 // 提交表单数据
 const form = reactive({
@@ -165,7 +176,7 @@ const form = reactive({
   tenantId: '',
 });
 
-const collapseActive = ref(false)
+const collapseActive = ref("1")
 
 // 定义校验规则
 const dataRules = ref({
@@ -175,6 +186,9 @@ const dataRules = ref({
   authorizedGrantTypes: [{required: true, message: '授权模式不能为空', trigger: 'blur'}],
   accessTokenValidity: [{required: true, message: '令牌时效不能为空', trigger: 'blur'}],
   refreshTokenValidity: [{required: true, message: '刷新时效不能为空', trigger: 'blur'}],
+  captchaFlag: [{required: true, message: '是否开启验证码校验', trigger: 'blur'}],
+  encFlag: [{required: true, message: '是否开启密码加密传输', trigger: 'blur'}],
+  onlineQuantity: [{required: true, message: '是否允许同时在线', trigger: 'blur'}],
 })
 
 // 打开弹窗

@@ -1,33 +1,18 @@
 <template>
   <el-dialog :title="prop.title" v-model="state.upload.open" width="60%">
-    <el-upload
-        ref="uploadRef"
-        :limit="1"
-        accept=".xlsx, .xls"
-        :headers="headers"
-        :action="url"
-        :disabled="state.upload.isUploading"
-        :on-progress="handleFileUploadProgress"
-        :on-success="handleFileSuccess"
-        :on-error="handleFileError"
-        :auto-upload="false"
-        drag
-    >
+    <el-upload ref="uploadRef" :limit="1" accept=".xlsx, .xls" :headers="headers" :action="url"
+      :disabled="state.upload.isUploading" :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess"
+      :on-error="handleFileError" :auto-upload="false" drag>
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">
         将文件拖到此处，或
         <em>点击上传</em>
       </div>
       <template #tip>
-        <div class="el-upload__tip text-center" >
+        <div class="el-upload__tip text-center">
           <span>仅允许导入xls、xlsx格式文件。</span>
-          <el-link
-              type="primary"
-              :underline="false"
-              style="font-size:12px;vertical-align: baseline;"
-              @click="downExcelTemp"
-              v-if="tempUrl"
-          >下载模板
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align: baseline;"
+            @click="downExcelTemp" v-if="tempUrl">下载模板
           </el-link>
         </div>
       </template>
@@ -41,24 +26,11 @@
   <!--校验失败错误数据-->
   <el-dialog title="校验失败数据" v-model="state.errorVisible">
     <el-table :data="state.errorData">
-      <el-table-column
-          property="lineNum"
-          label="行号"
-          width="100"
-      ></el-table-column>
-      <el-table-column
-          property="errors"
-          label="错误描述"
-          show-overflow-tooltip
-      >
+      <el-table-column property="lineNum" label="行号" width="100"></el-table-column>
+      <el-table-column property="errors" label="错误描述" show-overflow-tooltip>
         <template v-slot="scope">
-          <el-tag
-              type="danger"
-              v-for="error in scope.row.errors"
-              :key="error"
-          >{{ error }}
-          </el-tag
-          >
+          <el-tag type="danger" v-for="error in scope.row.errors" :key="error">{{ error }}
+          </el-tag>
         </template>
       </el-table-column>
     </el-table>
@@ -66,6 +38,7 @@
 </template>
 
 <script setup lang="ts" name="upload-excel">
+import { Local } from "@/utils/storage";
 import { useMessage } from "/@/hooks/message";
 import other from '/@/utils/other'
 import { Session } from '/@/utils/storage';
@@ -99,7 +72,7 @@ const state = reactive({
   }
 })
 
-const downExcelTemp = () =>  {
+const downExcelTemp = () => {
   other.downBlobFile(prop.tempUrl, {}, "temp.xlsx");
 }
 
@@ -132,17 +105,17 @@ const handleFileSuccess = (response: any) => {
 const submitFileForm = () => {
   uploadRef.value.submit();
 }
-const show = () =>  {
+const show = () => {
   state.upload.isUploading = false;
   state.upload.open = true;
 }
 
 
 const headers = computed(() => {
-  const tenantId = Session.get("tenantId")
+  const tenantId = Local.get("tenantId") ? Local.get("tenantId") : 1
   return {
     'Authorization': "Bearer " + Session.get("token"),
-    'TENANT-ID': tenantId ? tenantId : '1'
+    'TENANT-ID': tenantId
   };
 })
 

@@ -170,7 +170,6 @@ export function handleEmpty(list: EmptyArrayType) {
  * @param val 当前点击项菜单
  */
 export function handleOpenLink(val: RouteItem) {
-	const { origin, pathname } = window.location;
 	router.push(val.path);
 	if (verifyUrl(<string>val.meta?.isLink)) window.open(val.meta?.isLink);
 	else window.open(`${val.meta?.isLink}`);

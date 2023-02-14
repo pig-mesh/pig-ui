@@ -1,5 +1,5 @@
 export default {
-   file: {
+    file: {
         index: '序号',
         importsysFileTip: '导入文件管理表',
         id: '编号',
@@ -14,17 +14,17 @@ export default {
         updateTime: '更新时间',
         delFlag: '${field.fieldComment}',
         tenantId: '所属租户',
-	     inputidTip: '请输入编号',
-	     inputfileNameTip: '请输入文件名称',
-	     inputbucketNameTip: '请输入桶名称',
-	     inputoriginalTip: '请输入原文件名',
-	     inputtypeTip: '请输入文件类型',
-	     inputfileSizeTip: '请输入文件大小',
-	     inputcreateByTip: '请输入创建人',
-	     inputupdateByTip: '请输入修改人',
-	     inputcreateTimeTip: '请输入上传时间',
-	     inputupdateTimeTip: '请输入更新时间',
-	     inputdelFlagTip: '请输入${field.fieldComment}',
-	     inputtenantIdTip: '请输入所属租户',
+        inputidTip: '请输入编号',
+        inputfileNameTip: '请输入文件名称',
+        inputbucketNameTip: '请输入桶名称',
+        inputoriginalTip: '请输入原文件名',
+        inputtypeTip: '请输入文件类型',
+        inputfileSizeTip: '请输入文件大小',
+        inputcreateByTip: '请输入创建人',
+        inputupdateByTip: '请输入修改人',
+        inputcreateTimeTip: '请输入上传时间',
+        inputupdateTimeTip: '请输入更新时间',
+        inputdelFlagTip: '请输入${field.fieldComment}',
+        inputtenantIdTip: '请输入所属租户',
     }
 }

@@ -673,7 +673,6 @@ export default defineComponent({
             seconds = state.second.rangeStart + "-" + state.second.rangeEnd;
             break;
         }
-        console.log(seconds)
         return seconds;
       }),
       minutesText: computed(() => {

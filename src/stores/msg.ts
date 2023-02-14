@@ -7,13 +7,11 @@ export const useMsg = defineStore('msg', {
     }),
     actions: {
         getAllMsg() {
-            console.log("2", this.msgArray)
             return this.msgArray
         },
         // 设置字典
         setMsg(value: Object) {
             this.msgArray.push(value)
-            console.log("1", this.msgArray)
         },
         // 删除字典
         removeAll() {

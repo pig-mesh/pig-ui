@@ -49,7 +49,6 @@ const { t } = useI18n()
 // 定义变量内容
 const formDialogRef = ref()
 // 搜索变量
-const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
 const selectObjs = ref([])
@@ -67,12 +66,6 @@ const {
   sizeChangeHandle,
 } = useTable(state)
 
-
-// 清空搜索条件
-const resetQuery = () => {
-  queryRef.value.resetFields()
-  getDataList()
-}
 
 // 多选事件
 const handleSelectionChange = (val: any) => {

@@ -1,33 +1,19 @@
 <template>
   <div class="head-container">
-    <el-input
-        v-model="searchName"
-        :placeholder="placeholder"
-        clearable
-        style="margin-bottom: 20px"
-        @change="getDeptTree"
-    />
-    <el-tree
-        :data="state.List"
-        :props="props"
-        :expand-on-click-node="false"
-        ref="deptTreeRef"
-        :loading="state.localLoading"
-        node-key="id"
-        highlight-current
-        default-expand-all
-        @node-click="handleNodeClick"
-    />
+    <el-input v-model="searchName" :placeholder="placeholder" clearable style="margin-bottom: 20px"
+      @change="getDeptTree" />
+    <el-tree :data="state.List" :props="props" :expand-on-click-node="false" ref="deptTreeRef"
+      :loading="state.localLoading" node-key="id" highlight-current default-expand-all @node-click="handleNodeClick" />
   </div>
 </template>
 
 <script setup lang="ts" name="query-tree">
 
-import {onMounted, reactive, ref, unref} from "vue";
+import { onMounted, reactive, ref, unref } from "vue";
 
 const emit = defineEmits(['search', 'nodeClick'])
 
-const {placeholder, props, query, loading} = defineProps({
+const { placeholder, props, query, loading } = defineProps({
   props: {
     type: Object,
     default: () => {
@@ -61,11 +47,11 @@ const state = reactive({
 const searchName = ref()
 
 const handleNodeClick = (item: any) => {
-  emit('nodeClick',item)
+  emit('nodeClick', item)
 }
 
 const getDeptTree = () => {
-  if(query instanceof Function){
+  if (query instanceof Function) {
     state.localLoading = true
     const result = query(unref(searchName))
     if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
