@@ -12,7 +12,12 @@
       </el-tooltip>
     </el-row>
     <el-dialog :title="title" v-model="open" append-to-body>
-      <el-transfer :titles="['显示', '隐藏']" v-model="value" :data="columns" @change="dataChange"></el-transfer>
+      <el-transfer
+        :titles="['显示', '隐藏']"
+        v-model="value"
+        :data="columns"
+        @change="dataChange"
+      ></el-transfer>
     </el-dialog>
   </div>
 </template>
@@ -26,7 +31,6 @@ const props = defineProps({
   },
   columns: {
     type: Array,
-    default: () => []
   },
   search: {
     type: Boolean,
@@ -92,7 +96,6 @@ for (let item in props.columns) {
   display: block;
   margin-left: 0px;
 }
-
 :deep(.el-transfer__button:first-child) {
   margin-bottom: 10px;
 }
