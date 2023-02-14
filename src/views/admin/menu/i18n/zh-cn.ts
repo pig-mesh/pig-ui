@@ -10,7 +10,8 @@ export default {
         inputNameTip: '请输入菜单名称',
         parentId: '上级菜单',
         embedded: '是否内嵌',
-        visible: '是否显示'
+        visible: '是否显示',
+        icon: '图标'
     },
 
 }

@@ -1,7 +1,11 @@
 <template>
   <el-pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" class="mt15" :pager-count="5"
-    :page-sizes="prop.pageSizes" v-model:current-page="prop.current" background v-model:page-size="prop.size"
-    :layout="prop.layout" :total="prop.total">
+    :page-sizes="props.pageSizes"
+                 :current-page="props.current"
+                 background
+                 :page-size="props.size"
+                 :layout="props.layout"
+                 :total="props.total">
   </el-pagination>
 </template>
 
@@ -9,7 +13,7 @@
 
 const emit = defineEmits(['sizeChange', 'currentChange'])
 
-const prop = defineProps({
+const props = defineProps({
   current: {
     type: Number,
     default: 1,
@@ -24,7 +28,9 @@ const prop = defineProps({
   },
   pageSizes: {
     type: Array,
-    default: [1, 10, 20, 50, 100, 200],
+    default: () => {
+      return [1, 10, 20, 50, 100, 200]
+    }
   },
   layout: {
     type: String,
