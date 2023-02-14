@@ -1,0 +1,114 @@
+<!--图片上传组件-->
+
+<template>
+  <div>
+    <el-upload
+        ref="fileUpload"
+        class="avatar-uploader"
+        :action="props.uploadFileUrl"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess"
+        :before-upload="beforeAvatarUpload"
+        :headers="headers"
+    >
+      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
+      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+    </el-upload>
+  </div>
+</template>
+
+<script setup lang="ts" name="upload-image">
+
+import {useMessage} from "/@/hooks/message";
+import {Session} from "/@/utils/storage";
+import {watch} from "vue";
+
+const imageUrl = ref('')
+const fileUpload = ref()
+const emit = defineEmits(['update:value','change']);
+
+const props = defineProps({
+  value: [String, Array],
+  // 大小限制(MB)
+  fileSize: {
+    type: Number,
+    default: 5,
+  },
+  uploadFileUrl: {
+    type: String,
+    default: '/admin/sys-file/upload'
+  }
+});
+
+watch(() => props.value,(val) => {
+  if(val){
+    imageUrl.value = val
+  }
+},{ deep: true, immediate: true })
+
+
+const handleAvatarSuccess = (res, file) => {
+  if(res.code === 0){
+    imageUrl.value = res.data.url
+    emit("change", imageUrl.value);
+    emit("update:value", imageUrl.value);
+  }else{
+    fileUpload.value.handleRemove(file);
+  }
+}
+
+const beforeAvatarUpload = (rawFile: any) => {
+  if (rawFile.type !== 'image/jpeg') {
+    useMessage().error(`文件格式不正确, 请上传 image/jpeg 格式文件!`)
+    return false
+  }
+  // 校检文件大小
+  if (props.fileSize) {
+    const isLt = rawFile.size / 1024 / 1024 < props.fileSize;
+    if (!isLt) {
+      useMessage().error(`上传文件大小不能超过 ${props.fileSize} MB!`)
+      return false;
+    }
+  }
+  return true
+}
+
+const headers = reactive({
+  Authorization: ''
+})
+
+onMounted(() => {
+  if (Session.get('token')) {
+    headers.Authorization = `Bearer ${Session.get('token')}`;
+  }
+})
+
+</script>
+
+<style scoped>
+.avatar-uploader .el-upload {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+.avatar-uploader .el-upload:hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  text-align: center;
+}
+
+.avatar{
+  width: 178px;
+  height: 100%;
+}
+</style>

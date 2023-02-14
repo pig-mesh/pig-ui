@@ -48,22 +48,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
             title: 'hzxc',
             isKeepAlive: true,
         },
-        children: [
-            {
-                path: '/home',
-                name: 'home',
-                component: () => import('/@/views/home/index.vue'),
-                meta: {
-                    title: 'router.home',
-                    isLink: '',
-                    isHide: false,
-                    isKeepAlive: true,
-                    isAffix: true,
-                    isIframe: false,
-                    icon: 'iconfont icon-shouye',
-                },
-            },
-        ],
+        children: []
     },
 ];
 
