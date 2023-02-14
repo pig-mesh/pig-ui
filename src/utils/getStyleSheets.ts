@@ -6,8 +6,8 @@ const getAlicdnIconfont = () => {
 	return new Promise((resolve, reject) => {
 		nextTick(() => {
 			const styles: any = document.styleSheets;
-			let sheetsList = [];
-			let sheetsIconList = [];
+			let sheetsList = [] as any[];
+			let sheetsIconList = [] as any[];
 			for (let i = 0; i < styles.length; i++) {
 				if (styles[i].href && styles[i].href.indexOf('at.alicdn.com') > -1) {
 					sheetsList.push(styles[i]);
@@ -33,7 +33,7 @@ const getElementPlusIconfont = () => {
 	return new Promise((resolve, reject) => {
 		nextTick(() => {
 			const icons = svg as any;
-			const sheetsIconList = [];
+			const sheetsIconList = [] as any[];
 			for (const i in icons) {
 				sheetsIconList.push(`ele-${icons[i].name}`);
 			}
@@ -48,8 +48,8 @@ const getAwesomeIconfont = () => {
 	return new Promise((resolve, reject) => {
 		nextTick(() => {
 			const styles: any = document.styleSheets;
-			let sheetsList = [];
-			let sheetsIconList = [];
+			let sheetsList = [] as any[];
+			let sheetsIconList = [] as any[];
 			for (let i = 0; i < styles.length; i++) {
 				if (styles[i].href && styles[i].href.indexOf('netdna.bootstrapcdn.com') > -1) {
 					sheetsList.push(styles[i]);

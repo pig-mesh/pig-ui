@@ -13,7 +13,7 @@ import { onMounted, reactive, ref, unref } from "vue";
 
 const emit = defineEmits(['search', 'nodeClick'])
 
-const { placeholder, props, query, loading } = defineProps({
+const props = defineProps({
   props: {
     type: Object,
     default: () => {
@@ -40,7 +40,7 @@ const { placeholder, props, query, loading } = defineProps({
 
 const state = reactive({
   List: [],
-  localLoading: loading
+  localLoading: props.loading
 })
 
 
@@ -51,9 +51,9 @@ const handleNodeClick = (item: any) => {
 }
 
 const getDeptTree = () => {
-  if (query instanceof Function) {
+  if (props.query instanceof Function) {
     state.localLoading = true
-    const result = query(unref(searchName))
+    const result = props.query(unref(searchName))
     if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
       result.then((r: any) => {
         state.List = r.data
