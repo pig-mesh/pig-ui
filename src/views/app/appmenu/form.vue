@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="60%">
-    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" size="default" label-width="200px">
+    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules"  label-width="200px">
       <el-row :gutter="24">
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.menuType')" prop="menType">
@@ -50,8 +50,8 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="visible = false" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-        <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+        <el-button @click="visible = false" >{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
       </span>
     </template>
   </el-dialog>

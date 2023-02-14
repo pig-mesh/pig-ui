@@ -1,10 +1,27 @@
 <template>
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+          <el-form-item :label="$t('file.fileName')" prop="original">
+            <el-input v-model="state.queryForm.original" :placeholder="$t('file.inputoriginalTip')" clearable
+              style="width: 240px" @keyup.enter="getDataList" />
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()">
+          <el-button formDialogRef icon="folder-add" type="primary" class="ml10" v-auth="'sys_file_del'"
+            @click="formDialogRef.openDialog()">
             {{ $t('common.addBtn') }}
+          </el-button>
+          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_file_del'"
+            @click="handleDelete(undefined)">
+            {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
             @queryTable="getDataList"></right-toolbar>
@@ -14,16 +31,20 @@
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" align="center" />
         <el-table-column type="index" :label="t('file.index')" width="80" />
-          <el-table-column prop="fileName" :label="t('file.fileName')" show-overflow-tooltip/>
-          <el-table-column prop="bucketName" :label="t('file.bucketName')" show-overflow-tooltip/>
-          <el-table-column prop="original" :label="t('file.original')" show-overflow-tooltip/>
-          <el-table-column prop="type" :label="t('file.type')" show-overflow-tooltip/>
-          <el-table-column prop="fileSize" :label="t('file.fileSize')" show-overflow-tooltip/>
-          <el-table-column prop="createTime" :label="t('file.createTime')" show-overflow-tooltip/>
+        <el-table-column prop="fileName" :label="t('file.fileName')" show-overflow-tooltip />
+        <el-table-column prop="bucketName" :label="t('file.bucketName')" show-overflow-tooltip />
+        <el-table-column prop="original" :label="t('file.original')" show-overflow-tooltip />
+        <el-table-column prop="type" :label="t('file.type')" show-overflow-tooltip />
+        <el-table-column prop="fileSize" :label="t('file.fileSize')" show-overflow-tooltip />
+        <el-table-column prop="createTime" :label="t('file.createTime')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button text type="primary" v-auth="'sys_file_del'" @click="handleDelete(scope.row)">{{$t('common.delBtn') }}</el-button>
-            <el-button type="primary" text @click="download(scope.row, scope.index)">{{$t('common.download') }}</el-button>
+            <el-button text type="primary" v-auth="'sys_file_del'" @click="handleDelete(scope.row)">{{
+              $t('common.delBtn')
+            }}</el-button>
+            <el-button type="primary" text @click="download(scope.row, scope.index)">{{
+              $t('common.download')
+            }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -39,14 +60,14 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObj } from "/@/api/admin/file";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
-import {downBlobFile} from "/@/utils/other";
+import { downBlobFile } from "/@/utils/other";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n()
-// 定义查询字典
 
 // 定义变量内容
+const queryRef = ref();
 const formDialogRef = ref()
 // 搜索变量
 const showSearch = ref(true)
@@ -73,7 +94,14 @@ const handleSelectionChange = (val: any) => {
   multiple.value = !val.length
 }
 
-const download = (row: any) =>  {
+// 清空搜索条件
+const resetQuery = () => {
+  queryRef.value.resetFields()
+  getDataList()
+}
+
+// 文件下载
+const download = (row: any) => {
   downBlobFile("/admin/sys-file/" + row.bucketName + "/" + row.fileName, null, row.fileName
   );
 }

@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dept-dialog-container">
 		<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="769px">
-			<el-form ref="deptDialogFormRef" :model="dataForm" size="default" label-width="90px" :rules="dataRules">
+			<el-form ref="deptDialogFormRef" :model="dataForm"  label-width="90px" :rules="dataRules">
 				<el-row :gutter="35">
 					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
@@ -25,8 +25,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button @click="onCancel" >{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

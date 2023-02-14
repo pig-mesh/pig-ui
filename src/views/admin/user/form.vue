@@ -2,7 +2,7 @@
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
                :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" size="default" label-width="90px">
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px">
         <el-row :gutter="24">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
@@ -70,8 +70,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+          <el-button @click="visible = false" >{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
         </span>
       </template>
     </el-dialog>
