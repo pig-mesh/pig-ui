@@ -2,6 +2,7 @@ import { createI18n } from 'vue-i18n';
 import pinia from '/@/stores/index';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
+import { info } from '/@/api/admin/i18n'
 
 // 定义语言国际化内容
 
@@ -20,7 +21,7 @@ import zhcnLocale from 'element-plus/lib/locale/lang/zh-cn';
 // 定义变量内容
 const messages = {};
 const element = { en: enLocale, 'zh-cn': zhcnLocale};
-const itemize = { en: [], 'zh-cn': [] };
+const itemize = { en: [] as any[], 'zh-cn': [] as any[] };
 const modules: Record<string, any> = import.meta.glob('./**/*.ts', { eager: true });
 const pages: Record<string, any> = import.meta.glob('./../../**/**/**/i18n/*.ts', { eager: true });
 
@@ -44,15 +45,23 @@ function mergeArrObj<T>(list: T, key: string) {
 	});
 	return obj;
 }
+// 从后台获取数据
+info().then((res: any) => {
+	itemize["zh-cn"].push(...res.data['zh-cn'])
+	itemize.en.push(...res.data.en)
+}).finally(() => {
+	// 处理最终格式
+	for (const key in itemize) {
+		messages[key] = {
+			name: key,
+			el: element[key].el,
+			...mergeArrObj(itemize, key),
+		};
+	}
+	console.log(messages,'message')
+})
 
-// 处理最终格式
-for (const key in itemize) {
-	messages[key] = {
-		name: key,
-		el: element[key].el,
-		...mergeArrObj(itemize, key),
-	};
-}
+
 
 // 读取 pinia 默认语言
 const stores = useThemeConfig(pinia);
