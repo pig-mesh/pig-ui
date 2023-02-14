@@ -8,7 +8,8 @@ import { useUserInfo } from "/@/stores/userInfo";
  * @param data
  */
 export const login = (data: any) => {
-    let basicAuth = 'Basic ' + window.btoa('pig:pig')
+    const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT)
+    Session.set('basicAuth', basicAuth)
     return request({
         url: '/admin/oauth2/token',
         method: 'post',
@@ -24,7 +25,8 @@ export const login = (data: any) => {
 export const loginByMobile = (mobile: any, code: any) => {
     const grant_type = 'mobile'
     const scope = 'server'
-    let basicAuth = 'Basic ' + window.btoa('app:app')
+    const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_MOBILE_CLIENT)
+    Session.set('basicAuth', basicAuth)
 
     return request({
         url: '/admin/oauth2/token',
@@ -41,7 +43,8 @@ export const loginByMobile = (mobile: any, code: any) => {
 export const loginBySocial = (state: string, code: string) => {
     const grant_type = 'mobile'
     const scope = 'server'
-    let basicAuth = 'Basic ' + window.btoa('social:social')
+    const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_SOCIAL_CLIENT)
+    Session.set('basicAuth', basicAuth)
 
     return request({
         url: '/admin/oauth2/token',
@@ -66,7 +69,7 @@ export const refreshTokenApi = (refresh_token: string) => {
     const grant_type = 'refresh_token'
     const scope = 'server'
     // 获取当前选中的 basic 认证信息
-    let basicAuth = 'Basic ' + window.btoa('pig:pig')
+    const basicAuth = Session.get('basicAuth')
 
     return request({
         url: '/admin/oauth2/token',
@@ -85,7 +88,7 @@ export const refreshTokenApi = (refresh_token: string) => {
  * @param refreshLock
  */
 export const checkToken = (refreshTime: number, refreshLock: boolean) => {
-    let basicAuth = 'Basic ' + window.btoa('pig:pig')
+    const basicAuth = Session.get('basicAuth')
     request({
         url: '/admin/token/check_token',
         headers: {

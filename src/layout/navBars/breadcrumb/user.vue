@@ -7,27 +7,24 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{
-              $t('user.dropdownLarge')
-            }}
+            $t('user.dropdownLarge')
+          }}
           </el-dropdown-item>
           <el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{
-              $t('user.dropdownDefault')
-            }}
+            $t('user.dropdownDefault')
+          }}
           </el-dropdown-item>
           <el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{
-              $t('user.dropdownSmall')
-            }}
+            $t('user.dropdownSmall')
+          }}
           </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
     <el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
       <div class="layout-navbars-breadcrumb-user-icon">
-        <i
-            class="iconfont"
-            :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'"
-            :title="$t('user.title1')"
-        ></i>
+        <i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'"
+          :title="$t('user.title1')"></i>
       </div>
       <template #dropdown>
         <el-dropdown-menu>
@@ -38,7 +35,7 @@
     </el-dropdown>
     <div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
       <el-icon :title="$t('user.title2')">
-        <ele-Search/>
+        <ele-Search />
       </el-icon>
     </div>
     <div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
@@ -49,30 +46,27 @@
         <template #reference>
           <el-badge :is-dot="isDot">
             <el-icon :title="$t('user.title4')">
-              <ele-Bell/>
+              <ele-Bell />
             </el-icon>
           </el-badge>
         </template>
         <template #default>
-          <UserNews ref="newsRef"/>
+          <UserNews ref="newsRef" />
         </template>
       </el-popover>
     </div>
     <div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
-      <i
-          class="iconfont"
-          :title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
-          :class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
-      ></i>
+      <i class="iconfont" :title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
+        :class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"></i>
     </div>
     <el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
-			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="userInfos.user.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5"/>
-				{{ userInfos.user.username }}
-				<el-icon class="el-icon--right">
-					<ele-ArrowDown/>
-				</el-icon>
-			</span>
+      <span class="layout-navbars-breadcrumb-user-link">
+        <img :src="userInfos.user.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
+        {{ userInfos.user.username }}
+        <el-icon class="el-icon--right">
+          <ele-ArrowDown />
+        </el-icon>
+      </span>
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
@@ -81,25 +75,25 @@
         </el-dropdown-menu>
       </template>
     </el-dropdown>
-    <Search ref="searchRef"/>
-    <global-websocket uri="/admin/ws/info" v-if="themeConfig.isWebsocket" @rollback="rollback"/>
+    <Search ref="searchRef" />
+    <global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
   </div>
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import {defineAsyncComponent, ref, computed, reactive, onMounted} from 'vue';
-import {useRouter} from 'vue-router';
-import {ElMessageBox, ElMessage} from 'element-plus';
+import { defineAsyncComponent, ref, computed, reactive, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import { ElMessageBox, ElMessage } from 'element-plus';
 import screenfull from 'screenfull';
-import {useI18n} from 'vue-i18n';
-import {storeToRefs} from 'pinia';
-import {useUserInfo} from '/@/stores/userInfo';
-import {useThemeConfig} from '/@/stores/themeConfig';
+import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
+import { useUserInfo } from '/@/stores/userInfo';
+import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import {Session, Local} from '/@/utils/storage';
-import {formatAxis} from "/@/utils/formatTime";
-import {useMsg} from "/@/stores/msg";
+import { Session, Local } from '/@/utils/storage';
+import { formatAxis } from "/@/utils/formatTime";
+import { useMsg } from "/@/stores/msg";
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'))
@@ -107,12 +101,12 @@ const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 
 // 定义变量内容
-const {locale, t} = useI18n();
+const { locale, t } = useI18n();
 const router = useRouter();
 const stores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
-const {userInfos} = storeToRefs(stores);
-const {themeConfig} = storeToRefs(storesThemeConfig);
+const { userInfos } = storeToRefs(stores);
+const { themeConfig } = storeToRefs(storesThemeConfig);
 const searchRef = ref();
 const newsRef = ref();
 
@@ -122,10 +116,13 @@ const state = reactive({
   disabledSize: 'large',
 });
 
+// 是否开启websocket
+const websocketEnable = ref(import.meta.env.VITE_WEBSOCKET_ENABLE === 'true')
+
 // 设置分割样式
 const layoutUserFlexNum = computed(() => {
   let num: string | number = '';
-  const {layout, isClassicSplitMenu} = themeConfig.value;
+  const { layout, isClassicSplitMenu } = themeConfig.value;
   const layoutArr: string[] = ['defaults', 'columns'];
   if (layoutArr.includes(layout) || (layout === 'classic' && !isClassicSplitMenu)) num = '1';
   else num = '';
@@ -174,14 +171,14 @@ const onHandleCommandClick = (path: string) => {
         }
       },
     })
-        .then(async () => {
-          // 清除缓存/token等
-          Session.clear();
-          // 使用 reload 时，不需要调用 resetRoute() 重置路由
-          window.location.reload();
-        })
-        .catch(() => {
-        });
+      .then(async () => {
+        // 清除缓存/token等
+        Session.clear();
+        // 使用 reload 时，不需要调用 resetRoute() 重置路由
+        window.location.reload();
+      })
+      .catch(() => {
+      });
   } else if (path === 'wareHouse') {
     window.open('https://gitee.com/lyt-top/vue-next-admin');
   } else {
@@ -216,7 +213,7 @@ const initI18nOrSize = (value: string, attr: string) => {
 
 // 获取到消息
 const rollback = (msg: string) => {
-  useMsg().setMsg({label: 'websocket消息', value: msg, time: formatAxis(new Date())})
+  useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxis(new Date()) })
 }
 
 const isDot = computed(() => {

@@ -2,16 +2,16 @@
   <div class="login-container flex">
     <div class="login-left">
       <div class="login-left-logo">
-        <img :src="logoMini"/>
+        <img :src="logoMini" />
         <div class="login-left-logo-text">
           <span>{{ getThemeConfig.globalViceTitle }}</span>
           <span class="login-left-logo-text-msg">{{ getThemeConfig.globalViceTitleMsg }}</span>
         </div>
       </div>
       <div class="login-left-img">
-        <img :src="loginMain"/>
+        <img :src="loginMain" />
       </div>
-      <img :src="loginBg" class="login-left-waves"/>
+      <img :src="loginBg" class="login-left-waves" />
     </div>
     <div class="login-right flex">
       <div class="login-right-warp flex-margin">
@@ -20,23 +20,23 @@
           <div class="login-right-warp-main-form">
             <div>
               <!--  租户选择 -->
-              <tenant/>
+              <tenant />
               <el-tabs v-model="tabsActiveName">
                 <!-- 用户名密码登录 -->
                 <el-tab-pane :label="$t('label.one1')" name="account">
-                  <Password @signInSuccess="signInSuccess"/>
+                  <Password @signInSuccess="signInSuccess" />
                 </el-tab-pane>
                 <!-- 手机号登录 -->
                 <el-tab-pane :label="$t('label.two2')" name="mobile">
-                  <Mobile @signInSuccess="signInSuccess"/>
+                  <Mobile @signInSuccess="signInSuccess" />
                 </el-tab-pane>
                 <!-- 社交登录 -->
                 <el-tab-pane :label="$t('label.three3')" name="social">
-                  <Social @signInSuccess="signInSuccess"/>
+                  <Social @signInSuccess="signInSuccess" />
                 </el-tab-pane>
                 <!-- 注册 -->
-                <el-tab-pane :label="$t('label.register')" name="register" v-if="getThemeConfig.isRegister">
-                  <Register @afterSuccess="tabsActiveName = 'account'"/>
+                <el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
+                  <Register @afterSuccess="tabsActiveName = 'account'" />
                 </el-tab-pane>
               </el-tabs>
             </div>
@@ -48,17 +48,17 @@
 </template>
 
 <script setup lang="ts" name="loginIndex">
-import {storeToRefs} from 'pinia';
-import {useThemeConfig} from '/@/stores/themeConfig';
-import {NextLoading} from '/@/utils/loading';
+import { storeToRefs } from 'pinia';
+import { useThemeConfig } from '/@/stores/themeConfig';
+import { NextLoading } from '/@/utils/loading';
 import logoMini from '/@/assets/logo-mini.svg';
 import loginMain from '/@/assets/login-main.svg';
 import loginBg from '/@/assets/login-bg.svg';
-import {useI18n} from 'vue-i18n';
-import {formatAxis} from '/@/utils/formatTime';
-import {useMessage} from '/@/hooks/message';
-import {Session} from '/@/utils/storage';
-import {initBackEndControlRoutes} from '/@/router/backEnd';
+import { useI18n } from 'vue-i18n';
+import { formatAxis } from '/@/utils/formatTime';
+import { useMessage } from '/@/hooks/message';
+import { Session } from '/@/utils/storage';
+import { initBackEndControlRoutes } from '/@/router/backEnd';
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
@@ -69,10 +69,13 @@ const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig()
-const {themeConfig} = storeToRefs(storesThemeConfig)
-const {t} = useI18n()
+const { themeConfig } = storeToRefs(storesThemeConfig)
+const { t } = useI18n()
 const route = useRoute()
 const router = useRouter()
+
+// 是否开启注册
+const registerEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true')
 
 // 默认选择账号密码登录方式
 const tabsActiveName = ref('account')

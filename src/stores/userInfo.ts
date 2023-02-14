@@ -1,6 +1,6 @@
-import {defineStore} from 'pinia';
-import {Session} from '/@/utils/storage';
-import {getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi} from '/@/api/login/index'
+import { defineStore } from 'pinia';
+import { Session } from '/@/utils/storage';
+import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index'
 import other from '/@/utils/other'
 
 /**
@@ -24,7 +24,7 @@ export const useUserInfo = defineStore('userInfo', {
             // 密码加密
             const user = other.encryption({
                 data: data,
-                key: 'pigxpigxpigxpigx',
+                key: import.meta.env.VITE_PWD_ENC_KEY,
                 param: ['password']
             })
             return new Promise((resolve, reject) => {
