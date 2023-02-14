@@ -1,10 +1,10 @@
 <script setup lang="ts" name="authredirect">
 import request from '/@/utils/request';
-import { ElMessageBox } from 'element-plus';
 import other from "/@/utils/other";
 import { rule } from '/@/utils/validate';
 import { Session } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
+import { useMessageBox } from '/@/hooks/message';
 
 onMounted(async () => {
   const url = window.location.search
@@ -38,11 +38,8 @@ const bind = (state: string, code: string) => {
     method: 'post',
     params: { state, code }
   }).then(() => {
-    ElMessageBox.alert('社交账号绑定成功', '成功', {
-      confirmButtonText: '确定',
-      callback: () => {
-        window.close()
-      }
+    useMessageBox().confirm('社交账号绑定成功').then(() => {
+      window.close()
     })
   })
 }
