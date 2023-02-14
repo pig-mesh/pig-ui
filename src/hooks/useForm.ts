@@ -1,7 +1,7 @@
-import {Ref} from "vue";
+import { Ref } from "vue";
 
 
-export interface BasicFormProps{
+export interface BasicFormProps {
     // 是否显示
     visible?: Boolean,
     // 表单 ref
@@ -14,8 +14,7 @@ interface Props {
     [key: string]: any;
 }
 
-export function useTable(dataFormRef: Props | Ref<Props>,
-                         rulesRef?: Props | Ref<Props>) {
+export function useTable(dataFormRef: Props | Ref<Props>) {
 
     const resetFields = () => {
         dataFormRef?.value?.resetFields()
@@ -23,8 +22,8 @@ export function useTable(dataFormRef: Props | Ref<Props>,
 
     const validate = () => {
         return new Promise((resolve, reject) => {
-            dataFormRef?.value.validate((prop: any, isValid : boolean, message: string) => {
-                if(!isValid){
+            dataFormRef?.value.validate((prop: any, isValid: boolean, message: string) => {
+                if (!isValid) {
                     reject(message)
                 }
                 resolve(prop)

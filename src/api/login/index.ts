@@ -1,8 +1,7 @@
 import request from '/@/utils/request';
-import {Session} from "/@/utils/storage";
-import {rule} from "/@/utils/validate"
-import {useUserInfo} from "/@/stores/userInfo";
-import {formatAxis, parseTime} from "/@/utils/formatTime";
+import { Session } from "/@/utils/storage";
+import { rule } from "/@/utils/validate"
+import { useUserInfo } from "/@/stores/userInfo";
 
 /**
  * 登录
@@ -35,7 +34,7 @@ export const loginByMobile = (mobile: any, code: any) => {
             'Authorization': basicAuth
         },
         method: 'post',
-        params: {mobile: 'SMS@' + mobile, code: code, grant_type, scope}
+        params: { mobile: 'SMS@' + mobile, code: code, grant_type, scope }
     })
 }
 
@@ -52,7 +51,7 @@ export const loginBySocial = (state: string, code: string) => {
             'Authorization': basicAuth
         },
         method: 'post',
-        params: {mobile: state + '@' + code, code: code, grant_type, scope}
+        params: { mobile: state + '@' + code, code: code, grant_type, scope }
     })
 }
 
@@ -63,7 +62,7 @@ export const sendMobileCode = (mobile: any) => {
     })
 }
 
-export const refreshToken = (refresh_token: string) => {
+export const refreshTokenApi = (refresh_token: string) => {
     const grant_type = 'refresh_token'
     const scope = 'server'
     // 获取当前选中的 basic 认证信息
@@ -77,7 +76,7 @@ export const refreshToken = (refresh_token: string) => {
             'Authorization': basicAuth
         },
         method: 'post',
-        params: {refresh_token, grant_type, scope}
+        params: { refresh_token, grant_type, scope }
     })
 }
 
@@ -94,7 +93,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
             Authorization: basicAuth
         },
         method: 'get',
-        params: {token: Session.get("token")}
+        params: { token: Session.get("token") }
     })
         .then((response) => {
             if (rule.validatenull(response) || response.code === 1) {
@@ -116,9 +115,9 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
                 }
             }
         }).catch(() => {
-        // 发生异常关闭定时器
-        clearInterval(refreshTime)
-    })
+            // 发生异常关闭定时器
+            clearInterval(refreshTime)
+        })
 }
 
 /**

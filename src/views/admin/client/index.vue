@@ -30,7 +30,7 @@
         <el-table-column :label="t('client.clientId')" prop="clientId" show-overflow-tooltip/>
         <el-table-column :label="t('client.clientSecret')" prop="clientSecret" show-overflow-tooltip/>
         <el-table-column :label="t('client.scope')" prop="scope" show-overflow-tooltip/>
-        <el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip width="600px">
+        <el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip width="200px">
           <template #default="scope">
             <dict-tag :options="grant_types" :value="scope.row.authorizedGrantTypes"></dict-tag>
           </template>
@@ -73,7 +73,6 @@ const {grant_types} = useDict('grant_types')
 // 定义变量内容
 const formDialogRef = ref()
 // 搜索变量
-const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
 const selectObjs = ref([])
@@ -91,8 +90,6 @@ const {
   sizeChangeHandle,
   downBlobFile
 } = useTable(state)
-
-
 
 // 多选事件
 const handleSelectionChange = (val: any) => {

@@ -1,6 +1,6 @@
 import {defineStore} from 'pinia';
 import {Session} from '/@/utils/storage';
-import {getUserInfo, login, loginByMobile, loginBySocial, refreshToken} from '/@//api/login/index'
+import {getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi} from '/@/api/login/index'
 import other from '/@/utils/other'
 
 /**
@@ -66,7 +66,7 @@ export const useUserInfo = defineStore('userInfo', {
         async refreshToken() {
             return new Promise((resolve, reject) => {
                 const refreshToken = Session.get('refresh_token')
-                refreshToken(refreshToken).then((res: any) => {
+                refreshTokenApi(refreshToken).then((res: any) => {
                     // 存储token 信息
                     Session.set('token', res.access_token);
                     Session.set('refresh_token', res.refresh_token);

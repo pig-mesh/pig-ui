@@ -147,7 +147,6 @@ import {editInfo} from '/@/api/admin/user'
 import {useMessage} from "/@/hooks/message";
 import {Session} from "/@/utils/storage";
 import {rule} from "/@/utils/validate";
-import other, {openWindow} from "/@/utils/other";
 
 // 定义变量内容
 const formData = reactive({

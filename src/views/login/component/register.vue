@@ -100,6 +100,7 @@ const handleRegister = () => {
     if (!valid) {
       return false
     }
+
     registerUser(state.ruleForm).then(() => {
       useMessage().success(t('common.optSuccessText'))
       loading.value = false

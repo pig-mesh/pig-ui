@@ -1,16 +1,16 @@
 <template>
   <el-dialog v-model="visible" :close-on-click-modal="false"
-             :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+    :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px">
       <el-row :gutter="24">
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.jobName')" prop="jobName">
-            <el-input v-model="form.jobName" :placeholder="t('job.inputjobNameTip')"/>
+            <el-input v-model="form.jobName" :placeholder="t('job.inputjobNameTip')" />
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.jobGroup')" prop="jobGroup">
-            <el-input v-model="form.jobGroup" :placeholder="t('job.inputjobGroupTip')"/>
+            <el-input v-model="form.jobGroup" :placeholder="t('job.inputjobGroupTip')" />
           </el-form-item>
         </el-col>
 
@@ -18,32 +18,32 @@
           <el-form-item :label="t('job.jobType')" prop="jobType">
             <el-select v-model="form.jobType" :placeholder="t('job.jobType')">
               <el-option v-for="(item, index) in job_type" :key="index" :label="item.label"
-                         :value="item.value"></el-option>
+                :value="item.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.executePath')" prop="executePath">
-            <el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')"/>
+            <el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
           </el-form-item>
         </el-col>
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.className')" prop="className">
-            <el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')"/>
+            <el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
           </el-form-item>
         </el-col>
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.methodName')" prop="methodName">
-            <el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')"/>
+            <el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')" />
           </el-form-item>
         </el-col>
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('job.methodParamsValue')" prop="methodParamsValue">
-            <el-input v-model="form.methodParamsValue" :placeholder="t('job.inputmethodParamsValueTip')"/>
+            <el-input v-model="form.methodParamsValue" :placeholder="t('job.inputmethodParamsValueTip')" />
           </el-form-item>
         </el-col>
 
@@ -55,7 +55,8 @@
               </template>
 
               <template #reference>
-                <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')" @click="popoverVis(true)"/>
+                <el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')"
+                  @click="popoverVis(true)" />
               </template>
             </el-popover>
           </el-form-item>
@@ -65,45 +66,45 @@
           <el-form-item :label="t('job.misfirePolicy')" prop="misfirePolicy">
             <el-select v-model="form.misfirePolicy" :placeholder="t('job.inputmisfirePolicyTip')">
               <el-option v-for="(item, index) in misfire_policy" :key="index" :label="item.label"
-                         :value="item.value"></el-option>
+                :value="item.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('job.remark')" prop="remark">
-            <el-input v-model="form.remark" :placeholder="t('job.inputremarkTip')"  type="textarea"/>
+            <el-input v-model="form.remark" :placeholder="t('job.inputremarkTip')" type="textarea" />
           </el-form-item>
         </el-col>
 
       </el-row>
     </el-form>
     <template #footer>
-        <span class="dialog-footer">
-          <el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button formDialogRef type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
-        </span>
+      <span class="dialog-footer">
+        <el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button formDialogRef type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+      </span>
     </template>
   </el-dialog>
 </template>
 
 <script lang="ts" name="SysJobDialog" setup>
 // 定义子组件向父组件传值/事件
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from "/@/hooks/message";
-import {addObj, getObj, putObj} from '/@/api/daemon/job'
-import {useI18n} from "vue-i18n"
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from "/@/hooks/message";
+import { addObj, getObj, putObj } from '/@/api/daemon/job'
+import { useI18n } from "vue-i18n"
 
 const emit = defineEmits(['refresh']);
 const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'))
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const cronPopover = ref();
 const visible = ref(false)
 // 定义字典
-const {job_status, job_execute_status,misfire_policy,job_type} = useDict('job_status', 'job_execute_status','misfire_policy','job_type')
+const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type')
 
 // 提交表单数据
 const form = reactive({

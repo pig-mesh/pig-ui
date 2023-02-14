@@ -2,8 +2,8 @@
   <div></div>
 </template>
 <script setup lang="ts" name="global-websocket">
-import {ElNotification} from 'element-plus'
-import {Local, Session} from '/@/utils/storage'
+import { ElNotification } from 'element-plus'
+import { Local, Session } from '/@/utils/storage'
 
 const emit = defineEmits(['rollback'])
 
@@ -23,7 +23,7 @@ const state = reactive({
     timeout: 10 * 1000, // 响应超时时间
     pingTimeoutObj: ref(), // 延时发送心跳的定时器
     pongTimeoutObj: ref(), // 接收心跳响应的定时器
-    pingMessage: JSON.stringify({type: 'ping'}) // 心跳请求信息
+    pingMessage: JSON.stringify({ type: 'ping' }) // 心跳请求信息
   }
 })
 
@@ -32,7 +32,7 @@ const token = computed(() => {
 })
 
 const tenant = computed(() => {
-  return Local.get("tenant")
+  return Local.get("tenantId") ? Local.get("tenantId") : 1
 })
 
 
@@ -48,7 +48,7 @@ onUnmounted(() => {
 const initWebSocket = () => {
   // ws地址
   let host = window.location.host;
-  let wsUri = `ws://${host}${props.uri}?access_token=${token.value}`
+  let wsUri = `ws://${host}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant}`
   // 建立连接
   state.webSocket = new WebSocket(wsUri)
   // 连接成功
@@ -113,7 +113,6 @@ const startHeartbeat = () => {
  * 连接成功事件
  */
 const onOpen = () => {
-  console.log('WebSocket connection success')
   //开启心跳
   startHeartbeat()
   state.reconnectTime = 0
@@ -122,9 +121,7 @@ const onOpen = () => {
  * 连接失败事件
  * @param e
  */
-const onError = (e: any) => {
-  //错误
-  console.log(`WebSocket connection error：${e.code} ${e.reason} ${e.wasClean}`)
+const onError = () => {
   //重连
   reconnect()
 }
@@ -133,9 +130,7 @@ const onError = (e: any) => {
  * 连接关闭事件
  * @param e
  */
-const onClose = (e: any) => {
-  //关闭
-  console.log(`WebSocket connection closed：${e.code} ${e.reason} ${e.wasClean}`)
+const onClose = () => {
   //重连
   reconnect()
 }
@@ -161,13 +156,4 @@ const onMessage = (msgEvent: any) => {
 
   emit('rollback', text)
 }
-/**
- * 数据发送
- * @param msg
- */
-const send = (msg: string) => {
-  //数据发送
-  state.webSocket.send(msg)
-}
-
 </script>

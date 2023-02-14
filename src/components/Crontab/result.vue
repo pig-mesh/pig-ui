@@ -280,7 +280,7 @@ function expressionChange() {
                             continue;
                         }
                         // 循环"秒"数组
-                        goSecond: for (let si = sIdx; si <= sDate.length - 1; si++) {
+                        for (let si = sIdx; si <= sDate.length - 1; si++) {
                             let ss = sDate[si] < 10 ? '0' + sDate[si] : sDate[si];
                             // 添加当前时间（时间合法性在日期循环时已经判断）
                             if (MM !== '00' && DD !== '00') {
