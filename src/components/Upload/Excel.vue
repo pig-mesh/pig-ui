@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts" name="upload-excel">
-import { Local } from "@/utils/storage";
+import { Local } from "/@/utils/storage";
 import { useMessage } from "/@/hooks/message";
 import other from '/@/utils/other'
 import { Session } from '/@/utils/storage';
