@@ -58,7 +58,6 @@ info().then((res: any) => {
 			...mergeArrObj(itemize, key),
 		};
 	}
-	console.log(messages,'message')
 })
 
 

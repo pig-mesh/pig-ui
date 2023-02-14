@@ -10,6 +10,7 @@ export default {
         inputNameTip: 'input name',
         parentId: 'parent menu',
         embedded: 'embedded',
-        visible: 'visible'
+        visible: 'visible',
+        icon: 'icon'
     }
 }

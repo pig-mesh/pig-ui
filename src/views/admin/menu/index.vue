@@ -14,8 +14,12 @@
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column prop="name" :label="$t('sysmenu.name')" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')"
-					show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="icon" :label="$t('sysmenu.icon')" show-overflow-tooltip>
+          <template #default="scope">
+            <SvgIcon :name="scope.row.icon" />
+          </template>
+        </el-table-column>
 				<el-table-column prop="path" :label="$t('sysmenu.path')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.menuType')" show-overflow-tooltip>
 					<template #default="scope">

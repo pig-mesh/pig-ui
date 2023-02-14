@@ -41,6 +41,11 @@
               <el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right" />
             </el-form-item>
           </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="$t('sysmenu.icon')" prop="icon">
+              <IconSelector placeholder="请输入菜单图标" v-model="state.ruleForm.icon" />
+            </el-form-item>
+          </el-col>
           <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
             <el-form-item :label="$t('sysmenu.embedded')" prop="embedded">
               <el-radio-group v-model="state.ruleForm.embedded">
@@ -85,7 +90,7 @@ import {useMessage} from "/@/hooks/message";
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 // 引入组件
-// const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
+const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 const visible = ref(false)
 // 定义变量内容
