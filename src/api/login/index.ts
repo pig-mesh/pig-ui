@@ -14,7 +14,7 @@ export const login = (data: any) => {
         method: 'post',
         params: data,
         headers: {
-            isToken: false,
+            'isToken': false,
             'TENANT-ID': '1',
             'Authorization': basicAuth
         }
@@ -29,7 +29,7 @@ export const loginByMobile = (mobile: any, code: any) => {
     return request({
         url: '/admin/oauth2/token',
         headers: {
-            isToken: false,
+            'isToken': false,
             'TENANT-ID': '1',
             'Authorization': basicAuth
         },
@@ -46,7 +46,7 @@ export const loginBySocial = (state: string, code: string) => {
     return request({
         url: '/admin/oauth2/token',
         headers: {
-            isToken: false,
+            'isToken': false,
             'TENANT-ID': '1',
             'Authorization': basicAuth
         },
@@ -89,7 +89,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
     request({
         url: '/admin/token/check_token',
         headers: {
-            isToken: false,
+            'isToken': false,
             Authorization: basicAuth
         },
         method: 'get',

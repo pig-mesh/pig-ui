@@ -25,7 +25,8 @@ service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
             }
         }
         // 统一增加 token
-        if (Session.get('token')) {
+        const isToken = (config.headers || {}).isToken === false
+        if (Session.get('token') && !isToken) {
             config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
         }
 
