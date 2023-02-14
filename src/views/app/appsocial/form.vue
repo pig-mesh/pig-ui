@@ -111,6 +111,14 @@ const onSubmit = () => {
       return false
     }
 
+    if (form.appSecret && form.appSecret.indexOf("******") >= 0) {
+      form.appSecret = ''
+    }
+
+    if (form.appId && form.appId.indexOf("******") >= 0) {
+      form.appId = ''
+    }
+
     // 更新
     if (form.id) {
       putObj(form).then(() => {
