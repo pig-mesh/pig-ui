@@ -14,12 +14,13 @@
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column prop="name" :label="$t('sysmenu.name')" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')"
+					show-overflow-tooltip></el-table-column>
 				<el-table-column prop="icon" :label="$t('sysmenu.icon')" show-overflow-tooltip>
-          <template #default="scope">
-            <SvgIcon :name="scope.row.icon" />
-          </template>
-        </el-table-column>
+					<template #default="scope">
+						<SvgIcon :name="scope.row.icon" />
+					</template>
+				</el-table-column>
 				<el-table-column prop="path" :label="$t('sysmenu.path')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.menuType')" show-overflow-tooltip>
 					<template #default="scope">
@@ -43,9 +44,16 @@
 						}}</el-button>
 						<el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)"
 							v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }}</el-button>
-						<el-button text type="primary" @click="onTabelRowDel(scope.row)" v-auth="'sys_menu_del'">{{
-							$t('common.delBtn')
-						}}</el-button>
+
+						<el-tooltip :content="$t('sysmenu.deleteDisabledTip')"
+							:disabled="!deleteMenuDisabled(scope.row)" placement="top">
+							<span style="margin-left: 12px">
+								<el-button text type="primary" :disabled="deleteMenuDisabled(scope.row)"
+									@click="onTabelRowDel(scope.row)" v-auth="'sys_menu_del'">
+									{{ $t('common.delBtn') }}
+								</el-button>
+							</span>
+						</el-tooltip>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -63,7 +71,7 @@ import { useMessage, useMessageBox } from "/@/hooks/message";
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 
 // 定义变量内容
-const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();
+const menuDialogRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
@@ -71,7 +79,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	isPage: false
 });
-
 
 const {
 	getDataList,
@@ -85,16 +92,22 @@ const onOpenAddMenu = (type: string) => {
 const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
 	menuDialogRef.value.openDialog(type, row);
 };
-// 删除当前行
+
+//是否禁用删除
+const deleteMenuDisabled = (row: any) => {
+	return (row.children || []).length > 0
+}
+
+// 删除当前菜单
 const onTabelRowDel = (row: any) => {
 	useMessageBox().confirm(`此操作将永久删除路由：${row.name}`)
 		.then(() => {
 			delObj(row.id).then(() => {
 				useMessage().success('删除成功');
 				getDataList()
-			})
-
+			}).catch((err: any) => {
+				useMessage().error(err.msg)
+			});
 		})
-		.catch(() => { });
 };
 </script>

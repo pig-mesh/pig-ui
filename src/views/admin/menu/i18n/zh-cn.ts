@@ -22,6 +22,7 @@ export default {
         inputKeepAliveTip: '请选择是否缓冲',
         inputMenuTypeTip: '请选择菜单类型',
         inputEmbeddedTip: '请选择是否内嵌',
+        deleteDisabledTip: '菜单包含下级不能删除',
     },
 
 }

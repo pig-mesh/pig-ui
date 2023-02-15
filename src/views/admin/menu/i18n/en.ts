@@ -28,5 +28,6 @@ export default {
         inputDelFlagTip: 'input delFlag',
         inputTenantIdTip: 'input tenantId',
         inputEmbeddedTip: 'input embedded',
+        deleteDisabledTip: 'menu inclusion subordinates cannot be deleted',
     }
 }

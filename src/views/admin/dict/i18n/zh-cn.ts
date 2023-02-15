@@ -24,7 +24,8 @@ export default {
         inputSystemFlagTip: '请输入字典类型',
         inputDelFlagTip: '请输入 delFlag',
         inputTenantIdTip: '请输入所属租户',
-        dictItem: '字典项'
+        dictItem: '字典项',
+        deleteDisabledTip: '系统内置数据不能删除',
     },
     dictItem: {
         index: '序号',

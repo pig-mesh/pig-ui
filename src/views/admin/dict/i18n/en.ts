@@ -21,7 +21,8 @@ export default {
         inputSystemFlagTip: 'input systemFlag',
         inputDelFlagTip: 'input delFlag',
         inputTenantIdTip: 'input tenantId',
-        dictItem: 'dict item'
+        dictItem: 'dict item',
+        deleteDisabledTip: 'system data cannot be deleted ',
     },
     dictItem: {
         index: 'index',

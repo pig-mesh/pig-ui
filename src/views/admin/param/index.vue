@@ -58,11 +58,16 @@
               $t('common.editBtn')
             }}
             </el-button>
-            <el-button text :disabled="scope.row.systemFlag === '1'" type="primary"
-              @click="handleDelete([scope.row.publicId])">{{
-                $t('common.delBtn')
-              }}
-            </el-button>
+
+            <el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === 1"
+              placement="top">
+              <span style="margin-left: 12px">
+                <el-button text type="primary" :disabled="scope.row.systemFlag !== 1"
+                  @click="handleDelete([scope.row.publicId])">
+                  {{ $t('common.delBtn') }}
+                </el-button>
+              </span>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>

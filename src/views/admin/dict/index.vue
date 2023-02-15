@@ -54,10 +54,17 @@
 
         <el-table-column label="操作" width="200">
           <template #default="scope">
-            <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
-            <el-button text type="primary" :disabled="scope.row.systemFlag !== '1'"
-              @click="handleDelete([scope.row.id])">删除</el-button>
             <el-button text type="primary" @click="showDictITem(scope.row)">字典项</el-button>
+            <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
+            <el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === 1"
+              placement="top">
+              <span style="margin-left: 12px">
+                <el-button text type="primary" :disabled="scope.row.systemFlag !== 1"
+                  @click="handleDelete([scope.row.id])">
+                  {{ $t('common.delBtn') }}
+                </el-button>
+              </span>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
