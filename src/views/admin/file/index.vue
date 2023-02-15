@@ -64,6 +64,7 @@ import { downBlobFile } from "/@/utils/other";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const UploadImage = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'))
 const { t } = useI18n()
 
 // 定义变量内容
@@ -105,6 +106,7 @@ const download = (row: any) => {
   downBlobFile("/admin/sys-file/" + row.bucketName + "/" + row.fileName, null, row.fileName
   );
 }
+
 
 // 删除操作
 const handleDelete = (row: any) => {

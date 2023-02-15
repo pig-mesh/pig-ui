@@ -1,5 +1,5 @@
 export default {
-    job: {
+   job: {
         index: 'index',
         importsysJobTip: 'import SysJob',
         jobId: 'jobId',
