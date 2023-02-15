@@ -138,6 +138,9 @@ export function backEndComponent(routes: any) {
             item.component = dynamicImport(dynamicViewsModules, item.path as string);
         }
         item.children && backEndComponent(item.children);
+        if(item.children){
+            item.redirect = item.children[0].path
+        }
         return item;
     });
 }
