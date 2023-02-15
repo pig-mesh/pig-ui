@@ -9,7 +9,10 @@
 		"sourceMap": true,
 		"resolveJsonModule": true,
 		"esModuleInterop": true,
-		"lib": ["esnext", "dom"],
+		"lib": [
+			"esnext",
+			"dom"
+		],
 		"baseUrl": ".",
 		"allowJs": true,
 		"forceConsistentCasingInFileNames": true,
@@ -21,7 +24,12 @@
 		"noImplicitAny": false,
 		"skipLibCheck": true,
 		"paths": {
-			"/@/*": ["src/*"]
+			"/@/*": [
+				"src/*"
+			],
+			"@/*": [
+				"src/*"
+			]
 		},
 		"types": [
 			"@intlify/unplugin-vue-i18n/types",
@@ -32,8 +40,19 @@
 			"vite-plugin-svg-icons/client",
 			"unplugin-vue-define-options/macros-global"
 		],
-		"typeRoots": ["./node_modules/@types/", "./types"]
+		"typeRoots": [
+			"./node_modules/@types/",
+			"./types"
+		]
 	},
-	"include": ["src/**/*", "types/**/*.d.ts", "mock/**/*.ts"],
-	"exclude": ["dist", "node_modules"]
+	"include": [
+		"src/**/*",
+		"types/**/*.d.ts",
+		"mock/**/*.ts",
+		"auto-imports.d.ts"
+	],
+	"exclude": [
+		"dist",
+		"node_modules"
+	]
 }

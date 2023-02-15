@@ -15,7 +15,7 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button size="default" :disabled="multiple" icon="Delete" type="primary" class="ml10"
+          <el-button  :disabled="multiple" icon="Delete" type="primary" class="ml10"
             v-auth="'sys_user_del'" @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
           </el-button>

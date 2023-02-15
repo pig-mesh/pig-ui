@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dic-dialog-container">
 		<el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')"  width="60%">
-      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" size="default" :rules="dataRules">
+      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px"  :rules="dataRules">
         <el-row :gutter="35">
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
             <el-form-item label="类型" prop="dictType">
@@ -29,8 +29,8 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel" size="default">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit" size="default">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button @click="onCancel" >{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>

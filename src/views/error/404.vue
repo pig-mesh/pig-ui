@@ -8,7 +8,7 @@
 						<div class="left-item-animation left-item-title">{{ $t('notFound.foundTitle') }}</div>
 						<div class="left-item-animation left-item-msg">{{ $t('notFound.foundMsg') }}</div>
 						<div class="left-item-animation left-item-btn">
-							<el-button type="primary" size="default" round @click="onGoHome">{{ $t('notFound.foundBtn') }}</el-button>
+							<el-button type="primary"  round @click="onGoHome">{{ $t('notFound.foundBtn') }}</el-button>
 						</div>
 					</div>
 				</div>
