@@ -119,7 +119,7 @@ import {useI18n} from "vue-i18n";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const JobLog = defineAsyncComponent(() => import('./job-log-form.vue'));
+const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 const {t} = useI18n()
 // 定义查询字典
 

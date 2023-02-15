@@ -4,33 +4,32 @@
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
           <el-form-item :label="$t('post.postName')" prop="postName">
-            <el-input  :placeholder="$t('post.inputpostNameTip')" v-model="state.queryForm.postName"
+            <el-input :placeholder="$t('post.inputpostNameTip')" v-model="state.queryForm.postName"
               style="max-width: 180px" />
           </el-form-item>
           <el-form-item class="ml2">
-            <el-button  icon="search" type="primary" @click="getDataList">
+            <el-button icon="search" type="primary" @click="getDataList">
               {{ $t('common.queryBtn') }}
             </el-button>
-            <el-button icon="Refresh"  @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
           </el-form-item>
         </el-form>
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button  icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
+          <el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
             v-auth="'sys_post_add'">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button  icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
+          <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()"
             v-auth="'sys_post_add'">
             {{ $t('common.importBtn') }}
           </el-button>
-          <el-button  icon="Download" type="primary" class="ml10" @click="exportExcel"
-            v-auth="'sys_post_export'">
+          <el-button icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'sys_post_export'">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button  :disabled="multiple" icon="Delete" type="primary" class="ml10"
-            v-auth="'sys_post_del'" @click="handleDelete(undefined)">
+          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_post_del'"
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -47,10 +46,10 @@
         <el-table-column prop="remark" :label="t('post.remark')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button   text type="primary" v-auth="'sys_post_edit'"
+            <el-button text type="primary" v-auth="'sys_post_edit'"
               @click="formDialogRef.openDialog(scope.row.postId)">{{ $t('common.editBtn') }}</el-button>
 
-            <el-button   text type="primary" v-auth="'sys_post_del'" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" v-auth="'sys_post_del'" @click="handleDelete([scope.row.postId])">{{
               $t('common.delBtn')
             }}</el-button>
           </template>
@@ -84,7 +83,7 @@ const excelUploadRef = ref()
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
 const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -107,29 +106,24 @@ const resetQuery = () => {
   getDataList()
 }
 
-// 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
-}
-
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/admin/post/export', state.queryForm, 'post.xlsx')
 }
 
-// 删除操作
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.postId)
+  });
+  multiple.value = !objs.length
+}
 
-  useMessageBox().confirm(t('common.delConfirmText') + row.postId)
+// 删除操作
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
-      delObj(row.postId).then(() => {
+      delObj(ids).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {

@@ -8,18 +8,11 @@ export const pageList = (params?: Object) => {
     })
 }
 
-export const delObjs = (ids: string) =>  {
+
+export const delObj = (ids: object) => {
     return request({
-        url: '/admin/log/',
+        url: '/admin/log',
         method: 'delete',
         data: ids
-    })
-}
-
-
-export const delObj = (id:string) => {
-    return request({
-        url: '/admin/log/' + id,
-        method: 'delete'
     })
 }
