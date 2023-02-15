@@ -5,7 +5,7 @@ import { ref, toRefs } from "vue";
 /**
  * 获取字典数据
  */
-export function useDict(...args: any) {
+export function useDict(...args: string[]) {
   const res = ref({});
   return (() => {
     args.forEach((dictType: String) => {

@@ -16,6 +16,14 @@ export function addObj(obj?: Object) {
   })
 }
 
+export function delJobObj(obj?: Object) {
+  return request({
+    url: '/admin/sys-job-log',
+    method: 'delete',
+    data: obj
+  })
+}
+
 export function getObj(id?: string) {
   return request({
     url: '/admin/sys-job/' + id,
@@ -56,5 +64,13 @@ export function shutDownJobRa(jobId: string) {
   return request({
     url: '/admin/sys-job/shutdown-job/' + jobId,
     method: 'post'
+  })
+}
+
+export function fetchJobList(query?: Object) {
+  return request({
+    url: '/admin/sys-job-log/page',
+    method: 'get',
+    params: query
   })
 }
