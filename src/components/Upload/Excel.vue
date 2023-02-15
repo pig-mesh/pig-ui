@@ -97,6 +97,8 @@ const handleFileSuccess = (response: any) => {
     state.errorVisible = true;
     state.errorData = response.data;
     uploadRef.value.clearFiles();
+    // 刷新表格
+    emit("refreshDataList");
   } else {
     useMessage().success(response.msg ? response.msg : "导入成功");
     // 刷新表格

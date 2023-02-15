@@ -15,6 +15,7 @@ export default {
         inputUsernameTip: 'input username',
         inputPhoneTip: 'input phone',
         inputNameTip: 'input name',
-        importUserTip: 'user import'
+        importUserTip: 'user import',
+        deleteDisabledTip: 'admin are not allowed to delete',
     }
 }

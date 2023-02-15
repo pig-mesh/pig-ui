@@ -29,7 +29,7 @@
             {{ $t('common.exportBtn') }}
           </el-button>
           <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_user_del'"
-            @click="handleDelete(undefined)">
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -38,7 +38,7 @@
       </el-row>
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
         @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="50" align="center" />
+        <el-table-column type="selection" :selectable='handleSelectable' width="50" align="center" />
         <el-table-column type="index" label="序号" width="80" />
         <el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="roleCode" label="角色标识" show-overflow-tooltip></el-table-column>
@@ -54,13 +54,20 @@
             <el-button text type="primary" v-auth="'sys_role_edit'"
               @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
 
-            <el-button text type="primary" v-auth="'sys_role_del'" @click="handleDelete(scope.row)">{{
-              $t('common.delBtn')
-            }}</el-button>
-
             <el-button text type="primary" v-auth="'sys_role_del'" @click="permessionRef.openDialog(scope.row)">{{
               $t('sysrole.permissionTip')
             }}</el-button>
+
+            <el-tooltip :content="$t('sysrole.deleteDisabledTip')" :disabled="scope.row.roleId !== '1'" placement="top">
+              <span style="margin-left: 12px">
+                <el-button text type="primary" :disabled="scope.row.roleId === '1'" v-auth="'sys_role_del'"
+                  @click="handleDelete([scope.row.roleId])">{{
+                    $t('common.delBtn')
+                  }}
+                </el-button>
+              </span>
+            </el-tooltip>
+
           </template>
         </el-table-column>
       </el-table>
@@ -95,7 +102,7 @@ const excelUploadRef = ref()
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选rows
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
 // 是否可以多选
 const multiple = ref(true)
 
@@ -135,29 +142,29 @@ const resetQuery = () => {
   getDataList()
 }
 
-// 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
-}
-
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/admin/role/export', state.queryForm, 'role.xlsx')
 }
 
-// 删除角色
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
+// 是否可以多选
+const handleSelectable = (row: any) => {
+  return row.roleId !== '1'
+}
 
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.roleName}?`)
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.roleId)
+  });
+  multiple.value = !objs.length
+}
+
+// 删除操作
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
-      delObj(row.roleId).then(() => {
+      delObj(ids).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {
@@ -165,4 +172,5 @@ const handleDelete = (row: any) => {
       })
     })
 };
+
 </script>

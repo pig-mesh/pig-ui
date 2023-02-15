@@ -32,14 +32,14 @@ export const getObj = (id: string) => {
     })
 }
 
-export const getObjByCode = (code:string) => {
+export const getObjByCode = (code: string) => {
     return request({
         url: '/admin/role/code/' + code,
         method: 'get'
     })
 }
 
-export const addObj = (obj: Object)  => {
+export const addObj = (obj: Object) => {
     return request({
         url: '/admin/role',
         method: 'post',
@@ -47,7 +47,7 @@ export const addObj = (obj: Object)  => {
     })
 }
 
-export const putObj = (obj: Object) =>  {
+export const putObj = (obj: Object) => {
     return request({
         url: '/admin/role',
         method: 'put',
@@ -55,10 +55,11 @@ export const putObj = (obj: Object) =>  {
     })
 }
 
-export const delObj = (id: string) => {
+export const delObj = (ids: Object) => {
     return request({
-        url: '/admin/role/' + id,
-        method: 'delete'
+        url: '/admin/role/',
+        method: 'delete',
+        data: ids
     })
 }
 
@@ -73,7 +74,7 @@ export const permissionUpd = (roleId: string, menuIds: string) => {
     })
 }
 
-export const fetchRoleTree = (roleId: string) =>  {
+export const fetchRoleTree = (roleId: string) => {
     return request({
         url: '/admin/menu/tree/' + roleId,
         method: 'get'

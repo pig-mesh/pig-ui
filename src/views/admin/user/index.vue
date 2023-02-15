@@ -39,7 +39,7 @@
                 {{ $t('common.exportBtn') }}
               </el-button>
               <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_user_del'"
-                @click="handleDelete(undefined)">
+                @click="handleDelete(selectObjs)">
                 {{ $t('common.delBtn') }}
               </el-button>
               <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -48,7 +48,7 @@
           </el-row>
           <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
             @selection-change="handleSelectionChange">
-            <el-table-column type="selection" width="50" align="center" />
+            <el-table-column type="selection" :selectable='handleSelectable' width="50" align="center" />
             <el-table-column type="index" :label="$t('sysuser.index')" width="80" />
             <el-table-column prop="username" :label="$t('sysuser.username')" show-overflow-tooltip></el-table-column>
             <el-table-column prop="name" :label="$t('sysuser.name')" show-overflow-tooltip></el-table-column>
@@ -72,16 +72,23 @@
             </el-table-column>
             <el-table-column prop="createTime" :label="$t('sysuser.createTime')"
               show-overflow-tooltip></el-table-column>
-            <el-table-column :label="$t('common.action')" width="100">
+            <el-table-column :label="$t('common.action')" width="150">
               <template #default="scope">
-                <el-button   text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
+                <el-button text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
                   v-auth="'sys_user_edit'"> {{
                     $t('common.editBtn')
                   }}
                 </el-button>
-                <el-button   text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_user_del'">
-                  {{ $t('common.delBtn') }}
-                </el-button>
+                <el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'"
+                  placement="top">
+                  <span style="margin-left: 12px">
+                    <el-button text type="primary" :disabled="scope.row.userId === '1'" v-auth="'sys_user_del'"
+                      @click="handleDelete([scope.row.userId])">{{
+                        $t('common.delBtn')
+                      }}
+                    </el-button>
+                  </span>
+                </el-tooltip>
               </template>
             </el-table-column>
           </el-table>
@@ -123,9 +130,9 @@ const showSearch = ref(true)
 
 
 // 多选rows
-const selectObjs = ref([]);
+const selectObjs = ref([]) as any
 // 是否可以多选
-const multiple = ref(true);
+const multiple = ref(true)
 
 // 定义表格查询、后台调用的API
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -166,34 +173,34 @@ const handleNodeClick = (e: any) => {
   getDataList()
 }
 
-// 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
-}
-
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx')
 }
 
-// 删除用户
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach(val => {
-      handleDelete(val)
-    });
-    return
-  }
+// 是否可以多选
+const handleSelectable = (row: any) => {
+  return row.userId !== '1'
+}
 
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.username} ?`).then(() => {
-    // 删除用户的接口
-    delObj(row.userId).then(() => {
-      getDataList();
-      useMessage().success(t('common.delSuccessText'))
-    }).catch(err => {
-      useMessage().error(err.msg)
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.userId)
+  });
+  multiple.value = !objs.length
+}
+
+// 删除操作
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
+    .then(() => {
+      delObj(ids).then(() => {
+        getDataList();
+        useMessage().success(t('common.delSuccessText'));
+      }).catch((err: any) => {
+        useMessage().error(err.msg)
+      })
     })
-  })
 };
 </script>

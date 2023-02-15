@@ -15,12 +15,12 @@ import { info } from '/@/api/admin/i18n'
  */
 
 // element plus 自带国际化
-import enLocale from 'element-plus/lib/locale/lang/en';
 import zhcnLocale from 'element-plus/lib/locale/lang/zh-cn';
+import enLocale from 'element-plus/lib/locale/lang/en';
 
 // 定义变量内容
 const messages = {};
-const element = { en: enLocale, 'zh-cn': zhcnLocale};
+const element = { en: enLocale, 'zh-cn': zhcnLocale };
 const itemize = { en: [] as any[], 'zh-cn': [] as any[] };
 const modules: Record<string, any> = import.meta.glob('./**/*.ts', { eager: true });
 const pages: Record<string, any> = import.meta.glob('./../../**/**/**/i18n/*.ts', { eager: true });
@@ -45,6 +45,7 @@ function mergeArrObj<T>(list: T, key: string) {
 	});
 	return obj;
 }
+
 // 从后台获取数据
 info().then((res: any) => {
 	itemize["zh-cn"].push(...res.data['zh-cn'])
@@ -59,8 +60,6 @@ info().then((res: any) => {
 		};
 	}
 })
-
-
 
 // 读取 pinia 默认语言
 const stores = useThemeConfig(pinia);

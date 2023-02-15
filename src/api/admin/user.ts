@@ -23,10 +23,11 @@ export const getObj = (id: String) => {
     })
 }
 
-export const delObj = (id: String) => {
+export const delObj = (ids: Object) => {
     return request({
-        url: '/admin/user/' + id,
-        method: 'delete'
+        url: '/admin/user',
+        method: 'delete',
+        data: ids
     })
 }
 
