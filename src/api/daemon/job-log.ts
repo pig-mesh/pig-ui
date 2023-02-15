@@ -8,7 +8,7 @@ export function fetchList(query: any) {
     })
 }
 
-export function delObjs(ids: string) {
+export function delObjs(ids: object) {
     return request({
         url: '/admin/sys-job-log',
         method: 'delete',

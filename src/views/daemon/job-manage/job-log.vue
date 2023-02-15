@@ -44,7 +44,7 @@
 
 <script setup lang="ts" name="job-log">
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchJobList, delJobObj } from "/@/api/daemon/job";
+import { fetchList, delObjs } from "/@/api/daemon/job-log";
 import { useI18n } from "vue-i18n";
 import { useDict } from '/@/hooks/dict';
 import { useMessage, useMessageBox } from "/@/hooks/message";
@@ -66,7 +66,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     jobId: ''
   },
-  pageList: fetchJobList,
+  pageList: fetchList,
   createdIsNeed: false
 })
 
@@ -84,7 +84,6 @@ const openDialog = (id: string) => {
 };
 
 // 多选事件
-// 多选事件
 const handleSelectionChange = (objs: any) => {
   objs.forEach((val: any) => {
     selectObjs.value.push(val.jobLogId)
@@ -96,7 +95,7 @@ const handleSelectionChange = (objs: any) => {
 const handleDelete = (ids: string[]) => {
   useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
-      delJobObj(ids).then(() => {
+      delObjs(ids).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {

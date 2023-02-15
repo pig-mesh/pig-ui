@@ -15,7 +15,7 @@
         </el-col>
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('post.postSort')" prop="postSort">
-            <el-input v-model="form.postSort" :placeholder="t('post.inputpostSortTip')" />
+            <el-input-number v-model="form.postSort" :placeholder="t('post.inputpostSortTip')" />
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20">
@@ -52,14 +52,13 @@ const form = reactive({
   postId: '',
   postCode: '',
   postName: '',
-  postSort: '',
+  postSort: 0,
   remark: '',
   delFlag: '',
   createTime: '',
   createBy: '',
   updateTime: '',
-  updateBy: '',
-  tenantId: '',
+  updateBy: ''
 });
 
 // 定义校验规则
