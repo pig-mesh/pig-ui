@@ -6,10 +6,12 @@
 				<el-card shadow="hover" header="个人信息">
 					<div class="personal-user">
 						<div class="personal-user-left">
-							<el-upload class="h100 personal-user-left-upload" action="/admin/sys-file/upload"
-								:headers="headers" :on-success="handleAvatarSuccess" :limit="1">
-								<img :src="formData.avatar" />
-							</el-upload>
+							<image-upload class="h100 personal-user-left-upload" @change="handleAvatarSuccess">
+								<img v-if="formData.avatar" :src="formData.avatar" class="avatar" />
+								<el-icon v-else class="avatar-uploader-icon">
+									<Plus />
+								</el-icon>
+							</image-upload>
 						</div>
 						<div class="personal-user-right">
 							<el-row>
@@ -50,7 +52,7 @@
 			<el-col :span="24">
 				<el-card shadow="hover" class="mt15 personal-edit" header="更新信息">
 					<div class="personal-edit-title">基本信息</div>
-					<el-form :model="formData"  :rules="ruleForm" label-width="100px" class="mt35 mb35"
+					<el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt35 mb35"
 						ref="formdataRef">
 						<el-row :gutter="35">
 							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
@@ -148,9 +150,11 @@ import { formatAxis } from '/@/utils/formatTime';
 import { useUserInfo } from '/@/stores/userInfo';
 import { editInfo } from '/@/api/admin/user'
 import { useMessage } from "/@/hooks/message";
-import { Session } from "/@/utils/storage";
 import { rule } from "/@/utils/validate";
 import other from '/@/utils/other';
+
+
+const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'))
 
 // 定义变量内容
 const formData = reactive({
@@ -181,26 +185,19 @@ const ruleForm = reactive({
 	}]
 })
 
-
-const handleAvatarSuccess = (res: any) => {
-	formData.avatar = res.data.url;
-}
-
-
-const headers = computed(() => {
-	const tenantId = Session.get("tenantId")
-	return {
-		'Authorization': "Bearer " + Session.get("token"),
-		'TENANT-ID': tenantId ? tenantId : '1'
-	};
-})
-
 onMounted(() => {
 	const data = useUserInfo().userInfos
 	Object.assign(formData, data.user)
 	formData.password = ''
 })
 
+// 头像上传成功
+const handleAvatarSuccess = (url: any) => {
+	formData.avatar = url;
+}
+
+
+// 保存用户
 const handleSaveUser = () => {
 	formdataRef.value.validate((valid: boolean) => {
 		if (!valid) {
@@ -438,5 +435,18 @@ const handleClick = (thirdpart: string) => {
 			}
 		}
 	}
+}
+
+.el-icon.avatar-uploader-icon {
+	font-size: 28px;
+	color: #8c939d;
+	width: 178px;
+	height: 178px;
+	text-align: center;
+}
+
+.avatar {
+	width: 178px;
+	height: 100%;
 }
 </style>

@@ -55,7 +55,7 @@
         <el-table-column label="操作" width="200">
           <template #default="scope">
             <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
-            <el-button text type="primary" v-if="scope.row.systemFlag !== '1'"
+            <el-button text type="primary" :disabled="scope.row.systemFlag !== '1'"
               @click="handleDelete([scope.row.id])">删除</el-button>
             <el-button text type="primary" @click="showDictITem(scope.row)">字典项</el-button>
           </template>

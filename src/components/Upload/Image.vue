@@ -2,30 +2,27 @@
 
 <template>
   <div>
-    <el-upload
-        ref="fileUpload"
-        class="avatar-uploader"
-        :action="props.uploadFileUrl"
-        :show-file-list="false"
-        :on-success="handleAvatarSuccess"
-        :before-upload="beforeAvatarUpload"
-        :headers="headers"
-    >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+    <el-upload ref="fileUpload" class="avatar-uploader" :action="props.uploadFileUrl" :show-file-list="false"
+      :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :headers="headers" :limit="props.limit">
+      <slot>
+        123<img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <el-icon v-else class="avatar-uploader-icon">
+          <Plus />
+        </el-icon>
+      </slot>
     </el-upload>
   </div>
 </template>
 
 <script setup lang="ts" name="upload-image">
 
-import {useMessage} from "/@/hooks/message";
-import {Session} from "/@/utils/storage";
-import {watch} from "vue";
+import { useMessage } from "/@/hooks/message";
+import { Local, Session } from "/@/utils/storage";
+import { watch } from "vue";
 
 const imageUrl = ref('')
 const fileUpload = ref()
-const emit = defineEmits(['update:value','change']);
+const emit = defineEmits(['update:value', 'change']);
 
 const props = defineProps({
   value: [String, Array],
@@ -34,32 +31,36 @@ const props = defineProps({
     type: Number,
     default: 5,
   },
+  limit: {
+    type: Number,
+    default: 1,
+  },
   uploadFileUrl: {
     type: String,
     default: '/admin/sys-file/upload'
   }
 });
 
-watch(() => props.value,(val) => {
-  if(val){
+watch(() => props.value, (val) => {
+  if (val) {
     imageUrl.value = val
   }
-},{ deep: true, immediate: true })
+}, { deep: true, immediate: true })
 
 
 const handleAvatarSuccess = (res, file) => {
-  if(res.code === 0){
+  if (res.code === 0) {
     imageUrl.value = res.data.url
     emit("change", imageUrl.value);
     emit("update:value", imageUrl.value);
-  }else{
+  } else {
     fileUpload.value.handleRemove(file);
   }
 }
 
 const beforeAvatarUpload = (rawFile: any) => {
-  if (rawFile.type !== 'image/jpeg') {
-    useMessage().error(`文件格式不正确, 请上传 image/jpeg 格式文件!`)
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    useMessage().error(`文件格式不正确, 请上传 jpeg/png格式文件!`)
     return false
   }
   // 校检文件大小
@@ -73,14 +74,12 @@ const beforeAvatarUpload = (rawFile: any) => {
   return true
 }
 
-const headers = reactive({
-  Authorization: ''
-})
-
-onMounted(() => {
-  if (Session.get('token')) {
-    headers.Authorization = `Bearer ${Session.get('token')}`;
-  }
+const headers = computed(() => {
+  const tenantId = Local.get("tenantId") ? Local.get("tenantId") : 1
+  return {
+    'Authorization': "Bearer " + Session.get("token"),
+    'TENANT-ID': tenantId
+  };
 })
 
 </script>
@@ -107,7 +106,7 @@ onMounted(() => {
   text-align: center;
 }
 
-.avatar{
+.avatar {
   width: 178px;
   height: 100%;
 }

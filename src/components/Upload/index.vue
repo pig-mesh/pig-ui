@@ -1,20 +1,14 @@
 <!--文件上传组件-->
 <template>
   <div class="upload-file">
-    <el-upload
-        multiple
-        :action="props.uploadFileUrl"
-        :before-upload="handleBeforeUpload"
-        :file-list="fileList"
-        :limit="limit"
-        :on-error="handleUploadError"
-        :on-success="handleUploadSuccess"
-        :on-remove="handleRemove"
-        :headers="headers"
-        class="upload-file-uploader"
-        ref="fileUpload"
-    >
-      <el-button type="primary">选取文件</el-button>
+    <el-upload multiple :action="props.uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList"
+      :limit="limit" :on-error="handleUploadError" :on-success="handleUploadSuccess" :on-remove="handleRemove"
+      :headers="headers" class="upload-file-uploader" ref="fileUpload" :auto-upload="false" drag>
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">
+        将文件拖到此处，或
+        <em>点击上传</em>
+      </div>
       <template #tip>
         <div class="el-upload__tip" v-if="props.isShowTip">
           请上传
@@ -28,8 +22,8 @@
 </template>
 
 <script setup lang="ts" name="upload-file">
-import {useMessage} from "/@/hooks/message";
-import {Session} from "/@/utils/storage";
+import { useMessage } from "/@/hooks/message";
+import { Local, Session } from "/@/utils/storage";
 
 const props = defineProps({
   value: [String, Array],
@@ -46,7 +40,7 @@ const props = defineProps({
   // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
-    default: () => ["doc", "xls", "ppt", "txt", "pdf","docx", "xlsx", "pptx"],
+    default: () => ['png', 'jpg', 'jpeg', "doc", "xls", "ppt", "txt", "pdf", "docx", "xlsx", "pptx"],
   },
   // 是否显示提示
   isShowTip: {
@@ -59,25 +53,24 @@ const props = defineProps({
   }
 });
 
-const emit = defineEmits(['update:modelValue','change']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
-const number = ref(0);
-const fileList = ref([]);
-const uploadList = ref([]);
+const number = ref(0)
+const fileList = ref([]) as any
+const uploadList = ref([]) as any
 const fileUpload = ref()
-const headers = reactive({
-  Authorization: ''
-})
 
 
-onMounted(() => {
-  if (Session.get('token')) {
-    headers.Authorization = `Bearer ${Session.get('token')}`;
-  }
+const headers = computed(() => {
+  const tenantId = Local.get("tenantId") ? Local.get("tenantId") : 1
+  return {
+    'Authorization': "Bearer " + Session.get("token"),
+    'TENANT-ID': tenantId
+  };
 })
 
 // 上传前校检格式和大小
-const handleBeforeUpload = (file: File) =>  {
+const handleBeforeUpload = (file: File) => {
   // 校检文件类型
   if (props.fileType.length) {
     const fileName = file.name.split('.');
@@ -101,7 +94,7 @@ const handleBeforeUpload = (file: File) =>  {
 }
 
 // 上传成功回调
-function handleUploadSuccess(res, file) {
+function handleUploadSuccess(res: any, file: any) {
   if (res.code === 0) {
     uploadList.value.push({ name: res.data.fileName, url: res.data.url });
     uploadedSuccessfully();
@@ -114,7 +107,7 @@ function handleUploadSuccess(res, file) {
 }
 
 // 上传结束处理
-const uploadedSuccessfully = () =>  {
+const uploadedSuccessfully = () => {
   if (number.value > 0 && uploadList.value.length === number.value) {
     fileList.value = fileList.value.filter(f => f.url !== undefined).concat(uploadList.value);
     uploadList.value = [];
@@ -129,7 +122,7 @@ const handleRemove = (file: any) => {
 }
 
 // 对象转成指定字符串分隔
-const listToString = (list, separator = ',') =>  {
+const listToString = (list, separator = ',') => {
   let strs = "";
   separator = separator || ",";
   for (let i in list) {
@@ -161,7 +154,7 @@ watch(() => props.value, val => {
     fileList.value = [];
     return [];
   }
-},{ deep: true, immediate: true });
+}, { deep: true, immediate: true });
 
 
 </script>

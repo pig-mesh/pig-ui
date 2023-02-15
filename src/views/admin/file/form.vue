@@ -1,17 +1,6 @@
 <template>
   <el-dialog title="上传文件" v-model="visible" :close-on-click-modal="false" draggable>
-    <el-upload class="upload-demo" drag action="/admin/sys-file/upload" :headers="headers" multiple @success="success">
-      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
-      <div class="el-upload__text">
-        拖拽到这个位置或者<em>点击上传</em>
-      </div>
-      <template #tip>
-        <div class="el-upload__tip">
-          上传同步至文件服务器
-        </div>
-      </template>
-    </el-upload>
-
+    <upload @change="success" />
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
@@ -21,23 +10,12 @@
 </template>
 
 <script setup lang="ts" name="SysFileDialog">
-// 定义子组件向父组件传值/事件
-import { Local } from "/@/utils/storage";
-import { Session } from "/@/utils/storage";
+const Upload = defineAsyncComponent(() => import('/@/components/Upload/index.vue'))
 
 const emit = defineEmits(['refresh']);
 
 // 定义变量内容
 const visible = ref(false)
-// 定义字典
-
-const headers = computed(() => {
-  const tenantId = Local.get("tenantId") ? Local.get("tenantId") : 1
-  return {
-    'Authorization': "Bearer " + Session.get("token"),
-    'TENANT-ID': tenantId
-  };
-})
 
 // 打开弹窗
 const openDialog = () => {

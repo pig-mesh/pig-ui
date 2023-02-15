@@ -58,7 +58,7 @@
               $t('common.editBtn')
             }}
             </el-button>
-            <el-button text v-if="scope.row.systemFlag !== '1'" type="primary"
+            <el-button text :disabled="scope.row.systemFlag === '1'" type="primary"
               @click="handleDelete([scope.row.publicId])">{{
                 $t('common.delBtn')
               }}
@@ -118,7 +118,7 @@ const resetQuery = () => {
   getDataList()
 }
 
-// 是否可以多选 
+// 是否可以多选
 const handleSelectable = (row: any) => {
   // 系统类不可多选删除
   return row.systemFlag !== '1'
