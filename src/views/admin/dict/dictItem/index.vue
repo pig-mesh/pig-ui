@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="visible" title="字典项" size="80%">
+  <el-drawer v-model="visible" :title="$t('sysdict.dictItem')" size="80%">
     <el-card shadow="hover" class="layout-padding-auto">
       <el-row>
         <div class="mb8" style="width: 100%">
@@ -10,13 +10,13 @@
                          @queryTable="getDataList"></right-toolbar>
         </div>
         <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
-          <el-table-column prop="dictType" label="类型" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="value" label="数据值" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="label" label="标签" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="description" label="描述" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="sortOrder" label="排序" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="remarks" label="备注信息" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="createTime" label="创建日期" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="dictType" :label="$t('dictItem.dictType')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="value" :label="$t('dictItem.itemValue')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="label" :label="$t('dictItem.label')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="description" :label="$t('dictItem.description')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="sortOrder" :label="$t('dictItem.sortOrder')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="remarks" :label="$t('dictItem.remarks')" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="createTime" :label="$t('dictItem.createTime')" show-overflow-tooltip></el-table-column>
 
           <el-table-column :label="$t('common.action')" width="150">
             <template #default="scope">

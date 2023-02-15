@@ -1,28 +1,28 @@
 <template>
 	<div class="system-dic-dialog-container">
 		<el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')"  width="60%">
-      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px"  :rules="dataRules">
+      <el-form ref="dicDialogFormRef" :model="dataForm" label-width="100px"  :rules="dataRules">
         <el-row :gutter="35">
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="类型" prop="dictType">
-              <el-input v-model="dataForm.dictType" clearable placeholder="请输入字典名称"></el-input>
+            <el-form-item :label="$t('sysdict.dictType')" prop="dictType">
+              <el-input v-model="dataForm.dictType" clearable :placeholder="$t('sysdict.inputDictTypeTip')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="描述" prop="description">
-							<el-input v-model="dataForm.description" placeholder="请输入描述" clearable></el-input>
+            <el-form-item :label="$t('sysdict.description')" prop="description">
+							<el-input v-model="dataForm.description" :placeholder="$t('sysdict.inputDescriptionTip')" clearable></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-						<el-form-item label="字典类型" prop="systemFlag">
+						<el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
               <el-radio-group v-model="dataForm.systemFlag">
                 <el-radio-button :label="item.value" v-for="(item,index) in dict_type" :key="index">{{item.label}}</el-radio-button>
               </el-radio-group>
 						</el-form-item>
 					</el-col>
 					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-						<el-form-item label="备注信息" prop="remarks">
-							<el-input v-model="dataForm.remarks" type="textarea" placeholder="请输入字典描述" maxlength="150"></el-input>
+						<el-form-item :label="$t('sysdict.remarks')" prop="remarks">
+							<el-input v-model="dataForm.remarks" type="textarea" :placeholder="$t('sysdict.inputRemarksTip')" maxlength="150"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>

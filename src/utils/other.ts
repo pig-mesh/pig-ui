@@ -151,9 +151,9 @@ export function isMobile() {
  * @returns 删除空值后的数组对象
  */
 export function handleEmpty(list: EmptyArrayType) {
-	const arr = [];
+	const arr = [] as any[];
 	for (const i in list) {
-		const d = [];
+		const d = [] as any[];
 		for (const j in list[i]) {
 			d.push(list[i][j]);
 		}
