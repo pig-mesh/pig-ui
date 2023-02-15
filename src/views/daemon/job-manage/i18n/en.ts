@@ -52,5 +52,6 @@ export default {
         inputnextTimeTip: 'input nextTime',
         inputtenantIdTip: 'input tenantId',
         inputremarkTip: 'input remark',
+        inputjobLogStatusTip: 'select joblogstatus'
     }
 }

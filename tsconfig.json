@@ -25,10 +25,7 @@
 		"skipLibCheck": true,
 		"paths": {
 			"/@/*": [
-				"src/*"
-			],
-			"@/*": [
-				"src/*"
+				"./src/*"
 			]
 		},
 		"types": [

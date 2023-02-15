@@ -52,5 +52,6 @@ export default {
        inputnextTimeTip: '请输入下次执行时间',
        inputtenantIdTip: '请输入租户',
        inputremarkTip: '请输入备注信息',
+       inputjobLogStatusTip: '选择执行日志状态'
    }
 }
