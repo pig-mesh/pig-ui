@@ -20,7 +20,7 @@
             {{ $t('common.addBtn') }}
           </el-button>
           <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_file_del'"
-            @click="handleDelete(undefined)">
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -39,7 +39,7 @@
         <el-table-column prop="createTime" :label="t('file.createTime')" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button text type="primary" v-auth="'sys_file_del'" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" v-auth="'sys_file_del'" @click="handleDelete([scope.row.id])">{{
               $t('common.delBtn')
             }}</el-button>
             <el-button type="primary" text @click="download(scope.row, scope.index)">{{
@@ -73,7 +73,7 @@ const formDialogRef = ref()
 // 搜索变量
 const showSearch = ref(true)
 // 多选变量
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
 const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -88,13 +88,6 @@ const {
   sizeChangeHandle,
 } = useTable(state)
 
-
-// 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
-}
-
 // 清空搜索条件
 const resetQuery = () => {
   queryRef.value.resetFields()
@@ -107,19 +100,19 @@ const download = (row: any) => {
   );
 }
 
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.id)
+  });
+  multiple.value = !objs.length
+}
 
 // 删除操作
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
-
-  useMessageBox().confirm(t('common.delConfirmText') + row.id)
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
-      delObj(row.id).then(() => {
+      delObj(ids).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {

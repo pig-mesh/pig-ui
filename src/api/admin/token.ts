@@ -8,9 +8,10 @@ export function fetchList(query: object) {
     })
 }
 
-export function delObj(token:string) {
+export function delObj(accessTokens: string[]) {
     return request({
-        url: '/admin/token/' + token,
-        method: 'delete'
+        url: '/admin/token/delete',
+        method: 'delete',
+        data: accessTokens
     })
 }

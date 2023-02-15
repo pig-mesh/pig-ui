@@ -7,7 +7,7 @@
             {{ $t('common.addBtn') }}
           </el-button>
           <right-toolbar :search='false' class="ml10" style="float: right;margin-right: 20px"
-                         @queryTable="getDataList"></right-toolbar>
+            @queryTable="getDataList"></right-toolbar>
         </div>
         <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
           <el-table-column prop="dictType" label="类型" show-overflow-tooltip></el-table-column>
@@ -20,7 +20,7 @@
 
           <el-table-column :label="$t('common.action')" width="150">
             <template #default="scope">
-              <el-button   text type="primary" @click="dictformRef.openDialog(scope.row)"> {{$t('common.editBtn') }}
+              <el-button text type="primary" @click="dictformRef.openDialog(scope.row)"> {{ $t('common.editBtn') }}
               </el-button>
               <el-button text type="primary" @click="handleDelete(scope.row)">
                 {{ $t('common.delBtn') }}
@@ -40,12 +40,12 @@
 <script setup lang="ts" name="dict-item">
 
 
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {fetchItemList,delItemObj} from "/@/api/admin/dict";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useI18n} from "vue-i18n";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { fetchItemList, delItemObj } from "/@/api/admin/dict";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
 
-const  { t } = useI18n()
+const { t } = useI18n()
 const visible = ref(false)
 const DictForm = defineAsyncComponent(() => import("./form.vue"))
 const dictformRef = ref()
@@ -63,8 +63,7 @@ const {
 } = useTable(state)
 
 const handleDelete = (row: any) => {
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.name} ?`).then(() => {
-    // 删除用户的接口
+  useMessageBox().confirm(`${t('common.delConfirmText')} ?`).then(() => {
     delItemObj(row.id).then(() => {
       getDataList();
       useMessage().success(t('common.delSuccessText'))

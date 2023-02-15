@@ -23,10 +23,11 @@ export function getObj(id?: string) {
   })
 }
 
-export function delObj(id?: string) {
+export function delObj(ids?: Object) {
   return request({
-    url: '/admin/param/' + id,
-    method: 'delete'
+    url: '/admin/param',
+    method: 'delete',
+    data: ids
   })
 }
 

@@ -23,10 +23,11 @@ export function getObj(id?: string) {
   })
 }
 
-export function delObj(id?: string) {
+export function delObj(ids?: object) {
   return request({
-    url: '/admin/i18n/' + id,
-    method: 'delete'
+    url: '/admin/i18n',
+    method: 'delete',
+    data: ids
   })
 }
 
@@ -39,7 +40,7 @@ export function putObj(obj?: Object) {
 }
 
 
-export function info(){
+export function info() {
   return request({
     url: '/admin/i18n/info',
     method: 'get',

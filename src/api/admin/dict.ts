@@ -69,10 +69,11 @@ export function getObj(id: string) {
     })
 }
 
-export function delObj(row: any) {
+export function delObj(ids: Object) {
     return request({
-        url: '/admin/dict/' + row.id,
-        method: 'delete'
+        url: '/admin/dict',
+        method: 'delete',
+        data: ids
     })
 }
 

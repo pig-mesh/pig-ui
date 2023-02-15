@@ -7,9 +7,9 @@
             <el-input placeholder="请输入类型" v-model="state.queryForm.dictType" style="max-width: 180px" />
           </el-form-item>
           <el-form-item label="字典类型" prop="systemFlag">
-            <el-select v-model="state.queryForm.systemFlag"  clearable>
+            <el-select v-model="state.queryForm.systemFlag" clearable>
               <el-option v-for="(item, index) in dict_type" :label="item.label" :value="item.value"
-                :key="index" ></el-option>
+                :key="index"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item class="ml2">
@@ -26,16 +26,23 @@
             {{ $t('common.addBtn') }}
           </el-button>
           <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_dict_del'"
-            @click="handleDelete(undefined)">
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
             @queryTable="getDataList"></right-toolbar>
         </div>
       </el-row>
-      <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
+      <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
+        @selection-change="handleSelectionChange">
+        <el-table-column align="center" type="selection" :selectable='handleSelectable' width="50">
+        </el-table-column>
         <el-table-column type="index" label="序号" width="50" />
-        <el-table-column prop="dictType" label="类型" show-overflow-tooltip></el-table-column>
+        <el-table-column label="类型" show-overflow-tooltip>
+          <template #default="scope">
+            <el-button text type="primary" @click="showDictITem(scope.row)">{{ scope.row.dictType }}</el-button>
+          </template>
+        </el-table-column>
         <el-table-column prop="description" label="描述" show-overflow-tooltip sortable></el-table-column>
         <el-table-column prop="systemFlag" label="字典类型" show-overflow-tooltip>
           <template #default="scope">
@@ -48,7 +55,8 @@
         <el-table-column label="操作" width="200">
           <template #default="scope">
             <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
-            <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
+            <el-button text type="primary" v-if="scope.row.systemFlag !== '1'"
+              @click="handleDelete([scope.row.id])">删除</el-button>
             <el-button text type="primary" @click="showDictITem(scope.row)">字典项</el-button>
           </template>
         </el-table-column>
@@ -77,7 +85,7 @@ const dictItemDialogRef = ref()
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
 const multiple = ref(true)
 
 
@@ -100,25 +108,32 @@ const showDictITem = (row: any) => {
   dictItemDialogRef.value.open(row)
 }
 
-
 // 清空搜索条件
 const resetQuery = () => {
   queryRef.value.resetFields()
   state.queryForm = {}
   getDataList()
 }
-// 删除操作
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
 
-  useMessageBox().confirm(t('common.delConfirmText') + row.postId)
+// 是否可以多选 
+const handleSelectable = (row: any) => {
+  // 系统类不可多选删除
+  return row.systemFlag !== '1'
+}
+
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.id)
+  });
+  multiple.value = !objs.length
+}
+
+// 删除操作
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
-      delObj(row.postId).then(() => {
+      delObj(ids).then(() => {
         getDataList();
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {
