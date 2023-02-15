@@ -11,7 +11,17 @@ export default {
         parentId: '上级菜单',
         embedded: '是否内嵌',
         visible: '是否显示',
-        icon: '图标'
+        icon: '图标',
+        inputMenuIdTip: '',
+        inputPermissionTip: '请输入权限标识',
+        inputPathTip: '请输入路由路径',
+        inputParentIdTip: '请选择上级菜单',
+        inputIconTip: '请选择图标',
+        inputVisibleTip: '请选择是否显示',
+        inputSortOrderTip: '请输入排序',
+        inputKeepAliveTip: '请选择是否缓冲',
+        inputMenuTypeTip: '请选择菜单类型',
+        inputEmbeddedTip: '请选择是否内嵌',
     },
 
 }

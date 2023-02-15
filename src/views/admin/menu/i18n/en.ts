@@ -11,6 +11,22 @@ export default {
         parentId: 'parent menu',
         embedded: 'embedded',
         visible: 'visible',
-        icon: 'icon'
+        icon: 'icon',
+        inputMenuIdTip: 'input menuId',
+        inputPermissionTip: 'input permission',
+        inputPathTip: 'input path',
+        inputParentIdTip: 'input parentId',
+        inputIconTip: 'input icon',
+        inputVisibleTip: 'input visible',
+        inputSortOrderTip: 'input sortOrder',
+        inputKeepAliveTip: 'input keepAlive',
+        inputMenuTypeTip: 'input menuType',
+        inputCreateByTip: 'input createBy',
+        inputCreateTimeTip: 'input createTime',
+        inputUpdateByTip: 'input updateBy',
+        inputUpdateTimeTip: 'input updateTime',
+        inputDelFlagTip: 'input delFlag',
+        inputTenantIdTip: 'input tenantId',
+        inputEmbeddedTip: 'input embedded',
     }
 }

@@ -17,7 +17,7 @@
               <el-tree-select v-model="state.ruleForm.parentId" :data="state.parentData"
                               default-expand-all
                               :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
-                              placeholder="请选择上级菜单">
+                              :placeholder="$t('sysmenu.inputParentIdTip')">
               </el-tree-select>
             </el-form-item>
           </el-col>
@@ -28,12 +28,12 @@
           </el-col>
           <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
             <el-form-item :label="$t('sysmenu.path')" prop="path">
-              <el-input v-model="state.ruleForm.path" placeholder="请输入路由地址" />
+              <el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')" />
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '1'">
             <el-form-item :label="$t('sysmenu.permission')" prop="permission">
-              <el-input v-model="state.ruleForm.permission" maxlength="50" placeholder="请权限标识" />
+              <el-input v-model="state.ruleForm.permission" maxlength="50" :placeholder="$t('sysmenu.inputPermissionTip')" />
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
@@ -43,10 +43,10 @@
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysmenu.icon')" prop="icon">
-              <IconSelector placeholder="请输入菜单图标" v-model="state.ruleForm.icon" />
+              <IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
             </el-form-item>
           </el-col>
-          <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
+          <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && showembedded">
             <el-form-item :label="$t('sysmenu.embedded')" prop="embedded">
               <el-radio-group v-model="state.ruleForm.embedded">
                 <el-radio-button label="0">否</el-radio-button>
@@ -136,8 +136,20 @@ const getMenuData = () => {
     menu.children = res.data;
     state.parentData.push(menu)
   })
-
 };
+
+
+const showembedded = ref(false)
+
+
+
+watch(() => state.ruleForm.path,(val) => {
+  if(val.startsWith('http')){
+    showembedded.value = true
+  }else{
+    showembedded.value = false
+  }
+})
 
 const dataRules = reactive({
   menType: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
