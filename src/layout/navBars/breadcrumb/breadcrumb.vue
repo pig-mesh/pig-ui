@@ -90,6 +90,7 @@ const initRouteSplit = (path: string) => {
 	state.routeSplitFirst = `/${state.routeSplit[0]}`;
 	state.routeSplitIndex = 1;
 	getBreadcrumbList(routesList.value);
+  state.breadcrumbList.push(route)
 
 	if (route.name === 'home' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
 	if (state.breadcrumbList.length > 0)

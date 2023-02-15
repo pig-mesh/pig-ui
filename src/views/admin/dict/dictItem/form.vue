@@ -4,33 +4,33 @@
       <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px"  :rules="dataRules">
         <el-row :gutter="35">
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20" v-if="dataForm.id">
-            <el-form-item label="类型" prop="dictType">
-              <el-input v-model="dataForm.dictType" clearable disabled placeholder="请输入字典名称"></el-input>
+            <el-form-item :label="$t('dictItem.dictType')" prop="dictType">
+              <el-input v-model="dataForm.dictType" clearable disabled :placeholder="$t('dictItem.inputDictTypeTip')"></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="数据值" prop="value">
-              <el-input v-model="dataForm.value" placeholder="请输入数据值" clearable></el-input>
+            <el-form-item :label="$t('dictItem.itemValue')" prop="value">
+              <el-input v-model="dataForm.value" :placeholder="$t('dictItem.inputItemValueTip')" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="标签名" prop="label">
-              <el-input v-model="dataForm.label" placeholder="请输入标签名" clearable></el-input>
+            <el-form-item :label="$t('dictItem.label')" prop="label">
+              <el-input v-model="dataForm.label" :placeholder="$t('dictItem.inputLabelTip')" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="描述" prop="description">
-              <el-input v-model="dataForm.description" placeholder="请输入描述" clearable></el-input>
+            <el-form-item :label="$t('dictItem.description')" prop="description">
+              <el-input v-model="dataForm.description" :placeholder="$t('dictItem.inputDescriptionTip')" clearable></el-input>
             </el-form-item>
           </el-col>
           <el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-            <el-form-item label="排序" prop="sortOrder">
-              <el-input-number v-model="dataForm.sortOrder" placeholder="请输入排序" clearable></el-input-number>
+            <el-form-item :label="$t('dictItem.sortOrder')" prop="sortOrder">
+              <el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')" clearable></el-input-number>
             </el-form-item>
           </el-col>
           <el-col :span="24" class="mb20">
-            <el-form-item label="备注信息" prop="remarks">
-              <el-input v-model="dataForm.remarks" type="textarea" placeholder="请输入字典描述" maxlength="150"></el-input>
+            <el-form-item :label="$t('dictItem.remarks')" prop="remarks">
+              <el-input v-model="dataForm.remarks" type="textarea" :placeholder="$t('dictItem.inputRemarksTip')" maxlength="150"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
