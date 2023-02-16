@@ -45,6 +45,8 @@ function mergeArrObj<T>(list: T, key: string) {
 	});
 	return obj;
 }
+
+
 // 从后台获取数据
 info().then((res: any) => {
 	itemize["zh-cn"].push(...res.data['zh-cn'])
@@ -58,8 +60,21 @@ info().then((res: any) => {
 			...mergeArrObj(itemize, key),
 		};
 	}
+
 })
 
+// 远程获取i18n
+const infoI18n = await info()
+itemize["zh-cn"].push(...infoI18n.data['zh-cn'])
+itemize.en.push(...infoI18n.data.en)
+
+for (const key in itemize) {
+	messages[key] = {
+		name: key,
+		el: element[key].el,
+		...mergeArrObj(itemize, key),
+	};
+}
 
 
 // 读取 pinia 默认语言
