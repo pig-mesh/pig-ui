@@ -1,5 +1,5 @@
 export default {
-   sysi18n: {
+   i18n: {
         index: 'index',
         importsysI18nTip: 'import SysI18n',
         id: 'id',

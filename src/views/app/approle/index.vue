@@ -37,11 +37,11 @@
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="50" align="center" />
-        <el-table-column type="index" label="序号" width="80" />
-        <el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="roleCode" label="角色标识" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="roleDesc" label="角色描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table-column type="index" :label="$t('approle.index')" width="80" />
+        <el-table-column prop="roleName" :label="$t('approle.roleName')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="roleCode" :label="$t('approle.roleCode')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="roleDesc" :label="$t('approle.roleDesc')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" :label="$t('approle.createTime')" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button text type="primary" v-auth="'app_approle_edit'"

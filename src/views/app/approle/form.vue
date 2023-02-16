@@ -4,18 +4,18 @@
     <el-form ref="dataFormRef" :model="form" :rules="dataRules"  label-width="90px">
       <el-row :gutter="35">
         <el-col :span="12" class="mb20">
-          <el-form-item label="角色名称" prop="roleName">
-            <el-input v-model="form.roleName" placeholder="请输入角色名称" clearable></el-input>
+          <el-form-item :label="$t('approle.roleName')" prop="roleName">
+            <el-input v-model="form.roleName" :placeholder="$t('approle.please_enter_a_role_name')" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20">
-          <el-form-item label="角色标识" prop="roleCode">
-            <el-input v-model="form.roleCode" placeholder="请输入角色标识" clearable></el-input>
+          <el-form-item :label="$t('approle.roleCode')" prop="roleCode">
+            <el-input v-model="form.roleCode" :placeholder="$t('approle.please_enter_the_role_Code')" clearable></el-input>
           </el-form-item>
         </el-col>
         <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-          <el-form-item label="角色描述" prop="roleDesc">
-            <el-input v-model="form.roleDesc" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+          <el-form-item :label="$t('approle.roleDesc')" prop="roleDesc">
+            <el-input v-model="form.roleDesc" type="textarea" :placeholder="$t('approle.please_enter_the_role_description')" maxlength="150"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
