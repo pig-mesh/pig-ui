@@ -27,10 +27,17 @@
         @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
         <el-table-column align="center" type="selection" width="50" />
         <el-table-column :label="$t('systoken.index')" type="index" width="80" />
-        <el-table-column :label="$t('systoken.userId')" prop="userId" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('systoken.username')" prop="username" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('systoken.clientId')" prop="clientId" show-overflow-tooltip></el-table-column>
-        <el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.username')" prop="username" width="150"
+          show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.clientId')" prop="clientId" width="100"
+          show-overflow-tooltip></el-table-column>
+        <el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip>
+          <template #default="scope">
+            <el-button type="success" link v-if="Session.get('token') === scope.row.accessToken">
+              {{ scope.row.accessToken }}
+            </el-button>
+          </template>
+        </el-table-column>
         <el-table-column :label="$t('systoken.expiresAt')" prop="expiresAt" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="100">
           <template #default="scope">
@@ -53,6 +60,7 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObj } from "/@/api/admin/token";
 import { useI18n } from 'vue-i18n'
 import { useMessage, useMessageBox } from "/@/hooks/message";
+import { Session } from "/@/utils/storage";
 
 const { t } = useI18n()
 // 定义变量内容
@@ -64,14 +72,12 @@ const selectObjs = ref([]) as any
 // 是否可以多选
 const multiple = ref(true)
 
-
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     username: ''
   },
   pageList: fetchList
 });
-
 
 //  table hook
 const {

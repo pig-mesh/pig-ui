@@ -28,6 +28,7 @@ export default {
         inputcreateTimeTip: '请输入创建',
         inputupdateTimeTip: '请输入更新时间',
         inputmenuIdTip: '请选择租户套餐',
+        deleteDisabledTip: '基础租户不允许删除',
     },
     tenantmenu: {
         name: '租户套餐',

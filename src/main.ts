@@ -10,7 +10,6 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import elementIcons from '/@//components/svgIcon/svgicon'
 import '/@/theme/index.scss'
-import VueGridLayout from 'vue-grid-layout'
 import 'vxe-table/lib/style.css'
 import 'xe-utils'
 import VXETable from 'vxe-table'
@@ -41,5 +40,4 @@ app.use(pinia) // pinia 存储
     .use(VXETable) // VXETable 全局引入
     .use(elementIcons) // elementIcons 图标全局引入
     .use(i18n) // 国际化
-    .use(VueGridLayout)
     .mount('#app');

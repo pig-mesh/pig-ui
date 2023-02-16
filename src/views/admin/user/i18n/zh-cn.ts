@@ -15,7 +15,8 @@ export default {
         inputUsernameTip: '请输入用户名',
         inputPhoneTip: '请输入手机号',
         inputNameTip: '请输入姓名',
-        importUserTip: '用户导入'
+        importUserTip: '用户导入',
+        deleteDisabledTip: 'admin 不允许被删除',
     },
 
 }

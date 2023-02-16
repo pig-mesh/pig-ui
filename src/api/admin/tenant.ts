@@ -28,14 +28,15 @@ export function getObj(id?: string) {
     return request({
         url: '/admin/tenant',
         method: 'get',
-        params: {id}
+        params: { id }
     })
 }
 
-export function delObj(id?: string) {
+export function delObj(ids?: Object) {
     return request({
-        url: '/admin/tenant/' + id,
-        method: 'delete'
+        url: '/admin/tenant',
+        method: 'delete',
+        data: ids
     })
 }
 
