@@ -44,31 +44,41 @@
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item label="表单布局" prop="formLayout">
-						<el-radio-group v-model="dataForm.formLayout">
-							<el-radio :label="1" border>一列</el-radio>
-							<el-radio :label="2" border>两列</el-radio>
+					<el-form-item label="代码风格" prop="style">
+						<el-radio-group v-model="dataForm.style">
+							<el-radio-button :label="1">移动端</el-radio-button>
+							<el-radio-button :label="0">PC端</el-radio-button>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
 			</el-row>
 			<el-row>
 				<el-col :span="12" class="mb20">
-					<el-form-item label="生成方式" prop="generatorType">
-						<el-radio-group v-model="dataForm.generatorType">
-							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>
-							<el-radio-button :label="1">自定义路径</el-radio-button>
+					<el-form-item label="表单布局" prop="formLayout">
+						<el-radio-group v-model="dataForm.formLayout">
+							<el-radio-button :label="1">一列</el-radio-button>
+							<el-radio-button :label="2">两列</el-radio-button>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="i18n文件" prop="i18n">
-            <el-radio-group v-model="dataForm.i18n">
-              <el-radio-button :label="0">不生成</el-radio-button>
-              <el-radio-button :label="1">生成</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
+				<el-col :span="12" class="mb20">
+					<el-form-item label="生成方式" prop="generatorType">
+						<el-radio-group v-model="dataForm.generatorType">
+							<el-radio-button :label="1">自定义路径</el-radio-button>
+							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+			</el-row>
+			<el-row>
+				<el-col :span="12" class="mb20">
+					<el-form-item label="i18n文件" prop="i18n" v-if="dataForm.style === 0">
+						<el-radio-group v-model="dataForm.i18n">
+							<el-radio-button :label="0">不生成</el-radio-button>
+							<el-radio-button :label="1">生成</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
 			</el-row>
 			<el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
 				<el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
@@ -78,7 +88,7 @@
 			</el-form-item>
 		</el-form>
 		<template #footer>
-			<el-button @click="previewRef.openDialog(dataForm.id)">{{
+			<el-button @click="previewHandle()">{{
 				$t('gen.prewBtn')
 			}}</el-button>
 			<el-button type="primary" @click="submitHandle()">保存</el-button>
@@ -120,7 +130,8 @@ const dataForm = reactive({
 	tableComment: '',
 	tableName: '',
 	dsName: '',
-  i18n: '1'
+	i18n: 1,  // 默认生成 I18N 国际化文件
+	style: 0, //  默认风格 element-plus
 })
 
 const openDialog = (dName: string, tName: string) => {
@@ -157,6 +168,19 @@ const dataRules = ref({
 	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
+// 预览
+const previewHandle = () => {
+	dataFormRef.value.validate(async (valid: boolean) => {
+		if (!valid) {
+			return false
+		}
+		// 先保存
+		await putObj(dataForm)
+		// 打开预览窗口
+		previewRef.value.openDialog(dataForm.id)
+	})
+}
+
 // 保存
 const submitHandle = () => {
 	dataFormRef.value.validate((valid: boolean) => {
@@ -172,7 +196,7 @@ const submitHandle = () => {
 	})
 }
 
-// 生成代码
+// 生成
 const generatorHandle = () => {
 	dataFormRef.value.validate(async (valid: boolean) => {
 		if (!valid) {
@@ -180,7 +204,7 @@ const generatorHandle = () => {
 		}
 
 		// 先保存
-		await submitHandle()
+		await putObj(dataForm)
 
 		// 生成代码，zip压缩包
 		if (dataForm.generatorType === 0) {
