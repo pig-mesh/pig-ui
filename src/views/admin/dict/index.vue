@@ -3,10 +3,10 @@
     <el-card shadow="hover" class="layout-padding-auto">
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true">
-          <el-form-item label="类型" prop="dictType">
-            <el-input placeholder="请输入类型" v-model="state.queryForm.dictType" style="max-width: 180px" />
+          <el-form-item :label="$t('sysdict.dictType')" prop="dictType">
+            <el-input :placeholder="$t('sysdict.inputDictTypeTip')" v-model="state.queryForm.dictType" style="max-width: 180px" />
           </el-form-item>
-          <el-form-item label="字典类型" prop="systemFlag">
+          <el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
             <el-select v-model="state.queryForm.systemFlag" clearable>
               <el-option v-for="(item, index) in dict_type" :label="item.label" :value="item.value"
                 :key="index"></el-option>
@@ -37,25 +37,24 @@
         @selection-change="handleSelectionChange">
         <el-table-column align="center" type="selection" :selectable='handleSelectable' width="50">
         </el-table-column>
-        <el-table-column type="index" label="序号" width="50" />
-        <el-table-column label="类型" show-overflow-tooltip>
+        <el-table-column type="index" :label="$t('sysdict.index')" width="80" />
+        <el-table-column :label="$t('sysdict.dictType')" show-overflow-tooltip>
           <template #default="scope">
             <el-button text type="primary" @click="showDictITem(scope.row)">{{ scope.row.dictType }}</el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="description" label="描述" show-overflow-tooltip sortable></el-table-column>
-        <el-table-column prop="systemFlag" label="字典类型" show-overflow-tooltip>
+        <el-table-column prop="description" :label="$t('sysdict.description')"  show-overflow-tooltip sortable></el-table-column>
+        <el-table-column prop="systemFlag" :label="$t('sysdict.systemFlag')" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="dict_type" :value="scope.row.systemFlag"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="remarks" label="备注信息" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip sortable></el-table-column>
-
-        <el-table-column label="操作" width="200">
+        <el-table-column prop="remarks" :label="$t('sysdict.remarks')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" :label="$t('sysdict.createTime')" show-overflow-tooltip sortable></el-table-column>
+        <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-            <el-button text type="primary" @click="showDictITem(scope.row)">字典项</el-button>
-            <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">修改</el-button>
+            <el-button text type="primary" @click="showDictITem(scope.row)">{{ $t('sysdict.dictItem') }}</el-button>
+            <el-button text type="primary" @click="onOpenEditDic('edit', scope.row)">{{ $t('common.editBtn') }}</el-button>
             <el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === 1"
               placement="top">
               <span style="margin-left: 12px">
