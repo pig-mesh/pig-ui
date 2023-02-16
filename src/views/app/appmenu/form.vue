@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="60%">
-    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules"  label-width="200px">
-      <el-row :gutter="24">
+  <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules"  label-width="90px">
+      <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.menuType')" prop="menType">
             <el-radio-group v-model="state.ruleForm.menuType">
@@ -73,7 +73,7 @@ const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
-    id: '',
+    menuId: '',
     name: '',
     permission: '',
     parentId: '',

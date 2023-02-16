@@ -2,7 +2,7 @@
   <el-dialog v-model="visible" :close-on-click-modal="false"
              :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
-      <el-row :gutter="24">
+      <el-row :gutter="20">
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('i18n.name')" prop="name">
             <el-input v-model="form.name" :placeholder="t('i18n.inputKeyTip')"/>

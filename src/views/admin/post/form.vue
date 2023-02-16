@@ -2,7 +2,7 @@
   <el-dialog :title="form.postId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
     :close-on-click-modal="false" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px">
-      <el-row :gutter="24">
+      <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('post.postCode')" prop="postCode">
             <el-input v-model="form.postCode" :placeholder="t('post.inputpostCodeTip')" />

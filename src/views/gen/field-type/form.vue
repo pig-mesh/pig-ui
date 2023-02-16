@@ -2,7 +2,7 @@
   <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
     :close-on-click-modal="false" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
-      <el-row :gutter="24">
+      <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('fieldtype.columnType')" prop="columnType">
             <el-input v-model="form.columnType" :placeholder="t('fieldtype.inputcolumnTypeTip')" />
