@@ -39,16 +39,16 @@
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
         @selection-change="handleSelectionChange">
         <el-table-column type="selection" :selectable='handleSelectable' width="50" align="center" />
-        <el-table-column type="index" label="序号" width="80" />
-        <el-table-column prop="roleName" label="角色名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="roleCode" label="角色标识" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="roleDesc" label="角色描述" show-overflow-tooltip></el-table-column>
-        <el-table-column label="数据权限" show-overflow-tooltip>
+        <el-table-column type="index" :label="$t('sysrole.index')" width="80" />
+        <el-table-column prop="roleName" :label="$t('sysrole.roleName')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="roleCode" :label="$t('sysrole.roleCode')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="roleDesc" :label="$t('sysrole.roleDesc')" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="data_authority" :label="$t('sysrole.data_authority')"  show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="dictType" :value="scope.row.dsType"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" :label="$t('sysrole.createTime')" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button text type="primary" v-auth="'sys_role_edit'"
