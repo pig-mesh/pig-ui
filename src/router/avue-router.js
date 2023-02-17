@@ -57,8 +57,8 @@ RouterPlugin.install = function(option = {}) {
           children = oMenu[propsDefault.children],
           query = oMenu[propsDefault.query],
           meta = oMenu[propsDefault.meta]
-        if (option.keepAlive) {
-          meta.keepAlive = option.keepAlive
+        if (oMenu.keepAlive) {
+          meta.keepAlive = oMenu.keepAlive
         }
         const isChild = !!(children && children.length !== 0)
         const oRouter = {

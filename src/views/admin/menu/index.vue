@@ -45,7 +45,7 @@
         </el-table-column>
         <el-table-column prop="keepAlive" label="缓冲" width="80" align="center">
           <template #="scope">
-            <dict-tag :options="dicts.keepalive_status" :value="scope.row.type" />
+            <dict-tag :options="dicts.keepalive_status" :value="scope.row.keepAlive" />
           </template>
         </el-table-column>
         <el-table-column prop="permission" label="权限标识" :show-overflow-tooltip="true"></el-table-column>
