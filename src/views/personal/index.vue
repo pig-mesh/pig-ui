@@ -1,160 +1,136 @@
 <template>
-	<div class="personal layout-pd">
-		<el-row>
-			<!-- 个人信息 -->
-			<el-col :span="24">
-				<el-card shadow="hover" header="个人信息">
-					<div class="personal-user">
-						<div class="personal-user-left">
-							<image-upload class="h100 personal-user-left-upload" @change="handleAvatarSuccess">
-								<img v-if="formData.avatar" :src="formData.avatar" class="avatar" />
-								<el-icon v-else class="avatar-uploader-icon">
-									<Plus />
-								</el-icon>
-							</image-upload>
-						</div>
-						<div class="personal-user-right">
-							<el-row>
-								<el-col :span="24" class="personal-title mb18">{{
-									currentTime
-								}}，admin！ </el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">昵称：</div>
-											<div class="personal-item-value">{{ formData.nickname }}</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">身份：</div>
-											<div class="personal-item-value">超级管理</div>
-										</el-col>
-									</el-row>
-								</el-col>
-								<el-col :span="24">
-									<el-row>
-										<el-col :xs="24" :sm="8" class="personal-item mb6">
-											<div class="personal-item-label">登录IP：</div>
-											<div class="personal-item-value">192.168.1.1</div>
-										</el-col>
-										<el-col :xs="24" :sm="16" class="personal-item mb6">
-											<div class="personal-item-label">登录时间：</div>
-											<div class="personal-item-value">2021-02-05 18:47:26</div>
-										</el-col>
-									</el-row>
-								</el-col>
-							</el-row>
-						</div>
-					</div>
-				</el-card>
-			</el-col>
+  <el-drawer v-model="visible" :title="$t('personal.name')" size="50%">
+    <el-tabs style="height: 200px" class="demo-tabs">
+      <el-tab-pane label="基本信息">
+        <el-card shadow="hover" class="layout-padding-auto">
+          <el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt35 mb35" ref="formdataRef">
+          <el-row :gutter="20">
+            <el-col :span="24" class="mb20">
+              <el-form-item label="用户名" prop="avatar">
+                <image-upload class="h100 personal-user-left-upload" @change="handleAvatarSuccess">
+                  <img v-if="formData.avatar" :src="formData.avatar" class="avatar" />
+                  <el-icon v-else class="avatar-uploader-icon">
+                    <Plus />
+                  </el-icon>
+                </image-upload>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="mb20">
+              <el-form-item label="用户名" prop="username">
+                <el-input v-model="formData.username" clearable disabled></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="mb20">
+              <el-form-item label="手机" prop="phone">
+                <el-input v-model="formData.phone" placeholder="请输入手机" clearable></el-input>
+              </el-form-item>
+            </el-col>
 
-			<!-- 更新信息 -->
-			<el-col :span="24">
-				<el-card shadow="hover" class="mt15 personal-edit" header="更新信息">
-					<div class="personal-edit-title">基本信息</div>
-					<el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt35 mb35"
-						ref="formdataRef">
-						<el-row :gutter="35">
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="用户名" prop="username">
-									<el-input v-model="formData.username" clearable disabled></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="手机" prop="phone">
-									<el-input v-model="formData.phone" placeholder="请输入手机" clearable></el-input>
-								</el-form-item>
-							</el-col>
-
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="邮箱" prop="email">
-									<el-input v-model="formData.email" placeholder="请输入邮箱" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="昵称" prop="nickname">
-									<el-input v-model="formData.nickname" placeholder="请输入昵称" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="姓名" prop="name">
-									<el-input v-model="formData.name" placeholder="请输入姓名" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="原密码" prop="password">
-									<el-input v-model="formData.password" placeholder="请输入密码" clearable
-										type="password"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="mb20">
-								<el-form-item label="新密码" prop="newpassword1">
-									<el-input v-model="formData.newpassword1" clearable type="password"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :xs="24" :sm="12" :md="8" :lg="6" :xl="4" class="mb20">
-								<el-form-item label="确认密码" prop="newpassword2">
-									<el-input v-model="formData.newpassword2" clearable type="password"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :lg="6" :md="8" :sm="12" :xl="4" :xs="24" class="mb20">
-								<el-form-item label="社交登录" prop="social">
-									<div @click="handleClick('wechat')">
+            <el-col :span="24" class="mb20">
+              <el-form-item label="邮箱" prop="email">
+                <el-input v-model="formData.email" placeholder="请输入邮箱" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="mb20">
+              <el-form-item label="昵称" prop="nickname">
+                <el-input v-model="formData.nickname" placeholder="请输入昵称" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="mb20">
+              <el-form-item label="姓名" prop="name">
+                <el-input v-model="formData.name" placeholder="请输入姓名" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" class="mb20">
+              <el-form-item label="社交登录" prop="social">
+                <div @click="handleClick('wechat')">
 										<span :style="{ backgroundColor: '#6ba2d6' }" class="container">
 											<i class="iconfont icon-weixin" icon-class="wechat" />
 										</span>
-										<p class="title">微信</p>
-									</div>
-									<div @click="handleClick('tencent')">
+                  <p class="title">微信</p>
+                </div>
+                <div @click="handleClick('tencent')">
 										<span :style="{ backgroundColor: '#8dc349' }" class="container">
 											<i class="iconfont icon-qq" icon-class="qq" />
 										</span>
-										<p class="title">QQ</p>
-									</div>
-									<div @click="handleClick('gitee')">
+                  <p class="title">QQ</p>
+                </div>
+                <div @click="handleClick('gitee')">
 										<span :style="{ backgroundColor: '#bf3030' }" class="container">
 											<i class="iconfont icon-logo_gitee_icon" icon-class="qq" />
 										</span>
-										<p class="title">Gitee</p>
-									</div>
-									<div @click="handleClick('osc')">
+                  <p class="title">Gitee</p>
+                </div>
+                <div @click="handleClick('osc')">
 										<span :style="{ backgroundColor: '#007B25' }" class="container">
 											<i class="iconfont icon-oschina" icon-class="qq" />
 										</span>
-										<p class="title">开源中国</p>
-									</div>
-								</el-form-item>
-							</el-col>
+                  <p class="title">开源中国</p>
+                </div>
+              </el-form-item>
+            </el-col>
 
-							<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
-								<el-form-item>
-									<el-button type="primary" @click="handleSaveUser">
-										<el-icon>
-											<ele-Position />
-										</el-icon>
-										更新个人信息
-									</el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-				</el-card>
-			</el-col>
-		</el-row>
-	</div>
+            <el-col :span="24" class="mb20">
+              <el-form-item>
+                <el-button type="primary" @click="handleSaveUser">
+                  更新个人信息
+                </el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+        </el-card>
+      </el-tab-pane>
+      <el-tab-pane label="安全信息">
+        <el-card shadow="hover" class="layout-padding-auto">
+          <el-form :model="passwordFormData" :rules="passwordRuleForm" label-width="100px" class="mt35 mb35" ref="passwordFormdataRef">
+            <el-row :gutter="20">
+              <el-col :span="24" class="mb20">
+                <el-form-item label="原密码" prop="password">
+                  <el-input v-model="passwordFormData.password" placeholder="请输入密码" clearable
+                            type="password"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="mb20">
+                <el-form-item label="新密码" prop="newpassword1">
+                  <el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="mb20">
+                <el-form-item label="确认密码" prop="newpassword2">
+                  <el-input v-model="passwordFormData.newpassword2" clearable type="password"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="24" class="mb20">
+                <el-form-item>
+                  <el-button type="primary" @click="handleChangePassword">
+                    修改密码
+                  </el-button>
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-form>
+        </el-card>
+      </el-tab-pane>
+    </el-tabs>
+  </el-drawer>
 </template>
 
 <script setup lang="ts" name="personal">
-import { computed, reactive } from 'vue';
-import { formatAxis } from '/@/utils/formatTime';
 import { useUserInfo } from '/@/stores/userInfo';
-import { editInfo } from '/@/api/admin/user'
+import { editInfo, password } from '/@/api/admin/user'
 import { useMessage } from "/@/hooks/message";
 import { rule } from "/@/utils/validate";
 import other from '/@/utils/other';
+import {Session} from "/@/utils/storage";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n()
 
 
 const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'))
+
+const visible = ref(false)
 
 // 定义变量内容
 const formData = reactive({
@@ -164,36 +140,75 @@ const formData = reactive({
 	avatar: '',
 	nickname: '',
 	phone: '',
-	password: '',
-	newpassword1: '',
-	newpassword2: ''
 });
 
+const passwordFormData = reactive({
+  password: '',
+  newpassword1: '',
+  newpassword2: ''
+})
+
 const formdataRef = ref()
+const passwordFormdataRef = ref()
 
 const ruleForm = reactive({
-	password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
+
 	phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }, { validator: rule.validatePhone, trigger: 'blur' }],
 	nickname: [{ required: true, message: "昵称不能为空", trigger: "blur" }],
 	email: [{ required: true, message: "邮箱不能为空", trigger: "blur" }],
 	name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-	newpassword1: [{
-		min: 6,
-		max: 20,
-		message: "用户密码长度必须介于 6 和 20 之间",
-		trigger: "blur"
-	}]
+
+})
+const validatorPassword2 = (rule: any, value: any, callback: any) =>  {
+  if(value !== passwordFormData.newpassword1){
+    callback(new Error(t('personal.passwordRule')))
+  }else{
+    callback()
+  }
+}
+
+const passwordRuleForm = reactive({
+  password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
+  newpassword1: [{
+    min: 6,
+    max: 20,
+    message: "用户密码长度必须介于 6 和 20 之间",
+    trigger: "blur"
+  }],
+  newpassword2: [
+    {
+      min: 6,
+      max: 20,
+      message: "用户密码长度必须介于 6 和 20 之间",
+      trigger: "blur"
+    },{ validator: validatorPassword2, trigger: 'blur' }
+  ]
 })
 
-onMounted(() => {
-	const data = useUserInfo().userInfos
-	Object.assign(formData, data.user)
-	formData.password = ''
-})
+
+
 
 // 头像上传成功
 const handleAvatarSuccess = (url: any) => {
 	formData.avatar = url;
+}
+
+const handleChangePassword = () => {
+  passwordFormdataRef.value.validate((valid: boolean) => {
+    if (!valid) {
+      return false
+    }
+    password(passwordFormData).then(() => {
+      useMessage().success("修改成功")
+      // 需要重新登录
+      // 清除缓存/token等
+      Session.clear();
+      // 使用 reload 时，不需要调用 resetRoute() 重置路由
+      window.location.reload();
+    }).catch(err => {
+      useMessage().error(err.msg)
+    })
+  })
 }
 
 
@@ -213,12 +228,6 @@ const handleSaveUser = () => {
 	})
 
 }
-
-
-// 当前时间提示语
-const currentTime = computed(() => {
-	return formatAxis(new Date());
-});
 
 const handleClick = (thirdpart: string) => {
 	let appid, client_id, redirect_uri, url;
@@ -241,6 +250,16 @@ const handleClick = (thirdpart: string) => {
 	other.openWindow(url, thirdpart, 540, 540)
 }
 
+const open = () => {
+  visible.value = true
+  const data = useUserInfo().userInfos
+  Object.assign(formData, data.user)
+}
+
+// 暴露变量
+defineExpose({
+  open,
+});
 
 </script>
 

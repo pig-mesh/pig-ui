@@ -63,6 +63,14 @@ export function editInfo(obj: Object) {
     })
 }
 
+export function password(obj: Object){
+    return request({
+        url: '/admin/user/password',
+        method: 'put',
+        data: obj
+    })
+}
+
 /**
  * 注册用户
  */
@@ -107,3 +115,5 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
         }
     })
 }
+
+
