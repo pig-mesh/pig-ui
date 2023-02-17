@@ -27,7 +27,7 @@
             {{ $t('common.exportBtn') }}
           </el-button>
           <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'app_approle_del'"
-            @click="handleDelete(undefined)">
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -47,7 +47,7 @@
             <el-button text type="primary" v-auth="'app_approle_edit'"
               @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
 
-            <el-button text type="primary" v-auth="'app_approle_del'" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" v-auth="'app_approle_del'" @click="handleDelete([scope.row.roleId])">{{
               $t('common.delBtn')
             }}</el-button>
 
@@ -88,7 +88,8 @@ const excelUploadRef = ref()
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选rows
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
+
 // 是否可以多选
 const multiple = ref(true)
 
@@ -116,9 +117,11 @@ const resetQuery = () => {
 }
 
 // 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.roleId)
+  });
+  multiple.value = !objs.length
 }
 
 // 导出excel
@@ -126,23 +129,37 @@ const exportExcel = () => {
   downBlobFile('/admin/approle/export', state.queryForm, 'approle.xlsx')
 }
 
-// 删除角色
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
 
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.roleName}?`)
-    .then(() => {
-      delObj(row.roleId).then(() => {
-        getDataList();
-        useMessage().success(t('common.delSuccessText'));
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      })
-    })
+// 删除操作
+const handleDelete = (ids: string[]) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
+          .then(() => {
+            delObj(ids).then(() => {
+              getDataList();
+              useMessage().success(t('common.delSuccessText'));
+            }).catch((err: any) => {
+              useMessage().error(err.msg)
+            })
+          })
 };
+
+// 删除角色
+// const handleDelete = (ids: any) => {
+//   if (!ids) {
+//     selectObjs.value.forEach((ids: any) => {
+//       handleDelete(ids)
+//     });
+//     return
+//   }
+//
+//   useMessageBox().confirm(`${t('common.delConfirmText')}：${row.roleName}?`)
+//     .then(() => {
+//       delObj(ids).then(() => {
+//         getDataList();
+//         useMessage().success(t('common.delSuccessText'));
+//       }).catch((err: any) => {
+//         useMessage().error(err.msg)
+//       })
+//     })
+// };
 </script>

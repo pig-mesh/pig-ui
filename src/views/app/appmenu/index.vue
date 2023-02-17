@@ -10,9 +10,16 @@
 				<el-button icon="folder-add" type="primary" class="ml10" @click="onOpenAddMenu" v-auth="'sys_menu_add'">
 					{{ $t('common.addBtn') }}
 				</el-button>
+				<el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_post_del'"
+						   @click="handleDelete(selectObjs)">
+					{{ $t('common.delBtn') }}
+				</el-button>
+
 			</div>
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="path"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+				@selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="50" align="center" />
 				<el-table-column prop="name" :label="$t('appmenu.name')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="sortOrder" :label="$t('appmenu.sortOrder')"
 					show-overflow-tooltip></el-table-column>
@@ -38,7 +45,7 @@
 						}}</el-button>
 						<el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)"
 							v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }}</el-button>
-						<el-button text type="primary" @click="onTabelRowDel(scope.row)" v-auth="'sys_menu_del'">{{
+						<el-button text type="primary" @click="handleDelete([scope.row.id])" v-auth="'sys_menu_del'">{{
 							$t('common.delBtn')
 						}}</el-button>
 					</template>
@@ -54,8 +61,10 @@ import { RouteRecordRaw } from 'vue-router';
 import { pageList, delObj } from '/@/api/app/appmenu'
 import { useTable, BasicTableProps } from "/@/hooks/table";
 import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
+const { t } = useI18n();
 
 // 定义变量内容
 const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();
@@ -67,6 +76,31 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	isPage: false
 });
 
+// 多选变量
+const selectObjs = ref([]) as any
+const multiple = ref(true)
+
+
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+	objs.forEach((val: any) => {
+		selectObjs.value.push(val.id)
+	});
+	multiple.value = !objs.length
+}
+
+// 删除操作
+const handleDelete = (ids: string[]) => {
+	useMessageBox().confirm(t('common.delConfirmText'))
+			.then(() => {
+				delObj(ids).then(() => {
+					getDataList();
+					useMessage().success(t('common.delSuccessText'));
+				}).catch((err: any) => {
+					useMessage().error(err.msg)
+				})
+			})
+};
 
 const {
 	getDataList,
