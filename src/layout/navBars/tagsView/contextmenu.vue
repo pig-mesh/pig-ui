@@ -62,6 +62,12 @@ const state = reactive({
 			affix: false,
 			icon: 'iconfont icon-fullscreen',
 		},
+    {
+      contextMenuClickId: 5,
+      txt: 'tagsView.favorite',
+      affix: false,
+      icon: 'ele-Star',
+    },
 	],
 	item: {},
 	arrowLeft: 10,

@@ -60,6 +60,7 @@ import { Session } from '/@/utils/storage';
 import { isObjectValueEqual } from '/@/utils/arrayOperation';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
+import {useMessage} from "/@/hooks/message";
 
 // 引入组件
 const Contextmenu = defineAsyncComponent(() => import('/@/layout/navBars/tagsView/contextmenu.vue'));
@@ -73,7 +74,7 @@ const stores = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { tagsViewRoutes } = storeToRefs(storesTagsViewRoutes);
+const { tagsViewRoutes,favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 const storesKeepALiveNames = useKeepALiveNames();
 const route = useRoute();
 const router = useRouter();
@@ -362,8 +363,20 @@ const onCurrentContextmenuClick = async (item: RouteItem) => {
 			// 开启当前页面全屏
 			openCurrenFullscreen(getThemeConfig.value.isShareTagsView ? path : url);
 			break;
+    case 5:
+      favoriteRoute(item)
+      break;
 	}
 };
+
+const favoriteRoute = (item: RouteItem) => {
+  if(!favoriteRoutes.value.find(o => o.path === item.path)){
+    storesTagsViewRoutes.setFavoriteRoutes(item)
+  }else{
+    useMessage().error("已经存在收藏")
+  }
+}
+
 // 右键点击时：传 x,y 坐标值到子组件中（props）
 const onContextmenu = (v: RouteItem, e: MouseEvent) => {
 	const { clientX, clientY } = e;

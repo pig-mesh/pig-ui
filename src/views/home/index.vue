@@ -1,5 +1,29 @@
 <template>
 	<div class="home-container layout-pd">
+    <el-row :gutter="15" class="home-card-three">
+      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+        <div class="home-card-item">
+          <div class="home-card-item-title">快捷导航工具</div>
+          <div class="home-monitor">
+            <div class="flex-warp">
+              <div class="flex-warp-item" v-for="(v, k) in favoriteRoutes" :key="k">
+                <div class="flex-warp-item-box">
+                  <div class="flex-margin">
+                    <i :class="v.meta.icon"></i>
+                    <el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path" @close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </el-col>
+      <el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
+        <div class="home-card-item">
+          <div style="height: 100%" ref="homeBarRef"></div>
+        </div>
+      </el-col>
+    </el-row>
 		<el-row :gutter="15" class="home-card-one mb15">
 			<el-col
 				:xs="24"
@@ -37,31 +61,6 @@
 				</div>
 			</el-col>
 		</el-row>
-		<el-row :gutter="15" class="home-card-three">
-			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-				<div class="home-card-item">
-					<div class="home-card-item-title">快捷导航工具</div>
-					<div class="home-monitor">
-						<div class="flex-warp">
-							<div class="flex-warp-item" v-for="(v, k) in state.homeThree" :key="k">
-								<div class="flex-warp-item-box" :class="`home-animation${k}`">
-									<div class="flex-margin">
-										<i :class="v.icon" :style="{ color: v.iconColor }"></i>
-										<span class="pl5">{{ v.label }}</span>
-										<div class="mt10">{{ v.value }}</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</el-col>
-			<el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
-				<div class="home-card-item">
-					<div style="height: 100%" ref="homeBarRef"></div>
-				</div>
-			</el-col>
-		</el-row>
 	</div>
 </template>
 
@@ -71,7 +70,8 @@ import * as echarts from 'echarts';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-
+import { useRouter } from 'vue-router';
+const router = useRouter();
 // 定义变量内容
 const homeLineRef = ref();
 const homePieRef = ref();
@@ -79,7 +79,7 @@ const homeBarRef = ref();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { isTagsViewCurrenFull } = storeToRefs(storesTagsViewRoutes);
+const { isTagsViewCurrenFull,favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 const state = reactive({
 	global: {
 		homeChartOne: null,
@@ -125,62 +125,6 @@ const state = reactive({
 			color3: '--el-color-danger',
 		},
 	],
-	homeThree: [
-		{
-			icon: 'iconfont icon-yangan',
-			label: '浅粉红',
-			value: '2.1%OBS/M',
-			iconColor: '#F72B3F',
-		},
-		{
-			icon: 'iconfont icon-wendu',
-			label: '深红(猩红)',
-			value: '30℃',
-			iconColor: '#91BFF8',
-		},
-		{
-			icon: 'iconfont icon-shidu',
-			label: '淡紫红',
-			value: '57%RH',
-			iconColor: '#88D565',
-		},
-		{
-			icon: 'iconfont icon-shidu',
-			label: '弱紫罗兰红',
-			value: '107w',
-			iconColor: '#88D565',
-		},
-		{
-			icon: 'iconfont icon-zaosheng',
-			label: '中紫罗兰红',
-			value: '57DB',
-			iconColor: '#FBD4A0',
-		},
-		{
-			icon: 'iconfont icon-zaosheng',
-			label: '紫罗兰',
-			value: '57PV',
-			iconColor: '#FBD4A0',
-		},
-		{
-			icon: 'iconfont icon-zaosheng',
-			label: '暗紫罗兰',
-			value: '517Cpd',
-			iconColor: '#FBD4A0',
-		},
-		{
-			icon: 'iconfont icon-zaosheng',
-			label: '幽灵白',
-			value: '12kg',
-			iconColor: '#FBD4A0',
-		},
-		{
-			icon: 'iconfont icon-zaosheng',
-			label: '海军蓝',
-			value: '64fm',
-			iconColor: '#FBD4A0',
-		},
-	],
 	myCharts: [] as EmptyArrayType,
 	charts: {
 		theme: '',
@@ -188,6 +132,15 @@ const state = reactive({
 		color: '#303133',
 	},
 });
+
+const HandleRoute = (item: any) => {
+  router.push(item.path)
+}
+
+const handleCloseFavorite = (item: any) => {
+  storesTagsViewRoutes.delFavoriteRoutes(item)
+}
+
 
 // 折线图
 const initLineChart = () => {
@@ -600,7 +553,7 @@ $homeNavLengh: 8;
 				height: 100%;
 				.flex-warp-item {
 					width: 25%;
-					height: 111px;
+					height: 56px;
 					display: flex;
 					.flex-warp-item-box {
 						margin: auto;

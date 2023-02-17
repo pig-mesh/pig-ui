@@ -47,6 +47,7 @@
     "vite": "^4.0.0",
     "vite-plugin-style-import": "^2.0.0",
     "vite-plugin-vue-setup-extend": "^0.4.0",
+    "pinia-plugin-persist": "^1.0.0",
     "vue-eslint-parser": "^9.1.0"
   },
   "browserslist": [
