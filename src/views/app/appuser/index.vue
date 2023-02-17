@@ -31,7 +31,7 @@
                 {{ $t('common.exportBtn') }}
               </el-button>
               <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_user_del'"
-                @click="handleDelete(undefined)">
+                @click="handleDelete(selectObjs)">
                 {{ $t('common.delBtn') }}
               </el-button>
               <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -65,7 +65,7 @@
                     $t('common.editBtn')
                   }}
                 </el-button>
-                <el-button   text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_user_del'">
+                <el-button   text type="primary" @click="handleDelete([scope.row.userId])" v-auth="'sys_user_del'">
                   {{ $t('common.delBtn') }}
                 </el-button>
               </template>
@@ -104,7 +104,7 @@ const showSearch = ref(true)
 
 
 // 多选rows
-const selectObjs = ref([]);
+const selectObjs = ref([]) as any;
 // 是否可以多选
 const multiple = ref(true);
 
@@ -134,9 +134,11 @@ const resetQuery = () => {
 
 
 // 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.userId)
+  });
+  multiple.value = !objs.length
 }
 
 // 导出excel
@@ -145,17 +147,16 @@ const exportExcel = () => {
 }
 
 // 删除用户
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach(val => {
-      handleDelete(val)
-    });
-    return
-  }
-
-  useMessageBox().confirm(`${t('common.delConfirmText')}：${row.username} ?`).then(() => {
+const handleDelete = (ids: string[]) => {
+  // if (!row) {
+  //   selectObjs.value.forEach(val => {
+  //     handleDelete(val)
+  //   });
+  //   return
+  // }
+  useMessageBox().confirm(t('common.delConfirmText')).then(() => {
     // 删除用户的接口
-    delObj(row.userId).then(() => {
+    delObj(ids).then(() => {
       getDataList();
       useMessage().success(t('common.delSuccessText'))
     }).catch(err => {

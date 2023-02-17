@@ -27,7 +27,7 @@
             {{ $t('common.exportBtn') }}
           </el-button>
           <el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10"
-                     v-auth="'app_social_details_del'" @click="handleDelete(undefined)">
+                     v-auth="'app_social_details_del'" @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -52,7 +52,7 @@
             <el-button text type="primary" v-auth="'app_social_details_edit'"
                        @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
             </el-button>
-            <el-button text type="primary" v-auth="'app_social_details_del'" @click="handleDelete(scope.row)">{{
+            <el-button text type="primary" v-auth="'app_social_details_del'" @click="handleDelete([scope.row.id])">{{
                 $t('common.delBtn')
               }}
             </el-button>
@@ -86,7 +86,7 @@ const formDialogRef = ref()
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
-const selectObjs = ref([])
+const selectObjs = ref([]) as any
 const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -116,9 +116,11 @@ const resetQuery = () => {
 }
 
 // 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
+const handleSelectionChange = (objs: any) => {
+  objs.forEach((val: any) => {
+    selectObjs.value.push(val.id)
+  });
+  multiple.value = !objs.length
 }
 
 // 导出excel
@@ -127,17 +129,10 @@ const exportExcel = () => {
 }
 
 // 删除操作
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
-
-  useMessageBox().confirm(t('common.delConfirmText') + row.id)
+const handleDelete = (ids: any) => {
+  useMessageBox().confirm(t('common.delConfirmText'))
       .then(() => {
-        delObj(row.id).then(() => {
+        delObj(ids).then(() => {
           getDataList();
           useMessage().success(t('common.delSuccessText'));
         }).catch((err: any) => {
