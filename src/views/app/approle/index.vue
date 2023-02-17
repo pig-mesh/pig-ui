@@ -143,23 +143,4 @@ const handleDelete = (ids: string[]) => {
           })
 };
 
-// 删除角色
-// const handleDelete = (ids: any) => {
-//   if (!ids) {
-//     selectObjs.value.forEach((ids: any) => {
-//       handleDelete(ids)
-//     });
-//     return
-//   }
-//
-//   useMessageBox().confirm(`${t('common.delConfirmText')}：${row.roleName}?`)
-//     .then(() => {
-//       delObj(ids).then(() => {
-//         getDataList();
-//         useMessage().success(t('common.delSuccessText'));
-//       }).catch((err: any) => {
-//         useMessage().error(err.msg)
-//       })
-//     })
-// };
 </script>

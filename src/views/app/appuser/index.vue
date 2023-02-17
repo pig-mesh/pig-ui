@@ -148,12 +148,6 @@ const exportExcel = () => {
 
 // 删除用户
 const handleDelete = (ids: string[]) => {
-  // if (!row) {
-  //   selectObjs.value.forEach(val => {
-  //     handleDelete(val)
-  //   });
-  //   return
-  // }
   useMessageBox().confirm(t('common.delConfirmText')).then(() => {
     // 删除用户的接口
     delObj(ids).then(() => {
