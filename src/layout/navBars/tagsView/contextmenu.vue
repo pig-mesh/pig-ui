@@ -16,7 +16,7 @@
 						aria-disabled="false"
 						tabindex="-1"
 						:key="k"
-						v-if="!v.affix"
+						v-if="!v.affix && v.show"
 						@click="onCurrentContextmenuClick(v.contextMenuClickId)"
 					>
 						<SvgIcon :name="v.icon" />
@@ -31,6 +31,10 @@
 
 <script setup lang="ts" name="layoutTagsViewContextmenu">
 import { computed, reactive, onMounted, onUnmounted, watch } from 'vue';
+import {storeToRefs} from "pinia";
+import {useTagsViewRoutes} from "/@/stores/tagsViewRoutes";
+const storesTagsViewRoutes = useTagsViewRoutes();
+const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -52,20 +56,22 @@ const emit = defineEmits(['currentContextmenuClick']);
 const state = reactive({
 	isShow: false,
 	dropdownList: [
-		{ contextMenuClickId: 0, txt: 'tagsView.refresh', affix: false, icon: 'ele-RefreshRight' },
-		{ contextMenuClickId: 1, txt: 'tagsView.close', affix: false, icon: 'ele-Close' },
-		{ contextMenuClickId: 2, txt: 'tagsView.closeOther', affix: false, icon: 'ele-CircleClose' },
-		{ contextMenuClickId: 3, txt: 'tagsView.closeAll', affix: false, icon: 'ele-FolderDelete' },
+		{ contextMenuClickId: 0, txt: 'tagsView.refresh', affix: false,show: true, icon: 'ele-RefreshRight' },
+		{ contextMenuClickId: 1, txt: 'tagsView.close', affix: false,show: true, icon: 'ele-Close' },
+		{ contextMenuClickId: 2, txt: 'tagsView.closeOther', affix: false,show: true, icon: 'ele-CircleClose' },
+		{ contextMenuClickId: 3, txt: 'tagsView.closeAll', affix: false,show: true, icon: 'ele-FolderDelete' },
 		{
 			contextMenuClickId: 4,
 			txt: 'tagsView.fullscreen',
 			affix: false,
+      show: true,
 			icon: 'iconfont icon-fullscreen',
 		},
     {
       contextMenuClickId: 5,
       txt: 'tagsView.favorite',
       affix: false,
+      show: true,
       icon: 'ele-Star',
     },
 	],
@@ -93,6 +99,13 @@ const onCurrentContextmenuClick = (contextMenuClickId: number) => {
 const openContextmenu = (item: RouteItem) => {
 	state.item = item;
 	item.meta?.isAffix ? (state.dropdownList[1].affix = true) : (state.dropdownList[1].affix = false);
+  if(!favoriteRoutes.value.find(route => route.path === item.path)){
+    state.dropdownList[5].show = true
+  }else{
+    state.dropdownList[5].show = false
+  }
+
+
 	closeContextmenu();
 	setTimeout(() => {
 		state.isShow = true;
