@@ -297,13 +297,6 @@ const submitHandle = () => {
 
 }
 
-// 预览设计
-// const previewHandle = () => {
-// 	submitHandle().then(() => {
-// 		previewRef.value.openDialog(tableId.value)
-// 	})
-// }
-
 defineExpose({
 	openDialog,
   submitHandle
