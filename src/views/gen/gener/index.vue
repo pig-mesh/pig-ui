@@ -16,8 +16,8 @@
     <el-space wrap>
       <el-button style="margin-top: 12px" @click="pre" v-if="active > 0">上一步</el-button>
       <el-button style="margin-top: 12px" @click="next" v-if="active < 1">下一步</el-button>
-      <el-button style="margin-top: 12px" @click="previewDialogRef.openDialog(tableId)" v-if="active === 1">预览</el-button>
-      <el-button style="margin-top: 12px" @click="generatorHandle" v-if="active === 1">生成</el-button>
+      <el-button style="margin-top: 12px" @click="preview" v-if="active === 1">保存并预览</el-button>
+      <el-button style="margin-top: 12px" @click="generatorHandle" v-if="active === 1">保存并生成</el-button>
     </el-space>
     <preview-dialog ref="previewDialogRef"></preview-dialog>
   </div>
@@ -49,15 +49,15 @@ const dataForm = reactive({
 const next = async () => {
   if(active.value === 0){
     try {
-      await generatorRef.value.submitHandle()
+      const table = await generatorRef.value.submitHandle()
+      tableId.value = table
     }catch (e) {
       return
     }
   }
   if(active.value === 1){
     try {
-      const table =  await editTableRef.value.submitHandle()
-      tableId.value = table
+      await editTableRef.value.submitHandle()
     }catch (e) {
       return
     }
@@ -81,8 +81,15 @@ const dsName = ref()
 
 const editTableRef = ref()
 
+const preview = async () => {
+  await editTableRef.value.submitHandle()
+  previewDialogRef.value.openDialog(tableId.value)
+}
+
+
 // 生成
-const generatorHandle = () => {
+const generatorHandle = async () => {
+    await editTableRef.value.submitHandle()
     // 生成代码，zip压缩包
     if (dataForm.generatorType === 0) {
       downBlobFile('/gen/generator/download?tableIds=' + [tableId.value].join(','), {}, `${tableName.value}.zip`)

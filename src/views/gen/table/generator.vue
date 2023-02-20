@@ -194,7 +194,7 @@ const submitHandle = () => {
         visible.value = false
         emit('refreshDataList')
         useMessage().success(t('common.optSuccessText'))
-        resolve("")
+        resolve(dataForm.id)
       })
     })
   })

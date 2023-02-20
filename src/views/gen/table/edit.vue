@@ -113,19 +113,17 @@
 							<vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
 						</template>
 					</vxe-column>
-					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
+					<vxe-column field="formValidator" title="表单效验">
+            <template #default="{ row }">
+              <vxe-select v-model="row.formValidator">
+                <vxe-option v-for="item in formValidatorList" :key="item.value" :value="item.value"
+                            :label="item.label"></vxe-option>
+              </vxe-select>
+            </template>
+          </vxe-column>
 				</vxe-table>
 			</el-tab-pane>
 		</el-tabs>
-<!--		<template #footer>-->
-<!--			<el-button @click="visible = false">取消</el-button>-->
-<!--			<el-button @click="previewHandle()">{{-->
-<!--				$t('gen.prewBtn')-->
-<!--			}}</el-button> <el-button type="primary" @click="submitHandle()">确定</el-button>-->
-<!--		</template>-->
-		<!-- 预览 -->
-<!--		<preview-dialog ref="previewRef" />-->
-<!--	</el-drawer>-->
 </template>
 
 <script setup lang="ts">
@@ -137,7 +135,6 @@ import { VxeTableInstance } from 'vxe-table'
 import { useMessage } from '/@/hooks/message'
 import { useI18n } from 'vue-i18n'
 
-// const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
 
 const { t } = useI18n();
 
@@ -208,6 +205,18 @@ const formTypeList = reactive([
 	{ label: '复选框', value: 'checkbox' },
 	{ label: '日期', value: 'date' },
 	{ label: '日期时间', value: 'datetime' }
+])
+
+const formValidatorList = reactive([
+  { label: '数字', value: 'number' },
+  { label: '字母', value: 'letter' },
+  { label: '字母和数字', value: 'letterAndNumber' },
+  { label: '手机号码', value: 'mobilePhone' },
+  { label: '字母开头，仅可包含数字', value: 'letterStartNumberIncluded' },
+  { label: '禁止中文输入', value: 'noChinese' },
+  { label: '必须中文输入', value: 'chinese' },
+  { label: '电子邮箱', value: 'email' },
+  { label: 'URL网址', value: 'url' }
 ])
 
 const openDialog = (dName: string, tName: string) => {
