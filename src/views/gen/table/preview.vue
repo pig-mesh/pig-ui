@@ -35,7 +35,7 @@ const preview = reactive({
 })
 
 const previewCodegen = ref([])
-const fileTreeOriginal = ref([])
+const fileTreeOriginal = ref([] as any[])
 
 const openDialog = async (id: string) => {
     await getGenCodeFile(id)
@@ -70,7 +70,7 @@ const handleNodeClick = async (data: any, node: any) => {
  */
 const handleFiles = (fileTreeOriginal: any) => {
     const exists = {}
-    const files = []
+    const files = [] as any[]
 
     // 遍历每个元素
     for (const data of fileTreeOriginal.value) {

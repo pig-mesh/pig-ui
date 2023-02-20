@@ -106,7 +106,7 @@ const state = reactive({
     menuType: '0',
     keepAlive: '0',
     visible: '0',
-    embedded: '1',
+    embedded: '0',
   },
   parentData: [] as any[], // 上级菜单数据
 });
@@ -125,7 +125,7 @@ const getMenuData = () => {
       menuType: "",
       parentId: "",
       path: "",
-      embedded: 1,
+      embedded: '0',
       sortOrder: 0,
       updateBy: "",
       updateTime: "",
@@ -147,6 +147,7 @@ watch(() => state.ruleForm.path, (val) => {
     showembedded.value = true
   } else {
     showembedded.value = false
+    state.ruleForm.embedded = '0'
   }
 })
 

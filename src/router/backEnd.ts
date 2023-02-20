@@ -124,9 +124,7 @@ export async function setBackEndControlRefreshRoutes() {
  */
 export function backEndComponent(routes: any) {
     if (!routes) return;
-    return routes.filter((item: any) => {
-        return !item.visible
-    }).map((item: any) => {
+    return routes.map((item: any) => {
         if (item.path && item.path.startsWith('http')) {
             if (item.meta.isIframe) {
                 item.component = () => import('/@/layout/routerView/iframes.vue')

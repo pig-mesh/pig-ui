@@ -1,5 +1,4 @@
 <template>
-	<el-dialog v-model="visible" title="生成代码" :close-on-click-modal="false" draggable>
 		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
 			<el-row>
 				<el-col :span="12" class="mb20">
@@ -61,42 +60,33 @@
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item label="生成方式" prop="generatorType">
-						<el-radio-group v-model="dataForm.generatorType">
-							<el-radio-button :label="1">自定义路径</el-radio-button>
-							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
+        <el-col :span="12" class="mb20">
+          <el-form-item label="i18n文件" prop="i18n" v-if="dataForm.style === 0">
+            <el-radio-group v-model="dataForm.i18n">
+              <el-radio-button :label="0">不生成</el-radio-button>
+              <el-radio-button :label="1">生成</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+        </el-col>
+<!--				<el-col :span="12" class="mb20">-->
+<!--					<el-form-item label="生成方式" prop="generatorType">-->
+<!--						<el-radio-group v-model="dataForm.generatorType">-->
+<!--							<el-radio-button :label="1">自定义路径</el-radio-button>-->
+<!--							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>-->
+<!--						</el-radio-group>-->
+<!--					</el-form-item>-->
+<!--				</el-col>-->
 			</el-row>
-			<el-row>
-				<el-col :span="12" class="mb20">
-					<el-form-item label="i18n文件" prop="i18n" v-if="dataForm.style === 0">
-						<el-radio-group v-model="dataForm.i18n">
-							<el-radio-button :label="0">不生成</el-radio-button>
-							<el-radio-button :label="1">生成</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-			</el-row>
-			<el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
-				<el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
-			</el-form-item>
-			<el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
-				<el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
-			</el-form-item>
+<!--			<el-row>-->
+
+<!--			</el-row>-->
+<!--			<el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">-->
+<!--				<el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>-->
+<!--			</el-form-item>-->
+<!--			<el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">-->
+<!--				<el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>-->
+<!--			</el-form-item>-->
 		</el-form>
-		<template #footer>
-			<el-button @click="previewHandle()">{{
-				$t('gen.prewBtn')
-			}}</el-button>
-			<el-button type="primary" @click="submitHandle()">保存</el-button>
-			<el-button type="danger" @click="generatorHandle()">生成代码</el-button>
-		</template>
-	</el-dialog>
-	<!-- 预览 -->
-	<preview-dialog ref="previewRef" />
 </template>
 
 <script setup lang="ts">
@@ -105,7 +95,16 @@ import { putObj, useTableApi, useGeneratorCodeApi } from '/@/api/gen/table'
 import { useMessage } from '/@/hooks/message';
 import { downBlobFile } from '/@/utils/other';
 
-const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
+// const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
+
+const props = defineProps({
+  tableName: {
+    type: String
+  },
+  dsName: {
+    type: String
+  }
+})
 
 
 const emit = defineEmits(['refreshDataList'])
@@ -128,8 +127,8 @@ const dataForm = reactive({
 	functionName: '',
 	className: '',
 	tableComment: '',
-	tableName: '',
-	dsName: '',
+	tableName: '' as string,
+	dsName: '' as string,
 	i18n: 1,  // 默认生成 I18N 国际化文件
 	style: 0, //  默认风格 element-plus
 })
@@ -169,61 +168,80 @@ const dataRules = ref({
 })
 
 // 预览
-const previewHandle = () => {
-	dataFormRef.value.validate(async (valid: boolean) => {
-		if (!valid) {
-			return false
-		}
-		// 先保存
-		await putObj(dataForm)
-		// 打开预览窗口
-		previewRef.value.openDialog(dataForm.id)
-	})
-}
+// const previewHandle = () => {
+// 	dataFormRef.value.validate(async (valid: boolean) => {
+// 		if (!valid) {
+// 			return false
+// 		}
+// 		// 先保存
+// 		await putObj(dataForm)
+// 		// 打开预览窗口
+// 		previewRef.value.openDialog(dataForm.id)
+// 	})
+// }
 
 // 保存
 const submitHandle = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false
-		}
+  return new Promise((resolve, reject) => {
+    dataFormRef.value.validate((valid: boolean) => {
 
-		putObj(dataForm).then(() => {
-			visible.value = false
-			emit('refreshDataList')
-			useMessage().success(t('common.optSuccessText'))
-		})
-	})
+      if (!valid) {
+        reject()
+        return false
+      }
+
+      putObj(dataForm).then(() => {
+        visible.value = false
+        emit('refreshDataList')
+        useMessage().success(t('common.optSuccessText'))
+        resolve("")
+      })
+    })
+  })
+
 }
 
 // 生成
-const generatorHandle = () => {
-	dataFormRef.value.validate(async (valid: boolean) => {
-		if (!valid) {
-			return false
-		}
+// const generatorHandle = () => {
+// 	dataFormRef.value.validate(async (valid: boolean) => {
+// 		if (!valid) {
+// 			return false
+// 		}
+//
+// 		// 先保存
+// 		await putObj(dataForm)
+//
+// 		// 生成代码，zip压缩包
+// 		if (dataForm.generatorType === 0) {
+// 			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, `${dataForm.tableName}.zip`)
+// 			visible.value = false
+// 		}
+//
+// 		// 写入到指定目录
+// 		if (dataForm.generatorType === 1) {
+// 			useGeneratorCodeApi([dataForm.id].join(',')).then(() => {
+// 				useMessage().success(t('common.optSuccessText'))
+// 				visible.value = false
+// 			})
+// 		}
+// 	})
+// }
 
-		// 先保存
-		await putObj(dataForm)
+onMounted(() => {
+  // 重置表单数据
+  if (dataFormRef.value) {
+    dataFormRef.value.resetFields()
+  }
+  dataForm.id = ''
+  dataForm.tableName = String(props.tableName)
+  dataForm.dsName = String(props.dsName)
 
-		// 生成代码，zip压缩包
-		if (dataForm.generatorType === 0) {
-			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, `${dataForm.tableName}.zip`)
-			visible.value = false
-		}
-
-		// 写入到指定目录
-		if (dataForm.generatorType === 1) {
-			useGeneratorCodeApi([dataForm.id].join(',')).then(() => {
-				useMessage().success(t('common.optSuccessText'))
-				visible.value = false
-			})
-		}
-	})
-}
+  getTable(dataForm.dsName, dataForm.tableName)
+})
 
 defineExpose({
-	openDialog
+	openDialog,
+  submitHandle
 })
 </script>
 

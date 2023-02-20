@@ -46,15 +46,19 @@
             <el-button text type="primary" @click="syncTable(state.queryForm.dsName, scope.row.tableName)">{{
               $t('gen.syncBtn')
             }}</el-button>
+<!--            <el-button text type="primary"-->
+<!--              @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{-->
+<!--                $t('gen.designBtn')-->
+<!--              }}</el-button>-->
             <el-button text type="primary"
-              @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
-                $t('gen.designBtn')
-              }}</el-button>
+                @click="openGen(scope.row)">{{
+                  $t('gen.genBtn')
+                }}</el-button>
 
-            <el-button text type="primary"
-              @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{
-                $t('gen.genBtn')
-              }}</el-button>
+<!--            <el-button text type="primary"-->
+<!--              @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{-->
+<!--                $t('gen.genBtn')-->
+<!--              }}</el-button>-->
 
             <el-button text type="primary" @click="handleDelete(scope.row)">{{
               $t('common.delBtn')
@@ -65,12 +69,6 @@
       <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
     </el-card>
 
-    <!-- 编辑  -->
-    <edit-dialog ref="formDialogRef" @refresh="getDataList()" />
-
-    <!-- 生成-->
-    <generator-dialog ref="generatorRef" @refreshDataList="getDataList" />
-
   </div>
 </template>
 
@@ -80,15 +78,16 @@ import { fetchList, delObj, useSyncTableApi } from "/@/api/gen/table";
 import { list } from '/@/api/gen/datasource'
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
+import { useRouter } from 'vue-router';
+
+// 定义变量内容
+const router = useRouter();
 
 // 引入组件
-const EditDialog = defineAsyncComponent(() => import('./edit.vue'));
-const GeneratorDialog = defineAsyncComponent(() => import('./generator.vue'));
 const { t } = useI18n()
 
 // 定义变量内容
 const formDialogRef = ref()
-const generatorRef = ref()
 
 // 搜索变量
 const queryRef = ref()
@@ -124,6 +123,16 @@ onMounted(() => {
     getDataList()
   })
 })
+
+const openGen = (row) => {
+  router.push({
+    path: '/gen/gener/index',
+    query: {
+      tableName: row.tableName,
+      dsName: state.queryForm.dsName
+    }
+  })
+}
 
 // 同步表数据
 const syncTable = (dsName: string, tableName: string) => {
