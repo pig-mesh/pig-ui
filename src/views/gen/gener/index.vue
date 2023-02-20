@@ -24,17 +24,18 @@
 </template>
 
 <script lang="ts" setup>
-import {useGeneratorCodeApi} from "/@/api/gen/table";
+import { useGeneratorCodeApi } from "/@/api/gen/table";
+import { useRoute } from "vue-router";
+import { downBlobFile } from "/@/utils/other";
+import { useMessage } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
 
 const Generator = defineAsyncComponent(() => import('../table/generator.vue'))
 const EditTable = defineAsyncComponent(() => import('../table/edit.vue'))
 const PreviewDialog = defineAsyncComponent(() => import('../table/preview.vue'));
 const previewDialogRef = ref()
 const generatorRef = ref()
-import { useRoute } from "vue-router";
-import {downBlobFile} from "/@/utils/other";
-import {useMessage} from "/@/hooks/message";
-import {useI18n} from "vue-i18n";
+
 const route = useRoute()
 const { t } = useI18n()
 
@@ -44,32 +45,31 @@ const tableId = ref()
 const generatorType = ref()
 
 const next = async () => {
-  if(active.value === 0){
+  if (active.value === 0) {
     try {
       const dataform = await generatorRef.value.submitHandle()
-      console.log(dataform,'dataform')
       tableId.value = dataform.id
       generatorType.value = dataform.generatorType
-    }catch (e) {
+    } catch (e) {
       return
     }
   }
-  if(active.value === 1){
+  if (active.value === 1) {
     try {
       await editTableRef.value.submitHandle()
-    }catch (e) {
+    } catch (e) {
       return
     }
   }
 
-  if (active.value++ >= 2){
+  if (active.value++ >= 2) {
     active.value = 2
     return
   }
 }
 
 const pre = () => {
-  if (active.value-- <=0){
+  if (active.value-- <= 0) {
     active.value = 0
     return
   }
@@ -88,18 +88,18 @@ const preview = async () => {
 
 // 生成
 const generatorHandle = async () => {
-    await editTableRef.value.submitHandle()
-    // 生成代码，zip压缩包
-    if (generatorType.value === 0) {
-      downBlobFile('/gen/generator/download?tableIds=' + [tableId.value].join(','), {}, `${tableName.value}.zip`)
-    }
+  await editTableRef.value.submitHandle()
+  // 生成代码，zip压缩包
+  if (generatorType.value === 0) {
+    downBlobFile('/gen/generator/download?tableIds=' + [tableId.value].join(','), {}, `${tableName.value}.zip`)
+  }
 
-    // 写入到指定目录
-    if (generatorType.value === 1) {
-      useGeneratorCodeApi([tableId.value].join(',')).then(() => {
-        useMessage().success(t('common.optSuccessText'))
-      })
-    }
+  // 写入到指定目录
+  if (generatorType.value === 1) {
+    useGeneratorCodeApi([tableId.value].join(',')).then(() => {
+      useMessage().success(t('common.optSuccessText'))
+    })
+  }
 }
 
 

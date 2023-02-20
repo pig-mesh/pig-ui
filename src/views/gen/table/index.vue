@@ -27,16 +27,11 @@
           <el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(undefined)">
-            {{ $t('common.delBtn') }}
-          </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
             @queryTable="getDataList"></right-toolbar>
         </div>
       </el-row>
-      <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
-        @selection-change="handleSelectionChange">
-        <el-table-column type="selection" width="50" align="center" />
+      <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
         <el-table-column type="index" :label="t('table.index')" width="80" />
         <el-table-column prop="tableName" :label="t('table.tableName')" show-overflow-tooltip />
         <el-table-column prop="tableComment" :label="t('table.tableDesc')" show-overflow-tooltip />
@@ -46,22 +41,11 @@
             <el-button text type="primary" @click="syncTable(state.queryForm.dsName, scope.row.tableName)">{{
               $t('gen.syncBtn')
             }}</el-button>
-<!--            <el-button text type="primary"-->
-<!--              @click="formDialogRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{-->
-<!--                $t('gen.designBtn')-->
-<!--              }}</el-button>-->
-            <el-button text type="primary"
-                @click="openGen(scope.row)">{{
-                  $t('gen.genBtn')
-                }}</el-button>
-
-<!--            <el-button text type="primary"-->
-<!--              @click="generatorRef.openDialog(state.queryForm.dsName, scope.row.tableName)">{{-->
-<!--                $t('gen.genBtn')-->
-<!--              }}</el-button>-->
-
-            <el-button text type="primary" @click="handleDelete(scope.row)">{{
-              $t('common.delBtn')
+            <el-button text type="primary" @click="openGen(scope.row)">{{
+              $t('gen.genBtn')
+            }}</el-button>
+            <el-button text type="primary" @click="openDesign(scope.row)">{{
+              $t('gen.designBtn')
             }}</el-button>
           </template>
         </el-table-column>
@@ -74,9 +58,9 @@
 
 <script setup lang="ts" name="systemTable">
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObj, useSyncTableApi } from "/@/api/gen/table";
+import { fetchList, useSyncTableApi } from "/@/api/gen/table";
 import { list } from '/@/api/gen/datasource'
-import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useMessage } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
 import { useRouter } from 'vue-router';
 
@@ -86,15 +70,10 @@ const router = useRouter();
 // 引入组件
 const { t } = useI18n()
 
-// 定义变量内容
-const formDialogRef = ref()
-
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
 // 多选变量
-const selectObjs = ref([])
-const multiple = ref(true)
 const datasourceList = ref()
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -134,6 +113,16 @@ const openGen = (row) => {
   })
 }
 
+const openDesign = (row) => {
+  router.push({
+    path: '/gen/design/index',
+    query: {
+      tableName: row.tableName,
+      dsName: state.queryForm.dsName
+    }
+  })
+}
+
 // 同步表数据
 const syncTable = (dsName: string, tableName: string) => {
   useSyncTableApi(dsName, tableName).then(() => {
@@ -147,34 +136,8 @@ const resetQuery = () => {
   getDataList()
 }
 
-// 多选事件
-const handleSelectionChange = (val: any) => {
-  selectObjs.value = val
-  multiple.value = !val.length
-}
-
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/gen/table/export', state.queryForm, 'table.xlsx')
 }
-
-// 删除操作
-const handleDelete = (row: any) => {
-  if (!row) {
-    selectObjs.value.forEach((val: any) => {
-      handleDelete(val)
-    });
-    return
-  }
-
-  useMessageBox().confirm(t('common.delConfirmText') + row.id)
-    .then(() => {
-      delObj(row.id).then(() => {
-        getDataList();
-        useMessage().success(t('common.delSuccessText'));
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      })
-    })
-};
 </script>
