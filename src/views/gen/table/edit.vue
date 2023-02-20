@@ -1,5 +1,5 @@
 <template>
-	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">
+<!--	<el-drawer v-model="visible" title="编辑" :size="1200" :with-header="false" :close-on-click-modal="false">-->
 		<el-tabs v-model="activeName" @tab-click="handleClick">
 			<el-tab-pane label="属性设置" name="field">
 				<vxe-table ref="fieldTable" align="center" border row-key class="sortable-row-gen" :data="fieldList"
@@ -116,17 +116,16 @@
 					<vxe-column field="formValidator" title="表单效验" :edit-render="{ name: 'input' }"></vxe-column>
 				</vxe-table>
 			</el-tab-pane>
-
 		</el-tabs>
-		<template #footer>
-			<el-button @click="visible = false">取消</el-button>
-			<el-button @click="previewHandle()">{{
-				$t('gen.prewBtn')
-			}}</el-button> <el-button type="primary" @click="submitHandle()">确定</el-button>
-		</template>
+<!--		<template #footer>-->
+<!--			<el-button @click="visible = false">取消</el-button>-->
+<!--			<el-button @click="previewHandle()">{{-->
+<!--				$t('gen.prewBtn')-->
+<!--			}}</el-button> <el-button type="primary" @click="submitHandle()">确定</el-button>-->
+<!--		</template>-->
 		<!-- 预览 -->
-		<preview-dialog ref="previewRef" />
-	</el-drawer>
+<!--		<preview-dialog ref="previewRef" />-->
+<!--	</el-drawer>-->
 </template>
 
 <script setup lang="ts">
@@ -138,16 +137,28 @@ import { VxeTableInstance } from 'vxe-table'
 import { useMessage } from '/@/hooks/message'
 import { useI18n } from 'vue-i18n'
 
-const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
+// const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
 
 const { t } = useI18n();
 
-const previewRef = ref()
+// const previewRef = ref()
 const activeName = ref()
 const tableId = ref('')
 const fieldTable = ref<VxeTableInstance>()
 const formTable = ref<VxeTableInstance>()
 const gridTable = ref<VxeTableInstance>()
+
+
+const props = defineProps({
+  tableName: {
+    type: String
+  },
+  dsName: {
+    type: String
+  }
+})
+
+
 
 const handleClick = (tab: TabsPaneContext) => {
 	if (tab.paneName !== 'field') {
@@ -211,6 +222,16 @@ const openDialog = (dName: string, tName: string) => {
 	getDictList()
 }
 
+onMounted(() => {
+  tableName.value = String(props.tableName)
+  dsName.value = String(props.dsName)
+  activeName.value = 'field'
+  rowDrop()
+  getTable(dsName.value, tableName.value)
+  getFieldTypeList()
+  getDictList()
+})
+
 const rowDrop = () => {
 	nextTick(() => {
 		const el: any = window.document.querySelector('.body--wrapper>.vxe-table--body tbody')
@@ -255,22 +276,27 @@ const getDictList = () => {
 
 // 表单提交
 const submitHandle = () => {
-	return useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
-		useMessage().success(t('common.addSuccessText'))
-		visible.value = false // 关闭弹窗
-		emit('refreshDataList')
-	})
+  return new Promise((resolve) => {
+    useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
+      useMessage().success(t('common.addSuccessText'))
+      resolve(tableId.value)
+      // visible.value = false // 关闭弹窗
+      // emit('refreshDataList')
+    })
+  })
+
 }
 
 // 预览设计
-const previewHandle = () => {
-	submitHandle().then(() => {
-		previewRef.value.openDialog(tableId.value)
-	})
-}
+// const previewHandle = () => {
+// 	submitHandle().then(() => {
+// 		previewRef.value.openDialog(tableId.value)
+// 	})
+// }
 
 defineExpose({
-	openDialog
+	openDialog,
+  submitHandle
 })
 </script>
 
