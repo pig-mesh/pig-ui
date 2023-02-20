@@ -60,6 +60,7 @@ const visible = ref(false)
 
 const dataForm = reactive({
   id: '',
+  dictId:'',
   dictType: '',
   value: '',
   label: '',
@@ -78,8 +79,12 @@ const dataRules = reactive({
 
 
 // 打开弹窗
-const openDialog = (row: any) => {
+const openDialog = (row: any,dictForm:any) => {
   dataForm.id = ''
+  if (dictForm){
+    dataForm.dictId = dictForm.dictId
+    dataForm.dictType = dictForm.dictType
+  }
   if (row?.id) {
     getItemObj(row.id).then(res => {
       Object.assign(dataForm, res.data)

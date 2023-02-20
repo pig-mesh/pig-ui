@@ -3,7 +3,7 @@
     <el-card shadow="hover" class="layout-padding-auto">
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button icon="folder-add" type="primary" class="ml10" @click="dictformRef.openDialog()">
+          <el-button icon="folder-add" type="primary" class="ml10" @click="dictformRef.openDialog(null,state.queryForm)">
             {{ $t('common.addBtn') }}
           </el-button>
           <right-toolbar :search='false' class="ml10" style="float: right;margin-right: 20px"
@@ -51,7 +51,8 @@ const DictForm = defineAsyncComponent(() => import("./form.vue"))
 const dictformRef = ref()
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
-    dictId: ''
+    dictId: '',
+    dictType: ''
   },
   createdIsNeed: false,
   pageList: fetchItemList
@@ -74,6 +75,7 @@ const handleDelete = (row: any) => {
 };
 const open = (row: any) => {
   state.queryForm.dictId = row.id
+  state.queryForm.dictType = row.dictType
   visible.value = true
   getDataList()
 }
