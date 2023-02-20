@@ -201,6 +201,7 @@ const queryList = reactive([
 const formTypeList = reactive([
 	{ label: '单行文本', value: 'text' },
 	{ label: '多行文本', value: 'textarea' },
+	{ label: '数字', value: 'number' },
 	{ label: '富文本编辑器', value: 'editor' },
 	{ label: '下拉框', value: 'select' },
 	{ label: '单选按钮', value: 'radio' },

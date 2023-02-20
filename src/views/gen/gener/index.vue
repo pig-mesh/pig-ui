@@ -4,7 +4,6 @@
       <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
         <el-step title="基础信息" />
         <el-step title="数据修改" />
-        <el-step title="生成预览" />
       </el-steps>
     </el-card>
     <el-card class="layout-padding-auto" style="margin-top: 20px" shadow="hover" v-if="active === 0">
@@ -14,32 +13,11 @@
     <el-card class="layout-padding-auto" style="margin-top: 20px" shadow="hover" v-if="active === 1">
       <edit-table ref="editTableRef" :tableName="tableName" :dsName="dsName"></edit-table>
     </el-card>
-
-    <el-card class="layout-padding-auto" style="margin-top: 20px" shadow="hover" v-if="active === 2">
-      <el-form ref="dataFormRef"  label-width="120px" :model="dataForm">
-        <el-form-item label="生成方式" prop="generatorType">
-          <el-radio-group v-model="dataForm.generatorType">
-            <el-radio-button :label="1">自定义路径</el-radio-button>
-            <el-radio-button :label="0">ZIP 压缩包</el-radio-button>
-          </el-radio-group>
-        </el-form-item>
-        <el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
-          <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
-        </el-form-item>
-        <el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
-          <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-space wrap>
-            <el-button style="margin-top: 12px" @click="previewDialogRef.openDialog(tableId)">预览</el-button>
-            <el-button style="margin-top: 12px" @click="generatorHandle">生成</el-button>
-          </el-space>
-        </el-form-item>
-      </el-form>
-    </el-card>
     <el-space wrap>
       <el-button style="margin-top: 12px" @click="pre" v-if="active > 0">上一步</el-button>
-      <el-button style="margin-top: 12px" @click="next" v-if="active < 2">下一步</el-button>
+      <el-button style="margin-top: 12px" @click="next" v-if="active < 1">下一步</el-button>
+      <el-button style="margin-top: 12px" @click="previewDialogRef.openDialog(tableId)" v-if="active === 1">预览</el-button>
+      <el-button style="margin-top: 12px" @click="generatorHandle" v-if="active === 1">生成</el-button>
     </el-space>
     <preview-dialog ref="previewDialogRef"></preview-dialog>
   </div>

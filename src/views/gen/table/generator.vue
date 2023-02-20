@@ -60,32 +60,32 @@
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="i18n文件" prop="i18n" v-if="dataForm.style === 0">
+        <el-col :span="12" class="mb20" v-if="dataForm.style === 0">
+          <el-form-item label="i18n文件" prop="i18n" >
             <el-radio-group v-model="dataForm.i18n">
               <el-radio-button :label="0">不生成</el-radio-button>
               <el-radio-button :label="1">生成</el-radio-button>
             </el-radio-group>
           </el-form-item>
         </el-col>
-<!--				<el-col :span="12" class="mb20">-->
-<!--					<el-form-item label="生成方式" prop="generatorType">-->
-<!--						<el-radio-group v-model="dataForm.generatorType">-->
-<!--							<el-radio-button :label="1">自定义路径</el-radio-button>-->
-<!--							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>-->
-<!--						</el-radio-group>-->
-<!--					</el-form-item>-->
-<!--				</el-col>-->
+				<el-col :span="12" class="mb20">
+					<el-form-item label="生成方式" prop="generatorType">
+						<el-radio-group v-model="dataForm.generatorType">
+							<el-radio-button :label="1">自定义路径</el-radio-button>
+							<el-radio-button :label="0">ZIP 压缩包</el-radio-button>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+        <el-col :span="24" class="mb20">
+          <el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">
+            <el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>
+          </el-form-item>
+          <el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">
+            <el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>
+          </el-form-item>
+        </el-col>
 			</el-row>
-<!--			<el-row>-->
 
-<!--			</el-row>-->
-<!--			<el-form-item v-if="dataForm.generatorType === 1" label="后端生成路径" prop="backendPath">-->
-<!--				<el-input v-model="dataForm.backendPath" placeholder="后端生成路径"></el-input>-->
-<!--			</el-form-item>-->
-<!--			<el-form-item v-if="dataForm.generatorType === 1" label="前端生成路径" prop="frontendPath">-->
-<!--				<el-input v-model="dataForm.frontendPath" placeholder="前端生成路径"></el-input>-->
-<!--			</el-form-item>-->
 		</el-form>
 </template>
 
