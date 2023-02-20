@@ -2,7 +2,7 @@
   <el-dialog v-model="visible" :close-on-click-modal="false"
     :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
-      <el-row :gutter="24">
+      <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('social.type')" prop="type">
             <el-select v-model="form.type" :placeholder="t('social.inputTypeTip')">

@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
-        <el-row :gutter="24">
+        <el-row :gutter="20">
             <el-col :span="6">
                 <el-card :gutter="12" shadow="hover">
                     <el-scrollbar height="calc(100vh - 300px)">

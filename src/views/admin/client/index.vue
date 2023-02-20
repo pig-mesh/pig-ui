@@ -1,6 +1,22 @@
 <template>
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+          <el-form-item :label="$t('client.clientId')" prop="clientId">
+            <el-input :placeholder="$t('client.clientId')" v-model="state.queryForm.clientId" style="max-width: 180px" />
+          </el-form-item>
+          <el-form-item :label="$t('client.clientSecret')" prop="clientSecret">
+            <el-input :placeholder="$t('client.clientSecret')" v-model="state.queryForm.clientSecret" style="max-width: 180px" />
+          </el-form-item>
+          <el-form-item class="ml2">
+            <el-button icon="search" type="primary" @click="getDataList">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button v-auth="'sys_client_add'" class="ml10" formDialogRef icon="folder-add" type="primary"
@@ -71,6 +87,7 @@ const { t } = useI18n()
 const { grant_types } = useDict('grant_types')
 // 定义变量内容
 const formDialogRef = ref()
+const queryRef = ref()
 // 搜索变量
 const showSearch = ref(true)
 // 多选变量
@@ -95,6 +112,12 @@ const handleRefreshCache = () => {
   refreshCache().then(() => {
     useMessage().success('同步成功')
   })
+}
+
+const resetQuery = () => {
+  queryRef.value.resetFields()
+  state.queryForm = {}
+  getDataList()
 }
 
 // 导出excel

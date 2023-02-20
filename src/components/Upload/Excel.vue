@@ -1,6 +1,6 @@
 <!-- excel 导入组件 -->
 <template>
-  <el-dialog :title="prop.title" v-model="state.upload.open" width="60%">
+  <el-dialog :title="prop.title" v-model="state.upload.open" :close-on-click-modal="false" draggable>
     <el-upload ref="uploadRef" :limit="1" accept=".xlsx, .xls" :headers="headers" :action="url"
       :disabled="state.upload.isUploading" :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess"
       :on-error="handleFileError" :auto-upload="false" drag>

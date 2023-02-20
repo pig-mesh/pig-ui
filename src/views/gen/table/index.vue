@@ -103,7 +103,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     dsName: 'master'
   },
   pageList: fetchList,
-  createdIsNeed: false
+  createdIsNeed: false,
+  descs: ['createTime']
 })
 
 //  table hook
