@@ -70,13 +70,14 @@
       <template #dropdown>
         <el-dropdown-menu>
           <el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
-          <el-dropdown-item command="/personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
+          <el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
           <el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
     <Search ref="searchRef" />
     <global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
+    <personal-drawer ref="personalDrawerRef"></personal-drawer>
   </div>
 </template>
 
@@ -100,6 +101,8 @@ const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websock
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 
+const personalDrawer = defineAsyncComponent(() => import("/@/views/personal/index.vue"))
+
 // 定义变量内容
 const { locale, t } = useI18n();
 const router = useRouter();
@@ -109,6 +112,7 @@ const { userInfos } = storeToRefs(stores);
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const searchRef = ref();
 const newsRef = ref();
+const personalDrawerRef = ref()
 
 const state = reactive({
   isScreenfull: false,
@@ -179,8 +183,9 @@ const onHandleCommandClick = (path: string) => {
       })
       .catch(() => {
       });
-  } else if (path === 'wareHouse') {
-    window.open('https://gitee.com/lyt-top/vue-next-admin');
+  } else if (path === 'personal') {
+    // 打开个人页面
+    personalDrawerRef.value.open()
   } else {
     router.push(path);
   }

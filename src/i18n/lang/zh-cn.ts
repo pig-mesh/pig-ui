@@ -14,14 +14,6 @@ export default {
 		limitsFrontEndBtn: '按钮权限',
 		limitsBackEnd: '后端控制',
 		limitsBackEndEndPage: '页面权限',
-		menu: '菜单嵌套',
-		menu1: '菜单1',
-		menu11: '菜单11',
-		menu12: '菜单12',
-		menu121: '菜单121',
-		menu122: '菜单122',
-		menu13: '菜单13',
-		menu2: '菜单2',
 		funIndex: '功能',
 		funTagsView: 'tagsView 操作',
 		funCountup: '数字滚动',
@@ -112,6 +104,7 @@ export default {
 		closeAll: '全部关闭',
 		fullscreen: '当前页全屏',
 		closeFullscreen: '关闭全屏',
+		favorite: '收藏'
 	},
 	notFound: {
 		foundTitle: '地址输入错误，请重新输入地址~',

@@ -95,6 +95,7 @@ const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
+    id: '',
     menuId: '',
     name: '',
     permission: '',
@@ -160,7 +161,7 @@ const dataRules = reactive({
 })
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
-  if (row?.id) {
+  if (row?.id && type === 'edit') {
     state.ruleForm.id = row.id
     // 模拟数据，实际请走接口
     info(row.id).then(res => {
@@ -170,7 +171,9 @@ const openDialog = (type: string, row?: any) => {
     // 清空表单，此项需加表单验证才能使用
     nextTick(() => {
       menuDialogFormRef?.value?.resetFields();
+      state.ruleForm.parentId = row?.id || '-1'
     });
+
   }
   visible.value = true;
   getMenuData();

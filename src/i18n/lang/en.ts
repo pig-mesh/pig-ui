@@ -112,6 +112,7 @@ export default {
 		closeAll: 'closeAll',
 		fullscreen: 'fullscreen',
 		closeFullscreen: 'closeFullscreen',
+		favorite: 'favorite'
 	},
 	notFound: {
 		foundTitle: 'Wrong address input, please re-enter the address~',
