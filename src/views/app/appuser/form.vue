@@ -2,7 +2,7 @@
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
       :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px">
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px" v-loading="loading">
         <el-row :gutter="20">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('appuser.username')" prop="username">
@@ -79,6 +79,7 @@ const { lock_flag } = useDict('lock_flag')
 const dataFormRef = ref();
 const visible = ref(false)
 const roleData = ref<any[]>([])
+const loading = ref(false)
 
 const dataForm = reactive({
   userId: '',
@@ -183,6 +184,7 @@ const onSubmit = () => {
 // 初始化部门数据
 const getUserData = (id: string) => {
   // 获取部门数据
+  loading.value = true
   getObj(id).then(res => {
     Object.assign(dataForm, res.data)
     dataForm.password = '******'
@@ -192,6 +194,8 @@ const getUserData = (id: string) => {
         dataForm.role.push(item.roleId)
       })
     }
+  }).finally(() => {
+    loading.value = false
   })
 };
 

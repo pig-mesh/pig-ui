@@ -58,7 +58,7 @@
             </el-table-column>
             <el-table-column prop="createTime" :label="$t('appuser.createTime')"
               show-overflow-tooltip></el-table-column>
-            <el-table-column :label="$t('common.action')" width="100">
+            <el-table-column :label="$t('common.action')" width="150">
               <template #default="scope">
                 <el-button   text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
                   v-auth="'sys_user_edit'"> {{
