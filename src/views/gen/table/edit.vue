@@ -204,7 +204,9 @@ const formTypeList = reactive([
 	{ label: '单选按钮', value: 'radio' },
 	{ label: '复选框', value: 'checkbox' },
 	{ label: '日期', value: 'date' },
-	{ label: '日期时间', value: 'datetime' }
+	{ label: '日期时间', value: 'datetime' },
+  { label: '文件上传', value: 'upload-file' },
+  { label: '图片上传', value: 'upload-img' }
 ])
 
 const formValidatorList = reactive([
@@ -312,5 +314,8 @@ defineExpose({
 .sortable-row-gen .vxe-body--row.sortable-ghost,
 .sortable-row-gen .vxe-body--row.sortable-chosen {
 	background-color: #dfecfb;
+}
+.vxe-select–panel {
+  z-index: 9997 !important;
 }
 </style>
