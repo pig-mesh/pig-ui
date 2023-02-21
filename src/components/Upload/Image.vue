@@ -5,7 +5,7 @@
     <el-upload ref="fileUpload" class="avatar-uploader" :action="props.uploadFileUrl" :show-file-list="false"
       :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload" :headers="headers" :limit="props.limit">
       <slot>
-        123<img v-if="imageUrl" :src="imageUrl" class="avatar" />
+        <img v-if="imageUrl" :src="imageUrl" class="avatar" />
         <el-icon v-else class="avatar-uploader-icon">
           <Plus />
         </el-icon>
@@ -22,10 +22,10 @@ import { watch } from "vue";
 
 const imageUrl = ref('')
 const fileUpload = ref()
-const emit = defineEmits(['update:value', 'change']);
+const emit = defineEmits(['update:modelValue', 'change']);
 
 const props = defineProps({
-  value: [String, Array],
+  modelValue: [String, Array],
   // 大小限制(MB)
   fileSize: {
     type: Number,
@@ -41,7 +41,7 @@ const props = defineProps({
   }
 });
 
-watch(() => props.value, (val) => {
+watch(() => props.modelValue, (val) => {
   if (val) {
     imageUrl.value = val
   }
@@ -52,7 +52,7 @@ const handleAvatarSuccess = (res, file) => {
   if (res.code === 0) {
     imageUrl.value = res.data.url
     emit("change", imageUrl.value);
-    emit("update:value", imageUrl.value);
+    emit("update:modelValue", imageUrl.value);
   } else {
     fileUpload.value.handleRemove(file);
   }

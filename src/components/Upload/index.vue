@@ -1,9 +1,15 @@
 <!--文件上传组件-->
 <template>
   <div class="upload-file">
-    <el-upload multiple :action="props.uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList"
-      :limit="limit" :on-error="handleUploadError" :on-success="handleUploadSuccess" :on-remove="handleRemove"
-      :headers="headers" class="upload-file-uploader" ref="fileUpload" :auto-upload="false" drag>
+    <el-upload ref="fileUpload"
+               :action="props.uploadFileUrl"
+               :before-upload="handleBeforeUpload"
+               :file-list="fileList"
+               :headers="headers"
+               :limit="limit"
+               :on-error="handleUploadError"
+               :on-remove="handleRemove"
+               :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
       <i class="el-icon-upload"></i>
       <div class="el-upload__text">
         将文件拖到此处，或
@@ -12,8 +18,9 @@
       <template #tip>
         <div class="el-upload__tip" v-if="props.isShowTip">
           请上传
-          <template v-if="props.fileSize"> 大小不超过 <b style="color: #f56c6c">{{ props.fileSize }}MB</b> </template>
-          <template v-if="props.fileType"> 格式为 <b style="color: #f56c6c">{{ props.fileType.join("/") }}</b> </template>
+          <template v-if="props.fileSize"> 大小不超过 <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template>
+          <template v-if="props.fileType"> 格式为 <b style="color: #f56c6c">{{ props.fileType.join("/") }}</b>
+          </template>
           的文件
         </div>
       </template>
@@ -22,8 +29,8 @@
 </template>
 
 <script setup lang="ts" name="upload-file">
-import { useMessage } from "/@/hooks/message";
-import { Local, Session } from "/@/utils/storage";
+import {useMessage} from "/@/hooks/message";
+import {Local, Session} from "/@/utils/storage";
 
 const props = defineProps({
   value: [String, Array],
@@ -113,6 +120,7 @@ const uploadedSuccessfully = () => {
     uploadList.value = [];
     number.value = 0;
     emit("change", listToString(fileList.value));
+    emit("update:modelValue", listToString(fileList.value));
   }
 }
 
@@ -141,7 +149,7 @@ watch(() => props.value, val => {
   if (val) {
     let temp = 1;
     // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props.value.split(',');
+    const list = Array.isArray(val) ? val : props?.value?.split(',');
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
       if (typeof item === "string") {
