@@ -40,7 +40,7 @@
 					:show-overflow-tooltip="true"></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button text type="primary" @click="onOpenAddMenu('add')" v-auth="'sys_menu_add'"> {{
+						<el-button text type="primary" @click="onOpenAddMenu('add',scope.row)" v-auth="'sys_menu_add'"> {{
 							$t('common.addBtn')
 						}}</el-button>
 						<el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)"
@@ -107,23 +107,11 @@ const {
 } = useTable(state)
 
 // 打开新增菜单弹窗
-const onOpenAddMenu = (type: string) => {
-	menuDialogRef.value.openDialog(type);
+const onOpenAddMenu = (type: string, row: any) => {
+	menuDialogRef.value.openDialog(type,row);
 };
 // 打开编辑菜单弹窗
-const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
+const onOpenEditMenu = (type: string, row: any) => {
 	menuDialogRef.value.openDialog(type, row);
-};
-// 删除当前行
-const onTabelRowDel = (row: any) => {
-	useMessageBox().confirm(`此操作将永久删除路由：${row.name}`)
-		.then(() => {
-			delObj(row.id).then(() => {
-				useMessage().success('删除成功');
-				getDataList()
-			})
-
-		})
-		.catch(() => { });
 };
 </script>

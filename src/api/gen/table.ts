@@ -60,6 +60,14 @@ export const useGeneratorCodeApi = (tableIds: any) => {
   })
 }
 
+export const useGeneratorVFormApi = (dsName: any, tableName: string) => {
+  return request({
+    url: '/gen/generator/vform',
+    method: 'get',
+    params: { dsName: dsName, tableName: tableName }
+  })
+}
+
 export const useGeneratorPreviewApi = (tableId: any) => {
   return request({
     url: '/gen/generator/preview',

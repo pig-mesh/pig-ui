@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
-    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules"  label-width="90px">
+    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules"  label-width="90px" v-loading="loading">
       <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.menuType')" prop="menType">
@@ -12,7 +12,7 @@
         </el-col>
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
-            <el-tree-select v-model="state.ruleForm.parentId" :data="state.parentData"
+            <el-tree-select v-model="state.ruleForm.parentId" :data="state.parentData" default-expand-all
               :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
               placeholder="请选择上级菜单">
             </el-tree-select>
@@ -59,15 +59,14 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import { info, pageList, update, addObj } from "/@/api/app/appmenu";
-import type { menuData } from './menu'
 import {useMessage} from "/@/hooks/message";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 // 引入组件
-// const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 const visible = ref(false)
+const loading = ref(false)
 // 定义变量内容
 const menuDialogFormRef = ref();
 // 定义需要的数据
@@ -81,7 +80,8 @@ const state = reactive({
     path: '',
     sortOrder: 0,
     menuType: '0',
-    visible: ''
+    visible: '',
+    id: ''
   },
   parentData: [] as any[], // 上级菜单数据
 });
@@ -89,9 +89,9 @@ const state = reactive({
 // 从后端获取菜单信息
 const getMenuData = () => {
   state.parentData = []
+  loading.value = true
   pageList().then(res => {
-    let menu: menuData;
-    menu = {
+    let menu = {
       createBy: "",
       createTime: "",
       delFlag: "",
@@ -105,10 +105,12 @@ const getMenuData = () => {
       updateBy: "",
       updateTime: "",
       visible: "",
-      id: '-1', name: '根菜单', children: [] as menuData[]
+      id: '-1', name: '根菜单', children: [] as any[]
     };
     menu.children = res.data;
     state.parentData.push(menu)
+  }).finally(() => {
+    loading.value = false
   })
 
 };
@@ -124,16 +126,20 @@ const dataRules = reactive({
 })
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
-  if (row?.id) {
+  if (row?.id && type === 'edit') {
     state.ruleForm.id = row.id
     // 模拟数据，实际请走接口
+    loading.value = true
     info(row.id).then(res => {
       Object.assign(state.ruleForm,res.data)
+    }).finally(() => {
+      loading.value = false
     })
   } else {
     // 清空表单，此项需加表单验证才能使用
     nextTick(() => {
       menuDialogFormRef?.value?.resetFields();
+      state.ruleForm.parentId = row?.id || '-1'
     });
   }
   visible.value = true;
@@ -144,18 +150,24 @@ const openDialog = (type: string, row?: any) => {
 const onSubmit = () => {
   // 保存 调用刷新
   if (state.ruleForm.id) {
+    loading.value = true
     update(state.ruleForm).then(() => {
       visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)
+    }).finally(() => {
+      loading.value = false
     })
   } else {
+    loading.value = true
     addObj(state.ruleForm).then(() => {
       visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)
+    }).finally(() => {
+      loading.value = false
     })
   }
 

@@ -2,6 +2,7 @@
   <div class="system-role-dialog-container">
     <el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
       <el-tree
+          v-loading="loading"
           ref="menuTree"
           :data="state.treeData"
           :default-checked-keys="state.checkedKeys"
@@ -35,6 +36,7 @@ const {t} = useI18n();
 
 
 const menuTree = ref()
+const loading = ref(false)
 
 const state = reactive({
   checkedKeys: [] as any[],
@@ -59,12 +61,15 @@ const openDialog = (row: any) => {
   state.treeData = []
   checkedKeys.value = []
   state.roleId = row.roleId
+  loading.value = true
   fetchRoleTree(row.roleId).then(res => {
     checkedKeys.value = res.data
     return pageList()
   }).then(r => {
     state.treeData = r.data
     state.checkedKeys = resolveAllEunuchNodeId(state.treeData, checkedKeys.value, [])
+  }).finally(() => {
+    loading.value = false
   })
   state.dialog.isShowDialog = true;
 };
@@ -79,9 +84,12 @@ const onCancel = () => {
 };
 const onSubmit = () => {
   const menuIds = menuTree.value.getCheckedKeys().join(',').concat(',').concat(menuTree.value.getHalfCheckedKeys().join(','))
+  loading.value = true
   permissionUpd(state.roleId, menuIds).then(() => {
     state.dialog.isShowDialog = false;
     useMessage().success(t('common.editSuccessText'))
+  }).finally(() => {
+    loading.value = false
   })
 
 }
