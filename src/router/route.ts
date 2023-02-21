@@ -134,5 +134,14 @@ export const staticRoutes: Array<RouteRecordRaw> = [
             title: "登录",
             isAuth: false
         }
+    },
+    {
+        path: '/demo',
+        name: 'demo',
+        component: () => import('/@/views/demo/form.vue'),
+        meta: {
+            title: "表单demo",
+            isAuth: false
+        }
     }
 ];

@@ -33,7 +33,7 @@ import {useMessage} from "/@/hooks/message";
 import {Local, Session} from "/@/utils/storage";
 
 const props = defineProps({
-  value: [String, Array],
+  modelValue: [String, Array],
   // 数量限制
   limit: {
     type: Number,
@@ -44,7 +44,6 @@ const props = defineProps({
     type: Number,
     default: 5,
   },
-  // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
     default: () => ['png', 'jpg', 'jpeg', "doc", "xls", "ppt", "txt", "pdf", "docx", "xlsx", "pptx"],
@@ -127,6 +126,7 @@ const uploadedSuccessfully = () => {
 const handleRemove = (file: any) => {
   fileList.value = fileList.value.filter(f => !(f === file.url))
   emit("change", listToString(fileList.value));
+  emit("update:modelValue", listToString(fileList.value));
 }
 
 // 对象转成指定字符串分隔
@@ -145,11 +145,11 @@ const handleUploadError = () => {
   useMessage().error("上传文件失败")
 }
 
-watch(() => props.value, val => {
+watch(() => props.modelValue, val => {
   if (val) {
     let temp = 1;
     // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props?.value?.split(',');
+    const list = Array.isArray(val) ? val : props?.modelValue?.split(',');
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
       if (typeof item === "string") {
