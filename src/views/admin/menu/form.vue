@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
     :close-on-click-modal="false" draggable>
-    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px">
+    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
       <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.menuType')" prop="menType">
@@ -90,6 +90,7 @@ const emit = defineEmits(['refresh']);
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 const visible = ref(false)
+const loading = ref(false)
 // 定义变量内容
 const menuDialogFormRef = ref();
 // 定义需要的数据
@@ -165,8 +166,11 @@ const openDialog = (type: string, row?: any) => {
   if (row?.id && type === 'edit') {
     state.ruleForm.id = row.id
     // 模拟数据，实际请走接口
+    loading.value = true
     info(row.id).then(res => {
       Object.assign(state.ruleForm, res.data)
+    }).finally(() => {
+      loading.value = false
     })
   } else {
     // 清空表单，此项需加表单验证才能使用
@@ -184,18 +188,24 @@ const openDialog = (type: string, row?: any) => {
 const onSubmit = () => {
   // 保存 调用刷新
   if (state.ruleForm.id) {
+    loading.value = true
     update(state.ruleForm).then(() => {
       visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)
+    }).finally(() => {
+      loading.value = false
     })
   } else {
+    loading.value = true
     addObj(state.ruleForm).then(() => {
       visible.value = false;
       emit('refresh');
     }).catch(err => {
       useMessage().error(err.msg)
+    }).finally(() => {
+      loading.value = false
     })
   }
 

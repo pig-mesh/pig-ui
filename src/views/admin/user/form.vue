@@ -2,7 +2,7 @@
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
                :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px">
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px" v-loading="loading">
         <el-row :gutter="20">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
@@ -101,6 +101,7 @@ const visible = ref(false)
 const deptData = ref<any[]>([])
 const roleData = ref<any[]>([])
 const postData = ref<any[]>([])
+const loading = ref(false)
 
 const dataForm = reactive({
   userId: '',
@@ -193,23 +194,29 @@ const onSubmit = () => {
       if (dataForm.password && dataForm.password.indexOf("******") >= 0) {
         dataForm.password = undefined
       }
+      loading.value = true
       putObj(dataForm).then(() => {
         useMessage().success(t('common.editSuccessText'))
         visible.value = false; // 关闭弹窗
         emit('refresh');
       }).catch(err => {
         useMessage().error(err.msg)
+      }).finally(() => {
+        loading.value = false
       })
     } else {  // 新增方法
       if (dataForm.phone && dataForm.phone.indexOf("*") > 0) {
         dataForm.phone = undefined
       }
+      loading.value = true
       addObj(dataForm).then(() => {
         useMessage().success(t('common.addSuccessText'))
         visible.value = false // 关闭弹窗
         emit('refresh')
       }).catch(err => {
         useMessage().error(err.msg)
+      }).finally(() => {
+        loading.value = false
       })
     }
   })
@@ -219,6 +226,7 @@ const onSubmit = () => {
 // 初始化部门数据
 const getUserData = (id: string) => {
   // 获取部门数据
+  loading.value = true
   getObj(id).then(res => {
     Object.assign(dataForm, res.data)
     if (res.data.roleList) {
@@ -233,6 +241,8 @@ const getUserData = (id: string) => {
         dataForm.post.push(item.postId)
       })
     }
+  }).finally(() => {
+    loading.value = false
   })
 };
 
