@@ -1,6 +1,24 @@
 <template>
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+      <el-form-item :label="$t('template.id')" prop="id" >
+        <el-input :placeholder="t('template.inputIdTip')" v-model="state.queryForm.id"
+          style="max-width: 180px" />
+      </el-form-item>
+      <el-form-item :label="$t('template.templateName')" prop="templateName" >
+        <el-input :placeholder="t('template.inputTemplateNameTip')" v-model="state.queryForm.templateName"
+          style="max-width: 180px" />
+      </el-form-item>
+          <el-form-item class="ml2">
+            <el-button formDialogRef icon="search" type="primary" @click="getDataList">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button icon="Refresh" formDialogRef @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
@@ -91,7 +109,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-  downBlobFile('/gen/template/export', state.queryForm, 'template.xlsx')
+  downBlobFile('/codegen/template/export', state.queryForm, 'template.xlsx')
 }
 
 // 多选事件

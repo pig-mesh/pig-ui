@@ -1,5 +1,5 @@
 <template>
-    <el-drawer :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
+    <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
       <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
         <el-row :gutter="24">
 	  <el-col :span="12" class="mb20">
@@ -22,7 +22,7 @@
           <el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
         </span>
       </template>
-    </el-drawer>
+    </el-dialog>
 </template>
 
 <script setup lang="ts" name="GenGroupDialog">
@@ -50,6 +50,7 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
+        groupName: [{required: true, message: '分组名称不能为空', trigger: 'blur'}]
 })
 
 // 打开弹窗

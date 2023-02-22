@@ -1,6 +1,24 @@
 <template>
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
+      <el-row v-show="showSearch" class="mb8">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+      <el-form-item :label="$t('group.id')" prop="id" >
+        <el-input :placeholder="t('group.inputIdTip')" v-model="state.queryForm.id"
+          style="max-width: 180px" />
+      </el-form-item>
+      <el-form-item :label="$t('group.groupName')" prop="groupName" >
+        <el-input :placeholder="t('group.inputGroupNameTip')" v-model="state.queryForm.groupName"
+          style="max-width: 180px" />
+      </el-form-item>
+          <el-form-item class="ml2">
+            <el-button formDialogRef icon="search" type="primary" @click="getDataList">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button icon="Refresh" formDialogRef @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
+        </el-form>
+      </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
@@ -48,6 +66,7 @@
 import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObjs } from "/@/api/gen/group";
 import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useDict } from '/@/hooks/dict';
 import { useI18n } from "vue-i18n";
 
 // 引入组件

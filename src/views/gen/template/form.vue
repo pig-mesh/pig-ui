@@ -1,14 +1,7 @@
 <template>
-    <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
-      :close-on-click-modal="false" draggable>
+    <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
       <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
         <el-row :gutter="24">
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('template.id')" prop="id">
-	      <el-input v-model="form.id" :placeholder="t('template.inputIdTip')"/>
-	    </el-form-item>
-      </el-col>
-
 	  <el-col :span="12" class="mb20">
 	    <el-form-item :label="t('template.templateName')" prop="templateName">
 	      <el-input v-model="form.templateName" :placeholder="t('template.inputTemplateNameTip')"/>
@@ -22,7 +15,7 @@
       </el-col>
 
 	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('template.desc')" prop="desc">
+	    <el-form-item :label="t('template.desc')" prop="templateDesc">
 	      <el-input v-model="form.templateDesc" :placeholder="t('template.inputDescTip')"/>
 	    </el-form-item>
       </el-col>
@@ -45,6 +38,7 @@ const emit = defineEmits(['refresh']);
 import { useMessage } from "/@/hooks/message";
 import { getObj, addObj, putObj } from '/@/api/gen/template'
 import { useI18n } from "vue-i18n"
+import { rule } from '/@/utils/validate';
 
 const { t } = useI18n();
 
@@ -58,11 +52,14 @@ const form = reactive({
     id: '',
     templateName: '',
     generatorPath: '',
-	templateDesc: '',
+    templateDesc: '',
 });
 
 // 定义校验规则
 const dataRules = ref({
+        templateName: [{required: true, message: '模板名称不能为空', trigger: 'blur'}],
+        generatorPath: [{required: true, message: '模板路径不能为空', trigger: 'blur'}],
+        templateDesc: [{required: true, message: '模板描述不能为空', trigger: 'blur'}]
 })
 
 // 打开弹窗
