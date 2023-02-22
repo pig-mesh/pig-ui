@@ -52,7 +52,8 @@ const form = reactive({
     id: '',
     groupName: '',
     groupDesc: '',
-    templateId:[] as String []
+    templateId:[] as String [],
+    putList:[]
 });
 
 // 定义校验规则
@@ -70,6 +71,12 @@ const openDialog = (id: string) => {
   if (dataFormRef.value) {
     dataFormRef.value.resetFields()
   }
+
+    // 修改获取用户信息
+    if (id) {
+        form.id = id
+        getgenGroupData(id)
+    }
 
   // 获取genGroup信息
   if (id) {
@@ -112,10 +119,11 @@ const getgenGroupData = (id: string) => {
   // 获取数据
   getObj(id).then((res: any) => {
     Object.assign(form, res.data)
+      form.templateId=[]
     if (res.data.templateList) {
         let list = res.data.templateList
         list.forEach(item=>{
-            form.templateId.push(item.templateName)
+            form.templateId.push(item.id)
         })
     }
   })
