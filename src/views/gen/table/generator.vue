@@ -1,5 +1,5 @@
 <template>
-		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px">
+		<el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="120px" v-loading="loading">
 			<el-row>
 				<el-col :span="12" class="mb20">
 					<el-form-item label="表名" prop="tableName">
@@ -91,11 +91,8 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n';
-import { putObj, useTableApi, useGeneratorCodeApi } from '/@/api/gen/table'
+import { putObj, useTableApi } from '/@/api/gen/table'
 import { useMessage } from '/@/hooks/message';
-import { downBlobFile } from '/@/utils/other';
-
-// const previewDialog = defineAsyncComponent(() => import('./preview.vue'));
 
 const props = defineProps({
   tableName: {
@@ -109,9 +106,9 @@ const props = defineProps({
 
 const emit = defineEmits(['refreshDataList'])
 const { t } = useI18n()
-const previewRef = ref()
 
 const visible = ref(false)
+const loading = ref(false)
 const dataFormRef = ref()
 const dataForm = reactive({
 	id: '',
@@ -148,9 +145,12 @@ const openDialog = (dName: string, tName: string) => {
 }
 
 const getTable = (dsName: string, tableName: string) => {
+  loading.value = true
 	useTableApi(dsName, tableName).then(res => {
 		Object.assign(dataForm, res.data)
-	})
+	}).finally(() => {
+    loading.value = false
+  })
 }
 
 const dataRules = ref({
@@ -167,65 +167,27 @@ const dataRules = ref({
 	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
-// 预览
-// const previewHandle = () => {
-// 	dataFormRef.value.validate(async (valid: boolean) => {
-// 		if (!valid) {
-// 			return false
-// 		}
-// 		// 先保存
-// 		await putObj(dataForm)
-// 		// 打开预览窗口
-// 		previewRef.value.openDialog(dataForm.id)
-// 	})
-// }
-
 // 保存
 const submitHandle = () => {
   return new Promise((resolve, reject) => {
     dataFormRef.value.validate((valid: boolean) => {
-
       if (!valid) {
         reject()
         return false
       }
-
+      loading.value = true
       putObj(dataForm).then(() => {
         visible.value = false
         emit('refreshDataList')
         useMessage().success(t('common.optSuccessText'))
         resolve(dataForm)
+      }).finally(() => {
+        loading.value = false
       })
     })
   })
 
 }
-
-// 生成
-// const generatorHandle = () => {
-// 	dataFormRef.value.validate(async (valid: boolean) => {
-// 		if (!valid) {
-// 			return false
-// 		}
-//
-// 		// 先保存
-// 		await putObj(dataForm)
-//
-// 		// 生成代码，zip压缩包
-// 		if (dataForm.generatorType === 0) {
-// 			downBlobFile('/gen/generator/download?tableIds=' + [dataForm.id].join(','), {}, `${dataForm.tableName}.zip`)
-// 			visible.value = false
-// 		}
-//
-// 		// 写入到指定目录
-// 		if (dataForm.generatorType === 1) {
-// 			useGeneratorCodeApi([dataForm.id].join(',')).then(() => {
-// 				useMessage().success(t('common.optSuccessText'))
-// 				visible.value = false
-// 			})
-// 		}
-// 	})
-// }
 
 onMounted(() => {
   // 重置表单数据

@@ -4,6 +4,7 @@ import DictTag from '/@/components/DictTag/index.vue'
 import UploadExcel from '/@/components/Upload/Excel.vue'
 import UploadFile from '/@/components/Upload/index.vue'
 import UploadImg from '/@/components/Upload/Image.vue'
+import Editor from '/@/components/Editor/index.vue'
 
 
 export {
@@ -12,5 +13,6 @@ export {
     DictTag,
     UploadExcel,
     UploadFile,
-    UploadImg
+    UploadImg,
+    Editor
 }

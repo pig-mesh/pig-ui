@@ -16,7 +16,8 @@
 // https://www.wangeditor.com/v5/for-frame.html#vue3
 import '@wangeditor/editor/dist/css/style.css';
 import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
-import { IDomEditor } from '@wangeditor/editor';
+// @ts-ignore
+import { IDomEditor } from "@wangeditor/editor";
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
 
 // 定义父组件传过来的值

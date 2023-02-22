@@ -17,7 +17,7 @@ import '/@/theme/index.scss'
 import 'vxe-table/lib/style.css'
 import 'xe-utils'
 import VXETable from 'vxe-table'
-import {Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg} from '/@/components/index'
+import {Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor} from '/@/components/index'
 import {parseTime, parseDate, dateTimeStr, dateStr} from '/@/utils/formatTime'
 
 
@@ -28,8 +28,9 @@ app.component('DictTag', DictTag)
 app.component('Pagination', Pagination)
 app.component('RightToolbar', RightToolbar)
 app.component('uploadExcel', UploadExcel)
-app.component('uploadFile', UploadFile)
-app.component('uploadImg', UploadImg)
+app.component('UploadFile', UploadFile)
+app.component('UploadImg', UploadImg)
+app.component('Editor', Editor)
 
 // 全局方法挂载
 app.config.globalProperties.parseTime = parseTime
