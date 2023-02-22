@@ -14,9 +14,14 @@
             </el-form-item>
           </el-col>
 
-          <el-col :span="24" class="mb20">
+          <el-col :span="12" class="mb20">
             <el-form-item label="文件" prop="username">
               <upload-file v-model="dataForm.fileList"></upload-file>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item label="文件" prop="username">
+              <upload-file v-model="dataForm.fileList" type="simple"></upload-file>
             </el-form-item>
           </el-col>
           <el-col :span="24" class="mb20">
