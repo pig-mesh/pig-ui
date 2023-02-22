@@ -2,25 +2,23 @@
     <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
       <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
         <el-row :gutter="24">
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('group.groupName')" prop="groupName">
-	      <el-input v-model="form.groupName" :placeholder="t('group.inputGroupNameTip')"/>
-	    </el-form-item>
-      </el-col>
-
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('group.groupDesc')" prop="groupDesc">
-	      <el-input v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')"/>
-	    </el-form-item>
-      </el-col>
-<!--            多选数据-->
-      <el-col :span="12" class="mb20">
-         <el-form-item :label="$t('group.templateType')" prop="template">
-            <el-select v-model="form.template" :placeholder="$t('group.selectType')" clearable class="w100" multiple>
-               <el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
-            </el-select>
-          </el-form-item>
-      </el-col>
+	      <el-col :span="12" class="mb20">
+	        <el-form-item :label="t('group.groupName')" prop="groupName">
+	          <el-input v-model="form.groupName" :placeholder="t('group.inputGroupNameTip')"/>
+	        </el-form-item>
+          </el-col>
+	      <el-col :span="12" class="mb20">
+	        <el-form-item :label="t('group.groupDesc')" prop="groupDesc">
+	          <el-input v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')"/>
+	        </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+             <el-form-item :label="$t('group.templateType')" prop="templateId">
+                <el-select v-model="form.templateId" :placeholder="$t('group.selectType')" clearable class="w100" multiple>
+                   <el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
+                </el-select>
+              </el-form-item>
+          </el-col>
 		</el-row>
       </el-form>
       <template #footer>
@@ -54,13 +52,13 @@ const form = reactive({
     id: '',
     groupName: '',
     groupDesc: '',
-    template:[] as String []
+    templateId:[] as String []
 });
 
 // 定义校验规则
 const dataRules = ref({
         groupName: [{required: true, message: '分组名称不能为空', trigger: 'blur'}],
-        template: [{ required: true, message: "角色不能为空", trigger: "blur" }]
+        templateId: [{ required: true, message: "模板不能为空", trigger: "blur" }]
 })
 
 // 打开弹窗
@@ -114,6 +112,12 @@ const getgenGroupData = (id: string) => {
   // 获取数据
   getObj(id).then((res: any) => {
     Object.assign(form, res.data)
+    if (res.data.templateList) {
+        let list = res.data.templateList
+        list.forEach(item=>{
+            form.templateId.push(item.templateName)
+        })
+    }
   })
 };
 
