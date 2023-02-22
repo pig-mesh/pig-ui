@@ -8,6 +8,13 @@ export function fetchList(query?: Object) {
   })
 }
 
+export function list() {
+  return request({
+    url: '/gen/template/list',
+    method: 'get'
+  })
+}
+
 export function addObj(obj?: Object) {
   return request({
     url: '/gen/template',

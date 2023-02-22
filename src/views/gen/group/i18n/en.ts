@@ -8,5 +8,7 @@ export default {
         inputIdTip: 'input id',
         inputGroupNameTip: 'input groupName',
         inputGroupDescTip: 'input groupDesc',
+        templateType:"template Type",
+        selectType:"please select a template type"
     }
 }

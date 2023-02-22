@@ -13,7 +13,14 @@
 	      <el-input v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')"/>
 	    </el-form-item>
       </el-col>
-
+<!--            多选数据-->
+      <el-col :span="12" class="mb20">
+         <el-form-item :label="$t('group.templateType')" prop="template">
+            <el-select v-model="form.template" :placeholder="$t('group.selectType')" clearable class="w100" multiple>
+               <el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
+            </el-select>
+          </el-form-item>
+      </el-col>
 		</el-row>
       </el-form>
       <template #footer>
@@ -27,18 +34,19 @@
 
 <script setup lang="ts" name="GenGroupDialog">
 // 定义子组件向父组件传值/事件
-import { useDict } from '/@/hooks/dict';
 const emit = defineEmits(['refresh']);
 import { useMessage } from "/@/hooks/message";
-import { getObj, addObj, putObj } from '/@/api/gen/group'
-import { useI18n } from "vue-i18n"
-import { rule } from '/@/utils/validate';
+import { getObj, addObj, putObj } from '/@/api/gen/group';
+import { useI18n } from "vue-i18n";
+import { list as templateList } from '/@/api/gen/template'
+
 
 const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false)
+const templateData = ref<any[]>([])
 // 定义字典
 
 // 提交表单数据
@@ -46,11 +54,13 @@ const form = reactive({
     id: '',
     groupName: '',
     groupDesc: '',
+    template:[] as String []
 });
 
 // 定义校验规则
 const dataRules = ref({
-        groupName: [{required: true, message: '分组名称不能为空', trigger: 'blur'}]
+        groupName: [{required: true, message: '分组名称不能为空', trigger: 'blur'}],
+        template: [{ required: true, message: "角色不能为空", trigger: "blur" }]
 })
 
 // 打开弹窗
@@ -68,6 +78,7 @@ const openDialog = (id: string) => {
     form.id = id
     getgenGroupData(id)
   }
+    getTemplateData()
 };
 
 // 提交
@@ -105,6 +116,13 @@ const getgenGroupData = (id: string) => {
     Object.assign(form, res.data)
   })
 };
+
+// 角色数据
+const getTemplateData = () => {
+    templateList().then(res => {
+        templateData.value = res.data
+    })
+}
 
 // 暴露变量
 defineExpose({
