@@ -41,9 +41,8 @@
         @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" :label="t('group.index')" width="80" />
-          <el-table-column prop="id" :label="t('group.id')"  show-overflow-tooltip/>
-          <el-table-column prop="groupName" :label="t('group.groupName')"  show-overflow-tooltip/>
-          <el-table-column prop="groupDesc" :label="t('group.groupDesc')"  show-overflow-tooltip/>
+        <el-table-column prop="groupName" :label="t('group.groupName')"  show-overflow-tooltip/>
+        <el-table-column prop="groupDesc" :label="t('group.groupDesc')"  show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button text type="primary" v-auth="'codegen_group_edit'"
@@ -63,14 +62,14 @@
 </template>
 
 <script setup lang="ts" name="systemGenGroup">
-import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObjs } from "/@/api/gen/group";
-import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useI18n } from "vue-i18n";
+import {BasicTableProps, useTable} from "/@/hooks/table";
+import {delObjs, fetchList} from "/@/api/gen/group";
+import {useMessage, useMessageBox} from "/@/hooks/message";
+import {useI18n} from "vue-i18n";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const { t } = useI18n()
+const {t} = useI18n()
 // 定义查询字典
 
 // 定义变量内容
