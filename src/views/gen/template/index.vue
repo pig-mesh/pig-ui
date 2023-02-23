@@ -100,7 +100,6 @@
         getDataList,
         currentChangeHandle,
         sizeChangeHandle,
-        sortChangeHandle,
         downBlobFile
     } = useTable(state)
 
