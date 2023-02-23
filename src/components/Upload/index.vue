@@ -2,6 +2,7 @@
 <template>
   <div class="upload-file">
     <el-upload ref="fileUpload"
+               v-if="props.type === 'default'"
                :action="props.uploadFileUrl"
                :before-upload="handleBeforeUpload"
                :file-list="fileList"
@@ -10,11 +11,11 @@
                :on-error="handleUploadError"
                :on-remove="handleRemove"
                :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">
-        将文件拖到此处，或
-        <em>点击上传</em>
-      </div>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
       <template #tip>
         <div class="el-upload__tip" v-if="props.isShowTip">
           请上传
@@ -24,6 +25,18 @@
           的文件
         </div>
       </template>
+    </el-upload>
+    <el-upload ref="fileUpload"
+               v-if="props.type === 'simple'"
+               :action="props.uploadFileUrl"
+               :before-upload="handleBeforeUpload"
+               :file-list="fileList"
+               :headers="headers"
+               :limit="limit"
+               :on-error="handleUploadError"
+               :on-remove="handleRemove"
+               :on-success="handleUploadSuccess" class="upload-file-uploader" multiple>
+        <el-button type="primary" link>点击上传</el-button>
     </el-upload>
   </div>
 </template>
@@ -56,6 +69,13 @@ const props = defineProps({
   uploadFileUrl: {
     type: String,
     default: '/admin/sys-file/upload'
+  },
+  type: {
+    type: String,
+    default: 'default',
+    validator:(value: string) => {
+      return ['default','simple'].includes(value)
+    }
   }
 });
 
@@ -166,7 +186,3 @@ watch(() => props.modelValue, val => {
 
 
 </script>
-
-<style scoped>
-
-</style>

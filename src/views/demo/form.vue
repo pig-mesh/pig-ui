@@ -10,13 +10,23 @@
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item label="图片" prop="username">
-              <upload-image v-model="dataForm.image"></upload-image>
+              <upload-img v-model="dataForm.image"></upload-img>
             </el-form-item>
           </el-col>
 
-          <el-col :span="24" class="mb20">
+          <el-col :span="12" class="mb20">
             <el-form-item label="文件" prop="username">
               <upload-file v-model="dataForm.fileList"></upload-file>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item label="文件" prop="username">
+              <upload-file v-model="dataForm.fileList" type="simple"></upload-file>
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" class="mb20">
+            <el-form-item label="富文本" prop="text">
+              <editor v-model:get-html="dataForm.text"></editor>
             </el-form-item>
           </el-col>
           </el-row>
@@ -28,14 +38,11 @@
 
 <script setup lang="ts" name="form-demo">
 
-const UploadFile = defineAsyncComponent(() => import('/@/components/Upload/index.vue'))
-
-const UploadImage = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'))
-
 const dataForm = reactive({
   username: '',
   fileList: '',
-  image: ''
+  image: '',
+  text: ''
 })
 
 onMounted(() => {
