@@ -10,5 +10,8 @@ export default {
         inputTemplateNameTip: 'input templateName',
         inputGeneratorPathTip: 'input generatorPath',
         inputDescTip: 'input templateDesc',
+        templateCode:'template code',
+        inputTemplateCode:'input template Code'
+
     }
 }
