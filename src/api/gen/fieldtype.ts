@@ -8,6 +8,14 @@ export function fetchList(query?: Object) {
   })
 }
 
+export function list(query?: Object) {
+  return request({
+    url: '/gen/fieldtype/list',
+    method: 'get',
+    params: query
+  })
+}
+
 export function addObj(obj?: Object) {
   return request({
     url: '/gen/fieldtype',

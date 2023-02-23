@@ -1,32 +1,52 @@
 <!--文件上传组件-->
 <template>
   <div class="upload-file">
-    <el-upload multiple :action="props.uploadFileUrl" :before-upload="handleBeforeUpload" :file-list="fileList"
-      :limit="limit" :on-error="handleUploadError" :on-success="handleUploadSuccess" :on-remove="handleRemove"
-      :headers="headers" class="upload-file-uploader" ref="fileUpload" :auto-upload="false" drag>
-      <i class="el-icon-upload"></i>
-      <div class="el-upload__text">
-        将文件拖到此处，或
-        <em>点击上传</em>
-      </div>
+    <el-upload ref="fileUpload"
+               v-if="props.type === 'default'"
+               :action="props.uploadFileUrl"
+               :before-upload="handleBeforeUpload"
+               :file-list="fileList"
+               :headers="headers"
+               :limit="limit"
+               :on-error="handleUploadError"
+               :on-remove="handleRemove"
+               :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">
+          将文件拖到此处，或
+          <em>点击上传</em>
+        </div>
       <template #tip>
         <div class="el-upload__tip" v-if="props.isShowTip">
           请上传
-          <template v-if="props.fileSize"> 大小不超过 <b style="color: #f56c6c">{{ props.fileSize }}MB</b> </template>
-          <template v-if="props.fileType"> 格式为 <b style="color: #f56c6c">{{ props.fileType.join("/") }}</b> </template>
+          <template v-if="props.fileSize"> 大小不超过 <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template>
+          <template v-if="props.fileType"> 格式为 <b style="color: #f56c6c">{{ props.fileType.join("/") }}</b>
+          </template>
           的文件
         </div>
       </template>
+    </el-upload>
+    <el-upload ref="fileUpload"
+               v-if="props.type === 'simple'"
+               :action="props.uploadFileUrl"
+               :before-upload="handleBeforeUpload"
+               :file-list="fileList"
+               :headers="headers"
+               :limit="limit"
+               :on-error="handleUploadError"
+               :on-remove="handleRemove"
+               :on-success="handleUploadSuccess" class="upload-file-uploader" multiple>
+        <el-button type="primary" link>点击上传</el-button>
     </el-upload>
   </div>
 </template>
 
 <script setup lang="ts" name="upload-file">
-import { useMessage } from "/@/hooks/message";
-import { Local, Session } from "/@/utils/storage";
+import {useMessage} from "/@/hooks/message";
+import {Local, Session} from "/@/utils/storage";
 
 const props = defineProps({
-  value: [String, Array],
+  modelValue: [String, Array],
   // 数量限制
   limit: {
     type: Number,
@@ -37,7 +57,6 @@ const props = defineProps({
     type: Number,
     default: 5,
   },
-  // 文件类型, 例如['png', 'jpg', 'jpeg']
   fileType: {
     type: Array,
     default: () => ['png', 'jpg', 'jpeg', "doc", "xls", "ppt", "txt", "pdf", "docx", "xlsx", "pptx"],
@@ -50,6 +69,13 @@ const props = defineProps({
   uploadFileUrl: {
     type: String,
     default: '/admin/sys-file/upload'
+  },
+  type: {
+    type: String,
+    default: 'default',
+    validator:(value: string) => {
+      return ['default','simple'].includes(value)
+    }
   }
 });
 
@@ -113,12 +139,14 @@ const uploadedSuccessfully = () => {
     uploadList.value = [];
     number.value = 0;
     emit("change", listToString(fileList.value));
+    emit("update:modelValue", listToString(fileList.value));
   }
 }
 
 const handleRemove = (file: any) => {
   fileList.value = fileList.value.filter(f => !(f === file.url))
   emit("change", listToString(fileList.value));
+  emit("update:modelValue", listToString(fileList.value));
 }
 
 // 对象转成指定字符串分隔
@@ -137,11 +165,11 @@ const handleUploadError = () => {
   useMessage().error("上传文件失败")
 }
 
-watch(() => props.value, val => {
+watch(() => props.modelValue, val => {
   if (val) {
     let temp = 1;
     // 首先将值转为数组
-    const list = Array.isArray(val) ? val : props.value.split(',');
+    const list = Array.isArray(val) ? val : props?.modelValue?.split(',');
     // 然后将数组转为对象数组
     fileList.value = list.map(item => {
       if (typeof item === "string") {
@@ -158,7 +186,3 @@ watch(() => props.value, val => {
 
 
 </script>
-
-<style scoped>
-
-</style>

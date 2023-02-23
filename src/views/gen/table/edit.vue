@@ -3,6 +3,7 @@
 		<el-tabs v-model="activeName" @tab-click="handleClick">
 			<el-tab-pane label="属性设置" name="field">
 				<vxe-table ref="fieldTable" align="center" border row-key class="sortable-row-gen" :data="fieldList"
+                   :loading="loading"
 					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
 					<vxe-column type="seq" width="60"></vxe-column>
 					<vxe-column width="60" title="拖动">
@@ -23,7 +24,7 @@
 					<vxe-column field="attrName" title="属性名" :edit-render="{ name: 'input' }"></vxe-column>
 					<vxe-column field="attrType" title="属性类型">
 						<template #default="{ row }">
-							<vxe-select v-model="row.attrType">
+							<vxe-select v-model="row.attrType" @change="handleChangeRow(row)">
 								<vxe-option v-for="item in typeList" :key="item.value" :value="item.value"
 									:label="item.label"></vxe-option>
 							</vxe-select>
@@ -53,45 +54,33 @@
 				</vxe-table>
 			</el-tab-pane>
 			<el-tab-pane label="列表查询" name="third">
-				<vxe-table ref="gridTable" align="center" border row-key :data="fieldList"
+				<vxe-grid ref="gridTable" align="center" border row-key :data="fieldList" :loading="loading" :columns="fieldListColumns"
 					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
-					<vxe-column field="attrName" title="属性名"></vxe-column>
-					<vxe-column field="fieldComment" title="说明"></vxe-column>
-					<vxe-column field="gridItem" title="列表显示" width="100">
-						<template #default="{ row }">
+						<template #gridItem="{ row }">
 							<vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
 						</template>
-					</vxe-column>
-					<vxe-column field="gridSort" title="是否排序" width="100">
-						<template #default="{ row }">
+						<template #gridSort="{ row }">
 							<vxe-checkbox v-model="row.gridSort"></vxe-checkbox>
 						</template>
-					</vxe-column>
-					<vxe-column field="queryFormType" title="查询表单类型" width="200">
-						<template #default="{ row }">
+						<template #queryFormType="{ row }">
 							<vxe-select v-model="row.queryFormType">
-								<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value"
+								<vxe-option v-for="item in queryTypeList" :key="item.value" :value="item.value"
 									:label="item.label"></vxe-option>
 							</vxe-select>
 						</template>
-					</vxe-column>
-					<vxe-column field="queryItem" title="查询显示" width="100">
-						<template #default="{ row }">
+						<template #queryItem="{ row }">
 							<vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
 						</template>
-					</vxe-column>
-					<vxe-column field="queryType" title="查询方式" width="200">
-						<template #default="{ row }">
+						<template #queryType="{ row }">
 							<vxe-select v-model="row.queryType">
 								<vxe-option v-for="item in queryList" :key="item.value" :value="item.value"
 									:label="item.label"></vxe-option>
 							</vxe-select>
 						</template>
-					</vxe-column>
-				</vxe-table>
+				</vxe-grid>
 			</el-tab-pane>
 			<el-tab-pane label="表单页面" name="form">
-				<vxe-table ref="formTable" align="center" border row-key :data="fieldList"
+				<vxe-table ref="formTable" align="center" border row-key :data="fieldList" :loading="loading"
 					:checkbox-config="{ checkStrictly: true }" :edit-config="{ trigger: 'click', mode: 'cell' }">
 					<vxe-column field="attrName" title="属性名"></vxe-column>
 					<vxe-column field="fieldComment" title="说明"></vxe-column>
@@ -130,7 +119,7 @@
 import { TabsPaneContext } from 'element-plus/es'
 import Sortable from 'sortablejs'
 import { useTableFieldSubmitApi, useTableApi, fetchDictList } from '/@/api/gen/table'
-import { fetchList } from '/@/api/gen/fieldtype'
+import { list } from '/@/api/gen/fieldtype'
 import { VxeTableInstance } from 'vxe-table'
 import { useMessage } from '/@/hooks/message'
 import { useI18n } from 'vue-i18n'
@@ -204,7 +193,20 @@ const formTypeList = reactive([
 	{ label: '单选按钮', value: 'radio' },
 	{ label: '复选框', value: 'checkbox' },
 	{ label: '日期', value: 'date' },
-	{ label: '日期时间', value: 'datetime' }
+	{ label: '日期时间', value: 'datetime' },
+  { label: '文件上传', value: 'upload-file' },
+  { label: '图片上传', value: 'upload-img' }
+])
+
+const queryTypeList = reactive([
+  { label: '单行文本', value: 'text' },
+  { label: '多行文本', value: 'textarea' },
+  { label: '数字', value: 'number' },
+  { label: '下拉框', value: 'select' },
+  { label: '单选按钮', value: 'radio' },
+  { label: '复选框', value: 'checkbox' },
+  { label: '日期', value: 'date' },
+  { label: '日期时间', value: 'datetime' },
 ])
 
 const formValidatorList = reactive([
@@ -218,6 +220,33 @@ const formValidatorList = reactive([
   { label: '电子邮箱', value: 'email' },
   { label: 'URL网址', value: 'url' }
 ])
+
+
+const propToType = reactive({
+  "tinyint":'number',
+  "smallint":'number',
+  "mediumint":'number',
+  "int":'number',
+  "integer":'number',
+  "bigint":'number',
+  "float":'number',
+  "datetime":'datetime',
+  "date":'date',
+  "Long":'number',
+  "Float":'number',
+  "Double":'number',
+  "BigDecimal":'number',
+  "text":'textarea',
+  "longtext":'editor',
+  "bit":'radio',
+  "char":'radio',
+  "varchar":'text',
+})
+
+const handleChangeRow = (row: any) => {
+  row.queryFormType = propToType[row.attrType]
+  row.formType = propToType[row.attrType]
+}
 
 const openDialog = (dName: string, tName: string) => {
 	visible.value = true
@@ -255,23 +284,31 @@ const rowDrop = () => {
 		})
 	})
 }
+const loading = ref(false)
 
 const getTable = (dsName: string, tableName: string) => {
 	fieldList.value = [] // 避免第一次数据初始化， 表格显示历史数据
+  loading.value = true
 	useTableApi(dsName, tableName).then(res => {
 		tableId.value = res.data.id
-		fieldList.value = res.data.fieldList
-	})
+		fieldList.value = res.data.fieldList.map(item => {
+      item.queryFormType = propToType[item.fieldType]
+      item.formType = propToType[item.fieldType]
+      return item
+    })
+	}).finally(() => {
+    loading.value = false
+  })
 }
 
 const getFieldTypeList = async () => {
 	typeList.value = []
 
 	// 获取数据
-	const { data } = await fetchList()
+	const { data } = await list()
 
 	// 设置属性类型值
-	data.records.forEach((item: any) => typeList.value.push({ label: item.attrType, value: item.columnType }))
+	data.forEach((item: any) => typeList.value.push({ label: item.attrType, value: item.columnType }))
 	// 增加Object类型
 	typeList.value.push({ label: 'Object', value: 'Object' })
 }
@@ -294,8 +331,17 @@ const submitHandle = () => {
       // emit('refreshDataList')
     })
   })
-
 }
+
+const fieldListColumns = reactive([
+  { field: 'attrName', title: '属性名' },
+  { field: 'fieldComment', title: '说明' },
+  { field: 'gridItem', title: '列表显示', slots: { default: 'gridItem' }},
+  { field: 'gridSort', title: '是否排序' , slots: { default: 'gridSort' }},
+  { field: 'queryFormType', title: '查询表单类型' , slots: { default: 'queryFormType' }},
+  { field: 'queryItem', title: '查询显示', slots: { default: 'queryItem' } },
+  { field: 'queryType', title: '查询方式' , slots: { default: 'queryType' }},
+])
 
 defineExpose({
 	openDialog,
@@ -312,5 +358,8 @@ defineExpose({
 .sortable-row-gen .vxe-body--row.sortable-ghost,
 .sortable-row-gen .vxe-body--row.sortable-chosen {
 	background-color: #dfecfb;
+}
+.vxe-select–panel {
+  z-index: 9997 !important;
 }
 </style>
