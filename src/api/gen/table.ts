@@ -60,9 +60,17 @@ export const useGeneratorCodeApi = (tableIds: any) => {
   })
 }
 
-export const useGeneratorVFormApi = (dsName: any, tableName: string) => {
+export const useGeneratorVFormApi = (dsName: any, tableName: any) => {
   return request({
     url: '/gen/generator/vform',
+    method: 'get',
+    params: { dsName: dsName, tableName: tableName }
+  })
+}
+
+export const useGeneratorVFormSfcApi = (dsName: any, tableName: any) => {
+  return request({
+    url: '/gen/generator/vform/sfc',
     method: 'get',
     params: { dsName: dsName, tableName: tableName }
   })
@@ -80,5 +88,14 @@ export function fetchDictList() {
   return request({
     url: '/admin/dict/list',
     method: 'get'
+  })
+}
+
+
+export function useFormConfSaveApi(obj?: Object) {
+  return request({
+    url: '/gen/form',
+    method: 'post',
+    data: obj
   })
 }
