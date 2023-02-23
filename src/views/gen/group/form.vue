@@ -12,7 +12,7 @@
             <el-input v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')"/>
           </el-form-item>
         </el-col>
-        <el-col :span="12" class="mb20">
+        <el-col :span="24" class="mb20">
           <el-form-item :label="$t('group.templateType')" prop="templateId">
             <el-select v-model="form.templateId" :placeholder="$t('group.selectType')" class="w100" clearable multiple>
               <el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id"/>
