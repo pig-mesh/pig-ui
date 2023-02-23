@@ -13,7 +13,8 @@
 </template>
 
 <script lang="ts" setup>
-import { useGeneratorVFormApi } from '/@/api/gen/table';
+import { useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
+import { handleBlobFile } from '/@/utils/other';
 
 const route = useRoute()
 
@@ -41,10 +42,10 @@ const designerConfig = reactive({
   clearDesignerButton: true,
 
   //是否显示预览表单按钮
-  previewFormButton: true,
+  previewFormButton: false,
 
   //是否显示导入JSON按钮
-  importJsonButton: true,
+  importJsonButton: false,
 
   //是否显示导出JSON器按钮
   exportJsonButton: true,
@@ -73,7 +74,23 @@ const importJsonConfig = () => {
   }
 }
 
-const exportJsonConfig = () => {
+const exportJsonConfig = async () => {
+  const tableName = route.query.tableName
+  const dsName = route.query.dsName
+
+  if (tableName && dsName) {
+    // 先保存表单
+    const formJson = vfDesignerRef.value.getFormJson()
+    await useFormConfSaveApi({
+      dsName: dsName,
+      tableName: tableName,
+      formInfo: JSON.stringify(formJson)
+    })
+
+    //执行 sfc代码生成
+    const res = await useGeneratorVFormSfcApi(dsName, tableName)
+    handleBlobFile(res, 'form.vue')
+  }
 }
 </script>
 <style lang="scss">
