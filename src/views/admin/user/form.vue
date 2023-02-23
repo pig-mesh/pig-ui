@@ -141,7 +141,7 @@ const dataRules = ref(
         trigger: "blur"
       }],
       name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
-      dept: [{required: true, message: "部门不能为空", trigger: "blur"}],
+      deptId: [{required: true, message: "部门不能为空", trigger: "blur"}],
       role: [{required: true, message: "角色不能为空", trigger: "blur"}],
       post: [{required: true, message: "岗位不能为空", trigger: "blur"}],
       phone: [{required: true, message: "手机号不能为空", trigger: "blur"}, {
