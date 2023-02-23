@@ -20,11 +20,11 @@
                 </el-col>
 
                 <el-col :span="24" class="mb20">
-                    <el-form-item :label="t('template.templateCode')" prop="generatorPath">
-                        <el-input :placeholder="t('template.inputTemplateCode')" v-model="form.templateCode"/>
+                    <el-form-item :label="t('template.templateCode')" prop="templateCode">
+                        <el-input :placeholder="t('template.inputTemplateCode')" :rows="4" type="textarea"
+                                  v-model="form.templateCode"/>
                     </el-form-item>
                 </el-col>
-
 
             </el-row>
         </el-form>
