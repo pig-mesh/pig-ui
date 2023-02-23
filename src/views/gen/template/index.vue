@@ -41,7 +41,6 @@
         @selection-change="handleSelectionChange" >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" :label="t('template.index')" width="80" />
-        <el-table-column prop="id" :label="t('template.id')"  show-overflow-tooltip/>
         <el-table-column prop="templateName" :label="t('template.templateName')"  show-overflow-tooltip/>
         <el-table-column prop="generatorPath" :label="t('template.generatorPath')"  show-overflow-tooltip/>
         <el-table-column prop="templateDesc" :label="t('template.desc')"  show-overflow-tooltip/>

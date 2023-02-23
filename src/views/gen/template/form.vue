@@ -2,25 +2,25 @@
     <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
       <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
         <el-row :gutter="24">
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('template.templateName')" prop="templateName">
-	      <el-input v-model="form.templateName" :placeholder="t('template.inputTemplateNameTip')"/>
-	    </el-form-item>
-      </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="t('template.templateName')" prop="templateName">
+              <el-input v-model="form.templateName" :placeholder="t('template.inputTemplateNameTip')"/>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12" class="mb20">
+            <el-form-item :label="t('template.desc')" prop="templateDesc">
+              <el-input v-model="form.templateDesc" :placeholder="t('template.inputDescTip')"/>
+            </el-form-item>
+          </el-col>
 
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('template.generatorPath')" prop="generatorPath">
-	      <el-input v-model="form.generatorPath" :placeholder="t('template.inputGeneratorPathTip')"/>
-	    </el-form-item>
-      </el-col>
+          <el-col :span="24" class="mb20">
+            <el-form-item :label="t('template.generatorPath')" prop="generatorPath">
+              <el-input v-model="form.generatorPath" :placeholder="t('template.inputGeneratorPathTip')"/>
+            </el-form-item>
+          </el-col>
 
-	  <el-col :span="12" class="mb20">
-	    <el-form-item :label="t('template.desc')" prop="templateDesc">
-	      <el-input v-model="form.templateDesc" :placeholder="t('template.inputDescTip')"/>
-	    </el-form-item>
-      </el-col>
 
-		</el-row>
+        </el-row>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
@@ -33,14 +33,13 @@
 
 <script setup lang="ts" name="GenTemplateDialog">
 // 定义子组件向父组件传值/事件
-import { useDict } from '/@/hooks/dict';
-const emit = defineEmits(['refresh']);
-import { useMessage } from "/@/hooks/message";
-import { getObj, addObj, putObj } from '/@/api/gen/template'
-import { useI18n } from "vue-i18n"
-import { rule } from '/@/utils/validate';
+import {useMessage} from "/@/hooks/message";
+import {addObj, getObj, putObj} from '/@/api/gen/template'
+import {useI18n} from "vue-i18n"
 
-const { t } = useI18n();
+const emit = defineEmits(['refresh']);
+
+const {t} = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
