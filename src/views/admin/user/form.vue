@@ -26,14 +26,14 @@
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.role')" prop="role">
-              <el-select v-model="dataForm.role" placeholder="请选择角色" clearable class="w100" multiple>
+              <el-select v-model="dataForm.role" placeholder="请选择角色" clearable class="w100" multiple allow-create filterable>
                 <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId"/>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.post')" prop="post">
-              <el-select v-model="dataForm.post" placeholder="请选择岗位" clearable class="w100" multiple>
+              <el-select v-model="dataForm.post" placeholder="请选择岗位" clearable class="w100" multiple allow-create filterable>
                 <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId"/>
               </el-select>
             </el-form-item>
