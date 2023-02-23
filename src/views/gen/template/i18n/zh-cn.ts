@@ -10,5 +10,7 @@ export default {
         inputTemplateNameTip: '请输入模板名称',
         inputGeneratorPathTip: '请输入模板路径',
         inputDescTip: '请输入模板描述',
+        templateCode:'模板代码',
+        inputTemplateCode:'请输入模板代码'
     }
 }
