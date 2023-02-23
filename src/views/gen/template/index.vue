@@ -92,7 +92,6 @@ const {
   getDataList,
   currentChangeHandle,
   sizeChangeHandle,
-  sortChangeHandle,
   downBlobFile
 } = useTable(state)
 
@@ -112,10 +111,6 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-  // objs.forEach((val: any) => {
-  //   selectObjs.value.push(val.id)
-  // });
-  // multiple.value = !objs.length
   selectObjs.value = []
   objs.forEach((val: any)=>{
     selectObjs.value.push(val.id)
