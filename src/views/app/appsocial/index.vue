@@ -117,6 +117,7 @@ const resetQuery = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
+  selectObjs.value = []
   objs.forEach((val: any) => {
     selectObjs.value.push(val.id)
   });

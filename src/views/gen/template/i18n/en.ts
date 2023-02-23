@@ -5,10 +5,10 @@ export default {
         id: 'id',
         templateName: 'templateName',
         generatorPath: 'generatorPath',
-        desc: 'desc',
+        desc: 'templateDesc',
         inputIdTip: 'input id',
         inputTemplateNameTip: 'input templateName',
         inputGeneratorPathTip: 'input generatorPath',
-        inputDescTip: 'input desc',
+        inputDescTip: 'input templateDesc',
     }
 }
