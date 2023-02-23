@@ -44,10 +44,10 @@
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item label="代码风格" prop="style">
-						<el-radio-group v-model="dataForm.style">
-							<el-radio-button :label="1">移动端</el-radio-button>
-							<el-radio-button :label="0">PC端</el-radio-button>
-						</el-radio-group>
+            <el-select  v-model="dataForm.style" >
+              <el-option v-for="(item, index) in groupDataList" :key="index" :label="item.groupName"
+                         :value="item.id"></el-option>
+            </el-select>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -60,14 +60,6 @@
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
-        <el-col :span="12" class="mb20" v-if="dataForm.style === 0">
-          <el-form-item label="i18n文件" prop="i18n" >
-            <el-radio-group v-model="dataForm.i18n">
-              <el-radio-button :label="0">不生成</el-radio-button>
-              <el-radio-button :label="1">生成</el-radio-button>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item label="生成方式" prop="generatorType">
 						<el-radio-group v-model="dataForm.generatorType">
@@ -93,6 +85,7 @@
 import { useI18n } from 'vue-i18n';
 import { putObj, useTableApi } from '/@/api/gen/table'
 import { useMessage } from '/@/hooks/message';
+import { list as groupList} from '/@/api/gen/group'
 
 const props = defineProps({
   tableName: {
@@ -126,9 +119,10 @@ const dataForm = reactive({
 	tableComment: '',
 	tableName: '' as string,
 	dsName: '' as string,
-	i18n: 1,  // 默认生成 I18N 国际化文件
-	style: 0, //  默认风格 element-plus
+	style: '', //  默认风格 element-plus
 })
+
+const groupDataList = ref([])
 
 const openDialog = (dName: string, tName: string) => {
 	visible.value = true
@@ -164,7 +158,8 @@ const dataRules = ref({
 	generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	backendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+  style: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
 })
 
 // 保存
@@ -186,7 +181,12 @@ const submitHandle = () => {
       })
     })
   })
+}
 
+const genGroupList = () => {
+  groupList().then(res => {
+    groupDataList.value = res.data
+  })
 }
 
 onMounted(() => {
@@ -199,6 +199,7 @@ onMounted(() => {
   dataForm.dsName = String(props.dsName)
 
   getTable(dataForm.dsName, dataForm.tableName)
+  genGroupList()
 })
 
 defineExpose({

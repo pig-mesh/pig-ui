@@ -38,3 +38,10 @@ export function putObj(obj?: Object) {
     data: obj
   })
 }
+
+export function list() {
+  return request({
+    url: '/gen/group/list',
+    method: 'get',
+  })
+}
