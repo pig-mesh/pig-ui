@@ -48,7 +48,7 @@
           <template #default="scope">
             <el-button text type="primary" v-auth="'codegen_group_edit'"
               @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
-            <el-button text type="primary" v-auth="'sys_group_del'" @click="handleDelete([scope.row.id])">{{
+            <el-button text type="primary" v-auth="'codegen_group_del'" @click="handleDelete([scope.row.id])">{{
               $t('common.delBtn')
             }}</el-button>
           </template>
@@ -112,6 +112,7 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
+  selectObjs.value = []
   objs.forEach((val: any) => {
     selectObjs.value.push(val.id)
   });

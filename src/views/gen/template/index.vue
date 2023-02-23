@@ -38,18 +38,18 @@
         </div>
       </el-row>
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
-        @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
+        @selection-change="handleSelectionChange" >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column type="index" :label="t('template.index')" width="80" />
-          <el-table-column prop="id" :label="t('template.id')"  show-overflow-tooltip/>
-          <el-table-column prop="templateName" :label="t('template.templateName')"  show-overflow-tooltip/>
-          <el-table-column prop="generatorPath" :label="t('template.generatorPath')"  show-overflow-tooltip/>
-          <el-table-column prop="templateDesc" :label="t('template.desc')"  show-overflow-tooltip/>
+        <el-table-column prop="id" :label="t('template.id')"  show-overflow-tooltip/>
+        <el-table-column prop="templateName" :label="t('template.templateName')"  show-overflow-tooltip/>
+        <el-table-column prop="generatorPath" :label="t('template.generatorPath')"  show-overflow-tooltip/>
+        <el-table-column prop="templateDesc" :label="t('template.desc')"  show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button text type="primary" v-auth="'codegen_template_edit'"
               @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
-            <el-button text type="primary" v-auth="'sys_template_del'" @click="handleDelete([scope.row.id])">{{
+            <el-button text type="primary" v-auth="'codegen_template_del'" @click="handleDelete([scope.row.id])">{{
               $t('common.delBtn')
             }}</el-button>
           </template>
@@ -67,7 +67,6 @@
 import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObjs } from "/@/api/gen/template";
 import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useDict } from '/@/hooks/dict';
 import { useI18n } from "vue-i18n";
 
 // 引入组件
@@ -114,9 +113,14 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-  objs.forEach((val: any) => {
+  // objs.forEach((val: any) => {
+  //   selectObjs.value.push(val.id)
+  // });
+  // multiple.value = !objs.length
+  selectObjs.value = []
+  objs.forEach((val: any)=>{
     selectObjs.value.push(val.id)
-  });
+  })
   multiple.value = !objs.length
 }
 
