@@ -47,24 +47,9 @@ function mergeArrObj<T>(list: T, key: string) {
 }
 
 
-// 从后台获取数据
-info().then((res: any) => {
-	itemize["zh-cn"].push(...res.data['zh-cn'])
-	itemize.en.push(...res.data.en)
-}).finally(() => {
-	// 处理最终格式
-	for (const key in itemize) {
-		messages[key] = {
-			name: key,
-			el: element[key].el,
-			...mergeArrObj(itemize, key),
-		};
-	}
-
-})
-
 // 远程获取i18n
 const infoI18n = await info()
+
 itemize["zh-cn"].push(...infoI18n.data['zh-cn'])
 itemize.en.push(...infoI18n.data.en)
 
