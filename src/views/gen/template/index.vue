@@ -2,7 +2,7 @@
     <div class="layout-padding">
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
-                <el-form :inline="true" :model="state.queryForm" ref="queryRef">
+                <el-form :inline="true" :model="state.queryForm" ref="queryRef" @keyup.enter="getDataList">
                     <el-form-item :label="$t('template.id')" prop="id">
                         <el-input :placeholder="t('template.inputIdTip')" style="max-width: 180px"
                             v-model="state.queryForm.id" />
