@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
       <el-row v-show="showSearch" class="mb8">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('client.clientId')" prop="clientId">
             <el-input :placeholder="$t('client.clientId')" v-model="state.queryForm.clientId" style="max-width: 180px" />
           </el-form-item>

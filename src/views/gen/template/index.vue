@@ -2,7 +2,7 @@
     <div class="layout-padding">
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
-                <el-form :inline="true" :model="state.queryForm" ref="queryRef">
+                <el-form :inline="true" :model="state.queryForm" ref="queryRef" @keyup.enter="getDataList">
                     <el-form-item :label="$t('template.id')" prop="id">
                         <el-input :placeholder="t('template.inputIdTip')" style="max-width: 180px"
                                   v-model="state.queryForm.id"/>
@@ -66,7 +66,7 @@
         </el-card>
 
         <!-- 编辑、新增  -->
-        <form-dialog @refresh="getDataList()" ref="formDialogRef"/>
+        <form-dialog @refresh="getDataList(false)" ref="formDialogRef"/>
     </div>
 </template>
 
@@ -131,7 +131,7 @@
         useMessageBox().confirm(t('common.delConfirmText'))
             .then(() => {
                 delObjs(ids).then(() => {
-                    getDataList();
+                    getDataList(false);
                     useMessage().success(t('common.delSuccessText'));
                 }).catch((err: any) => {
                     useMessage().error(err.msg)

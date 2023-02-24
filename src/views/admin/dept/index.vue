@@ -2,21 +2,27 @@
 	<div class="layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
 			<div class="mb15">
-				<el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px"
-					v-model="state.queryForm.deptName"> </el-input>
-				<el-button icon="search" type="primary" class="ml10" @click="getDataList">
-					{{ $t('common.queryBtn') }}
-				</el-button>
-				<el-button icon="folder-add" type="primary" class="ml10" @click="deptDialogRef.openDialog('add');"
-					v-auth="'sys_dept_add'">
-					{{ $t('common.addBtn') }}
-				</el-button>
-        <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
-          {{ $t('common.importBtn') }}
-        </el-button>
-        <el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
-          {{ $t('common.exportBtn') }}
-        </el-button>
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
+          <el-form-item prop="deptName">
+            <el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px"
+                      v-model="state.queryForm.deptName"> </el-input>
+          </el-form-item>
+          <el-form-item class="ml2">
+            <el-button icon="search" type="primary" class="ml10" @click="getDataList">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button icon="folder-add" type="primary" class="ml10" @click="deptDialogRef.openDialog('add');"
+                       v-auth="'sys_dept_add'">
+              {{ $t('common.addBtn') }}
+            </el-button>
+            <el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
+              {{ $t('common.importBtn') }}
+            </el-button>
+            <el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
+              {{ $t('common.exportBtn') }}
+            </el-button>
+          </el-form-item>
+        </el-form>
 			</div>
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="id"
 				default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">

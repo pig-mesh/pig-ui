@@ -13,7 +13,7 @@
         </el-col>
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
-            <el-tree-select v-model="state.ruleForm.parentId" :data="state.parentData" default-expand-all
+            <el-tree-select v-model="state.ruleForm.parentId" :data="state.parentData" :render-after-expand="false"
               :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
               :placeholder="$t('sysmenu.inputParentIdTip')">
             </el-tree-select>
@@ -115,7 +115,9 @@ const state = reactive({
 // 从后端获取菜单信息
 const getMenuData = () => {
   state.parentData = []
-  pageList().then(res => {
+  pageList({
+    type: '0'
+  }).then(res => {
     let menu = {
       createBy: "",
       createTime: "",

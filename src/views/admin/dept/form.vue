@@ -7,8 +7,7 @@
 						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
               <el-tree-select v-model="dataForm.parentId" :data="parentData"
                               :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
-                              default-expand-all
-                              :placeholder="$t('sysdept.inputparentIdTip')"/>
+                              :render-after-expand="false" :placeholder="$t('sysdept.inputparentIdTip')"/>
 						</el-form-item>
 					</el-col>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">

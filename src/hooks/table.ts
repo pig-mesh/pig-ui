@@ -138,8 +138,10 @@ export function useTable(options?: BasicTableProps) {
         query();
     }
 
-    const getDataList = () => {
-        state.pagination!.current = 1
+    const getDataList = (refresh: boolean = true) => {
+        if(refresh){
+            state.pagination!.current = 1
+        }
         query()
     }
 
