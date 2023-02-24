@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <el-row v-show="showSearch" class="mb8">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('sysdict.dictType')" prop="dictType">
             <el-input :placeholder="$t('sysdict.inputDictTypeTip')" v-model="state.queryForm.dictType" style="max-width: 180px" />
           </el-form-item>
