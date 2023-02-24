@@ -96,7 +96,6 @@ const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
-    id: '',
     menuId: '',
     name: '',
     permission: '',
@@ -166,7 +165,7 @@ const dataRules = reactive({
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
   if (row?.id && type === 'edit') {
-    state.ruleForm.id = row.id
+    state.ruleForm.menuId = row.id
     // 模拟数据，实际请走接口
     loading.value = true
     info(row.id).then(res => {
@@ -189,7 +188,7 @@ const openDialog = (type: string, row?: any) => {
 // 保存数据
 const onSubmit = () => {
   // 保存 调用刷新
-  if (state.ruleForm.id) {
+  if (state.ruleForm.menuId) {
     loading.value = true
     update(state.ruleForm).then(() => {
       visible.value = false;
