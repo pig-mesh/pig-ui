@@ -1,118 +1,121 @@
 <template>
-	<div class="layout-padding">
-		<el-card shadow="hover">
-			<div class="mb15">
-				<el-input :placeholder="$t('appmenu.inputNameTip')" style="max-width: 180px"
-					v-model="state.queryForm.menuName"> </el-input>
-				<el-button icon="search" type="primary" class="ml10" @click="getDataList">
-					{{ $t('common.queryBtn') }}
-				</el-button>
-				<el-button icon="folder-add" type="primary" class="ml10" @click="onOpenAddMenu" v-auth="'sys_menu_add'">
-					{{ $t('common.addBtn') }}
-				</el-button>
-				<el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_post_del'"
-						   @click="handleDelete(selectObjs)">
-					{{ $t('common.delBtn') }}
-				</el-button>
+    <div class="layout-padding">
+        <el-card shadow="hover">
+            <div @keyup.enter="getDataList" class="mb15">
+                <el-input :placeholder="$t('appmenu.inputNameTip')" style="max-width: 180px"
+                          v-model="state.queryForm.menuName"></el-input>
+                <el-button @click="getDataList" class="ml10" icon="search" type="primary">
+                    {{ $t('common.queryBtn') }}
+                </el-button>
+                <el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
+                    {{ $t('common.addBtn') }}
+                </el-button>
+                <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary"
+                           v-auth="'sys_post_del'">
+                    {{ $t('common.delBtn') }}
+                </el-button>
 
-			</div>
-			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="path"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				@selection-change="handleSelectionChange">
-				<el-table-column type="selection" width="50" align="center" />
-				<el-table-column prop="name" :label="$t('appmenu.name')" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sortOrder" :label="$t('appmenu.sortOrder')"
-					show-overflow-tooltip></el-table-column>
-				<el-table-column prop="path" :label="$t('appmenu.path')" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('appmenu.menuType')" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag v-if="scope.row.menuType === '0'" type="success">页面</el-tag>
-						<el-tag v-if="scope.row.menuType === '2'" type="success">按钮</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column :label="$t('appmenu.visible')" show-overflow-tooltip>
-					<template #default="scope">
-						<el-tag v-if="scope.row.visible === '0'" type="info">关闭</el-tag>
-						<el-tag v-if="scope.row.visible === '1'" type="success">开启</el-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="permission" :label="$t('appmenu.permission')"
-					:show-overflow-tooltip="true"></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
-					<template #default="scope">
-						<el-button text type="primary" @click="onOpenAddMenu('add',scope.row)" v-auth="'sys_menu_add'"> {{
-							$t('common.addBtn')
-						}}</el-button>
-						<el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)"
-							v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }}</el-button>
-						<el-button text type="primary" @click="handleDelete([scope.row.id])" v-auth="'sys_menu_del'">{{
-							$t('common.delBtn')
-						}}</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
-		</el-card>
-		<MenuDialog ref="menuDialogRef" @refresh="getDataList()" />
-	</div>
+            </div>
+            <el-table :data="state.dataList" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }" @selection-change="handleSelectionChange" row-key="path"
+                      style="width: 100%"
+                      v-loading="state.loading">
+                <el-table-column align="center" type="selection" width="50"/>
+                <el-table-column :label="$t('appmenu.name')" prop="name" show-overflow-tooltip></el-table-column>
+                <el-table-column :label="$t('appmenu.sortOrder')" prop="sortOrder"
+                                 show-overflow-tooltip></el-table-column>
+                <el-table-column :label="$t('appmenu.path')" prop="path" show-overflow-tooltip></el-table-column>
+                <el-table-column :label="$t('appmenu.menuType')" show-overflow-tooltip>
+                    <template #default="scope">
+                        <el-tag type="success" v-if="scope.row.menuType === '0'">页面</el-tag>
+                        <el-tag type="success" v-if="scope.row.menuType === '2'">按钮</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="$t('appmenu.visible')" show-overflow-tooltip>
+                    <template #default="scope">
+                        <el-tag type="info" v-if="scope.row.visible === '0'">关闭</el-tag>
+                        <el-tag type="success" v-if="scope.row.visible === '1'">开启</el-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="$t('appmenu.permission')" :show-overflow-tooltip="true"
+                                 prop="permission"></el-table-column>
+                <el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
+                    <template #default="scope">
+                        <el-button @click="onOpenAddMenu('add',scope.row)" text type="primary" v-auth="'sys_menu_add'">
+                            {{
+                            $t('common.addBtn')
+                            }}
+                        </el-button>
+                        <el-button @click="onOpenEditMenu('edit', scope.row)" text type="primary"
+                                   v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }}
+                        </el-button>
+                        <el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_menu_del'">{{
+                            $t('common.delBtn')
+                            }}
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+        </el-card>
+        <MenuDialog @refresh="getDataList()" ref="menuDialogRef"/>
+    </div>
 </template>
 
-<script setup lang="ts" name="systemMenu">
-import { RouteRecordRaw } from 'vue-router';
-import { pageList, delObj } from '/@/api/app/appmenu'
-import { useTable, BasicTableProps } from "/@/hooks/table";
-import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useI18n } from "vue-i18n";
-// 引入组件
-const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
-const { t } = useI18n();
+<script lang="ts" name="systemMenu" setup>
+    import {delObj, pageList} from '/@/api/app/appmenu'
+    import {BasicTableProps, useTable} from "/@/hooks/table";
+    import {useMessage, useMessageBox} from "/@/hooks/message";
+    import {useI18n} from "vue-i18n";
+    // 引入组件
+    const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
+    const {t} = useI18n();
 
-// 定义变量内容
-const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();
-const state: BasicTableProps = reactive<BasicTableProps>({
-	pageList: pageList, // H
-	queryForm: {
-		menuName: ''
-	},
-	isPage: false
-});
+    // 定义变量内容
+    const menuDialogRef = ref<InstanceType<typeof MenuDialog>>();
+    const state: BasicTableProps = reactive<BasicTableProps>({
+        pageList: pageList, // H
+        queryForm: {
+            menuName: ''
+        },
+        isPage: false
+    });
 
-// 多选变量
-const selectObjs = ref([]) as any
-const multiple = ref(true)
+    // 多选变量
+    const selectObjs = ref([]) as any
+    const multiple = ref(true)
 
 
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value = []
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id)
-	});
-	multiple.value = !objs.length
-}
+    // 多选事件
+    const handleSelectionChange = (objs: any) => {
+        selectObjs.value = []
+        objs.forEach((val: any) => {
+            selectObjs.value.push(val.id)
+        });
+        multiple.value = !objs.length
+    }
 
-// 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox().confirm(t('common.delConfirmText'))
-			.then(() => {
-				delObj(ids).then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				}).catch((err: any) => {
-					useMessage().error(err.msg)
-				})
-			})
-};
+    // 删除操作
+    const handleDelete = (ids: string[]) => {
+        useMessageBox().confirm(t('common.delConfirmText'))
+            .then(() => {
+                delObj(ids).then(() => {
+                    getDataList();
+                    useMessage().success(t('common.delSuccessText'));
+                }).catch((err: any) => {
+                    useMessage().error(err.msg)
+                })
+            })
+    };
 
-const {
-	getDataList,
-} = useTable(state)
+    const {
+        getDataList,
+    } = useTable(state)
 
-// 打开新增菜单弹窗
-const onOpenAddMenu = (type: string, row: any) => {
-	menuDialogRef.value.openDialog(type,row);
-};
-// 打开编辑菜单弹窗
-const onOpenEditMenu = (type: string, row: any) => {
-	menuDialogRef.value.openDialog(type, row);
-};
+    // 打开新增菜单弹窗
+    const onOpenAddMenu = (type: string, row: any) => {
+        menuDialogRef.value.openDialog(type, row);
+    };
+    // 打开编辑菜单弹窗
+    const onOpenEditMenu = (type: string, row: any) => {
+        menuDialogRef.value.openDialog(type, row);
+    };
 </script>
