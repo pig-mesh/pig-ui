@@ -10,14 +10,14 @@
       <el-col :span="20" :xs="24">
         <el-card shadow="hover" class="layout-padding-auto">
           <el-row v-show="showSearch" class="mb8">
-            <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+            <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
               <el-form-item :label="$t('sysuser.username')" prop="username">
                 <el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable
-                  style="width: 240px" @keyup.enter="getDataList" />
+                  style="width: 240px" />
               </el-form-item>
               <el-form-item :label="$t('sysuser.phone')" prop="phone">
                 <el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable
-                  style="width: 240px" @keyup.enter="getDataList" />
+                  style="width: 240px" />
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
@@ -100,7 +100,7 @@
       </el-col>
     </el-row>
 
-    <user-form ref="userDialogRef" @refresh="getDataList()" />
+    <user-form ref="userDialogRef" @refresh="getDataList(false)" />
 
     <upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')" url="/admin/user/import"
       temp-url="/admin/sys-file/local/file/user.xlsx" @refreshDataList="getDataList" />
@@ -196,7 +196,7 @@ const handleDelete = (ids: string[]) => {
   useMessageBox().confirm(t('common.delConfirmText'))
     .then(() => {
       delObj(ids).then(() => {
-        getDataList();
+        getDataList(false);
         useMessage().success(t('common.delSuccessText'));
       }).catch((err: any) => {
         useMessage().error(err.msg)
