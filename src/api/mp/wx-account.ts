@@ -19,7 +19,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query) {
   return request({
-    url: '/mp/wx-account-fans/page',
+    url: '/admin/wx-account/page',
     method: 'get',
     params: query
   })
@@ -27,37 +27,59 @@ export function fetchList(query) {
 
 export function addObj(obj) {
   return request({
-    url: '/mp/wx-account-fans',
+    url: '/admin/wx-account',
     method: 'post',
     data: obj
   })
 }
 
-export function sync(appId) {
-  return request({
-    url: '/mp/wx-account-fans/sync/' + appId,
-    method: 'post'
-  })
-}
-
 export function getObj(id) {
   return request({
-    url: '/mp/wx-account-fans/' + id,
+    url: '/admin/wx-account/' + id,
     method: 'get'
   })
 }
 
-export function delObj(id) {
+export function generateQr(appid) {
   return request({
-    url: '/mp/wx-account-fans/' + id,
+    url: '/admin/wx-account/qr/' + appid,
+    method: 'post'
+  })
+}
+
+export function clearQuota(appid) {
+  return request({
+    url: '/admin/wx-account/clear-quota/' + appid,
+    method: 'post'
+  })
+}
+
+export function delObjs(id) {
+  return request({
+    url: '/admin/wx-account/' + id,
     method: 'delete'
   })
 }
 
 export function putObj(obj) {
   return request({
-    url: '/mp/wx-account-fans',
+    url: '/admin/wx-account',
     method: 'put',
     data: obj
+  })
+}
+
+export function fetchAccountList() {
+  return request({
+    url: '/admin/wx-account/list',
+    method: 'get'
+  })
+}
+
+export function fetchStatistics(q) {
+  return request({
+    url: '/admin/wx-account/statistics',
+    method: 'get',
+    params: q
   })
 }

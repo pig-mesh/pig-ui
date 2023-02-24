@@ -152,7 +152,6 @@ import {
   CircleCheck as ElIconCircleCheck,
   CirclePlus as ElIconCirclePlus,
 } from '@element-plus/icons'
-import { $on, $off, $once, $emit } from '../../utils/gogocodeTransfer'
 import WxNews from '@/views/mp/components/wx-news/main.vue'
 import WxVoicePlayer from '@/views/mp/components/wx-voice-play/main.vue'
 import WxVideoPlayer from '@/views/mp/components/wx-video-play/main.vue'

@@ -139,10 +139,7 @@ const getMenuData = () => {
   })
 };
 
-
 const showembedded = ref(false)
-
-
 
 watch(() => state.ruleForm.path, (val) => {
   if (val.startsWith('http')) {
@@ -154,13 +151,12 @@ watch(() => state.ruleForm.path, (val) => {
 })
 
 const dataRules = reactive({
-  menType: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  parentId: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  path: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  permission: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  sortOrder: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  keepAlive: [{ required: true, message: "姓名不能为空", trigger: "blur" }]
+  menType: [{ required: true, message: "菜单类型不能为空", trigger: "blur" }],
+  parentId: [{ required: true, message: "上级菜单不能为空", trigger: "blur" }],
+  name: [{ required: true, message: "菜单不能为空", trigger: "blur" }],
+  path: [{ required: true, message: "路径不能为空", trigger: "blur" }],
+  permission: [{ required: true, message: "权限代码不能为空", trigger: "blur" }],
+  sortOrder: [{ required: true, message: "排序不能为空", trigger: "blur" }]
 })
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {

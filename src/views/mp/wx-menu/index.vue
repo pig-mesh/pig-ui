@@ -1,7 +1,5 @@
 <template>
   <div class="app-container">
-    <doc-alert title="公众号菜单" url="https://doc.iocoder.cn/mp/menu/" />
-
     <!-- 搜索工作栏 -->
     <el-form
       ref="queryForm"
@@ -249,18 +247,11 @@
 </template>
 
 <script>
-import {
-  Plus as ElIconPlus,
-  CircleCheck as ElIconCircleCheck,
-  Search as ElIconSearch,
-  Refresh as ElIconRefresh,
-  Delete as ElIconDelete,
-} from '@element-plus/icons'
-import WxReplySelect from '@/views/mp/components/wx-reply/main.vue'
-import WxNews from '@/views/mp/components/wx-news/main.vue'
-import WxMaterialSelect from '@/views/mp/components/wx-material-select/main.vue'
-import { deleteMenu, getMenuList, saveMenu } from '@/api/mp/menu'
-import { getSimpleAccounts } from '@/api/mp/account'
+// import WxReplySelect from '/@/views/mp/components/wx-reply/main.vue'
+import WxNews from '/@/views/mp/components/wx-news/main.vue'
+// import WxMaterialSelect from '/@/views/mp/components/wx-material-select/main.vue'
+import { deleteMenu, getMenuList, saveObj } from '/@/api/mp/wx-menu'
+import { getSimpleAccounts } from '/@/api/mp/wx-account'
 
 export default {
   data() {
@@ -412,12 +403,6 @@ export default {
           ...item,
         }
         if (item.type === 'click' || item.type === 'scancode_waitmsg') {
-          delete menu
-          delete menu
-          delete menu
-          delete menu
-          delete menu
-          delete menu
           menu.reply = {
             type: item.replyMessageType,
             accountId: item.accountId,
@@ -508,14 +493,6 @@ export default {
       // 清空父菜单的属性，因为它只需要 name 属性即可
       if (!item.children || item.children.length <= 0) {
         item['children'] = []
-        delete item
-        delete item
-        delete item
-        delete item
-        delete item
-        delete item
-        delete item
-        delete item
         // 关闭配置面板
         this.showConfigureContent = false
       }
@@ -566,7 +543,7 @@ export default {
         .confirm('确定要保证并发布该菜单吗？')
         .then(() => {
           this.loading = true
-          return saveMenu(this.accountId, this.convertMenuFormList())
+          return saveObj(this.accountId, this.convertMenuFormList())
         })
         .then(() => {
           this.getList()
