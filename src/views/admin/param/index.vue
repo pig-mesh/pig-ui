@@ -29,6 +29,9 @@
             @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
+          <el-button class="ml10" formDialogRef icon="refresh-left" type="primary" @click="handleRefreshCache()">
+            {{ $t('common.refreshCacheBtn') }}
+          </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
             @queryTable="getDataList"></right-toolbar>
         </div>
@@ -81,7 +84,7 @@
 
 <script lang="ts" name="systemSysPublicParam" setup>
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { delObj, fetchList } from "/@/api/admin/param";
+import { delObj, fetchList,refreshCache } from "/@/api/admin/param";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from "vue-i18n";
@@ -140,6 +143,11 @@ const handleSelectionChange = (objs: any) => {
     selectObjs.value.push(val.publicId)
   });
   multiple.value = !objs.length
+}
+const handleRefreshCache = () =>{
+  refreshCache().then(()=>{
+    useMessage().success('同步成功')
+  })
 }
 
 // 删除操作

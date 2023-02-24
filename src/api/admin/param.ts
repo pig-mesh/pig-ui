@@ -38,3 +38,9 @@ export function putObj(obj?: Object) {
     data: obj
   })
 }
+export function refreshCache() {
+    return request({
+      url: '/admin/param/sync',
+      method: 'put'
+    })
+}
