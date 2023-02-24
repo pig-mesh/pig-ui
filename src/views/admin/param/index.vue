@@ -2,7 +2,7 @@
     <div class="layout-padding">
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
-                <el-form :inline="true" :model="state.queryForm" ref="queryRef">
+                <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
                     <el-form-item :label="t('param.systemFlag')" class="ml2" prop="systemFlag">
                         <el-select :placeholder="t('param.inputsystemFlagTip')" v-model="state.queryForm.systemFlag">
                             <el-option :key="index" :label="item.label" :value="item.value"
@@ -27,7 +27,8 @@
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
+                               icon="Delete"
                                type="primary">
                         {{ $t('common.delBtn') }}
                     </el-button>
