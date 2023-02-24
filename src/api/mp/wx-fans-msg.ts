@@ -19,7 +19,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query) {
   return request({
-    url: '/mp/wx-fans-msg/page',
+    url: '/admin/wx-fans-msg/page',
     method: 'get',
     params: query
   })
@@ -27,7 +27,7 @@ export function fetchList(query) {
 
 export function addObj(obj) {
   return request({
-    url: '/mp/wx-fans-msg',
+    url: '/admin/wx-fans-msg',
     method: 'post',
     data: obj
   })
@@ -35,21 +35,21 @@ export function addObj(obj) {
 
 export function getObj(id) {
   return request({
-    url: '/mp/wxfansmsg/' + id,
+    url: '/admin/wxfansmsg/' + id,
     method: 'get'
   })
 }
 
-export function delObj(id) {
+export function delObjs(id) {
   return request({
-    url: '/mp/wxfansmsg/' + id,
+    url: '/admin/wxfansmsg/' + id,
     method: 'delete'
   })
 }
 
 export function putObj(obj) {
   return request({
-    url: '/mp/wxfansmsg',
+    url: '/admin/wxfansmsg',
     method: 'put',
     data: obj
   })
@@ -57,7 +57,7 @@ export function putObj(obj) {
 
 export function fetchResList(query) {
   return request({
-    url: '/mp/wx-fans-msg/page',
+    url: '/admin/wx-fans-msg/page',
     method: 'get',
     params: query
   })
@@ -65,7 +65,7 @@ export function fetchResList(query) {
 
 export function addResObj(obj) {
   return request({
-    url: '/mp/wx-fans-msg',
+    url: '/admin/wx-fans-msg',
     method: 'post',
     data: obj
   })
@@ -73,7 +73,7 @@ export function addResObj(obj) {
 
 export function delResObj(id) {
   return request({
-    url: '/mp/wx-fans-msg/' + id,
+    url: '/admin/wx-fans-msg/' + id,
     method: 'delete'
   })
 }
