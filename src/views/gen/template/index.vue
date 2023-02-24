@@ -22,15 +22,15 @@
             </el-row>
             <el-row>
                 <div class="mb8" style="width: 100%">
-                    <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
+                    <el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
                         type="primary" v-auth="'codegen_template_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
-                    <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
+                    <el-button @click="exportExcel" class="ml10" icon="Download" type="primary"
                         v-auth="'codegen_template_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10"
                         icon="Delete" type="primary" v-auth="'codegen_template_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
