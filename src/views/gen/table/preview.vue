@@ -14,7 +14,7 @@
                     <el-tab-pane v-for="item in previewCodegen"
                         :label="item.codePath.substring(item.codePath.lastIndexOf('/') + 1)" :name="item.codePath"
                         :key="item.codePath">
-                        <pre>{{ item.code }}</pre>
+                      <highlightjs autodetect :code="item.code" />
                     </el-tab-pane>
                 </el-tabs>
             </el-col>

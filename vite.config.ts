@@ -4,9 +4,11 @@ import {defineConfig, loadEnv, ConfigEnv} from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 // vue3 自动引入
 import AutoImport from 'unplugin-auto-import/vite'
+import topLevelAwait from 'vite-plugin-top-level-await'
 
 // 按需加载
 import {createStyleImportPlugin, VxeTableResolve} from 'vite-plugin-style-import'
+import viteCompression from "vite-plugin-compression";
 
 const pathResolve = (dir: string) => {
     return resolve(__dirname, '.', dir);
@@ -31,7 +33,15 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
             resolves: [
                 VxeTableResolve()
             ],
-        })],
+        }), topLevelAwait({
+                // The export name of top-level await promise for each chunk module
+                promiseExportName: '__tla',
+                // The function to generate import names of top-level await promise in each chunk module
+                promiseImportName: i => `__tla_${i}`
+        }), viteCompression({
+            deleteOriginFile: true
+        })
+        ],
         root: process.cwd(),
         resolve: {alias},
         base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,

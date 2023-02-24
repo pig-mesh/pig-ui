@@ -19,7 +19,9 @@ import 'xe-utils'
 import VXETable from 'vxe-table'
 import {Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor} from '/@/components/index'
 import {parseTime, parseDate, dateTimeStr, dateStr} from '/@/utils/formatTime'
-
+import 'highlight.js/styles/atom-one-dark.css'
+import 'highlight.js/lib/common'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
 
 const app = createApp(App);
 
@@ -48,4 +50,5 @@ app.use(pinia) // pinia 存储
     .use(elementIcons) // elementIcons 图标全局引入
     .use(VForm3) // 表单设计
     .use(i18n) // 国际化
+    .use(hljsVuePlugin) // 代码高亮
     .mount('#app');
