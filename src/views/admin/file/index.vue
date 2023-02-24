@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <el-card class="layout-padding-auto">
       <el-row v-show="showSearch" class="mb8">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('file.fileName')" prop="original">
             <el-input v-model="state.queryForm.original" :placeholder="$t('file.inputoriginalTip')" clearable
               style="width: 240px" @keyup.enter="getDataList" />

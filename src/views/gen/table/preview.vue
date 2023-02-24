@@ -2,7 +2,7 @@
     <el-dialog title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
         <el-row :gutter="20">
             <el-col :span="6">
-                <el-card :gutter="12" shadow="hover">
+                <el-card :gutter="12" shadow="hover" v-loading="loading">
                     <el-scrollbar height="calc(100vh - 300px)">
                         <el-tree ref="treeRef" node-key="id" :data="preview.fileTree" :expand-on-click-node="false"
                             highlight-current @node-click="handleNodeClick" />
@@ -24,6 +24,7 @@
 <script setup lang="ts" name="preview">
 import { useGeneratorPreviewApi } from '/@/api/gen/table';
 import { handleTree } from '/@/utils/other';
+import {validatePhone} from "/@/api/admin/user";
 
 const visible = ref(false)
 // ======== 显示页面 ========
@@ -42,17 +43,22 @@ const openDialog = async (id: string) => {
     visible.value = true
 }
 
+const loading = ref(false)
+
 const getGenCodeFile = (id: string) => {
+    loading.value = true
+    fileTreeOriginal.value = []
     useGeneratorPreviewApi(id).then((res: any) => {
         previewCodegen.value = res
         for (let index in res) {
             fileTreeOriginal.value.push(res[index].codePath)
         }
-
         // 默认选中第一个 选项卡
         preview.activeName = res[0].codePath
         const files = handleFiles(fileTreeOriginal)
         preview.fileTree = handleTree(files, 'id', 'parentId', 'children', '/')
+    }).finally(() => {
+      loading.value = false
     })
 }
 

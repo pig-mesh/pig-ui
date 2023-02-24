@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <el-card shadow="hover" class="layout-padding-auto">
       <el-row shadow="hover" v-show="showSearch" class="mb8">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true">
+        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('sysrole.roleName')" prop="roleName">
             <el-input :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName"
               style="max-width: 180px" />

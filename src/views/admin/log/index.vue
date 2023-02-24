@@ -16,7 +16,7 @@
                             :end-placeholder="$t('syslog.inputEndPlaceholderTip')"/>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+            <el-button type="primary" icon="Search" @click="getDataList(true)">{{ $t('common.queryBtn') }}</el-button>
             <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
           </el-form-item>
         </el-form>
