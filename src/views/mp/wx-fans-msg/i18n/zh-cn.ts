@@ -11,7 +11,7 @@ export default {
         type: '消息分类',
         repType: '消息类型',
         repEvent: '事件类型',
-        repContent: '回复类型文本保存文字、地理位置信息',
+        repContent: '内容',
         repMediaId: '回复类型',
         repName: '回复的素材名、视频和音乐的标题',
         repDesc: '视频和音乐的描述',

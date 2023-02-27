@@ -22,15 +22,15 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button v-auth="'mp_wxAccountTag_add'" class="ml10" formDialogRef icon="folder-add" type="primary"
-                     @click="formDialogRef.openDialog()">
+          <el-button v-auth="'mp_wx_account_tag_add'" class="ml10" formDialogRef icon="folder-add" type="primary"
+                     @click="formDialogRef.openDialog(state.queryForm.wxAccountAppid)">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button v-auth="'mp_wxAccountTag_export'" class="ml10" formDialogRef icon="Download" type="primary"
+          <el-button v-auth="'mp_wx_account_tag_export'" class="ml10" formDialogRef icon="Download" type="primary"
                      @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button v-auth="'mp_wxAccountTag_del'" :disabled="multiple" class="ml10" formDialogRef icon="Delete"
+          <el-button v-auth="'mp_wx_account_tag_del'" :disabled="multiple" class="ml10" formDialogRef icon="Delete"
                      type="primary" @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>

@@ -45,6 +45,10 @@
                   </el-icon>
                 </div>
               </div>
+              <div class="save_div">
+                <el-button class="save_btn" type="success" size="small" @click="handleSave">保存并发布菜单</el-button>
+                <el-button class="save_btn" type="danger" size="small" @click="handleDelete">清空菜单</el-button>
+              </div>
             </div>
 
             <div v-if="showRightFlag" class="right">
@@ -68,6 +72,51 @@
                       <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value"/>
                     </el-select>
                   </div>
+                  <div class="configur_content" v-if="tempObj.type === 'view'">
+                    <span>跳转链接：</span>
+                    <el-input class="input_width" v-model="tempObj.url" placeholder="请输入链接" clearable />
+                  </div>
+                  <div class="configur_content" v-if="tempObj.type === 'miniprogram'">
+                    <div class="applet">
+                      <span>小程序的 appid ：</span>
+                      <el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid" clearable />
+                    </div>
+                    <div class="applet">
+                      <span>小程序的页面路径：</span>
+                      <el-input class="input_width" v-model="tempObj.miniProgramPagePath"
+                                placeholder="请输入小程序的页面路径，如：pages/index" clearable />
+                    </div>
+                    <div class="applet">
+                      <span>小程序的备用网页：</span>
+                      <el-input class="input_width" v-model="tempObj.url" placeholder="不支持小程序的老版本客户端将打开本网页" clearable />
+                    </div>
+                    <p class="blue">tips:需要和公众号进行关联才可以把小程序绑定带微信菜单上哟！</p>
+                  </div>
+                  <div class="configur_content" v-if="tempObj.type === 'article_view_limited'">
+                    <el-row>
+                      <div class="select-item" v-if="tempObj && tempObj.replyArticles">
+                        <wx-news :articles="tempObj.replyArticles" />
+                        <el-row class="ope-row">
+                          <el-button type="danger" icon="el-icon-delete" circle @click="deleteMaterial" />
+                        </el-row>
+                      </div>
+                      <div v-else>
+                        <el-row>
+                          <el-col :span="24" style="text-align: center">
+                            <el-button type="success" @click="openMaterial">
+                              素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+                            </el-button>
+                          </el-col>
+                        </el-row>
+                      </div>
+                      <el-dialog title="选择图文" v-model="dialogNewsVisible" width="90%">
+                        <wx-material-select :objData="{type: 'news', accountId: this.accountId}" @selectMaterial="selectMaterial" />
+                      </el-dialog>
+                    </el-row>
+                  </div>
+                  <div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
+                    <wx-reply-select :objData="tempObj.reply" v-if="hackResetWxReplySelect" />
+                  </div>
                 </div>
               </div>
             </div>
@@ -79,15 +128,18 @@
 </template>
 
 <script lang="ts" name="wx-menu" setup>
+import { saveObj  } from '/@/api/mp/wx-menu'
 
 // 部门树使用的数据
 import {fetchAccountList} from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 
+const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
+
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 // 点击树
-const handleNodeClick = (e: any) => {
-
+const handleNodeClick = (node: any) => {
+  accountId.value = node.appid
 }
 
 const deptData = reactive({
@@ -160,7 +212,10 @@ const menuOptions = ref([
 
 const showRightFlag = ref(false)
 
-let tempObj = ref({})
+let tempObj = ref({
+  replyArticles: [] as any,
+  articleId: ''
+})
 
 const tempSelfObj = reactive({
   grand: '', // 表示二级菜单
@@ -236,6 +291,94 @@ const deleteMenu = () => {
     isActive.value = -1
     isSubMenuActive.value = '-1'
   })
+
+}
+
+const handleSave = () => {
+ useMessageBox().confirm("").then(() => {
+   return saveObj(accountId.value, convertMenuFormList());
+ })
+}
+
+
+const convertMenuFormList = () => {
+  const menuList = [] as any;
+  menuList.forEach(item => {
+    let menu = convertMenuForm(item);
+    menuList.push(menu);
+    // 处理子菜单
+    if (!item.children || item.children.length <= 0) {
+      return;
+    }
+    menu.children = [];
+    item.children.forEach(subItem => {
+      menu.children.push(convertMenuForm(subItem))
+    })
+  })
+  return menuList;
+}
+
+// 将前端的 menu，转换成后端接收的 menu
+const convertMenuForm = (menu: any) =>  {
+  let result = {
+    ...menu,
+    children: undefined, // 不处理子节点
+    reply: undefined, // 稍后复制
+  }
+  if (menu.type === 'click' || menu.type === 'scancode_waitmsg') {
+    result.replyMessageType = menu.reply.type;
+    result.replyContent = menu.reply.content;
+    result.replyMediaId = menu.reply.mediaId;
+    result.replyMediaUrl = menu.reply.url;
+    result.replyTitle = menu.reply.title;
+    result.replyDescription = menu.reply.description;
+    result.replyThumbMediaId = menu.reply.thumbMediaId;
+    result.replyThumbMediaUrl = menu.reply.thumbMediaUrl;
+    result.replyArticles = menu.reply.articles;
+    result.replyMusicUrl = menu.reply.musicUrl;
+    result.replyHqMusicUrl = menu.reply.hqMusicUrl;
+  }
+  return result;
+}
+
+
+const deleteMaterial = () => {
+  tempObj.value.replyArticles = []
+  tempObj.value.articleId = ""
+}
+
+
+const dialogNewsVisible = ref(false)
+const openMaterial = () => {
+  dialogNewsVisible.value = true
+}
+
+const selectMaterial = (item) => {
+  const articleId = item.articleId;
+  const articles = item.content.newsItem;
+  // 提示，针对多图文
+  if (articles.length > 1) {
+    // this.$alert('您选择的是多图文，将默认跳转第一篇', '提示', {
+    //   confirmButtonText: '确定'
+    // })
+  }
+  dialogNewsVisible.value = false
+
+  // 设置菜单的回复
+  tempObj.value.articleId = articleId;
+  tempObj.value.replyArticles = [];
+  articles.forEach(article => {
+    tempObj.value.replyArticles.push({
+      title: article.title,
+      description: article.digest,
+      picUrl: article.picUrl,
+      url: article.url,
+    })
+  })
+}
+
+
+const handleDelete = () => {
 
 }
 

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getPage(query) {
   return request({
-    url: '/mp/wx-material/page',
+    url: '/admin/wx-material/page',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function getPage(query) {
 
 export function addObj(obj) {
   return request({
-    url: '/mp/wx-material/materialNews',
+    url: '/admin/wx-material/materialNews',
     method: 'post',
     data: obj
   })
@@ -18,7 +18,7 @@ export function addObj(obj) {
 
 export function materialNewsUpdate(obj) {
   return request({
-    url: '/mp/wx-material/materialNews',
+    url: '/admin/wx-material/materialNews',
     method: 'put',
     data: obj
   })
@@ -26,14 +26,14 @@ export function materialNewsUpdate(obj) {
 
 export function getObj(id) {
   return request({
-    url: '/mp/wx-material/' + id,
+    url: '/admin/wx-material/' + id,
     method: 'get'
   })
 }
 
 export function delObj(query) {
   return request({
-    url: '/mp/wx-material',
+    url: '/admin/wx-material',
     method: 'delete',
     params: query
   })
@@ -41,7 +41,7 @@ export function delObj(query) {
 
 export function putObj(obj) {
   return request({
-    url: '/mp/wx-material',
+    url: '/admin/wx-material',
     method: 'put',
     data: obj
   })
@@ -49,7 +49,7 @@ export function putObj(obj) {
 
 export function getMaterialOther(query) {
   return request({
-    url: '/mp/wx-material/materialOther',
+    url: '/admin/wx-material/materialOther',
     method: 'get',
     params: query,
     responseType: 'blob'
@@ -58,7 +58,7 @@ export function getMaterialOther(query) {
 
 export function getMaterialVideo(query) {
   return request({
-    url: '/mp/wx-material/materialVideo',
+    url: '/admin/wx-material/materialVideo',
     method: 'get',
     params: query
   })
@@ -66,7 +66,7 @@ export function getMaterialVideo(query) {
 
 export function getTempMaterialOther(query) {
   return request({
-    url: '/mp/wx-material/tempMaterialOther',
+    url: '/admin/wx-material/tempMaterialOther',
     method: 'get',
     params: query,
     responseType: 'blob'

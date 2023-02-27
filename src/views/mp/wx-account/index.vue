@@ -48,15 +48,29 @@
         <el-table-column :label="t('account.url')" prop="url" show-overflow-tooltip/>
         <el-table-column :label="t('account.token')" prop="token" show-overflow-tooltip/>
         <el-table-column :label="t('account.aeskey')" prop="aeskey" show-overflow-tooltip/>
-        <el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip/>
-        <el-table-column :label="$t('common.action')" width="150">
+        <el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip>
           <template #default="scope">
+            <a target="_blank" :href="scope.row.qrUrl"><img :src="scope.row.qrUrl" style="width: 100px"></a>
+          </template>
+        </el-table-column>
+        <el-table-column :label="$t('common.action')" width="200">
+          <template #default="scope">
+
             <el-button v-auth="'mp_wxaccount_edit'" text type="primary"
                        @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
             </el-button>
             <el-button v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
                 $t('common.delBtn')
               }}
+            </el-button>
+            <el-button
+                type="text"
+                @click="access(scope.row,scope.index)">
+              接入
+            </el-button>
+            <el-button
+                type="text"
+                @click="generate(scope.row,scope.index)">二维码
             </el-button>
           </template>
         </el-table-column>
@@ -66,12 +80,22 @@
 
     <!-- 编辑、新增  -->
     <form-dialog ref="formDialogRef" @refresh="getDataList(false)"/>
+
+    <el-dialog v-model="dialogFormVisible" title="接入">
+      <el-row :gutter="20">
+        <el-col :span="6">服务器地址(URL)</el-col>
+        <el-col id="target" :span="12">{{ wxurl }}</el-col>
+        <el-col :span="6">
+          <el-button id="btn" type="primary" style="float: right;" @click="copyLink">点击复制</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts" name="systemWxAccount" setup>
 import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObjs, fetchList} from "/@/api/mp/wx-account";
+import {delObjs, fetchList, generateQr} from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useI18n} from "vue-i18n";
 
@@ -137,4 +161,18 @@ const handleDelete = (ids: string[]) => {
         })
       })
 };
+
+const dialogFormVisible = ref(false)
+const wxurl = ref("")
+const access = (row: any) => {
+    dialogFormVisible.value = true
+    wxurl.value = row.url + '/mp/' + row.appid + '/portal'
+}
+
+const generate = (row: any) => {
+  generateQr(row.appid).then(() => {
+    useMessage().success("获取成功")
+    getDataList()
+  })
+}
 </script>

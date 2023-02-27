@@ -8,7 +8,6 @@
             <el-input v-model="form.tag" :placeholder="t('wxAccountTag.inputTagTip')"/>
           </el-form-item>
         </el-col>
-
       </el-row>
     </el-form>
     <template #footer>
@@ -37,7 +36,7 @@ const loading = ref(false)
 
 // 提交表单数据
 const form = reactive({
-  id: '',
+  wxAccountAppid: '',
   tag: '',
 });
 
@@ -47,7 +46,7 @@ const dataRules = ref({})
 // 打开弹窗
 const openDialog = (id: string) => {
   visible.value = true
-  form.id = ''
+  form.wxAccountAppid = id
 
   // 重置表单数据
   if (dataFormRef.value) {
@@ -61,30 +60,16 @@ const onSubmit = () => {
     if (!valid) {
       return false
     }
-    // 更新
-    if (form.id) {
-      loading.value = true
-      putObj(form).then(() => {
-        useMessage().success(t('common.editSuccessText'))
-        visible.value = false // 关闭弹窗
-        emit('refresh')
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      }).finally(() => {
-        loading.value = false
-      })
-    } else {
-      loading.value = true
-      addObj(form).then(() => {
-        useMessage().success(t('common.addSuccessText'))
-        visible.value = false // 关闭弹窗
-        emit('refresh')
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      }).finally(() => {
-        loading.value = false
-      })
-    }
+    loading.value = true
+    addObj(form).then(() => {
+      useMessage().success(t('common.addSuccessText'))
+      visible.value = false // 关闭弹窗
+      emit('refresh')
+    }).catch((err: any) => {
+      useMessage().error(err.msg)
+    }).finally(() => {
+      loading.value = false
+    })
   })
 }
 

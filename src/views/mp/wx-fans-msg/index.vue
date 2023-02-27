@@ -44,10 +44,32 @@
         <el-table-column align="center" type="selection" width="60"/>
         <el-table-column :label="t('wxFansMsg.index')" type="index" width="80"/>
         <el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.wxUserId')" prop="wxUserId" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.nickName')" prop="nickName" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.repMediaId')" prop="repMediaId" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.content')" prop="content" show-overflow-tooltip/>
+        <el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip/>
+        <el-table-column :label="t('wxFansMsg.openId')" prop="openId" show-overflow-tooltip/>
+        <el-table-column :label="t('wxFansMsg.repContent')" prop="repContent" show-overflow-tooltip>
+          <template #default="scope">
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'subscribe'"><el-tag type="success" size="mini">关注</el-tag></div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'unsubscribe'"><el-tag type="danger" size="mini">取消关注</el-tag></div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'CLICK'"><el-tag size="mini">点击菜单</el-tag>：【{{ scope.row.repName }}】</div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'VIEW'"><el-tag size="mini">点击菜单链接</el-tag>：【{{ scope.row.repUrl }}】</div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'scancode_waitmsg'"><el-tag size="mini">扫码结果：</el-tag>：【{{ scope.row.repContent }}】</div>
+            <div v-if="scope.row.repType === 'text'">{{ scope.row.repContent }}</div>
+            <div v-if="scope.row.repType === 'image'">
+              <a target="_blank" :href="scope.row.repUrl"><img :src="scope.row.repUrl" style="width: 100px"></a>
+            </div>
+            <div v-if="scope.row.repType === 'voice'">
+              <WxVoicePlayer :obj-data="scope.row"></WxVoicePlayer>
+            </div>
+            <div v-if="scope.row.repType === 'video'">
+              <WxVideoPlayer :obj-data="scope.row" style="margin-top: 40px"></WxVideoPlayer>
+            </div>
+            <div v-if="scope.row.repType === 'shortvideo'">
+              <WxVideoPlayer :obj-data="scope.row" style="margin-top: 40px"></WxVideoPlayer>
+            </div>
+            <div v-if="scope.row.repType === 'link'"><el-tag size="mini">链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a></div>
+          </template>
+        </el-table-column>
+
         <el-table-column :label="t('wxFansMsg.readFlag')" prop="readFlag" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="response_type" :value="scope.row.readFlag"></dict-tag>

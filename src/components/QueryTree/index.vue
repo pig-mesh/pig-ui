@@ -57,6 +57,9 @@ const getDeptTree = () => {
     if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
       result.then((r: any) => {
         state.List = r.data
+        if(r.data.length > 0){
+          handleNodeClick(r.data[0])
+        }
       })
     }
   }
