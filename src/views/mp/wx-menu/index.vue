@@ -127,7 +127,7 @@
 </template>
 
 <script lang="ts" name="wx-menu" setup>
-import { saveObj  } from '/@/api/mp/wx-menu'
+import { saveObj,getObj } from '/@/api/mp/wx-menu'
 
 // 部门树使用的数据
 import {fetchAccountList} from "/@/api/mp/wx-account";
@@ -139,6 +139,8 @@ const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/ind
 // 点击树
 const handleNodeClick = (node: any) => {
   accountId.value = node.appid
+  name.value = node.name
+  getMenuFun()
 }
 
 const deptData = reactive({
@@ -222,12 +224,24 @@ const tempSelfObj = reactive({
   secondIndex: '' // 表示二级菜单索引
 })
 
+const getMenuFun = () =>  {
+  getObj(accountId.value).then((res) => {
+    if (res.data) {
+      const data = JSON.parse(res.data)
+      if (data && data.button) {
+        Object.assign(menuList,data.button)
+      }
+    }
+  })
+}
+
+
+
 const showConfigureContent = ref(true)
 
 // 一级菜单点击事件
 const menuClick = (i, item) => {
   showRightFlag.value = true // 右边菜单
-  // Object.assign(tempObj, item) // 这个如果放在顶部，flag 会没有。因为重新赋值了。
   tempObj.value = item
   showConfigureContent.value = !(item.children && item.children.length > 0) // 有子菜单，就不显示配置内容
   isActive.value = i
@@ -299,50 +313,11 @@ const deleteMenu = () => {
 }
 
 const handleSave = () => {
- useMessageBox().confirm("").then(() => {
-   return saveObj(accountId.value, convertMenuFormList());
+ useMessageBox().confirm("确定要保存该菜单吗?").then(() => {
+   return saveObj(accountId.value, {
+     button: menuList
+   });
  })
-}
-
-
-const convertMenuFormList = () => {
-  const menuList = [] as any;
-  menuList.forEach(item => {
-    let menu = convertMenuForm(item);
-    menuList.push(menu);
-    // 处理子菜单
-    if (!item.children || item.children.length <= 0) {
-      return;
-    }
-    menu.children = [];
-    item.children.forEach(subItem => {
-      menu.children.push(convertMenuForm(subItem))
-    })
-  })
-  return menuList;
-}
-
-// 将前端的 menu，转换成后端接收的 menu
-const convertMenuForm = (menu: any) =>  {
-  let result = {
-    ...menu,
-    children: undefined, // 不处理子节点
-    reply: undefined, // 稍后复制
-  }
-  if (menu.type === 'click' || menu.type === 'scancode_waitmsg') {
-    result.replyMessageType = menu.reply.type;
-    result.replyContent = menu.reply.content;
-    result.replyMediaId = menu.reply.mediaId;
-    result.replyMediaUrl = menu.reply.url;
-    result.replyTitle = menu.reply.title;
-    result.replyDescription = menu.reply.description;
-    result.replyThumbMediaId = menu.reply.thumbMediaId;
-    result.replyThumbMediaUrl = menu.reply.thumbMediaUrl;
-    result.replyArticles = menu.reply.articles;
-    result.replyMusicUrl = menu.reply.musicUrl;
-    result.replyHqMusicUrl = menu.reply.hqMusicUrl;
-  }
-  return result;
 }
 
 

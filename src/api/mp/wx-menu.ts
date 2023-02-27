@@ -19,14 +19,14 @@ import request from '/@/utils/request';
 
 export function getObj(id) {
   return request({
-    url: '/mp/wx-menu/' + id,
+    url: '/admin/wx-menu/' + id,
     method: 'get'
   })
 }
 
 export function saveObj(appId, data) {
   return request({
-    url: '/mp/wx-menu/' + appId,
+    url: '/admin/wx-menu/' + appId,
     method: 'post',
     data: data
   })
@@ -34,7 +34,7 @@ export function saveObj(appId, data) {
 
 export function publishObj(id) {
   return request({
-    url: '/mp/wx-menu/' + id,
+    url: '/admin/wx-menu/' + id,
     method: 'put'
   })
 }
