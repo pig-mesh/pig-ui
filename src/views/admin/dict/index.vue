@@ -29,7 +29,7 @@
             @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
-          <el-button class="ml10" formDialogRef icon="refresh-left" type="primary" @click="handleRefreshCache()">
+          <el-button class="ml10" icon="refresh-left" type="primary" @click="handleRefreshCache()">
             {{ $t('common.refreshCacheBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"

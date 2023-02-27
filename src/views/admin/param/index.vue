@@ -2,7 +2,7 @@
     <div class="layout-padding">
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
-                <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
+                <el-form :inline="true" :model="state.queryForm" ref="queryRef">
                     <el-form-item :label="t('param.systemFlag')" class="ml2" prop="systemFlag">
                         <el-select :placeholder="t('param.inputsystemFlagTip')" v-model="state.queryForm.systemFlag">
                             <el-option :key="index" :label="item.label" :value="item.value"
@@ -20,19 +20,18 @@
             </el-row>
             <el-row>
                 <div class="mb8" style="width: 100%">
-                    <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
+                    <el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
                                type="primary">
                         {{ $t('common.addBtn') }}
                     </el-button>
-                    <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary">
+                    <el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
-                               icon="Delete"
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete"
                                type="primary">
                         {{ $t('common.delBtn') }}
                     </el-button>
-                    <el-button @click="handleRefreshCache()" class="ml10" formDialogRef icon="refresh-left"
+                    <el-button @click="handleRefreshCache()" class="ml10" icon="refresh-left"
                                type="primary">
                         {{ $t('common.refreshCacheBtn') }}
                     </el-button>
