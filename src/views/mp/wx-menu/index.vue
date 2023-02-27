@@ -109,9 +109,8 @@
                           </el-col>
                         </el-row>
                       </div>
-                      <el-dialog title="选择图文" v-model="dialogNewsVisible" width="90%">
-                        <wx-material-select :objData="{type: 'news', accountId: this.accountId}" @selectMaterial="selectMaterial" />
-                      </el-dialog>
+                      <wx-material-select ref="dialogNewsRef"  @selectMaterial="selectMaterial" />
+
                     </el-row>
                   </div>
                   <div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
@@ -234,6 +233,8 @@ const menuClick = (i, item) => {
   isActive.value = i
   isSubMenuFlag.value = i
   isSubMenuActive.value = '-1'
+  tempSelfObj.grand = '1'//表示一级菜单
+  tempSelfObj.index = i//表示一级菜单索引
 }
 
 // 点击二级菜单
@@ -244,6 +245,9 @@ const subMenuClick = (subItem, index, k) => {
   showConfigureContent.value = true
   isActive.value = -1 // 一级菜单去除样式
   isSubMenuActive.value = (index + '' + k) // 二级菜单选中样式
+  tempSelfObj.grand = '2'//表示二级菜单
+  tempSelfObj.index = index//表示一级菜单索引
+  tempSelfObj.secondIndex = k//表示二级菜单索引
 }
 
 // 添加横向二级菜单；item 表示要操作的父菜单
@@ -348,9 +352,9 @@ const deleteMaterial = () => {
 }
 
 
-const dialogNewsVisible = ref(false)
+const dialogNewsRef = ref()
 const openMaterial = () => {
-  dialogNewsVisible.value = true
+  dialogNewsRef.value.openDialog({type: 'news', accountId: accountId.value})
 }
 
 const selectMaterial = (item) => {
@@ -362,7 +366,6 @@ const selectMaterial = (item) => {
     //   confirmButtonText: '确定'
     // })
   }
-  dialogNewsVisible.value = false
 
   // 设置菜单的回复
   tempObj.value.articleId = articleId;

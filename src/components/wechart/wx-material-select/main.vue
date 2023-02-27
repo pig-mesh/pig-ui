@@ -1,5 +1,7 @@
 <template>
-  <div v-if="props.objData.type === 'image'">
+  <el-dialog title="选择图文" v-model="visible"
+             :close-on-click-modal="false" draggable>
+  <div v-if="objData.type === 'image'">
     <div class="waterfall" v-loading="state.loading">
       <div class="waterfall-item" v-for="item in state.dataList" :key="item.mediaId">
         <img class="material-img" :src="item.url" />
@@ -16,7 +18,7 @@
                 @size-change="sizeChangeHandle"
                 @current-change="currentChangeHandle"/>
   </div>
-  <div v-else-if="props.objData.type === 'voice'">
+  <div v-else-if="objData.type === 'voice'">
     <!-- 列表 -->
     <el-table v-loading="state.loading" :data="state.dataList">
       <el-table-column label="编号" align="center" prop="mediaId" />
@@ -57,7 +59,7 @@
                 @size-change="sizeChangeHandle"
                 @current-change="currentChangeHandle"/>
   </div>
-  <div v-else-if="props.objData.type === 'video'">
+  <div v-else-if="objData.type === 'video'">
     <!-- 列表 -->
     <el-table v-loading="state.loading" :data="state.dataList">
       <el-table-column label="编号" align="center" prop="mediaId" />
@@ -97,7 +99,7 @@
                 @size-change="sizeChangeHandle"
                 @current-change="currentChangeHandle"/>
   </div>
-  <div v-else-if="props.objData.type === 'news'">
+  <div v-else-if="objData.type === 'news'">
     <div class="waterfall" v-loading="state.loading">
       <template v-for="item in state.dataList">
         <div v-if="item.content && item.content.newsItem" class="waterfall-item" :key="item.id">
@@ -117,6 +119,7 @@
                 @size-change="sizeChangeHandle"
                 @current-change="currentChangeHandle"/>
   </div>
+  </el-dialog>
 
 </template>
 
@@ -128,35 +131,44 @@ import {getPage} from "/@/api/mp/wx-material";
 
 const emit = defineEmits(["selectMaterial"])
 
-const props = defineProps({
-  objData: {
-    type: Object, // type - 类型；accountId - 公众号账号编号
-    required: true,
-  },
-  newsType: {
-    // 图文类型：1、已发布图文；2、草稿箱图文
-    type: String,
-    default: '1',
-  },
+const objData = reactive({
+  repType: '',
+  accountId: ''
 })
+
+const visible = ref(false)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
-    type: props.objData.repType,
-    appId: props.objData.accountId
+    type: "",
+    appId: ""
   },
-  pageList: getPage
+  pageList: getPage,
+  createdIsNeed: false
 })
 
 const {
+  getDataList,
   currentChangeHandle,
   sizeChangeHandle
 } = useTable(state)
 
 
 const selectMaterial = (item : any) => {
-  emit('selectMaterial', item,props.objData.accountId)
+  emit('selectMaterial', item,objData.accountId)
+  visible.value = false
 }
 
+const openDialog = (data: any) => {
+  state.queryForm.type = data.repType
+  state.queryForm.appId = data.accountId
+  visible.value = true
+  getDataList()
+}
+
+// 暴露变量
+defineExpose({
+  openDialog,
+});
 
 </script>
