@@ -105,7 +105,7 @@ const deleteMenuDisabled = (row: any) => {
 
 // 删除当前菜单
 const onTabelRowDel = (row: any) => {
-	useMessageBox().confirm(`此操作将永久删除路由：${row.name}`)
+	useMessageBox().confirm(`此操作将永久删除：${row.name}`)
 		.then(() => {
 			delObj(row.id).then(() => {
 				useMessage().success('删除成功');
