@@ -1,0 +1,28 @@
+export default {
+   order: {
+        index: '序号',
+        importpayGoodsOrderTip: '导入商品订单表',
+        goodsOrderId: '商品订单ID',
+        goodsId: '商品ID',
+        goodsName: '商品名称',
+        amount: '金额',
+        userId: '用户ID',
+        status: '订单状态',
+        payOrderId: '支付订单号',
+        delFlag: ' delFlag',
+        createTime: '创建时间',
+        updateTime: '更新时间',
+        tenantId: '租户ID',
+        inputGoodsOrderIdTip: '请输入商品订单ID',
+        inputGoodsIdTip: '请输入商品ID',
+        inputGoodsNameTip: '请输入商品名称',
+        inputAmountTip: '请输入金额',
+        inputUserIdTip: '请输入用户ID',
+        inputStatusTip: '请输入订单状态',
+        inputPayOrderIdTip: '请输入支付订单号',
+        inputDelFlagTip: '请输入 delFlag',
+        inputCreateTimeTip: '请输入创建时间',
+        inputUpdateTimeTip: '请输入更新时间',
+        inputTenantIdTip: '请输入租户ID',
+    }
+}

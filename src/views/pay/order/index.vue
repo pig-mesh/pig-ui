@@ -3,9 +3,17 @@
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-                    <el-form-item :label="$t('channel.channelName')" prop="channelName">
-                        <el-input :placeholder="t('channel.inputChannelNameTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.channelName"/>
+                    <el-form-item :label="$t('order.goodsOrderId')" prop="goodsOrderId">
+                        <el-input :placeholder="t('order.inputGoodsOrderIdTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.goodsOrderId"/>
+                    </el-form-item>
+                    <el-form-item :label="$t('order.goodsName')" prop="goodsName">
+                        <el-input :placeholder="t('order.inputGoodsNameTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.goodsName"/>
+                    </el-form-item>
+                    <el-form-item :label="$t('order.payOrderId')" prop="payOrderId">
+                        <el-input :placeholder="t('order.inputPayOrderIdTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.payOrderId"/>
                     </el-form-item>
                     <el-form-item class="ml2">
                         <el-button @click="getDataList" formDialogRef icon="search" type="primary">
@@ -20,16 +28,15 @@
                 <div class="mb8" style="width: 100%">
                     <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
                                type="primary"
-                               v-auth="'pay_channel_add'">
+                               v-auth="'pay_order_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
-                               v-auth="'pay_channel_export'">
+                               v-auth="'pay_order_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
-                               icon="Delete"
-                               type="primary" v-auth="'pay_channel_del'">
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                               type="primary" v-auth="'pay_order_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
                     <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
@@ -39,24 +46,21 @@
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
                       style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('channel.index')" type="index" width="80"/>
-                <el-table-column :label="t('channel.appId')" prop="appId" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.mchId')" prop="mchId" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.channelName')" prop="channelName" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.channelMchId')" prop="channelMchId" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.returnUrl')" prop="returnUrl" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.notifyUrl')" prop="notifyUrl" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.state')" prop="state" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.param')" prop="param" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.remark')" prop="remark" show-overflow-tooltip/>
-                <el-table-column :label="t('channel.createTime')" prop="createTime" show-overflow-tooltip/>
+                <el-table-column :label="t('order.index')" type="index" width="80"/>
+                <el-table-column :label="t('order.goodsOrderId')" prop="goodsOrderId" show-overflow-tooltip/>
+                <el-table-column :label="t('order.goodsId')" prop="goodsId" show-overflow-tooltip/>
+                <el-table-column :label="t('order.goodsName')" prop="goodsName" show-overflow-tooltip/>
+                <el-table-column :label="t('order.amount')" prop="amount" show-overflow-tooltip/>
+                <el-table-column :label="t('order.userId')" prop="userId" show-overflow-tooltip/>
+                <el-table-column :label="t('order.status')" prop="status" show-overflow-tooltip/>
+                <el-table-column :label="t('order.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
                 <el-table-column :label="$t('common.action')" width="150">
                     <template #default="scope">
-                        <el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary"
-                                   v-auth="'pay_channel_edit'">{{ $t('common.editBtn') }}
+                        <el-button @click="formDialogRef.openDialog(scope.row.goodsOrderId)" text type="primary"
+                                   v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
                         </el-button>
-                        <el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_channel_del'">
-                            {{
+                        <el-button @click="handleDelete([scope.row.goodsOrderId])" text type="primary"
+                                   v-auth="'pay_order_del'">{{
                             $t('common.delBtn')
                             }}
                         </el-button>
@@ -72,18 +76,17 @@
     </div>
 </template>
 
-<script lang="ts" name="systemPayChannel" setup>
+<script lang="ts" name="systemPayGoodsOrder" setup>
     import {BasicTableProps, useTable} from "/@/hooks/table";
-    import {delObjs, fetchList} from "/@/api/pay/channel";
+    import {delObjs, fetchList} from "/@/api/pay/order";
     import {useMessage, useMessageBox} from "/@/hooks/message";
     import {useI18n} from "vue-i18n";
-    import {useDict} from "/@/hooks/dict";
 
     // 引入组件
     const FormDialog = defineAsyncComponent(() => import('./form.vue'));
     const {t} = useI18n()
     // 定义查询字典
-    const {status_type} = useDict('status_type')
+
     // 定义变量内容
     const formDialogRef = ref()
     // 搜索变量
@@ -97,6 +100,7 @@
         queryForm: {},
         pageList: fetchList
     })
+
 
     //  table hook
     const {
@@ -115,17 +119,33 @@
         selectObjs.value = []
         getDataList()
     }
+    const dictType = ref([
+        {
+            label: '处理失败',
+            value: '-1'
+        },
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '支付成功',
+            value: '1'
+        }, {
+            label: '处理完成',
+            value: '2'
+        }
+    ])
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/pay/channel/export', state.queryForm, 'channel.xlsx')
+        downBlobFile('/pay/order/export', state.queryForm, 'order.xlsx')
     }
 
     // 多选事件
     const handleSelectionChange = (objs: any) => {
         selectObjs.value = []
         objs.forEach((val: any) => {
-            selectObjs.value.push(val.id)
+            selectObjs.value.push(val.goodsOrderId)
         });
         multiple.value = !objs.length
     }
