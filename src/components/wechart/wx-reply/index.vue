@@ -27,7 +27,7 @@
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
-              <upload-file @click="handelImageChange" type="simple" :uploadFileUrl="actionUrl" :data="uploadData"></upload-file>
+              <wx-file-upload :data="uploadData"></wx-file-upload>
             </el-col>
           </el-row>
         </div>
@@ -53,7 +53,7 @@
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
-              <upload-file @click="handelImageChange" type="simple" :uploadFileUrl="actionUrl" :data="uploadData"></upload-file>
+              <wx-file-upload :data="uploadData"></wx-file-upload>
             </el-col>
           </el-row>
         </div>
@@ -107,6 +107,8 @@
 
 <script setup lang="ts" name="wx-reply">
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
+
+const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
 
 const props = defineProps({
   objData: {

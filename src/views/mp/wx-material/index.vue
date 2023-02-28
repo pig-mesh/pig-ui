@@ -13,7 +13,7 @@
             <el-tab-pane name="image" label="image">
               <template #label><i class="el-icon-picture"></i> 图片</template>
               <div class="add_but">
-                <upload-file @click="handelImageChange" type="simple" :uploadFileUrl="actionUrl" :data="uploadData"></upload-file>
+                <wx-file-upload @success="getDataList" :uploadData="uploadData" :type="['image/jpeg','image/png','image/gif','image/bmp','image/jpg']"></wx-file-upload>
               </div>
               <div v-loading="state.loading" class="waterfall">
                 <div v-for="item in state.dataList" :key="item.id" class="waterfall-item">
@@ -34,7 +34,7 @@
             <el-tab-pane name="voice" label="voice">
               <template #label><i class="el-icon-microphone"></i> 语音</template>
               <div class="add_but">
-                <upload-file @click="handelImageChange" type="simple" :uploadFileUrl="actionUrl" :data="uploadData"></upload-file>
+                <wx-file-upload @success="getDataList" :uploadData="uploadData"></wx-file-upload>
               </div>
               <el-table
                   v-loading="state.loading"
@@ -82,7 +82,7 @@
                 <el-button size="mini" type="primary" @click="handleAddVideo">新建</el-button>
               </div>
               <el-dialog v-loading="addMaterialLoading" title="新建视频" v-model="dialogVideoVisible">
-                <upload-file @click="handelImageChange" type="simple" :uploadFileUrl="actionUrl" :data="uploadData" :auto-upload="false" ref="uploadFileVideo" :limit="1"></upload-file>
+                <wx-file-upload @success="getDataList" :uploadData="uploadData" auto-upload="false" ref="uploadFileVideo" :type="['video/mp4']"></wx-file-upload>
                 <el-form
                     ref="uploadForm"
                     :model="uploadData"
@@ -146,14 +146,25 @@
             <el-tab-pane name="news" label="news">
               <template #label><i class="el-icon-news"></i> 图文</template>
               <div class="add_but">
-                <el-button type="primary" size="mini" @click="handleAddNews">新 增</el-button>
+                <el-button type="primary" @click="handleAddNews">新 增</el-button>
               </div>
-              <news-form ref="dialogNewsRef"></news-form>
-
-
-
+              <news-form ref="dialogNewsRef" @ok="getDataList"></news-form>
+              <div v-loading="state.loading" class="waterfall">
+                <div
+                    v-for="item in state.dataList"
+                    :key="item.id"
+                    class="waterfall-item">
+<!--                  <WxNews :obj-data="item.content.newsItem"></WxNews>-->
+                  <el-row class="ope-row">
+                    <el-button type="primary" icon="el-icon-edit" circle @click="handleEditNews(item)"></el-button>
+                    <el-button type="danger" icon="el-icon-delete" circle @click="delMaterial(item)"></el-button>
+                  </el-row>
+                </div>
+              </div>
+              <div v-if="state.dataList.length <=0 && !state.loading" class="el-table__empty-block">
+                <span class="el-table__empty-text">暂无数据</span>
+              </div>
             </el-tab-pane>
-
           </el-tabs>
         </el-card>
       </el-col>
@@ -172,6 +183,7 @@ import { delObj,getPage } from '/@/api/mp/wx-material'
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 const NewsForm = defineAsyncComponent(() => import("./components/news-form.vue"))
+const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
 
 const deptData = reactive({
   queryList: () => {
@@ -293,8 +305,11 @@ const handleAddNews = () => {
   })
 }
 
-
-
+const handleEditNews = (item) => {
+  dialogNewsRef.value.openDialog({
+    accountId: checkAppId.value
+  })
+}
 
 </script>
 

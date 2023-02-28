@@ -138,6 +138,8 @@ const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechar
 const WxReply = defineAsyncComponent(() => import("/@/components/wechart/wx-reply/index.vue"))
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
+
+
 // 点击树
 const handleNodeClick = (node: any) => {
   accountId.value = node.appid

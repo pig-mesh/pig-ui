@@ -4,13 +4,13 @@
       :before-close="dialogNewsClose"
       :close-on-click-modal="false"
       v-model="dialogNewsVisible"
+      :destroy-on-close="true"
       width="80%"
       top="20px">
     <div class="left">
       <div class="select-item">
         <div v-for="(news, index) in articlesAdd" :key="news.id">
-          <div
-              v-if="index==0"
+          <div v-if="index==0"
               class="news-main father"
               :class="{'activeAddNews': isActiveAddNews === index}"
               @click="activeNews(index)">
@@ -19,10 +19,9 @@
               <div class="news-content-title">{{ news.title }}</div>
             </div>
             <div v-if="articlesAdd.length>1" class="child">
-              <el-button type="mini" icon="el-icon-sort-down" @click="downNews(index)">下移</el-button>
+              <el-button icon="el-icon-top" @click="downNews(index)">下移</el-button>
               <el-button
                   v-if="operateMaterial=='add'"
-                  type="mini"
                   icon="el-icon-delete"
                   @click="minusNews(index)">删除
               </el-button>
@@ -42,14 +41,12 @@
             <div class="child">
               <el-button
                   v-if="articlesAdd.length > index+1"
-                  type="mini"
                   icon="el-icon-sort-down"
                   @click="downNews(index)">下移
               </el-button>
-              <el-button type="mini" icon="el-icon-sort-up" @click="upNews(index)">上移</el-button>
+              <el-button icon="el-icon-sort-up" @click="upNews(index)">上移</el-button>
               <el-button
                   v-if="operateMaterial=='add'"
-                  type="mini"
                   icon="el-icon-delete"
                   @click="minusNews(index)">删除
               </el-button>
@@ -57,7 +54,7 @@
           </div>
         </div>
         <div v-if="articlesAdd.length<8 && operateMaterial=='add'" class="news-main-plus" @click="plusNews">
-          <i class="el-icon-circle-plus icon-plus"></i>
+          <el-icon><Plus /></el-icon>
         </div>
       </div>
     </div>
@@ -73,9 +70,8 @@
           <img v-if="articlesAdd[isActiveAddNews].thumbUrl" class="material-img" :src="articlesAdd[isActiveAddNews].thumbUrl" :class="isActiveAddNews === 0 ? 'avatar':'avatar1'">
           <i v-else class="el-icon-plus avatar-uploader-icon" :class="isActiveAddNews === 0 ? 'avatar':'avatar1'"></i>
           <div class="thumb-but">
-            <upload-file type="simple" :uploadFileUrl="actionUrl" :data="uploadData"></upload-file>
-            <el-button size="mini" type="primary" style="margin-left: 5px" @click="openMaterial">素材库选择
-            </el-button>
+            <wx-file-upload :uploadData="uploadData" @success="handleImageChange"></wx-file-upload>
+            <el-button  type="primary" @click="openMaterial">素材库选择</el-button>
           </div>
         </div>
         <el-input
@@ -111,16 +107,22 @@
 
 
 import {useMessageBox} from "/@/hooks/message";
+import {addObj, materialNewsUpdate} from '/@/api/mp/wx-material'
 
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
+
+const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
 
 const WxMaterialSelectRef = ref()
 
 const dialogNewsVisible = ref(false)
 
-const operateMaterial = ref("")
+const operateMaterial = ref("add")
 
 const addMaterialLoading = ref(false)
+
+// 定义刷新表格emit
+const emit = defineEmits(['ok']);
 
 const dialogNewsClose = () => {
  useMessageBox().confirm("修改内容可能还未保存，确定关闭吗?").then(() => {
@@ -130,8 +132,10 @@ const dialogNewsClose = () => {
 
 const actionUrl = ref("/admin/wx-material/materialFileUpload")
 
+// 公众号id
 const accountId = ref()
 
+// 文章数据
 const articlesAdd = ref([
   {
     'title': '',
@@ -146,12 +150,20 @@ const articlesAdd = ref([
     'thumbUrl': ''
   }
 ])
-
+// 激活文章
 const isActiveAddNews = ref(0)
+// 编辑媒体的id
+const articlesMediaId = ref()
 
 const openDialog = (data: any) => {
+  // 设置组件内不用账号
   accountId.value = data.accountId
+  uploadData.appId = data.accountId
+
   dialogNewsVisible.value = true
+
+  operateMaterial.value = 'add'
+  articlesMediaId.value = ''
 }
 
 const uploadData = reactive({
@@ -168,8 +180,69 @@ const openMaterial = () => {
   })
 }
 
+const handleImageChange = (response, file, fileList) => {
+  console.log(response, file, fileList,'response, file, fileList')
+  articlesAdd.value[isActiveAddNews.value].thumbMediaId = response.data.mediaId
+  articlesAdd.value[isActiveAddNews.value].thumbUrl = response.data.url
+}
+
 const onSubmit = () => {
-  console.log('22222')
+  addMaterialLoading.value = true
+  if (operateMaterial.value === 'add') {
+    addObj({
+      articles: articlesAdd.value,
+      appId: accountId.value
+    }).then(() => {
+      addMaterialLoading.value = false
+      dialogNewsVisible.value = false
+      isActiveAddNews.value = 0
+      articlesAdd.value = [
+        {
+          'title': '',
+          'thumbMediaId': '',
+          'author': '',
+          'digest': '',
+          'showCoverPic': '',
+          'content': '',
+          'contentSourceUrl': '',
+          'needOpenComment': '',
+          'onlyFansCanComment': '',
+          'thumbUrl': ''
+        }
+      ]
+      emit('ok',)
+    }).finally(() => {
+      addMaterialLoading.value = false
+    })
+  }
+  if (operateMaterial.value === 'edit') {
+    materialNewsUpdate({
+      articles: articlesAdd.value,
+      mediaId: articlesMediaId.value,
+      appId: accountId.value
+    }).then(() => {
+      addMaterialLoading.value = false
+      dialogNewsVisible.value = false
+      isActiveAddNews.value = 0
+      articlesAdd.value = [
+        {
+          'title': '',
+          'thumbMediaId': '',
+          'author': '',
+          'digest': '',
+          'showCoverPic': '',
+          'content': '',
+          'contentSourceUrl': '',
+          'needOpenComment': '',
+          'onlyFansCanComment': '',
+          'thumbUrl': ''
+        }
+      ]
+      emit("ok")
+    }).finally(() => {
+      addMaterialLoading.value = false
+    })
+  }
 }
 
 const activeNews = (index) => {
@@ -199,6 +272,20 @@ const plusNews = () => {
     'thumbUrl': ''
   })
   isActiveAddNews.value = articlesAdd.value.length -1
+}
+
+const downNews = (index) => {
+  const temp = articlesAdd.value[index]
+  articlesAdd.value[index] = articlesAdd.value[index + 1]
+  articlesAdd.value[index + 1] = temp
+  isActiveAddNews.value = index + 1
+}
+
+const upNews = (index) => {
+  const temp = articlesAdd[index]
+  articlesAdd[index] = articlesAdd[index - 1]
+  articlesAdd[index - 1] = temp
+  isActiveAddNews.value = index - 1
 }
 
 
