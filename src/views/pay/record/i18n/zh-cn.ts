@@ -1,0 +1,26 @@
+export default {
+   record: {
+        index: '序号',
+        importpayNotifyRecordTip: '导入通知记录日志表',
+        id: 'ID',
+        notifyId: '响应ID',
+        request: '请求报文',
+        response: '响应报文',
+        orderNo: '系统订单号',
+        httpStatus: 'http状态',
+        delFlag: 'delFlag',
+        createTime: '创建时间',
+        updateTime: '更新时间',
+        tenantId: '租户ID',
+        inputIdTip: '请输入ID',
+        inputNotifyIdTip: '请输入响应ID',
+        inputRequestTip: '请输入请求报文',
+        inputResponseTip: '请输入响应报文',
+        inputOrderNoTip: '请输入系统订单号',
+        inputHttpStatusTip: '请输入http状态',
+        inputDelFlagTip: '请输入delFlag',
+        inputCreateTimeTip: '请输入创建时间',
+        inputUpdateTimeTip: '请输入更新时间',
+        inputTenantIdTip: '请输入租户ID',
+    }
+}

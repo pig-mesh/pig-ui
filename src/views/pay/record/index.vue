@@ -3,17 +3,13 @@
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-                    <el-form-item :label="$t('order.goodsOrderId')" prop="goodsOrderId">
-                        <el-input :placeholder="t('order.inputGoodsOrderIdTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.goodsOrderId"/>
+                    <el-form-item :label="$t('record.notifyId')" prop="notifyId">
+                        <el-input :placeholder="t('record.inputNotifyIdTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.notifyId"/>
                     </el-form-item>
-                    <el-form-item :label="$t('order.goodsName')" prop="goodsName">
-                        <el-input :placeholder="t('order.inputGoodsNameTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.goodsName"/>
-                    </el-form-item>
-                    <el-form-item :label="$t('order.payOrderId')" prop="payOrderId">
-                        <el-input :placeholder="t('order.inputPayOrderIdTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.payOrderId"/>
+                    <el-form-item :label="$t('record.orderNo')" prop="orderNo">
+                        <el-input :placeholder="t('record.inputOrderNoTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.orderNo"/>
                     </el-form-item>
                     <el-form-item class="ml2">
                         <el-button @click="getDataList" formDialogRef icon="search" type="primary">
@@ -28,16 +24,15 @@
                 <div class="mb8" style="width: 100%">
                     <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
                                type="primary"
-                               v-auth="'pay_order_add'">
+                               v-auth="'pay_record_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
-                               v-auth="'pay_order_export'">
+                               v-auth="'pay_record_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
-                               icon="Delete"
-                               type="primary" v-auth="'pay_order_del'">
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                               type="primary" v-auth="'pay_record_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
                     <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
@@ -47,21 +42,20 @@
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
                       style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('order.index')" type="index" width="80"/>
-                <el-table-column :label="t('order.goodsOrderId')" prop="goodsOrderId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.goodsId')" prop="goodsId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.goodsName')" prop="goodsName" show-overflow-tooltip/>
-                <el-table-column :label="t('order.amount')" prop="amount" show-overflow-tooltip/>
-                <el-table-column :label="t('order.userId')" prop="userId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.status')" prop="status" show-overflow-tooltip/>
-                <el-table-column :label="t('order.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
+                <el-table-column :label="t('record.index')" type="index" width="80"/>
+                <el-table-column :label="t('record.id')" prop="id" show-overflow-tooltip/>
+                <el-table-column :label="t('record.notifyId')" prop="notifyId" show-overflow-tooltip/>
+                <el-table-column :label="t('record.request')" prop="request" show-overflow-tooltip/>
+                <el-table-column :label="t('record.response')" prop="response" show-overflow-tooltip/>
+                <el-table-column :label="t('record.orderNo')" prop="orderNo" show-overflow-tooltip/>
+                <el-table-column :label="t('record.httpStatus')" prop="httpStatus" show-overflow-tooltip/>
                 <el-table-column :label="$t('common.action')" width="150">
                     <template #default="scope">
-                        <el-button @click="formDialogRef.openDialog(scope.row.goodsOrderId)" text type="primary"
-                                   v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
+                        <el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary"
+                                   v-auth="'pay_record_edit'">{{ $t('common.editBtn') }}
                         </el-button>
-                        <el-button @click="handleDelete([scope.row.goodsOrderId])" text type="primary"
-                                   v-auth="'pay_order_del'">{{
+                        <el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_record_del'">
+                            {{
                             $t('common.delBtn')
                             }}
                         </el-button>
@@ -77,9 +71,9 @@
     </div>
 </template>
 
-<script lang="ts" name="systemPayGoodsOrder" setup>
+<script lang="ts" name="systemPayNotifyRecord" setup>
     import {BasicTableProps, useTable} from "/@/hooks/table";
-    import {delObjs, fetchList} from "/@/api/pay/goods";
+    import {delObjs, fetchList} from "/@/api/pay/record";
     import {useMessage, useMessageBox} from "/@/hooks/message";
     import {useI18n} from "vue-i18n";
 
@@ -102,7 +96,6 @@
         pageList: fetchList
     })
 
-
     //  table hook
     const {
         getDataList,
@@ -120,33 +113,17 @@
         selectObjs.value = []
         getDataList()
     }
-    const dictType = ref([
-        {
-            label: '处理失败',
-            value: '-1'
-        },
-        {
-            label: '订单生成',
-            value: '0'
-        }, {
-            label: '支付成功',
-            value: '1'
-        }, {
-            label: '处理完成',
-            value: '2'
-        }
-    ])
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/pay/order/export', state.queryForm, 'order.xlsx')
+        downBlobFile('/pay/record/export', state.queryForm, 'record.xlsx')
     }
 
     // 多选事件
     const handleSelectionChange = (objs: any) => {
         selectObjs.value = []
         objs.forEach((val: any) => {
-            selectObjs.value.push(val.goodsOrderId)
+            selectObjs.value.push(val.id)
         });
         multiple.value = !objs.length
     }

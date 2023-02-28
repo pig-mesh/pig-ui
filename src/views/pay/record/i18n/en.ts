@@ -1,0 +1,26 @@
+export default {
+   record: {
+        index: 'index',
+        importpayNotifyRecordTip: 'import PayNotifyRecord',
+        id: 'id',
+        notifyId: 'notifyId',
+        request: 'request',
+        response: 'response',
+        orderNo: 'orderNo',
+        httpStatus: 'httpStatus',
+        delFlag: 'delFlag',
+        createTime: 'createTime',
+        updateTime: 'updateTime',
+        tenantId: 'tenantId',
+        inputIdTip: 'input id',
+        inputNotifyIdTip: 'input notifyId',
+        inputRequestTip: 'input request',
+        inputResponseTip: 'input response',
+        inputOrderNoTip: 'input orderNo',
+        inputHttpStatusTip: 'input httpStatus',
+        inputDelFlagTip: 'input delFlag',
+        inputCreateTimeTip: 'input createTime',
+        inputUpdateTimeTip: 'input updateTime',
+        inputTenantIdTip: 'input tenantId',
+    }
+}
