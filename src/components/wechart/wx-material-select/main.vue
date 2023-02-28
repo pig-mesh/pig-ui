@@ -144,7 +144,11 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     appId: ""
   },
   pageList: getPage,
-  createdIsNeed: false
+  createdIsNeed: false,
+  props: {
+    item: 'items',
+    totalCount: 'totalCount'
+  }
 })
 
 const {
@@ -160,8 +164,9 @@ const selectMaterial = (item : any) => {
 }
 
 const openDialog = (data: any) => {
-  state.queryForm.type = data.repType
+  state.queryForm.type = data.type
   state.queryForm.appId = data.accountId
+  console.log(data,'data')
   visible.value = true
   getDataList()
 }

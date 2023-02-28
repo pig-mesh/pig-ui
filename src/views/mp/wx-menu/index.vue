@@ -114,7 +114,7 @@
                     </el-row>
                   </div>
                   <div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
-                    <wx-reply-select :objData="tempObj.reply" v-if="hackResetWxReplySelect" />
+                    <wx-reply :objData="tempObj" v-if="hackResetWxReplySelect"/>
                   </div>
                 </div>
               </div>
@@ -134,6 +134,8 @@ import {fetchAccountList} from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
+
+const WxReply = defineAsyncComponent(() => import("/@/components/wechart/wx-reply/index.vue"))
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 // 点击树
@@ -167,6 +169,8 @@ const menuList = reactive([
     children: []
   }
 ] as any)
+
+const hackResetWxReplySelect = ref(false)
 
 const menuOptions = ref([
   {
@@ -215,7 +219,8 @@ const showRightFlag = ref(false)
 
 let tempObj = ref({
   replyArticles: [] as any,
-  articleId: ''
+  articleId: '',
+  appId: ''
 })
 
 const tempSelfObj = reactive({
@@ -241,8 +246,13 @@ const showConfigureContent = ref(true)
 
 // 一级菜单点击事件
 const menuClick = (i, item) => {
+  hackResetWxReplySelect.value = false
+  nextTick(() => {
+    hackResetWxReplySelect.value = true
+  })
   showRightFlag.value = true // 右边菜单
   tempObj.value = item
+  tempObj.value.appId = accountId.value
   showConfigureContent.value = !(item.children && item.children.length > 0) // 有子菜单，就不显示配置内容
   isActive.value = i
   isSubMenuFlag.value = i
@@ -253,9 +263,14 @@ const menuClick = (i, item) => {
 
 // 点击二级菜单
 const subMenuClick = (subItem, index, k) => {
+  hackResetWxReplySelect.value = false
+  nextTick(() => {
+    hackResetWxReplySelect.value = true
+  })
   showRightFlag.value = true // 右边菜单
   // Object.assign(tempObj, subItem) // 这个如果放在顶部，flag 会没有。因为重新赋值了。
   tempObj.value = subItem
+  tempObj.value.appId = accountId.value
   showConfigureContent.value = true
   isActive.value = -1 // 一级菜单去除样式
   isSubMenuActive.value = (index + '' + k) // 二级菜单选中样式
@@ -314,8 +329,10 @@ const deleteMenu = () => {
 
 const handleSave = () => {
  useMessageBox().confirm("确定要保存该菜单吗?").then(() => {
-   return saveObj(accountId.value, {
+   saveObj(accountId.value, {
      button: menuList
+   }).then(() => {
+     useMessage().success("保存成功")
    });
  })
 }

@@ -92,6 +92,7 @@ export function useTable(options?: BasicTableProps) {
                 descs: state.descs,
                 ascs: state.ascs
             }).then((res: any) => {
+                console.log(res,'resss')
                 state.dataList = state.isPage ? res.data[state.props.item] : res.data
                 state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0
             }).catch((err: any) => {

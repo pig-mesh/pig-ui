@@ -148,10 +148,7 @@
               <div class="add_but">
                 <el-button type="primary" size="mini" @click="handleAddNews">新 增</el-button>
               </div>
-
-
-
-
+              <news-form ref="dialogNewsRef"></news-form>
 
 
 
@@ -174,6 +171,7 @@ import {BasicTableProps, useTable} from "/@/hooks/table";
 import { delObj,getPage } from '/@/api/mp/wx-material'
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
+const NewsForm = defineAsyncComponent(() => import("./components/news-form.vue"))
 
 const deptData = reactive({
   queryList: () => {
@@ -192,7 +190,6 @@ const uploadData = ref({
 })
 
 const materialType = ref("image")
-
 
 // 点击树
 const handleNodeClick = (data: any) => {
@@ -222,7 +219,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   pageList: getPage,
   createdIsNeed: false,
   props: {
-    item: 'item',
+    item: 'items',
     totalCount: 'totalCount'
   }
 })
@@ -235,7 +232,6 @@ const {
 } = useTable(state)
 
 const handelImageChange = () => {
-  console.log("111111111")
   getDataList()
 }
 
@@ -289,10 +285,12 @@ const subVideo = () => {
 
 // 图文
 
-const dialogNewsVisible = ref(true)
+const dialogNewsRef = ref()
 
 const handleAddNews = () => {
-  dialogNewsVisible.value = true
+  dialogNewsRef.value.openDialog({
+    accountId: checkAppId.value
+  })
 }
 
 
