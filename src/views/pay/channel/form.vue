@@ -5,14 +5,8 @@
                  v-loading="loading">
             <el-row :gutter="24">
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('channel.mchId')" prop="mchId">
-                        <el-input :placeholder="t('channel.inputMchIdTip')" v-model="form.mchId"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('channel.channelId')" prop="channelId">
-                        <el-input :placeholder="t('channel.inputChannelIdTip')" v-model="form.channelId"/>
+                    <el-form-item :label="t('channel.appId')" prop="appId">
+                        <el-input :placeholder="t('channel.inputAppIdTip')" v-model="form.appId"/>
                     </el-form-item>
                 </el-col>
 
@@ -21,53 +15,54 @@
                         <el-input :placeholder="t('channel.inputChannelNameTip')" v-model="form.channelName"/>
                     </el-form-item>
                 </el-col>
-
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('channel.channelMchId')" prop="channelMchId">
-                        <el-input :placeholder="t('channel.inputChannelMchIdTip')" v-model="form.channelMchId"/>
+                    <el-form-item :label="t('channel.mchId')" prop="mchId">
+                        <el-input :placeholder="t('channel.inputMchIdTip')" v-model="form.mchId"/>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('channel.state')" prop="state">
+                        <el-select v-model="form.state">
+                            <el-option :key="item.value" :label="item.label" :value="item.value"
+                                       v-for="item in status_type">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
 
-                <el-col :span="12" class="mb20">
+
+                <el-col :span="24" class="mb20">
                     <el-form-item :label="t('channel.returnUrl')" prop="returnUrl">
-                        <el-input :placeholder="t('channel.inputReturnUrlTip')" v-model="form.returnUrl"/>
+                        <el-input :placeholder="t('channel.inputReturnUrlTip')" v-model="form.returnUrl">
+                            <template v-slot:prepend>Https://</template>
+                        </el-input>
                     </el-form-item>
                 </el-col>
 
-                <el-col :span="12" class="mb20">
+
+                <el-col :span="24" class="mb20">
                     <el-form-item :label="t('channel.notifyUrl')" prop="notifyUrl">
-                        <el-input :placeholder="t('channel.inputNotifyUrlTip')" v-model="form.notifyUrl"/>
+                        <el-input :placeholder="t('channel.inputNotifyUrlTip')" v-model="form.notifyUrl">
+                            <template v-slot:prepend>Https://</template>
+                        </el-input>
                     </el-form-item>
                 </el-col>
 
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('tenant.state')" prop="state">
-                        <el-radio-group v-model="form.state">
-                            <el-radio :key="index" :label="item.value" border v-for="(item, index) in status_type">{{
-                                item.label }}
-                            </el-radio>
-                        </el-radio-group>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('channel.param')" prop="param">
-                        <el-input :placeholder="t('channel.inputParamTip')" v-model="form.param"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
+                <el-col :span="24" class="mb20">
                     <el-form-item :label="t('channel.remark')" prop="remark">
-                        <el-input :placeholder="t('channel.inputRemarkTip')" v-model="form.remark"/>
+                        <el-input :placeholder="t('channel.inputRemarkTip')" :rows="2" type="textarea"
+                                  v-model="form.remark"/>
                     </el-form-item>
                 </el-col>
 
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('channel.appId')" prop="appId">
-                        <el-input :placeholder="t('channel.inputAppIdTip')" v-model="form.appId"/>
+
+                <el-col :span="24" class="mb20">
+                    <el-form-item :label="t('channel.param')" prop="param">
+                        <el-input :placeholder="t('channel.inputParamTip')" :rows="4" type="textarea"
+                                  v-model="form.param"/>
                     </el-form-item>
                 </el-col>
+
 
             </el-row>
         </el-form>
@@ -116,7 +111,6 @@
     // 定义校验规则
     const dataRules = ref({
         appId: [{required: true, message: 'appId不能为空', trigger: 'blur'}],
-        mchId: [{required: true, message: '商户ID不能为空', trigger: 'blur'}],
         channelId: [{required: true, message: '渠道ID不能为空', trigger: 'blur'}],
         channelName: [{required: true, message: '渠道名称不能为空', trigger: 'blur'}],
         channelMchId: [{required: true, message: '渠道商户ID不能为空', trigger: 'blur'}],

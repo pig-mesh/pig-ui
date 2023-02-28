@@ -16,7 +16,7 @@ export default {
         createTime: '创建时间',
         updateTime: '更新时间',
         tenantId: '租户ID',
-        appId: '应用ID',
+        appId: 'AppID',
         inputIdTip: '请输入渠道主键ID',
         inputMchIdTip: '请输入商户ID',
         inputChannelIdTip: '请输入渠道ID',
