@@ -68,9 +68,16 @@
                 @click="access(scope.row,scope.index)">
               接入
             </el-button>
+
             <el-button
                 type="text"
                 @click="generate(scope.row,scope.index)">二维码
+            </el-button>
+
+            <el-button
+                type="text"
+                @click="quota(scope.row,scope.index)">
+              quota
             </el-button>
           </template>
         </el-table-column>
@@ -95,7 +102,7 @@
 
 <script lang="ts" name="systemWxAccount" setup>
 import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObjs, fetchList, generateQr} from "/@/api/mp/wx-account";
+import {clearQuota, delObjs, fetchList, generateQr} from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useI18n} from "vue-i18n";
 
@@ -173,6 +180,12 @@ const generate = (row: any) => {
   generateQr(row.appid).then(() => {
     useMessage().success("获取成功")
     getDataList()
+  })
+}
+
+const quota = (row) => {
+  clearQuota(row.appid).then(() => {
+    useMessage().success("清空api的调用quota成功")
   })
 }
 </script>

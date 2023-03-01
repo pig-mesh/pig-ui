@@ -49,13 +49,8 @@
         <el-table-column :label="t('wxAccountTag.tagId')" prop="tagId" show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button v-auth="'mp_wxAccountTag_edit'" text type="primary"
-                       @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
-            </el-button>
-            <el-button v-auth="'sys_wxAccountTag_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
-                $t('common.delBtn')
-              }}
-            </el-button>
+            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
+            <el-button text type="primary" @click="handleDelete([scope.row.id])">{{$t('common.delBtn') }}</el-button>
           </template>
         </el-table-column>
       </el-table>

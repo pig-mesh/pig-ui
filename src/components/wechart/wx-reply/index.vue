@@ -84,7 +84,7 @@
       <template #label><i class="el-icon-news"></i> 图文</template>
       <el-row>
         <div v-if="objData.content" class="select-item">
-          <WxNews :obj-data="objData.content.newsItem"></WxNews>
+          <wx-news :obj-data="objData.content.newsItem"></wx-news>
           <el-row class="ope-row">
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
           </el-row>
@@ -106,9 +106,13 @@
 </template>
 
 <script setup lang="ts" name="wx-reply">
+import {getMaterialVideo} from "/@/api/mp/wx-material";
+
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
 
 const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
+
+const WxNews = defineAsyncComponent(() => import("/@/components/wechart/wx-news/index.vue"))
 
 const props = defineProps({
   objData: {
@@ -130,18 +134,15 @@ const uploadData = reactive({
     appId: props.objData.appId
 })
 
-const actionUrl = ref("/admin/wx-material/materialFileUpload")
-
-
 const handleClick = (tab) => {
   uploadData.mediaType = tab.paneName
 
 }
 
 const deleteObj = () => {
-  // this.$delete(this.objData, 'repName')
-  // this.$delete(this.objData, 'repUrl')
-  // this.$delete(this.objData, 'content')
+  props.objData.repName = ''
+  props.objData.repUrl = ''
+  props.objData.content = ''
 }
 
 const openMaterial = (data: any) => {
@@ -151,23 +152,52 @@ const openMaterial = (data: any) => {
 const dialogNewsRef = ref()
 
 const selectMaterial = (item, appId) => {
-  console.log(item, appId,'item, appId')
 
+  const tempObjItem = {
+    repType: '',
+    repMediaId: '',
+    media_id: '',
+    content: ''
+  }
+  tempObjItem.repType = props.objData.repType
+  tempObjItem.repMediaId = item.mediaId
+  tempObjItem.media_id = item.mediaId
+  tempObjItem.content = item.content
 
-}
-
-const handelImageChange = () => {
-  // getDataList()
+  props.objData.repMediaId = item.mediaId
+  props.objData.media_id = item.mediaId
+  props.objData.content = item.content
+  if (props.objData.repType === 'music') {
+    tempObjItem.repThumbMediaId = item.mediaId
+    tempObjItem.repThumbUrl = item.url
+    props.objData.repThumbMediaId = item.mediaId
+    props.objData.repThumbUrl = item.url
+  } else {
+    tempObjItem.repName = item.name
+    tempObjItem.repUrl = item.url
+    props.objData.repName = item.name
+    props.objData.repUrl = item.url
+  }
+  if (props.objData.repType === 'video') {
+    getMaterialVideo({
+      mediaId: item.mediaId,
+      appId: appId
+    }).then(response => {
+      const data = response.data.data
+      tempObjItem.repDesc = data.description
+      tempObjItem.repUrl = data.downUrl
+    })
+  }
 }
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .public-account-management {
-.el-input {
-  width: 70%;
-  margin-right: 2%;
-}
+  .el-input {
+    width: 70%;
+    margin-right: 2%;
+  }
 }
 
 .pagination {

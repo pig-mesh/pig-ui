@@ -155,15 +155,21 @@ const isActiveAddNews = ref(0)
 // 编辑媒体的id
 const articlesMediaId = ref()
 
-const openDialog = (data: any) => {
+const openDialog = (data: any,item: any,mediaId: any,type: any) => {
   // 设置组件内不用账号
   accountId.value = data.accountId
   uploadData.appId = data.accountId
 
   dialogNewsVisible.value = true
-
   operateMaterial.value = 'add'
-  articlesMediaId.value = ''
+
+  articlesAdd.value = item
+  if(mediaId){
+    articlesMediaId.value = mediaId
+  }
+  if(type){
+    operateMaterial.value = type
+  }
 }
 
 const uploadData = reactive({

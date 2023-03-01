@@ -103,8 +103,7 @@
     <div class="waterfall" v-loading="state.loading">
       <template v-for="item in state.dataList">
         <div v-if="item.content && item.content.newsItem" class="waterfall-item" :key="item.id">
-<!--          <wx-news :articles="item.content.newsItem" />-->
-
+          <wx-news :obj-data="item.content.newsItem"></wx-news>
           <el-row class="ope-row">
             <el-button size="mini" type="success" @click="selectMaterial(item)">
               选择<el-icon class="el-icon--right"
@@ -128,12 +127,14 @@
 import {defineEmits} from "vue";
 import {BasicTableProps, useTable} from "/@/hooks/table";
 import {getPage} from "/@/api/mp/wx-material";
+const WxNews = defineAsyncComponent(() => import('../wx-news/index.vue'))
 
 const emit = defineEmits(["selectMaterial"])
 
 const objData = reactive({
   repType: '',
-  accountId: ''
+  accountId: '',
+  type: ''
 })
 
 const visible = ref(false)
@@ -167,6 +168,7 @@ const openDialog = (data: any) => {
   state.queryForm.type = data.type
   state.queryForm.appId = data.accountId
   console.log(data,'data')
+  objData.type = data.type
   visible.value = true
   getDataList()
 }

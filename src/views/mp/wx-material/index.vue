@@ -132,7 +132,6 @@
                         @click="handleInfo(scope.row)">查看
                     </el-button>
                     <el-button
-                        v-if="permissions.mp_wxmaterial_del"
                         type="text"
                         icon="el-icon-delete"
                         size="small"
@@ -154,7 +153,7 @@
                     v-for="item in state.dataList"
                     :key="item.id"
                     class="waterfall-item">
-<!--                  <WxNews :obj-data="item.content.newsItem"></WxNews>-->
+                  <wx-news :obj-data="item.content.newsItem"></wx-news>
                   <el-row class="ope-row">
                     <el-button type="primary" icon="el-icon-edit" circle @click="handleEditNews(item)"></el-button>
                     <el-button type="danger" icon="el-icon-delete" circle @click="delMaterial(item)"></el-button>
@@ -179,11 +178,12 @@
 import { fetchAccountList } from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {BasicTableProps, useTable} from "/@/hooks/table";
-import { delObj,getPage } from '/@/api/mp/wx-material'
+import {delObj, getMaterialVideo, getPage} from '/@/api/mp/wx-material'
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 const NewsForm = defineAsyncComponent(() => import("./components/news-form.vue"))
 const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
+const WxNews = defineAsyncComponent(() => import("/@/components/wechart/wx-news/index.vue"))
 
 const deptData = reactive({
   queryList: () => {
@@ -221,6 +221,8 @@ const handleClick = (tab) =>  {
   }
   materialType.value = tab.paneName
   uploadData.value.mediaType = tab.paneName
+  state.queryForm.type = materialType.value
+  getDataList()
 }
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -243,10 +245,6 @@ const {
   sizeChangeHandle,
 } = useTable(state)
 
-const handelImageChange = () => {
-  getDataList()
-}
-
 const delMaterial = (item: any) => {
   useMessageBox().confirm("此操作将永久删除该文件, 是否继续?").then(() => {
     delObj({
@@ -258,7 +256,6 @@ const delMaterial = (item: any) => {
   })
 }
 
-const actionUrl = ref("/admin/wx-material/materialFileUpload")
 
 // 视频
 
@@ -307,7 +304,17 @@ const handleAddNews = () => {
 
 const handleEditNews = (item) => {
   dialogNewsRef.value.openDialog({
-    accountId: checkAppId.value
+    accountId: checkAppId.value,
+  },JSON.parse(JSON.stringify(item.content.newsItem)),item.mediaId,'edit')
+}
+
+const handleInfo = (row) => {
+  getMaterialVideo({
+    mediaId: row.mediaId,
+    appId: checkAppId.value
+  }).then((response) => {
+    const downUrl = response.data.downUrl
+    window.open(downUrl, '_blank')
   })
 }
 

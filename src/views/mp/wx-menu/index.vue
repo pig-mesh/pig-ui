@@ -95,7 +95,7 @@
                   <div class="configur_content" v-if="tempObj.type === 'article_view_limited'">
                     <el-row>
                       <div class="select-item" v-if="tempObj && tempObj.replyArticles">
-                        <wx-news :articles="tempObj.replyArticles" />
+                        <wx-news :objData="tempObj.replyArticles" />
                         <el-row class="ope-row">
                           <el-button type="danger" icon="el-icon-delete" circle @click="deleteMaterial" />
                         </el-row>
@@ -138,6 +138,8 @@ const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechar
 const WxReply = defineAsyncComponent(() => import("/@/components/wechart/wx-reply/index.vue"))
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
+
+const WxNews = defineAsyncComponent(() => import("/@/components/wechart/wx-news/index.vue"))
 
 
 // 点击树

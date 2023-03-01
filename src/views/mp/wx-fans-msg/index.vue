@@ -69,7 +69,6 @@
             <div v-if="scope.row.repType === 'link'"><el-tag size="mini">链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a></div>
           </template>
         </el-table-column>
-
         <el-table-column :label="t('wxFansMsg.readFlag')" prop="readFlag" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="response_type" :value="scope.row.readFlag"></dict-tag>
