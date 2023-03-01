@@ -22,7 +22,7 @@ export default {
         notifyCount: '通知次数',
         lastNotifyTime: '最后一次通知时间',
         expireTime: '订单失效时间',
-        paySuccTime: '订单支付成功时间',
+        paySuccTime: '成功时间',
         createTime: '创建时间',
         updateTime: '更新时间',
         delFlag: ' delFlag',
