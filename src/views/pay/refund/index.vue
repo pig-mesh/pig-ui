@@ -4,17 +4,16 @@
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
                     <el-form-item :label="$t('refund.refundOrderId')" prop="refundOrderId">
-                        <el-input :placeholder="t('refund.inputRefundOrderIdTip')"
-                                  style="max-width: 180px"
-                                  v-model="state.queryForm.refundOrderId"/>
+                        <el-input :placeholder="t('refund.inputRefundOrderIdTip')" style="max-width: 180px"
+                            v-model="state.queryForm.refundOrderId" />
                     </el-form-item>
                     <el-form-item :label="$t('refund.payOrderId')" prop="payOrderId">
                         <el-input :placeholder="t('refund.inputPayOrderIdTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.payOrderId"/>
+                            v-model="state.queryForm.payOrderId" />
                     </el-form-item>
                     <el-form-item :label="$t('refund.mchId')" prop="mchId">
                         <el-input :placeholder="t('refund.inputMchIdTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.mchId"/>
+                            v-model="state.queryForm.mchId" />
                     </el-form-item>
                     <el-form-item class="ml2">
                         <el-button @click="getDataList" formDialogRef icon="search" type="primary">
@@ -28,163 +27,121 @@
             <el-row>
                 <div class="mb8" style="width: 100%">
                     <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
-                               type="primary"
-                               v-auth="'pay_order_add'">
+                        type="primary" v-auth="'pay_order_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
-                               v-auth="'pay_order_export'">
+                        v-auth="'pay_order_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
                     <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
-                               icon="Delete"
-                               type="primary" v-auth="'pay_order_del'">
+                        icon="Delete" type="primary" v-auth="'pay_order_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
                     <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
-                                   v-model:showSearch="showSearch"></right-toolbar>
+                        v-model:showSearch="showSearch"></right-toolbar>
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      border style="width: 100%" v-loading="state.loading">
-                <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('refund.index')" fixed type="index" width="80"/>
-                <el-table-column :label="t('refund.refundOrderId')" prop="refundOrderId" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelPayOrderNo')" prop="channelPayOrderNo" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.mchId')" prop="mchId" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.mchRefundNo')" prop="mchRefundNo" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelId')" prop="channelId" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.payAmount')" prop="payAmount" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.refundAmount')" prop="refundAmount" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.currency')" prop="currency" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.status')" prop="status" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.result')" prop="result" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.clientIp')" prop="clientIp" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.device')" prop="device" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.remark')" prop="remark" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelUser')" prop="channelUser" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.username')" prop="username" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelMchId')" prop="channelMchId" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelOrderNo')" prop="channelOrderNo" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelErrCode')" prop="channelErrCode" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.channelErrMsg')" prop="channelErrMsg" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.extra')" prop="extra" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.notifyUrl')" prop="notifyUrl" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.param1')" prop="param1" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.param2')" prop="param2" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.expireTime')" prop="expireTime" show-overflow-tooltip/>
-                <el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip/>
+                border style="width: 100%" v-loading="state.loading">
+                <el-table-column align="center" type="selection" width="60" />
+                <el-table-column :label="t('refund.index')" fixed type="index" width="80" />
+                <el-table-column :label="t('refund.refundOrderId')" prop="refundOrderId" show-overflow-tooltip />
+                <el-table-column :label="t('refund.payOrderId')" prop="payOrderId" show-overflow-tooltip />
+                <el-table-column :label="t('refund.channelId')" prop="channelId" show-overflow-tooltip />
+                <el-table-column :label="t('refund.payAmount')" prop="payAmount" show-overflow-tooltip />
+                <el-table-column :label="t('refund.refundAmount')" prop="refundAmount" show-overflow-tooltip />
+                <el-table-column :label="t('refund.remark')" prop="remark" show-overflow-tooltip />
+                <el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip />
                 <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.refundOrderId)" text type="primary"
-                                   v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
+                            v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
                         </el-button>
                         <el-button @click="handleDelete([scope.row.refundOrderId])" text type="primary"
-                                   v-auth="'sys_order_del'">{{
-                            $t('common.delBtn')
+                            v-auth="'sys_order_del'">{{
+                                $t('common.delBtn')
                             }}
                         </el-button>
                     </template>
                 </el-table-column>
             </el-table>
-            <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
-                        v-bind="state.pagination"/>
+            <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
         </el-card>
 
         <!-- 编辑、新增  -->
-        <form-dialog @refresh="getDataList(false)" ref="formDialogRef"/>
+        <form-dialog @refresh="getDataList(false)" ref="formDialogRef" />
     </div>
 </template>
 
 <script lang="ts" name="systemPayRefundOrder" setup>
-    import {BasicTableProps, useTable} from "/@/hooks/table";
-    import {delObjs, fetchList} from "/@/api/pay/refund";
-    import {useMessage, useMessageBox} from "/@/hooks/message";
-    import {useI18n} from "vue-i18n";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { delObjs, fetchList } from "/@/api/pay/refund";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
 
-    // 引入组件
-    const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-    const {t} = useI18n()
-    // 定义查询字典
+// 引入组件
+const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const { t } = useI18n()
+// 定义查询字典
 
-    // 定义变量内容
-    const formDialogRef = ref()
-    // 搜索变量
-    const queryRef = ref()
-    const showSearch = ref(true)
-    // 多选变量
-    const selectObjs = ref([]) as any
-    const multiple = ref(true)
+// 定义变量内容
+const formDialogRef = ref()
+// 搜索变量
+const queryRef = ref()
+const showSearch = ref(true)
+// 多选变量
+const selectObjs = ref([]) as any
+const multiple = ref(true)
 
-    const state: BasicTableProps = reactive<BasicTableProps>({
-        queryForm: {},
-        pageList: fetchList
-    })
+const state: BasicTableProps = reactive<BasicTableProps>({
+    queryForm: {},
+    pageList: fetchList,
+    descs: ['create_time']
+})
 
-    const dictType = ref([
-        {
-            label: '订单生成',
-            value: '0'
-        }, {
-            label: '退款中',
-            value: '1'
-        }, {
-            label: '退款成功',
-            value: '2'
-        },
-        {
-            label: '退款失败',
-            value: '3'
-        },
-        {
-            label: '业务处理完成',
-            value: '4'
-        },
-    ])
+//  table hook
+const {
+    getDataList,
+    currentChangeHandle,
+    sizeChangeHandle,
+    sortChangeHandle,
+    downBlobFile
+} = useTable(state)
 
-    //  table hook
-    const {
-        getDataList,
-        currentChangeHandle,
-        sizeChangeHandle,
-        sortChangeHandle,
-        downBlobFile
-    } = useTable(state)
-
+// 清空搜索条件
+const resetQuery = () => {
     // 清空搜索条件
-    const resetQuery = () => {
-        // 清空搜索条件
-        queryRef.value.resetFields()
-        // 清空多选
-        selectObjs.value = []
-        getDataList()
-    }
+    queryRef.value.resetFields()
+    // 清空多选
+    selectObjs.value = []
+    getDataList()
+}
 
-    // 导出excel
-    const exportExcel = () => {
-        downBlobFile('/admin/refund/export', state.queryForm, 'refund.xlsx')
-    }
+// 导出excel
+const exportExcel = () => {
+    downBlobFile('/admin/refund/export', state.queryForm, 'refund.xlsx')
+}
 
-    // 多选事件
-    const handleSelectionChange = (objs: any) => {
-        selectObjs.value = []
-        objs.forEach((val: any) => {
-            selectObjs.value.push(val.refundOrderId)
-        });
-        multiple.value = !objs.length
-    }
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+    selectObjs.value = []
+    objs.forEach((val: any) => {
+        selectObjs.value.push(val.refundOrderId)
+    });
+    multiple.value = !objs.length
+}
 
-    // 删除操作
-    const handleDelete = (ids: string[]) => {
-        useMessageBox().confirm(t('common.delConfirmText'))
-            .then(() => {
-                delObjs(ids).then(() => {
-                    getDataList(false);
-                    useMessage().success(t('common.delSuccessText'));
-                }).catch((err: any) => {
-                    useMessage().error(err.msg)
-                })
+// 删除操作
+const handleDelete = (ids: string[]) => {
+    useMessageBox().confirm(t('common.delConfirmText'))
+        .then(() => {
+            delObjs(ids).then(() => {
+                getDataList(false);
+                useMessage().success(t('common.delSuccessText'));
+            }).catch((err: any) => {
+                useMessage().error(err.msg)
             })
-    };
+        })
+};
 </script>

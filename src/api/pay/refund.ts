@@ -8,7 +8,7 @@ export function fetchList(query?: Object) {
   })
 }
 
-export function addObj(obj?: Object) {
+export function useRefundApi(obj?: Object) {
   return request({
     url: '/admin/refund',
     method: 'post',

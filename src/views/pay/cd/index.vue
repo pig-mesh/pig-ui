@@ -74,7 +74,7 @@ const getQr = () => {
     })
   } else {
     const tenantId = Local.get("tenantId") ? Local.get("tenantId") : 1
-    url.value = `${protocol}//${host}/pay/goods/buy?amount=${state.amount}&TENANT-ID=${tenantId}`
+    url.value = `${protocol}//${host}/admin/goods/buy?amount=${state.amount}&TENANT-ID=${tenantId}`
   }
 }
 </script>

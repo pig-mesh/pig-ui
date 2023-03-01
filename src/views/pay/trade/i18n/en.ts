@@ -1,5 +1,5 @@
 export default {
-   trade: {
+    trade: {
         index: 'index',
         importpayTradeOrderTip: 'import PayTradeOrder',
         orderId: 'orderId',
@@ -52,5 +52,6 @@ export default {
         inputUpdateTimeTip: 'input updateTime',
         inputDelFlagTip: 'input delFlag',
         inputTenantIdTip: 'input tenantId',
+        refundBtn: 'refund'
     }
 }
