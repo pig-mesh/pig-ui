@@ -3,14 +3,20 @@
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-                    <el-form-item :label="$t('order.goodsOrderId')" prop="goodsOrderId">
-                        <el-input :placeholder="t('order.inputGoodsOrderIdTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.goodsOrderId"/>
+
+
+                    <el-form-item :label="t('order.status')" prop="status">
+                        <el-select :placeholder="t('order.inputStatusTip')" v-model="state.queryForm.status">
+                            <el-option
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                    v-for="item in dictType">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item :label="$t('order.goodsName')" prop="goodsName">
-                        <el-input :placeholder="t('order.inputGoodsNameTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.goodsName"/>
-                    </el-form-item>
+
+
                     <el-form-item :label="$t('order.payOrderId')" prop="payOrderId">
                         <el-input :placeholder="t('order.inputPayOrderIdTip')" style="max-width: 180px"
                                   v-model="state.queryForm.payOrderId"/>
@@ -45,16 +51,21 @@
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      style="width: 100%" v-loading="state.loading">
+                      border style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
                 <el-table-column :label="t('order.index')" type="index" width="80"/>
-                <el-table-column :label="t('order.goodsOrderId')" prop="goodsOrderId" show-overflow-tooltip/>
                 <el-table-column :label="t('order.goodsId')" prop="goodsId" show-overflow-tooltip/>
                 <el-table-column :label="t('order.goodsName')" prop="goodsName" show-overflow-tooltip/>
                 <el-table-column :label="t('order.amount')" prop="amount" show-overflow-tooltip/>
-                <el-table-column :label="t('order.userId')" prop="userId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.status')" prop="status" show-overflow-tooltip/>
+                <el-table-column :label="t('order.status')" prop="status" show-overflow-tooltip>
+                    <template #default="scope">
+                        <dict-tag :options="dictType" :value="scope.row.status"></dict-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="t('order.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
+                <el-table-column :label="t('order.createTime')" prop="createTime" show-overflow-tooltip/>
+
+
                 <el-table-column :label="$t('common.action')" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.goodsOrderId)" text type="primary"
@@ -102,6 +113,23 @@
         pageList: fetchList
     })
 
+    const dictType = ref([
+        {
+            label: '处理失败',
+            value: '-1'
+        },
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '支付成功',
+            value: '1'
+        }, {
+            label: '处理完成',
+            value: '2'
+        }
+    ])
+
 
     //  table hook
     const {
@@ -120,22 +148,17 @@
         selectObjs.value = []
         getDataList()
     }
-    const dictType = ref([
-        {
-            label: '处理失败',
-            value: '-1'
-        },
-        {
-            label: '订单生成',
-            value: '0'
-        }, {
-            label: '支付成功',
-            value: '1'
-        }, {
-            label: '处理完成',
-            value: '2'
-        }
-    ])
+
+
+    const filterDh = (value, objs) => {
+        objs.forEach(item => {
+            if (value == item.value) {
+                status
+                return item.label
+            }
+        })
+        return value
+    }
 
     // 导出excel
     const exportExcel = () => {

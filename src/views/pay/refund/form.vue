@@ -5,156 +5,156 @@
                  v-loading="loading">
             <el-row :gutter="24">
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.payOrderId')" prop="payOrderId">
-                        <el-input :placeholder="t('order.inputPayOrderIdTip')" v-model="form.payOrderId"/>
+                    <el-form-item :label="t('refund.payOrderId')" prop="payOrderId">
+                        <el-input :placeholder="t('refund.inputPayOrderIdTip')" v-model="form.payOrderId"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelPayOrderNo')" prop="channelPayOrderNo">
-                        <el-input :placeholder="t('order.inputChannelPayOrderNoTip')" v-model="form.channelPayOrderNo"/>
+                    <el-form-item :label="t('refund.channelPayOrderNo')" prop="channelPayOrderNo">
+                        <el-input :placeholder="t('refund.inputChannelPayOrderNoTip')" v-model="form.channelPayOrderNo"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.mchId')" prop="mchId">
-                        <el-input :placeholder="t('order.inputMchIdTip')" v-model="form.mchId"/>
+                    <el-form-item :label="t('refund.mchId')" prop="mchId">
+                        <el-input :placeholder="t('refund.inputMchIdTip')" v-model="form.mchId"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.mchRefundNo')" prop="mchRefundNo">
-                        <el-input :placeholder="t('order.inputMchRefundNoTip')" v-model="form.mchRefundNo"/>
+                    <el-form-item :label="t('refund.mchRefundNo')" prop="mchRefundNo">
+                        <el-input :placeholder="t('refund.inputMchRefundNoTip')" v-model="form.mchRefundNo"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelId')" prop="channelId">
-                        <el-input :placeholder="t('order.inputChannelIdTip')" v-model="form.channelId"/>
+                    <el-form-item :label="t('refund.channelId')" prop="channelId">
+                        <el-input :placeholder="t('refund.inputChannelIdTip')" v-model="form.channelId"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.payAmount')" prop="payAmount">
-                        <el-input :placeholder="t('order.inputPayAmountTip')" v-model="form.payAmount"/>
+                    <el-form-item :label="t('refund.payAmount')" prop="payAmount">
+                        <el-input :placeholder="t('refund.inputPayAmountTip')" v-model="form.payAmount"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.refundAmount')" prop="refundAmount">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('order.inputRefundAmountTip')"
+                    <el-form-item :label="t('refund.refundAmount')" prop="refundAmount">
+                        <el-input-number :max="1000" :min="1" :placeholder="t('refund.inputRefundAmountTip')"
                                          v-model="form.refundAmount"></el-input-number>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.currency')" prop="currency">
-                        <el-input :placeholder="t('order.inputCurrencyTip')" v-model="form.currency"/>
+                    <el-form-item :label="t('refund.currency')" prop="currency">
+                        <el-input :placeholder="t('refund.inputCurrencyTip')" v-model="form.currency"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.status')" prop="status">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('order.inputStatusTip')"
+                    <el-form-item :label="t('refund.status')" prop="status">
+                        <el-input-number :max="1000" :min="1" :placeholder="t('refund.inputStatusTip')"
                                          v-model="form.status"></el-input-number>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.result')" prop="result">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('order.inputResultTip')"
+                    <el-form-item :label="t('refund.result')" prop="result">
+                        <el-input-number :max="1000" :min="1" :placeholder="t('refund.inputResultTip')"
                                          v-model="form.result"></el-input-number>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.clientIp')" prop="clientIp">
-                        <el-input :placeholder="t('order.inputClientIpTip')" v-model="form.clientIp"/>
+                    <el-form-item :label="t('refund.clientIp')" prop="clientIp">
+                        <el-input :placeholder="t('refund.inputClientIpTip')" v-model="form.clientIp"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.device')" prop="device">
-                        <el-input :placeholder="t('order.inputDeviceTip')" v-model="form.device"/>
+                    <el-form-item :label="t('refund.device')" prop="device">
+                        <el-input :placeholder="t('refund.inputDeviceTip')" v-model="form.device"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.remark')" prop="remark">
-                        <el-input :placeholder="t('order.inputRemarkTip')" v-model="form.remark"/>
+                    <el-form-item :label="t('refund.remark')" prop="remark">
+                        <el-input :placeholder="t('refund.inputRemarkTip')" v-model="form.remark"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelUser')" prop="channelUser">
-                        <el-input :placeholder="t('order.inputChannelUserTip')" v-model="form.channelUser"/>
+                    <el-form-item :label="t('refund.channelUser')" prop="channelUser">
+                        <el-input :placeholder="t('refund.inputChannelUserTip')" v-model="form.channelUser"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.username')" prop="username">
-                        <el-input :placeholder="t('order.inputUsernameTip')" v-model="form.username"/>
+                    <el-form-item :label="t('refund.username')" prop="username">
+                        <el-input :placeholder="t('refund.inputUsernameTip')" v-model="form.username"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelMchId')" prop="channelMchId">
-                        <el-input :placeholder="t('order.inputChannelMchIdTip')" v-model="form.channelMchId"/>
+                    <el-form-item :label="t('refund.channelMchId')" prop="channelMchId">
+                        <el-input :placeholder="t('refund.inputChannelMchIdTip')" v-model="form.channelMchId"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelOrderNo')" prop="channelOrderNo">
-                        <el-input :placeholder="t('order.inputChannelOrderNoTip')" v-model="form.channelOrderNo"/>
+                    <el-form-item :label="t('refund.channelOrderNo')" prop="channelOrderNo">
+                        <el-input :placeholder="t('refund.inputChannelOrderNoTip')" v-model="form.channelOrderNo"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelErrCode')" prop="channelErrCode">
-                        <el-input :placeholder="t('order.inputChannelErrCodeTip')" v-model="form.channelErrCode"/>
+                    <el-form-item :label="t('refund.channelErrCode')" prop="channelErrCode">
+                        <el-input :placeholder="t('refund.inputChannelErrCodeTip')" v-model="form.channelErrCode"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.channelErrMsg')" prop="channelErrMsg">
-                        <el-input :placeholder="t('order.inputChannelErrMsgTip')" v-model="form.channelErrMsg"/>
+                    <el-form-item :label="t('refund.channelErrMsg')" prop="channelErrMsg">
+                        <el-input :placeholder="t('refund.inputChannelErrMsgTip')" v-model="form.channelErrMsg"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.extra')" prop="extra">
-                        <el-input :placeholder="t('order.inputExtraTip')" v-model="form.extra"/>
+                    <el-form-item :label="t('refund.extra')" prop="extra">
+                        <el-input :placeholder="t('refund.inputExtraTip')" v-model="form.extra"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.notifyUrl')" prop="notifyUrl">
-                        <el-input :placeholder="t('order.inputNotifyUrlTip')" v-model="form.notifyUrl"/>
+                    <el-form-item :label="t('refund.notifyUrl')" prop="notifyUrl">
+                        <el-input :placeholder="t('refund.inputNotifyUrlTip')" v-model="form.notifyUrl"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.param1')" prop="param1">
-                        <el-input :placeholder="t('order.inputParam1Tip')" v-model="form.param1"/>
+                    <el-form-item :label="t('refund.param1')" prop="param1">
+                        <el-input :placeholder="t('refund.inputParam1Tip')" v-model="form.param1"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.param2')" prop="param2">
-                        <el-input :placeholder="t('order.inputParam2Tip')" v-model="form.param2"/>
+                    <el-form-item :label="t('refund.param2')" prop="param2">
+                        <el-input :placeholder="t('refund.inputParam2Tip')" v-model="form.param2"/>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.expireTime')" prop="expireTime">
-                        <el-date-picker :placeholder="t('order.inputExpireTimeTip')" :value-format="dateTimeStr"
+                    <el-form-item :label="t('refund.expireTime')" prop="expireTime">
+                        <el-date-picker :placeholder="t('refund.inputExpireTimeTip')" :value-format="dateTimeStr"
                                         type="datetime" v-model="form.expireTime"></el-date-picker>
                     </el-form-item>
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('order.refundSuccTime')" prop="refundSuccTime">
-                        <el-date-picker :placeholder="t('order.inputRefundSuccTimeTip')" :value-format="dateTimeStr"
+                    <el-form-item :label="t('refund.refundSuccTime')" prop="refundSuccTime">
+                        <el-date-picker :placeholder="t('refund.inputRefundSuccTimeTip')" :value-format="dateTimeStr"
                                         type="datetime" v-model="form.refundSuccTime"></el-date-picker>
                     </el-form-item>
                 </el-col>
