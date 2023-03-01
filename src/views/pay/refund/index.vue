@@ -26,10 +26,6 @@
             </el-row>
             <el-row>
                 <div class="mb8" style="width: 100%">
-                    <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
-                        type="primary" v-auth="'pay_order_add'">
-                        {{ $t('common.addBtn') }}
-                    </el-button>
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
                         v-auth="'pay_order_export'">
                         {{ $t('common.exportBtn') }}
@@ -55,11 +51,8 @@
                 <el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip />
                 <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
-                        <el-button @click="formDialogRef.openDialog(scope.row.refundOrderId)" text type="primary"
-                            v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
-                        </el-button>
                         <el-button @click="handleDelete([scope.row.refundOrderId])" text type="primary"
-                            v-auth="'sys_order_del'">{{
+                            v-auth="'pay_order_export'">{{
                                 $t('common.delBtn')
                             }}
                         </el-button>
@@ -68,9 +61,6 @@
             </el-table>
             <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
         </el-card>
-
-        <!-- 编辑、新增  -->
-        <form-dialog @refresh="getDataList(false)" ref="formDialogRef" />
     </div>
 </template>
 
@@ -81,12 +71,7 @@ import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
 
 // 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n()
-// 定义查询字典
-
-// 定义变量内容
-const formDialogRef = ref()
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)

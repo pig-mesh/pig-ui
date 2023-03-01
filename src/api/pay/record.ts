@@ -25,7 +25,7 @@ export function getObj(id?: string) {
 
 export function delObjs(ids?: Object) {
   return request({
-    url: '/admin/record',
+    url: '/admin/notify',
     method: 'delete',
     data: ids
   })

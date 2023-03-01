@@ -130,7 +130,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/pay/channel/export', state.queryForm, 'channel.xlsx')
+        downBlobFile('/admin/channel/export', state.queryForm, 'channel.xlsx')
     }
 
     // 多选事件

@@ -22,10 +22,6 @@
             </el-row>
             <el-row>
                 <div class="mb8" style="width: 100%">
-                    <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
-                        type="primary" v-auth="'pay_record_add'">
-                        {{ $t('common.addBtn') }}
-                    </el-button>
                     <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
                         v-auth="'pay_record_export'">
                         {{ $t('common.exportBtn') }}
@@ -42,18 +38,14 @@
                 style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60" />
                 <el-table-column :label="t('record.index')" type="index" width="80" />
-                <el-table-column :label="t('record.id')" prop="id" show-overflow-tooltip />
                 <el-table-column :label="t('record.notifyId')" prop="notifyId" show-overflow-tooltip />
                 <el-table-column :label="t('record.request')" prop="request" show-overflow-tooltip />
                 <el-table-column :label="t('record.response')" prop="response" show-overflow-tooltip />
                 <el-table-column :label="t('record.orderNo')" prop="orderNo" show-overflow-tooltip />
-                <el-table-column :label="t('record.httpStatus')" prop="httpStatus" show-overflow-tooltip />
+                <el-table-column :label="t('record.createTime')" prop="createTime" show-overflow-tooltip />
                 <el-table-column :label="$t('common.action')" width="150">
                     <template #default="scope">
-                        <el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary"
-                            v-auth="'pay_record_edit'">{{ $t('common.editBtn') }}
-                        </el-button>
-                        <el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_record_del'">
+                        <el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_record_del'">
                             {{
                                 $t('common.delBtn')
                             }}
@@ -63,9 +55,6 @@
             </el-table>
             <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
         </el-card>
-
-        <!-- 编辑、新增  -->
-        <form-dialog @refresh="getDataList(false)" ref="formDialogRef" />
     </div>
 </template>
 
@@ -75,13 +64,7 @@ import { delObjs, fetchList } from "/@/api/pay/record";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
 
-// 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n()
-// 定义查询字典
-
-// 定义变量内容
-const formDialogRef = ref()
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
@@ -115,7 +98,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-    downBlobFile('/pay/record/export', state.queryForm, 'record.xlsx')
+    downBlobFile('/admin/notify/export', state.queryForm, 'record.xlsx')
 }
 
 // 多选事件
