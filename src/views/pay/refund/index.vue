@@ -36,7 +36,8 @@
                                v-auth="'pay_order_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
+                               icon="Delete"
                                type="primary" v-auth="'pay_order_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
@@ -45,9 +46,9 @@
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      style="width: 100%" v-loading="state.loading">
+                      border style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('refund.index')" type="index" width="80"/>
+                <el-table-column :label="t('refund.index')" fixed type="index" width="80"/>
                 <el-table-column :label="t('refund.refundOrderId')" prop="refundOrderId" show-overflow-tooltip/>
                 <el-table-column :label="t('refund.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
                 <el-table-column :label="t('refund.channelPayOrderNo')" prop="channelPayOrderNo" show-overflow-tooltip/>
@@ -74,7 +75,7 @@
                 <el-table-column :label="t('refund.param2')" prop="param2" show-overflow-tooltip/>
                 <el-table-column :label="t('refund.expireTime')" prop="expireTime" show-overflow-tooltip/>
                 <el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip/>
-                <el-table-column :label="$t('common.action')" width="150">
+                <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.refundOrderId)" text type="primary"
                                    v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
@@ -120,6 +121,27 @@
         queryForm: {},
         pageList: fetchList
     })
+
+    const dictType = ref([
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '退款中',
+            value: '1'
+        }, {
+            label: '退款成功',
+            value: '2'
+        },
+        {
+            label: '退款失败',
+            value: '3'
+        },
+        {
+            label: '业务处理完成',
+            value: '4'
+        },
+    ])
 
     //  table hook
     const {

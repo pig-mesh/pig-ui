@@ -12,7 +12,8 @@
 
                 <el-col :span="12" class="mb20">
                     <el-form-item :label="t('refund.channelPayOrderNo')" prop="channelPayOrderNo">
-                        <el-input :placeholder="t('refund.inputChannelPayOrderNoTip')" v-model="form.channelPayOrderNo"/>
+                        <el-input :placeholder="t('refund.inputChannelPayOrderNoTip')"
+                                  v-model="form.channelPayOrderNo"/>
                     </el-form-item>
                 </el-col>
 
@@ -61,11 +62,26 @@
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('refund.result')" prop="result">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('refund.inputResultTip')"
-                                         v-model="form.result"></el-input-number>
+                    <el-form-item :label="t('refund.status')" prop="status">
+                        <el-select :placeholder="t('refund.inputStatusTip')" v-model="form.status">
+                            <el-option :key="item.value" :label="item.label" :value="item.value"
+                                       v-for="item in dictType">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
+
+
+                <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('refund.result')" prop="result">
+                        <el-select :placeholder="t('refund.inputResultTip')" v-model="form.result">
+                            <el-option :key="item.value" :label="item.label" :value="item.value"
+                                       v-for="item in dictResult">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+
 
                 <el-col :span="12" class="mb20">
                     <el-form-item :label="t('refund.clientIp')" prop="clientIp">
@@ -234,6 +250,42 @@
             getpayRefundOrderData(id)
         }
     };
+    const dictType = ref([
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '退款中',
+            value: '1'
+        }, {
+            label: '退款成功',
+            value: '2'
+        },
+        {
+            label: '退款失败',
+            value: '3'
+        },
+        {
+            label: '业务处理完成',
+            value: '4'
+        },
+    ])
+    const dictResult = ref([
+        {
+            label: '不确认结果',
+            value: '0'
+        }, {
+            label: '等待手动处理',
+            value: '1'
+        }, {
+            label: '确认成功',
+            value: '2'
+        },
+        {
+            label: '确认失败',
+            value: '3'
+        },
+    ])
 
     // 提交
     const onSubmit = () => {
