@@ -4,6 +4,13 @@
         <el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef"
                  v-loading="loading">
             <el-row :gutter="24">
+
+                <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('trade.orderId')" prop="orderId">
+                        <el-input :placeholder="t('trade.inputOrderIdTip')" v-model="form.orderId"/>
+                    </el-form-item>
+                </el-col>
+
                 <el-col :span="12" class="mb20">
                     <el-form-item :label="t('trade.channelId')" prop="channelId">
                         <el-input :placeholder="t('trade.inputChannelIdTip')" v-model="form.channelId"/>
@@ -11,10 +18,31 @@
                 </el-col>
 
                 <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('trade.channelMchId')" prop="channelMchId">
+                        <el-input :placeholder="t('trade.inputChannelMchIdTip')" v-model="form.channelMchId"/>
+                    </el-form-item>
+                </el-col>
+
+
+                <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('trade.channelOrderNo')" prop="channelOrderNo">
+                        <el-input :placeholder="t('trade.inputChannelOrderNoTip')" v-model="form.channelOrderNo"/>
+                    </el-form-item>
+                </el-col>
+
+                <el-col :span="12" class="mb20">
+                    <el-form-item :label="t('trade.body')" prop="body">
+                        <el-input :placeholder="t('trade.inputBodyTip')" v-model="form.body"/>
+                    </el-form-item>
+                </el-col>
+
+
+                <el-col :span="12" class="mb20">
                     <el-form-item :label="t('trade.amount')" prop="amount">
                         <el-input :placeholder="t('trade.inputAmountTip')" v-model="form.amount"/>
                     </el-form-item>
                 </el-col>
+
 
                 <el-col :span="12" class="mb20">
                     <el-form-item :label="t('trade.currency')" prop="currency">
@@ -22,10 +50,14 @@
                     </el-form-item>
                 </el-col>
 
+
                 <el-col :span="12" class="mb20">
                     <el-form-item :label="t('trade.status')" prop="status">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('trade.inputStatusTip')"
-                                         v-model="form.status"></el-input-number>
+                        <el-select v-model="form.status" :placeholder="t('trade.inputStatusTip')">
+                            <el-option :key="item.value" :label="item.label" :value="item.value"
+                                       v-for="item in dictType">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
 
@@ -36,98 +68,25 @@
                 </el-col>
 
                 <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.device')" prop="device">
-                        <el-input :placeholder="t('trade.inputDeviceTip')" v-model="form.device"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.subject')" prop="subject">
-                        <el-input :placeholder="t('trade.inputSubjectTip')" v-model="form.subject"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.body')" prop="body">
-                        <el-input :placeholder="t('trade.inputBodyTip')" v-model="form.body"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.extra')" prop="extra">
-                        <el-input :placeholder="t('trade.inputExtraTip')" v-model="form.extra"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.channelMchId')" prop="channelMchId">
-                        <el-input :placeholder="t('trade.inputChannelMchIdTip')" v-model="form.channelMchId"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.channelOrderNo')" prop="channelOrderNo">
-                        <el-input :placeholder="t('trade.inputChannelOrderNoTip')" v-model="form.channelOrderNo"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.errCode')" prop="errCode">
-                        <el-input :placeholder="t('trade.inputErrCodeTip')" v-model="form.errCode"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.errMsg')" prop="errMsg">
-                        <el-input :placeholder="t('trade.inputErrMsgTip')" v-model="form.errMsg"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.param1')" prop="param1">
-                        <el-input :placeholder="t('trade.inputParam1Tip')" v-model="form.param1"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.param2')" prop="param2">
-                        <el-input :placeholder="t('trade.inputParam2Tip')" v-model="form.param2"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.notifyUrl')" prop="notifyUrl">
-                        <el-input :placeholder="t('trade.inputNotifyUrlTip')" v-model="form.notifyUrl"/>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.notifyCount')" prop="notifyCount">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('trade.inputNotifyCountTip')"
-                                         v-model="form.notifyCount"></el-input-number>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.lastNotifyTime')" prop="lastNotifyTime">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('trade.inputLastNotifyTimeTip')"
-                                         v-model="form.lastNotifyTime"></el-input-number>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
-                    <el-form-item :label="t('trade.expireTime')" prop="expireTime">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('trade.inputExpireTimeTip')"
-                                         v-model="form.expireTime"></el-input-number>
-                    </el-form-item>
-                </el-col>
-
-                <el-col :span="12" class="mb20">
                     <el-form-item :label="t('trade.paySuccTime')" prop="paySuccTime">
-                        <el-input-number :max="1000" :min="1" :placeholder="t('trade.inputPaySuccTimeTip')"
-                                         v-model="form.paySuccTime"></el-input-number>
+                            <el-input :placeholder="t('trade.inputPaySuccTimeTip')" v-model="form.paySuccTime"/>
                     </el-form-item>
                 </el-col>
+
+
+
+<!--                <el-col :span="12" class="mb20">-->
+<!--                    <el-form-item :label="t('trade.paySuccTime')" prop="paySuccTime">-->
+<!--                    <el-date-picker-->
+<!--                            :label="t('trade.paySuccTime')"-->
+<!--                            v-model="form.paySuccTime"-->
+<!--                            type="datetime"-->
+<!--                            :placeholder="t('trade.inputPaySuccTimeTip')"-->
+<!--                            align="right"-->
+<!--                            :picker-options="pickerOptions">-->
+<!--                    </el-date-picker>-->
+<!--                    </el-form-item>-->
+<!--                </el-col>-->
 
             </el-row>
         </el-form>
@@ -200,6 +159,23 @@
             getpayTradeOrderData(id)
         }
     };
+
+    const dictType = ref([
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '支付中（未使用）',
+            value: '1'
+        }, {
+            label: '支付成功',
+            value: '2'
+        },
+        {
+            label: '业务处理完成',
+            value: '3'
+        },
+    ])
 
     // 提交
     const onSubmit = () => {

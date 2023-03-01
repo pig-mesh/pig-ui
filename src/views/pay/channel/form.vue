@@ -34,7 +34,6 @@
                 <el-col :span="24" class="mb20">
                     <el-form-item :label="t('channel.returnUrl')" prop="returnUrl">
                         <el-input :placeholder="t('channel.inputReturnUrlTip')" v-model="form.returnUrl">
-                            <template v-slot:prepend>Https://</template>
                         </el-input>
                     </el-form-item>
                 </el-col>
@@ -43,7 +42,6 @@
                 <el-col :span="24" class="mb20">
                     <el-form-item :label="t('channel.notifyUrl')" prop="notifyUrl">
                         <el-input :placeholder="t('channel.inputNotifyUrlTip')" v-model="form.notifyUrl">
-                            <template v-slot:prepend>Https://</template>
                         </el-input>
                     </el-form-item>
                 </el-col>

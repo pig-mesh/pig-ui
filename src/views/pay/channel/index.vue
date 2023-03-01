@@ -44,20 +44,25 @@
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      style="width: 100%" v-loading="state.loading" max-height="300"  border>
+                      border max-height="300" style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('channel.index')" type="index" width="80" fixed/>
-                <el-table-column :label="t('channel.appId')" prop="appId" show-overflow-tooltip  width="160"/>
-                <el-table-column :label="t('channel.channelName')" prop="channelName" show-overflow-tooltip width="100"/>
+                <el-table-column :label="t('channel.index')" fixed type="index" width="80"/>
+                <el-table-column :label="t('channel.appId')" prop="appId" show-overflow-tooltip width="160"/>
+                <el-table-column :label="t('channel.channelName')" prop="channelName" show-overflow-tooltip
+                                 width="100"/>
                 <el-table-column :label="t('channel.mchId')" prop="mchId" show-overflow-tooltip width="120"/>
-                <el-table-column :label="t('channel.state')" prop="state" show-overflow-tooltip width="80"/>
+                <el-table-column :label="t('channel.state')" prop="state" show-overflow-tooltip width="100">
+                    <template #default="scope">
+                        <dict-tag :options="status_type" :value="scope.row.state"></dict-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column :label="t('channel.returnUrl')" prop="returnUrl" show-overflow-tooltip width="200"/>
                 <el-table-column :label="t('channel.notifyUrl')" prop="notifyUrl" show-overflow-tooltip width="200"/>
                 <el-table-column :label="t('channel.remark')" prop="remark" show-overflow-tooltip width="120"/>
                 <el-table-column :label="t('channel.param')" prop="param" show-overflow-tooltip width="160"/>
                 <el-table-column :label="t('channel.createTime')" prop="createTime" show-overflow-tooltip width="180"/>
 
-                <el-table-column :label="$t('common.action')" width="150"   fixed="right" fixed-hight="100">
+                <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary"
                                    v-auth="'pay_channel_edit'">{{ $t('common.editBtn') }}

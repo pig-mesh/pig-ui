@@ -3,17 +3,17 @@
         <el-card class="layout-padding-auto">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-                    <el-form-item :label="$t('order.refundOrderId')" prop="refundOrderId">
-                        <el-input :placeholder="t('order.inputRefundOrderIdTip')"
+                    <el-form-item :label="$t('refund.refundOrderId')" prop="refundOrderId">
+                        <el-input :placeholder="t('refund.inputRefundOrderIdTip')"
                                   style="max-width: 180px"
                                   v-model="state.queryForm.refundOrderId"/>
                     </el-form-item>
-                    <el-form-item :label="$t('order.payOrderId')" prop="payOrderId">
-                        <el-input :placeholder="t('order.inputPayOrderIdTip')" style="max-width: 180px"
+                    <el-form-item :label="$t('refund.payOrderId')" prop="payOrderId">
+                        <el-input :placeholder="t('refund.inputPayOrderIdTip')" style="max-width: 180px"
                                   v-model="state.queryForm.payOrderId"/>
                     </el-form-item>
-                    <el-form-item :label="$t('order.mchId')" prop="mchId">
-                        <el-input :placeholder="t('order.inputMchIdTip')" style="max-width: 180px"
+                    <el-form-item :label="$t('refund.mchId')" prop="mchId">
+                        <el-input :placeholder="t('refund.inputMchIdTip')" style="max-width: 180px"
                                   v-model="state.queryForm.mchId"/>
                     </el-form-item>
                     <el-form-item class="ml2">
@@ -36,7 +36,8 @@
                                v-auth="'pay_order_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
+                               icon="Delete"
                                type="primary" v-auth="'pay_order_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
@@ -45,36 +46,36 @@
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      style="width: 100%" v-loading="state.loading">
+                      border style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('order.index')" type="index" width="80"/>
-                <el-table-column :label="t('order.refundOrderId')" prop="refundOrderId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelPayOrderNo')" prop="channelPayOrderNo" show-overflow-tooltip/>
-                <el-table-column :label="t('order.mchId')" prop="mchId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.mchRefundNo')" prop="mchRefundNo" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelId')" prop="channelId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.payAmount')" prop="payAmount" show-overflow-tooltip/>
-                <el-table-column :label="t('order.refundAmount')" prop="refundAmount" show-overflow-tooltip/>
-                <el-table-column :label="t('order.currency')" prop="currency" show-overflow-tooltip/>
-                <el-table-column :label="t('order.status')" prop="status" show-overflow-tooltip/>
-                <el-table-column :label="t('order.result')" prop="result" show-overflow-tooltip/>
-                <el-table-column :label="t('order.clientIp')" prop="clientIp" show-overflow-tooltip/>
-                <el-table-column :label="t('order.device')" prop="device" show-overflow-tooltip/>
-                <el-table-column :label="t('order.remark')" prop="remark" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelUser')" prop="channelUser" show-overflow-tooltip/>
-                <el-table-column :label="t('order.username')" prop="username" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelMchId')" prop="channelMchId" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelOrderNo')" prop="channelOrderNo" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelErrCode')" prop="channelErrCode" show-overflow-tooltip/>
-                <el-table-column :label="t('order.channelErrMsg')" prop="channelErrMsg" show-overflow-tooltip/>
-                <el-table-column :label="t('order.extra')" prop="extra" show-overflow-tooltip/>
-                <el-table-column :label="t('order.notifyUrl')" prop="notifyUrl" show-overflow-tooltip/>
-                <el-table-column :label="t('order.param1')" prop="param1" show-overflow-tooltip/>
-                <el-table-column :label="t('order.param2')" prop="param2" show-overflow-tooltip/>
-                <el-table-column :label="t('order.expireTime')" prop="expireTime" show-overflow-tooltip/>
-                <el-table-column :label="t('order.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip/>
-                <el-table-column :label="$t('common.action')" width="150">
+                <el-table-column :label="t('refund.index')" fixed type="index" width="80"/>
+                <el-table-column :label="t('refund.refundOrderId')" prop="refundOrderId" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.payOrderId')" prop="payOrderId" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelPayOrderNo')" prop="channelPayOrderNo" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.mchId')" prop="mchId" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.mchRefundNo')" prop="mchRefundNo" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelId')" prop="channelId" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.payAmount')" prop="payAmount" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.refundAmount')" prop="refundAmount" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.currency')" prop="currency" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.status')" prop="status" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.result')" prop="result" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.clientIp')" prop="clientIp" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.device')" prop="device" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.remark')" prop="remark" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelUser')" prop="channelUser" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.username')" prop="username" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelMchId')" prop="channelMchId" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelOrderNo')" prop="channelOrderNo" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelErrCode')" prop="channelErrCode" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.channelErrMsg')" prop="channelErrMsg" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.extra')" prop="extra" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.notifyUrl')" prop="notifyUrl" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.param1')" prop="param1" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.param2')" prop="param2" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.expireTime')" prop="expireTime" show-overflow-tooltip/>
+                <el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip/>
+                <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.refundOrderId)" text type="primary"
                                    v-auth="'pay_order_edit'">{{ $t('common.editBtn') }}
@@ -121,6 +122,27 @@
         pageList: fetchList
     })
 
+    const dictType = ref([
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '退款中',
+            value: '1'
+        }, {
+            label: '退款成功',
+            value: '2'
+        },
+        {
+            label: '退款失败',
+            value: '3'
+        },
+        {
+            label: '业务处理完成',
+            value: '4'
+        },
+    ])
+
     //  table hook
     const {
         getDataList,
@@ -141,7 +163,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/pay/order/export', state.queryForm, 'order.xlsx')
+        downBlobFile('/admin/refund/export', state.queryForm, 'refund.xlsx')
     }
 
     // 多选事件

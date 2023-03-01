@@ -1,5 +1,5 @@
 export default {
-   order: {
+   refund: {
         index: '序号',
         importpayRefundOrderTip: '导入退款订单表',
         refundOrderId: '退款订单号',

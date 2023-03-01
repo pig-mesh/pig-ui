@@ -7,10 +7,20 @@
                         <el-input :placeholder="t('trade.inputOrderIdTip')" style="max-width: 180px"
                                   v-model="state.queryForm.orderId"/>
                     </el-form-item>
-                    <el-form-item :label="$t('trade.subject')" prop="subject">
-                        <el-input :placeholder="t('trade.inputSubjectTip')" style="max-width: 180px"
-                                  v-model="state.queryForm.subject"/>
+
+
+                    <el-form-item :label="t('trade.status')" prop="status">
+                        <el-select :placeholder="t('trade.inputStatusTip')" v-model="state.queryForm.status">
+                            <el-option
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value"
+                                    v-for="item in dictType">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
+
+
                     <el-form-item class="ml2">
                         <el-button @click="getDataList" formDialogRef icon="search" type="primary">
                             {{ $t('common.queryBtn') }}
@@ -41,37 +51,35 @@
                 </div>
             </el-row>
             <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
-                      style="width: 100%" v-loading="state.loading">
+                      border style="width: 100%" v-loading="state.loading">
                 <el-table-column align="center" type="selection" width="60"/>
-                <el-table-column :label="t('trade.index')" type="index" width="80"/>
-                <el-table-column :label="t('trade.orderId')" prop="orderId" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.channelId')" prop="channelId" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.amount')" prop="amount" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.currency')" prop="currency" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.status')" prop="status" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.clientIp')" prop="clientIp" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.device')" prop="device" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.subject')" prop="subject" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.body')" prop="body" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.extra')" prop="extra" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.channelMchId')" prop="channelMchId" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.channelOrderNo')" prop="channelOrderNo" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.errCode')" prop="errCode" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.errMsg')" prop="errMsg" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.param1')" prop="param1" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.param2')" prop="param2" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.notifyUrl')" prop="notifyUrl" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.notifyCount')" prop="notifyCount" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.lastNotifyTime')" prop="lastNotifyTime" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.expireTime')" prop="expireTime" show-overflow-tooltip/>
-                <el-table-column :label="t('trade.paySuccTime')" prop="paySuccTime" show-overflow-tooltip/>
-                <el-table-column :label="$t('common.action')" width="150">
+                <el-table-column :label="t('trade.index')" fixed type="index" width="80"/>
+                <el-table-column :label="t('trade.orderId')" prop="orderId" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.channelId')" prop="channelId" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.channelMchId')" prop="channelMchId" show-overflow-tooltip
+                                 width="120"/>
+                <el-table-column :label="t('trade.channelOrderNo')" prop="channelOrderNo" show-overflow-tooltip
+                                 width="120"/>
+                <el-table-column :label="t('trade.body')" prop="body" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.amount')" prop="amount" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.currency')" prop="currency" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.status')" prop="status" show-overflow-tooltip width="120">
+                    <template #default="scope">
+                        <dict-tag :options="dictType" :value="scope.row.status"></dict-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="t('trade.clientIp')" prop="clientIp" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.paySuccTime')" prop="paySuccTime" show-overflow-tooltip width="120"/>
+                <el-table-column :label="t('trade.createTime')" prop="device" show-overflow-tooltip width="160"/>
+
+
+                <el-table-column :label="$t('common.action')" fixed="right" width="150">
                     <template #default="scope">
                         <el-button @click="formDialogRef.openDialog(scope.row.orderId)" text type="primary"
                                    v-auth="'pay_trade_edit'">{{ $t('common.editBtn') }}
                         </el-button>
                         <el-button @click="handleDelete([scope.row.orderId])" text type="primary"
-                                   v-auth="'sys_trade_del'">{{
+                                   v-auth="'pay_trade_del'">{{
                             $t('common.delBtn')
                             }}
                         </el-button>
@@ -111,6 +119,23 @@
         queryForm: {},
         pageList: fetchList
     })
+
+    const dictType = ref([
+        {
+            label: '订单生成',
+            value: '0'
+        }, {
+            label: '支付中（未使用）',
+            value: '1'
+        }, {
+            label: '支付成功',
+            value: '2'
+        },
+        {
+            label: '业务处理完成',
+            value: '3'
+        },
+    ])
 
     //  table hook
     const {
