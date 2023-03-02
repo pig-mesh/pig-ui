@@ -63,7 +63,7 @@ export function editInfo(obj: Object) {
     })
 }
 
-export function password(obj: Object){
+export function password(obj: Object) {
     return request({
         url: '/admin/user/password',
         method: 'put',

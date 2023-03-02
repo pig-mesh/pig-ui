@@ -1,8 +1,8 @@
 <template>
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
-               :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px" v-loading="loading">
+      :close-on-click-modal="false" draggable>
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="90px" v-loading="loading">
         <el-row :gutter="20">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
@@ -27,23 +27,22 @@
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.role')" prop="role">
               <el-select v-model="dataForm.role" placeholder="请选择角色" clearable class="w100" multiple>
-                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId"/>
+                <el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.post')" prop="post">
               <el-select v-model="dataForm.post" placeholder="请选择岗位" clearable class="w100" multiple>
-                <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId"/>
+                <el-option v-for="item in postData" :key="item.postId" :label="item.postName" :value="item.postId" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.dept')" prop="dept">
               <el-tree-select v-model="dataForm.deptId" :data="deptData"
-                              :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable
-                              check-strictly
-                              placeholder="请选择所属部门">
+                :props="{ value: 'id', label: 'name', children: 'children' }" class="w100" clearable check-strictly
+                placeholder="请选择所属部门">
               </el-tree-select>
             </el-form-item>
           </el-col>
@@ -70,8 +69,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false" >{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
+          <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -79,21 +78,21 @@
 </template>
 
 <script setup lang="ts" name="systemUserDialog">
-import {getObj, addObj, putObj, validateUsername, validatePhone} from '/@/api/admin/user'
-import {list as roleList} from '/@/api/admin/role'
-import {list as postList} from '/@/api/admin/post'
-import {depttree} from '/@/api/admin/dept'
-import {useDict} from "/@/hooks/dict";
-import {useI18n} from "vue-i18n";
-import {useMessage} from '/@/hooks/message';
-import {rule} from '/@/utils/validate';
+import { getObj, addObj, putObj, validateUsername, validatePhone } from '/@/api/admin/user'
+import { list as roleList } from '/@/api/admin/role'
+import { list as postList } from '/@/api/admin/post'
+import { depttree } from '/@/api/admin/dept'
+import { useDict } from "/@/hooks/dict";
+import { useI18n } from "vue-i18n";
+import { useMessage } from '/@/hooks/message';
+import { rule } from '/@/utils/validate';
 
-const {t} = useI18n()
+const { t } = useI18n()
 
 // 定义刷新表格emit
 const emit = defineEmits(['refresh']);
 // @ts-ignore
-const {lock_flag} = useDict('lock_flag')
+const { lock_flag } = useDict('lock_flag')
 
 // 定义变量内容
 const dataFormRef = ref();
@@ -123,43 +122,37 @@ const dataForm = reactive({
 });
 
 const dataRules = ref(
-    {
-      username: [{required: true, message: "用户名不能为空", trigger: "blur"}, {
-        min: 5,
-        max: 20,
-        message: "用户名称长度必须介于 5 和 20 之间",
-        trigger: "blur"
-      }, {
-        validator: (rule: any, value: any, callback: any) => {
-          validateUsername(rule, value, callback, dataForm.userId !== '')
-        }, trigger: 'blur'
-      }],
-      password: [{required: true, message: "密码不能为空", trigger: "blur"}, {
-        min: 6,
-        max: 20,
-        message: "用户密码长度必须介于 6 和 20 之间",
-        trigger: "blur"
-      }],
-      name: [{required: true, message: "姓名不能为空", trigger: "blur"}],
-      deptId: [{required: true, message: "部门不能为空", trigger: "blur"}],
-      role: [{required: true, message: "角色不能为空", trigger: "blur"}],
-      post: [{required: true, message: "岗位不能为空", trigger: "blur"}],
-      phone: [{required: true, message: "手机号不能为空", trigger: "blur"}, {
-        validator: rule.validatePhone,
-        trigger: 'blur'
-      }, {
-        validator: {
-          validator: (rule: any, value: any, callback: any) => {
-            validatePhone(rule, value, callback, dataForm.userId !== '')
-          }, trigger: 'blur'
-        }, trigger: 'blur'
-      }],
-      email: [{type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}]
-    }
+  {
+    // 用户名校验，不能为空 、长度 5-20、不能和已有数据重复
+    username: [{ required: true, message: "用户名不能为空", trigger: "blur" }
+      , { min: 5, max: 20, message: "用户名称长度必须介于 5 和 20 之间", trigger: "blur" }
+      , {
+      validator: (rule: any, value: any, callback: any) => {
+        validateUsername(rule, value, callback, dataForm.userId !== '')
+      }, trigger: 'blur'
+    }],
+    password: [{ required: true, message: "密码不能为空", trigger: "blur" }, { min: 6, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }],
+    // 姓名校验，不能为空、只能是中文
+    name: [{ required: true, message: "姓名不能为空", trigger: "blur" }
+      , { validator: rule.chinese, trigger: 'blur' }
+    ],
+    deptId: [{ required: true, message: "部门不能为空", trigger: "blur" }],
+    role: [{ required: true, message: "角色不能为空", trigger: "blur" }],
+    post: [{ required: true, message: "岗位不能为空", trigger: "blur" }],
+    // 手机号校验，不能为空、新增的时不能重复校验
+    phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }
+      , { validator: rule.validatePhone, trigger: 'blur' }
+      , {
+      validator: (rule: any, value: any, callback: any) => {
+        validatePhone(rule, value, callback, dataForm.userId !== '')
+      }, trigger: 'blur'
+    }],
+    email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"] }]
+  }
 )
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
   visible.value = true
   dataForm.userId = ''
 
@@ -171,7 +164,8 @@ const openDialog = (id: string) => {
   // 修改获取用户信息
   if (id) {
     dataForm.userId = id
-    getUserData(id)
+    await getUserData(id)
+    dataForm.password = '******'
   }
 
   // 加载使用的数据
@@ -220,14 +214,13 @@ const onSubmit = () => {
       })
     }
   })
-
 };
 
 // 初始化部门数据
 const getUserData = (id: string) => {
   // 获取部门数据
   loading.value = true
-  getObj(id).then(res => {
+  return getObj(id).then(res => {
     Object.assign(dataForm, res.data)
     if (res.data.roleList) {
       dataForm.role = []

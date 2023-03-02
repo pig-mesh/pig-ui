@@ -13,7 +13,7 @@ onMounted(async () => {
 
   // 优先获取 code 参数，获取不到 则换成 ticket
   let code = other.getQueryString(url, 'code')
-  if (rule.validatenull(code)) {
+  if (rule.validateNull(code)) {
     code = other.getQueryString(url, 'ticket')
   }
 

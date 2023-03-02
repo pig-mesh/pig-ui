@@ -21,7 +21,7 @@
         </el-col>
         <el-col :span="12" class="mb20">
           <el-form-item :label="$t('sysmenu.name')" prop="name">
-            <el-input v-model="state.ruleForm.name" clearable placeholder="格式：router.xxx"></el-input>
+            <el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
@@ -105,7 +105,7 @@ const state = reactive({
     sortOrder: 0,
     menuType: '0',
     keepAlive: '0',
-    visible: '0',
+    visible: '1',
     embedded: '0',
   },
   parentData: [] as any[], // 上级菜单数据
@@ -131,7 +131,7 @@ const getMenuData = () => {
       sortOrder: 0,
       updateBy: "",
       updateTime: "",
-      visible: "",
+      visible: "1",
       id: '-1', name: '根菜单', children: []
     };
     menu.children = res.data;

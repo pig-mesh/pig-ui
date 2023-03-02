@@ -1,7 +1,7 @@
 <template>
-  <el-dialog :title="form.id ? '编辑' : '新增'" v-model="visible"
-    :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="form" :rules="dataRules"  label-width="90px">
+  <el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false"
+    draggable>
+    <el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px">
       <el-row :gutter="20">
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('tenant.name')" prop="name">
@@ -25,6 +25,18 @@
             </el-select>
           </el-form-item>
         </el-col>
+        <el-col :span="12" class="mb20">
+          <el-form-item :label="t('tenant.startTime')" prop="startTime">
+            <el-date-picker v-model="form.startTime" type="date" :placeholder="t('tenant.inputstartTimeTip')"
+              :value-format="dateTimeStr" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12" class="mb20">
+          <el-form-item :label="t('tenant.endTime')" prop="endTime">
+            <el-date-picker v-model="form.endTime" type="date" :placeholder="t('tenant.inputendTimeTip')"
+              :value-format="dateTimeStr" />
+          </el-form-item>
+        </el-col>
 
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('tenant.status')" prop="status">
@@ -34,23 +46,12 @@
             </el-radio-group>
           </el-form-item>
         </el-col>
-
-        <el-col :span="12" class="mb20">
-          <el-form-item :label="t('tenant.startTime')" prop="startTime">
-            <el-date-picker v-model="form.startTime" type="date" :placeholder="t('tenant.inputstartTimeTip')" :value-format="dateTimeStr" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item :label="t('tenant.endTime')" prop="endTime">
-            <el-date-picker v-model="form.endTime" type="date" :placeholder="t('tenant.inputendTimeTip')" :value-format="dateTimeStr"/>
-          </el-form-item>
-        </el-col>
       </el-row>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="visible = false" >取消</el-button>
-        <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
+        <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+        <el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
       </span>
     </template>
   </el-dialog>
