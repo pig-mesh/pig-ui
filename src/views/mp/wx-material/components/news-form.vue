@@ -154,7 +154,6 @@ const isActiveAddNews = ref(0)
 const articlesMediaId = ref()
 
 const openDialog = (data: any,item?: any,mediaId?: any,type: any = 'add') => {
-  console.log(data,item,mediaId,type,'data,item,mediaId,type')
   // 设置组件内不用账号
   accountId.value = data.accountId
   uploadData.appId = data.accountId
@@ -187,8 +186,7 @@ const openMaterial = () => {
   })
 }
 
-const handleImageChange = (response, file, fileList) => {
-  console.log(response, file, fileList,'response, file, fileList')
+const handleImageChange = (response) => {
   articlesAdd.value[isActiveAddNews.value].thumbMediaId = response.data.mediaId
   articlesAdd.value[isActiveAddNews.value].thumbUrl = response.data.url
 }

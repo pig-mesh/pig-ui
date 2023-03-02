@@ -153,7 +153,6 @@ const handleClick = (tab: TabsPaneContext) => {
 	}
 }
 
-const emit = defineEmits(['refreshDataList'])
 const visible = ref(false)
 
 const sortable = ref() as any

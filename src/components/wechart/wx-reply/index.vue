@@ -1,9 +1,9 @@
 <template>
-  <el-tabs v-model="props.objData.repType" type="border-card" @tab-click="handleClick" style="width: 100%;">
+  <el-tabs v-model="objData.repType" type="border-card" @tab-click="handleClick" style="width: 100%;">
     <el-tab-pane name="text" label="text">
       <template #label><i class="el-icon-document"></i> 文本</template>
       <el-input
-          v-model="props.objData.repContent"
+          v-model="objData.repContent"
           type="textarea"
           :rows="5"
           placeholder="请输入内容">
@@ -23,7 +23,7 @@
         <div v-if="!objData.repUrl" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="12" class="col-select">
-              <el-button type="success" @click="openMaterial({type: 'image',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+              <el-button type="success" @click="openMaterial({type: 'image',accountId: props.objData.appId})">素材库选择<i class="fansel-icon--right"></i>
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
@@ -49,7 +49,7 @@
         <div v-if="!objData.repName" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="12" class="col-select">
-              <el-button type="success" @click="openMaterial({type: 'voice',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+              <el-button type="success" @click="openMaterial({type: 'voice',accountId: props.objData.appId})">素材库选择<i class="fansel-icon--right"></i>
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
@@ -71,7 +71,7 @@
         </div>
         <div style="margin: 20px 0;"></div>
         <div style="text-align: center">
-          <el-button type="success" @click="openMaterial({type: 'video',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+          <el-button type="success" @click="openMaterial({type: 'video',accountId: props.objData.appId})">素材库选择<i class="fansel-icon--right"></i>
           </el-button>
         </div>
       </el-row>
@@ -90,7 +90,7 @@
         <div v-if="!objData.content" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="24" class="col-select2">
-              <el-button type="success" @click="openMaterial({type: 'news',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+              <el-button type="success" @click="openMaterial({type: 'news',accountId: props.objData.appId})">素材库选择<i class="fansel-icon--right"></i>
               </el-button>
             </el-col>
           </el-row>
@@ -112,6 +112,7 @@ const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechar
 const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
 
 const WxNews = defineAsyncComponent(() => import("/@/components/wechart/wx-news/index.vue"))
+
 
 const props = defineProps({
   objData: {
@@ -154,13 +155,12 @@ const openMaterial = (data: any) => {
 const dialogNewsRef = ref()
 
 const selectMaterial = (item, appId) => {
-
-  const tempObjItem = {
+  let tempObjItem = {
     repType: '',
     repMediaId: '',
     media_id: '',
     content: ''
-  }
+  } as any
   tempObjItem.repType = props.objData.repType
   tempObjItem.repMediaId = item.mediaId
   tempObjItem.media_id = item.mediaId
@@ -192,7 +192,7 @@ const selectMaterial = (item, appId) => {
   }
 }
 
-const handelImage = (response, file, fileList) => {
+const handelImage = (response) => {
     if (response.code === 0) {
       const item = response.data
       selectMaterial(item,props.objData.appId)

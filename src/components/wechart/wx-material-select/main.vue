@@ -7,9 +7,9 @@
         <img class="material-img" :src="item.url" />
         <p class="item-name">{{ item.name }}</p>
         <el-row class="ope-row">
-          <el-button size="mini" type="success" @click="selectMaterial(item)"
+          <el-button type="success" @click="selectMaterial(item)"
           >选择
-            <el-icon class="el-icon--right"><el-icon-circle-check /></el-icon>
+            <el-icon class="el-icon--right"></el-icon>
           </el-button>
         </el-row>
       </div>
@@ -23,10 +23,7 @@
     <el-table v-loading="state.loading" :data="state.dataList">
       <el-table-column label="编号" align="center" prop="mediaId" />
       <el-table-column label="文件名" align="center" prop="name" />
-      <el-table-column label="语音" align="center">
-        <template v-slot="scope">
-          <wx-voice-player :url="scope.row.url" />
-        </template>
+      <el-table-column label="语音" align="center" prop="url">
       </el-table-column>
       <el-table-column
           label="上传时间"
@@ -46,8 +43,6 @@
       >
         <template v-slot="scope">
           <el-button
-              size="mini"
-              type="text"
               icon="el-icon-circle-plus"
               @click="selectMaterial(scope.row)"
           >选择</el-button
@@ -86,8 +81,6 @@
       >
         <template v-slot="scope">
           <el-button
-              size="mini"
-              type="text"
               icon="el-icon-circle-plus"
               @click="selectMaterial(scope.row)"
           >选择</el-button
@@ -105,10 +98,8 @@
         <div v-if="item.content && item.content.newsItem" class="waterfall-item" :key="item.id">
           <wx-news :obj-data="item.content.newsItem"></wx-news>
           <el-row class="ope-row">
-            <el-button size="mini" type="success" @click="selectMaterial(item)">
-              选择<el-icon class="el-icon--right"
-            ><el-icon-circle-check
-            /></el-icon>
+            <el-button type="success" @click="selectMaterial(item)">
+              选择<el-icon class="el-icon--right"/>
             </el-button>
           </el-row>
         </div>

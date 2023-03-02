@@ -104,7 +104,7 @@
                         <el-row>
                           <el-col :span="24" style="text-align: center">
                             <el-button type="success" @click="openMaterial">
-                              素材库选择<i class="el-icon-circle-check el-icon--right"></i>
+                              素材库选择<i class="fansel-icon--right"></i>
                             </el-button>
                           </el-col>
                         </el-row>
