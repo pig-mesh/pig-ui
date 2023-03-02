@@ -16,6 +16,7 @@ export default {
         addSuccessText: '添加成功',
         delSuccessText: '删除成功',
         delConfirmText: '此操作将永久删除',
+        optConfirmText: '是否确认本操作',
         confirmButtonText: '确认',
         cancelButtonText: '取消',
         download: '下载'

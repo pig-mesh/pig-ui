@@ -1,0 +1,37 @@
+<template>
+  <div class="layout-padding">
+    <el-scrollbar class="main">
+      <iframe :src="src" class="iframe" />
+    </el-scrollbar>
+  </div>
+</template>
+
+<script lang="ts" name="modelView" setup>
+const route = useRoute();
+
+const src = ref('')
+
+watch([route], () => {
+  init()
+})
+
+onMounted(() => {
+  init()
+})
+
+const init = () => {
+  src.value = "/admin/modeler.html?modelId=" + route.query.id
+}
+
+</script>
+
+<style lang="scss" scoped>
+
+.iframe {
+  width: 100%;
+  height: 80vh;
+  border: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+</style>

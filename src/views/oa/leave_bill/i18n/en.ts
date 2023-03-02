@@ -1,0 +1,26 @@
+export default {
+   leave: {
+        index: 'index',
+        importoaLeaveBillTip: 'import OaLeaveBill',
+        leaveId: 'leaveId',
+        username: 'username',
+        days: 'days',
+        content: 'content',
+        state: 'state',
+        leaveTime: 'leaveTime',
+        createTime: 'createTime',
+        updateTime: 'updateTime',
+        delFlag: 'delFlag',
+        tenantId: 'tenantId',
+        inputLeaveIdTip: 'input leaveId',
+        inputUsernameTip: 'input username',
+        inputDaysTip: 'input days',
+        inputContentTip: 'input content',
+        inputStateTip: 'input state',
+        inputLeaveTimeTip: 'input leaveTime',
+        inputCreateTimeTip: 'input createTime',
+        inputUpdateTimeTip: 'input updateTime',
+        inputDelFlagTip: 'input delFlag',
+        inputTenantIdTip: 'input tenantId',
+    }
+}
