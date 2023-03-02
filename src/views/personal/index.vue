@@ -186,8 +186,6 @@ const passwordRuleForm = reactive({
 })
 
 
-
-
 // 头像上传成功
 const handleAvatarSuccess = (url: any) => {
 	formData.avatar = url;

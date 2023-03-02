@@ -37,7 +37,9 @@ export const Local = {
 export const Session = {
 	// 设置临时缓存
 	set(key: string, val: any) {
-		if (key === 'token' || key === 'refresh_token') return Cookies.set(key, val);
+		if (key === 'token' || key === 'refresh_token') {
+			Cookies.set(key, val)
+		}
 		window.sessionStorage.setItem(key, JSON.stringify(val));
 	},
 	// 获取临时缓存
