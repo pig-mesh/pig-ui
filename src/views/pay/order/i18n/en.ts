@@ -1,0 +1,28 @@
+export default {
+   order: {
+        index: 'index',
+        importpayGoodsOrderTip: 'import PayGoodsOrder',
+        goodsOrderId: 'goodsOrderId',
+        goodsId: 'goodsId',
+        goodsName: 'goodsName',
+        amount: 'amount',
+        userId: 'userId',
+        status: 'status',
+        payOrderId: 'payOrderId',
+        delFlag: 'delFlag',
+        createTime: 'createTime',
+        updateTime: 'updateTime',
+        tenantId: 'tenantId',
+        inputGoodsOrderIdTip: 'input goodsOrderId',
+        inputGoodsIdTip: 'input goodsId',
+        inputGoodsNameTip: 'input goodsName',
+        inputAmountTip: 'input amount',
+        inputUserIdTip: 'input userId',
+        inputStatusTip: 'input status',
+        inputPayOrderIdTip: 'input payOrderId',
+        inputDelFlagTip: 'input delFlag',
+        inputCreateTimeTip: 'input createTime',
+        inputUpdateTimeTip: 'input updateTime',
+        inputTenantIdTip: 'input tenantId',
+    }
+}

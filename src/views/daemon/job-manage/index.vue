@@ -33,13 +33,13 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button class="ml10" formDialogRef icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
+          <el-button class="ml10" icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button class="ml10" formDialogRef icon="Download" type="primary" @click="exportExcel">
+          <el-button class="ml10" icon="Download" type="primary" @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button :disabled="multiple" class="ml10" formDialogRef icon="Delete" type="primary"
+          <el-button :disabled="multiple" class="ml10" icon="Delete" type="primary"
                      @click="handleDelete(undefined)">
             {{ $t('common.delBtn') }}
           </el-button>
