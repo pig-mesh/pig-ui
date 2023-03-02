@@ -103,6 +103,8 @@ import {useMessage} from "/@/hooks/message";
 const WxReply = defineAsyncComponent(() => import("../wx-reply/index.vue"))
 const WxNews = defineAsyncComponent(() => import("../wx-news/index.vue"))
 
+const NameAvatar = defineAsyncComponent(() => import("/@/components/NameAvatar/index.vue"))
+
 const visible = ref(false)
 
 // 各种loading
@@ -191,6 +193,31 @@ defineExpose({
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+@import './comment.scss';
+@import './card.scss';
 
+
+.msg-main {
+  margin-top: -30px;
+  padding: 10px;
+}
+.msg-div {
+  height: 50vh;
+  overflow: auto;
+  background-color: #eaeaea;
+  margin-left: 10px;
+  margin-right: 10px;
+}
+.msg-send {
+  padding: 10px;
+}
+.avatar-div {
+  text-align: center;
+  width: 80px;
+}
+.send-but {
+  float: right;
+  margin-top: 8px!important;
+}
 </style>

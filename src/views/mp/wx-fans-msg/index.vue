@@ -57,16 +57,8 @@
             <div v-if="scope.row.repType === 'image'">
               <a target="_blank" :href="scope.row.repUrl"><img :src="scope.row.repUrl" style="width: 100px"></a>
             </div>
-            <div v-if="scope.row.repType === 'voice'">
-              <WxVoicePlayer :obj-data="scope.row"></WxVoicePlayer>
-            </div>
-            <div v-if="scope.row.repType === 'video'">
-              <WxVideoPlayer :obj-data="scope.row" style="margin-top: 40px"></WxVideoPlayer>
-            </div>
-            <div v-if="scope.row.repType === 'shortvideo'">
-              <WxVideoPlayer :obj-data="scope.row" style="margin-top: 40px"></WxVideoPlayer>
-            </div>
-            <div v-if="scope.row.repType === 'link'"><el-tag size="mini">链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a></div>
+            <div v-if="['video','voice','link','shortvideo'].includes(scope.row.repType)">
+              <el-tag>链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a></div>
           </template>
         </el-table-column>
         <el-table-column :label="t('wxFansMsg.readFlag')" prop="readFlag" show-overflow-tooltip>
@@ -78,7 +70,6 @@
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button
-                type="text"
                 @click="wxMsgDo(scope.row,scope.index)">消息</el-button>
           </template>
         </el-table-column>
@@ -115,7 +106,8 @@ const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {},
-  pageList: fetchList
+  pageList: fetchList,
+  descs: ['create_time']
 })
 
 //  table hook

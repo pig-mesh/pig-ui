@@ -169,3 +169,47 @@ defineExpose({
 });
 
 </script>
+
+<style lang="scss" scoped>
+/*瀑布流样式*/
+.waterfall {
+  width: 100%;
+  column-gap:10px;
+  column-count: 5;
+  margin: 0 auto;
+}
+.waterfall-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  break-inside: avoid;
+  border: 1px solid #eaeaea;
+}
+.material-img {
+  width: 100%;
+}
+p {
+  line-height: 30px;
+}
+@media (min-width: 992px) and (max-width: 1300px) {
+  .waterfall {
+    column-count: 3;
+  }
+  p {
+    color:red;
+  }
+}
+@media (min-width: 768px) and (max-width: 991px) {
+  .waterfall {
+    column-count: 2;
+  }
+  p {
+    color: orange;
+  }
+}
+@media (max-width: 767px) {
+  .waterfall {
+    column-count: 1;
+  }
+}
+/*瀑布流样式*/
+</style>

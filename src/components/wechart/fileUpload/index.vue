@@ -8,6 +8,7 @@
       :on-success="handleUploadSuccess"
       :file-list="fileList"
       :before-upload="beforeThumbImageUpload"
+      :auto-upload="autoUpload"
       :data="uploadData">
       <template #tip>
         <div class="el-upload__tip" v-if="props.type.length > 0">支持{{props.type.join("/")}}格式，大小不超过2M</div>
@@ -33,13 +34,9 @@ const headers = computed(() => {
     'TENANT-ID': tenantId
   };
 })
-
 // 定义刷新表格emit
 const emit = defineEmits(['success']);
-
-
 const fileList = ref([])
-
 
 const props = defineProps({
   uploadData: {
@@ -67,7 +64,6 @@ const props = defineProps({
 
 const beforeThumbImageUpload = (file: any) => {
   let isType = true
-  console.log(file.type,'file.type')
   if(props.type?.length > 0){
     isType = props.type?.includes(file.type)
   }
