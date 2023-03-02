@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="props.objData.repType" type="border-card" @tab-click="handleClick">
+  <el-tabs v-model="props.objData.repType" type="border-card" @tab-click="handleClick" style="width: 100%;">
     <el-tab-pane name="text" label="text">
       <template #label><i class="el-icon-document"></i> 文本</template>
       <el-input
@@ -20,14 +20,14 @@
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
           </el-row>
         </div>
-        <div v-if="!objData.repUrl">
+        <div v-if="!objData.repUrl" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="12" class="col-select">
               <el-button type="success" @click="openMaterial({type: 'image',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
-              <wx-file-upload :data="uploadData"></wx-file-upload>
+              <wx-file-upload :data="uploadData" @success="handelImage"></wx-file-upload>
             </el-col>
           </el-row>
         </div>
@@ -46,7 +46,7 @@
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
           </el-row>
         </div>
-        <div v-if="!objData.repName">
+        <div v-if="!objData.repName" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="12" class="col-select">
               <el-button type="success" @click="openMaterial({type: 'voice',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
@@ -62,11 +62,9 @@
 
     <el-tab-pane name="video" label="video">
       <template #label><i class="el-icon-share"></i> 视频</template>
-      <el-row>
+      <el-row style="text-align: center">
         <el-input v-model="objData.repName" placeholder="请输入标题"></el-input>
-        <div style="margin: 20px 0;"></div>
         <el-input v-model="objData.repDesc" placeholder="请输入描述"></el-input>
-        <div style="margin: 20px 0;"></div>
         <div style="text-align: center;">
           <a v-if="objData.repUrl" target="_blank" :href="objData.repUrl"><i
               class="icon-bofang">&nbsp;播放视频</i></a>
@@ -89,7 +87,7 @@
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
           </el-row>
         </div>
-        <div v-if="!objData.content">
+        <div v-if="!objData.content" style="width: 100%;">
           <el-row style="text-align: center">
             <el-col :span="24" class="col-select2">
               <el-button type="success" @click="openMaterial({type: 'news',accountId: props.objData.appId})">素材库选择<i class="el-icon-circle-check el-icon--right"></i>
@@ -107,6 +105,7 @@
 
 <script setup lang="ts" name="wx-reply">
 import {getMaterialVideo} from "/@/api/mp/wx-material";
+import {useMessage} from "/@/hooks/message";
 
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
 
@@ -117,13 +116,15 @@ const WxNews = defineAsyncComponent(() => import("/@/components/wechart/wx-news/
 const props = defineProps({
   objData: {
     type: Object,
-    default: () => ({
-      repType: '',
-      repContent: '',
-      repName: '',
-      repDesc: '',
-      repUrl: ''
-    })
+    default: () => {
+      return {
+        repType: '',
+        repContent: '',
+        repName: '',
+        repDesc: '',
+        repUrl: ''
+      }
+    }
   }
 })
 
@@ -136,6 +137,7 @@ const uploadData = reactive({
 
 const handleClick = (tab) => {
   uploadData.mediaType = tab.paneName
+  uploadData.appId = props.objData.appId
 
 }
 
@@ -190,20 +192,18 @@ const selectMaterial = (item, appId) => {
   }
 }
 
+const handelImage = (response, file, fileList) => {
+    if (response.code === 0) {
+      const item = response.data
+      selectMaterial(item,props.objData.appId)
+    } else {
+      useMessage().error("上传错误" + response.msg)
+    }
+}
+
 </script>
 
 <style scoped lang="scss">
-.public-account-management {
-  .el-input {
-    width: 70%;
-    margin-right: 2%;
-  }
-}
-
-.pagination {
-  text-align: right;
-  margin-right: 25px;
-}
 
 .select-item {
   width: 280px;

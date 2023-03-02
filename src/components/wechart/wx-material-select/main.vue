@@ -167,7 +167,6 @@ const selectMaterial = (item : any) => {
 const openDialog = (data: any) => {
   state.queryForm.type = data.type
   state.queryForm.appId = data.accountId
-  console.log(data,'data')
   objData.type = data.type
   visible.value = true
   getDataList()

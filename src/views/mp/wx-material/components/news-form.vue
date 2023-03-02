@@ -130,8 +130,6 @@ const dialogNewsClose = () => {
  })
 }
 
-const actionUrl = ref("/admin/wx-material/materialFileUpload")
-
 // 公众号id
 const accountId = ref()
 
@@ -155,7 +153,8 @@ const isActiveAddNews = ref(0)
 // 编辑媒体的id
 const articlesMediaId = ref()
 
-const openDialog = (data: any,item: any,mediaId: any,type: any) => {
+const openDialog = (data: any,item?: any,mediaId?: any,type: any = 'add') => {
+  console.log(data,item,mediaId,type,'data,item,mediaId,type')
   // 设置组件内不用账号
   accountId.value = data.accountId
   uploadData.appId = data.accountId
@@ -163,9 +162,11 @@ const openDialog = (data: any,item: any,mediaId: any,type: any) => {
   dialogNewsVisible.value = true
   operateMaterial.value = 'add'
 
-  articlesAdd.value = item
+  if(item){
+    articlesAdd.value = item
+  }
   if(mediaId){
-    articlesMediaId.value = mediaId
+    articlesMediaId.value = mediaId || ''
   }
   if(type){
     operateMaterial.value = type

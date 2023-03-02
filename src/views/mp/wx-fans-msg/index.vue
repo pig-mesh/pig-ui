@@ -77,18 +77,15 @@
         <el-table-column :label="t('wxFansMsg.createTime')" prop="createTime" show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button v-auth="'mp_wxFansMsg_edit'" text type="primary"
-                       @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
-            </el-button>
-            <el-button v-auth="'sys_wxFansMsg_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
-                $t('common.delBtn')
-              }}
-            </el-button>
+            <el-button
+                type="text"
+                @click="wxMsgDo(scope.row,scope.index)">消息</el-button>
           </template>
         </el-table-column>
       </el-table>
       <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
     </el-card>
+    <wx-msg ref="WxmsgRef"></wx-msg>
   </div>
 </template>
 
@@ -100,12 +97,15 @@ import {useDict} from '/@/hooks/dict';
 import {useI18n} from "vue-i18n";
 import {fetchAccountList} from "/@/api/mp/wx-account";
 
+const WxMsg = defineAsyncComponent(() => import("/@/components/wechart/wx-msg/index.vue"))
+
 const {t} = useI18n()
 // 定义查询字典
 
 const {response_type,repType} = useDict('response_type','repType')
-// 定义变量内容
-const formDialogRef = ref()
+
+const WxmsgRef = ref()
+
 // 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
@@ -182,4 +182,11 @@ const handleDelete = (ids: string[]) => {
         })
       })
 };
+
+const wxMsgDo = (row) => {
+  WxmsgRef.value.openDialog({
+    wxUserId: row.wxUserId,
+    appId: row.appId
+  })
+}
 </script>
