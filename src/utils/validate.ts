@@ -106,6 +106,11 @@ export const rule = {
    */
   validatePhone(rule: any, value: any, callback: any) {
     var isPhone = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/
+
+    if(value.indexOf('****') >= 0){
+      return callback()
+    }
+
     if (!isPhone.test(value)) {
       callback(new Error('请输入合法手机号'))
     } else {

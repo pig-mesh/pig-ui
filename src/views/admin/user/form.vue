@@ -2,7 +2,7 @@
   <div class="system-user-dialog-container">
     <el-dialog :title="dataForm.userId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
                :close-on-click-modal="false" draggable>
-      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules"  label-width="90px" v-loading="loading">
+      <el-form ref="dataFormRef" :model="dataForm" :rules="dataRules" label-width="90px" v-loading="loading">
         <el-row :gutter="20">
           <el-col :span="12" class="mb20">
             <el-form-item :label="$t('sysuser.username')" prop="username">
@@ -70,8 +70,8 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false" >{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button type="primary" @click="onSubmit" >{{ $t('common.confirmButtonText') }}</el-button>
+          <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
         </span>
       </template>
     </el-dialog>
@@ -159,7 +159,7 @@ const dataRules = ref(
 )
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
   visible.value = true
   dataForm.userId = ''
 
@@ -171,7 +171,8 @@ const openDialog = (id: string) => {
   // 修改获取用户信息
   if (id) {
     dataForm.userId = id
-    getUserData(id)
+    await getUserData(id)
+    dataForm.password = '******'
   }
 
   // 加载使用的数据
@@ -220,14 +221,13 @@ const onSubmit = () => {
       })
     }
   })
-
 };
 
 // 初始化部门数据
 const getUserData = (id: string) => {
   // 获取部门数据
   loading.value = true
-  getObj(id).then(res => {
+  return getObj(id).then(res => {
     Object.assign(dataForm, res.data)
     if (res.data.roleList) {
       dataForm.role = []
