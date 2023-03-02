@@ -47,8 +47,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 //  table hook
 const {
   getDataList,
-  currentChangeHandle,
-  sizeChangeHandle,
   sortChangeHandle,
 } = useTable(state)
 
