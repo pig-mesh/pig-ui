@@ -70,13 +70,11 @@
     <form-dialog ref="formDialogRef" @refresh="getDataList(false)"/>
 
     <el-dialog v-model="dialogFormVisible" title="接入">
-      <el-row :gutter="20">
-        <el-col :span="6">服务器地址(URL)</el-col>
-        <el-col id="target" :span="12">{{ wxurl }}</el-col>
-        <el-col :span="6">
-          <el-button id="btn" type="primary" style="float: right;" @click="copyLink">点击复制</el-button>
-        </el-col>
-      </el-row>
+        <el-input v-model="wxurl" readonly>
+          <template #append>
+            <el-button @click="copyText(wxurl)">复制链接</el-button>
+          </template>
+        </el-input>
     </el-dialog>
   </div>
 </template>
@@ -86,7 +84,9 @@ import {BasicTableProps, useTable} from "/@/hooks/table";
 import {clearQuota, delObjs, fetchList, generateQr} from "/@/api/mp/wx-account";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useI18n} from "vue-i18n";
+import commonFunction from '/@/utils/commonFunction';
 
+const { copyText } = commonFunction();
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const {t} = useI18n()

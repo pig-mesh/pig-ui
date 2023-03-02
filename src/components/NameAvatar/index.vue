@@ -38,8 +38,9 @@ export default {
   },
   watch: {},
   computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
     text() {
-      if (this.num != undefined) {
+      if (this.num !== undefined) {
         return `+${this.num}`;
       } else {
         if (this.name) {
