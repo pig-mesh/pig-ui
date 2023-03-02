@@ -1,20 +1,28 @@
 <template>
 	<div class="layout-footer pb15">
 		<div class="layout-footer-warp">
-			<div>vue-next-admin，Made by lyt with ❤️</div>
-			<div class="mt5">深圳市 xxx 公司版权所有</div>
+			<div class="mt5">{{ footerAuthor }}</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts" name="layoutFooter">
-// 此处需有内容（注释也得），否则缓存将失败
+import { useThemeConfig } from '/@/stores/themeConfig';
+
+// 定义变量内容
+const storesThemeConfig = useThemeConfig()
+const { themeConfig } = storeToRefs(storesThemeConfig)
+// 获取布局配置信息
+const footerAuthor = computed(() => {
+	return themeConfig.value.footerAuthor;
+});
 </script>
 
 <style scoped lang="scss">
 .layout-footer {
 	width: 100%;
 	display: flex;
+
 	&-warp {
 		margin: auto;
 		color: var(--el-text-color-secondary);
