@@ -15,7 +15,6 @@
       </template>
     <el-button type="primary">本地上传</el-button>
   </el-upload>
-
 </template>
 
 <script setup lang="ts" name="wx-file-upload">

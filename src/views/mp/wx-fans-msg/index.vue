@@ -63,14 +63,13 @@
         </el-table-column>
         <el-table-column :label="t('wxFansMsg.readFlag')" prop="readFlag" show-overflow-tooltip>
           <template #default="scope">
-            <dict-tag :options="response_type" :value="scope.row.readFlag"></dict-tag>
+            <dict-tag :options="readFlag" :value="scope.row.readFlag"></dict-tag>
           </template>
         </el-table-column>
         <el-table-column :label="t('wxFansMsg.createTime')" prop="createTime" show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button
-                @click="wxMsgDo(scope.row,scope.index)">消息</el-button>
+            <el-button link type="primary" @click="wxMsgDo(scope.row,scope.index)">消息</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -93,7 +92,17 @@ const WxMsg = defineAsyncComponent(() => import("/@/components/wechart/wx-msg/in
 const {t} = useI18n()
 // 定义查询字典
 
-const {response_type,repType} = useDict('response_type','repType')
+const {repType} = useDict('repType')
+
+const readFlag = ref([
+  {
+    value: '1',
+    label: '是'
+  }, {
+    value: '0',
+    label: '否'
+  }
+])
 
 const WxmsgRef = ref()
 

@@ -60,14 +60,12 @@
                     <el-button
                         type="text"
                         icon="el-icon-download"
-                        size="small"
                         plain
                         @click="handleDown(scope.row)">下载
                     </el-button>
                     <el-button
                         type="text"
                         icon="el-icon-delete"
-                        size="small"
                         plain
                         @click="delMaterial(scope.row)">删除
                     </el-button>
@@ -79,13 +77,14 @@
             <el-tab-pane name="video" label="video">
               <template #label><i class="el-icon-video-play"></i> 视频</template>
               <div class="add_but">
-                <el-button size="mini" type="primary" @click="handleAddVideo">新建</el-button>
+                <el-button type="primary" @click="handleAddVideo">新建</el-button>
               </div>
-              <el-dialog v-loading="addMaterialLoading" title="新建视频" v-model="dialogVideoVisible">
+              <el-dialog title="新建视频" v-model="dialogVideoVisible">
                 <wx-file-upload @success="getDataList" :uploadData="uploadData" auto-upload="false" ref="uploadFileVideo" :type="['video/mp4']"></wx-file-upload>
                 <el-form
                     ref="uploadForm"
                     :model="uploadData"
+                    v-loading="addMaterialLoading"
                     :rules="uploadRules">
                   <el-form-item label="标题" prop="title">
                     <el-input v-model="uploadData.title" placeholder="标题将展示在相关播放页面，建议填写清晰、准确、生动的标题"></el-input>
@@ -124,23 +123,14 @@
                     fixed="right"
                     label="操作">
                   <template v-slot="scope">
-                    <el-button
-                        type="text"
-                        icon="el-icon-view"
-                        size="small"
-                        plain
-                        @click="handleInfo(scope.row)">查看
+                    <el-button type="text" icon="el-icon-view" @click="handleInfo(scope.row)">查看
                     </el-button>
-                    <el-button
-                        type="text"
-                        icon="el-icon-delete"
-                        size="small"
-                        plain
-                        @click="delMaterial(scope.row)">删除
+                    <el-button type="text" icon="el-icon-delete" @click="delMaterial(scope.row)">删除
                     </el-button>
                   </template>
                 </el-table-column>
               </el-table>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
             </el-tab-pane>
             <el-tab-pane name="news" label="news">
               <template #label><i class="el-icon-news"></i> 图文</template>

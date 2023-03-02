@@ -95,7 +95,7 @@ export function useTable(options?: BasicTableProps) {
                 state.dataList = state.isPage ? res.data[state.props.item] : res.data
                 state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0
             }).catch((err: any) => {
-                ElMessage.error(err.data.msg)
+                ElMessage.error(err.msg || err.data.msg)
             }).finally(() => {
                 state.loading = false;
             })
