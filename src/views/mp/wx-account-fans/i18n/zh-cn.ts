@@ -12,11 +12,13 @@ export default {
         country: '国家',
         province: '省份',
         city: '城市',
-        tagIds: '分组ID',
+        tagIds: '分组',
         headimgUrl: ' headimgUrl',
         remark: '备注',
         wxAccountId: '微信公众号ID',
         wxAccountName: '微信公众号',
-        wxAccountAppid: '公众号appid'
+        wxAccountAppid: '公众号appid',
+        inputremarkTip: '请输入备注',
+        inputTagTip: '请选择分组'
     }
 }

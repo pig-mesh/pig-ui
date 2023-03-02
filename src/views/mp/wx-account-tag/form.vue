@@ -23,7 +23,7 @@
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 import {useMessage} from "/@/hooks/message";
-import {addObj, putObj} from '/@/api/mp/wx-account-tag'
+import {addObj} from '/@/api/mp/wx-account-tag'
 import {useI18n} from "vue-i18n"
 
 const {t} = useI18n();

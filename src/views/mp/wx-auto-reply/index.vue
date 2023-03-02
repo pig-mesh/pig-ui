@@ -308,7 +308,7 @@ const handleEdit = (row: any) => {
 }
 
 const handleDel = (row) => {
-  useMessageBox().confirm("").then(() => {
+  useMessageBox().confirm("是否确认删除此数据?").then(() => {
     delObj(row.id).then(() =>{
       useMessage().success("删除成功")
       getDataList()

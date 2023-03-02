@@ -27,10 +27,6 @@
                      @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button v-auth="'mp_fans_del'" :disabled="multiple" class="ml10" formDialogRef icon="Delete"
-                     type="primary" @click="handleDelete(selectObjs)">
-            {{ $t('common.delBtn') }}
-          </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
                          @queryTable="getDataList"></right-toolbar>
         </div>
@@ -41,20 +37,29 @@
         <el-table-column :label="t('fans.index')" type="index" width="80"/>
         <el-table-column :label="t('fans.id')" prop="id" show-overflow-tooltip/>
         <el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip/>
+        <el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
+          <template #default="scope">
+            <dict-tag :options="subscribe" :value="scope.row.subscribeStatus"></dict-tag>
+          </template>
+        </el-table-column>
         <el-table-column :label="t('fans.subscribeTime')" prop="subscribeTime" show-overflow-tooltip/>
         <el-table-column :label="t('fans.nickname')" prop="nickname" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.gender')" prop="gender" show-overflow-tooltip/>
         <el-table-column :label="t('fans.language')" prop="language" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip/>
+        <el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip width="200">
+          <template #default="scope">
+            <span v-for="(tag, index) in scope.row.tagList" :key="index">
+              <el-tag>{{ tag.tag }} </el-tag>&nbsp;&nbsp;
+            </span>
+          </template>
+        </el-table-column>
         <el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip/>
         <el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button v-auth="'mp_fans_edit'" text type="primary"
-                       @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
+            <el-button text type="primary"
+                       @click="formDialogRef.openDialog(scope.row,state.queryForm.wxAccountAppid)">{{ $t('common.editBtn') }}
             </el-button>
-            <el-button v-auth="'sys_fans_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
+            <el-button text type="primary" @click="handleDelete([scope.row.id])">{{
                 $t('common.delBtn')
               }}
             </el-button>
@@ -62,6 +67,7 @@
         </el-table-column>
       </el-table>
       <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
+      <form-dialog ref="formDialogRef" @refresh="getDataList"></form-dialog>
     </el-card>
   </div>
 </template>
@@ -72,6 +78,11 @@ import {delObjs, fetchList, sync} from "/@/api/mp/wx-account-fans";
 import { fetchAccountList } from '/@/api/mp/wx-account'
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useI18n} from "vue-i18n";
+import {useDict} from "/@/hooks/dict";
+
+const FormDialog = defineAsyncComponent(() => import("./form.vue"))
+
+const { subscribe } = useDict('subscribe')
 
 // 引入组件
 const {t} = useI18n()
