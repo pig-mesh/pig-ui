@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 import { Session } from "/@/utils/storage";
-import { rule } from "/@/utils/validate"
+import { validateNull } from "/@/utils/validate"
 import { useUserInfo } from "/@/stores/userInfo";
 
 /**
@@ -99,7 +99,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
         params: { token: Session.get("token") }
     })
         .then((response) => {
-            if (rule.validatenull(response) || response.code === 1) {
+            if (validateNull(response) || response.code === 1) {
                 clearInterval(refreshTime)
                 return
             }

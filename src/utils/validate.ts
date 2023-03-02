@@ -1,49 +1,8 @@
 /**
- * @desc  [自定义校验规则]
- * @example
- *  import { validateRule } from "@/utils/validateRules";
- *  rules: [
- *     { validator: validateRule.emailValue, trigger: 'blur'}
- *  ]
- */
-
-export const getRegExp = function (validatorName) {
-  const commonRegExp = {
-    number: '/^[-]?\\d+(\\.\\d+)?$/',
-    letter: '/^[A-Za-z]+$/',
-    letterAndNumber: '/^[A-Za-z0-9]+$/',
-    mobilePhone: '/^[1][3-9][0-9]{9}$/',
-    letterStartNumberIncluded: '/^[A-Za-z]+[A-Za-z\\d]*$/',
-    noChinese: '/^[^\u4e00-\u9fa5]+$/',
-    chinese: '/^[\u4e00-\u9fa5]+$/',
-    email: '/^([-_A-Za-z0-9.]+)@([_A-Za-z0-9]+\\.)+[A-Za-z0-9]{2,3}$/',
-    url: '/^([hH][tT]{2}[pP]:\\/\\/|[hH][tT]{2}[pP][sS]:\\/\\/)(([A-Za-z0-9-~]+)\\.)+([A-Za-z0-9-~\\/])+$/',
-  }
-
-  return commonRegExp[validatorName]
-}
-
-const validateFn = function (validatorName, rule, value, callback, defaultErrorMsg) {
-  //空值不校验
-  if (validatenull(value) || (value.length <= 0)) {
-    callback()
-    return
-  }
-
-  const reg = eval(getRegExp(validatorName))
-
-  if (!reg.test(value)) {
-    let errTxt = rule.errorMsg || defaultErrorMsg
-    callback(new Error(errTxt))
-  } else {
-    callback()
-  }
-}
-
-/**
  * 判断是否为空
+ * @param val 数据
  */
-const validatenull = (val: any) =>  {
+export const validateNull = (val: any) => {
   if (typeof val === 'boolean') {
     return false
   }
@@ -60,6 +19,7 @@ const validatenull = (val: any) =>  {
   }
   return false
 }
+
 
 
 export const rule = {
@@ -107,7 +67,7 @@ export const rule = {
   validatePhone(rule: any, value: any, callback: any) {
     var isPhone = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/
 
-    if(value.indexOf('****') >= 0){
+    if (value.indexOf('****') >= 0) {
       return callback()
     }
 
@@ -117,9 +77,6 @@ export const rule = {
       callback()
     }
   },
-
-
-
 
   /* 数字 */
   number(rule, value, callback) {
@@ -140,7 +97,6 @@ export const rule = {
   mobilePhone(rule, value, callback) {
     validateFn('mobilePhone', rule, value, callback, '[' + rule.label + ']手机号码格式有误')
   },
-
 
   /* 字母开头，仅可包含数字 */
   letterStartNumberIncluded(rule, value, callback) {
@@ -169,11 +125,10 @@ export const rule = {
 
   regExp(rule, value, callback) {
     //空值不校验
-    if (validatenull(value) || (value.length <= 0)) {
+    if (validateNull(value) || (value.length <= 0)) {
       callback()
       return
     }
-
     const pattern = eval(rule.regExp)
     if (!pattern.test(value)) {
       let errTxt = rule.errorMsg || '[' + rule.label + ']invalid value'
@@ -184,5 +139,47 @@ export const rule = {
   },
 
 }
+
+/**
+ * @desc  [自定义校验规则]
+ * @example
+ *  import { validateRule } from "@/utils/validateRules";
+ *  rules: [
+ *     { validator: validateRule.emailValue, trigger: 'blur'}
+ *  ]
+ */
+
+export const getRegExp = function (validatorName) {
+  const commonRegExp = {
+    number: '/^[-]?\\d+(\\.\\d+)?$/',
+    letter: '/^[A-Za-z]+$/',
+    letterAndNumber: '/^[A-Za-z0-9]+$/',
+    mobilePhone: '/^[1][3-9][0-9]{9}$/',
+    letterStartNumberIncluded: '/^[A-Za-z]+[A-Za-z\\d]*$/',
+    noChinese: '/^[^\u4e00-\u9fa5]+$/',
+    chinese: '/^[\u4e00-\u9fa5]+$/',
+    email: '/^([-_A-Za-z0-9.]+)@([_A-Za-z0-9]+\\.)+[A-Za-z0-9]{2,3}$/',
+    url: '/^([hH][tT]{2}[pP]:\\/\\/|[hH][tT]{2}[pP][sS]:\\/\\/)(([A-Za-z0-9-~]+)\\.)+([A-Za-z0-9-~\\/])+$/',
+  }
+  return commonRegExp[validatorName]
+}
+
+const validateFn = function (validatorName, rule, value, callback, defaultErrorMsg) {
+  //空值不校验
+  if (validateNull(value) || (value.length <= 0)) {
+    callback()
+    return
+  }
+
+  const reg = eval(getRegExp(validatorName))
+
+  if (!reg.test(value)) {
+    let errTxt = rule.errorMsg || defaultErrorMsg
+    callback(new Error(errTxt))
+  } else {
+    callback()
+  }
+}
+
 
 
