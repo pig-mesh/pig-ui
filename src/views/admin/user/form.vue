@@ -123,6 +123,7 @@ const dataForm = reactive({
 
 const dataRules = ref(
   {
+    // 用户名校验，不能为空 、长度 5-20、不能和已有数据重复
     username: [{ required: true, message: "用户名不能为空", trigger: "blur" }
       , { min: 5, max: 20, message: "用户名称长度必须介于 5 和 20 之间", trigger: "blur" }
       , {
@@ -130,13 +131,15 @@ const dataRules = ref(
         validateUsername(rule, value, callback, dataForm.userId !== '')
       }, trigger: 'blur'
     }],
-    password: [{ required: true, message: "密码不能为空", trigger: "blur" }, { min: 6, max: 20, message: "用户密码长度必须介于 6 和 20 之间", trigger: "blur" }],
+    password: [{ required: true, message: "密码不能为空", trigger: "blur" }, { min: 6, max: 20, message: "用户密码长度必须介于 5 和 20 之间", trigger: "blur" }],
+    // 姓名校验，不能为空、只能是中文
     name: [{ required: true, message: "姓名不能为空", trigger: "blur" }
       , { validator: rule.chinese, trigger: 'blur' }
     ],
     deptId: [{ required: true, message: "部门不能为空", trigger: "blur" }],
     role: [{ required: true, message: "角色不能为空", trigger: "blur" }],
     post: [{ required: true, message: "岗位不能为空", trigger: "blur" }],
+    // 手机号校验，不能为空、新增的时不能重复校验
     phone: [{ required: true, message: "手机号不能为空", trigger: "blur" }
       , { validator: rule.validatePhone, trigger: 'blur' }
       , {

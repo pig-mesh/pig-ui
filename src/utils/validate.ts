@@ -80,47 +80,47 @@ export const rule = {
 
   /* 数字 */
   number(rule, value, callback) {
-    validateFn('number', rule, value, callback, '[' + rule.label + ']包含非数字字符')
+    validateFn('number', rule, value, callback, '包含非数字字符')
   },
 
   /* 字母 */
   letter(rule, value, callback) {
-    validateFn('letter', rule, value, callback, '[' + rule.label + ']包含非字母字符')
+    validateFn('letter', rule, value, callback, '包含非字母字符')
   },
 
   /* 字母和数字 */
   letterAndNumber(rule, value, callback) {
-    validateFn('letterAndNumber', rule, value, callback, '[' + rule.label + ']只能输入字母或数字')
+    validateFn('letterAndNumber', rule, value, callback, '只能输入字母或数字')
   },
 
   /* 手机号码 */
   mobilePhone(rule, value, callback) {
-    validateFn('mobilePhone', rule, value, callback, '[' + rule.label + ']手机号码格式有误')
+    validateFn('mobilePhone', rule, value, callback, '手机号码格式有误')
   },
 
   /* 字母开头，仅可包含数字 */
   letterStartNumberIncluded(rule, value, callback) {
-    validateFn('letterStartNumberIncluded', rule, value, callback, '[' + rule.label + ']必须以字母开头，可包含数字')
+    validateFn('letterStartNumberIncluded', rule, value, callback, '必须以字母开头，可包含数字')
   },
 
   /* 禁止中文输入 */
   noChinese(rule, value, callback) {
-    validateFn('noChinese', rule, value, callback, '[' + rule.label + ']不可输入中文字符')
+    validateFn('noChinese', rule, value, callback, '不可输入中文字符')
   },
 
   /* 必须中文输入 */
   chinese(rule, value, callback) {
-    validateFn('chinese', rule, value, callback, '[' + rule.label + ']只能输入中文字符')
+    validateFn('chinese', rule, value, callback, '只能输入中文字符')
   },
 
   /* 电子邮箱 */
   email(rule, value, callback) {
-    validateFn('email', rule, value, callback, '[' + rule.label + ']邮箱格式有误')
+    validateFn('email', rule, value, callback, '邮箱格式有误')
   },
 
   /* URL网址 */
   url(rule, value, callback) {
-    validateFn('url', rule, value, callback, '[' + rule.label + ']URL格式有误')
+    validateFn('url', rule, value, callback, 'URL格式有误')
   },
 
   regExp(rule, value, callback) {
@@ -131,7 +131,7 @@ export const rule = {
     }
     const pattern = eval(rule.regExp)
     if (!pattern.test(value)) {
-      let errTxt = rule.errorMsg || '[' + rule.label + ']invalid value'
+      let errTxt = rule.errorMsg || 'invalid value'
       callback(new Error(errTxt))
     } else {
       callback()
