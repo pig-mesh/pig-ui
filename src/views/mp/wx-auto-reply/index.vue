@@ -29,13 +29,13 @@
               <el-table-column label="操作" prop="action" show-overflow-tooltip>
                 <template #default="scope">
                   <el-button
+                      link
                       icon="el-icon-edit"
-                      plain
                       @click="handleEdit(scope.row)">编辑
                   </el-button>
                   <el-button
+                      link
                       icon="el-icon-delete"
-                      plain
                       @click="handleDel(scope.row)">删除
                   </el-button>
                 </template>
@@ -68,12 +68,12 @@
                 <template #default="scope">
                   <el-button
                       icon="el-icon-edit"
-                      plain
+                      link
                       @click="handleEdit(scope.row)">编辑
                   </el-button>
                   <el-button
                       icon="el-icon-delete"
-                      plain
+                      link
                       @click="handleDel(scope.row)">删除
                   </el-button>
                 </template>
@@ -108,12 +108,12 @@
                 <template #default="scope">
                   <el-button
                       icon="el-icon-edit"
-                      plain
+                      link
                       @click="handleEdit(scope.row)">编辑
                   </el-button>
                   <el-button
                       icon="el-icon-delete"
-                      plain
+                      link
                       @click="handleDel(scope.row)">删除
                   </el-button>
                 </template>

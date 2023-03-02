@@ -55,30 +55,11 @@
         </el-table-column>
         <el-table-column :label="$t('common.action')" width="200">
           <template #default="scope">
-
-            <el-button v-auth="'mp_wxaccount_edit'" text type="primary"
-                       @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
-            </el-button>
-            <el-button v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
-                $t('common.delBtn')
-              }}
-            </el-button>
-            <el-button
-                type="text"
-                @click="access(scope.row,scope.index)">
-              接入
-            </el-button>
-
-            <el-button
-                type="text"
-                @click="generate(scope.row,scope.index)">二维码
-            </el-button>
-
-            <el-button
-                type="text"
-                @click="quota(scope.row,scope.index)">
-              quota
-            </el-button>
+            <el-button v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
+            <el-button v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{$t('common.delBtn') }}</el-button>
+            <el-button text type="primary" @click="access(scope.row,scope.index)">接入</el-button>
+            <el-button text type="primary" @click="generate(scope.row,scope.index)">二维码</el-button>
+            <el-button text type="primary" @click="quota(scope.row,scope.index)">quota</el-button>
           </template>
         </el-table-column>
       </el-table>
