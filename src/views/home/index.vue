@@ -230,7 +230,7 @@ const initPieChart = () => {
 	state.global.homeChartTwo = markRaw(echarts.init(homePieRef.value, state.charts.theme));
 	var getname = ['房屋及结构物', '专用设备', '通用设备', '文物和陈列品', '图书、档案'];
 	var getvalue = [34.2, 38.87, 17.88, 9.05, 2.05];
-	var data = [];
+	var data = [] as any;
 	for (var i = 0; i < getname.length; i++) {
 		data.push({ name: getname[i], value: getvalue[i] });
 	}

@@ -72,7 +72,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		deptName: ''
 	},
-	isPage: false
+	isPage: false,
+	descs: ['create_time']
 });
 
 

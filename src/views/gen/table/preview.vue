@@ -24,7 +24,6 @@
 <script setup lang="ts" name="preview">
 import { useGeneratorPreviewApi } from '/@/api/gen/table';
 import { handleTree } from '/@/utils/other';
-import {validatePhone} from "/@/api/admin/user";
 
 const visible = ref(false)
 // ======== 显示页面 ========

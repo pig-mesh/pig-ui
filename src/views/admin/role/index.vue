@@ -110,7 +110,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     roleName: ''
   },
-  pageList: pageList // H
+  pageList: pageList, // H
+  descs: ['create_time']
 });
 
 const dictType = ref([{

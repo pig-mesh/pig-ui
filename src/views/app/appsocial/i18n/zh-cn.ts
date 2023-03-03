@@ -6,7 +6,7 @@ export default {
         type: '类型',
         remark: '描述',
         appId: 'appId',
-        appSecret: 'appSecret',
+        appSecret: 'app秘钥',
         redirectUrl: '回调地址',
         ext: '拓展字段',
         createBy: '创建人',

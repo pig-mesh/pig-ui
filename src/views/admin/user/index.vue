@@ -141,7 +141,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     username: '',
     phone: ''
   },
-  pageList: pageList
+  pageList: pageList,
+  descs: ['create_time']
 });
 
 // 部门树使用的数据
@@ -203,4 +204,9 @@ const handleDelete = (ids: string[]) => {
       })
     })
 };
+
+
+onMounted(() => {
+  state.dataList
+})
 </script>

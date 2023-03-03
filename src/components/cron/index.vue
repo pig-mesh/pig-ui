@@ -74,7 +74,6 @@
   <div class="vue3-cron-div">
     <el-button
       class="language"
-      type="text"
       @click="state.language = state.language === 'en' ? 'cn' : 'en'"
       >{{ state.language === 'en' ? 'cn' : 'en' }}</el-button
     >
@@ -556,7 +555,7 @@
         <span>
           cron预览:
         </span>
-        <el-tag type="primary"> 
+        <el-tag type="primary">
           {{ state.cron }}
         </el-tag>
         </div>

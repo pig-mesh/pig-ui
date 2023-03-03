@@ -96,7 +96,6 @@ const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
-    id: '',
     menuId: '',
     name: '',
     permission: '',
@@ -140,10 +139,7 @@ const getMenuData = () => {
   })
 };
 
-
 const showembedded = ref(false)
-
-
 
 watch(() => state.ruleForm.path, (val) => {
   if (val.startsWith('http')) {
@@ -155,18 +151,17 @@ watch(() => state.ruleForm.path, (val) => {
 })
 
 const dataRules = reactive({
-  menType: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  parentId: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  name: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  path: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  permission: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  sortOrder: [{ required: true, message: "姓名不能为空", trigger: "blur" }],
-  keepAlive: [{ required: true, message: "姓名不能为空", trigger: "blur" }]
+  menType: [{ required: true, message: "菜单类型不能为空", trigger: "blur" }],
+  parentId: [{ required: true, message: "上级菜单不能为空", trigger: "blur" }],
+  name: [{ required: true, message: "菜单不能为空", trigger: "blur" }],
+  path: [{ required: true, message: "路径不能为空", trigger: "blur" }],
+  permission: [{ required: true, message: "权限代码不能为空", trigger: "blur" }],
+  sortOrder: [{ required: true, message: "排序不能为空", trigger: "blur" }]
 })
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
   if (row?.id && type === 'edit') {
-    state.ruleForm.id = row.id
+    state.ruleForm.menuId = row.id
     // 模拟数据，实际请走接口
     loading.value = true
     info(row.id).then(res => {
@@ -189,7 +184,7 @@ const openDialog = (type: string, row?: any) => {
 // 保存数据
 const onSubmit = () => {
   // 保存 调用刷新
-  if (state.ruleForm.id) {
+  if (state.ruleForm.menuId) {
     loading.value = true
     update(state.ruleForm).then(() => {
       visible.value = false;

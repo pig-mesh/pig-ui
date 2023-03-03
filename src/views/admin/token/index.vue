@@ -78,7 +78,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     queryForm: {
         username: ''
     },
-    pageList: fetchList
+    pageList: fetchList,
+
 });
 
 //  table hook

@@ -10,6 +10,8 @@
                :limit="limit"
                :on-error="handleUploadError"
                :on-remove="handleRemove"
+               :data="data"
+               :auto-upload="autoUpload"
                :on-success="handleUploadSuccess" class="upload-file-uploader" drag multiple>
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
@@ -33,8 +35,10 @@
                :file-list="fileList"
                :headers="headers"
                :limit="limit"
+               :auto-upload="autoUpload"
                :on-error="handleUploadError"
                :on-remove="handleRemove"
+               :data="data"
                :on-success="handleUploadSuccess" class="upload-file-uploader" multiple>
         <el-button type="primary" link>点击上传</el-button>
     </el-upload>
@@ -76,6 +80,13 @@ const props = defineProps({
     validator:(value: string) => {
       return ['default','simple'].includes(value)
     }
+  },
+  data: {
+    type: Object
+  },
+  autoUpload: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -183,6 +194,15 @@ watch(() => props.modelValue, val => {
     return [];
   }
 }, { deep: true, immediate: true });
+
+
+const submit = () => {
+  fileUpload.value.submit()
+}
+
+defineExpose({
+  submit
+})
 
 
 </script>
