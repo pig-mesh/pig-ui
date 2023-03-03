@@ -100,7 +100,8 @@
             createTime: ''
         },
         selectObjs: [],
-        pageList: pageList
+        pageList: pageList,
+        descs: ['create_time']
     });
 
     //  table hook

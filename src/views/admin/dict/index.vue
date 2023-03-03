@@ -100,7 +100,8 @@ const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {},
-  pageList: fetchList
+  pageList: fetchList,
+  descs: ['create_time']
 })
 const {
   getDataList,

@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" name="systemMenuDialog" setup>
-    import {addObj, info, pageList, update, validatePermission} from "/@/api/app/appmenu";
+    import {addObj, info, pageList, update, validateByName, validatePermission} from "/@/api/app/appmenu";
     import {useMessage} from "/@/hooks/message";
     import {rule} from "/@/utils/validate";
 
@@ -120,7 +120,12 @@
     };
 
     const dataRules = reactive({
-        name: [{required: true, message: "菜单名称不能为空", trigger: "blur"}],
+        name: [{required: true, message: "菜单名称不能为空", trigger: "blur"}
+            , {
+                validator: (rule: any, value: any, callback: any) => {
+                    validateByName(rule, value, callback, state.ruleForm.menuId !== '')
+                }, trigger: 'blur'
+            }],
         path: [{required: true, message: "路由路径不能为空", trigger: "blur"}
             , {validate: rule.noChinese, trigger: "blur"}],
         permission: [{required: true, message: "权限标识不能为空", trigger: "blur"},

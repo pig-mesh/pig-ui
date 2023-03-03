@@ -88,6 +88,7 @@
         },
         pageList: fetchList,
         createdIsNeed: false,
+        descs: ['create_time']
     })
 
     //  table hook

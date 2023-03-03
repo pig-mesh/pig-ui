@@ -1,4 +1,5 @@
 import request from "/@/utils/request";
+import {getDetailsByPhone} from "/@/api/admin/user";
 
 export const pageList = (params?: Object) => {
     return request({
@@ -54,6 +55,14 @@ export function getDetails(obj: Object) {
     })
 }
 
+
+export function getDetailsByName(obj: Object) {
+    return request({
+        url: '/admin/appmenu/detailsByName/' + obj,
+        method: 'get'
+    })
+}
+
 export function validatePermission(rule: any, value: any, callback: any, isEdit: boolean) {
     if (isEdit) {
         return callback()
@@ -69,4 +78,17 @@ export function validatePermission(rule: any, value: any, callback: any, isEdit:
     })
 }
 
+export function validateByName(rule: any, value: any, callback: any, isEdit: boolean) {
+    if (isEdit) {
+        return callback()
+    }
+    getDetailsByName(value).then(response => {
+        const result = response.data
+        if (result !== null) {
+            callback(new Error('菜单名称已经存在'))
+        } else {
+            callback()
+        }
+    })
+}
 

@@ -112,7 +112,8 @@
         queryForm: {
             systemFlag: ''
         },
-        pageList: fetchList
+        pageList: fetchList,
+        descs: ['create_time']
     })
 
     //  table hook
