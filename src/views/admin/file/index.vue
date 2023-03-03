@@ -1,6 +1,6 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('file.fileName')" prop="original">
@@ -49,7 +49,7 @@
         </el-table-column>
       </el-table>
       <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
-    </el-card>
+    </div>
     <!-- 编辑、新增  -->
     <form-dialog ref="formDialogRef" @refresh="getDataList()" />
   </div>
