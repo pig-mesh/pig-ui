@@ -76,6 +76,29 @@ const getAwesomeIconfont = () => {
 	});
 };
 
+/*
+ * 获取本地自带的图标
+ * /src/assets/icons文件夹内的svg文件
+ */
+const getLocalIconfontNames = () => {
+	return new Promise<string[]>((resolve, reject) => {
+		nextTick(() => {
+			let iconfonts: string[] = [];
+
+			const svgEl = document.getElementById('local-icon');
+			if (svgEl?.dataset.iconName) {
+				iconfonts = (svgEl?.dataset.iconName as string).split(',');
+			}
+
+			if (iconfonts.length > 0) {
+				resolve(iconfonts);
+			} else {
+				reject('No Local Icons');
+			}
+		});
+	});
+};
+
 /**
  * 获取字体图标 `document.styleSheets`
  * @method ali 获取阿里字体图标 `<i class="iconfont 图标类名"></i>`
@@ -94,6 +117,9 @@ const initIconfont = {
 	// fontawesome
 	awe: () => {
 		return getAwesomeIconfont();
+	},
+	local: () => {
+		return getLocalIconfontNames();
 	},
 };
 

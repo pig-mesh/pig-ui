@@ -27,7 +27,7 @@
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
-              <wx-file-upload :data="uploadData" @success="handelImage"></wx-file-upload>
+              <wx-file-upload :data="uploadData" @success="handelUpload"></wx-file-upload>
             </el-col>
           </el-row>
         </div>
@@ -40,7 +40,7 @@
         <div v-if="objData.repName" class="select-item">
           <p class="item-name">{{ objData.repName }}</p>
           <div class="item-infos">
-<!--            <WxVoicePlayer :obj-data="Object.assign(tempPlayerObj,{repMediaId: objData.media_id, repName: objData.repName})"></WxVoicePlayer>-->
+            <img :src="WxVoice" style="width: 100px" @click="loadVideo(item)">
           </div>
           <el-row class="ope-row">
             <el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
@@ -53,7 +53,7 @@
               </el-button>
             </el-col>
             <el-col :span="12" class="col-add">
-              <wx-file-upload :data="uploadData"></wx-file-upload>
+              <wx-file-upload :data="uploadData" @success="handelUpload"></wx-file-upload>
             </el-col>
           </el-row>
         </div>
@@ -62,7 +62,7 @@
 
     <el-tab-pane name="video" label="video">
       <template #label><i class="el-icon-share"></i> 视频</template>
-      <el-row style="text-align: center">
+      <el-row style="text-align: center;flex: 1">
         <el-input v-model="objData.repName" placeholder="请输入标题"></el-input>
         <el-input v-model="objData.repDesc" placeholder="请输入描述"></el-input>
         <div style="text-align: center;">
@@ -106,7 +106,8 @@
 <script setup lang="ts" name="wx-reply">
 import {getMaterialVideo} from "/@/api/mp/wx-material";
 import {useMessage} from "/@/hooks/message";
-
+import WxVideo from '/@/assets/icon/wx-video.svg'
+import WxVoice from '/@/assets/icon/wx-voice.svg'
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
 
 const WxFileUpload = defineAsyncComponent(() => import("/@/components/wechart/fileUpload/index.vue"))
@@ -136,9 +137,29 @@ const uploadData = reactive({
     appId: props.objData.appId
 })
 
+const tempObj = ref() as any
+
 const handleClick = (tab) => {
   uploadData.mediaType = tab.paneName
   uploadData.appId = props.objData.appId
+
+  const tempObjItem = tempObj.value[props.objData.repType]
+  if (tempObjItem) {
+    props.objData.repName = tempObjItem.repName ? tempObjItem.repName : null
+    props.objData.repMediaId = tempObjItem.repMediaId ? tempObjItem.repMediaId : null
+    props.objData.media_id = tempObjItem.media_id ? tempObjItem.media_id : null
+    props.objData.repUrl = tempObjItem.repUrl ? tempObjItem.repUrl : null
+    props.objData.content = tempObjItem.content ? tempObjItem.content : null
+    props.objData.repDesc = tempObjItem.repDesc ? tempObjItem.repDesc : null
+  } else {
+    props.objData.repName = ''
+    props.objData.repMediaId = ''
+    props.objData.media_id = ''
+    props.objData.repUrl = ''
+    props.objData.content = ''
+    props.objData.repDesc = ''
+  }
+
 
 }
 
@@ -185,20 +206,34 @@ const selectMaterial = (item, appId) => {
       mediaId: item.mediaId,
       appId: appId
     }).then(response => {
-      const data = response.data.data
-      tempObjItem.repDesc = data.description
+      const data = response.data
+      tempObjItem.repDesc = data.description || ''
       tempObjItem.repUrl = data.downUrl
+      props.objData.repName = data.title
+      props.objData.repDesc = data.description || ''
+      props.objData.repUrl = data.downUrl
     })
   }
+  tempObj.value[props.objData.repType] = tempObjItem
 }
 
-const handelImage = (response) => {
+const handelUpload = (response) => {
     if (response.code === 0) {
       const item = response.data
       selectMaterial(item,props.objData.appId)
     } else {
       useMessage().error("上传错误" + response.msg)
     }
+}
+
+const loadVideo = (item) => {
+  getMaterialVideo({
+    mediaId: item.repMediaId,
+    appId: item.appId
+  }).then(response => {
+    const data = response.data
+    window.open(data.downUrl,'target','');
+  })
 }
 
 </script>

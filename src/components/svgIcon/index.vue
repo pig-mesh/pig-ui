@@ -5,7 +5,11 @@
 	<div v-else-if="isShowIconImg" :style="setIconImgOutStyle">
 		<img :src="getIconName" :style="setIconSvgInsStyle" />
 	</div>
+  <svg v-else-if="isShowLocalSvg" class="svg-icon icon" :style="setIconImgOutStyle">
+    <use :href="`#${getIconName}`" />
+  </svg>
 	<i v-else :class="getIconName" :style="setIconSvgStyle" />
+
 </template>
 
 <script setup lang="ts" name="svgIcon">
@@ -43,6 +47,10 @@ const isShowIconSvg = computed(() => {
 const isShowIconImg = computed(() => {
 	return linesString.find((str) => props.name?.startsWith(str));
 });
+
+const isShowLocalSvg = computed(() => {
+  return props?.name?.startsWith('local-');
+})
 // 设置图标样式
 const setIconSvgStyle = computed(() => {
 	return `font-size: ${props.size}px;color: ${props.color};`;
