@@ -1,26 +1,17 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-date-picker
-              v-model="beginTime"
-              class="input_width"
-              placeholder="选择开始时间"
-              @change="check">
+          <el-date-picker v-model="beginTime" class="input_width" placeholder="选择开始时间" @change="check">
           </el-date-picker>
-          <el-date-picker
-              v-model="endTime"
-              class="input_width"
-              placeholder="选择结束时间"
-              @change="check">
+          <el-date-picker v-model="endTime" class="input_width" placeholder="选择结束时间" @change="check">
           </el-date-picker>
         </div>
       </el-row>
-      <el-row >
+      <el-row>
         <el-col :span="4" :xs="24">
-          <query-tree :query="deptData.queryList"
-                      @node-click="handleNodeClick"/>
+          <query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
         </el-col>
         <el-col :span="20">
           <el-row :gutter="15" class="home-card-two mb15">
@@ -51,15 +42,15 @@
           </el-row>
         </el-col>
       </el-row>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts" name="wx-statistics">
 
-import {useMessage} from "/@/hooks/message";
-import {fetchAccountList, fetchStatistics} from "/@/api/mp/wx-account";
-import {markRaw} from "vue";
+import { useMessage } from "/@/hooks/message";
+import { fetchAccountList, fetchStatistics } from "/@/api/mp/wx-account";
+import { markRaw } from "vue";
 import * as echarts from "echarts";
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
@@ -67,7 +58,7 @@ const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/ind
 const beginTime = ref(new Date().getTime() - 3600 * 1000 * 24 * 7)
 const endTime = ref(new Date().getTime() - 3600 * 1000 * 24)
 
-const check = () =>  {
+const check = () => {
   const start = new Date(beginTime.value)
   const end = new Date(endTime.value)
   if (end.getTime() >= new Date().getTime()) {
@@ -202,7 +193,7 @@ const interfaceSummary = () => {
 
 
 const LintData = ref([
-    [],[],[],[],[],[],[],[]
+  [], [], [], [], [], [], [], []
 ])
 
 
@@ -222,7 +213,7 @@ const initdata = () => {
 </script>
 
 <style scoped>
-.home-card-item{
+.home-card-item {
   width: 100%;
   height: 400px;
   border-radius: 4px;
@@ -234,5 +225,4 @@ const initdata = () => {
   border: 1px solid var(--next-border-color-light);
   margin-top: 20px;
 }
-
 </style>

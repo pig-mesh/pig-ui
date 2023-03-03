@@ -180,8 +180,6 @@ const passwordRuleForm = reactive({
 })
 
 
-
-
 // 头像上传成功
 const handleAvatarSuccess = (url: any) => {
 	formData.avatar = url;
@@ -258,7 +256,7 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-@import '../../theme/mixins/index.scss';
+@import '/@/theme/mixins/index.scss';
 
 .personal {
 	.personal-user {

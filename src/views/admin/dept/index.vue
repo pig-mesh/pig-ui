@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-padding">
-		<el-card shadow="hover" class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
 			<div class="mb15">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item prop="deptName">
@@ -44,8 +44,8 @@
 					</template>
 				</el-table-column>
 			</el-table>
-		</el-card>
-		<dept-form ref="deptDialogRef" @refresh="getDataList()" />
+    </div>
+    <dept-form ref="deptDialogRef" @refresh="getDataList()" />
     <upload-excel ref="excelUploadRef" :title="$t('sysdept.importTip')" url="/admin/dept/import"
                   temp-url="/admin/sys-file/local/file/dept.xlsx" @refreshDataList="getDataList" />
 	</div>
@@ -72,7 +72,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		deptName: ''
 	},
-	isPage: false
+	isPage: false,
+	descs: ['create_time']
 });
 
 

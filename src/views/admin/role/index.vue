@@ -1,6 +1,6 @@
 <template>
   <div class="layout-padding">
-    <el-card shadow="hover" class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row shadow="hover" v-show="showSearch" class="mb8">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="$t('sysrole.roleName')" prop="roleName">
@@ -43,7 +43,7 @@
         <el-table-column prop="roleName" :label="$t('sysrole.roleName')" show-overflow-tooltip></el-table-column>
         <el-table-column prop="roleCode" :label="$t('sysrole.roleCode')" show-overflow-tooltip></el-table-column>
         <el-table-column prop="roleDesc" :label="$t('sysrole.roleDesc')" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="data_authority" :label="$t('sysrole.data_authority')"  show-overflow-tooltip>
+        <el-table-column prop="data_authority" :label="$t('sysrole.data_authority')" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="dictType" :value="scope.row.dsType"></dict-tag>
           </template>
@@ -51,8 +51,8 @@
         <el-table-column prop="createTime" :label="$t('sysrole.createTime')" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button text type="primary" v-auth="'sys_role_edit'"
-              @click="roleDialogRef.openDialog(scope.row.roleId)">{{ $t('common.editBtn') }}</el-button>
+            <el-button text type="primary" v-auth="'sys_role_edit'" @click="roleDialogRef.openDialog(scope.row.roleId)">{{
+              $t('common.editBtn') }}</el-button>
 
             <el-button text type="primary" v-auth="'sys_role_del'" @click="permessionRef.openDialog(scope.row)">{{
               $t('sysrole.permissionTip')
@@ -72,7 +72,7 @@
         </el-table-column>
       </el-table>
       <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
-    </el-card>
+    </div>
 
     <!-- 角色编辑、新增  -->
     <role-dialog ref="roleDialogRef" @refresh="getDataList()" />
@@ -110,7 +110,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     roleName: ''
   },
-  pageList: pageList // H
+  pageList: pageList, // H
+  descs: ['create_time']
 });
 
 const dictType = ref([{

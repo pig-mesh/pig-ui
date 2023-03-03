@@ -8,7 +8,7 @@
         </el-card>
       </el-col>
       <el-col :span="20" :xs="24">
-        <el-card shadow="hover" class="layout-padding-auto">
+        <div class="layout-padding-auto layout-padding-view">
           <el-row v-show="showSearch" class="mb8">
             <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
               <el-form-item :label="$t('sysuser.username')" prop="username">
@@ -70,8 +70,7 @@
                 <dict-tag :options="lock_flag" :value="scope.row.lockFlag"></dict-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="createTime" :label="$t('sysuser.createTime')"
-              show-overflow-tooltip></el-table-column>
+            <el-table-column prop="createTime" :label="$t('sysuser.createTime')" show-overflow-tooltip></el-table-column>
             <el-table-column :label="$t('common.action')" width="150">
               <template #default="scope">
                 <el-button text type="primary" @click="userDialogRef.openDialog(scope.row.userId)"
@@ -95,8 +94,7 @@
 
           <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination">
           </pagination>
-
-        </el-card>
+        </div>
       </el-col>
     </el-row>
 
@@ -141,7 +139,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
     username: '',
     phone: ''
   },
-  pageList: pageList
+  pageList: pageList,
+  descs: ['create_time']
 });
 
 // 部门树使用的数据

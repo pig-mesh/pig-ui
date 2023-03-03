@@ -1,20 +1,20 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch" class="mb8">
         <el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
           <el-form-item :label="$t('wxFansMsg.appName')" prop="wxAccountAppid">
             <el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.appName')" clearable class="w100">
-              <el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid"/>
+              <el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
             </el-select>
           </el-form-item>
           <el-form-item :label="$t('wxFansMsg.nickName')" prop="nickName">
             <el-input v-model="state.queryForm.nickName" :placeholder="t('wxFansMsg.inputNickNameTip')"
-                      style="max-width: 180px"/>
+              style="max-width: 180px" />
           </el-form-item>
           <el-form-item :label="$t('wxFansMsg.repType')" prop="repType">
             <el-select v-model="state.queryForm.repType" :placeholder="$t('wxFansMsg.repType')" clearable class="w100">
-              <el-option v-for="item in repType" :key="item.value" :label="item.label" :value="item.value"/>
+              <el-option v-for="item in repType" :key="item.value" :label="item.label" :value="item.value" />
             </el-select>
           </el-form-item>
           <el-form-item class="ml2">
@@ -28,37 +28,43 @@
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button v-auth="'mp_wxFansMsg_export'" class="ml10" formDialogRef icon="Download" type="primary"
-                     @click="exportExcel">
+            @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button v-auth="'mp_wxmsg_del'" :disabled="multiple" class="ml10" formDialogRef icon="Delete"
-                     type="primary" @click="handleDelete(selectObjs)">
+          <el-button v-auth="'mp_wxmsg_del'" :disabled="multiple" class="ml10" formDialogRef icon="Delete" type="primary"
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
-                         @queryTable="getDataList"></right-toolbar>
+            @queryTable="getDataList"></right-toolbar>
         </div>
       </el-row>
       <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
-                @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
-        <el-table-column align="center" type="selection" width="60"/>
-        <el-table-column :label="t('wxFansMsg.index')" type="index" width="80"/>
-        <el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip/>
-        <el-table-column :label="t('wxFansMsg.openId')" prop="openId" show-overflow-tooltip/>
+        @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
+        <el-table-column align="center" type="selection" width="60" />
+        <el-table-column :label="t('wxFansMsg.index')" type="index" width="80" />
+        <el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip />
+        <el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip />
+        <el-table-column :label="t('wxFansMsg.openId')" prop="openId" show-overflow-tooltip />
         <el-table-column :label="t('wxFansMsg.repContent')" prop="repContent" show-overflow-tooltip>
           <template #default="scope">
-            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'subscribe'"><el-tag type="success" size="mini">关注</el-tag></div>
-            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'unsubscribe'"><el-tag type="danger" size="mini">取消关注</el-tag></div>
-            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'CLICK'"><el-tag size="mini">点击菜单</el-tag>：【{{ scope.row.repName }}】</div>
-            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'VIEW'"><el-tag size="mini">点击菜单链接</el-tag>：【{{ scope.row.repUrl }}】</div>
-            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'scancode_waitmsg'"><el-tag size="mini">扫码结果：</el-tag>：【{{ scope.row.repContent }}】</div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'subscribe'"><el-tag type="success"
+                size="mini">关注</el-tag></div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'unsubscribe'"><el-tag type="danger"
+                size="mini">取消关注</el-tag></div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'CLICK'"><el-tag
+                size="mini">点击菜单</el-tag>：【{{ scope.row.repName }}】</div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'VIEW'"><el-tag
+                size="mini">点击菜单链接</el-tag>：【{{ scope.row.repUrl }}】</div>
+            <div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'scancode_waitmsg'"><el-tag
+                size="mini">扫码结果：</el-tag>：【{{ scope.row.repContent }}】</div>
             <div v-if="scope.row.repType === 'text'">{{ scope.row.repContent }}</div>
             <div v-if="scope.row.repType === 'image'">
               <a target="_blank" :href="scope.row.repUrl"><img :src="scope.row.repUrl" style="width: 100px"></a>
             </div>
-            <div v-if="['video','voice','link','shortvideo'].includes(scope.row.repType)">
-              <el-tag>链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a></div>
+            <div v-if="['video', 'voice', 'link', 'shortvideo'].includes(scope.row.repType)">
+              <el-tag>链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a>
+            </div>
           </template>
         </el-table-column>
         <el-table-column :label="t('wxFansMsg.readFlag')" prop="readFlag" show-overflow-tooltip>
@@ -66,33 +72,33 @@
             <dict-tag :options="readFlag" :value="scope.row.readFlag"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="t('wxFansMsg.createTime')" prop="createTime" show-overflow-tooltip/>
+        <el-table-column :label="t('wxFansMsg.createTime')" prop="createTime" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button link type="primary" @click="wxMsgDo(scope.row,scope.index)">消息</el-button>
+            <el-button link type="primary" @click="wxMsgDo(scope.row, scope.index)">消息</el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
-    </el-card>
+      <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
+    </div>
     <wx-msg ref="WxmsgRef"></wx-msg>
   </div>
 </template>
 
 <script lang="ts" name="systemWxMsg" setup>
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObjs, fetchList} from "/@/api/mp/wx-fans-msg";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useDict} from '/@/hooks/dict';
-import {useI18n} from "vue-i18n";
-import {fetchAccountList} from "/@/api/mp/wx-account";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { delObjs, fetchList } from "/@/api/mp/wx-fans-msg";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useDict } from '/@/hooks/dict';
+import { useI18n } from "vue-i18n";
+import { fetchAccountList } from "/@/api/mp/wx-account";
 
 const WxMsg = defineAsyncComponent(() => import("/@/components/wechart/wx-msg/index.vue"))
 
-const {t} = useI18n()
+const { t } = useI18n()
 // 定义查询字典
 
-const {repType} = useDict('repType')
+const { repType } = useDict('repType')
 
 const readFlag = ref([
   {
@@ -142,14 +148,14 @@ const accountList = ref([])
 const getAccountList = () => {
   fetchAccountList().then(res => {
     accountList.value = res.data
-    if(accountList.value.length > 0){
+    if (accountList.value.length > 0) {
       state.queryForm.wxAccountAppid = accountList.value[0].appid
       getDataList()
     }
   })
 }
 
-watch(() => state.queryForm.wxAccountAppid,() => {
+watch(() => state.queryForm.wxAccountAppid, () => {
   getDataList()
 })
 
@@ -174,14 +180,14 @@ const handleSelectionChange = (objs: any) => {
 // 删除操作
 const handleDelete = (ids: string[]) => {
   useMessageBox().confirm(t('common.delConfirmText'))
-      .then(() => {
-        delObjs(ids).then(() => {
-          getDataList(false);
-          useMessage().success(t('common.delSuccessText'));
-        }).catch((err: any) => {
-          useMessage().error(err.msg)
-        })
+    .then(() => {
+      delObjs(ids).then(() => {
+        getDataList(false);
+        useMessage().success(t('common.delSuccessText'));
+      }).catch((err: any) => {
+        useMessage().error(err.msg)
       })
+    })
 };
 
 const wxMsgDo = (row) => {

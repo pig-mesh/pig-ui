@@ -1,6 +1,6 @@
 <template>
     <div class="layout-padding">
-        <el-card class="layout-padding-auto">
+        <div class="layout-padding-auto layout-padding-view">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" ref="queryRef" @keyup.enter="getDataList">
                     <el-form-item :label="$t('template.id')" prop="id">
@@ -22,16 +22,16 @@
             </el-row>
             <el-row>
                 <div class="mb8" style="width: 100%">
-                    <el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add"
-                        type="primary" v-auth="'codegen_template_add'">
+                    <el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary"
+                        v-auth="'codegen_template_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
                     <el-button @click="exportExcel" class="ml10" icon="Download" type="primary"
                         v-auth="'codegen_template_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10"
-                        icon="Delete" type="primary" v-auth="'codegen_template_del'">
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete"
+                        type="primary" v-auth="'codegen_template_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
                     <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
@@ -59,7 +59,7 @@
                 </el-table-column>
             </el-table>
             <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
-        </el-card>
+        </div>
 
         <!-- 编辑、新增  -->
         <form-dialog @refresh="getDataList()" ref="formDialogRef" />

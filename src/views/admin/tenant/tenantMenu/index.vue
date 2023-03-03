@@ -1,14 +1,14 @@
 <template>
   <el-drawer v-model="visible" title="租户套餐" size="80%">
-    <el-card shadow="hover" class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button icon="folder-add" type="primary" class="ml10" @click="tenantMenuDialogRef.openDialog()"
-                     v-auth="'admin_systenantmenu_add'">
+            v-auth="'admin_systenantmenu_add'">
             {{ $t('common.addBtn') }}
           </el-button>
           <right-toolbar :search='false' class="ml10" style="float: right;margin-right: 20px"
-                         @queryTable="getDataList"></right-toolbar>
+            @queryTable="getDataList"></right-toolbar>
         </div>
 
       </el-row>
@@ -20,12 +20,11 @@
             <dict-tag :options="status_type" :value="scope.row.status"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" :label="$t('tenantmenu.createTime')"
-                         show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" :label="$t('tenantmenu.createTime')" show-overflow-tooltip></el-table-column>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button   text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)"
-                         v-auth="'admin_systenantmenu_edit'"> {{
+            <el-button text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)"
+              v-auth="'admin_systenantmenu_edit'"> {{
                 $t('common.editBtn')
               }}
             </el-button>
@@ -38,16 +37,16 @@
       <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination">
       </pagination>
       <tenant-menu-dialog ref="tenantMenuDialogRef" @refresh="getDataList"></tenant-menu-dialog>
-    </el-card>
+    </div>
   </el-drawer>
 </template>
 
 <script setup lang="ts" name="tenant-menu">
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import { fetchList,delObj } from "/@/api/admin/tenant-menu";
-import {useDict} from "/@/hooks/dict";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useI18n} from "vue-i18n";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { fetchList, delObj } from "/@/api/admin/tenant-menu";
+import { useDict } from "/@/hooks/dict";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
 const { t } = useI18n()
 const TenantMenuDialog = defineAsyncComponent(() => import('./form.vue'))
 
@@ -86,6 +85,4 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

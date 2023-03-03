@@ -101,7 +101,7 @@ const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websock
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 
-const personalDrawer = defineAsyncComponent(() => import("/@/views/personal/index.vue"))
+const personalDrawer = defineAsyncComponent(() => import("/@/views/admin/user/personal.vue"))
 
 // 定义变量内容
 const { locale, t } = useI18n();

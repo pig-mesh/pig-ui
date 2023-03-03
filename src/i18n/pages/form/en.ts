@@ -13,6 +13,7 @@ export default {
 		resetBtn: 'reset',
 		action:'action',
 		optSuccessText: 'operation success',
+		optConfirmText: 'Confirm this operation	',
 		editSuccessText: 'edit success',
 		addSuccessText: 'add success',
 		delSuccessText: 'delete success',

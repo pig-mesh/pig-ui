@@ -93,11 +93,13 @@ body,
 		position: absolute;
 		left: 0;
 		top: 0;
+		height: 100%;
 		overflow: hidden;
 		@extend .layout-flex;
 		&-auto {
 			height: inherit;
 			@extend .layout-flex;
+			padding: 10px;
 		}
 		&-view {
 			background: var(--el-color-white);

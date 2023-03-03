@@ -3,126 +3,113 @@
     <el-row :gutter="20">
       <el-col :span="4" :xs="24">
         <el-card class="layout-padding-auto" shadow="hover">
-          <query-tree :query="deptData.queryList"
-                      @node-click="handleNodeClick"/>
+          <query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
         </el-card>
       </el-col>
       <el-col :md="20">
-        <el-card class="layout-padding-auto" shadow="hover">
+        <div class="layout-padding-auto layout-padding-view">
           <el-tabs v-model="type" @tab-click="handleClick">
-          <el-tab-pane name="1" label="1">
-            <template #label>关注时回复</template>
-            <el-row>
-              <div class="mb8" style="width: 100%">
-                <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
-                  {{ $t('common.addBtn') }}
-                </el-button>
-              </div>
-            </el-row>
-            <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
-              <el-table-column label="序号" type="index" width="80"/>
-              <el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
-                <template #default="scope">
-                  <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" prop="action" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-button
-                      link
-                      icon="el-icon-edit"
-                      @click="handleEdit(scope.row)">编辑
+            <el-tab-pane name="1" label="1">
+              <template #label>关注时回复</template>
+              <el-row>
+                <div class="mb8" style="width: 100%">
+                  <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+                    {{ $t('common.addBtn') }}
                   </el-button>
-                  <el-button
-                      link
-                      icon="el-icon-delete"
-                      @click="handleDel(scope.row)">删除
+                </div>
+              </el-row>
+              <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
+                @sort-change="sortChangeHandle">
+                <el-table-column label="序号" type="index" width="80" />
+                <el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
+                  <template #default="scope">
+                    <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" prop="action" show-overflow-tooltip>
+                  <template #default="scope">
+                    <el-button link icon="el-icon-edit" @click="handleEdit(scope.row)">编辑
+                    </el-button>
+                    <el-button link icon="el-icon-delete" @click="handleDel(scope.row)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
+            </el-tab-pane>
+            <el-tab-pane name="2" label="2">
+              <template #label>消息回复</template>
+              <el-row>
+                <div class="mb8" style="width: 100%">
+                  <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+                    {{ $t('common.addBtn') }}
                   </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
-          </el-tab-pane>
-          <el-tab-pane name="2" label="2">
-            <template #label>消息回复</template>
-            <el-row>
-              <div class="mb8" style="width: 100%">
-                <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
-                  {{ $t('common.addBtn') }}
-                </el-button>
-              </div>
-            </el-row>
-            <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
-              <el-table-column label="序号" type="index" width="80"/>
-              <el-table-column label="请求消息类型" prop="reqType" show-overflow-tooltip>
-                <template #default="scope">
-                  <dict-tag :options="dicDataReqType" :value="scope.row.reqType"></dict-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
-                <template #default="scope">
-                  <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" prop="action" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-button
-                      icon="el-icon-edit"
-                      link
-                      @click="handleEdit(scope.row)">编辑
+                </div>
+              </el-row>
+              <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
+                @sort-change="sortChangeHandle">
+                <el-table-column label="序号" type="index" width="80" />
+                <el-table-column label="请求消息类型" prop="reqType" show-overflow-tooltip>
+                  <template #default="scope">
+                    <dict-tag :options="dicDataReqType" :value="scope.row.reqType"></dict-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
+                  <template #default="scope">
+                    <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" prop="action" show-overflow-tooltip>
+                  <template #default="scope">
+                    <el-button icon="el-icon-edit" link @click="handleEdit(scope.row)">编辑
+                    </el-button>
+                    <el-button icon="el-icon-delete" link @click="handleDel(scope.row)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
+            </el-tab-pane>
+            <el-tab-pane name="3" label="3">
+              <template #label>关键词回复</template>
+              <el-row>
+                <div class="mb8" style="width: 100%">
+                  <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+                    {{ $t('common.addBtn') }}
                   </el-button>
-                  <el-button
-                      icon="el-icon-delete"
-                      link
-                      @click="handleDel(scope.row)">删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
-          </el-tab-pane>
-          <el-tab-pane name="3" label="3">
-            <template #label>关键词回复</template>
-            <el-row>
-              <div class="mb8" style="width: 100%">
-                <el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
-                  {{ $t('common.addBtn') }}
-                </el-button>
-              </div>
-            </el-row>
-            <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
-              <el-table-column label="序号" type="index" width="80"/>
-              <el-table-column label="关键词" prop="reqKey" show-overflow-tooltip>
-              </el-table-column>
-              <el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
-                <template #default="scope">
-                  <dict-tag :options="dicRepMate" :value="scope.row.repMate"></dict-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
-                <template #default="scope">
-                  <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
-                </template>
-              </el-table-column>
-              <el-table-column label="操作" prop="action" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-button
-                      icon="el-icon-edit"
-                      link
-                      @click="handleEdit(scope.row)">编辑
-                  </el-button>
-                  <el-button
-                      icon="el-icon-delete"
-                      link
-                      @click="handleDel(scope.row)">删除
-                  </el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
-          </el-tab-pane>
-        </el-tabs>
-        </el-card>
+                </div>
+              </el-row>
+              <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
+                @sort-change="sortChangeHandle">
+                <el-table-column label="序号" type="index" width="80" />
+                <el-table-column label="关键词" prop="reqKey" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
+                  <template #default="scope">
+                    <dict-tag :options="dicRepMate" :value="scope.row.repMate"></dict-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
+                  <template #default="scope">
+                    <dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
+                  </template>
+                </el-table-column>
+                <el-table-column label="操作" prop="action" show-overflow-tooltip>
+                  <template #default="scope">
+                    <el-button icon="el-icon-edit" link @click="handleEdit(scope.row)">编辑
+                    </el-button>
+                    <el-button icon="el-icon-delete" link @click="handleDel(scope.row)">删除
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
+            </el-tab-pane>
+          </el-tabs>
+        </div>
       </el-col>
     </el-row>
     <el-dialog :title="handleType === 'add' ? '新增回复消息' : '修改回复消息'" v-model="dialog1Visible" width="50%">
@@ -130,12 +117,8 @@
         <el-form-item v-if="type === '2'" label="请求消息类型">
           <el-select v-model="objData.reqType" placeholder="请选择">
             <template v-for="item in dicDataReqType">
-              <el-option
-                  v-if="item.value !== 'event'"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                  :disabled="item.disabled">
+              <el-option v-if="item.value !== 'event'" :key="item.value" :label="item.label" :value="item.value"
+                :disabled="item.disabled">
               </el-option>
             </template>
 
@@ -143,11 +126,7 @@
         </el-form-item>
         <el-form-item v-if="type === '3'" label="匹配类型">
           <el-select v-model="objData.repMate" placeholder="请选择" style="width: 100px">
-            <el-option
-                v-for="item in dicRepMate"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value">
+            <el-option v-for="item in dicRepMate" :key="item.value" :label="item.label" :value="item.value">
             </el-option>
           </el-select>
         </el-form-item>
@@ -158,7 +137,7 @@
           <WxReply v-if="hackResetWxReplySelect" :obj-data="objData"></WxReply>
         </el-form-item>
       </el-form>
-      <template #footer >
+      <template #footer>
         <el-button @click="dialog1Visible = false">取 消</el-button>
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
       </template>
@@ -168,10 +147,10 @@
 
 <script setup lang="ts" name="wx-auto-reply">
 
-import {fetchAccountList} from "/@/api/mp/wx-account";
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {getPage,delObj,addObj,putObj} from '/@/api/mp/wx-auto-reply'
+import { fetchAccountList } from "/@/api/mp/wx-account";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { getPage, delObj, addObj, putObj } from '/@/api/mp/wx-auto-reply'
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 
@@ -297,7 +276,7 @@ const handleEdit = (row: any) => {
 
 const handleDel = (row) => {
   useMessageBox().confirm("是否确认删除此数据?").then(() => {
-    delObj(row.id).then(() =>{
+    delObj(row.id).then(() => {
       useMessage().success("删除成功")
       getDataList()
     })
@@ -342,6 +321,4 @@ const handleAdd = () => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
