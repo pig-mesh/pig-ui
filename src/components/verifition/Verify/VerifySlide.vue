@@ -101,8 +101,8 @@ export default {
       }
     }
   },
-  setup(props, context) {
-    const {mode, captchaType, vSpace, imgSize, barSize, type, blockSize, explain} = toRefs(props)
+  setup(props) {
+    const {mode, captchaType, type, blockSize, explain} = toRefs(props)
     const { proxy } = getCurrentInstance();
     let secretKey = ref(''),           //后端返回的ase加密秘钥
         passFlag = ref(''),         //是否通过的标识
@@ -198,10 +198,11 @@ export default {
     //鼠标按下
     function start(e) {
       e = e || window.event
+      let x = null
       if (!e.touches) {  //兼容PC端
-        var x = e.clientX;
+        x = e.clientX;
       } else {           //兼容移动端
-        var x = e.touches[0].pageX;
+        x = e.touches[0].pageX;
       }
       startLeft.value = Math.floor(x - barArea.value.getBoundingClientRect().left);
       startMoveTime.value = +new Date();    //开始滑动的时间

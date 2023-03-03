@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import errorCode from './errorCode'
-import { ElMessage, ElMessageBox } from 'element-plus';
+import { ElMessageBox } from 'element-plus';
 import { Session, Local } from '/@/utils/storage';
 import qs from 'qs';
 
@@ -20,6 +19,7 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
     // get查询参数序列化
     if (config.method === 'get') {
+        // @ts-ignore
         config.paramsSerializer = (params: any) => {
             return qs.stringify(params, { arrayFormat: 'repeat' })
         }
@@ -51,7 +51,6 @@ service.interceptors.response.use((res: any) => {
     return res.data;
 }, error => {
     const status = Number(error.response.status) || 200
-    const message = error.response.data.msg || errorCode[status] || errorCode['default']
     if (status === 424) {
         ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '系统提示', {
             confirmButtonText: '重新登录',

@@ -26,6 +26,8 @@ export interface BasicTableProps {
     descs?: string[]
 
     ascs?: string[]
+
+    props?: any
 }
 
 export interface Pagination {
@@ -60,7 +62,11 @@ export function useTable(options?: BasicTableProps) {
         loading: false,
         selectObjs: [],
         descs: [],
-        ascs: []
+        ascs: [],
+        props: {
+            item: 'records',
+            totalCount: 'total'
+        }
     }
 
     const mergeDefaultOptions = (options: any, props: any): BasicTableProps => {
@@ -86,10 +92,10 @@ export function useTable(options?: BasicTableProps) {
                 descs: state.descs,
                 ascs: state.ascs
             }).then((res: any) => {
-                state.dataList = state.isPage ? res.data.records : res.data
-                state.pagination!.total = state.isPage ? res.data.total : 0
+                state.dataList = state.isPage ? res.data[state.props.item] : res.data
+                state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0
             }).catch((err: any) => {
-                ElMessage.error(err.data.msg)
+                ElMessage.error(err.msg || err.data.msg)
             }).finally(() => {
                 state.loading = false;
             })

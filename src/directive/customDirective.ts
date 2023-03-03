@@ -62,6 +62,7 @@ export function wavesDirective(app: App) {
  */
 export function dragDirective(app: App) {
 	app.directive('drag', {
+		// @ts-ignore
 		mounted(el, binding) {
 			if (!binding.value) return false;
 

@@ -204,4 +204,9 @@ const handleDelete = (ids: string[]) => {
       })
     })
 };
+
+
+onMounted(() => {
+  state.dataList
+})
 </script>
