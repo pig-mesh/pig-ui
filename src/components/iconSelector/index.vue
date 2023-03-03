@@ -15,9 +15,7 @@
 				<SvgIcon
 					:name="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix"
 					class="font14"
-					v-if="state.fontIconPrefix === '' ? prepend?.indexOf('ele-') > -1 : state.fontIconPrefix?.indexOf('ele-') > -1"
 				/>
-				<i v-else :class="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix" class="font14"></i>
 			</template>
 		</el-input>
 		<el-popover
@@ -42,6 +40,9 @@
 						<el-tab-pane lazy label="awe" name="awe">
 							<IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
 						</el-tab-pane>
+            <el-tab-pane lazy label="local" name="local">
+              <IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
+            </el-tab-pane>
 					</el-tabs>
 				</div>
 			</template>
@@ -116,6 +117,7 @@ const state = reactive({
 		ali: [],
 		ele: [],
 		awe: [],
+    local: []
 	},
 });
 
@@ -148,6 +150,7 @@ const fontIconTabNameList = () => {
 	if (state.fontIconTabActive === 'ali') iconList = state.fontIconList.ali;
 	else if (state.fontIconTabActive === 'ele') iconList = state.fontIconList.ele;
 	else if (state.fontIconTabActive === 'awe') iconList = state.fontIconList.awe;
+	else if (state.fontIconTabActive === 'local') iconList = state.fontIconList.local;
 	return iconList;
 };
 // 处理 icon 双向绑定数值回显
@@ -162,6 +165,7 @@ const initFontIconName = () => {
 	if (props.modelValue!.indexOf('iconfont') > -1) name = 'ali';
 	else if (props.modelValue!.indexOf('ele-') > -1) name = 'ele';
 	else if (props.modelValue!.indexOf('fa') > -1) name = 'awe';
+	else if (props.modelValue!.indexOf('local') > -1) name = 'local';
 	// 初始化 tab 高亮回显
 	state.fontIconTabActive = name;
 	return name;
@@ -186,7 +190,12 @@ const initFontIconData = async (name: string) => {
 		await initIconfont.awe().then((res: any) => {
 			state.fontIconList.awe = res.map((i: string) => `fa ${i}`);
 		});
-	}
+	}else if(name === 'local'){
+    if (state.fontIconList.local.length > 0) return;
+    await initIconfont.local().then((res: any) => {
+      state.fontIconList.local = res.map((i: string) => `${i}`);
+    });
+  }
 	// 初始化 input 的 placeholder
 	// 参考（单项数据流）：https://cn.vuejs.org/v2/guide/components-props.html?#%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81
 	state.fontIconPlaceholder = props.placeholder;

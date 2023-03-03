@@ -8,7 +8,7 @@
     </div>
     <div @click="handleClick('wechat')">
       <span :style="{ backgroundColor: '#6ba2d6' }" class="container">
-        <i icon-class="wechat" class="iconfont icon-weixin"/>
+        <i icon="wechat" class="iconfont icon-weixin"/>
       </span>
       <p class="title">微信</p>
     </div>

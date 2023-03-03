@@ -42,14 +42,13 @@
                   <a target="_blank" :href="item.repUrl"><img :src="item.repUrl" style="width: 100px"></a>
                 </div>
                 <div v-if="item.repType === 'voice'">
-                  <img :src="WxVoice" style="width: 100px" @click="loadVideo(item)">
-                  <el-button link @click="loadVideo(item)"></el-button>
+                  <SvgIcon name="local-wx-voice" :size="80" @click="loadVideo(item)"></SvgIcon>
                 </div>
                 <div v-if="item.repType === 'video'" style="text-align: center">
-                  <img :src="WxVideo" style="width: 100px" @click="loadVideo(item)">
+                  <SvgIcon name="local-wx-video" :size="80" @click="loadVideo(item)"></SvgIcon>
                 </div>
                 <div v-if="item.repType === 'shortvideo'" style="text-align: center">
-                  <img :src="WxVideo" style="width: 100px" @click="loadVideo(item)">
+                  <svg-icon name="local-wx-video" :size="80" @click="loadVideo(item)"></svg-icon>
                 </div>
                 <div v-if="item.repType === 'location'">
                   <el-link
@@ -97,8 +96,6 @@
 <script setup lang="ts" name="wx-msg">
 import { fetchList,addObj } from '/@/api/mp/wx-fans-msg'
 import {useMessage} from "/@/hooks/message";
-import WxVideo from '/@/assets/icon/wx-video.svg'
-import WxVoice from '/@/assets/icon/wx-voice.svg'
 import {getMaterialVideo} from "/@/api/mp/wx-material";
 
 const WxReply = defineAsyncComponent(() => import("../wx-reply/index.vue"))
