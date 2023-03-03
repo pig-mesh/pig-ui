@@ -42,31 +42,25 @@
               </el-form-item>
             </el-col>
             <el-col :span="24" class="mb20">
-              <el-form-item label="社交登录" prop="social">
-                <div @click="handleClick('wechat')">
-										<span :style="{ backgroundColor: '#6ba2d6' }" class="container">
-											<i class="iconfont icon-weixin" icon-class="wechat" />
-										</span>
-                  <p class="title">微信</p>
-                </div>
-                <div @click="handleClick('tencent')">
-										<span :style="{ backgroundColor: '#8dc349' }" class="container">
-											<i class="iconfont icon-qq" icon-class="qq" />
-										</span>
-                  <p class="title">QQ</p>
-                </div>
-                <div @click="handleClick('gitee')">
-										<span :style="{ backgroundColor: '#bf3030' }" class="container">
-											<i class="iconfont icon-logo_gitee_icon" icon-class="qq" />
-										</span>
-                  <p class="title">Gitee</p>
-                </div>
-                <div @click="handleClick('osc')">
-										<span :style="{ backgroundColor: '#007B25' }" class="container">
-											<i class="iconfont icon-oschina" icon-class="qq" />
-										</span>
-                  <p class="title">开源中国</p>
-                </div>
+              <el-form-item label="社交登录" prop="social" >
+                <a-row style="display: flex;justify-content: space-between;width: 300px">
+                  <div @click="handleClick('wechat')" class="item">
+                    <SvgIcon name="local-wechat" :size="20"/>
+                    <p class="title">微信</p>
+                  </div>
+                  <div @click="handleClick('tencent')" class="item">
+                    <SvgIcon name="local-qq" :size="20"/>
+                    <p class="title">QQ</p>
+                  </div>
+                  <div @click="handleClick('gitee')" class="item">
+                    <SvgIcon name="local-gitee" :size="20"/>
+                    <p class="title">Gitee</p>
+                  </div>
+                  <div @click="handleClick('osc')" class="item">
+                    <SvgIcon name="local-oschina" :size="20"/>
+                    <p class="title">开源中国</p>
+                  </div>
+                </a-row>
               </el-form-item>
             </el-col>
 
@@ -465,5 +459,11 @@ defineExpose({
 .avatar {
 	width: 178px;
 	height: 100%;
+}
+
+.item{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 </style>
