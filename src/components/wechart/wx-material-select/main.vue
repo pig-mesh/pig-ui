@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="选择图文" v-model="visible"
-             :close-on-click-modal="false" draggable>
+             :close-on-click-modal="false" draggable width="80%">
   <div v-if="objData.type === 'image'">
     <div class="waterfall" v-loading="state.loading">
       <div class="waterfall-item" v-for="item in state.dataList" :key="item.mediaId">
@@ -80,11 +80,7 @@
           class-name="small-padding fixed-width"
       >
         <template v-slot="scope">
-          <el-button
-              icon="el-icon-circle-plus"
-              @click="selectMaterial(scope.row)"
-          >选择</el-button
-          >
+          <el-button @click="selectMaterial(scope.row)">选择</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -159,6 +155,7 @@ const openDialog = (data: any) => {
   state.queryForm.type = data.type
   state.queryForm.appId = data.accountId
   objData.type = data.type
+  objData.accountId = data.accountId
   visible.value = true
   getDataList()
 }

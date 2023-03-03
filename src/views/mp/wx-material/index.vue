@@ -80,7 +80,7 @@
                 <el-button type="primary" @click="handleAddVideo">新建</el-button>
               </div>
               <el-dialog title="新建视频" v-model="dialogVideoVisible">
-                <wx-file-upload @success="getDataList" :uploadData="uploadData" auto-upload="false" ref="uploadFileVideo" :type="['video/mp4']"></wx-file-upload>
+                <wx-file-upload @success="getDataList" :uploadData="uploadData" :auto-upload="false" ref="uploadFileVideo" :type="['video/mp4']"></wx-file-upload>
                 <el-form
                     ref="uploadForm"
                     :model="uploadData"
@@ -275,9 +275,9 @@ const subVideo = () => {
     if (!valid) {
       return false
     }
-    uploadFileVideo.value.submit()
-  }).finally(() => {
-    dialogVideoVisible.value = false
+    uploadFileVideo.value.submit().then(() => {
+      dialogVideoVisible.value = false
+    })
   })
 }
 
