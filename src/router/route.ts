@@ -101,7 +101,7 @@ export const staticConfigRoutes: Array<RouteRecordRaw> = [
     {
         path: '/personal',
         name: 'personal',
-        component: () => import('/@/views/personal/index.vue'),
+        component: () => import('/@/views/admin/user/personal.vue'),
         meta: {
             "title": "router.personal",
             "isHide": true

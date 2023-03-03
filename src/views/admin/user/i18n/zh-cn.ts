@@ -18,5 +18,8 @@ export default {
         importUserTip: '用户导入',
         deleteDisabledTip: 'admin 不允许被删除',
     },
-
+    personal: {
+        name: '个人信息',
+        passwordRule: '两次输入密码不一致'
+    }
 }
