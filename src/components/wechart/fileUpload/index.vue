@@ -81,7 +81,10 @@ const handleUploadSuccess = (response, file, fileList) => {
   emit("success",response, file, fileList)
 }
 const submit = () => {
-  fileUpload.value.submit()
+  return new Promise(resolve => {
+    fileUpload.value.submit()
+    resolve('')
+  })
 }
 
 defineExpose({

@@ -42,16 +42,14 @@
                   <a target="_blank" :href="item.repUrl"><img :src="item.repUrl" style="width: 100px"></a>
                 </div>
                 <div v-if="item.repType === 'voice'">
-                  {{item}}
-<!--                  <WxVoicePlayer :obj-data="item"></WxVoicePlayer>-->
+                  <img :src="WxVoice" style="width: 100px" @click="loadVideo(item)">
+                  <el-button link @click="loadVideo(item)"></el-button>
                 </div>
                 <div v-if="item.repType === 'video'" style="text-align: center">
-                  {{item}}
-<!--                  <WxVideoPlayer :obj-data="item"></WxVideoPlayer>-->
+                  <img :src="WxVideo" style="width: 100px" @click="loadVideo(item)">
                 </div>
                 <div v-if="item.repType === 'shortvideo'" style="text-align: center">
-                  {{item}}
-<!--                  <WxVideoPlayer :obj-data="item"></WxVideoPlayer>-->
+                  <img :src="WxVideo" style="width: 100px" @click="loadVideo(item)">
                 </div>
                 <div v-if="item.repType === 'location'">
                   <el-link
@@ -99,11 +97,15 @@
 <script setup lang="ts" name="wx-msg">
 import { fetchList,addObj } from '/@/api/mp/wx-fans-msg'
 import {useMessage} from "/@/hooks/message";
+import WxVideo from '/@/assets/icon/wx-video.svg'
+import WxVoice from '/@/assets/icon/wx-voice.svg'
+import {getMaterialVideo} from "/@/api/mp/wx-material";
 
 const WxReply = defineAsyncComponent(() => import("../wx-reply/index.vue"))
 const WxNews = defineAsyncComponent(() => import("../wx-news/index.vue"))
 
 const NameAvatar = defineAsyncComponent(() => import("/@/components/NameAvatar/index.vue"))
+
 
 const visible = ref(false)
 
@@ -180,6 +182,17 @@ const getData = () => {
     }
   })
 }
+
+const loadVideo = (item) => {
+  getMaterialVideo({
+    mediaId: item.repMediaId,
+    appId: item.appId
+  }).then(response => {
+    const data = response.data
+    window.open(data.downUrl,'target','');
+  })
+}
+
 
 const loadingMore = () => {
   page.currentPage = page.currentPage + 1
