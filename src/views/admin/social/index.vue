@@ -1,6 +1,6 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch" class="mb8">
         <el-form ref="queryRef" :inline="true" :model="state.queryForm">
           <el-form-item :label="t('social.type')" class="ml2" prop="type">
@@ -26,8 +26,8 @@
           <el-button class="ml10" icon="Download" type="primary" @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
-          <el-button v-auth="'sys_social_details_del'" :disabled="multiple" class="ml10" icon="Delete"
-            type="primary" @click="handleDelete(selectObjs)">
+          <el-button v-auth="'sys_social_details_del'" :disabled="multiple" class="ml10" icon="Delete" type="primary"
+            @click="handleDelete(selectObjs)">
             {{ $t('common.delBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
@@ -60,7 +60,7 @@
         </el-table-column>
       </el-table>
       <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
-    </el-card>
+    </div>
 
     <!-- 编辑、新增  -->
     <form-dialog ref="formDialogRef" @refresh="getDataList()" />

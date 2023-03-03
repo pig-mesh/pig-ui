@@ -1,7 +1,6 @@
 <template>
     <div class="layout-padding">
-
-        <el-card class="layout-padding-auto" shadow="hover">
+        <div class="layout-padding-auto layout-padding-view">
             <el-row class="mb8" v-show="showSearch">
                 <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
                     <el-form-item :label="$t('systoken.username')" prop="username">
@@ -53,7 +52,7 @@
 
             <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination">
             </pagination>
-        </el-card>
+        </div>
     </div>
 </template>
 

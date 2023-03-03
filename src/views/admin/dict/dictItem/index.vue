@@ -1,6 +1,6 @@
 <template>
   <el-drawer v-model="visible" :title="$t('sysdict.dictItem')" size="80%">
-    <el-card shadow="hover" class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button icon="folder-add" type="primary" class="ml10" @click="dictformRef.openDialog(null,state.queryForm)">
@@ -31,7 +31,7 @@
         <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination">
         </pagination>
       </el-row>
-    </el-card>
+    </div>
     <dict-form ref="dictformRef" @refresh="getDataList"></dict-form>
 
   </el-drawer>

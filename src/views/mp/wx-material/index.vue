@@ -3,17 +3,17 @@
     <el-row :gutter="20">
       <el-col :md="4">
         <el-card class="layout-padding-auto" shadow="hover">
-          <query-tree :query="deptData.queryList"
-                      @node-click="handleNodeClick"/>
+          <query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
         </el-card>
       </el-col>
       <el-col :span="20">
-        <el-card class="layout-padding-auto" shadow="hover">
+        <div class="layout-padding-auto layout-padding-view">
           <el-tabs v-model="materialType" @tab-click="handleClick">
             <el-tab-pane name="image" label="image">
               <template #label><i class="el-icon-picture"></i> 图片</template>
               <div class="add_but">
-                <wx-file-upload @success="getDataList" :uploadData="uploadData" :type="['image/jpeg','image/png','image/gif','image/bmp','image/jpg']"></wx-file-upload>
+                <wx-file-upload @success="getDataList" :uploadData="uploadData"
+                  :type="['image/jpeg', 'image/png', 'image/gif', 'image/bmp', 'image/jpg']"></wx-file-upload>
               </div>
               <div v-loading="state.loading" class="waterfall">
                 <div v-for="item in state.dataList" :key="item.id" class="waterfall-item">
@@ -26,53 +26,35 @@
                   </el-row>
                 </div>
               </div>
-              <div v-if="state.dataList.length <=0 && !state.loading" class="el-table__empty-block">
+              <div v-if="state.dataList.length <= 0 && !state.loading" class="el-table__empty-block">
                 <span class="el-table__empty-text">暂无数据</span>
               </div>
-              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
             </el-tab-pane>
             <el-tab-pane name="voice" label="voice">
               <template #label><i class="el-icon-microphone"></i> 语音</template>
               <div class="add_but">
                 <wx-file-upload @success="getDataList" :uploadData="uploadData"></wx-file-upload>
               </div>
-              <el-table
-                  v-loading="state.loading"
-                  :data="state.dataList"
-                  stripe
-                  border>
-                <el-table-column
-                    prop="mediaId"
-                    label="media_id">
+              <el-table v-loading="state.loading" :data="state.dataList" stripe border>
+                <el-table-column prop="mediaId" label="media_id">
                 </el-table-column>
-                <el-table-column
-                    prop="name"
-                    label="名称">
+                <el-table-column prop="name" label="名称">
                 </el-table-column>
-                <el-table-column
-                    prop="updateTime"
-                    label="更新时间">
+                <el-table-column prop="updateTime" label="更新时间">
                 </el-table-column>
-                <el-table-column
-                    fixed="right"
-                    label="操作">
+                <el-table-column fixed="right" label="操作">
                   <template v-slot="scope">
-                    <el-button
-                        type="text"
-                        icon="el-icon-download"
-                        plain
-                        @click="handleDown(scope.row)">下载
+                    <el-button type="text" icon="el-icon-download" plain @click="handleDown(scope.row)">下载
                     </el-button>
-                    <el-button
-                        type="text"
-                        icon="el-icon-delete"
-                        plain
-                        @click="delMaterial(scope.row)">删除
+                    <el-button type="text" icon="el-icon-delete" plain @click="delMaterial(scope.row)">删除
                     </el-button>
                   </template>
                 </el-table-column>
               </el-table>
-              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
             </el-tab-pane>
             <el-tab-pane name="video" label="video">
               <template #label><i class="el-icon-video-play"></i> 视频</template>
@@ -80,21 +62,15 @@
                 <el-button type="primary" @click="handleAddVideo">新建</el-button>
               </div>
               <el-dialog title="新建视频" v-model="dialogVideoVisible">
-                <wx-file-upload @success="getDataList" :uploadData="uploadData" :auto-upload="false" ref="uploadFileVideo" :type="['video/mp4']"></wx-file-upload>
-                <el-form
-                    ref="uploadForm"
-                    :model="uploadData"
-                    v-loading="addMaterialLoading"
-                    :rules="uploadRules">
+                <wx-file-upload @success="getDataList" :uploadData="uploadData" :auto-upload="false" ref="uploadFileVideo"
+                  :type="['video/mp4']"></wx-file-upload>
+                <el-form ref="uploadForm" :model="uploadData" v-loading="addMaterialLoading" :rules="uploadRules">
                   <el-form-item label="标题" prop="title">
                     <el-input v-model="uploadData.title" placeholder="标题将展示在相关播放页面，建议填写清晰、准确、生动的标题"></el-input>
                   </el-form-item>
                   <el-form-item label="描述" prop="introduction">
-                    <el-input
-                        v-model="uploadData.introduction"
-                        :rows="3"
-                        type="textarea"
-                        placeholder="介绍语将展示在相关播放页面，建议填写简洁明确、有信息量的内容"></el-input>
+                    <el-input v-model="uploadData.introduction" :rows="3" type="textarea"
+                      placeholder="介绍语将展示在相关播放页面，建议填写简洁明确、有信息量的内容"></el-input>
                   </el-form-item>
                 </el-form>
                 <template #footer>
@@ -102,26 +78,14 @@
                   <el-button type="primary" @click="subVideo">提 交</el-button>
                 </template>
               </el-dialog>
-              <el-table
-                  v-loading="state.loading"
-                  :data="state.dataList"
-                  stripe
-                  border>
-                <el-table-column
-                    prop="mediaId"
-                    label="media_id">
+              <el-table v-loading="state.loading" :data="state.dataList" stripe border>
+                <el-table-column prop="mediaId" label="media_id">
                 </el-table-column>
-                <el-table-column
-                    prop="name"
-                    label="名称">
+                <el-table-column prop="name" label="名称">
                 </el-table-column>
-                <el-table-column
-                    prop="updateTime"
-                    label="更新时间">
+                <el-table-column prop="updateTime" label="更新时间">
                 </el-table-column>
-                <el-table-column
-                    fixed="right"
-                    label="操作">
+                <el-table-column fixed="right" label="操作">
                   <template v-slot="scope">
                     <el-button type="text" icon="el-icon-view" @click="handleInfo(scope.row)">查看
                     </el-button>
@@ -130,7 +94,8 @@
                   </template>
                 </el-table-column>
               </el-table>
-              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
+              <pagination v-bind="state.pagination" @size-change="sizeChangeHandle"
+                @current-change="currentChangeHandle" />
             </el-tab-pane>
             <el-tab-pane name="news" label="news">
               <template #label><i class="el-icon-news"></i> 图文</template>
@@ -139,10 +104,7 @@
               </div>
               <news-form ref="dialogNewsRef" @ok="getDataList"></news-form>
               <div v-loading="state.loading" class="waterfall">
-                <div
-                    v-for="item in state.dataList"
-                    :key="item.id"
-                    class="waterfall-item">
+                <div v-for="item in state.dataList" :key="item.id" class="waterfall-item">
                   <wx-news :obj-data="item.content.newsItem"></wx-news>
                   <el-row class="ope-row">
                     <el-button type="primary" icon="el-icon-edit" circle @click="handleEditNews(item)"></el-button>
@@ -150,25 +112,23 @@
                   </el-row>
                 </div>
               </div>
-              <div v-if="state.dataList.length <=0 && !state.loading" class="el-table__empty-block">
+              <div v-if="state.dataList.length <= 0 && !state.loading" class="el-table__empty-block">
                 <span class="el-table__empty-text">暂无数据</span>
               </div>
             </el-tab-pane>
           </el-tabs>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
-
-
 </template>
 
 <script setup lang="ts" name="wx-material">
 
 import { fetchAccountList } from "/@/api/mp/wx-account";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObj, getMaterialVideo, getPage} from '/@/api/mp/wx-material'
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { delObj, getMaterialVideo, getPage } from '/@/api/mp/wx-material'
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
 const NewsForm = defineAsyncComponent(() => import("./components/news-form.vue"))
@@ -203,7 +163,7 @@ const handleNodeClick = (data: any) => {
 }
 
 
-const handleClick = (tab) =>  {
+const handleClick = (tab) => {
   if (checkAppId.value) {
     // getPage(this.page)
   } else {
@@ -241,7 +201,7 @@ const delMaterial = (item: any) => {
       id: item.mediaId,
       appId: checkAppId.value
     }).then(() => {
-        getDataList()
+      getDataList()
     })
   })
 }
@@ -295,7 +255,7 @@ const handleAddNews = () => {
 const handleEditNews = (item) => {
   dialogNewsRef.value.openDialog({
     accountId: checkAppId.value,
-  },JSON.parse(JSON.stringify(item.content.newsItem)),item.mediaId,'edit')
+  }, JSON.parse(JSON.stringify(item.content.newsItem)), item.mediaId, 'edit')
 }
 
 const handleInfo = (row) => {
@@ -424,6 +384,7 @@ p {
   .waterfall {
     column-count: 3;
   }
+
   p {
     color: red;
   }
@@ -433,6 +394,7 @@ p {
   .waterfall {
     column-count: 2;
   }
+
   p {
     color: orange;
   }

@@ -1,27 +1,27 @@
 <template>
 	<div class="layout-padding">
-		<el-card shadow="hover">
+		<div class="layout-padding-auto layout-padding-view">
 			<div class="mb15">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item :label="$t('sysmenu.name')" prop="menuName" >
-            <el-input :placeholder="$t('sysmenu.inputNameTip')" style="max-width: 180px"
-                      clearable v-model="state.queryForm.menuName"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button icon="search" type="primary" class="ml10" @click="getDataList">
-              {{ $t('common.queryBtn') }}
-            </el-button>
-            <el-button icon="folder-add" type="primary" class="ml10" @click="onOpenAddMenu" v-auth="'sys_menu_add'">
-              {{ $t('common.addBtn') }}
-            </el-button>
-          </el-form-item>
-        </el-form>
+				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
+					<el-form-item :label="$t('sysmenu.name')" prop="menuName">
+						<el-input :placeholder="$t('sysmenu.inputNameTip')" style="max-width: 180px" clearable
+							v-model="state.queryForm.menuName" />
+					</el-form-item>
+					<el-form-item>
+						<el-button icon="search" type="primary" class="ml10" @click="getDataList">
+							{{ $t('common.queryBtn') }}
+						</el-button>
+						<el-button icon="folder-add" type="primary" class="ml10" @click="onOpenAddMenu"
+							v-auth="'sys_menu_add'">
+							{{ $t('common.addBtn') }}
+						</el-button>
+					</el-form-item>
+				</el-form>
 			</div>
 			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" row-key="path"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column prop="name" :label="$t('sysmenu.name')" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')"
-					show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sortOrder" :label="$t('sysmenu.sortOrder')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="icon" :label="$t('sysmenu.icon')" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
@@ -45,14 +45,14 @@
 					:show-overflow-tooltip="true"></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button text type="primary" @click="onOpenAddMenu('add',scope.row)" v-auth="'sys_menu_add'"> {{
+						<el-button text type="primary" @click="onOpenAddMenu('add', scope.row)" v-auth="'sys_menu_add'"> {{
 							$t('common.addBtn')
 						}}</el-button>
 						<el-button text type="primary" @click="onOpenEditMenu('edit', scope.row)"
 							v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }}</el-button>
 
-						<el-tooltip :content="$t('sysmenu.deleteDisabledTip')"
-							:disabled="!deleteMenuDisabled(scope.row)" placement="top">
+						<el-tooltip :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)"
+							placement="top">
 							<span style="margin-left: 12px">
 								<el-button text type="primary" :disabled="deleteMenuDisabled(scope.row)"
 									@click="onTabelRowDel(scope.row)" v-auth="'sys_menu_del'">
@@ -63,7 +63,7 @@
 					</template>
 				</el-table-column>
 			</el-table>
-		</el-card>
+		</div>
 		<MenuDialog ref="menuDialogRef" @refresh="getDataList()" />
 	</div>
 </template>
@@ -90,8 +90,8 @@ const {
 } = useTable(state)
 
 // 打开新增菜单弹窗
-const onOpenAddMenu = (type: string,row?: any) => {
-	menuDialogRef.value.openDialog(type,row);
+const onOpenAddMenu = (type: string, row?: any) => {
+	menuDialogRef.value.openDialog(type, row);
 };
 // 打开编辑菜单弹窗
 const onOpenEditMenu = (type: string, row: any) => {

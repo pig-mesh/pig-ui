@@ -1,11 +1,11 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto" shadow="hover">
+    <div class="layout-padding-auto layout-padding-view">
       <el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
         <el-step title="基础信息" />
         <el-step title="数据修改" />
       </el-steps>
-    </el-card>
+    </div>
     <el-card class="layout-padding-auto" style="margin-top: 20px" shadow="hover" v-if="active === 0">
       <generator ref="generatorRef" :tableName="tableName" :dsName="dsName"></generator>
     </el-card>

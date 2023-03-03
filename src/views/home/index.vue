@@ -1,40 +1,33 @@
 <template>
 	<div class="home-container layout-pd">
-    <el-row :gutter="15" class="home-card-three">
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-        <div class="home-card-item">
-          <div class="home-card-item-title">快捷导航工具</div>
-          <div class="home-monitor">
-            <div class="flex-warp">
-              <div class="flex-warp-item" v-for="(v, k) in favoriteRoutes" :key="k">
-                <div class="flex-warp-item-box">
-                  <div class="flex-margin">
-                    <i :class="v.meta.icon"></i>
-                    <el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path" @close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </el-col>
-      <el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
-        <div class="home-card-item">
-          <div style="height: 100%" ref="homeBarRef"></div>
-        </div>
-      </el-col>
-    </el-row>
+		<el-row :gutter="15" class="home-card-three">
+			<el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+				<div class="home-card-item">
+					<div class="home-card-item-title">快捷导航工具</div>
+					<div class="home-monitor">
+						<div class="flex-warp">
+							<div class="flex-warp-item" v-for="(v, k) in favoriteRoutes" :key="k">
+								<div class="flex-warp-item-box">
+									<div class="flex-margin">
+										<i :class="v.meta.icon"></i>
+										<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path"
+											@close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</el-col>
+			<el-col :xs="24" :sm="14" :md="14" :lg="16" :xl="16" class="home-media">
+				<div class="home-card-item">
+					<div style="height: 100%" ref="homeBarRef"></div>
+				</div>
+			</el-col>
+		</el-row>
 		<el-row :gutter="15" class="home-card-one mb15">
-			<el-col
-				:xs="24"
-				:sm="12"
-				:md="12"
-				:lg="6"
-				:xl="6"
-				v-for="(v, k) in state.homeOne"
-				:key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
-			>
+			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in state.homeOne" :key="k"
+				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
 				<div class="home-card-item flex">
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
@@ -79,7 +72,7 @@ const homeBarRef = ref();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { isTagsViewCurrenFull,favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
+const { isTagsViewCurrenFull, favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 const state = reactive({
 	global: {
 		homeChartOne: null,
@@ -134,11 +127,11 @@ const state = reactive({
 });
 
 const HandleRoute = (item: any) => {
-  router.push(item.path)
+	router.push(item.path)
 }
 
 const handleCloseFavorite = (item: any) => {
-  storesTagsViewRoutes.delFavoriteRoutes(item)
+	storesTagsViewRoutes.delFavoriteRoutes(item)
 }
 
 
@@ -497,8 +490,10 @@ watch(
 
 <style scoped lang="scss">
 $homeNavLengh: 8;
+
 .home-container {
 	overflow: hidden;
+
 	.home-card-one,
 	.home-card-two,
 	.home-card-three {
@@ -512,19 +507,23 @@ $homeNavLengh: 8;
 			background: var(--el-color-white);
 			color: var(--el-text-color-primary);
 			border: 1px solid var(--next-border-color-light);
+
 			&:hover {
 				box-shadow: 0 2px 12px var(--next-color-dark-hover);
 				transition: all ease 0.3s;
 			}
+
 			&-icon {
 				width: 70px;
 				height: 70px;
 				border-radius: 100%;
 				flex-shrink: 1;
+
 				i {
 					color: var(--el-text-color-placeholder);
 				}
 			}
+
 			&-title {
 				font-size: 15px;
 				font-weight: bold;
@@ -532,6 +531,7 @@ $homeNavLengh: 8;
 			}
 		}
 	}
+
 	.home-card-one {
 		@for $i from 0 through 3 {
 			.home-one-animation#{$i} {
@@ -543,18 +543,22 @@ $homeNavLengh: 8;
 			}
 		}
 	}
+
 	.home-card-two,
 	.home-card-three {
 		.home-card-item {
 			height: 400px;
 			width: 100%;
 			overflow: hidden;
+
 			.home-monitor {
 				height: 100%;
+
 				.flex-warp-item {
 					width: 25%;
 					height: 56px;
 					display: flex;
+
 					.flex-warp-item-box {
 						margin: auto;
 						text-align: center;
@@ -564,11 +568,13 @@ $homeNavLengh: 8;
 						background: var(--next-bg-color);
 						cursor: pointer;
 						transition: all 0.3s ease;
+
 						&:hover {
 							background: var(--el-color-primary-light-9);
 							transition: all 0.3s ease;
 						}
 					}
+
 					@for $i from 0 through $homeNavLengh {
 						.home-animation#{$i} {
 							opacity: 0;

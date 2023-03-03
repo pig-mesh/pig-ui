@@ -1,6 +1,6 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <v-form-designer ref="vfDesignerRef" :banned-widgets="bannedWidgets" :designer-config="designerConfig">
         <template #customToolButtons>
           <el-button link type="primary" @click="exportJsonConfig">
@@ -8,7 +8,7 @@
           </el-button>
         </template>
       </v-form-designer>
-    </el-card>
+    </div>
   </div>
 </template>
 

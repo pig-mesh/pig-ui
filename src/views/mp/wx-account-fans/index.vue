@@ -1,15 +1,15 @@
 <template>
   <div class="layout-padding">
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch" class="mb8">
         <el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
           <el-form-item :label="$t('fans.nickname')" prop="nickname">
-            <el-input v-model="state.queryForm.nickname"
-                      style="max-width: 180px"/>
+            <el-input v-model="state.queryForm.nickname" style="max-width: 180px" />
           </el-form-item>
           <el-form-item :label="$t('fans.wxAccountName')" prop="wxAccountAppid">
-            <el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable class="w100">
-              <el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid"/>
+            <el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable
+              class="w100">
+              <el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
             </el-select>
           </el-form-item>
           <el-form-item class="ml2">
@@ -24,27 +24,27 @@
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button v-auth="'mp_fans_export'" class="ml10" formDialogRef icon="Download" type="primary"
-                     @click="exportExcel">
+            @click="exportExcel">
             {{ $t('common.exportBtn') }}
           </el-button>
           <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
-                         @queryTable="getDataList"></right-toolbar>
+            @queryTable="getDataList"></right-toolbar>
         </div>
       </el-row>
       <el-table v-loading="state.loading" :data="state.dataList" style="width: 100%"
-                @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
-        <el-table-column align="center" type="selection" width="60"/>
-        <el-table-column :label="t('fans.index')" type="index" width="80"/>
-        <el-table-column :label="t('fans.id')" prop="id" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip/>
+        @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
+        <el-table-column align="center" type="selection" width="60" />
+        <el-table-column :label="t('fans.index')" type="index" width="80" />
+        <el-table-column :label="t('fans.id')" prop="id" show-overflow-tooltip />
+        <el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip />
         <el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="subscribe" :value="scope.row.subscribeStatus"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column :label="t('fans.subscribeTime')" prop="subscribeTime" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.nickname')" prop="nickname" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.language')" prop="language" show-overflow-tooltip/>
+        <el-table-column :label="t('fans.subscribeTime')" prop="subscribeTime" show-overflow-tooltip />
+        <el-table-column :label="t('fans.nickname')" prop="nickname" show-overflow-tooltip />
+        <el-table-column :label="t('fans.language')" prop="language" show-overflow-tooltip />
         <el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip width="200">
           <template #default="scope">
             <span v-for="(tag, index) in scope.row.tagList" :key="index">
@@ -52,40 +52,40 @@
             </span>
           </template>
         </el-table-column>
-        <el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip/>
-        <el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip/>
+        <el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip />
+        <el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip />
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button text type="primary"
-                       @click="formDialogRef.openDialog(scope.row,state.queryForm.wxAccountAppid)">{{ $t('common.editBtn') }}
+            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)">{{
+              $t('common.editBtn') }}
             </el-button>
             <el-button text type="primary" @click="handleDelete([scope.row.id])">{{
-                $t('common.delBtn')
-              }}
+              $t('common.delBtn')
+            }}
             </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle"/>
+      <pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
       <form-dialog ref="formDialogRef" @refresh="getDataList"></form-dialog>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script lang="ts" name="systemWxAccountFans" setup>
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObjs, fetchList, sync} from "/@/api/mp/wx-account-fans";
+import { BasicTableProps, useTable } from "/@/hooks/table";
+import { delObjs, fetchList, sync } from "/@/api/mp/wx-account-fans";
 import { fetchAccountList } from '/@/api/mp/wx-account'
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useI18n} from "vue-i18n";
-import {useDict} from "/@/hooks/dict";
+import { useMessage, useMessageBox } from "/@/hooks/message";
+import { useI18n } from "vue-i18n";
+import { useDict } from "/@/hooks/dict";
 
 const FormDialog = defineAsyncComponent(() => import("./form.vue"))
 
 const { subscribe } = useDict('subscribe')
 
 // 引入组件
-const {t} = useI18n()
+const { t } = useI18n()
 // 定义查询字典
 
 // 定义变量内容
@@ -117,24 +117,24 @@ const accountList = ref([])
 const getAccountList = () => {
   fetchAccountList().then(res => {
     accountList.value = res.data
-    if(accountList.value.length > 0){
+    if (accountList.value.length > 0) {
       state.queryForm.wxAccountAppid = accountList.value[0].appid
       getDataList()
     }
   })
 }
 
-watch(() => state.queryForm.wxAccountAppid,() => {
+watch(() => state.queryForm.wxAccountAppid, () => {
   getDataList()
 })
 
 const asyncFans = () => {
-  if(state.queryForm.wxAccountAppid){
+  if (state.queryForm.wxAccountAppid) {
     sync(state.queryForm.wxAccountAppid).then(() => {
       useMessage().success("已开始从微信同步粉丝信息，建议等待后查询")
       getDataList()
     })
-  }else{
+  } else {
     useMessage().error("请选择公众号")
   }
 }
@@ -169,13 +169,13 @@ const handleSelectionChange = (objs: any) => {
 // 删除操作
 const handleDelete = (ids: string[]) => {
   useMessageBox().confirm(t('common.delConfirmText'))
-      .then(() => {
-        delObjs(ids).then(() => {
-          getDataList(false);
-          useMessage().success(t('common.delSuccessText'));
-        }).catch((err: any) => {
-          useMessage().error(err.msg)
-        })
+    .then(() => {
+      delObjs(ids).then(() => {
+        getDataList(false);
+        useMessage().success(t('common.delSuccessText'));
+      }).catch((err: any) => {
+        useMessage().error(err.msg)
       })
+    })
 };
 </script>

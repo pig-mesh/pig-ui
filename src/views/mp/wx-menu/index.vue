@@ -3,12 +3,11 @@
     <el-row :gutter="20">
       <el-col :span="4" :xs="24">
         <el-card class="layout-padding-auto" shadow="hover">
-          <query-tree :query="deptData.queryList"
-                      @node-click="handleNodeClick"/>
+          <query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
         </el-card>
       </el-col>
       <el-col :span="20">
-        <el-card class="layout-padding-auto" shadow="hover">
+        <div class="layout-padding-auto layout-padding-view">
           <div v-loading="loading" class="public-account-management clearfix">
             <div class="left">
               <div class="weixin-hd">
@@ -24,16 +23,16 @@
                     <template v-for="(subItem, k) in item.children">
                       <div v-if="item.children" :key="k" class="subtitle menu_bottom">
                         <div :class="{ active: isSubMenuActive === i + '' + k }" class="menu_subItem"
-                             @click="subMenuClick(subItem, i, k)">
+                          @click="subMenuClick(subItem, i, k)">
                           {{ subItem.name }}
                         </div>
                       </div>
                     </template>
                     <!-- 二级菜单加号， 当长度 小于 5 才显示二级菜单的加号  -->
                     <div v-if="!item.children || item.children.length < 5" class="menu_bottom menu_addicon"
-                         @click="addSubMenu(i, item)">
+                      @click="addSubMenu(i, item)">
                       <el-icon>
-                        <el-icon-plus/>
+                        <el-icon-plus />
                       </el-icon>
                     </div>
                   </div>
@@ -41,7 +40,7 @@
                 <!-- 一级菜单加号 -->
                 <div v-if="menuList.length < 3" class="menu_bottom menu_addicon" @click="addMenu">
                   <el-icon>
-                    <el-icon-plus/>
+                    <el-icon-plus />
                   </el-icon>
                 </div>
               </div>
@@ -59,17 +58,17 @@
                 </div>
                 <div>
                   <span>菜单名称：</span>
-                  <el-input v-model="tempObj.name" class="input_width" clearable placeholder="请输入菜单名称"/>
+                  <el-input v-model="tempObj.name" class="input_width" clearable placeholder="请输入菜单名称" />
                 </div>
                 <div v-if="showConfigureContent">
                   <div class="menu_content">
                     <span>菜单标识：</span>
-                    <el-input v-model="tempObj.menuKey" class="input_width" clearable placeholder="请输入菜单 KEY"/>
+                    <el-input v-model="tempObj.menuKey" class="input_width" clearable placeholder="请输入菜单 KEY" />
                   </div>
                   <div class="menu_content">
                     <span>菜单内容：</span>
                     <el-select v-model="tempObj.type" class="menu_option" clearable placeholder="请选择">
-                      <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value"/>
+                      <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value" />
                     </el-select>
                   </div>
                   <div class="configur_content" v-if="tempObj.type === 'view'">
@@ -79,12 +78,13 @@
                   <div class="configur_content" v-if="tempObj.type === 'miniprogram'">
                     <div class="applet">
                       <span>小程序的 appid ：</span>
-                      <el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid" clearable />
+                      <el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid"
+                        clearable />
                     </div>
                     <div class="applet">
                       <span>小程序的页面路径：</span>
                       <el-input class="input_width" v-model="tempObj.miniProgramPagePath"
-                                placeholder="请输入小程序的页面路径，如：pages/index" clearable />
+                        placeholder="请输入小程序的页面路径，如：pages/index" clearable />
                     </div>
                     <div class="applet">
                       <span>小程序的备用网页：</span>
@@ -109,29 +109,29 @@
                           </el-col>
                         </el-row>
                       </div>
-                      <wx-material-select ref="dialogNewsRef"  @selectMaterial="selectMaterial" />
+                      <wx-material-select ref="dialogNewsRef" @selectMaterial="selectMaterial" />
 
                     </el-row>
                   </div>
                   <div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
-                    <wx-reply :objData="tempObj" v-if="hackResetWxReplySelect"/>
+                    <wx-reply :objData="tempObj" v-if="hackResetWxReplySelect" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </el-card>
+        </div>
       </el-col>
     </el-row>
   </div>
 </template>
 
 <script lang="ts" name="wx-menu" setup>
-import { saveObj,getObj } from '/@/api/mp/wx-menu'
+import { saveObj, getObj } from '/@/api/mp/wx-menu'
 
 // 部门树使用的数据
-import {fetchAccountList} from "/@/api/mp/wx-account";
-import {useMessage, useMessageBox} from "/@/hooks/message";
+import { fetchAccountList } from "/@/api/mp/wx-account";
+import { useMessage, useMessageBox } from "/@/hooks/message";
 
 const WxMaterialSelect = defineAsyncComponent(() => import("/@/components/wechart/wx-material-select/main.vue"))
 
@@ -233,12 +233,12 @@ const tempSelfObj = reactive({
   secondIndex: '' // 表示二级菜单索引
 })
 
-const getMenuFun = () =>  {
+const getMenuFun = () => {
   getObj(accountId.value).then((res) => {
     if (res.data) {
       const data = JSON.parse(res.data)
       if (data && data.button) {
-        Object.assign(menuList,data.button)
+        Object.assign(menuList, data.button)
       }
     }
   })
@@ -317,13 +317,13 @@ const addMenu = () => {
 const deleteMenu = () => {
   useMessageBox().confirm("确定要删除吗?").then(() => {
 
-    if(tempSelfObj.grand === '1'){
+    if (tempSelfObj.grand === '1') {
       menuList.splice(tempSelfObj.index, 1)
-    }else if(tempSelfObj.grand === '2'){
+    } else if (tempSelfObj.grand === '2') {
       menuList[tempSelfObj.index].children.splice(tempSelfObj.secondIndex, 1)
     }
     useMessage().success("删除成功")
-    Object.assign(tempObj,{})
+    Object.assign(tempObj, {})
     showRightFlag.value = false
     isActive.value = -1
     isSubMenuActive.value = '-1'
@@ -332,13 +332,13 @@ const deleteMenu = () => {
 }
 
 const handleSave = () => {
- useMessageBox().confirm("确定要保存该菜单吗?").then(() => {
-   saveObj(accountId.value, {
-     button: menuList
-   }).then(() => {
-     useMessage().success("保存成功")
-   });
- })
+  useMessageBox().confirm("确定要保存该菜单吗?").then(() => {
+    saveObj(accountId.value, {
+      button: menuList
+    }).then(() => {
+      useMessage().success("保存成功")
+    });
+  })
 }
 
 
@@ -350,7 +350,7 @@ const deleteMaterial = () => {
 
 const dialogNewsRef = ref()
 const openMaterial = () => {
-  dialogNewsRef.value.openDialog({type: 'news', accountId: accountId.value})
+  dialogNewsRef.value.openDialog({ type: 'news', accountId: accountId.value })
 }
 
 const selectMaterial = (item) => {
@@ -448,6 +448,7 @@ div {
     padding: 518px 25px 88px;
     position: relative;
     box-sizing: border-box;
+
     /*第一级菜单*/
     .menu_main {
       .menu_bottom {
@@ -517,6 +518,7 @@ div {
       }
     }
   }
+
   /*右边菜单内容*/
   .right {
     float: left;
@@ -526,14 +528,17 @@ div {
     margin-left: 20px;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
+
     .configure_page {
       .delete_btn {
         text-align: right;
         margin-bottom: 15px;
       }
+
       .menu_content {
         margin-top: 20px;
       }
+
       .configur_content {
         margin-top: 20px;
         background-color: #fff;
@@ -569,6 +574,7 @@ div {
       }
     }
   }
+
   .el-input {
     width: 70%;
     margin-right: 2%;
@@ -581,21 +587,25 @@ div {
   text-align: right;
   margin-right: 25px;
 }
+
 .select-item {
   width: 280px;
   padding: 10px;
   margin: 0 auto 10px auto;
   border: 1px solid #eaeaea;
 }
+
 .select-item2 {
   padding: 10px;
   margin: 0 auto 10px auto;
   border: 1px solid #eaeaea;
 }
+
 .ope-row {
   padding-top: 10px;
   text-align: center;
 }
+
 .item-name {
   font-size: 12px;
   overflow: hidden;

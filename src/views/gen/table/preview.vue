@@ -14,7 +14,7 @@
                     <el-tab-pane v-for="item in previewCodegen"
                         :label="item.codePath.substring(item.codePath.lastIndexOf('/') + 1)" :name="item.codePath"
                         :key="item.codePath">
-                      <highlightjs autodetect :code="item.code" />
+                        <highlightjs autodetect :code="item.code" />
                     </el-tab-pane>
                 </el-tabs>
             </el-col>
@@ -57,7 +57,7 @@ const getGenCodeFile = (id: string) => {
         const files = handleFiles(fileTreeOriginal)
         preview.fileTree = handleTree(files, 'id', 'parentId', 'children', '/')
     }).finally(() => {
-      loading.value = false
+        loading.value = false
     })
 }
 

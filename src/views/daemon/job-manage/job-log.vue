@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="visible" :close-on-click-modal="false" fullscreen title="运行日志" draggable>
-    <el-card class="layout-padding-auto">
+    <div class="layout-padding-auto layout-padding-view">
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10" v-auth="'sys_log_del'"
@@ -38,7 +38,7 @@
         </el-table-column>
       </el-table>
       <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
-    </el-card>
+    </div>
   </el-dialog>
 </template>
 
@@ -111,6 +111,4 @@ defineExpose({
 });
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

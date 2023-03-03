@@ -46,7 +46,7 @@
                 <el-form-item label="代码风格" prop="style">
                     <el-select v-model="dataForm.style">
                         <el-option :key="index" :label="item.groupName" :value="item.id"
-                                   v-for="(item, index) in groupDataList"></el-option>
+                            v-for="(item, index) in groupDataList"></el-option>
                     </el-select>
                 </el-form-item>
             </el-col>
@@ -82,137 +82,137 @@
 </template>
 
 <script lang="ts" setup>
-    import {useI18n} from 'vue-i18n';
-    import {putObj, useTableApi} from '/@/api/gen/table'
-    import {useMessage} from '/@/hooks/message';
-    import {list as groupList} from '/@/api/gen/group'
+import { useI18n } from 'vue-i18n';
+import { putObj, useTableApi } from '/@/api/gen/table'
+import { useMessage } from '/@/hooks/message';
+import { list as groupList } from '/@/api/gen/group'
 
-    const props = defineProps({
-        tableName: {
-            type: String
-        },
-        dsName: {
-            type: String
-        }
-    })
+const props = defineProps({
+    tableName: {
+        type: String
+    },
+    dsName: {
+        type: String
+    }
+})
 
 
-    const emit = defineEmits(['refreshDataList'])
-    const {t} = useI18n()
+const emit = defineEmits(['refreshDataList'])
+const { t } = useI18n()
 
-    const visible = ref(false)
-    const loading = ref(false)
-    const dataFormRef = ref()
-    const dataForm = reactive({
-        id: '',
-        generatorType: 0,
-        formLayout: 1,
-        backendPath: '',
-        frontendPath: '',
-        packageName: '',
-        email: '',
-        author: '',
-        version: '',
-        moduleName: '',
-        functionName: '',
-        className: '',
-        tableComment: '',
-        tableName: '' as string,
-        dsName: '' as string,
-        style: '', //  默认风格 element-plus
-    })
+const visible = ref(false)
+const loading = ref(false)
+const dataFormRef = ref()
+const dataForm = reactive({
+    id: '',
+    generatorType: 0,
+    formLayout: 1,
+    backendPath: '',
+    frontendPath: '',
+    packageName: '',
+    email: '',
+    author: '',
+    version: '',
+    moduleName: '',
+    functionName: '',
+    className: '',
+    tableComment: '',
+    tableName: '' as string,
+    dsName: '' as string,
+    style: '', //  默认风格 element-plus
+})
 
-    const groupDataList = ref([])
+const groupDataList = ref([])
 
-    const openDialog = (dName: string, tName: string) => {
-        visible.value = true
-        dataForm.id = ''
-        dataForm.tableName = tName
-        dataForm.dsName = dName
+const openDialog = (dName: string, tName: string) => {
+    visible.value = true
+    dataForm.id = ''
+    dataForm.tableName = tName
+    dataForm.dsName = dName
 
-        // 重置表单数据
-        if (dataFormRef.value) {
-            dataFormRef.value.resetFields()
-        }
-
-        getTable(dName, tName)
+    // 重置表单数据
+    if (dataFormRef.value) {
+        dataFormRef.value.resetFields()
     }
 
-    const getTable = (dsName: string, tableName: string) => {
-        loading.value = true
-        useTableApi(dsName, tableName).then(res => {
-            Object.assign(dataForm, res.data)
-            let list = res.data.groupList
-            dataForm.style = list[0].id
+    getTable(dName, tName)
+}
 
-        }).finally(() => {
-            loading.value = false
-        })
-    }
+const getTable = (dsName: string, tableName: string) => {
+    loading.value = true
+    useTableApi(dsName, tableName).then(res => {
+        Object.assign(dataForm, res.data)
+        let list = res.data.groupList
+        dataForm.style = list[0].id
 
-    const dataRules = ref({
-        tableName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        tableComment: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        className: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        packageName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        author: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        moduleName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        functionName: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        generatorType: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        formLayout: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        backendPath: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        frontendPath: [{required: true, message: '必填项不能为空', trigger: 'blur'}],
-        style: [{required: true, message: '必填项不能为空', trigger: 'blur'}]
+    }).finally(() => {
+        loading.value = false
     })
+}
 
-    // 保存
-    const submitHandle = () => {
-        return new Promise((resolve, reject) => {
-            dataFormRef.value.validate((valid: boolean) => {
-                if (!valid) {
-                    reject()
-                    return false
-                }
-                loading.value = true
-                putObj(dataForm).then(() => {
-                    visible.value = false
-                    emit('refreshDataList')
-                    useMessage().success(t('common.optSuccessText'))
-                    resolve(dataForm)
-                }).finally(() => {
-                    loading.value = false
-                })
+const dataRules = ref({
+    tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    className: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    packageName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    author: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    moduleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    functionName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    backendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+    style: [{ required: true, message: '必填项不能为空', trigger: 'blur' }]
+})
+
+// 保存
+const submitHandle = () => {
+    return new Promise((resolve, reject) => {
+        dataFormRef.value.validate((valid: boolean) => {
+            if (!valid) {
+                reject()
+                return false
+            }
+            loading.value = true
+            putObj(dataForm).then(() => {
+                visible.value = false
+                emit('refreshDataList')
+                useMessage().success(t('common.optSuccessText'))
+                resolve(dataForm)
+            }).finally(() => {
+                loading.value = false
             })
         })
-    }
-
-    const genGroupList = () => {
-        groupList().then(res => {
-            groupDataList.value = res.data
-        })
-    }
-
-    onMounted(() => {
-        // 重置表单数据
-        if (dataFormRef.value) {
-            dataFormRef.value.resetFields()
-        }
-        dataForm.id = ''
-        dataForm.tableName = String(props.tableName)
-        dataForm.dsName = String(props.dsName)
-
-        getTable(dataForm.dsName, dataForm.tableName)
-        genGroupList()
     })
+}
 
-    defineExpose({
-        openDialog,
-        submitHandle
+const genGroupList = () => {
+    groupList().then(res => {
+        groupDataList.value = res.data
     })
+}
+
+onMounted(() => {
+    // 重置表单数据
+    if (dataFormRef.value) {
+        dataFormRef.value.resetFields()
+    }
+    dataForm.id = ''
+    dataForm.tableName = String(props.tableName)
+    dataForm.dsName = String(props.dsName)
+
+    getTable(dataForm.dsName, dataForm.tableName)
+    genGroupList()
+})
+
+defineExpose({
+    openDialog,
+    submitHandle
+})
 </script>
 
 <style lang="scss" scoped>
-    .generator-code .el-dialog__body {
-        padding: 15px 30px 0 20px;
-    }
+.generator-code .el-dialog__body {
+    padding: 15px 30px 0 20px;
+}
 </style>
