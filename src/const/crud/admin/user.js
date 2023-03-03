@@ -14,7 +14,7 @@
  * this software without specific prior written permission.
  * Author: lengleng (wangiegie@gmail.com)
  */
-import { isExsit } from '@/api/admin/user'
+import { isExist } from '@/api/admin/user'
 
 export const validateUsername = (rule, value, callback) => {
   if (!value) {
@@ -24,7 +24,7 @@ export const validateUsername = (rule, value, callback) => {
   if (!flag) {
     callback(new Error('用户名支持小写英文、数字'))
   }
-  isExsit({ username: value }).then(response => {
+  isExist({ username: value }).then(response => {
     if (window.boxType === 'edit') callback()
     const result = response.data.data
     if (result) {
@@ -60,7 +60,7 @@ export const checkPhone = (rule, value, callback) => {
     }
   }
 
-  isExsit({ phone: value }).then(response => {
+  isExist({ phone: value }).then(response => {
     if (window.boxType === 'edit') callback()
     const result = response.data.data
     if (result) {

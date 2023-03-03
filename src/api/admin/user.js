@@ -55,7 +55,7 @@ export function putObj(obj) {
   })
 }
 
-export function isExsit(params) {
+export function isExist(params) {
   return request({
     url: '/admin/user/check/exsit',
     method: 'get',
