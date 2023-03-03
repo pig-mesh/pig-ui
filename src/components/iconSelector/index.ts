@@ -10,7 +10,7 @@ const clearReturn = /(\r)|(\n)/g;
 const clearFill = /(fill="[^>+].*?")/g;
 
 function findSvgFile(dir: string): string[] {
-	const svgRes = [];
+	const svgRes = [] as any;
 	const dirents = readdirSync(dir, {
 		withFileTypes: true,
 	});

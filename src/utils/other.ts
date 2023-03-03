@@ -8,10 +8,10 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { i18n } from '/@/i18n/index';
 import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
-import request from "/@/utils/request";
-import { useMessage } from "/@/hooks/message";
+import request from '/@/utils/request';
+import { useMessage } from '/@/hooks/message';
 // @ts-ignore
-import * as CryptoJS from "crypto-js";
+import * as CryptoJS from 'crypto-js';
 
 // 引入组件
 const SvgIcon = defineAsyncComponent(() => import('/@/components/svgIcon/index.vue'));
@@ -57,8 +57,10 @@ export function useTitle() {
 export function setTagsViewNameI18n(item: any) {
 	let tagsViewName: string = '';
 	const { query, params, meta } = item;
+	//修复tagsViewName匹配到其他含下列单词的路由
+	const pattern = /^\{("(zh-cn|en|zh-tw)":"[^,]+",?){1,3}}$/;
 	if (query?.tagsViewName || params?.tagsViewName) {
-		if (/\/zh-cn|en|zh-tw\//.test(query?.tagsViewName) || /\/zh-cn|en|zh-tw\//.test(params?.tagsViewName)) {
+		if (pattern.test(query?.tagsViewName) || pattern.test(params?.tagsViewName)) {
 			// 国际化
 			const urlTagsParams = (query?.tagsViewName && JSON.parse(query?.tagsViewName)) || (params?.tagsViewName && JSON.parse(params?.tagsViewName));
 			tagsViewName = urlTagsParams[i18n.global.locale.value];
@@ -180,35 +182,29 @@ export function handleOpenLink(val: RouteItem) {
  */
 export const openWindow = (url: string, title: string, w: number, h: number) => {
 	// Fixes dual-screen position                            Most browsers       Firefox
-	const dualScreenLeft =
-		window.screenLeft !== undefined ? window.screenLeft : screen.left;
-	const dualScreenTop =
-		window.screenTop !== undefined ? window.screenTop : screen.top;
+	const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+	const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
 
-	const width = window.innerWidth
-		? window.innerWidth
-		: document.documentElement.clientWidth
-			? document.documentElement.clientWidth
-			: screen.width;
+	const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
 	const height = window.innerHeight
 		? window.innerHeight
 		: document.documentElement.clientHeight
-			? document.documentElement.clientHeight
-			: screen.height;
+		? document.documentElement.clientHeight
+		: screen.height;
 
 	const left = width / 2 - w / 2 + dualScreenLeft;
 	const top = height / 2 - h / 2 + dualScreenTop;
 	return window.open(
 		url,
 		title,
-		"toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=" +
-		w +
-		", height=" +
-		h +
-		", top=" +
-		top +
-		", left=" +
-		left
+		'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no, width=' +
+			w +
+			', height=' +
+			h +
+			', top=' +
+			top +
+			', left=' +
+			left
 	);
 };
 /**
@@ -217,7 +213,7 @@ export const openWindow = (url: string, title: string, w: number, h: number) => 
 export function encryption(params: any) {
 	let { data, type, param, key } = params;
 	const result = JSON.parse(JSON.stringify(data));
-	if (type === "Base64") {
+	if (type === 'Base64') {
 		param.forEach((ele: any) => {
 			result[ele] = btoa(result[ele]);
 		});
@@ -230,7 +226,7 @@ export function encryption(params: any) {
 			var encrypted = CryptoJS.AES.encrypt(data, key, {
 				iv: iv,
 				mode: CryptoJS.mode.CFB,
-				padding: CryptoJS.pad.NoPadding
+				padding: CryptoJS.pad.NoPadding,
 			});
 			result[ele] = encrypted.toString();
 		});
@@ -248,27 +244,27 @@ export function encryption(params: any) {
 export function downBlobFile(url: any, query: any, fileName: string) {
 	return request({
 		url: url,
-		method: "get",
-		responseType: "blob",
-		params: query
-	}).then(response => {
-		handleBlobFile(response, fileName)
+		method: 'get',
+		responseType: 'blob',
+		params: query,
+	}).then((response) => {
+		handleBlobFile(response, fileName);
 	});
 }
 
 /**
  * blob 文件刘处理
- * @param response 响应结果 
- * @returns 
+ * @param response 响应结果
+ * @returns
  */
 export function handleBlobFile(response: any, fileName: string) {
 	// 处理返回的文件流
 	const blob = response;
 	if (blob && blob.size === 0) {
-		useMessage().error("内容为空，无法下载");
+		useMessage().error('内容为空，无法下载');
 		return;
 	}
-	const link = document.createElement("a");
+	const link = document.createElement('a');
 
 	// 兼容一下 入参不是 File Blob 类型情况
 	var binaryData = [] as any;
@@ -325,37 +321,37 @@ const other = {
 		handleOpenLink(val);
 	},
 	encryption: (data: any) => {
-		return encryption(data)
+		return encryption(data);
 	},
 	downBlobFile: (url: any, query: any, fileName: string) => {
-		return downBlobFile(url, query, fileName)
+		return downBlobFile(url, query, fileName);
 	},
 	toUnderline: (str: string) => {
-		return toUnderline(str)
+		return toUnderline(str);
 	},
 	openWindow: (url: string, title: string, w: number, h: number) => {
-		return openWindow(url, title, w, h)
+		return openWindow(url, title, w, h);
 	},
 	getQueryString: (url: string, paraName: string) => {
-		return getQueryString(url, paraName)
-	}
+		return getQueryString(url, paraName);
+	},
 };
 
 export function getQueryString(url: string, paraName: string) {
-	const arrObj = url.split("?");
+	const arrObj = url.split('?');
 	if (arrObj.length > 1) {
-		const arrPara = arrObj[1].split("&");
+		const arrPara = arrObj[1].split('&');
 		let arr;
 		for (let i = 0; i < arrPara.length; i++) {
-			arr = arrPara[i].split("=");
+			arr = arrPara[i].split('=');
 			// eslint-disable-next-line eqeqeq
 			if (arr != null && arr[0] == paraName) {
 				return arr[1];
 			}
 		}
-		return "";
+		return '';
 	} else {
-		return "";
+		return '';
 	}
 }
 
@@ -369,25 +365,31 @@ export function getQueryString(url: string, paraName: string) {
  * @returns {*}
  */
 export function handleTree(data, id, parentId, children, rootId) {
-	id = id || 'id'
-	parentId = parentId || 'parentId'
-	children = children || 'children'
-	rootId = rootId || Math.min.apply(Math, data.map(item => {
-		return item[parentId]
-	})) || 0
+	id = id || 'id';
+	parentId = parentId || 'parentId';
+	children = children || 'children';
+	rootId =
+		rootId ||
+		Math.min.apply(
+			Math,
+			data.map((item) => {
+				return item[parentId];
+			})
+		) ||
+		0;
 	//对源数据深度克隆
-	const cloneData = JSON.parse(JSON.stringify(data))
+	const cloneData = JSON.parse(JSON.stringify(data));
 	//循环所有项
-	const treeData = cloneData.filter(father => {
-		const branchArr = cloneData.filter(child => {
+	const treeData = cloneData.filter((father) => {
+		const branchArr = cloneData.filter((child) => {
 			//返回每一项的子级数组
-			return father[id] === child[parentId]
-		})
-		branchArr.length > 0 ? father[children] = branchArr : ''
+			return father[id] === child[parentId];
+		});
+		branchArr.length > 0 ? (father[children] = branchArr) : '';
 		//返回第一层
-		return father[parentId] === rootId
-	})
-	return treeData !== '' ? treeData : data
+		return father[parentId] === rootId;
+	});
+	return treeData !== '' ? treeData : data;
 }
 
 /**
@@ -396,9 +398,8 @@ export function handleTree(data, id, parentId, children, rootId) {
  * @returns 下划线
  */
 export function toUnderline(str: string) {
-	return str.replace(/([A-Z])/g, "_$1").toLowerCase()
+	return str.replace(/([A-Z])/g, '_$1').toLowerCase();
 }
-
 
 // 统一批量导出
 export default other;
