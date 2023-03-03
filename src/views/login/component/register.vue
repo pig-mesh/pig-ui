@@ -1,7 +1,7 @@
 <template>
   <el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="state.ruleForm">
     <el-form-item class="login-animation1" prop="username">
-      <el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
+      <el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
                 autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
@@ -12,7 +12,7 @@
     </el-form-item>
     <el-form-item class="login-animation2" prop="password">
       <el-input :type="state.isShowPassword ? 'text' : 'password'"
-                :placeholder="$t('account.accountPlaceholder2')" v-model="state.ruleForm.password" autocomplete="off">
+                :placeholder="$t('password.accountPlaceholder2')" v-model="state.ruleForm.password" autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
             <ele-Unlock/>
@@ -27,7 +27,7 @@
       </el-input>
     </el-form-item>
     <el-form-item class="login-animation3" prop="phone">
-      <el-input text :placeholder="$t('account.phonePlaceholder4')" v-model="state.ruleForm.phone" clearable
+      <el-input text :placeholder="$t('password.phonePlaceholder4')" v-model="state.ruleForm.phone" clearable
                 autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
@@ -39,7 +39,7 @@
     <el-form-item class="login-animation4">
       <el-button type="primary" class="login-content-submit" round v-waves @click="handleRegister"
                  :loading="loading">
-        <span>{{ $t('account.registerBtnText') }}</span>
+        <span>{{ $t('password.registerBtnText') }}</span>
       </el-button>
     </el-form-item>
   </el-form>

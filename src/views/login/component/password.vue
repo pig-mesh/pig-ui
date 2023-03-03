@@ -1,51 +1,50 @@
 <template>
   <el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm">
     <el-form-item class="login-animation1">
-      <el-input text :placeholder="$t('account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
-                autocomplete="off">
+      <el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
+        autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
-            <ele-User/>
+            <ele-User />
           </el-icon>
         </template>
       </el-input>
     </el-form-item>
     <el-form-item class="login-animation2">
-      <el-input :type="state.isShowPassword ? 'text' : 'password'"
-                :placeholder="$t('account.accountPlaceholder2')" v-model="state.ruleForm.password" autocomplete="off">
+      <el-input :type="state.isShowPassword ? 'text' : 'password'" :placeholder="$t('password.accountPlaceholder2')"
+        v-model="state.ruleForm.password" autocomplete="off">
         <template #prefix>
           <el-icon class="el-input__icon">
-            <ele-Unlock/>
+            <ele-Unlock />
           </el-icon>
         </template>
         <template #suffix>
           <i class="iconfont el-input__icon login-content-password"
-             :class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-             @click="state.isShowPassword = !state.isShowPassword">
+            :class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
+            @click="state.isShowPassword = !state.isShowPassword">
           </i>
         </template>
       </el-input>
     </el-form-item>
     <el-form-item>
       <Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'"
-              :imgSize="{ width: '330px', height: '155px' }" ref="verifyref"/>
+        :imgSize="{ width: '330px', height: '155px' }" ref="verifyref" />
     </el-form-item>
     <el-form-item class="login-animation4">
-      <el-button type="primary" class="login-content-submit" round v-waves @click="handleVerify"
-                 :loading="loading">
-        <span>{{ $t('account.accountBtnText') }}</span>
+      <el-button type="primary" class="login-content-submit" round v-waves @click="handleVerify" :loading="loading">
+        <span>{{ $t('password.accountBtnText') }}</span>
       </el-button>
     </el-form-item>
-    <div class="font12 mt30 login-animation4 login-msg">{{ $t('mobile.msgText') }}</div>
+    <div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div>
   </el-form>
 </template>
 
 <script setup lang="ts" name="password">
-import {reactive, defineAsyncComponent, ref} from 'vue';
-import {useUserInfo} from '/@/stores/userInfo';
-import {useI18n} from "vue-i18n";
+import { reactive, defineAsyncComponent, ref } from 'vue';
+import { useUserInfo } from '/@/stores/userInfo';
+import { useI18n } from "vue-i18n";
 
-const {t} = useI18n()
+const { t } = useI18n()
 const Verify = defineAsyncComponent(() => import('/@/components/verifition/Verify.vue'))
 
 // 定义变量内容
@@ -64,8 +63,8 @@ const state = reactive({
 });
 
 const loginRules = reactive({
-  username: [{required: true, trigger: "blur", message: t('account.accountPlaceholder1')}],
-  password: [{required: true, trigger: "blur", message: t('account.accountPlaceholder2')}],
+  username: [{ required: true, trigger: "blur", message: t('password.accountPlaceholder1') }],
+  password: [{ required: true, trigger: "blur", message: t('password.accountPlaceholder2') }],
 })
 
 // @ts-ignore
