@@ -2,7 +2,7 @@ import { createI18n } from 'vue-i18n';
 import pinia from '/@/stores/index';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import { info } from '/@/api/admin/i18n'
+import { info } from '/@/api/admin/i18n';
 
 // 定义语言国际化内容
 
@@ -20,7 +20,7 @@ import zhcnLocale from 'element-plus/lib/locale/lang/zh-cn';
 
 // 定义变量内容
 const messages = {};
-const element = { en: enLocale, 'zh-cn': zhcnLocale};
+const element = { en: enLocale, 'zh-cn': zhcnLocale };
 const itemize = { en: [] as any[], 'zh-cn': [] as any[] };
 const modules: Record<string, any> = import.meta.glob('./**/*.ts', { eager: true });
 const pages: Record<string, any> = import.meta.glob('./../../**/**/**/i18n/*.ts', { eager: true });
@@ -46,12 +46,14 @@ function mergeArrObj<T>(list: T, key: string) {
 	return obj;
 }
 
-
 // 远程获取i18n
-const infoI18n = await info()
-
-itemize["zh-cn"].push(...infoI18n.data['zh-cn'])
-itemize.en.push(...infoI18n.data.en)
+try {
+	const infoI18n = await info();
+	itemize['zh-cn'].push(...infoI18n.data['zh-cn']);
+	itemize.en.push(...infoI18n.data.en);
+} catch (e) {
+	// 考虑请求不过去没有后台的情况下导致的i18n失效
+}
 
 for (const key in itemize) {
 	messages[key] = {
@@ -60,7 +62,6 @@ for (const key in itemize) {
 		...mergeArrObj(itemize, key),
 	};
 }
-
 
 // 读取 pinia 默认语言
 const stores = useThemeConfig(pinia);

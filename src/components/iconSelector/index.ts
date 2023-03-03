@@ -50,7 +50,6 @@ export const svgBuilder = (path: string, perfix = 'local') => {
 	if (path === '') return;
 	idPerfix = perfix;
 	const res = findSvgFile(path);
-	console.log(res, 'res');
 	return {
 		name: 'svg-transform',
 		transformIndexHtml(html: string) {
