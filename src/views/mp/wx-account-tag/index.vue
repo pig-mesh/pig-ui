@@ -23,7 +23,7 @@
       <el-row>
         <div class="mb8" style="width: 100%">
           <el-button v-auth="'mp_wx_account_tag_add'" class="ml10" formDialogRef icon="folder-add" type="primary"
-                     @click="formDialogRef.openDialog(state.queryForm.wxAccountAppid)">
+                     @click="formDialogRef.openDialog(null,state.queryForm.wxAccountAppid)">
             {{ $t('common.addBtn') }}
           </el-button>
           <el-button v-auth="'mp_wx_account_tag_export'" class="ml10" formDialogRef icon="Download" type="primary"
@@ -49,8 +49,8 @@
         <el-table-column :label="t('wxAccountTag.tagId')" prop="tagId" show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
-            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
-            <el-button text type="primary" @click="handleDelete([scope.row.id])">{{$t('common.delBtn') }}</el-button>
+            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row,state.queryForm.wxAccountAppid)">{{ $t('common.editBtn') }}</el-button>
+            <el-button text type="primary" @click="handleDelete(scope.row)">{{$t('common.delBtn') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -141,10 +141,13 @@ const handleSelectionChange = (objs: any) => {
 }
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
+const handleDelete = (row: any) => {
   useMessageBox().confirm(t('common.delConfirmText'))
       .then(() => {
-        delObjs(ids).then(() => {
+        delObjs({
+          id: row.id,
+          wxAccountAppid: row.wxAccountAppid
+        }).then(() => {
           getDataList(false);
           useMessage().success(t('common.delSuccessText'));
         }).catch((err: any) => {

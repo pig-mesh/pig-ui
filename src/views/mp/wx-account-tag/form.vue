@@ -23,7 +23,7 @@
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 import {useMessage} from "/@/hooks/message";
-import {addObj} from '/@/api/mp/wx-account-tag'
+import {addObj,putObj} from '/@/api/mp/wx-account-tag'
 import {useI18n} from "vue-i18n"
 
 const {t} = useI18n();
@@ -38,20 +38,25 @@ const loading = ref(false)
 const form = reactive({
   wxAccountAppid: '',
   tag: '',
+  id: ''
 });
 
 // 定义校验规则
 const dataRules = ref({})
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = (row: any,appid: string) => {
   visible.value = true
-  form.wxAccountAppid = id
 
   // 重置表单数据
   if (dataFormRef.value) {
     dataFormRef.value.resetFields()
   }
+  if(row){
+    Object.assign(form,row)
+  }
+  form.wxAccountAppid = appid
+
 };
 
 // 提交
@@ -61,15 +66,27 @@ const onSubmit = () => {
       return false
     }
     loading.value = true
-    addObj(form).then(() => {
-      useMessage().success(t('common.addSuccessText'))
-      visible.value = false // 关闭弹窗
-      emit('refresh')
-    }).catch((err: any) => {
-      useMessage().error(err.msg)
-    }).finally(() => {
-      loading.value = false
-    })
+    if(form.id){
+      putObj(form).then(() => {
+        useMessage().success(t('common.editSuccessText'))
+        visible.value = false // 关闭弹窗
+        emit('refresh')
+      }).catch((err: any) => {
+        useMessage().error(err.msg)
+      }).finally(() => {
+        loading.value = false
+      })
+    }else{
+      addObj(form).then(() => {
+        useMessage().success(t('common.addSuccessText'))
+        visible.value = false // 关闭弹窗
+        emit('refresh')
+      }).catch((err: any) => {
+        useMessage().error(err.msg)
+      }).finally(() => {
+        loading.value = false
+      })
+    }
   })
 }
 
