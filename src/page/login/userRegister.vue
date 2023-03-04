@@ -22,16 +22,13 @@
     <el-form-item prop="password">
       <el-input
         v-model="registerForm.password"
-        :type="passwordType"
+        size="small"
+        type="password"
         auto-complete="off"
+        show-password
         placeholder="请输入密码"
         @keyup.enter.native="handleRegister"
       >
-        <i
-          slot="suffix"
-          class="el-icon-view el-input__icon"
-          @click="showPassword"
-        ></i>
         <template #prefix>
           <i class="icon-mima"></i>
         </template>
@@ -87,8 +84,7 @@ export default {
             trigger: 'blur'
           }
         ]
-      },
-      passwordType: 'password'
+      }
     }
   },
   created() {
@@ -99,11 +95,6 @@ export default {
   methods: {
     validatePhone(rule, value, callback) {
       checkPhone(rule, value, callback)
-    },
-    showPassword() {
-      this.passwordType === ''
-        ? (this.passwordType = 'password')
-        : (this.passwordType = '')
     },
     handleRegister() {
       this.$refs.registerForm.validate(valid => {

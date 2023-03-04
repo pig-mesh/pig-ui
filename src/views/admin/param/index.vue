@@ -33,7 +33,7 @@
         @row-update="handleUpdate"
         @row-save="handleSave"
         @row-del="rowDel">
-        <template slot="menuLeft">
+        <template #menu-left>
           <el-button
             v-if="permissions.sys_publicparam_del"
             class="filter-item"

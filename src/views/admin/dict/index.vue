@@ -32,7 +32,7 @@
         @size-change="sizeChange"
         @current-change="currentChange"
         @row-del="rowDel">
-        <template slot="menuLeft">
+        <template #menu-left>
           <el-button
             v-if="permissions.sys_dict_del"
             class="filter-item"
