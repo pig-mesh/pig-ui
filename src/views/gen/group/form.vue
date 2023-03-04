@@ -51,7 +51,7 @@ const form = reactive({
 	id: '',
 	groupName: '',
 	groupDesc: '',
-	templateId: [] as String[],
+	templateId: [] as string[],
 	putList: [],
 });
 

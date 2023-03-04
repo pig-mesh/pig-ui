@@ -45,7 +45,7 @@
 						<el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
 					<el-form-item :label="$t('sysmenu.icon')" prop="icon">
 						<IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
 					</el-form-item>

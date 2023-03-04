@@ -93,6 +93,7 @@ const multiple = ref(true);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
+	descs: ['id'],
 });
 
 //  table hook

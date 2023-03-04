@@ -115,7 +115,7 @@ const dataRules = ref({
 	roleCode: [
 		{ required: true, message: '角色标识不能为空', trigger: 'blur' },
 		{ min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
-		{ validator: rule.validatorKey, trigger: 'blur' },
+		{ validator: rule.validatorCapital, trigger: 'blur' },
 		{ validator: validateRoleCode, trigger: 'blur' },
 	],
 	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],

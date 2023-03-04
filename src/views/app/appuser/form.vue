@@ -95,8 +95,8 @@ const dataForm = reactive({
 	nickname: '',
 	name: '',
 	email: '',
-	post: [] as String[],
-	role: [] as String[],
+	post: [] as string[],
+	role: [] as string[],
 });
 
 const dataRules = ref({

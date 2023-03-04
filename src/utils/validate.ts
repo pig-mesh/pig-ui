@@ -34,13 +34,26 @@ export const rule = {
 		}
 	},
 	/**
-	 * 校验 请输入中文、英文、数字包括下划线
+	 * 校验 请输入大写英文、下划线
 	 * 名称校验
 	 */
-	validatorKey(rule: any, value: any, callback: any) {
+	validatorCapital(rule: any, value: any, callback: any) {
 		const acount = /^[A-Z_]+$/;
 		if (value && !acount.test(value)) {
 			callback(new Error('请输入大写英文、下划线'));
+		} else {
+			callback();
+		}
+	},
+
+	/**
+	 * 校验 请输入小写英文、下划线
+	 * 名称校验
+	 */
+	validatorLowercase(rule: any, value: any, callback: any) {
+		const acount = /^[a-z_]+$/;
+		if (value && !acount.test(value)) {
+			callback(new Error('请输入小写英文、下划线'));
 		} else {
 			callback();
 		}

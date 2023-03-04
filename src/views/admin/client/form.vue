@@ -20,39 +20,27 @@
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes">
-						<el-checkbox-group v-model="form.authorizedGrantTypes">
-							<el-checkbox :key="index" :label="item.value" v-for="(item, index) in grant_types">{{ item.label }} </el-checkbox>
-						</el-checkbox-group>
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('client.webServerRedirectUri')" prop="webServerRedirectUri">
-						<el-input :placeholder="t('client.inputWebServerRedirectUriTip')" v-model="form.webServerRedirectUri" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('client.authorities')" prop="authorities">
-						<el-input :placeholder="t('client.inputAuthoritiesTip')" v-model="form.authorities" />
+						<el-select v-model="form.authorizedGrantTypes" multiple collapse-tags collapse-tags-tooltip>
+							<el-option :key="index" :label="item.label" v-for="(item, index) in grant_types" :value="item.value"></el-option>
+						</el-select>
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('client.accessTokenValidity')" prop="accessTokenValidity">
-						<el-input :placeholder="t('client.inputAccessTokenValidityTip')" v-model="form.accessTokenValidity" />
+						<el-input-number :placeholder="t('client.inputAccessTokenValidityTip')" v-model="form.accessTokenValidity" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('client.refreshTokenValidity')" prop="refreshTokenValidity">
-						<el-input :placeholder="t('client.inputRefreshTokenValidityTip')" v-model="form.refreshTokenValidity" />
+						<el-input-number :placeholder="t('client.inputRefreshTokenValidityTip')" v-model="form.refreshTokenValidity" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="form.authorizedGrantTypes.includes('authorization_code')">
 					<el-form-item :label="t('client.autoapprove')" prop="autoapprove">
 						<el-radio-group v-model="form.autoapprove">
 							<el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{ item.label }} </el-radio>
@@ -60,9 +48,15 @@
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('client.additionalInformation')" prop="additionalInformation">
-						<el-input :placeholder="t('client.inputAdditionalInformationTip')" type="textarea" v-model="form.additionalInformation" />
+				<el-col :span="12" class="mb20" v-if="form.authorizedGrantTypes.includes('authorization_code')">
+					<el-form-item :label="t('client.authorities')" prop="authorities">
+						<el-input :placeholder="t('client.inputAuthoritiesTip')" v-model="form.authorities" />
+					</el-form-item>
+				</el-col>
+
+				<el-col :span="24" class="mb20" v-if="form.authorizedGrantTypes.includes('authorization_code')">
+					<el-form-item :label="t('client.webServerRedirectUri')" prop="webServerRedirectUri">
+						<el-input :placeholder="t('client.inputWebServerRedirectUriTip')" v-model="form.webServerRedirectUri" />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -118,13 +112,13 @@
 </template>
 
 <script lang="ts" name="SysOauthClientDetailsDialog" setup>
-// 定义子组件向父组件传值/事件
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/admin/client';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 
+// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
@@ -145,36 +139,49 @@ const form = reactive({
 	id: '',
 	clientId: '',
 	clientSecret: '',
-	scope: '',
-	authorizedGrantTypes: [],
+	scope: 'server',
+	authorizedGrantTypes: [] as string[],
 	webServerRedirectUri: '',
 	authorities: '',
-	accessTokenValidity: '',
-	refreshTokenValidity: '',
-	additionalInformation: '',
-	autoapprove: '',
+	accessTokenValidity: 43200,
+	refreshTokenValidity: 2592001,
+	autoapprove: 'true',
 	delFlag: '',
 	createBy: '',
 	updateBy: '',
 	createTime: '',
 	updateTime: '',
 	tenantId: '',
+	onlineQuantity: '1',
+	captchaFlag: '1',
+	encFlag: '1',
 });
 
 const collapseActive = ref('1');
 
 // 定义校验规则
 const dataRules = ref({
-	clientId: [{ required: true, message: '编号不能为空', trigger: 'blur' }],
-	clientSecret: [{ required: true, message: '密钥不能为空', trigger: 'blur' }],
+	clientId: [
+		{ required: true, message: '编号不能为空', trigger: 'blur' },
+		{ validator: rule.validatorLowercase, trigger: 'blur' },
+	],
+	clientSecret: [
+		{ required: true, message: '密钥不能为空', trigger: 'blur' },
+		{ validator: rule.validatorLowercase, trigger: 'blur' },
+	],
 	scope: [{ required: true, message: '域不能为空', trigger: 'blur' }],
 	authorizedGrantTypes: [{ required: true, message: '授权模式不能为空', trigger: 'blur' }],
-	accessTokenValidity: [{ required: true, message: '令牌时效不能为空', trigger: 'blur' }],
-	refreshTokenValidity: [{ required: true, message: '刷新时效不能为空', trigger: 'blur' }],
+	accessTokenValidity: [
+		{ required: true, message: '令牌时效不能为空', trigger: 'blur' },
+		{ type: 'number', min: 3600, message: '令牌时效不能小于一小时', trigger: 'blur' },
+	],
+	refreshTokenValidity: [
+		{ required: true, message: '刷新时效不能为空', trigger: 'blur' },
+		{ type: 'number', min: 7200, message: '刷新时效不能小于两小时', trigger: 'blur' },
+	],
 	captchaFlag: [{ required: true, message: '是否开启验证码校验', trigger: 'blur' }],
 	encFlag: [{ required: true, message: '是否开启密码加密传输', trigger: 'blur' }],
 	onlineQuantity: [{ required: true, message: '是否允许同时在线', trigger: 'blur' }],
-	authorities: [{ required: true, message: '权限不能为空', trigger: 'blur' }],
 	autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
 	webServerRedirectUri: [
 		{ required: true, message: '回调地址不能为空', trigger: 'blur' },

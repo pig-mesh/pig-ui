@@ -96,17 +96,17 @@
 
 				<el-table-column :label="$t('common.action')" width="300" fixed="right">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="handleJobLog(scope.row)">日志</el-button>
+						<el-button text type="primary" @click="handleJobLog(scope.row)">日志</el-button>
 
-						<el-button size="small" text type="primary" @click="handleStartJob(scope.row)">启动</el-button>
+						<el-button v-if="scope.row.jobStatus !== '2'" text type="primary" @click="handleStartJob(scope.row)">启动</el-button>
 
-						<el-button size="small" text type="primary" @click="handleShutDownJob(scope.row)">暂停</el-button>
+						<el-button v-if="scope.row.jobStatus === '2'" text type="primary" @click="handleShutDownJob(scope.row)">暂停</el-button>
 
-						<el-button size="small" text type="primary" @click="handleEditJob(scope.row)">{{ $t('common.editBtn') }}</el-button>
+						<el-button text type="primary" @click="handleEditJob(scope.row)">{{ $t('common.editBtn') }}</el-button>
 
-						<el-button size="small" text type="primary" @click="handleRunJob(scope.row)">执行</el-button>
+						<el-button text type="primary" @click="handleRunJob(scope.row)">执行</el-button>
 
-						<el-button size="small" text type="primary" @click="handleDelete(scope.row)">{{ $t('common.delBtn') }}</el-button>
+						<el-button text type="primary" @click="handleDelete(scope.row)">{{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -170,7 +170,7 @@ const handleSelectionChange = (val: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/pigx/job/export', state.queryForm, 'job.xlsx');
+	downBlobFile('/admin/job/export', state.queryForm, 'job.xlsx');
 };
 
 const handleJobLog = (row: any) => {

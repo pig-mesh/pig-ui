@@ -95,7 +95,7 @@ const dataRules = reactive({
 	publicName: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
 	publicKey: [
 		{ required: true, message: '参数键不能为空', trigger: 'blur' },
-		{ validator: rule.validatorKey, trigger: 'blur' },
+		{ validator: rule.validatorLowercase, trigger: 'blur' },
 	],
 	publicValue: [{ required: true, message: '参数值不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
