@@ -1,0 +1,105 @@
+{
+	"[scss]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[javascript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[html]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[vue]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[css]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"eslint.options": {
+		"extensions": [".js", ".vue", ".ts", ".tsx"]
+	},
+	"eslint.validate": ["vue", "html", "javascript", "graphql", "javascriptreact", "json", "typescript", "typescriptreact", "vue-html"],
+	"eslint.format.enable": true,
+	"editor.codeActionsOnSave": {
+		"source.fixAll.eslint": true
+	},
+	"files.associations": {
+		"*.cjson": "jsonc",
+		"*.wxss": "css",
+		"*.wxs": "javascript",
+		"*.nvue": "vue"
+	},
+	"editor.formatOnSave": true,
+	"editor.tabSize": 2,
+	"editor.formatOnType": true,
+	"javascript.format.enable": false,
+	"workbench.iconTheme": "material-icon-theme",
+	"backgroundCover.imagePath": "d:\\360downloads\\upload.jpg",
+	"search.followSymlinks": false,
+	"backgroundCover.opacity": 0.5,
+	"terminal.integrated.shell.windows": "C:\\Windows\\System32\\cmd.exe",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"[markdown]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"markdownlint.config": {
+		"default": true,
+		"no-hard-tabs": false,
+		"no-inline-html": false,
+		"first-line-heading": false,
+		"heading-increment": false,
+		"no-bare-urls": false
+	},
+	"i18n-ally.localesPaths": [
+		"src/i18n",
+		"src/i18n/lang",
+		"src/components/Cron/language",
+		"src/views/admin/i18n",
+		"src/views/admin/audit/i18n",
+		"src/views/admin/client/i18n",
+		"src/views/admin/dept/i18n",
+		"src/views/admin/dict/i18n",
+		"src/views/admin/file/i18n",
+		"src/views/admin/i18n/i18n",
+		"src/views/admin/log/i18n",
+		"src/views/admin/param/i18n",
+		"src/views/admin/menu/i18n",
+		"src/views/admin/post/i18n",
+		"src/views/admin/role/i18n",
+		"src/views/admin/social/i18n",
+		"src/views/admin/tenant/i18n",
+		"src/views/admin/token/i18n",
+		"src/views/admin/user/i18n",
+		"src/views/app/approle/i18n",
+		"src/views/app/appmenu/i18n",
+		"src/views/app/appsocial/i18n",
+		"src/views/app/appuser/i18n",
+		"src/views/gen/datasource/i18n",
+		"src/views/daemon/job-manage/i18n",
+		"src/views/gen/field-type/i18n",
+		"src/views/gen/table/i18n",
+		"src/views/gen/group/i18n",
+		"src/views/gen/template/i18n",
+		"src/views/mp/wx-account/i18n",
+		"src/views/mp/wx-account-fans/i18n",
+		"src/views/mp/wx-account-tag/i18n",
+		"src/views/mp/wx-fans-msg/i18n",
+		"src/views/oa/leave_bill/i18n",
+		"src/views/oa/model/i18n",
+		"src/views/oa/process/i18n",
+		"src/views/oa/task/i18n",
+		"src/views/pay/channel/i18n",
+		"src/views/pay/order/i18n",
+		"src/views/pay/record/i18n",
+		"src/views/pay/refund/i18n",
+		"src/views/pay/trade/i18n"
+	]
+}
