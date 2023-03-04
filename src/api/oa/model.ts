@@ -8,10 +8,11 @@ export function fetchList(query) {
   })
 }
 
-export function delObj(id) {
+export function delObj(ids:Object) {
   return request({
-    url: '/admin/model/' + id,
-    method: 'delete'
+    url: '/admin/model',
+    method: 'delete',
+    data: ids
   })
 }
 
@@ -22,7 +23,7 @@ export function deploy(id) {
   })
 }
 
-export function addObj(obj) {
+export function addObj(obj?: Object) {
   return request({
     url: '/admin/model/insert',
     method: 'post',
