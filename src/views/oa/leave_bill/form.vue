@@ -44,7 +44,7 @@
 
 <script setup lang="ts" name="OaLeaveBillDialog">
 import { useMessage } from "/@/hooks/message";
-import { getObj, addObj, putObj } from '../../../api/oa/leave-bill'
+import { getObj, addObj, putObj } from '/@/api/oa/leave-bill'
 import { useI18n } from "vue-i18n"
 import { useUserInfo } from "/@/stores/userInfo";
 const emit = defineEmits(['refresh']);

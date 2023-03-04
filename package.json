@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "PIGCLOUD微服务开发平台",
   "author": "pig4cloud",
-  "license": "MIT",
+  "license": "不对外分发 pig4cloud 版权所有，请购买商业版权",
   "scripts": {
     "dev": "vite --force",
     "build": "vite build",
