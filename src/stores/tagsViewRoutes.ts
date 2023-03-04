@@ -10,7 +10,7 @@ export const useTagsViewRoutes = defineStore('tagsViewRoutes', {
 	state: (): TagsViewRoutesState => ({
 		tagsViewRoutes: [],
 		isTagsViewCurrenFull: false,
-		favoriteRoutes: []
+		favoriteRoutes: [],
 	}),
 	actions: {
 		async setTagsViewRoutes(data: Array<string>) {
@@ -20,19 +20,19 @@ export const useTagsViewRoutes = defineStore('tagsViewRoutes', {
 			Session.set('isTagsViewCurrenFull', bool);
 			this.isTagsViewCurrenFull = bool;
 		},
-		async setFavoriteRoutes(item){
-			this.favoriteRoutes.push(item)
+		async setFavoriteRoutes(item) {
+			this.favoriteRoutes.push(item);
 		},
-		async delFavoriteRoutes(item){
-			this.favoriteRoutes.splice(this.favoriteRoutes.indexOf(item), 1)
-		}
+		async delFavoriteRoutes(item) {
+			this.favoriteRoutes.splice(this.favoriteRoutes.indexOf(item), 1);
+		},
 	},
 	persist: {
 		enabled: true,
 		strategies: [
 			{
-				key: 'tagsViewRoutes',  //自定义 Key值
-				storage: localStorage,  // 选择存储方式
+				key: 'tagsViewRoutes', //自定义 Key值
+				storage: localStorage, // 选择存储方式
 			},
 		],
 	},

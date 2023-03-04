@@ -18,23 +18,23 @@
 import request from '/@/utils/request';
 
 export function getObj(id) {
-  return request({
-    url: '/admin/wx-menu/' + id,
-    method: 'get'
-  })
+	return request({
+		url: '/admin/wx-menu/' + id,
+		method: 'get',
+	});
 }
 
 export function saveObj(appId, data) {
-  return request({
-    url: '/admin/wx-menu/' + appId,
-    method: 'post',
-    data: data
-  })
+	return request({
+		url: '/admin/wx-menu/' + appId,
+		method: 'post',
+		data: data,
+	});
 }
 
 export function publishObj(id) {
-  return request({
-    url: '/admin/wx-menu/' + id,
-    method: 'put'
-  })
+	return request({
+		url: '/admin/wx-menu/' + id,
+		method: 'put',
+	});
 }

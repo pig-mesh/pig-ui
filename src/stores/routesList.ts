@@ -10,7 +10,7 @@ export const useRoutesList = defineStore('routesList', {
 	state: (): RoutesListState => ({
 		routesList: [],
 		isColumnsMenuHover: false,
-		isColumnsNavHover: false
+		isColumnsNavHover: false,
 	}),
 	actions: {
 		async setRoutesList(data: Array<string>) {
@@ -21,6 +21,6 @@ export const useRoutesList = defineStore('routesList', {
 		},
 		async setColumnsNavHover(bool: Boolean) {
 			this.isColumnsNavHover = bool;
-		}
-	}
+		},
+	},
 });

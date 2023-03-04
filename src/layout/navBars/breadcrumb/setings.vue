@@ -14,7 +14,7 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">primary</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.primary"  @change="onColorPickerChange"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.primary" @change="onColorPickerChange"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -29,13 +29,13 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBar"  @change="onBgColorPickerChange('topBar')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBar" @change="onBgColorPickerChange('topBar')"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBarColor"  @change="onBgColorPickerChange('topBarColor')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBarColor" @change="onBgColorPickerChange('topBarColor')"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt10">
@@ -50,24 +50,19 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBar"  @change="onBgColorPickerChange('menuBar')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBar" @change="onBgColorPickerChange('menuBar')"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBarColor"  @change="onBgColorPickerChange('menuBarColor')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBarColor" @change="onBgColorPickerChange('menuBarColor')"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarActiveColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker
-							v-model="getThemeConfig.menuBarActiveColor"
-							
-							show-alpha
-							@change="onBgColorPickerChange('menuBarActiveColor')"
-						/>
+						<el-color-picker v-model="getThemeConfig.menuBarActiveColor" show-alpha @change="onBgColorPickerChange('menuBarActiveColor')" />
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt14">
@@ -86,7 +81,6 @@
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-color-picker
 							v-model="getThemeConfig.columnsMenuBar"
-							
 							@change="onBgColorPickerChange('columnsMenuBar')"
 							:disabled="getThemeConfig.layout !== 'columns'"
 						>
@@ -98,7 +92,6 @@
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-color-picker
 							v-model="getThemeConfig.columnsMenuBarColor"
-							
 							@change="onBgColorPickerChange('columnsMenuBarColor')"
 							:disabled="getThemeConfig.layout !== 'columns'"
 						>
@@ -185,7 +178,6 @@
 							:min="1"
 							:max="9999"
 							@change="setLocalThemeConfig"
-							
 							style="width: 90px"
 						>
 						</el-input-number>
@@ -282,7 +274,7 @@
 				<div class="layout-breadcrumb-seting-bar-flex mt14">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourWartermarkText') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-input v-model="getThemeConfig.wartermarkText"  style="width: 90px" @input="onWartermarkTextInput"></el-input>
+						<el-input v-model="getThemeConfig.wartermarkText" style="width: 90px" @input="onWartermarkTextInput"></el-input>
 					</div>
 				</div>
 
@@ -291,7 +283,7 @@
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fiveTagsStyle') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-select v-model="getThemeConfig.tagsStyle" placeholder="请选择"  style="width: 90px" @change="setLocalThemeConfig">
+						<el-select v-model="getThemeConfig.tagsStyle" placeholder="请选择" style="width: 90px" @change="setLocalThemeConfig">
 							<el-option label="风格1" value="tags-style-one"></el-option>
 							<el-option label="风格4" value="tags-style-four"></el-option>
 							<el-option label="风格5" value="tags-style-five"></el-option>
@@ -301,7 +293,7 @@
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fiveAnimation') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-select v-model="getThemeConfig.animation" placeholder="请选择"  style="width: 90px" @change="setLocalThemeConfig">
+						<el-select v-model="getThemeConfig.animation" placeholder="请选择" style="width: 90px" @change="setLocalThemeConfig">
 							<el-option label="slide-right" value="slide-right"></el-option>
 							<el-option label="slide-left" value="slide-left"></el-option>
 							<el-option label="opacitys" value="opacitys"></el-option>
@@ -314,7 +306,6 @@
 						<el-select
 							v-model="getThemeConfig.columnsAsideStyle"
 							placeholder="请选择"
-							
 							style="width: 90px"
 							:disabled="getThemeConfig.layout !== 'columns' ? true : false"
 							@change="setLocalThemeConfig"
@@ -330,7 +321,6 @@
 						<el-select
 							v-model="getThemeConfig.columnsAsideLayout"
 							placeholder="请选择"
-							
 							style="width: 90px"
 							:disabled="getThemeConfig.layout !== 'columns' ? true : false"
 							@change="setLocalThemeConfig"
@@ -417,7 +407,7 @@
 						</el-icon>
 						{{ $t('layout.copyText') }}
 					</el-button>
-					<el-button  class="copy-config-btn-reset" type="info" @click="onResetConfigClick">
+					<el-button class="copy-config-btn-reset" type="info" @click="onResetConfigClick">
 						<el-icon class="mr5">
 							<ele-RefreshRight />
 						</el-icon>

@@ -119,7 +119,7 @@ const setFilterRoutes = () => {
 };
 // 传送当前子级数据到菜单中
 const setSendChildren = (path: string) => {
-  const parentRoute = searchParent(routesList.value,path) as any
+	const parentRoute = searchParent(routesList.value, path) as any;
 	let currentData: MittMenu = { children: [] };
 	state.columnsAsideList.map((v: RouteItem, k: number) => {
 		if (v.path === parentRoute.path) {
@@ -143,7 +143,7 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 };
 // tagsView 点击时，根据路由查找下标 columnsAsideList，实现左侧菜单高亮
 const setColumnsMenuHighlight = (path: string) => {
-  const parentRoute = searchParent(routesList.value,path) as any
+	const parentRoute = searchParent(routesList.value, path) as any;
 	const currentSplitRoute = state.columnsAsideList.find((v: RouteItem) => v.path === parentRoute.path);
 	if (!currentSplitRoute) return false;
 	// 延迟拿值，防止取不到
@@ -153,21 +153,20 @@ const setColumnsMenuHighlight = (path: string) => {
 };
 
 // 使用递归查询对应的父级路由
-const searchParent = (routesList: any,path: string) => {
-  let route = undefined
-  routesList.forEach(item => {
-    if(item.path === path){
-      route =  item;
-      return
-    }
-    if(item.children && searchParent(item.children,path)){
-      route = item
-      return;
-    }
-  })
-  return route
-}
-
+const searchParent = (routesList: any, path: string) => {
+	let route = undefined;
+	routesList.forEach((item) => {
+		if (item.path === path) {
+			route = item;
+			return;
+		}
+		if (item.children && searchParent(item.children, path)) {
+			route = item;
+			return;
+		}
+	});
+	return route;
+};
 
 // 页面加载时
 onMounted(() => {

@@ -1,66 +1,65 @@
 <template>
-  <div class="top-right-btn" :style="style">
-    <el-row>
-      <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
-        <el-button circle icon="Search" @click="toggleSearch()" />
-      </el-tooltip>
-      <el-tooltip class="item" effect="dark" content="刷新" placement="top">
-        <el-button circle icon="Refresh" @click="refresh()" />
-      </el-tooltip>
-    </el-row>
-  </div>
+	<div class="top-right-btn" :style="style">
+		<el-row>
+			<el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top" v-if="search">
+				<el-button circle icon="Search" @click="toggleSearch()" />
+			</el-tooltip>
+			<el-tooltip class="item" effect="dark" content="刷新" placement="top">
+				<el-button circle icon="Refresh" @click="refresh()" />
+			</el-tooltip>
+		</el-row>
+	</div>
 </template>
 
 <script setup name="right-toolbar">
-
 const props = defineProps({
-  showSearch: {
-    type: Boolean,
-    default: true,
-  },
-  search: {
-    type: Boolean,
-    default: true,
-  },
-  gutter: {
-    type: Number,
-    default: 10,
-  },
-})
+	showSearch: {
+		type: Boolean,
+		default: true,
+	},
+	search: {
+		type: Boolean,
+		default: true,
+	},
+	gutter: {
+		type: Number,
+		default: 10,
+	},
+});
 
 const emits = defineEmits(['update:showSearch', 'queryTable']);
 
 const style = computed(() => {
-  const ret = {};
-  if (props.gutter) {
-    ret.marginRight = `${props.gutter / 2}px`;
-  }
-  return ret;
+	const ret = {};
+	if (props.gutter) {
+		ret.marginRight = `${props.gutter / 2}px`;
+	}
+	return ret;
 });
 
 // 搜索
 function toggleSearch() {
-  emits("update:showSearch", !props.showSearch);
+	emits('update:showSearch', !props.showSearch);
 }
 
 // 刷新
 function refresh() {
-  emits("queryTable");
+	emits('queryTable');
 }
 </script>
 
-<style lang='scss' scoped>
+<style lang="scss" scoped>
 :deep(.el-transfer__button) {
-  border-radius: 50%;
-  display: block;
-  margin-left: 0px;
+	border-radius: 50%;
+	display: block;
+	margin-left: 0px;
 }
 
 :deep(.el-transfer__button:first-child) {
-  margin-bottom: 10px;
+	margin-bottom: 10px;
 }
 
 .my-el-transfer {
-  text-align: center;
+	text-align: center;
 }
 </style>

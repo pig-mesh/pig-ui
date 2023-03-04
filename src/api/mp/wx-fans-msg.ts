@@ -18,62 +18,62 @@
 import request from '/@/utils/request';
 
 export function fetchList(query) {
-  return request({
-    url: '/admin/wx-fans-msg/page',
-    method: 'get',
-    params: query
-  })
+	return request({
+		url: '/admin/wx-fans-msg/page',
+		method: 'get',
+		params: query,
+	});
 }
 
 export function addObj(obj) {
-  return request({
-    url: '/admin/wx-fans-msg',
-    method: 'post',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-fans-msg',
+		method: 'post',
+		data: obj,
+	});
 }
 
 export function getObj(id) {
-  return request({
-    url: '/admin/wxfansmsg/' + id,
-    method: 'get'
-  })
+	return request({
+		url: '/admin/wxfansmsg/' + id,
+		method: 'get',
+	});
 }
 
 export function delObjs(id) {
-  return request({
-    url: '/admin/wxfansmsg/' + id,
-    method: 'delete'
-  })
+	return request({
+		url: '/admin/wxfansmsg/' + id,
+		method: 'delete',
+	});
 }
 
 export function putObj(obj) {
-  return request({
-    url: '/admin/wxfansmsg',
-    method: 'put',
-    data: obj
-  })
+	return request({
+		url: '/admin/wxfansmsg',
+		method: 'put',
+		data: obj,
+	});
 }
 
 export function fetchResList(query) {
-  return request({
-    url: '/admin/wx-fans-msg/page',
-    method: 'get',
-    params: query
-  })
+	return request({
+		url: '/admin/wx-fans-msg/page',
+		method: 'get',
+		params: query,
+	});
 }
 
 export function addResObj(obj) {
-  return request({
-    url: '/admin/wx-fans-msg',
-    method: 'post',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-fans-msg',
+		method: 'post',
+		data: obj,
+	});
 }
 
 export function delResObj(id) {
-  return request({
-    url: '/admin/wx-fans-msg/' + id,
-    method: 'delete'
-  })
+	return request({
+		url: '/admin/wx-fans-msg/' + id,
+		method: 'delete',
+	});
 }

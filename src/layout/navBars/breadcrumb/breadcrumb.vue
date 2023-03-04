@@ -1,20 +1,21 @@
 <template>
 	<div v-if="isShowBreadcrumb" class="layout-navbars-breadcrumb">
-		<SvgIcon class="layout-navbars-breadcrumb-icon" :name="themeConfig.isCollapse ? 'ele-Expand' : 'ele-Fold'"
-			:size="16" @click="onThemeConfigChange" />
+		<SvgIcon
+			class="layout-navbars-breadcrumb-icon"
+			:name="themeConfig.isCollapse ? 'ele-Expand' : 'ele-Fold'"
+			:size="16"
+			@click="onThemeConfigChange"
+		/>
 		<el-breadcrumb class="layout-navbars-breadcrumb-hide">
 			<transition-group name="breadcrumb">
-				<el-breadcrumb-item v-for="(v, k) in state.breadcrumbList"
-					:key="!v.meta.tagsViewName ? v.meta.title : v.meta.tagsViewName">
+				<el-breadcrumb-item v-for="(v, k) in state.breadcrumbList" :key="!v.meta.tagsViewName ? v.meta.title : v.meta.tagsViewName">
 					<span v-if="k === state.breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
-						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont"
-							v-if="themeConfig.isBreadcrumbIcon" />
+						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />
 						<div v-if="!v.meta.tagsViewName">{{ $t(v.meta.title) }}</div>
 						<div v-else>{{ v.meta.tagsViewName }}</div>
 					</span>
 					<a v-else @click.prevent="onBreadcrumbClick(v)">
-						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont"
-							v-if="themeConfig.isBreadcrumbIcon" />{{ $t(v.meta.title) }}
+						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />{{ $t(v.meta.title) }}
 					</a>
 				</el-breadcrumb-item>
 			</transition-group>
@@ -90,7 +91,7 @@ const initRouteSplit = (path: string) => {
 	state.routeSplitFirst = `/${state.routeSplit[0]}`;
 	state.routeSplitIndex = 1;
 	getBreadcrumbList(routesList.value);
-  state.breadcrumbList.push(route)
+	state.breadcrumbList.push(route);
 
 	if (route.name === 'home' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
 	if (state.breadcrumbList.length > 0)

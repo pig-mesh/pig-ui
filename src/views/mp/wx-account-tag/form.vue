@@ -1,97 +1,101 @@
 <template>
-  <el-dialog v-model="visible" :close-on-click-modal="false"
-             :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
-    <el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" formDialogRef label-width="90px">
-      <el-row :gutter="24">
-        <el-col :span="24" class="mb20">
-          <el-form-item :label="t('wxAccountTag.tag')" prop="tag">
-            <el-input v-model="form.tag" :placeholder="t('wxAccountTag.inputTagTip')"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-    </el-form>
-    <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-          <el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
-        </span>
-    </template>
-  </el-dialog>
+	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
+		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" formDialogRef label-width="90px">
+			<el-row :gutter="24">
+				<el-col :span="24" class="mb20">
+					<el-form-item :label="t('wxAccountTag.tag')" prop="tag">
+						<el-input v-model="form.tag" :placeholder="t('wxAccountTag.inputTagTip')" />
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script lang="ts" name="WxAccountTagDialog" setup>
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-import {useMessage} from "/@/hooks/message";
-import {addObj,putObj} from '/@/api/mp/wx-account-tag'
-import {useI18n} from "vue-i18n"
+import { useMessage } from '/@/hooks/message';
+import { addObj, putObj } from '/@/api/mp/wx-account-tag';
+import { useI18n } from 'vue-i18n';
 
-const {t} = useI18n();
+const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
-const visible = ref(false)
-const loading = ref(false)
+const visible = ref(false);
+const loading = ref(false);
 // 定义字典
 
 // 提交表单数据
 const form = reactive({
-  wxAccountAppid: '',
-  tag: '',
-  id: ''
+	wxAccountAppid: '',
+	tag: '',
+	id: '',
 });
 
 // 定义校验规则
-const dataRules = ref({})
+const dataRules = ref({});
 
 // 打开弹窗
-const openDialog = (row: any,appid: string) => {
-  visible.value = true
+const openDialog = (row: any, appid: string) => {
+	visible.value = true;
 
-  // 重置表单数据
-  if (dataFormRef.value) {
-    dataFormRef.value.resetFields()
-  }
-  if(row){
-    Object.assign(form,row)
-  }
-  form.wxAccountAppid = appid
-
+	// 重置表单数据
+	if (dataFormRef.value) {
+		dataFormRef.value.resetFields();
+	}
+	if (row) {
+		Object.assign(form, row);
+	}
+	form.wxAccountAppid = appid;
 };
 
 // 提交
 const onSubmit = () => {
-  dataFormRef.value.validate((valid: boolean) => {
-    if (!valid) {
-      return false
-    }
-    loading.value = true
-    if(form.id){
-      putObj(form).then(() => {
-        useMessage().success(t('common.editSuccessText'))
-        visible.value = false // 关闭弹窗
-        emit('refresh')
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      }).finally(() => {
-        loading.value = false
-      })
-    }else{
-      addObj(form).then(() => {
-        useMessage().success(t('common.addSuccessText'))
-        visible.value = false // 关闭弹窗
-        emit('refresh')
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      }).finally(() => {
-        loading.value = false
-      })
-    }
-  })
-}
+	dataFormRef.value.validate((valid: boolean) => {
+		if (!valid) {
+			return false;
+		}
+		loading.value = true;
+		if (form.id) {
+			putObj(form)
+				.then(() => {
+					useMessage().success(t('common.editSuccessText'));
+					visible.value = false; // 关闭弹窗
+					emit('refresh');
+				})
+				.catch((err: any) => {
+					useMessage().error(err.msg);
+				})
+				.finally(() => {
+					loading.value = false;
+				});
+		} else {
+			addObj(form)
+				.then(() => {
+					useMessage().success(t('common.addSuccessText'));
+					visible.value = false; // 关闭弹窗
+					emit('refresh');
+				})
+				.catch((err: any) => {
+					useMessage().error(err.msg);
+				})
+				.finally(() => {
+					loading.value = false;
+				});
+		}
+	});
+};
 
 // 暴露变量
 defineExpose({
-  openDialog
+	openDialog,
 });
 </script>

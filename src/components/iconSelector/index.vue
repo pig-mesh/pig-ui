@@ -12,10 +12,7 @@
 			@blur="onIconBlur"
 		>
 			<template #prepend>
-				<SvgIcon
-					:name="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix"
-					class="font14"
-				/>
+				<SvgIcon :name="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix" class="font14" />
 			</template>
 		</el-input>
 		<el-popover
@@ -40,9 +37,9 @@
 						<el-tab-pane lazy label="awe" name="awe">
 							<IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
 						</el-tab-pane>
-            <el-tab-pane lazy label="local" name="local">
-              <IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
-            </el-tab-pane>
+						<el-tab-pane lazy label="local" name="local">
+							<IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
+						</el-tab-pane>
 					</el-tabs>
 				</div>
 			</template>
@@ -117,7 +114,7 @@ const state = reactive({
 		ali: [],
 		ele: [],
 		awe: [],
-    local: []
+		local: [],
 	},
 });
 
@@ -190,12 +187,12 @@ const initFontIconData = async (name: string) => {
 		await initIconfont.awe().then((res: any) => {
 			state.fontIconList.awe = res.map((i: string) => `fa ${i}`);
 		});
-	}else if(name === 'local'){
-    if (state.fontIconList.local.length > 0) return;
-    await initIconfont.local().then((res: any) => {
-      state.fontIconList.local = res.map((i: string) => `${i}`);
-    });
-  }
+	} else if (name === 'local') {
+		if (state.fontIconList.local.length > 0) return;
+		await initIconfont.local().then((res: any) => {
+			state.fontIconList.local = res.map((i: string) => `${i}`);
+		});
+	}
 	// 初始化 input 的 placeholder
 	// 参考（单项数据流）：https://cn.vuejs.org/v2/guide/components-props.html?#%E5%8D%95%E5%90%91%E6%95%B0%E6%8D%AE%E6%B5%81
 	state.fontIconPlaceholder = props.placeholder;

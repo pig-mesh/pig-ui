@@ -1,228 +1,221 @@
 <template>
-  <div class="layout-padding">
-    <div class="layout-padding-auto layout-padding-view">
-      <el-row>
-        <div class="mb8" style="width: 100%">
-          <el-date-picker v-model="beginTime" class="input_width" placeholder="选择开始时间" @change="check">
-          </el-date-picker>
-          <el-date-picker v-model="endTime" class="input_width" placeholder="选择结束时间" @change="check">
-          </el-date-picker>
-        </div>
-      </el-row>
-      <el-row>
-        <el-col :span="4" :xs="24">
-          <query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
-        </el-col>
-        <el-col :span="20">
-          <el-row :gutter="15" class="home-card-two mb15">
-            <el-col :span="12">
-              <div class="home-card-item">
-                <div style="height: 100%" ref="userCumulateRef"></div>
-              </div>
-            </el-col>
+	<div class="layout-padding">
+		<div class="layout-padding-auto layout-padding-view">
+			<el-row>
+				<div class="mb8" style="width: 100%">
+					<el-date-picker v-model="beginTime" class="input_width" placeholder="选择开始时间" @change="check"> </el-date-picker>
+					<el-date-picker v-model="endTime" class="input_width" placeholder="选择结束时间" @change="check"> </el-date-picker>
+				</div>
+			</el-row>
+			<el-row>
+				<el-col :span="4" :xs="24">
+					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
+				</el-col>
+				<el-col :span="20">
+					<el-row :gutter="15" class="home-card-two mb15">
+						<el-col :span="12">
+							<div class="home-card-item">
+								<div style="height: 100%" ref="userCumulateRef"></div>
+							</div>
+						</el-col>
 
-            <el-col :span="12">
-              <div class="home-card-item">
-                <div style="height: 100%" ref="userShardRef"></div>
-              </div>
-            </el-col>
+						<el-col :span="12">
+							<div class="home-card-item">
+								<div style="height: 100%" ref="userShardRef"></div>
+							</div>
+						</el-col>
 
-            <el-col :span="12">
-              <div class="home-card-item">
-                <div style="height: 100%" ref="upstreamMsgDistMonthRef"></div>
-              </div>
-            </el-col>
+						<el-col :span="12">
+							<div class="home-card-item">
+								<div style="height: 100%" ref="upstreamMsgDistMonthRef"></div>
+							</div>
+						</el-col>
 
-
-            <el-col :span="12">
-              <div class="home-card-item">
-                <div style="height: 100%" ref="interfaceSummaryRef"></div>
-              </div>
-            </el-col>
-          </el-row>
-        </el-col>
-      </el-row>
-    </div>
-  </div>
+						<el-col :span="12">
+							<div class="home-card-item">
+								<div style="height: 100%" ref="interfaceSummaryRef"></div>
+							</div>
+						</el-col>
+					</el-row>
+				</el-col>
+			</el-row>
+		</div>
+	</div>
 </template>
 
 <script setup lang="ts" name="wx-statistics">
+import { useMessage } from '/@/hooks/message';
+import { fetchAccountList, fetchStatistics } from '/@/api/mp/wx-account';
+import { markRaw } from 'vue';
+import * as echarts from 'echarts';
 
-import { useMessage } from "/@/hooks/message";
-import { fetchAccountList, fetchStatistics } from "/@/api/mp/wx-account";
-import { markRaw } from "vue";
-import * as echarts from "echarts";
+const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
-const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'))
-
-const beginTime = ref(new Date().getTime() - 3600 * 1000 * 24 * 7)
-const endTime = ref(new Date().getTime() - 3600 * 1000 * 24)
+const beginTime = ref(new Date().getTime() - 3600 * 1000 * 24 * 7);
+const endTime = ref(new Date().getTime() - 3600 * 1000 * 24);
 
 const check = () => {
-  const start = new Date(beginTime.value)
-  const end = new Date(endTime.value)
-  if (end.getTime() >= new Date().getTime()) {
-    useMessage().error("统计结束日小于当前日期，请重新选择")
-    return false
-  }
+	const start = new Date(beginTime.value);
+	const end = new Date(endTime.value);
+	if (end.getTime() >= new Date().getTime()) {
+		useMessage().error('统计结束日小于当前日期，请重新选择');
+		return false;
+	}
 
-  if (end.getTime() - start.getTime() >= 3600 * 1000 * 24 * 7) {
-    useMessage().error("时间间隔7天以内，请重新选择")
-    return false
-  }
-}
+	if (end.getTime() - start.getTime() >= 3600 * 1000 * 24 * 7) {
+		useMessage().error('时间间隔7天以内，请重新选择');
+		return false;
+	}
+};
 
-const accountId = ref()
+const accountId = ref();
 
 // 点击树
 const handleNodeClick = (node: any) => {
-  accountId.value = node.appid
-  initdata()
-}
+	accountId.value = node.appid;
+	initdata();
+};
 
 const deptData = reactive({
-  queryList: () => {
-    return fetchAccountList()
-  }
-})
+	queryList: () => {
+		return fetchAccountList();
+	},
+});
 
-
-const userCumulateRef = ref()
+const userCumulateRef = ref();
 
 // 初始化折线图
 const userCumulate = () => {
-  const userCumulate = markRaw(echarts.init(userCumulateRef.value));
-  const option = {
-    title: {
-      text: '用户分析数据',
-    },
-    xAxis: {
-      type: 'category',
-      data: LintData.value[0],
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        type: 'line',
-        data: LintData.value[1]
-      }
-    ]
-  }
-  userCumulate.setOption(option)
-}
+	const userCumulate = markRaw(echarts.init(userCumulateRef.value));
+	const option = {
+		title: {
+			text: '用户分析数据',
+		},
+		xAxis: {
+			type: 'category',
+			data: LintData.value[0],
+		},
+		yAxis: {
+			type: 'value',
+		},
+		series: [
+			{
+				type: 'line',
+				data: LintData.value[1],
+			},
+		],
+	};
+	userCumulate.setOption(option);
+};
 
-const userShardRef = ref()
+const userShardRef = ref();
 
 // 初始化折线图
 const userShard = () => {
-  const userShard = markRaw(echarts.init(userShardRef.value));
-  const option = {
-    title: {
-      text: '接口分析数据',
-    },
-    xAxis: {
-      type: 'category',
-      data: LintData.value[2],
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        type: 'line',
-        data: LintData.value[3]
-      }
-    ]
-  }
-  userShard.setOption(option)
-}
+	const userShard = markRaw(echarts.init(userShardRef.value));
+	const option = {
+		title: {
+			text: '接口分析数据',
+		},
+		xAxis: {
+			type: 'category',
+			data: LintData.value[2],
+		},
+		yAxis: {
+			type: 'value',
+		},
+		series: [
+			{
+				type: 'line',
+				data: LintData.value[3],
+			},
+		],
+	};
+	userShard.setOption(option);
+};
 
-const upstreamMsgDistMonthRef = ref()
+const upstreamMsgDistMonthRef = ref();
 
 // 初始化折线图
 const upstreamMsgDistMonth = () => {
-  const upstreamMsgDistMonth = markRaw(echarts.init(upstreamMsgDistMonthRef.value));
-  const option = {
-    title: {
-      text: '消息分析数据',
-    },
-    xAxis: {
-      type: 'category',
-      data: LintData.value[4],
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        type: 'line',
-        data: LintData.value[5]
-      }
-    ]
-  }
-  upstreamMsgDistMonth.setOption(option)
-}
+	const upstreamMsgDistMonth = markRaw(echarts.init(upstreamMsgDistMonthRef.value));
+	const option = {
+		title: {
+			text: '消息分析数据',
+		},
+		xAxis: {
+			type: 'category',
+			data: LintData.value[4],
+		},
+		yAxis: {
+			type: 'value',
+		},
+		series: [
+			{
+				type: 'line',
+				data: LintData.value[5],
+			},
+		],
+	};
+	upstreamMsgDistMonth.setOption(option);
+};
 
-const interfaceSummaryRef = ref()
+const interfaceSummaryRef = ref();
 
 // 初始化折线图
 const interfaceSummary = () => {
-  const interfaceSummary = markRaw(echarts.init(interfaceSummaryRef.value));
-  const option = {
-    title: {
-      text: '图文分享数据',
-    },
-    xAxis: {
-      type: 'category',
-      data: LintData.value[0],
-    },
-    yAxis: {
-      type: 'value'
-    },
-    series: [
-      {
-        type: 'line',
-        data: LintData.value[1]
-      }
-    ]
-  }
-  interfaceSummary.setOption(option)
-}
+	const interfaceSummary = markRaw(echarts.init(interfaceSummaryRef.value));
+	const option = {
+		title: {
+			text: '图文分享数据',
+		},
+		xAxis: {
+			type: 'category',
+			data: LintData.value[0],
+		},
+		yAxis: {
+			type: 'value',
+		},
+		series: [
+			{
+				type: 'line',
+				data: LintData.value[1],
+			},
+		],
+	};
+	interfaceSummary.setOption(option);
+};
 
-
-const LintData = ref([
-  [], [], [], [], [], [], [], []
-])
-
+const LintData = ref([[], [], [], [], [], [], [], []]);
 
 const initdata = () => {
-  fetchStatistics({
-    appId: accountId.value,
-    interval: new Date(beginTime.value).getTime() + '-' + new Date(endTime.value).getTime()
-  }).then((res) => {
-    LintData.value = res.data
-  }).finally(() => {
-    userCumulate()
-    userShard()
-    upstreamMsgDistMonth()
-    interfaceSummary()
-  })
-}
+	fetchStatistics({
+		appId: accountId.value,
+		interval: new Date(beginTime.value).getTime() + '-' + new Date(endTime.value).getTime(),
+	})
+		.then((res) => {
+			LintData.value = res.data;
+		})
+		.finally(() => {
+			userCumulate();
+			userShard();
+			upstreamMsgDistMonth();
+			interfaceSummary();
+		});
+};
 </script>
 
 <style scoped>
 .home-card-item {
-  width: 100%;
-  height: 400px;
-  border-radius: 4px;
-  transition: all ease 0.3s;
-  padding: 20px;
-  overflow: hidden;
-  background: var(--el-color-white);
-  color: var(--el-text-color-primary);
-  border: 1px solid var(--next-border-color-light);
-  margin-top: 20px;
+	width: 100%;
+	height: 400px;
+	border-radius: 4px;
+	transition: all ease 0.3s;
+	padding: 20px;
+	overflow: hidden;
+	background: var(--el-color-white);
+	color: var(--el-text-color-primary);
+	border: 1px solid var(--next-border-color-light);
+	margin-top: 20px;
 }
 </style>

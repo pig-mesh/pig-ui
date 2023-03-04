@@ -1,75 +1,78 @@
 <template>
-  <div class="head-container">
-    <el-input v-model="searchName" :placeholder="placeholder" clearable style="margin-bottom: 20px"
-      @change="getDeptTree" />
-    <el-tree :data="state.List" :props="props.props" :expand-on-click-node="false" ref="deptTreeRef"
-      :loading="state.localLoading" node-key="id" highlight-current default-expand-all @node-click="handleNodeClick" />
-  </div>
+	<div class="head-container">
+		<el-input v-model="searchName" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getDeptTree" />
+		<el-tree
+			:data="state.List"
+			:props="props.props"
+			:expand-on-click-node="false"
+			ref="deptTreeRef"
+			:loading="state.localLoading"
+			node-key="id"
+			highlight-current
+			default-expand-all
+			@node-click="handleNodeClick"
+		/>
+	</div>
 </template>
 
 <script setup lang="ts" name="query-tree">
+import { onMounted, reactive, ref, unref } from 'vue';
 
-import { onMounted, reactive, ref, unref } from "vue";
-
-const emit = defineEmits(['search', 'nodeClick'])
+const emit = defineEmits(['search', 'nodeClick']);
 
 const props = defineProps({
-  props: {
-    type: Object,
-    default: () => {
-      return {
-        label: 'name',
-        children: 'children',
-        value: 'id'
-      }
-    }
-  },
-  placeholder: {
-    type: String,
-    default: ''
-  },
-  loading: {
-    type: Boolean,
-    default: false
-  },
-  query: {
-    type: Function,
-    required: true
-  }
-})
+	props: {
+		type: Object,
+		default: () => {
+			return {
+				label: 'name',
+				children: 'children',
+				value: 'id',
+			};
+		},
+	},
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	loading: {
+		type: Boolean,
+		default: false,
+	},
+	query: {
+		type: Function,
+		required: true,
+	},
+});
 
 const state = reactive({
-  List: [],
-  localLoading: props.loading
-})
+	List: [],
+	localLoading: props.loading,
+});
 
-
-const searchName = ref()
+const searchName = ref();
 
 const handleNodeClick = (item: any) => {
-  emit('nodeClick', item)
-}
+	emit('nodeClick', item);
+};
 
 const getDeptTree = () => {
-  if (props.query instanceof Function) {
-    state.localLoading = true
-    const result = props.query(unref(searchName))
-    if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
-      result.then((r: any) => {
-        state.List = r.data
-        if(r.data.length > 0){
-          handleNodeClick(r.data[0])
-        }
-      })
-    }
-  }
-}
+	if (props.query instanceof Function) {
+		state.localLoading = true;
+		const result = props.query(unref(searchName));
+		if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
+			result.then((r: any) => {
+				state.List = r.data;
+				if (r.data.length > 0) {
+					handleNodeClick(r.data[0]);
+				}
+			});
+		}
+	}
+};
 onMounted(() => {
-  getDeptTree()
-})
-
+	getDeptTree();
+});
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
