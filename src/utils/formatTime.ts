@@ -231,3 +231,5 @@ export function parseDate(time, pattern) {
 export const dateTimeStr: string = 'YYYY-MM-DD hh:mm:ss';
 
 export const dateStr: string = 'YYYY-MM-DD';
+
+export const timeStr: string = 'hh:mm:ss';
