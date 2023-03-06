@@ -2,8 +2,8 @@
 	<div class="system-dept-dialog-container">
 		<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="769px">
 			<el-form ref="deptDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules">
-				<el-row :gutter="35">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+				<el-row :gutter="20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
 							<el-tree-select
 								v-model="dataForm.parentId"
@@ -17,12 +17,12 @@
 							/>
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdept.name')" prop="name">
 							<el-input v-model="dataForm.name" :placeholder="$t('sysdept.inputnameTip')" clearable />
 						</el-form-item>
 					</el-col>
-					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdept.sortOrder')" prop="sortOrder">
 							<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" clearable />
 						</el-form-item>

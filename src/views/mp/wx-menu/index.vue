@@ -374,5 +374,5 @@ const handleDelete = () => {};
 </script>
 
 <style lang="scss" scoped>
-@import url(./assets/wx-menu.scss);
+@import './assets/wx-menu.scss';
 </style>

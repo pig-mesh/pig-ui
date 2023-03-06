@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-padding">
-		<el-row :gutter="20">
+		<el-row :gutter="10">
 			<el-col :span="4" :xs="24">
 				<el-card class="layout-padding-auto" shadow="hover">
 					<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">

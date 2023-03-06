@@ -5,7 +5,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="$t('sysmenu.menuType')" prop="menType">
 						<el-radio-group v-model="state.ruleForm.menuType">
-							<el-radio-button label="0">左菜单</el-radio-button>
+							<el-radio-button label="0">菜单</el-radio-button>
 							<el-radio-button label="1">按钮</el-radio-button>
 						</el-radio-group>
 					</el-form-item>

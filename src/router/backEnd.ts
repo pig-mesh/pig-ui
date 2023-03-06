@@ -8,7 +8,7 @@ import { dynamicRoutes, notFoundAndNoPower, staticConfigRoutes } from '/@/router
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
+import { useMenuApi } from '/@/api/admin/menu';
 
 // 后端控制路由
 
