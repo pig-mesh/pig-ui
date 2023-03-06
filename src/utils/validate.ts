@@ -60,6 +60,19 @@ export const rule = {
 	},
 
 	/**
+	 * 校验 请输入小写英文
+	 * 名称校验
+	 */
+	validatorLower(rule: any, value: any, callback: any) {
+		const acount = /^[a-z]+$/;
+		if (value && !acount.test(value)) {
+			callback(new Error('请输入小写英文'));
+		} else {
+			callback();
+		}
+	},
+
+	/**
 	 * 校验首尾空白字符的正则表达式
 	 *
 	 */

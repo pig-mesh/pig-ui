@@ -45,3 +45,25 @@ export function refreshCache() {
 		method: 'put',
 	});
 }
+
+export function getDetails(obj: Object) {
+	return request({
+		url: '/admin/client/getClientDetailsById/' + obj,
+		method: 'get',
+	});
+}
+
+export function validateclientId(rule:any , value:any ,callback:any,isEdit: boolean) {
+  if (isEdit){
+  	return callback;
+  }
+  getDetails(value).then((res)=>{
+  	 const result = res.data
+	  if (result !== null){
+	  	callback(new Error("编号已经存在"))
+	  }else {
+	  	callback();
+	  }
+  })
+
+}
