@@ -12,8 +12,6 @@ export function useMenuApi() {
 				method: 'get',
 				params,
 			});
-		}
+		},
 	};
 }
-
-

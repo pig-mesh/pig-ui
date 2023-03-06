@@ -28,7 +28,6 @@
 /* Form 表单
 ------------------------------- */
 .el-form {
-
 	// 用于修改弹窗时表单内容间隔太大问题，如系统设置的新增菜单弹窗里的表单内容
 	.el-form-item:last-of-type {
 		margin-bottom: 0 !important;
@@ -141,7 +140,6 @@
 
 // 水平菜单、横向菜单折叠背景色
 .el-popper.is-pure.is-light {
-
 	// 水平菜单
 	.el-menu--vertical {
 		background: var(--next-bg-menuBar);
@@ -348,4 +346,3 @@
 	background-color: var(--el-color-primary) !important;
 	color: var(--el-color-white) !important;
 }
-

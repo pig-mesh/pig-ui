@@ -1,6 +1,6 @@
 <template>
 	<el-config-provider :size="getGlobalComponentSize" :locale="getGlobalI18n">
-		<router-view v-show="themeConfig.lockScreenTime > 1" />
+		<router-view v-show="setLockScreen" />
 		<LockScreen v-if="themeConfig.isLockScreen" />
 		<Setings ref="setingsRef" v-show="themeConfig.lockScreenTime > 1" />
 		<CloseFull v-if="!themeConfig.isLockScreen" />
@@ -31,6 +31,13 @@ const route = useRoute();
 const stores = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
+
+// 设置锁屏时组件显示隐藏
+const setLockScreen = computed(() => {
+	// 防止锁屏后，刷新出现不相关界面
+	// https://gitee.com/lyt-top/vue-next-admin/issues/I6AF8P
+	return themeConfig.value.isLockScreen ? themeConfig.value.lockScreenTime > 1 : themeConfig.value.lockScreenTime >= 0;
+});
 
 // 获取全局组件大小
 const getGlobalComponentSize = computed(() => {

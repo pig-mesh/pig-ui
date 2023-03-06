@@ -92,10 +92,10 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
 	let currentData: MittMenu = { children: [] };
-  if(!state.defaultActive){
-    const route = searchParent(routesList.value,path as string) as any
-    state.defaultActive = route!.path
-  }
+	if (!state.defaultActive) {
+		const route = searchParent(routesList.value, path as string) as any;
+		state.defaultActive = route!.path;
+	}
 	filterRoutesFun(routesList.value).map((v, k) => {
 		if (v.path === state.defaultActive) {
 			v['k'] = k;
@@ -109,13 +109,13 @@ const setSendClassicChildren = (path: string) => {
 // 设置页面当前路由高亮
 const setCurrentRouterHighlight = (currentRoute: RouteToFrom) => {
 	const { path, meta } = currentRoute;
-  const route = searchParent(routesList.value,path as string) as any
+	const route = searchParent(routesList.value, path as string) as any;
 	if (themeConfig.value.layout === 'classic') {
-    if(route){
-      state.defaultActive = route!.path
-    }else{
-      state.defaultActive = `/${path?.split('/')[1]}`;
-    }
+		if (route) {
+			state.defaultActive = route!.path;
+		} else {
+			state.defaultActive = `/${path?.split('/')[1]}`;
+		}
 	} else {
 		const pathSplit = meta?.isDynamic ? meta.isDynamicPath!.split('/') : path!.split('/');
 		if (pathSplit.length >= 4 && meta?.isHide) state.defaultActive = pathSplit.splice(0, 3).join('/');
@@ -124,22 +124,20 @@ const setCurrentRouterHighlight = (currentRoute: RouteToFrom) => {
 };
 
 // 使用递归查询对应的父级路由
-const searchParent = (routesList: any,path: string) => {
-  let route = undefined
-  routesList.forEach(item => {
-    if(item.path === path){
-      route =  item;
-      return
-    }
-    if(item.children && searchParent(item.children,path)){
-      route = item
-      return;
-    }
-  })
-  return route
-}
-
-
+const searchParent = (routesList: any, path: string) => {
+	let route = undefined;
+	routesList.forEach((item) => {
+		if (item.path === path) {
+			route = item;
+			return;
+		}
+		if (item.children && searchParent(item.children, path)) {
+			route = item;
+			return;
+		}
+	});
+	return route;
+};
 
 // 打开外部链接
 const onALinkClick = (val: RouteItem) => {

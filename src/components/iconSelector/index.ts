@@ -10,7 +10,7 @@ const clearReturn = /(\r)|(\n)/g;
 const clearFill = /(fill="[^>+].*?")/g;
 
 function findSvgFile(dir: string): string[] {
-	const svgRes = [];
+	const svgRes = [] as any;
 	const dirents = readdirSync(dir, {
 		withFileTypes: true,
 	});
@@ -59,8 +59,8 @@ export const svgBuilder = (path: string, perfix = 'local') => {
 				`
                 <body>
                 <svg id="local-icon" data-icon-name="${iconNames.join(
-					','
-				)}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
+									','
+								)}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position: absolute; width: 0; height: 0">
                 ${res.join('')}
                 </svg>
                 `

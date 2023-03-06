@@ -104,7 +104,7 @@ export default {
 		closeAll: '全部关闭',
 		fullscreen: '当前页全屏',
 		closeFullscreen: '关闭全屏',
-		favorite: '收藏'
+		favorite: '收藏',
 	},
 	notFound: {
 		foundTitle: '地址输入错误，请重新输入地址~',

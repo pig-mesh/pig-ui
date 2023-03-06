@@ -10,8 +10,8 @@
 import { useThemeConfig } from '/@/stores/themeConfig';
 
 // 定义变量内容
-const storesThemeConfig = useThemeConfig()
-const { themeConfig } = storeToRefs(storesThemeConfig)
+const storesThemeConfig = useThemeConfig();
+const { themeConfig } = storeToRefs(storesThemeConfig);
 // 获取布局配置信息
 const footerAuthor = computed(() => {
 	return themeConfig.value.footerAuthor;

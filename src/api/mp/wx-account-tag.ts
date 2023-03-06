@@ -18,49 +18,48 @@
 import request from '/@/utils/request';
 
 export function getPage(query) {
-  return request({
-    url: '/admin/wx-account-tag/page',
-    method: 'get',
-    params: query
-  })
+	return request({
+		url: '/admin/wx-account-tag/page',
+		method: 'get',
+		params: query,
+	});
 }
 
 export function addObj(obj) {
-  return request({
-    url: '/admin/wx-account-tag',
-    method: 'post',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account-tag',
+		method: 'post',
+		data: obj,
+	});
 }
 
-
 export function delObjs(obj) {
-  return request({
-    url: '/admin/wx-account-tag',
-    method: 'delete',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account-tag',
+		method: 'delete',
+		data: obj,
+	});
 }
 
 export function putObj(obj) {
-  return request({
-    url: '/admin/wx-account-tag',
-    method: 'put',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account-tag',
+		method: 'put',
+		data: obj,
+	});
 }
 
 export function sync(appId) {
-  return request({
-    url: '/admin/wx-account-tag/sync/' + appId,
-    method: 'post'
-  })
+	return request({
+		url: '/admin/wx-account-tag/sync/' + appId,
+		method: 'post',
+	});
 }
 
 export function list(appId) {
-  return request({
-    url: '/admin/wx-account-tag/list/',
-    method: 'get',
-    params: { 'wxAccountAppid': appId }
-  })
+	return request({
+		url: '/admin/wx-account-tag/list/',
+		method: 'get',
+		params: { wxAccountAppid: appId },
+	});
 }

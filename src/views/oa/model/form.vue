@@ -34,7 +34,6 @@
     import {useMessage} from "/@/hooks/message"
     import {useI18n} from "vue-i18n"
     import {addObj, getObj, putObj} from "/@/api/oa/model";
-    import {rule} from "/@/utils/validate";
 
     const emit = defineEmits(['refresh']);
 
@@ -59,7 +58,6 @@
         {
             key: [
                 {required: true, message: '模型表示不能为空', trigger: 'blur'},
-                {validator: rule.validatorKey, trigger: 'blur'}
             ],
             name: [
                 {required: true, message: '模型名称不能为空', trigger: 'blur'}

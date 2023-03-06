@@ -18,68 +18,68 @@
 import request from '/@/utils/request';
 
 export function fetchList(query) {
-  return request({
-    url: '/admin/wx-account/page',
-    method: 'get',
-    params: query
-  })
+	return request({
+		url: '/admin/wx-account/page',
+		method: 'get',
+		params: query,
+	});
 }
 
 export function addObj(obj) {
-  return request({
-    url: '/admin/wx-account',
-    method: 'post',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account',
+		method: 'post',
+		data: obj,
+	});
 }
 
 export function getObj(id) {
-  return request({
-    url: '/admin/wx-account/' + id,
-    method: 'get'
-  })
+	return request({
+		url: '/admin/wx-account/' + id,
+		method: 'get',
+	});
 }
 
 export function generateQr(appid) {
-  return request({
-    url: '/admin/wx-account/qr/' + appid,
-    method: 'post'
-  })
+	return request({
+		url: '/admin/wx-account/qr/' + appid,
+		method: 'post',
+	});
 }
 
 export function clearQuota(appid) {
-  return request({
-    url: '/admin/wx-account/clear-quota/' + appid,
-    method: 'post'
-  })
+	return request({
+		url: '/admin/wx-account/clear-quota/' + appid,
+		method: 'post',
+	});
 }
 
 export function delObjs(id) {
-  return request({
-    url: '/admin/wx-account/' + id,
-    method: 'delete'
-  })
+	return request({
+		url: '/admin/wx-account/' + id,
+		method: 'delete',
+	});
 }
 
 export function putObj(obj) {
-  return request({
-    url: '/admin/wx-account',
-    method: 'put',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account',
+		method: 'put',
+		data: obj,
+	});
 }
 
 export function fetchAccountList() {
-  return request({
-    url: '/admin/wx-account/list',
-    method: 'get'
-  })
+	return request({
+		url: '/admin/wx-account/list',
+		method: 'get',
+	});
 }
 
 export function fetchStatistics(q) {
-  return request({
-    url: '/admin/wx-account/statistics',
-    method: 'get',
-    params: q
-  })
+	return request({
+		url: '/admin/wx-account/statistics',
+		method: 'get',
+		params: q,
+	});
 }

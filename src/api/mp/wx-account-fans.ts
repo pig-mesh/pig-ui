@@ -18,46 +18,46 @@
 import request from '/@/utils/request';
 
 export function fetchList(query) {
-  return request({
-    url: '/admin/wx-account-fans/page',
-    method: 'get',
-    params: query
-  })
+	return request({
+		url: '/admin/wx-account-fans/page',
+		method: 'get',
+		params: query,
+	});
 }
 
 export function addObj(obj) {
-  return request({
-    url: '/admin/wx-account-fans',
-    method: 'post',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account-fans',
+		method: 'post',
+		data: obj,
+	});
 }
 
 export function sync(appId) {
-  return request({
-    url: '/admin/wx-account-fans/sync/' + appId,
-    method: 'post'
-  })
+	return request({
+		url: '/admin/wx-account-fans/sync/' + appId,
+		method: 'post',
+	});
 }
 
 export function getObj(id) {
-  return request({
-    url: '/admin/wx-account-fans/' + id,
-    method: 'get'
-  })
+	return request({
+		url: '/admin/wx-account-fans/' + id,
+		method: 'get',
+	});
 }
 
 export function delObjs(id) {
-  return request({
-    url: '/admin/wx-account-fans/' + id,
-    method: 'delete'
-  })
+	return request({
+		url: '/admin/wx-account-fans/' + id,
+		method: 'delete',
+	});
 }
 
 export function putObj(obj) {
-  return request({
-    url: '/admin/wx-account-fans',
-    method: 'put',
-    data: obj
-  })
+	return request({
+		url: '/admin/wx-account-fans',
+		method: 'put',
+		data: obj,
+	});
 }
