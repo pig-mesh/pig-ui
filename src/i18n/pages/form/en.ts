@@ -11,7 +11,7 @@ export default {
 		importUserTip: 'import user',
 		queryDeptTip: 'input deptName',
 		resetBtn: 'reset',
-		action:'action',
+		action: 'action',
 		optSuccessText: 'operation success',
 		optConfirmText: 'Confirm this operation	',
 		editSuccessText: 'edit success',
@@ -20,11 +20,11 @@ export default {
 		delConfirmText: 'This operation will permanently delete',
 		confirmButtonText: 'confirm',
 		cancelButtonText: 'cancel',
-		download: 'download'
+		download: 'download',
 	},
 	message: {
 		box: {
-			title: 'system prompt'
-		}
-	}
+			title: 'system prompt',
+		},
+	},
 };

@@ -10,8 +10,9 @@
 								<div class="flex-warp-item-box">
 									<div class="flex-margin">
 										<i :class="v.meta.icon"></i>
-										<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path"
-											@close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
+										<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path" @close="handleCloseFavorite(v)">{{
+											$t(v.name)
+										}}</el-tag>
 									</div>
 								</div>
 							</div>
@@ -26,8 +27,16 @@
 			</el-col>
 		</el-row>
 		<el-row :gutter="15" class="home-card-one mb15">
-			<el-col :xs="24" :sm="12" :md="12" :lg="6" :xl="6" v-for="(v, k) in state.homeOne" :key="k"
-				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }">
+			<el-col
+				:xs="24"
+				:sm="12"
+				:md="12"
+				:lg="6"
+				:xl="6"
+				v-for="(v, k) in state.homeOne"
+				:key="k"
+				:class="{ 'home-media home-media-lg': k > 1, 'home-media-sm': k === 1 }"
+			>
 				<div class="home-card-item flex">
 					<div class="flex-margin flex w100" :class="` home-one-animation${k}`">
 						<div class="flex-auto">
@@ -127,13 +136,12 @@ const state = reactive({
 });
 
 const HandleRoute = (item: any) => {
-	router.push(item.path)
-}
+	router.push(item.path);
+};
 
 const handleCloseFavorite = (item: any) => {
-	storesTagsViewRoutes.delFavoriteRoutes(item)
-}
-
+	storesTagsViewRoutes.delFavoriteRoutes(item);
+};
 
 // 折线图
 const initLineChart = () => {

@@ -1,82 +1,80 @@
-import request from "/@/utils/request";
-
+import request from '/@/utils/request';
 
 export const list = (params?: Object) => {
-    return request({
-        url: '/admin/role/list',
-        method: "get",
-        params
-    })
-}
+	return request({
+		url: '/admin/role/list',
+		method: 'get',
+		params,
+	});
+};
 
 export const pageList = (params?: Object) => {
-    return request({
-        url: '/admin/role/page',
-        method: "get",
-        params
-    })
-}
-
+	return request({
+		url: '/admin/role/page',
+		method: 'get',
+		params,
+	});
+};
 
 export const deptRoleList = () => {
-    return request({
-        url: '/admin/role/list',
-        method: 'get'
-    })
-}
+	return request({
+		url: '/admin/role/list',
+		method: 'get',
+	});
+};
 
 export const getObj = (id: string) => {
-    return request({
-        url: '/admin/role/' + id,
-        method: 'get'
-    })
-}
+	return request({
+		url: '/admin/role/' + id,
+		method: 'get',
+	});
+};
 
 export const getObjByCode = (code: string) => {
-    return request({
-        url: '/admin/role/code/' + code,
-        method: 'get'
-    })
-}
+	return request({
+		url: '/admin/role/code/' + code,
+		method: 'get',
+	});
+};
 
 export const addObj = (obj: Object) => {
-    return request({
-        url: '/admin/role',
-        method: 'post',
-        data: obj
-    })
-}
+	return request({
+		url: '/admin/role',
+		method: 'post',
+		data: obj,
+	});
+};
 
 export const putObj = (obj: Object) => {
-    return request({
-        url: '/admin/role',
-        method: 'put',
-        data: obj
-    })
-}
+	return request({
+		url: '/admin/role',
+		method: 'put',
+		data: obj,
+	});
+};
 
 export const delObj = (ids: Object) => {
-    return request({
-        url: '/admin/role/',
-        method: 'delete',
-        data: ids
-    })
-}
+	return request({
+		url: '/admin/role/',
+		method: 'delete',
+		data: ids,
+	});
+};
 
 export const permissionUpd = (roleId: string, menuIds: string) => {
-    return request({
-        url: '/admin/role/menu',
-        method: 'put',
-        data: {
-            roleId: roleId,
-            menuIds: menuIds
-        }
-    })
-}
+	return request({
+		url: '/admin/role/menu',
+		method: 'put',
+		data: {
+			roleId: roleId,
+			menuIds: menuIds,
+		},
+	});
+};
 
 export const fetchRoleTree = (roleId: string) => {
-    return request({
-        url: '/admin/menu/tree/' + roleId,
-        method: 'get'
-    })
-}
+	return request({
+		url: '/admin/menu/tree/' + roleId,
+		method: 'get',
+	});
+};

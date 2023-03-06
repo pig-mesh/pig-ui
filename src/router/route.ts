@@ -18,17 +18,17 @@ import { RouteRecordRaw } from 'vue-router';
 
 // 扩展 RouteMeta 接口
 declare module 'vue-router' {
-    interface RouteMeta {
-        title?: string;
-        isLink?: string;
-        isHide?: boolean;
-        isAuth?: boolean;
-        isKeepAlive?: boolean;
-        isAffix?: boolean;
-        isIframe?: boolean;
-        roles?: string[];
-        icon?: string;
-    }
+	interface RouteMeta {
+		title?: string;
+		isLink?: string;
+		isHide?: boolean;
+		isAuth?: boolean;
+		isKeepAlive?: boolean;
+		isAffix?: boolean;
+		isIframe?: boolean;
+		roles?: string[];
+		icon?: string;
+	}
 }
 
 /**
@@ -39,17 +39,17 @@ declare module 'vue-router' {
  * @returns 返回路由菜单数据
  */
 export const dynamicRoutes: Array<RouteRecordRaw> = [
-    {
-        path: '/',
-        name: '/',
-        component: () => import('/@/layout/index.vue'),
-        redirect: '/home',
-        meta: {
-            title: 'hzxc',
-            isKeepAlive: true,
-        },
-        children: []
-    },
+	{
+		path: '/',
+		name: '/',
+		component: () => import('/@/layout/index.vue'),
+		redirect: '/home',
+		meta: {
+			title: 'hzxc',
+			isKeepAlive: true,
+		},
+		children: [],
+	},
 ];
 
 /**
@@ -57,24 +57,24 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
  * @link 参考：https://next.router.vuejs.org/zh/guide/essentials/history-mode.html#netlify
  */
 export const notFoundAndNoPower = [
-    {
-        path: '/:path(.*)*',
-        name: 'notFound',
-        component: () => import('/@/views/error/404.vue'),
-        meta: {
-            title: 'staticRoutes.notFound',
-            isHide: true,
-        },
-    },
-    {
-        path: '/401',
-        name: 'noPower',
-        component: () => import('/@/views/error/401.vue'),
-        meta: {
-            title: 'staticRoutes.noPower',
-            isHide: true,
-        },
-    }
+	{
+		path: '/:path(.*)*',
+		name: 'notFound',
+		component: () => import('/@/views/error/404.vue'),
+		meta: {
+			title: 'staticRoutes.notFound',
+			isHide: true,
+		},
+	},
+	{
+		path: '/401',
+		name: 'noPower',
+		component: () => import('/@/views/error/401.vue'),
+		meta: {
+			title: 'staticRoutes.noPower',
+			isHide: true,
+		},
+	},
 ];
 
 /**
@@ -84,31 +84,30 @@ export const notFoundAndNoPower = [
  * @returns 返回路由菜单数据
  */
 export const staticConfigRoutes: Array<RouteRecordRaw> = [
-    {
-        path: '/home',
-        name: 'home',
-        component: () => import('/@/views/home/index.vue'),
-        meta: {
-            title: 'router.home',
-            isLink: '',
-            isHide: false,
-            isKeepAlive: true,
-            isAffix: true,
-            isIframe: false,
-            icon: 'iconfont icon-shouye',
-        },
-    },
-    {
-        path: '/personal',
-        name: 'personal',
-        component: () => import('/@/views/admin/user/personal.vue'),
-        meta: {
-            "title": "router.personal",
-            "isHide": true
-        },
-    }
+	{
+		path: '/home',
+		name: 'home',
+		component: () => import('/@/views/home/index.vue'),
+		meta: {
+			title: 'router.home',
+			isLink: '',
+			isHide: false,
+			isKeepAlive: true,
+			isAffix: true,
+			isIframe: false,
+			icon: 'iconfont icon-shouye',
+		},
+	},
+	{
+		path: '/personal',
+		name: 'personal',
+		component: () => import('/@/views/admin/user/personal.vue'),
+		meta: {
+			title: 'router.personal',
+			isHide: true,
+		},
+	},
 ];
-
 
 /**
  * 定义静态路由（默认路由）
@@ -117,22 +116,22 @@ export const staticConfigRoutes: Array<RouteRecordRaw> = [
  * @returns 返回路由菜单数据
  */
 export const staticRoutes: Array<RouteRecordRaw> = [
-    {
-        path: '/login',
-        name: 'login',
-        component: () => import('/@/views/login/index.vue'),
-        meta: {
-            title: '登录',
-            isAuth: false
-        },
-    },
-    {
-        path: '/authredirect',
-        name: 'authredirect',
-        component: () => import('/@/views/login/component/authredirect.vue'),
-        meta: {
-            title: "登录",
-            isAuth: false
-        }
-    }
+	{
+		path: '/login',
+		name: 'login',
+		component: () => import('/@/views/login/index.vue'),
+		meta: {
+			title: '登录',
+			isAuth: false,
+		},
+	},
+	{
+		path: '/authredirect',
+		name: 'authredirect',
+		component: () => import('/@/views/login/component/authredirect.vue'),
+		meta: {
+			title: '登录',
+			isAuth: false,
+		},
+	},
 ];

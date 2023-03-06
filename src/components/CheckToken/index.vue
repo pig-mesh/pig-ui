@@ -1,19 +1,19 @@
 <template>
-  <div></div>
+	<div></div>
 </template>
 <script setup lang="ts" name="check-token">
 import { checkToken } from '/@/api/login';
 
-const refreshLock = ref(false)
-const refreshTime = ref()
+const refreshLock = ref(false);
+const refreshTime = ref();
 
 onMounted(() => {
-  refreshToken()
-})
+	refreshToken();
+});
 
 const refreshToken = () => {
-  refreshTime.value = setInterval(() => {
-    checkToken(refreshTime.value, refreshLock.value)
-  }, 30000)
-}
+	refreshTime.value = setInterval(() => {
+		checkToken(refreshTime.value, refreshLock.value);
+	}, 30000);
+};
 </script>
