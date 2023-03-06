@@ -8,7 +8,8 @@
                                   v-model="state.queryForm.category"/>
                     </el-form-item>
                     <el-form-item class="ml2">
-                        <el-button @click="getDataList" icon="search" type="primary">
+                        <el-button @click="getDataList" icon="search" type="primary"
+                                   v-auth="'oa_model_view'">
                             {{ $t('common.queryBtn') }}
                         </el-button>
                         <el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
@@ -109,7 +110,6 @@
     // 多选事件
     const handleSelectionChange = (objs: any) => {
         selectObjs.value = []
-        console.log(objs)
         objs.forEach((val: any) => {
             selectObjs.value.push(val.id)
         });

@@ -29,3 +29,12 @@ export function doTask(obj) {
     data: obj
   })
 }
+
+export function delObj(ids?:Object) {
+  return request({
+    url: '/admin/task',
+    method: 'delete',
+    data: ids
+  })
+}
+
