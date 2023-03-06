@@ -4,9 +4,18 @@
 			<el-col :span="16">
 				<el-row :gutter="10">
 					<el-col :span="24">
-						<div class="home-card-item">
-							<el-avatar shape="circle" :size="100" fit="cover" :src="userData.avatar" />
-							{{ userData }}
+						<div class="home-card-item" v-loading="userLoading">
+							<el-row>
+								<el-col :span="4">
+									<el-avatar shape="circle" :size="100" fit="cover" :src="userData.avatar" />
+								</el-col>
+								<el-col :span="2">
+									<div>{{ userData.name }}</div>
+									<div>{{ userData.deptName }} | {{ userData.postName }}</div>
+								</el-col>
+								<el-col :span="4" :offset="14"> {{ formatDate(date, 'YYYY-mm-dd HH:MM:SS') }} </el-col>
+							</el-row>
+							<!--							{{ userData }}-->
 						</div>
 					</el-col>
 					<el-col :span="24">
@@ -95,6 +104,8 @@ import { useMsg } from '/@/stores/msg';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { pageList } from '/@/api/admin/log';
 import { fetchList } from '/@/api/admin/audit';
+import { formatDate } from '/@/utils/formatTime';
+import { getObj } from '/@/api/admin/user';
 const router = useRouter();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
@@ -108,6 +119,13 @@ const HandleRoute = (item: any) => {
 const handleCloseFavorite = (item: any) => {
 	storesTagsViewRoutes.delFavoriteRoutes(item);
 };
+
+const userLoading = ref(false);
+const date = ref(new Date());
+
+setInterval(() => {
+	date.value = new Date();
+}, 1000);
 
 const logState: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList,
@@ -132,21 +150,14 @@ const auditState: BasicTableProps = reactive<BasicTableProps>({
 useTable(auditState);
 
 // 定义变量内容
-const userData = reactive({
-	username: '',
-	name: '',
-	email: '',
-	avatar: '',
-	nickname: '',
-	phone: '',
-});
+const userData = ref({} as any);
 const newsList = computed(() => {
 	return useMsg().getAllMsg();
 });
 
 onMounted(() => {
 	const data = useUserInfo().userInfos;
-	Object.assign(userData, data.user);
+	initUserInfo(data.user.userId);
 });
 
 const handleRoutr = (type) => {
@@ -159,6 +170,23 @@ const handleRoutr = (type) => {
 			path: '/admin/audit/index',
 		});
 	}
+};
+
+const initUserInfo = (userId: any) => {
+	userLoading.value = true;
+	getObj(userId)
+		.then((res) => {
+			userData.value = res.data;
+			console.log(res.data, 'data');
+			userData.value.postName = res.data.postList
+				.map((item) => {
+					return item.postName;
+				})
+				.join(',');
+		})
+		.finally(() => {
+			userLoading.value = false;
+		});
 };
 </script>
 
