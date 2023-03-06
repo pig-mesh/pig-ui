@@ -91,7 +91,7 @@ const handleLogin = async () => {
 		.then(() => {
 			emit('signInSuccess');
 		})
-		.catch(() => {
+		.finally(() => {
 			loading.value = false;
 		});
 };

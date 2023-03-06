@@ -101,7 +101,7 @@ const onSignIn = () => {
 			// 登录后前端页面跳转
 			emit('signInSuccess');
 		})
-		.catch(() => {
+		.finally(() => {
 			loading.value = false;
 		});
 };
