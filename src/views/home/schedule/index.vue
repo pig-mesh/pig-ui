@@ -1,16 +1,18 @@
 <template>
-	<div class="layout-padding">
+	<el-drawer v-model="visible" title="日程管理" size="80%">
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row v-show="showSearch" class="mb8">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
+					<el-form-item :label="t('schedule.date')" prop="date">
+						<el-date-picker
+							type="date"
+							:placeholder="t('schedule.inputDateTip')"
+							v-model="state.queryForm.date"
+							:value-format="dateStr"
+						></el-date-picker>
+					</el-form-item>
 					<el-form-item :label="$t('schedule.title')" prop="title">
 						<el-input :placeholder="t('schedule.inputTitleTip')" v-model="state.queryForm.title" style="max-width: 180px" />
-					</el-form-item>
-					<el-form-item :label="$t('schedule.type')" prop="type">
-						<el-input :placeholder="t('schedule.inputTypeTip')" v-model="state.queryForm.type" style="max-width: 180px" />
-					</el-form-item>
-					<el-form-item :label="$t('schedule.createBy')" prop="createBy">
-						<el-input :placeholder="t('schedule.inputCreateByTip')" v-model="state.queryForm.createBy" style="max-width: 180px" />
 					</el-form-item>
 					<el-form-item class="ml2">
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
@@ -22,7 +24,14 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()" v-auth="'admin_schedule_add'">
+					<el-button
+						formDialogRef
+						icon="folder-add"
+						type="primary"
+						class="ml10"
+						@click="formDialogRef.openDialog(null, state.queryForm)"
+						v-auth="'admin_schedule_add'"
+					>
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'admin_schedule_export'">
@@ -85,7 +94,7 @@
 
 		<!-- 编辑、新增  -->
 		<form-dialog ref="formDialogRef" @refresh="getDataList(false)" />
-	</div>
+	</el-drawer>
 </template>
 
 <script setup lang="ts" name="systemSysSchedule">
@@ -100,10 +109,10 @@ const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_st
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
-// 定义查询字典
-
 // 定义变量内容
 const formDialogRef = ref();
+const visible = ref(false);
+
 // 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
@@ -113,6 +122,7 @@ const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
+	createdIsNeed: false,
 	pageList: fetchList,
 });
 
@@ -156,4 +166,15 @@ const handleDelete = (ids: string[]) => {
 				});
 		});
 };
+
+const open = (row: any) => {
+	state.queryForm.date = row.date;
+	getDataList();
+	visible.value = true;
+};
+
+// 暴露变量
+defineExpose({
+	open,
+});
 </script>

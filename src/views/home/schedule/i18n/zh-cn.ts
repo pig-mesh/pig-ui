@@ -4,7 +4,7 @@ export default {
         importsysScheduleTip: '导入日程',
         id: 'id',
         title: '标题',
-        type: '日程类型',
+        type: '类型',
         state: '状态',
         content: '内容',
         time: '时间',

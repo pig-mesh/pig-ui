@@ -25,7 +25,7 @@
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('schedule.date')" prop="date">
-						<el-date-picker type="datetime" :placeholder="t('schedule.inputDateTip')" v-model="form.date" :value-format="dateStr"></el-date-picker>
+						<el-date-picker type="date" :placeholder="t('schedule.inputDateTip')" v-model="form.date" :value-format="dateStr"></el-date-picker>
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
