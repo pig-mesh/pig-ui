@@ -19,10 +19,10 @@
 						</div>
 					</el-col>
 					<el-col :span="24">
-						<div class="home-card-item" style="height: 200px">
+						<div class="home-card-item">
 							<div class="home-card-item-title">快捷导航工具</div>
 							<div class="home-monitor">
-								<div class="flex-warp">
+								<div class="flex-warp" v-if="favoriteRoutes.length > 0">
 									<div class="flex-warp-item" v-for="(v, k) in favoriteRoutes" :key="k">
 										<div class="flex-warp-item-box">
 											<div class="flex-margin">
@@ -34,6 +34,7 @@
 										</div>
 									</div>
 								</div>
+								<el-empty v-else />
 							</div>
 						</div>
 					</el-col>
@@ -45,7 +46,7 @@
 									<el-button link class="button" text @click="handleRoutr('log')">更多</el-button>
 								</div>
 							</template>
-							<el-timeline>
+							<el-timeline v-if="logState.dataList.length > 0">
 								<el-timeline-item v-for="(item, index) in logState.dataList" :key="index" :timestamp="item.createTime">
 									{{ item.title }} - {{ item.remoteAddr }}
 								</el-timeline-item>
@@ -60,11 +61,12 @@
 									<el-button link class="button" text @click="handleRoutr('audit')">更多</el-button>
 								</div>
 							</template>
-							<el-timeline>
+							<el-timeline v-if="auditState.dataList.length > 0">
 								<el-timeline-item v-for="(item, index) in auditState.dataList" :key="index" :timestamp="item.createTime">
 									{{ item.createBy }} : {{ item.auditField }} {{ item.afterVal }} => {{ item.beforeVal }}
 								</el-timeline-item>
 							</el-timeline>
+							<el-empty v-else />
 						</el-card>
 					</el-col>
 				</el-row>
@@ -72,7 +74,31 @@
 			<el-col :span="8">
 				<el-row>
 					<el-col :span="24">
-						<el-calendar />
+						<el-card class="box-card">
+							<el-calendar v-model="calendar">
+								<template #date-cell="{ data }">
+									<div
+										:class="data.isSelected ? 'is-selected' : ''"
+										style="width: 100%; height: 100%"
+										@click="scheduleFormRef.openDialog(null, { date: formatDate(data.date, 'YYYY-mm-dd') })"
+									>
+										{{ data.day.split('-').slice(1).join('-') }}
+										<ul class="events">
+											<li v-for="item in getListData(data.date)" :key="item.content">
+												<el-badge :value="item.title" :is-dot="true" />
+												{{ item.title }}
+											</li>
+										</ul>
+									</div>
+								</template>
+							</el-calendar>
+							<el-timeline style="margin-top: 20px" v-if="scheduleDataList.length > 0">
+								<el-timeline-item v-for="(item, index) in scheduleDataList" :key="index" :timestamp="item.time">
+									{{ item.title }} - {{ item.createBy }}
+								</el-timeline-item>
+							</el-timeline>
+							<el-empty v-else />
+						</el-card>
 					</el-col>
 					<el-col :span="24">
 						<el-card class="box-card">
@@ -81,16 +107,18 @@
 									<span>站内信</span>
 								</div>
 							</template>
-							<el-timeline>
+							<el-timeline v-if="newsList.length > 0">
 								<el-timeline-item v-for="(item, index) in newsList" :key="index" :timestamp="item.time">
 									{{ item.label }} - {{ item.value }}
 								</el-timeline-item>
 							</el-timeline>
+							<el-empty v-else />
 						</el-card>
 					</el-col>
 				</el-row>
 			</el-col>
 		</el-row>
+		<schedule-form ref="scheduleFormRef" @refresh="() => {}"></schedule-form>
 	</div>
 </template>
 
@@ -106,11 +134,14 @@ import { pageList } from '/@/api/admin/log';
 import { fetchList } from '/@/api/admin/audit';
 import { formatDate } from '/@/utils/formatTime';
 import { getObj } from '/@/api/admin/user';
+import { list } from '/@/api/admin/schedule';
 const router = useRouter();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
 const { isTagsViewCurrenFull, favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
+
+const ScheduleForm = defineAsyncComponent(() => import('/@/views/admin/schedule/form.vue'));
 
 const HandleRoute = (item: any) => {
 	router.push(item.path);
@@ -122,6 +153,8 @@ const handleCloseFavorite = (item: any) => {
 
 const userLoading = ref(false);
 const date = ref(new Date());
+
+const scheduleFormRef = ref();
 
 setInterval(() => {
 	date.value = new Date();
@@ -149,6 +182,16 @@ const auditState: BasicTableProps = reactive<BasicTableProps>({
 
 useTable(auditState);
 
+const calendar = ref(new Date());
+
+watch(calendar, (val, oldval) => {
+	const newVal = formatDate(val, 'YYYY-mm');
+	const old = formatDate(oldval, 'YYYY-mm');
+	if (newVal !== old) {
+		initscheduleList(newVal);
+	}
+});
+
 // 定义变量内容
 const userData = ref({} as any);
 const newsList = computed(() => {
@@ -158,6 +201,7 @@ const newsList = computed(() => {
 onMounted(() => {
 	const data = useUserInfo().userInfos;
 	initUserInfo(data.user.userId);
+	initscheduleList(formatDate(calendar.value, 'YYYY-mm'));
 });
 
 const handleRoutr = (type) => {
@@ -170,6 +214,14 @@ const handleRoutr = (type) => {
 			path: '/admin/audit/index',
 		});
 	}
+};
+
+const getListData = (date: any) => {
+	console.log(date, 'dadadadad');
+	const dataTime = formatDate(date, 'YYYY-mm-dd');
+	return scheduleDataList.value.filter((item) => {
+		return item.date === dataTime;
+	});
 };
 
 const initUserInfo = (userId: any) => {
@@ -187,6 +239,16 @@ const initUserInfo = (userId: any) => {
 		.finally(() => {
 			userLoading.value = false;
 		});
+};
+
+const scheduleDataList = ref([] as any);
+
+const initscheduleList = (date) => {
+	list({
+		month: `${date}-01`,
+	}).then((res) => {
+		scheduleDataList.value = res.data;
+	});
 };
 </script>
 
@@ -266,5 +328,9 @@ const initUserInfo = (userId: any) => {
 			height: 56px;
 		}
 	}
+}
+
+li {
+	list-style: none;
 }
 </style>

@@ -18,7 +18,7 @@ import 'vxe-table/lib/style.css';
 import 'xe-utils';
 import VXETable from 'vxe-table';
 import { Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor } from '/@/components/index';
-import { parseTime, parseDate, dateTimeStr, dateStr } from '/@/utils/formatTime';
+import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'highlight.js/lib/common';
 import hljsVuePlugin from '@highlightjs/vue-plugin';
@@ -39,6 +39,7 @@ app.config.globalProperties.parseTime = parseTime;
 app.config.globalProperties.parseDate = parseDate;
 app.config.globalProperties.dateTimeStr = dateTimeStr;
 app.config.globalProperties.dateStr = dateStr;
+app.config.globalProperties.timeStr = timeStr;
 
 directive(app);
 other.elSvg(app);
