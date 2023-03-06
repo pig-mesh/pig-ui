@@ -52,13 +52,13 @@
 				@sort-change="sortChangeHandle"
 			>
 				<el-table-column type="selection" width="60" align="center" />
-				<el-table-column type="index" :label="t('audit.index')" width="80" />
-				<el-table-column prop="auditName" :label="t('audit.auditName')" show-overflow-tooltip />
-				<el-table-column prop="auditField" :label="t('audit.auditField')" show-overflow-tooltip />
-				<el-table-column prop="beforeVal" :label="t('audit.beforeVal')" show-overflow-tooltip />
-				<el-table-column prop="afterVal" :label="t('audit.afterVal')" show-overflow-tooltip />
-				<el-table-column prop="createBy" :label="t('audit.createBy')" show-overflow-tooltip />
-				<el-table-column prop="createTime" :label="t('audit.createTime')" show-overflow-tooltip />
+				<el-table-column type="index" :label="$t('audit.index')" width="80" />
+				<el-table-column prop="auditName" :label="$t('audit.auditName')" show-overflow-tooltip />
+				<el-table-column prop="auditField" :label="$t('audit.auditField')" show-overflow-tooltip />
+				<el-table-column prop="beforeVal" :label="$t('audit.beforeVal')" show-overflow-tooltip />
+				<el-table-column prop="afterVal" :label="$t('audit.afterVal')" show-overflow-tooltip />
+				<el-table-column prop="createBy" :label="$t('audit.createBy')" show-overflow-tooltip />
+				<el-table-column prop="createTime" :label="$t('audit.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
 						<el-button text type="primary" v-auth="'sys_audit_del'" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
