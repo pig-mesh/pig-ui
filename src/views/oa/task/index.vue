@@ -61,8 +61,9 @@
 
 <script setup lang="ts" name="systemTask">
 import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList } from "/@/api/oa/task";
+import { fetchList ,delObj} from "/@/api/oa/task";
 import { useI18n } from "vue-i18n";
+import { useMessage,useMessageBox } from "/@/hooks/message";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -112,15 +113,24 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
+  selectObjs.value = []
   objs.forEach((val: any) => {
-    selectObjs.value.push(val.leaveId)
+    selectObjs.value.push(val.taskId)
   });
   multiple.value = !objs.length
 }
 
 // 删除操作
 const handleDelete = (ids: string[]) => {
-
+  useMessageBox().confirm(t('common.delConfirmText'))
+          .then(() => {
+            delObj(ids).then(() => {
+              getDataList();
+              useMessage().success(t('common.delSuccessText'));
+            }).catch((err: any) => {
+              useMessage().error(err.msg)
+            })
+          })
 };
 
 //查看流程图

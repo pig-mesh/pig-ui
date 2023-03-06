@@ -6,9 +6,10 @@ export default {
         time: '提交时间',
         comment: '批注',
         content: '事由',
+        cancel: '作废',
         inputTaskNameTip: '请输入任务名称',
         inputCommentTip: '请输入批注名称',
-        cancel: '作废'
+
     },
     comment: {
         index: '序号',
