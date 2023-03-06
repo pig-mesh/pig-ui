@@ -43,13 +43,13 @@
                                  show-overflow-tooltip></el-table-column>
                 <el-table-column :label="$t('common.action')" width="200">
                     <template #default="scope">
-                        <el-button @click="handleView(scope.row.id)" text type="primary" v-auth="'app_approle_edit'">模型图
+                        <el-button @click="handleView(scope.row.id)" text type="primary" v-auth="'oa_model_view'">模型图
                         </el-button>
-                        <el-button @click="handleDeploy(scope.row.id)" text type="primary" v-auth="'app_approle_edit'">
+                        <el-button @click="handleDeploy(scope.row.id)" text type="primary" v-auth="'oa_model_add'">
                             部署
                         </el-button>
                         <el-button @click="handleDelete([scope.row.roleId])" text type="primary"
-                                   v-auth="'app_approle_del'">{{
+                                   v-auth="'oa_model_del'">{{
                             $t('common.delBtn')
                             }}
                         </el-button>

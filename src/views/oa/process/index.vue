@@ -8,7 +8,7 @@
                             v-model="state.queryForm.category" />
                     </el-form-item>
                     <el-form-item class="ml2">
-                        <el-button @click="getDataList" icon="search" type="primary">
+                        <el-button @click="getDataList" icon="search" type="primary" v-auth="'oa_process_view'">
                             {{ $t('common.queryBtn') }}
                         </el-button>
                         <el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
@@ -18,7 +18,7 @@
             <el-row>
                 <div class="mb8" style="width: 100%">
                     <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete"
-                        type="primary" v-auth="'app_approle_del'">
+                        type="primary" v-auth="'oa_process_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
                     <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
@@ -77,7 +77,7 @@ import { BasicTableProps, useTable } from "/@/hooks/table";
 import { delObj, fetchList, status } from "/@/api/oa/process";
 import { useMessage, useMessageBox } from "/@/hooks/message";
 import { useI18n } from "vue-i18n";
-import { parseTime } from "/@/utils/formatTime";
+
 
 // 引入组件
 const { t } = useI18n()

@@ -1,154 +1,164 @@
 <template>
-  <div class="layout-padding">
-    <el-card class="layout-padding-auto">
-      <el-row v-show="showSearch" class="mb8">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item :label="$t('leave.username')" prop="username">
-            <el-input :placeholder="t('leave.inputUsernameTip')" v-model="state.queryForm.username"
-              style="max-width: 180px" />
-          </el-form-item>
-          <el-form-item :label="t('leave.state')" prop="state" class="ml2">
-            <el-select v-model="state.queryForm.state" :placeholder="t('leave.inputStateTip')">
-              <el-option :label="item.label" :value="item.value" v-for="(item, index) in leave_status"
-                :key="index"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item class="ml2">
-            <el-button formDialogRef icon="search" type="primary" @click="getDataList">
-              {{ $t('common.queryBtn') }}
-            </el-button>
-            <el-button icon="Refresh" formDialogRef @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-row>
-      <el-row>
-        <div class="mb8" style="width: 100%">
-          <el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()">
-            {{ $t('common.addBtn') }}
-          </el-button>
-          <el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel">
-            {{ $t('common.exportBtn') }}
-          </el-button>
-          <el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10"
-            @click="handleDelete(selectObjs)">
-            {{ $t('common.delBtn') }}
-          </el-button>
-          <right-toolbar v-model:showSearch="showSearch" class="ml10" style="float: right;margin-right: 20px"
-            @queryTable="getDataList"></right-toolbar>
-        </div>
-      </el-row>
-      <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
-        @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
-        <el-table-column type="selection" width="60" align="center" />
-        <el-table-column type="index" :label="t('leave.index')" width="80" />
-        <el-table-column prop="leaveId" :label="t('leave.leaveId')" show-overflow-tooltip />
-        <el-table-column prop="username" :label="t('leave.username')" show-overflow-tooltip />
-        <el-table-column prop="days" :label="t('leave.days')" show-overflow-tooltip />
-        <el-table-column prop="state" :label="t('leave.state')" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="leave_status" :value="scope.row.state"></dict-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="leaveTime" :label="t('leave.leaveTime')" show-overflow-tooltip />
-        <el-table-column :label="$t('common.action')" width="150">
-          <template #default="scope">
-            <el-button text type="primary" @click="handleSubmit(scope.row)" v-if="scope.row.state === '0'">提交</el-button>
-            <el-button text type="primary" @click="formDialogRef.openDialog(scope.row.leaveId)">{{ $t('common.editBtn')
-            }}</el-button>
-            <el-button text type="primary" @click="handleDelete([scope.row.leaveId])">{{
-              $t('common.delBtn')
-            }}</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination" />
-    </el-card>
+    <div class="layout-padding">
+        <el-card class="layout-padding-auto">
+            <el-row class="mb8" v-show="showSearch">
+                <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
+                    <el-form-item :label="$t('leave.username')" prop="username">
+                        <el-input :placeholder="t('leave.inputUsernameTip')" style="max-width: 180px"
+                                  v-model="state.queryForm.username"/>
+                    </el-form-item>
+                    <el-form-item :label="t('leave.state')" class="ml2" prop="state">
+                        <el-select :placeholder="t('leave.inputStateTip')" v-model="state.queryForm.state">
+                            <el-option :key="index" :label="item.label" :value="item.value"
+                                       v-for="(item, index) in leave_status"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item class="ml2">
+                        <el-button @click="getDataList" formDialogRef icon="search" type="primary"
+                                   v-auth="'oa_leave_bill_view'">
+                            {{ $t('common.queryBtn') }}
+                        </el-button>
+                        <el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }}
+                        </el-button>
+                    </el-form-item>
+                </el-form>
+            </el-row>
+            <el-row>
+                <div class="mb8" style="width: 100%">
+                    <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
+                               type="primary">
+                        {{ $t('common.addBtn') }}
+                    </el-button>
+                    <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary">
+                        {{ $t('common.exportBtn') }}
+                    </el-button>
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                               type="primary" v-auth="'oa_leave_bill_del'">
+                        {{ $t('common.delBtn') }}
+                    </el-button>
+                    <right-toolbar @queryTable="getDataList" class="ml10" style="float: right;margin-right: 20px"
+                                   v-model:showSearch="showSearch"></right-toolbar>
+                </div>
+            </el-row>
+            <el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle"
+                      style="width: 100%" v-loading="state.loading">
+                <el-table-column align="center" type="selection" width="60"/>
+                <el-table-column :label="t('leave.index')" type="index" width="80"/>
+                <el-table-column :label="t('leave.leaveId')" prop="leaveId" show-overflow-tooltip/>
+                <el-table-column :label="t('leave.username')" prop="username" show-overflow-tooltip/>
+                <el-table-column :label="t('leave.days')" prop="days" show-overflow-tooltip/>
+                <el-table-column :label="t('leave.state')" prop="state" show-overflow-tooltip>
+                    <template #default="scope">
+                        <dict-tag :options="leave_status" :value="scope.row.state"></dict-tag>
+                    </template>
+                </el-table-column>
+                <el-table-column :label="t('leave.leaveTime')" prop="leaveTime" show-overflow-tooltip/>
+                <el-table-column :label="$t('common.action')" width="150">
+                    <template #default="scope">
+                        <el-button @click="handleSubmit(scope.row)" text type="primary" v-if="scope.row.state === '0'">
+                            提交
+                        </el-button>
+                        <el-button @click="formDialogRef.openDialog(scope.row.leaveId)" text type="primary">{{
+                            $t('common.editBtn')
+                            }}
+                        </el-button>
+                        <el-button @click="handleDelete([scope.row.leaveId])" text type="primary">{{
+                            $t('common.delBtn')
+                            }}
+                        </el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
+                        v-bind="state.pagination"/>
+        </el-card>
 
-    <!-- 编辑、新增  -->
-    <form-dialog ref="formDialogRef" @refresh="getDataList(false)" />
-  </div>
+        <!-- 编辑、新增  -->
+        <form-dialog @refresh="getDataList(false)" ref="formDialogRef"/>
+    </div>
 </template>
 
-<script setup lang="ts" name="systemOaLeaveBill">
-import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObj, submit } from "/@/api/oa/leave-bill";
-import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useDict } from '/@/hooks/dict';
-import { useI18n } from "vue-i18n";
+<script lang="ts" name="systemOaLeaveBill" setup>
+    import {BasicTableProps, useTable} from "/@/hooks/table";
+    import {delObj, fetchList, submit} from "/@/api/oa/leave-bill";
+    import {useMessage, useMessageBox} from "/@/hooks/message";
+    import {useDict} from '/@/hooks/dict';
+    import {useI18n} from "vue-i18n";
 
-// 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const { t } = useI18n()
-// 定义查询字典
+    // 引入组件
+    const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+    const {t} = useI18n()
+    // 定义查询字典
 
-const { leave_status } = useDict('leave_status')
-// 定义变量内容
-const formDialogRef = ref()
-// 搜索变量
-const queryRef = ref()
-const showSearch = ref(true)
-// 多选变量
-const selectObjs = ref([]) as any
-const multiple = ref(true)
+    const {leave_status} = useDict('leave_status')
+    // 定义变量内容
+    const formDialogRef = ref()
+    // 搜索变量
+    const queryRef = ref()
+    const showSearch = ref(true)
+    // 多选变量
+    const selectObjs = ref([]) as any
+    const multiple = ref(true)
 
-const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
-  pageList: fetchList
-})
-
-//  table hook
-const {
-  getDataList,
-  currentChangeHandle,
-  sizeChangeHandle,
-  sortChangeHandle,
-  downBlobFile
-} = useTable(state)
-
-// 清空搜索条件
-const resetQuery = () => {
-  // 清空搜索条件
-  queryRef.value.resetFields()
-  // 清空多选
-  selectObjs.value = []
-  getDataList()
-}
-
-// 导出excel
-const exportExcel = () => {
-  downBlobFile('/admin/leave/export', state.queryForm, 'leave.xlsx')
-}
-
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-  objs.forEach((val: any) => {
-    selectObjs.value.push(val.leaveId)
-  });
-  multiple.value = !objs.length
-}
-
-// 删除操作
-const handleDelete = (ids: string[]) => {
-  useMessageBox().confirm(t('common.delConfirmText'))
-    .then(() => {
-      delObj(ids).then(() => {
-        getDataList(false);
-        useMessage().success(t('common.delSuccessText'));
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      })
+    const state: BasicTableProps = reactive<BasicTableProps>({
+        queryForm: {},
+        pageList: fetchList
     })
-};
 
-const handleSubmit = (row) => {
-  useMessageBox().confirm(t('common.optConfirmText'))
-    .then(() => {
-      submit(row.leaveId).then(() => {
-        getDataList(false);
-        useMessage().success(t('common.optSuccessText'));
-      }).catch((err: any) => {
-        useMessage().error(err.msg)
-      })
-    })
-}
+    //  table hook
+    const {
+        getDataList,
+        currentChangeHandle,
+        sizeChangeHandle,
+        sortChangeHandle,
+        downBlobFile
+    } = useTable(state)
+
+    // 清空搜索条件
+    const resetQuery = () => {
+        // 清空搜索条件
+        queryRef.value.resetFields()
+        // 清空多选
+        selectObjs.value = []
+        getDataList()
+    }
+
+    // 导出excel
+    const exportExcel = () => {
+        downBlobFile('/admin/leave/export', state.queryForm, 'leave.xlsx')
+    }
+
+    // 多选事件
+    const handleSelectionChange = (objs: any) => {
+        selectObjs.value = []
+        objs.forEach((val: any) => {
+            selectObjs.value.push(val.leaveId)
+        });
+        multiple.value = !objs.length
+    }
+
+    // 删除操作
+    const handleDelete = (ids: string[]) => {
+        useMessageBox().confirm(t('common.delConfirmText'))
+            .then(() => {
+                delObj(ids).then(() => {
+                    getDataList(false);
+                    useMessage().success(t('common.delSuccessText'));
+                }).catch((err: any) => {
+                    useMessage().error(err.msg)
+                })
+            })
+    };
+
+    const handleSubmit = (row) => {
+        useMessageBox().confirm(t('common.optConfirmText'))
+            .then(() => {
+                submit(row.leaveId).then(() => {
+                    getDataList(false);
+                    useMessage().success(t('common.optSuccessText'));
+                }).catch((err: any) => {
+                    useMessage().error(err.msg)
+                })
+            })
+    }
 </script>
