@@ -12,9 +12,13 @@ export default {
 		dept: 'dept',
 		email: 'email',
 		nickname: 'nickname',
-		inputUsernameTip: 'input username',
-		inputPhoneTip: 'input phone',
-		inputNameTip: 'input name',
-		importUserTip: 'user import',
+		inputNameTip:'input name',
+		inputRoleTip:'input role',
+		inputUserNameTip:'input username',
+		inputPasswordTip:'input Password',
+		inputPhoneTip:'input phone',
+		inputEmailTip:'input Email',
+		inputNickNameTip:'input NickName'
+
 	},
 };

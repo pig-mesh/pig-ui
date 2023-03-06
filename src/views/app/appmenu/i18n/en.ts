@@ -7,7 +7,9 @@ export default {
 		menuType: 'menuType',
 		visible: 'visible',
 		permission: 'permission',
-		inputNameTip: 'input name',
+		inputMenuNameTip: 'input menuName',
+		inputPathTip: 'input path',
+		inputPermissionTip: 'input permission',
 		parentId: 'parent menu',
 	},
 };

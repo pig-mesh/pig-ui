@@ -50,7 +50,7 @@
         key: '',
         name: '',
         category: '',
-        desc: 'vvv',
+        desc: 'create_time',
     });
 
     // 定义校验规则
@@ -65,6 +65,7 @@
             category: [
                 {required: true, message: '模型分类不能为空', trigger: 'blur'}
             ]
+
         }
     )
 
