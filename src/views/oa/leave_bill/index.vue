@@ -138,6 +138,7 @@
         objs.forEach((val: any) => {
             selectObjs.value.push(val.leaveId)
         });
+        console.log(selectObjs)
         multiple.value = !objs.length
     }
 
