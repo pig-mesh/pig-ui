@@ -12,9 +12,12 @@ export default {
 		dept: '部门',
 		email: '邮箱',
 		nickname: '昵称',
-		inputUsernameTip: '请输入用户名',
-		inputPhoneTip: '请输入手机号',
-		inputNameTip: '请输入姓名',
-		importUserTip: '用户导入',
+		inputNameTip:'请输入姓名',
+		inputRoleTip:'请选择角色',
+		inputUserNameTip:'请输入用户名',
+		inputPasswordTip:'请输入密码',
+		inputEmailTip:'请输入邮箱',
+		inputPhoneTip:'请输入手机号码',
+        inputNickNameTip:'请输入昵称'
 	},
 };

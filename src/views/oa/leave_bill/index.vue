@@ -26,13 +26,15 @@
             <el-row>
                 <div class="mb8" style="width: 100%">
                     <el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add"
-                               type="primary">
+                               type="primary" v-auth="'oa_leave_bill_add'">
                         {{ $t('common.addBtn') }}
                     </el-button>
-                    <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary">
+                    <el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary"
+                               v-auth="'oa_leave_bill_export'">
                         {{ $t('common.exportBtn') }}
                     </el-button>
-                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef icon="Delete"
+                    <el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" formDialogRef
+                               icon="Delete"
                                type="primary" v-auth="'oa_leave_bill_del'">
                         {{ $t('common.delBtn') }}
                     </el-button>
@@ -58,11 +60,13 @@
                         <el-button @click="handleSubmit(scope.row)" text type="primary" v-if="scope.row.state === '0'">
                             提交
                         </el-button>
-                        <el-button @click="formDialogRef.openDialog(scope.row.leaveId)" text type="primary">{{
+                        <el-button @click="formDialogRef.openDialog(scope.row.leaveId)" text type="primary"
+                                   v-auth="'oa_leave_bill_edit'">{{
                             $t('common.editBtn')
                             }}
                         </el-button>
-                        <el-button @click="handleDelete([scope.row.leaveId])" text type="primary">{{
+                        <el-button @click="handleDelete([scope.row.leaveId])" text type="primary"
+                                   v-auth="'oa_leave_bill_del'">{{
                             $t('common.delBtn')
                             }}
                         </el-button>
@@ -125,7 +129,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/admin/leave/export', state.queryForm, 'leave.xlsx')
+        downBlobFile('/admin/leave-bill/export', state.queryForm, 'leave.xlsx')
     }
 
     // 多选事件
@@ -134,6 +138,7 @@
         objs.forEach((val: any) => {
             selectObjs.value.push(val.leaveId)
         });
+        console.log(selectObjs)
         multiple.value = !objs.length
     }
 
