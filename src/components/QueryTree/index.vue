@@ -11,7 +11,11 @@
 			highlight-current
 			default-expand-all
 			@node-click="handleNodeClick"
-		/>
+		>
+			<template #default="{ node, data }" v-if="$slots.default">
+				<slot :node="node" :data="data"></slot>
+			</template>
+		</el-tree>
 	</div>
 </template>
 
