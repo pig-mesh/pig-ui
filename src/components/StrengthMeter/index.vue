@@ -43,7 +43,6 @@ const getPasswordStrength = computed(() => {
 const innerValueRef = ref();
 
 const handleChange = (e: any) => {
-	console.log(e, 'eeee');
 	innerValueRef.value = e;
 };
 

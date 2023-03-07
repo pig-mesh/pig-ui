@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { Session } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
 import other from '/@/utils/other';
+import { useMessage } from '/@/hooks/message';
 
 /**
  * 用户信息
@@ -36,20 +37,22 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
+						useMessage().error(err.msg);
 						reject(err);
 					});
 			});
 		},
-		async loginByMobile(data: any) {
+		async loginByMobile(data) {
 			return new Promise((resolve, reject) => {
 				loginByMobile(data.mobile, data.code)
-					.then((res: any) => {
+					.then((res) => {
 						// 存储token 信息
 						Session.set('token', res.access_token);
 						Session.set('refresh_token', res.refresh_token);
 						resolve(res);
 					})
-					.catch((err: any) => {
+					.catch((err) => {
+						useMessage().error(err.msg);
 						reject(err);
 					});
 			});
@@ -57,13 +60,14 @@ export const useUserInfo = defineStore('userInfo', {
 		async loginBySocial(state: string, code: string) {
 			return new Promise((resolve, reject) => {
 				loginBySocial(state, code)
-					.then((res: any) => {
+					.then((res) => {
 						// 存储token 信息
 						Session.set('token', res.access_token);
 						Session.set('refresh_token', res.refresh_token);
 						resolve(res);
 					})
-					.catch((err: any) => {
+					.catch((err) => {
+						useMessage().error('登录失败，账号未绑定');
 						reject(err);
 					});
 			});
@@ -79,6 +83,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err: any) => {
+						useMessage().error(err.msg);
 						reject(err);
 					});
 			});

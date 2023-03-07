@@ -2,6 +2,7 @@ import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
 import { ElMessageBox } from 'element-plus';
 import { Session, Local } from '/@/utils/storage';
 import qs from 'qs';
+import { useMessageBox } from '../hooks/message';
 
 // 配置新建一个 axios 实例
 const service: AxiosInstance = axios.create({
@@ -54,18 +55,15 @@ service.interceptors.response.use(
 		return res.data;
 	},
 	(error) => {
-		console.log(error, 'rrrrr');
 		const status = Number(error.response.status) || 200;
 		if (status === 424) {
-			ElMessageBox.confirm('令牌状态已过期，请点击重新登录', '系统提示', {
-				confirmButtonText: '重新登录',
-				cancelButtonText: '取消',
-				type: 'warning',
-			}).then(() => {
-				Session.clear(); // 清除浏览器全部临时缓存
-				window.location.href = '/'; // 去登录页
-				return;
-			});
+			useMessageBox()
+				.confirm('令牌状态已过期，请点击重新登录')
+				.then(() => {
+					Session.clear(); // 清除浏览器全部临时缓存
+					window.location.href = '/'; // 去登录页
+					return;
+				});
 		}
 		return Promise.reject(error.response.data);
 	}
