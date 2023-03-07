@@ -8,7 +8,7 @@
 
 <script setup lang="ts" name="register">
 import { fetchList } from '/@/api/admin/tenant';
-import { Session } from '/@/utils/storage';
+import { Local, Session } from '/@/utils/storage';
 
 const tenantList = ref([]);
 const tenant = ref();

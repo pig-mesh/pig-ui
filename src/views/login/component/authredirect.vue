@@ -1,7 +1,7 @@
 <script setup lang="ts" name="authredirect">
 import request from '/@/utils/request';
 import other from '/@/utils/other';
-import { rule } from '/@/utils/validate';
+import { validateNull } from '/@/utils/validate';
 import { Session } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useMessageBox } from '/@/hooks/message';
@@ -11,7 +11,7 @@ onMounted(async () => {
 
 	// 优先获取 code 参数，获取不到 则换成 ticket
 	let code = other.getQueryString(url, 'code');
-	if (rule.validateNull(code)) {
+	if (validateNull(code)) {
 		code = other.getQueryString(url, 'ticket');
 	}
 

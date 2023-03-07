@@ -39,7 +39,7 @@
 
 <script setup lang="ts" name="payCd">
 import { useBuyApi } from '/@/api/pay/cd';
-import { Local } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 // 导入二维码插件
 const VueQrcode = defineAsyncComponent(() => import('@chenfengyuan/vue-qrcode'));
 
