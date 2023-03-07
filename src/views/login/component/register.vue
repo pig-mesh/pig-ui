@@ -103,6 +103,8 @@ const dataRules = ref({
 			validator: (rule: any, value: any, callback: any) => {
 				if (Number(score.value) < 2) {
 					callback('密码强度太低');
+				} else {
+					callback();
 				}
 			},
 			trigger: 'blur',
@@ -116,17 +118,20 @@ const handlePassScore = (e) => {
 };
 
 const handleRegister = () => {
-	loading.value = true;
 	dataFormRef.value.validate((valid: boolean) => {
 		if (!valid) {
 			return false;
 		}
-
-		registerUser(state.ruleForm).then(() => {
-			useMessage().success(t('common.optSuccessText'));
-			loading.value = false;
-			emit('afterSuccess');
-		});
+		loading.value = true;
+		registerUser(state.ruleForm)
+			.then(() => {
+				useMessage().success(t('common.optSuccessText'));
+				loading.value = false;
+				emit('afterSuccess');
+			})
+			.catch((err) => {
+				useMessage().error(err.msg);
+			});
 	});
 };
 </script>
