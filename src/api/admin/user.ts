@@ -70,6 +70,16 @@ export function password(obj: Object) {
 	});
 }
 
+export function UnbindingUser(type) {
+	return request({
+		url: '/admin/user/unbinding',
+		method: 'post',
+		params: {
+			type,
+		},
+	});
+}
+
 /**
  * 注册用户
  */

@@ -1,7 +1,7 @@
 <template>
 	<el-drawer v-model="visible" :title="$t('personal.name')" size="50%">
 		<el-tabs style="height: 200px" class="demo-tabs">
-			<el-tab-pane label="基本信息">
+			<el-tab-pane label="基本信息" v-loading="loading">
 				<el-card shadow="hover" class="layout-padding-auto">
 					<el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt35 mb35" ref="formdataRef">
 						<el-row :gutter="20">
@@ -42,29 +42,6 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="24" class="mb20">
-								<el-form-item label="社交登录" prop="social">
-									<el-row style="display: flex; justify-content: space-between; width: 300px">
-										<div @click="handleClick('wechat')" class="item">
-											<SvgIcon name="local-wechat" :size="20" />
-											<p class="title">微信</p>
-										</div>
-										<div @click="handleClick('tencent')" class="item">
-											<SvgIcon name="local-qq" :size="20" />
-											<p class="title">QQ</p>
-										</div>
-										<div @click="handleClick('gitee')" class="item">
-											<SvgIcon name="local-gitee" :size="20" />
-											<p class="title">Gitee</p>
-										</div>
-										<div @click="handleClick('osc')" class="item">
-											<SvgIcon name="local-oschina" :size="20" />
-											<p class="title">开源中国</p>
-										</div>
-									</el-row>
-								</el-form-item>
-							</el-col>
-
-							<el-col :span="24" class="mb20">
 								<el-form-item>
 									<el-button type="primary" @click="handleSaveUser"> 更新个人信息 </el-button>
 								</el-form-item>
@@ -101,13 +78,33 @@
 					</el-form>
 				</el-card>
 			</el-tab-pane>
+			<el-tab-pane label="第三方账号">
+				<el-card shadow="hover" class="layout-padding-auto">
+					<el-table :data="socialList">
+						<el-table-column type="index" label="序号" width="80"></el-table-column>
+						<el-table-column prop="name" label="绑定帐号信息"></el-table-column>
+						<el-table-column label="状态">
+							<template #default="scope">
+								<el-tag v-if="scope.row.openId"> 已绑定 </el-tag>
+								<el-tag v-else> 未绑定 </el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column prop="action" label="操作">
+							<template #default="scope">
+								<el-button @click="Unbinding(scope.row.type)" text type="primary" v-if="scope.row.openId"> 解绑 </el-button>
+								<el-button @click="handleClick(scope.row.type)" text type="primary" v-else> 绑定 </el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</el-card>
+			</el-tab-pane>
 		</el-tabs>
 	</el-drawer>
 </template>
 
 <script setup lang="ts" name="personal">
 import { useUserInfo } from '/@/stores/userInfo';
-import { editInfo, password } from '/@/api/admin/user';
+import { editInfo, getObj, password, UnbindingUser } from '/@/api/admin/user';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
 import other from '/@/utils/other';
@@ -121,7 +118,8 @@ const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Imag
 const visible = ref(false);
 
 // 定义变量内容
-const formData = reactive({
+const formData = ref({
+	userId: '',
 	username: '',
 	name: '',
 	email: '',
@@ -179,7 +177,7 @@ const passwordRuleForm = reactive({
 
 // 头像上传成功
 const handleAvatarSuccess = (url: any) => {
-	formData.avatar = url;
+	formData.value.avatar = url;
 };
 
 const handleChangePassword = () => {
@@ -242,7 +240,58 @@ const handleClick = (thirdpart: string) => {
 const open = () => {
 	visible.value = true;
 	const data = useUserInfo().userInfos;
-	Object.assign(formData, data.user);
+	initUserInfo(data.user.userId);
+	// Object.assign(formData, data.user);
+};
+
+const loading = ref(false);
+const initUserInfo = (userId: any) => {
+	loading.value = true;
+	getObj(userId)
+		.then((res) => {
+			formData.value = res.data;
+			console.log(formData.value, 'formData');
+			initSocialList();
+		})
+		.finally(() => {
+			loading.value = false;
+		});
+};
+const socialList = ref([] as any);
+
+const initSocialList = () => {
+	socialList.value = [
+		{
+			name: '微信公众号',
+			type: 'wechat',
+			openId: formData.value.wxOpenid,
+		},
+		{
+			name: 'QQ',
+			type: 'tencent',
+			openId: formData.value.qqOpenid,
+		},
+		{
+			name: 'gitee',
+			type: 'gitee',
+			openId: formData.value.giteeOpenId,
+		},
+		{
+			name: '开源中国',
+			type: 'osc',
+			openId: formData.value.oscOpenId,
+		},
+	];
+};
+
+const Unbinding = (type) => {
+	UnbindingUser(type)
+		.then((res) => {
+			useMessage().success('解绑成功');
+		})
+		.finally(() => {
+			initUserInfo(formData.value.userId);
+		});
 };
 
 // 暴露变量
