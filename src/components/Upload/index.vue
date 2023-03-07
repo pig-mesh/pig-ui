@@ -20,19 +20,19 @@
 		>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
-				将文件拖到此处，或
-				<em>点击上传</em>
+				{{ $t('excel.operationNotice') }}
+				<em>{{ $t('excel.clickUpload') }}</em>
 			</div>
 			<template #tip>
 				<div class="el-upload__tip" v-if="props.isShowTip">
-					请上传
+					{{ $t('excel.pleaseUpload') }}
 					<template v-if="props.fileSize">
-						大小不超过 <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template
+						{{ $t('excel.size') }} <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template
 					>
 					<template v-if="props.fileType">
-						格式为 <b style="color: #f56c6c">{{ props.fileType.join('/') }}</b>
+						{{ $t('excel.format') }} <b style="color: #f56c6c">{{ props.fileType.join('/') }}</b>
 					</template>
-					的文件
+					{{ $t('excel.file') }}
 				</div>
 			</template>
 		</el-upload>
@@ -52,7 +52,7 @@
 			class="upload-file-uploader"
 			multiple
 		>
-			<el-button type="primary" link>点击上传</el-button>
+			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 		</el-upload>
 	</div>
 </template>
@@ -60,7 +60,10 @@
 <script setup lang="ts" name="upload-file">
 import { useMessage } from '/@/hooks/message';
 import { Local, Session } from '/@/utils/storage';
+import {useI18n} from 'vue-i18n';
 
+
+const {t} = useI18n()
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制
