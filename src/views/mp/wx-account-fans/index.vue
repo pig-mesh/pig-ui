@@ -52,6 +52,11 @@
 				<el-table-column :label="t('fans.subscribeTime')" prop="subscribeTime" show-overflow-tooltip />
 				<el-table-column :label="t('fans.nickname')" prop="nickname" show-overflow-tooltip />
 				<el-table-column :label="t('fans.language')" prop="language" show-overflow-tooltip />
+				<el-table-column :label="t('fans.isBlack')" prop="isBlack" show-overflow-tooltip>
+					<template #default="scope">
+						<dict-tag :options="blackList" :value="scope.row.isBlack"></dict-tag>
+					</template>
+				</el-table-column>
 				<el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip width="200">
 					<template #default="scope">
 						<span v-for="(tag, index) in scope.row.tagList" :key="index">
@@ -61,12 +66,14 @@
 				</el-table-column>
 				<el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip />
 				<el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
 						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 						<el-button text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
+						<el-button text type="primary" @click="handelUnBlack([scope.row.id])" v-if="scope.row.isBlack"> 取消拉黑 </el-button>
+						<el-button text type="primary" @click="handelBlack([scope.row.id])" v-else> 拉黑 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -78,7 +85,7 @@
 
 <script lang="ts" name="systemWxAccountFans" setup>
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObjs, fetchList, sync } from '/@/api/mp/wx-account-fans';
+import { black, delObjs, fetchList, sync, unblack } from '/@/api/mp/wx-account-fans';
 import { fetchAccountList } from '/@/api/mp/wx-account';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
@@ -91,6 +98,16 @@ const { subscribe } = useDict('subscribe');
 // 引入组件
 const { t } = useI18n();
 // 定义查询字典
+const blackList = ref([
+	{
+		label: '是',
+		value: '1',
+	},
+	{
+		label: '否',
+		value: '0',
+	},
+]);
 
 // 定义变量内容
 const formDialogRef = ref();
@@ -175,6 +192,36 @@ const handleDelete = (ids: string[]) => {
 				.then(() => {
 					getDataList(false);
 					useMessage().success(t('common.delSuccessText'));
+				})
+				.catch((err: any) => {
+					useMessage().error(err.msg);
+				});
+		});
+};
+
+const handelBlack = (ids: string[]) => {
+	useMessageBox()
+		.confirm('是否要拉黑用户')
+		.then(() => {
+			black(ids, state.queryForm.wxAccountAppid)
+				.then(() => {
+					getDataList(false);
+					useMessage().success('拉黑用户成功');
+				})
+				.catch((err: any) => {
+					useMessage().error(err.msg);
+				});
+		});
+};
+
+const handelUnBlack = (ids: string[]) => {
+	useMessageBox()
+		.confirm('是否要取消拉黑用户')
+		.then(() => {
+			unblack(ids, state.queryForm.wxAccountAppid)
+				.then(() => {
+					getDataList(false);
+					useMessage().success('设置成功');
 				})
 				.catch((err: any) => {
 					useMessage().error(err.msg);
