@@ -53,38 +53,38 @@
                                            v-model:showSearch="showSearch"></right-toolbar>
                         </div>
                     </el-row>
-                    <el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%"
-                              v-loading="state.loading">
+                    <el-table :data="state.dataList" @selection-change="handleSelectionChange" border
+                              max-height="450" style="width: 100%" v-loading="state.loading">
                         <el-table-column :selectable='handleSelectable' align="center" type="selection" width="50"/>
-                        <el-table-column :label="$t('sysuser.index')" type="index" width="80"/>
+                        <el-table-column :label="$t('sysuser.index')" type="index" width="60"/>
                         <el-table-column :label="$t('sysuser.username')" prop="username"
-                                         show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="$t('sysuser.name')" prop="name"
-                                         show-overflow-tooltip></el-table-column>
+                                         show-overflow-tooltip width="120"></el-table-column>
+                        <el-table-column :label="$t('sysuser.name')" fixed
+                                         prop="name" show-overflow-tooltip width="100"></el-table-column>
                         <el-table-column :label="$t('sysuser.phone')" prop="phone"
-                                         show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
+                                         show-overflow-tooltip width="120"></el-table-column>
+                        <el-table-column :label="$t('sysuser.post')" show-overflow-tooltip width="120">
                             <template #default="scope">
                                 <el-tag :key="index" type="success" v-for="(item, index) in scope.row.postList">{{
                                     item.postName }}
                                 </el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
+                        <el-table-column :label="$t('sysuser.role')" show-overflow-tooltip width="100">
                             <template #default="scope">
                                 <el-tag :key="index" type="success" v-for="(item, index) in scope.row.roleList">{{
                                     item.roleName }}
                                 </el-tag>
                             </template>
                         </el-table-column>
-                        <el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
+                        <el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip width="100">
                             <template #default="scope">
                                 <dict-tag :options="lock_flag" :value="scope.row.lockFlag"></dict-tag>
                             </template>
                         </el-table-column>
                         <el-table-column :label="$t('sysuser.createTime')" prop="createTime"
-                                         show-overflow-tooltip></el-table-column>
-                        <el-table-column :label="$t('common.action')" width="150">
+                                         show-overflow-tooltip width="180"></el-table-column>
+                        <el-table-column :label="$t('common.action')" fixed="right" width="160">
                             <template #default="scope">
                                 <el-button @click="userDialogRef.openDialog(scope.row.userId)" text type="primary"
                                            v-auth="'sys_user_edit'"> {{
@@ -95,7 +95,8 @@
                                             :disabled="scope.row.userId !== '1'"
                                             placement="top">
                   <span style="margin-left: 12px">
-                    <el-button :disabled="scope.row.userId === '1'" @click="handleDelete([scope.row.userId])" text type="primary"
+                    <el-button :disabled="scope.row.userId === '1'" @click="handleDelete([scope.row.userId])" text
+                               type="primary"
                                v-auth="'sys_user_del'">{{
                         $t('common.delBtn')
                       }}
