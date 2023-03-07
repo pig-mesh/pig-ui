@@ -18,7 +18,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"experimentalDecorators": true,
-		"noImplicitAny": false,
+		"noImplicitAny": false, // 是否关闭 ts 2322 类型推导
 		"skipLibCheck": true,
 		"paths": {
 			"/@/*": ["./src/*"]

@@ -65,7 +65,6 @@
 										v-model="passwordFormData.newpassword1"
 										:minlength="6"
 										:maxlength="16"
-										@score="handleScore"
 										placeholder="请输入新密码"
 									></strength-meter>
 									<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
@@ -160,10 +159,6 @@ const validatorPassword2 = (rule: any, value: any, callback: any) => {
 	} else {
 		callback();
 	}
-};
-
-const handleScore = (e) => {
-	console.log(e, 'eee');
 };
 
 const passwordRuleForm = reactive({
