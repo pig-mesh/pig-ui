@@ -27,8 +27,9 @@ service.interceptors.request.use(
 		}
 		// 统一增加 token
 		const isToken = (config.headers || {}).isToken === false;
-		if (Session.get('token') && !isToken) {
-			config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
+		const token = Session.getToken();
+		if (token && !isToken) {
+			config.headers!['Authorization'] = `Bearer ${token}`;
 		}
 
 		// 统一增加租户信息

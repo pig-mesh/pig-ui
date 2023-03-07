@@ -40,7 +40,7 @@ export const Session = {
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
-	const token = Session.get('token');
+	const token = Session.getToken();
 	if (to.path === '/login' && !token) {
 		next();
 		NProgress.done();
@@ -76,7 +76,7 @@ export async function initBackEndControlRoutes() {
 	// 界面 loading 动画开始执行
 	if (window.nextLoading === undefined) NextLoading.start();
 	// 无 token 停止执行下一步
-	if (!Session.get('token')) return false;
+	if (!Session.getToken()) return false;
 	// 触发初始化用户信息 pinia
 	await useUserInfo().setUserInfos();
 	// 获取路由菜单数据
@@ -115,8 +115,8 @@ service.interceptors.request.use((config: InternalAxiosRequestConfig) => {
         }
     }
     // 在发送请求之前做些什么 token
-    if (Session.get('token')) {
-        config.headers!['Authorization'] = `Bearer ${Session.get('token')}`;
+    if (Session.getToken()) {
+        config.headers!['Authorization'] = `Bearer ${Session.getToken()}`;
     }
     return config;
 },

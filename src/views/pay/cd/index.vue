@@ -70,7 +70,7 @@ const getQr = () => {
 			url.value = res.params;
 		});
 	} else {
-		const tenantId = Local.get('tenantId') ? Local.get('tenantId') : 1;
+		const tenantId = Session.getTenant();
 		url.value = `${protocol}//${host}/admin/goods/buy?amount=${state.amount}&TENANT-ID=${tenantId}`;
 	}
 };

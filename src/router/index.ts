@@ -86,7 +86,7 @@ export function formatTwoStageRoutes(arr: any) {
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
 	if (to.meta.title) NProgress.start();
-	const token = Session.get('token');
+	const token = Session.getToken();
 	if (to.meta.isAuth !== undefined && !to.meta.isAuth) {
 		next();
 		NProgress.done();

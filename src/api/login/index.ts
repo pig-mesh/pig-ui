@@ -96,7 +96,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 			Authorization: basicAuth,
 		},
 		method: 'get',
-		params: { token: Session.get('token') },
+		params: { token: Session.getToken() },
 	})
 		.then((response) => {
 			if (validateNull(response) || response.code === 1) {

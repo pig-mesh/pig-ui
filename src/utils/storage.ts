@@ -64,4 +64,12 @@ export const Session = {
 		Cookies.remove('refresh_token');
 		window.sessionStorage.clear();
 	},
+	// 获取当前存储的 token
+	getToken() {
+		return this.get('token');
+	},
+	// 获取当前的租户
+	getTenant() {
+		return Session.getTenant();
+	},
 };

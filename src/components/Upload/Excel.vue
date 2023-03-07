@@ -121,9 +121,9 @@ const show = () => {
 };
 
 const headers = computed(() => {
-	const tenantId = Local.get('tenantId') ? Local.get('tenantId') : 1;
+	const tenantId = Session.getTenant();
 	return {
-		Authorization: 'Bearer ' + Session.get('token'),
+		Authorization: 'Bearer ' + Session.getToken(),
 		'TENANT-ID': tenantId,
 	};
 });

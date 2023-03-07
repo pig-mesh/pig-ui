@@ -3,7 +3,7 @@
 </template>
 <script setup lang="ts" name="global-websocket">
 import { ElNotification } from 'element-plus';
-import { Local, Session } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 
 const emit = defineEmits(['rollback']);
 
@@ -28,11 +28,11 @@ const state = reactive({
 });
 
 const token = computed(() => {
-	return Session.get('token');
+	return Session.getToken();
 });
 
 const tenant = computed(() => {
-	return Local.get('tenantId') ? Local.get('tenantId') : 1;
+	return Session.getTenant();
 });
 
 onMounted(() => {

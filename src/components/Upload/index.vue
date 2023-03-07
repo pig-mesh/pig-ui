@@ -59,7 +59,7 @@
 
 <script setup lang="ts" name="upload-file">
 import { useMessage } from '/@/hooks/message';
-import { Local, Session } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 
 const props = defineProps({
 	modelValue: [String, Array],
@@ -110,9 +110,9 @@ const uploadList = ref([]) as any;
 const fileUpload = ref();
 
 const headers = computed(() => {
-	const tenantId = Local.get('tenantId') ? Local.get('tenantId') : 1;
+	const tenantId = Session.getTenant();
 	return {
-		Authorization: 'Bearer ' + Session.get('token'),
+		Authorization: 'Bearer ' + Session.getToken(),
 		'TENANT-ID': tenantId,
 	};
 });

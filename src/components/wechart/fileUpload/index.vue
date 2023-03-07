@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts" name="wx-file-upload">
-import { Local, Session } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 import { useMessage } from '/@/hooks/message';
 
 const actionUrl = ref('/admin/wx-material/materialFileUpload');
@@ -27,9 +27,9 @@ const actionUrl = ref('/admin/wx-material/materialFileUpload');
 const fileUpload = ref();
 
 const headers = computed(() => {
-	const tenantId = Local.get('tenantId') ? Local.get('tenantId') : 1;
+	const tenantId = Session.getTenant();
 	return {
-		Authorization: 'Bearer ' + Session.get('token'),
+		Authorization: 'Bearer ' + Session.getToken(),
 		'TENANT-ID': tenantId,
 	};
 });

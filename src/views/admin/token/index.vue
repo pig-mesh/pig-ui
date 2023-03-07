@@ -117,6 +117,6 @@ const handleDelete = (accessTokens: string[]) => {
 
 // 判断当前token 是否和登录token一致
 const filterOwnToken = (row: any) => {
-	return Session.get('token') === row.accessToken;
+	return Session.getToken() === row.accessToken;
 };
 </script>
