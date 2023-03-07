@@ -46,6 +46,7 @@ const pageList = () => {
 const state: BasicTableProps = reactive<BasicTableProps>({
 	isPage: false,
 	queryForm: {},
+	createdIsNeed: false,
 	pageList: pageList,
 });
 
