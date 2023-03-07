@@ -8,6 +8,8 @@ export default {
 		serviceId: 'serviceId',
 		time: 'time',
 		createTime: 'createTime',
+		requestUri: 'requestUri',
+		exception: 'exception',
 		action: 'action',
 		inputLogTypeTip: 'select logType',
 		inputStartPlaceholderTip: 'Start Time',

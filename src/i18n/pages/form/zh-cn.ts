@@ -5,6 +5,7 @@ export default {
 		addBtn: '新 增',
 		editBtn: '修 改',
 		delBtn: '删除',
+		detailBtn: '详情',
 		refreshCacheBtn: '刷新缓存',
 		exportBtn: '导出',
 		importBtn: '导入',
