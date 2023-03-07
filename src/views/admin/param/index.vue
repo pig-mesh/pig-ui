@@ -21,14 +21,14 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<el-button @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 						{{ $t('common.refreshCacheBtn') }}
+					</el-button>
+					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
+						{{ $t('common.exportBtn') }}
 					</el-button>
 					<right-toolbar
 						@queryTable="getDataList"

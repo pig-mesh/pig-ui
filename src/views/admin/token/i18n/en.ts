@@ -7,5 +7,6 @@ export default {
 		accessToken: 'accessToken',
 		expiresAt: 'expiresAt',
 		inputUsernameTip: 'input Username',
+		offlineBtn: 'offline',
 	},
 };

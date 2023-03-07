@@ -15,7 +15,7 @@
 			<el-row>
 				<div class="mb8" style="width: 100%">
 					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_user_del'">
-						{{ $t('common.delBtn') }}
+						{{ $t('systoken.offlineBtn') }}
 					</el-button>
 					<right-toolbar
 						@queryTable="getDataList"
@@ -47,7 +47,7 @@
 				<el-table-column :label="$t('common.action')" width="100">
 					<template #default="scope">
 						<el-button @click="handleDelete([scope.row.accessToken])" size="small" text type="primary" v-auth="'sys_user_del'">
-							{{ $t('common.delBtn') }}
+							{{ $t('systoken.offlineBtn') }}
 						</el-button>
 					</template>
 				</el-table-column>

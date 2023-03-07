@@ -7,5 +7,6 @@ export default {
 		accessToken: '令牌',
 		expiresAt: '过期时间',
 		inputUsernameTip: '请输入用户名',
+		offlineBtn: '下线',
 	},
 };

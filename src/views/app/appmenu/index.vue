@@ -2,7 +2,7 @@
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
 			<div @keyup.enter="getDataList" class="mb15">
-				<el-input :placeholder="$t('appmenu.inputNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"></el-input>
+				<el-input :placeholder="$t('appmenu.inputMenuNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"></el-input>
 				<el-button @click="getDataList" class="ml10" icon="search" type="primary">
 					{{ $t('common.queryBtn') }}
 				</el-button>
