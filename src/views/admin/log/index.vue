@@ -62,6 +62,9 @@
 				<el-table-column :label="$t('syslog.createTime')" prop="createTime" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
 				<el-table-column :label="$t('common.action')" width="100">
 					<template #default="scope">
+						<el-button @click="LogDetailRef.openDialog(scope.row)" size="small" text type="primary">
+							{{ $t('common.detailBtn') }}
+						</el-button>
 						<el-button @click="handleDelete([scope.row.id])" size="small" text type="primary" v-auth="'sys_user_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
@@ -70,6 +73,7 @@
 			</el-table>
 
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"> </pagination>
+			<log-detail ref="LogDetailRef"></log-detail>
 		</div>
 	</div>
 </template>
@@ -80,6 +84,9 @@ import { delObj, pageList } from '/@/api/admin/log';
 import { useI18n } from 'vue-i18n';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
+const LogDetail = defineAsyncComponent(() => import('./detail.vue'));
+
+const LogDetailRef = ref();
 
 const { log_type } = useDict('log_type');
 

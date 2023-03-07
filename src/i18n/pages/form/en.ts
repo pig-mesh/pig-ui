@@ -5,6 +5,7 @@ export default {
 		addBtn: 'add',
 		editBtn: 'edit',
 		delBtn: 'delete',
+		detailBtn: 'detail',
 		exportBtn: 'export',
 		refreshCacheBtn: 'refreshCache',
 		importBtn: 'import',
