@@ -61,12 +61,19 @@
 							</el-col>
 							<el-col :span="24" class="mb20">
 								<el-form-item label="新密码" prop="newpassword1">
-									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>
+									<strength-meter
+										v-model="passwordFormData.newpassword1"
+										:minlength="6"
+										:maxlength="16"
+										@score="handleScore"
+										placeholder="请输入新密码"
+									></strength-meter>
+									<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
 								</el-form-item>
 							</el-col>
 							<el-col :span="24" class="mb20">
 								<el-form-item label="确认密码" prop="newpassword2">
-									<el-input v-model="passwordFormData.newpassword2" clearable type="password"></el-input>
+									<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16" placeholder="请重复密码"></strength-meter>
 								</el-form-item>
 							</el-col>
 							<el-col :span="24" class="mb20">
@@ -114,6 +121,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
+const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthMeter/index.vue'));
 
 const visible = ref(false);
 
@@ -152,6 +160,10 @@ const validatorPassword2 = (rule: any, value: any, callback: any) => {
 	} else {
 		callback();
 	}
+};
+
+const handleScore = (e) => {
+	console.log(e, 'eee');
 };
 
 const passwordRuleForm = reactive({

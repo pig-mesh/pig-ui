@@ -10,26 +10,19 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop="password">
-			<el-input
-				:type="state.isShowPassword ? 'text' : 'password'"
+			<strength-meter
 				:placeholder="$t('password.accountPlaceholder2')"
 				v-model="state.ruleForm.password"
 				autocomplete="off"
-			>
-				<template #prefix>
+				:maxLength="20"
+				:minLength="6"
+				@score="handlePassScore"
+				><template #prefix>
 					<el-icon class="el-input__icon">
 						<ele-Unlock />
 					</el-icon>
 				</template>
-				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
-						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword"
-					>
-					</i>
-				</template>
-			</el-input>
+			</strength-meter>
 		</el-form-item>
 		<el-form-item class="login-animation3" prop="phone">
 			<el-input text :placeholder="$t('password.phonePlaceholder4')" v-model="state.ruleForm.phone" clearable autocomplete="off">
@@ -55,6 +48,7 @@ import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['afterSuccess']);
+const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthMeter/index.vue'));
 
 const { t } = useI18n();
 const dataFormRef = ref();
@@ -105,8 +99,21 @@ const dataRules = ref({
 			message: '用户密码长度必须介于 6 和 20 之间',
 			trigger: 'blur',
 		},
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				if (Number(score.value) < 2) {
+					callback('密码强度太低');
+				}
+			},
+			trigger: 'blur',
+		},
 	],
 });
+const score = ref('0');
+
+const handlePassScore = (e) => {
+	score.value = e;
+};
 
 const handleRegister = () => {
 	loading.value = true;
