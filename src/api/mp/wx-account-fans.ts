@@ -61,3 +61,19 @@ export function putObj(obj) {
 		data: obj,
 	});
 }
+
+export function black(obj, appid) {
+	return request({
+		url: '/admin/wx-account-fans/black/' + appid,
+		method: 'post',
+		data: obj,
+	});
+}
+
+export function unblack(obj, appid) {
+	return request({
+		url: '/admin/wx-account-fans/unblack/' + appid,
+		method: 'post',
+		data: obj,
+	});
+}
