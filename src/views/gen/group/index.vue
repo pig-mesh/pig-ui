@@ -111,7 +111,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/codegen/group/export', state.queryForm, 'group.xlsx');
+	downBlobFile('/gen/group/export', state.queryForm, 'group.xlsx');
 };
 
 // 多选事件
