@@ -45,3 +45,10 @@ export function info() {
 		method: 'get',
 	});
 }
+
+export function refreshCache() {
+	return request({
+		url: '/admin/i18n/sync',
+		method: 'put',
+	})
+}
