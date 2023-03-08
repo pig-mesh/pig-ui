@@ -1,5 +1,4 @@
 import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
-import { ElMessageBox } from 'element-plus';
 import { Session, Local } from '/@/utils/storage';
 import qs from 'qs';
 import { useMessageBox } from '../hooks/message';

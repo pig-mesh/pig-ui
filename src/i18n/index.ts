@@ -46,15 +46,6 @@ function mergeArrObj<T>(list: T, key: string) {
 	return obj;
 }
 
-// 远程获取i18n
-try {
-	const infoI18n = await info();
-	itemize['zh-cn'].push(...infoI18n.data['zh-cn']);
-	itemize.en.push(...infoI18n.data.en);
-} catch (e) {
-	// 考虑请求不过去没有后台的情况下导致的i18n失效
-}
-
 for (const key in itemize) {
 	messages[key] = {
 		name: key,
@@ -79,3 +70,27 @@ export const i18n = createI18n({
 	fallbackLocale: zhcnLocale.name,
 	messages,
 });
+
+const messageLocal = {};
+
+const itemizeLocal = { en: [] as any[], 'zh-cn': [] as any[] };
+
+// 远程获取i18n
+try {
+	setTimeout(async () => {
+		const infoI18n = await info();
+		itemizeLocal['zh-cn'].push(...infoI18n.data['zh-cn']);
+		itemizeLocal.en.push(...infoI18n.data.en);
+		for (const key in itemizeLocal) {
+			messageLocal[key] = {
+				name: key,
+				...mergeArrObj(itemizeLocal, key),
+			};
+		}
+		i18n.global.mergeLocaleMessage('zh-cn', messageLocal['zh-cn']);
+		i18n.global.mergeLocaleMessage('en', messageLocal['en']);
+		i18n.global.locale.value = themeConfig.value.globalI18n;
+	}, 50);
+} catch (e) {
+	// 考虑请求不过去没有后台的情况下导致的i18n失效
+}
