@@ -42,13 +42,14 @@
 </template>
 
 <script setup lang="ts" name="tenant-menu-form">
+import { treemenu, addObj, putObj } from '/@/api/admin/tenant-menu';
+import { useMessage } from '/@/hooks/message';
 import { getObj } from '/@/api/admin/tenant-menu';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 const { status_type } = useDict('status_type');
 const { t } = useI18n();
-import { treemenu, addObj, putObj } from '/@/api/admin/tenant-menu';
-import { useMessage } from '/@/hooks/message';
+
 const emit = defineEmits(['refresh']);
 
 const dataFormRef = ref();
@@ -57,7 +58,7 @@ const menuTreeRef = ref();
 
 const form = reactive({
 	id: '',
-	status: '',
+	status: '0',
 	name: '',
 	menuIds: '',
 });

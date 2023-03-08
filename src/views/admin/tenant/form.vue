@@ -94,7 +94,6 @@ const menuData = ref([]);
 const dataRules = ref({
 	name: [{ required: true, message: 'name不能为空', trigger: 'blur' }],
 	code: [{ required: true, message: 'code不能为空', trigger: 'blur' }],
-	tenantDomain: [{ required: true, message: 'tenantDomain不能为空', trigger: 'blur' }],
 	startTime: [{ required: true, message: '开始时间不能为空', trigger: 'blur' }],
 	endTime: [{ required: true, message: '结束时间不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: 'status不能为空', trigger: 'blur' }],
