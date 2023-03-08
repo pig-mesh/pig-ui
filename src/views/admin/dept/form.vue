@@ -124,7 +124,7 @@ const getDeptData = async () => {
 	depttree().then((res) => {
 		parentData.value = [];
 		const dept = {
-			id: '-1',
+			id: '0',
 			name: '根部门',
 			children: [] as any[],
 		};
