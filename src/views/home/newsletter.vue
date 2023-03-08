@@ -6,7 +6,9 @@
 			</div>
 		</template>
 		<el-timeline v-if="newsList.length > 0">
-			<el-timeline-item v-for="(item, index) in newsList" :key="index" :timestamp="item.time"> {{ item.label }} - {{ item.value }} </el-timeline-item>
+			<el-timeline-item v-for="(item, index) in newsList.slice(0, 5)" :key="index" :timestamp="item.time">
+				{{ item.label }} - {{ item.value }}
+			</el-timeline-item>
 		</el-timeline>
 		<el-empty v-else />
 	</el-card>
@@ -15,7 +17,9 @@
 <script setup lang="ts" name="SysFavoriteDashboard">
 import { useMsg } from '/@/stores/msg';
 
+const mes = useMsg();
+
 const newsList = computed(() => {
-	return useMsg().getAllMsg();
+	return mes.getAllMsg();
 });
 </script>

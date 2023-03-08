@@ -26,10 +26,10 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary" v-auth="'sys_user_export'">
+					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
 						{{ $t('common.exportBtn') }}
 					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_user_del'">
+					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
@@ -60,12 +60,13 @@
 				<el-table-column :label="$t('syslog.serviceId')" prop="serviceId" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('syslog.createTime')" prop="createTime" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
+				<el-table-column :label="$t('syslog.createBy')" prop="createBy" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
 				<el-table-column :label="$t('common.action')" width="100">
 					<template #default="scope">
 						<el-button @click="LogDetailRef.openDialog(scope.row)" size="small" text type="primary">
 							{{ $t('common.detailBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" size="small" text type="primary" v-auth="'sys_user_del'">
+						<el-button @click="handleDelete([scope.row.id])" size="small" text type="primary">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

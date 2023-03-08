@@ -24,17 +24,10 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button
-						formDialogRef
-						icon="folder-add"
-						type="primary"
-						class="ml10"
-						@click="formDialogRef.openDialog(null, state.queryForm)"
-						v-auth="'admin_schedule_add'"
-					>
+					<el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog(null, state.queryForm)">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'admin_schedule_export'">
+					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel">
 						{{ $t('common.exportBtn') }}
 					</el-button>
 					<el-button
@@ -82,10 +75,8 @@
 				<el-table-column prop="createTime" :label="t('schedule.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button text type="primary" v-auth="'admin_schedule_edit'" @click="formDialogRef.openDialog(scope.row.id)">{{
-							$t('common.editBtn')
-						}}</el-button>
-						<el-button text type="primary" v-auth="'admin_schedule_del'" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}</el-button>
+						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}</el-button>
+						<el-button text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

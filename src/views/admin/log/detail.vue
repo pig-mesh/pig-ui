@@ -9,6 +9,7 @@
 			<el-descriptions-item :label="$t('syslog.createTime')">{{ data.createTime }}</el-descriptions-item>
 			<el-descriptions-item :label="$t('syslog.requestUri')">{{ data.requestUri }}</el-descriptions-item>
 			<el-descriptions-item :label="$t('syslog.exception')">{{ data.exception }}</el-descriptions-item>
+			<el-descriptions-item :label="$t('syslog.createBy')">{{ data.createBy }}</el-descriptions-item>
 		</el-descriptions>
 	</el-drawer>
 </template>
@@ -21,7 +22,6 @@ const data = reactive({} as any);
 const openDialog = (row: any) => {
 	visible.value = true;
 	Object.assign(data, row);
-	console.log(data, 'dadadadada');
 };
 
 // 暴露变量
