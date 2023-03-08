@@ -53,17 +53,16 @@ export function getDetails(obj: Object) {
 	});
 }
 
-export function validateclientId(rule:any , value:any ,callback:any,isEdit: boolean) {
-  if (isEdit){
-  	return callback;
-  }
-  getDetails(value).then((res)=>{
-  	 const result = res.data
-	  if (result !== null){
-	  	callback(new Error("编号已经存在"))
-	  }else {
-	  	callback();
-	  }
-  })
-
+export function validateclientId(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+	getDetails(value).then((res) => {
+		const result = res.data;
+		if (result !== null) {
+			callback(new Error('编号已经存在'));
+		} else {
+			callback();
+		}
+	});
 }
