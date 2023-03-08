@@ -41,9 +41,9 @@ import { fetchList, delObj } from '/@/api/admin/tenant-menu';
 import { useDict } from '/@/hooks/dict';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
 const TenantMenuDialog = defineAsyncComponent(() => import('./form.vue'));
 
+const { t } = useI18n();
 const { status_type } = useDict('status_type');
 const visible = ref(false);
 const tenantMenuDialogRef = ref();

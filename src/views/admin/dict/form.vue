@@ -24,7 +24,7 @@
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.remarks')" prop="remarks">
-							<el-input :placeholder="$t('sysdict.inputRemarksTip')" maxlength="150" type="textarea" v-model="dataForm.remarks"></el-input>
+							<el-input :placeholder="$t('sysdict.inputRemarksTip')" v-model="dataForm.remarks"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>

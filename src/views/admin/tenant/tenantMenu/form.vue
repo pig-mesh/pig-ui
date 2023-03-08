@@ -66,7 +66,18 @@ const form = reactive({
 const dataRules = reactive({
 	name: [{ required: true, message: '套餐名称不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: '套餐状态不能为空', trigger: 'blur' }],
-	menuIds: [{ required: true, message: '套餐菜单不能为空', trigger: 'blur' }],
+	menuIds: [
+		{
+			validator: (_rule: any, _value: any, callback: any) => {
+				if (menuTreeRef.value.getCheckedKeys().length > 0) {
+					callback();
+				} else {
+					useMessage().error('请选择租户套餐菜单');
+				}
+			},
+			trigger: 'blur',
+		},
+	],
 });
 
 const menuData = ref<any[]>([]);

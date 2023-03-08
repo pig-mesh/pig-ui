@@ -56,13 +56,13 @@
 <script setup lang="ts" name="systemTenantDialog">
 import { validateTenantCode, validateTenantName } from '/@/api/admin/tenant';
 import { useDict } from '/@/hooks/dict';
-// 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/admin/tenant';
 import { menuList } from '/@/api/admin/tenant-menu';
 import { useI18n } from 'vue-i18n';
 
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 
 // 定义变量内容
