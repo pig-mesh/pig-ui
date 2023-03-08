@@ -80,6 +80,16 @@ export function UnbindingUser(type) {
 	});
 }
 
+export function checkPassword(password: string) {
+	return request({
+		url: '/admin/user/check',
+		method: 'post',
+		params: {
+			password,
+		},
+	});
+}
+
 /**
  * 注册用户
  */

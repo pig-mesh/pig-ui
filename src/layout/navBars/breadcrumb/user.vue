@@ -1,17 +1,5 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onComponentSizeChange">
-			<div class="layout-navbars-breadcrumb-user-icon">
-				<i class="iconfont icon-ziti" :title="$t('user.title0')"></i>
-			</div>
-			<template #dropdown>
-				<el-dropdown-menu>
-					<el-dropdown-item command="large" :disabled="state.disabledSize === 'large'">{{ $t('user.dropdownLarge') }} </el-dropdown-item>
-					<el-dropdown-item command="default" :disabled="state.disabledSize === 'default'">{{ $t('user.dropdownDefault') }} </el-dropdown-item>
-					<el-dropdown-item command="small" :disabled="state.disabledSize === 'small'">{{ $t('user.dropdownSmall') }} </el-dropdown-item>
-				</el-dropdown-menu>
-			</template>
-		</el-dropdown>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'" :title="$t('user.title1')"></i>
@@ -23,6 +11,11 @@
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
+		<div class="layout-navbars-breadcrumb-user-icon" @click="onLockClick">
+			<el-icon :title="$t('layout.threeLockScreenTime')">
+				<ele-Lock />
+			</el-icon>
+		</div>
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
 			<el-icon :title="$t('user.title2')">
 				<ele-Search />
@@ -186,14 +179,6 @@ const onHandleCommandClick = (path: string) => {
 const onSearchClick = () => {
 	searchRef.value.openSearch();
 };
-// 组件大小改变
-const onComponentSizeChange = (size: string) => {
-	Local.remove('themeConfig');
-	themeConfig.value.globalComponentSize = size;
-	Local.set('themeConfig', themeConfig.value);
-	initI18nOrSize('globalComponentSize', 'disabledSize');
-	window.location.reload();
-};
 // 语言切换
 const onLanguageChange = (lang: string) => {
 	Local.remove('themeConfig');
@@ -203,6 +188,13 @@ const onLanguageChange = (lang: string) => {
 	other.useTitle();
 	initI18nOrSize('globalI18n', 'disabledI18n');
 };
+// 锁屏
+const onLockClick = () => {
+	themeConfig.value.isLockScreen = true;
+	themeConfig.value.lockScreenTime = 0;
+	Local.set('themeConfig', themeConfig.value);
+};
+
 // 初始化组件大小/i18n
 const initI18nOrSize = (value: string, attr: string) => {
 	state[attr] = Local.get('themeConfig')[value];

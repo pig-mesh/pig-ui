@@ -28,14 +28,15 @@
 				<div v-show="state.isShowLoockLogin" class="layout-lock-screen-login">
 					<div class="layout-lock-screen-login-box">
 						<div class="layout-lock-screen-login-box-img">
-							<img src="https://img2.baidu.com/it/u=1978192862,2048448374&fm=253&fmt=auto&app=138&f=JPEG?w=504&h=500" />
+							<img :src="formData.avatar" />
 						</div>
-						<div class="layout-lock-screen-login-box-name">Administrator</div>
+						<div class="layout-lock-screen-login-box-name">{{ formData.username }}</div>
 						<div class="layout-lock-screen-login-box-value">
 							<el-input
 								placeholder="请输入密码"
 								ref="layoutLockScreenInputRef"
 								v-model="state.lockScreenPassword"
+								type="password"
 								@keyup.enter.native.stop="onLockScreenSubmit()"
 							>
 								<template #append>
@@ -46,6 +47,7 @@
 									</el-button>
 								</template>
 							</el-input>
+							<p style="color: red">{{ mes }}</p>
 						</div>
 					</div>
 					<div class="layout-lock-screen-login-icon">
@@ -65,7 +67,8 @@ import { formatDate } from '/@/utils/formatTime';
 import { Local } from '/@/utils/storage';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-
+import { checkPassword } from '/@/api/admin/user';
+import { useUserInfo } from '/@/stores/userInfo';
 // 定义变量内容
 const layoutLockScreenDateRef = ref<HtmlType>();
 const layoutLockScreenInputRef = ref();
@@ -176,17 +179,29 @@ const setLocalThemeConfig = () => {
 	themeConfig.value.isDrawer = false;
 	Local.set('themeConfig', themeConfig.value);
 };
+const mes = ref();
+
 // 密码输入点击事件
 const onLockScreenSubmit = () => {
-	themeConfig.value.isLockScreen = false;
-	themeConfig.value.lockScreenTime = 30;
-	setLocalThemeConfig();
+	checkPassword(state.lockScreenPassword)
+		.then(() => {
+			themeConfig.value.isLockScreen = false;
+			themeConfig.value.lockScreenTime = 30;
+			setLocalThemeConfig();
+		})
+		.catch((err) => {
+			mes.value = err.msg;
+		});
 };
+
+const formData = reactive({});
 // 页面加载时
 onMounted(() => {
 	initGetElement();
 	initSetTime();
 	initLockScreen();
+	const data = useUserInfo().userInfos;
+	Object.assign(formData, data.user);
 });
 // 页面卸载时
 onUnmounted(() => {

@@ -23,6 +23,16 @@
 						<el-switch v-model="getThemeConfig.isIsDark" size="small" @change="onAddDarkChange"></el-switch>
 					</div>
 				</div>
+				<div class="layout-breadcrumb-seting-bar-flex mt15">
+					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('user.title0') }}</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-select v-model="getThemeConfig.globalComponentSize" placeholder="请选择" style="width: 90px" @change="onComponentSizeChange">
+							<el-option :label="$t('user.dropdownLarge')" value="large"></el-option>
+							<el-option :label="$t('user.dropdownDefault')" value="default"></el-option>
+							<el-option :label="$t('user.dropdownSmall')" value="small"></el-option>
+						</el-select>
+					</div>
+				</div>
 
 				<!-- 顶栏设置 -->
 				<el-divider content-position="left">{{ $t('layout.twoTopTitle') }}</el-divider>
@@ -169,20 +179,20 @@
 						<el-switch v-model="getThemeConfig.isLockScreen" size="small" @change="setLocalThemeConfig"></el-switch>
 					</div>
 				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt11">
-					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.threeLockScreenTime') }}</div>
-					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-input-number
-							v-model="getThemeConfig.lockScreenTime"
-							controls-position="right"
-							:min="1"
-							:max="9999"
-							@change="setLocalThemeConfig"
-							style="width: 90px"
-						>
-						</el-input-number>
-					</div>
-				</div>
+				<!--				<div class="layout-breadcrumb-seting-bar-flex mt11">-->
+				<!--					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.threeLockScreenTime') }}</div>-->
+				<!--					<div class="layout-breadcrumb-seting-bar-flex-value">-->
+				<!--						<el-input-number-->
+				<!--							v-model="getThemeConfig.lockScreenTime"-->
+				<!--							controls-position="right"-->
+				<!--							:min="1"-->
+				<!--							:max="9999"-->
+				<!--							@change="setLocalThemeConfig"-->
+				<!--							style="width: 90px"-->
+				<!--						>-->
+				<!--						</el-input-number>-->
+				<!--					</div>-->
+				<!--				</div>-->
 
 				<!-- 界面显示 -->
 				<el-divider content-position="left">{{ $t('layout.fourTitle') }}</el-divider>
@@ -624,6 +634,16 @@ const onResetConfigClick = () => {
 	// @ts-ignore
 	Local.set('version', __VERSION__);
 };
+
+// 组件大小修改
+const onComponentSizeChange = (size: string) => {
+	Local.remove('themeConfig');
+	themeConfig.value.globalComponentSize = size;
+	Local.set('themeConfig', themeConfig.value);
+	getThemeConfig.value.isDrawer = false;
+	window.location.reload();
+};
+
 // 初始化菜单样式等
 const initSetStyle = () => {
 	// 2、菜单 / 顶栏 --> 顶栏背景渐变
