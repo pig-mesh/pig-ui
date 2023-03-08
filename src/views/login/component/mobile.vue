@@ -1,5 +1,5 @@
 <template>
-	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm">
+	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm" @keyup.enter="handleLogin">
 		<el-form-item class="login-animation1" prop="mobile">
 			<el-input text :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable autocomplete="off">
 				<template #prefix>
