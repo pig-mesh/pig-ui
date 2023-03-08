@@ -47,7 +47,7 @@ onUnmounted(() => {
 const initWebSocket = () => {
 	// ws地址
 	let host = window.location.host;
-	let wsUri = `ws://${host}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant}`;
+	let wsUri = `ws://${host}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
 	// 建立连接
 	state.webSocket = new WebSocket(wsUri);
 	// 连接成功
