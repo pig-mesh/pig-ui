@@ -3,27 +3,27 @@
 		<el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="60%">
 			<el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules">
 				<el-row :gutter="35">
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20" v-if="dataForm.id">
+					<el-col :span="12" class="mb20" v-if="dataForm.id">
 						<el-form-item :label="$t('dictItem.dictType')" prop="dictType">
 							<el-input v-model="dataForm.dictType" clearable disabled :placeholder="$t('dictItem.inputDictTypeTip')"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
-						<el-form-item :label="$t('dictItem.itemValue')" prop="value">
-							<el-input v-model="dataForm.value" :placeholder="$t('dictItem.inputItemValueTip')" clearable></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('dictItem.label')" prop="label">
 							<el-input v-model="dataForm.label" :placeholder="$t('dictItem.inputLabelTip')" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
+						<el-form-item :label="$t('dictItem.itemValue')" prop="value">
+							<el-input v-model="dataForm.value" :placeholder="$t('dictItem.inputItemValueTip')" clearable></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('dictItem.description')" prop="description">
 							<el-input v-model="dataForm.description" :placeholder="$t('dictItem.inputDescriptionTip')" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('dictItem.sortOrder')" prop="sortOrder">
 							<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')" clearable></el-input-number>
 						</el-form-item>
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts" name="dict-item-form">
-import { getItemObj, addItemObj, putItemObj } from '/@/api/admin/dict';
+import { getItemObj, addItemObj, putItemObj, validateDictItemLabel } from '/@/api/admin/dict';
 import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
@@ -70,7 +70,15 @@ const dataForm = reactive({
 
 const dataRules = reactive({
 	value: [{ required: true, message: '数据值不能为空', trigger: 'blur' }],
-	label: [{ required: true, message: '标签不能为空', trigger: 'blur' }],
+	label: [
+		{ required: true, message: '标签不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateDictItemLabel(rule, value, callback, dataForm.dictType, dataForm.id !== '');
+			},
+			trigger: 'blur',
+		},
+	],
 	description: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
 	sortOrder: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
 });
