@@ -10,6 +10,7 @@ export default {
 		createTime: 'createTime',
 		requestUri: 'requestUri',
 		exception: 'exception',
+		createBy: 'createBy',
 		action: 'action',
 		inputLogTypeTip: 'select logType',
 		inputStartPlaceholderTip: 'Start Time',

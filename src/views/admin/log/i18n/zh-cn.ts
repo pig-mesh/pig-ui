@@ -10,6 +10,7 @@ export default {
 		createTime: '创建时间',
 		requestUri: '请求地址',
 		exception: '异常信息',
+		createBy: '创建人',
 		action: '操作',
 		inputLogTypeTip: '请选择类型',
 		inputStartPlaceholderTip: '开始时间',

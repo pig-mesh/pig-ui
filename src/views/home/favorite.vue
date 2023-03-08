@@ -6,9 +6,7 @@
 				<div class="flex-warp-item-box">
 					<div class="flex-margin">
 						<i :class="v.meta.icon"></i>
-						<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable :type="v.path" @close="handleCloseFavorite(v)">{{
-							$t(v.name)
-						}}</el-tag>
+						<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable @close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
 					</div>
 				</div>
 			</div>
