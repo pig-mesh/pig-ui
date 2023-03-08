@@ -1,5 +1,4 @@
 import request from '/@/utils/request';
-import { getDetailsByPhone } from '/@/api/admin/user';
 
 export const pageList = (params?: Object) => {
 	return request({

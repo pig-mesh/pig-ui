@@ -26,8 +26,16 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
 	return request({
-		url: '/admin/post/' + id,
+		url: '/admin/post/details/' + id,
 		method: 'get',
+	});
+}
+
+export function getObjDetails(obj?: object) {
+	return request({
+		url: '/admin/post/details',
+		method: 'get',
+		params: obj,
 	});
 }
 
@@ -44,5 +52,35 @@ export function putObj(obj?: Object) {
 		url: '/admin/post',
 		method: 'put',
 		data: obj,
+	});
+}
+
+export function validatePostName(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ postName: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('岗位名称已经存在'));
+		} else {
+			callback();
+		}
+	});
+}
+
+export function validatePostCode(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ postCode: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('岗位编码已经存在'));
+		} else {
+			callback();
+		}
 	});
 }
