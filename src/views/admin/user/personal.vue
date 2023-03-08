@@ -61,12 +61,7 @@
 							</el-col>
 							<el-col :span="24" class="mb20">
 								<el-form-item label="新密码" prop="newpassword1">
-									<strength-meter
-										v-model="passwordFormData.newpassword1"
-										:minlength="6"
-										:maxlength="16"
-										placeholder="请输入新密码"
-									></strength-meter>
+									<strength-meter v-model="passwordFormData.newpassword1" :minlength="6" :maxlength="16" placeholder="请输入新密码"></strength-meter>
 									<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
 								</el-form-item>
 							</el-col>
@@ -213,7 +208,7 @@ const handleSaveUser = () => {
 		if (!valid) {
 			return false;
 		}
-		editInfo(formData)
+		editInfo(formData.value)
 			.then(() => {
 				useMessage().success('修改成功');
 				// 更新上下文的 user信息
@@ -260,6 +255,9 @@ const initUserInfo = (userId: any) => {
 			console.log(formData.value, 'formData');
 			initSocialList();
 		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		})
 		.finally(() => {
 			loading.value = false;
 		});
@@ -295,6 +293,9 @@ const Unbinding = (type) => {
 	UnbindingUser(type)
 		.then((res) => {
 			useMessage().success('解绑成功');
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
 		})
 		.finally(() => {
 			initUserInfo(formData.value.userId);
