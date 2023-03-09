@@ -21,19 +21,19 @@
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="['3', '4'].includes(form.jobType)">
 					<el-form-item :label="t('job.executePath')" prop="executePath">
 						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
 					<el-form-item :label="t('job.className')" prop="className">
 						<el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
 					<el-form-item :label="t('job.methodName')" prop="methodName">
 						<el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')" />
 					</el-form-item>
@@ -134,6 +134,9 @@ const dataRules = reactive({
 	jobType: [{ required: true, message: '任务类型不能为空', trigger: 'blur' }],
 	cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
 	misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
+	executePath: [{ required: true, message: '执行路径不能为空', trigger: 'blur' }],
+	className: [{ required: true, message: '执行文件不能为空', trigger: 'blur' }],
+	methodName: [{ required: true, message: '执行方法不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗
