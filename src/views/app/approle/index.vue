@@ -67,7 +67,7 @@
 			@refreshDataList="getDataList"
 			ref="excelUploadRef"
 			temp-url="/admin/sys-file/local/file/role.xlsx"
-			url="/admin/role/import"
+			url="/admin/approle/import"
 		/>
 		<!-- 授权 -->
 		<permession ref="permessionRef" />

@@ -72,8 +72,8 @@ const form = reactive({
 	id: '',
 	type: '',
 	remark: '',
-	appId: '',
-	appSecret: '',
+	appId: '' as string | undefined,
+	appSecret: '' as string | undefined,
 	redirectUrl: '',
 	ext: '',
 });
@@ -81,14 +81,8 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
 	type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
-	appId: [
-		{ required: true, message: 'appId不能为空', trigger: 'blur' },
-		{ validator: rule.letterAndNumber, trigger: 'blur' },
-	],
-	appSecret: [
-		{ required: true, message: 'app秘钥不能为空', trigger: 'blur' },
-		{ validator: rule.letterAndNumber, trigger: 'blur' },
-	],
+	appId: [{ required: true, message: 'appId不能为空', trigger: 'blur' }],
+	appSecret: [{ required: true, message: 'app秘钥不能为空', trigger: 'blur' }],
 
 	redirectUrl: [
 		{ required: true, message: '回调地址不能为空', trigger: 'blur' },
@@ -121,11 +115,11 @@ const onSubmit = () => {
 		}
 
 		if (form.appSecret && form.appSecret.indexOf('******') >= 0) {
-			form.appSecret = '';
+			form.appSecret = undefined;
 		}
 
 		if (form.appId && form.appId.indexOf('******') >= 0) {
-			form.appId = '';
+			form.appId = undefined;
 		}
 
 		// 更新

@@ -87,7 +87,7 @@
 			@refreshDataList="getDataList"
 			ref="excelUploadRef"
 			temp-url="/admin/sys-file/local/file/user.xlsx"
-			url="/admin/user/import"
+			url="/admin/appuser/import"
 		/>
 	</div>
 </template>
