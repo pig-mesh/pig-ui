@@ -19,6 +19,7 @@ import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
 // @ts-ignore
 import { IDomEditor } from '@wangeditor/editor';
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
+import { Session } from '/@/utils/storage';
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -47,16 +48,41 @@ const props = defineProps({
 	getHtml: String,
 	// 双向绑定，用于获取 editor.getText()
 	getText: String,
+	uploadFileUrl: {
+		type: String,
+		default: '/admin/sys-file/upload',
+	},
 });
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['update:getHtml', 'update:getText']);
 
-// 定义变量内容
+// 定义上传需要的请求头信息
+const headers = computed(() => {
+	return {
+		Authorization: 'Bearer ' + Session.get('token'),
+		'TENANT-ID': Session.getTenant(),
+	};
+});
+
+// 定义上传需要的字段信息
+const uploadAttr = reactive({
+	fieldName: 'file',
+	server: props.uploadFileUrl,
+	headers: headers,
+	customInsert(res, insertFn) {
+		insertFn(res.data.url);
+	},
+});
+
 const editorRef = shallowRef();
 const state = reactive({
 	editorConfig: {
 		placeholder: props.placeholder,
+		MENU_CONF: {
+			uploadImage: uploadAttr,
+			uploadVideo: uploadAttr,
+		},
 	},
 	editorVal: props.getHtml,
 });

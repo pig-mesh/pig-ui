@@ -51,9 +51,6 @@
 import { useMessage } from '/@/hooks/message';
 import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
-import { useI18n } from 'vue-i18n';
-
-const { t } = useI18n();
 
 const emit = defineEmits(['sizeChange', 'refreshDataList']);
 const prop = defineProps({

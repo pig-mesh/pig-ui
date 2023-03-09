@@ -60,10 +60,6 @@
 <script setup lang="ts" name="upload-file">
 import { useMessage } from '/@/hooks/message';
 import { Local, Session } from '/@/utils/storage';
-import {useI18n} from 'vue-i18n';
-
-
-const {t} = useI18n()
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制
