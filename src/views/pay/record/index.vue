@@ -102,7 +102,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/notify/export', state.queryForm, 'record.xlsx');
+	downBlobFile('/pay/notify/export', state.queryForm, 'record.xlsx');
 };
 
 // 多选事件

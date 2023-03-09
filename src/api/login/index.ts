@@ -11,7 +11,7 @@ export const login = (data: any) => {
 	const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT);
 	Session.set('basicAuth', basicAuth);
 	return request({
-		url: '/admin/oauth2/token',
+		url: '/auth/oauth2/token',
 		method: 'post',
 		params: data,
 		headers: {
@@ -29,7 +29,7 @@ export const loginByMobile = (mobile: any, code: any) => {
 	Session.set('basicAuth', basicAuth);
 
 	return request({
-		url: '/admin/oauth2/token',
+		url: '/auth/oauth2/token',
 		headers: {
 			isToken: false,
 			'TENANT-ID': '1',
@@ -47,7 +47,7 @@ export const loginBySocial = (state: string, code: string) => {
 	Session.set('basicAuth', basicAuth);
 
 	return request({
-		url: '/admin/oauth2/token',
+		url: '/auth/oauth2/token',
 		headers: {
 			isToken: false,
 			'TENANT-ID': '1',
@@ -60,7 +60,7 @@ export const loginBySocial = (state: string, code: string) => {
 
 export const sendMobileCode = (mobile: any) => {
 	return request({
-		url: '/admin/mobile/' + mobile,
+		url: '/auth/mobile/' + mobile,
 		method: 'get',
 	});
 };
@@ -72,7 +72,7 @@ export const refreshTokenApi = (refresh_token: string) => {
 	const basicAuth = Session.get('basicAuth');
 
 	return request({
-		url: '/admin/oauth2/token',
+		url: '/auth/oauth2/token',
 		headers: {
 			isToken: false,
 			'TENANT-ID': '1',
@@ -90,7 +90,7 @@ export const refreshTokenApi = (refresh_token: string) => {
 export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 	const basicAuth = Session.get('basicAuth');
 	request({
-		url: '/admin/token/check_token',
+		url: '/auth/token/check_token',
 		headers: {
 			isToken: false,
 			Authorization: basicAuth,
@@ -131,7 +131,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
  */
 export const getUserInfo = () => {
 	return request({
-		url: '/admin/user/info',
+		url: '/auth/user/info',
 		method: 'get',
 	});
 };

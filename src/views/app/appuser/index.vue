@@ -146,7 +146,7 @@ const handleSelectionChange = (objs: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/appuser/export', state.queryForm, 'users.xlsx');
+	downBlobFile('/app/appuser/export', state.queryForm, 'users.xlsx');
 };
 
 // 删除用户

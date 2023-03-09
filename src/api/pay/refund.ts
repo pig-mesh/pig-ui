@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query?: Object) {
 	return request({
-		url: '/admin/refund/page',
+		url: '/pay/refund/page',
 		method: 'get',
 		params: query,
 	});
@@ -10,7 +10,7 @@ export function fetchList(query?: Object) {
 
 export function useRefundApi(obj?: Object) {
 	return request({
-		url: '/admin/refund',
+		url: '/pay/refund',
 		method: 'post',
 		data: obj,
 	});
@@ -25,7 +25,7 @@ export function getObj(id?: string) {
 
 export function delObjs(ids?: Object) {
 	return request({
-		url: '/admin/refund',
+		url: '/pay/refund',
 		method: 'delete',
 		data: ids,
 	});
@@ -33,7 +33,7 @@ export function delObjs(ids?: Object) {
 
 export function putObj(obj?: Object) {
 	return request({
-		url: '/admin/refund',
+		url: '/pay/refund',
 		method: 'put',
 		data: obj,
 	});

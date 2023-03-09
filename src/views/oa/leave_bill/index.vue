@@ -129,7 +129,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/admin/leave-bill/export', state.queryForm, 'leave.xlsx')
+        downBlobFile('/act/leave-bill/export', state.queryForm, 'leave.xlsx')
     }
 
     // 多选事件

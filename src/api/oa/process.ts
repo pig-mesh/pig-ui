@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query) {
     return request({
-        url: '/admin/process',
+        url: '/act/process',
         method: 'get',
         params: query
     })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function delObj(ids?: Object) {
     return request({
-        url: '/admin/process',
+        url: '/act/process',
         method: 'delete',
         data: ids
     })
@@ -18,7 +18,7 @@ export function delObj(ids?: Object) {
 
 export function status(id, type) {
     return request({
-        url: '/admin/process/status/' + id + '/' + type,
+        url: '/act/process/status/' + id + '/' + type,
         method: 'put'
     })
 }

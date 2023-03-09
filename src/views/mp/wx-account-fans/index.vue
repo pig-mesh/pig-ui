@@ -172,7 +172,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/fans/export', state.queryForm, 'fans.xlsx');
+	downBlobFile('/mp/fans/export', state.queryForm, 'fans.xlsx');
 };
 
 // 多选事件

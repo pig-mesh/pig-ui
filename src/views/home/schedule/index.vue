@@ -131,7 +131,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/schedule/export', state.queryForm, 'schedule.xlsx');
+	downBlobFile('/daemon/schedule/export', state.queryForm, 'schedule.xlsx');
 };
 
 // 多选事件

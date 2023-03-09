@@ -5,7 +5,7 @@
 		<el-upload
 			ref="fileUpload"
 			class="avatar-uploader"
-			:action="props.uploadFileUrl"
+			:action="other.adaptationUrl(props.uploadFileUrl)"
 			:show-file-list="false"
 			:on-success="handleAvatarSuccess"
 			:before-upload="beforeAvatarUpload"
@@ -26,6 +26,7 @@
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { watch } from 'vue';
+import other from "/@/utils/other";
 
 const imageUrl = ref('');
 const fileUpload = ref();

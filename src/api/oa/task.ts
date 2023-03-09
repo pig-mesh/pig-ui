@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query) {
 	return request({
-		url: '/admin/task/todo',
+		url: '/act/task/todo',
 		method: 'get',
 		params: query,
 	});
@@ -10,21 +10,21 @@ export function fetchList(query) {
 
 export function fetchDetail(id) {
 	return request({
-		url: '/admin/task/' + id,
+		url: '/act/task/' + id,
 		method: 'get',
 	});
 }
 
 export function fetchComment(id) {
 	return request({
-		url: '/admin/task/comment/' + id,
+		url: '/act/task/comment/' + id,
 		method: 'get',
 	});
 }
 
 export function doTask(obj) {
 	return request({
-		url: '/admin/task',
+		url: '/act/task',
 		method: 'post',
 		data: obj,
 	});
@@ -32,7 +32,7 @@ export function doTask(obj) {
 
 export function delObj(ids?:Object) {
   return request({
-    url: '/admin/task',
+    url: '/act/task',
     method: 'delete',
     data: ids
   })

@@ -148,7 +148,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/wxAccountTag/export', state.queryForm, 'wxAccountTag.xlsx');
+	downBlobFile('/mp/wxAccountTag/export', state.queryForm, 'wxAccountTag.xlsx');
 };
 
 // 多选事件

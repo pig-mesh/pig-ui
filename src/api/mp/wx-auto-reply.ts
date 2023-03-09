@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function getPage(query) {
 	return request({
-		url: '/admin/wx-auto-reply/page',
+		url: '/mp/wx-auto-reply/page',
 		method: 'get',
 		params: query,
 	});
@@ -10,7 +10,7 @@ export function getPage(query) {
 
 export function addObj(obj) {
 	return request({
-		url: '/admin/wx-auto-reply',
+		url: '/mp/wx-auto-reply',
 		method: 'post',
 		data: obj,
 	});
@@ -18,21 +18,21 @@ export function addObj(obj) {
 
 export function getObj(id) {
 	return request({
-		url: '/admin/wx-auto-reply/' + id,
+		url: '/mp/wx-auto-reply/' + id,
 		method: 'get',
 	});
 }
 
 export function delObj(id) {
 	return request({
-		url: '/admin/wx-auto-reply/' + id,
+		url: '/mp/wx-auto-reply/' + id,
 		method: 'delete',
 	});
 }
 
 export function putObj(obj) {
 	return request({
-		url: '/admin/wx-auto-reply',
+		url: '/mp/wx-auto-reply',
 		method: 'put',
 		data: obj,
 	});

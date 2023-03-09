@@ -125,7 +125,7 @@ const handleSelectionChange = (objs: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/approle/export', state.queryForm, 'approle.xlsx');
+	downBlobFile('/app/approle/export', state.queryForm, 'approle.xlsx');
 };
 
 // 删除操作
