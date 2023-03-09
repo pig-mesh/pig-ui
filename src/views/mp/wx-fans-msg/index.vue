@@ -180,7 +180,7 @@ onMounted(() => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/wxFansMsg/export', state.queryForm, 'wxFansMsg.xlsx');
+	downBlobFile('/act/wxFansMsg/export', state.queryForm, 'wxFansMsg.xlsx');
 };
 
 // 多选事件

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query) {
     return request({
-        url: '/admin/leave-bill/page',
+        url: '/act/leave-bill/page',
         method: 'get',
         params: query
     })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function addObj(obj) {
     return request({
-        url: '/admin/leave-bill',
+        url: '/act/leave-bill',
         method: 'post',
         data: obj
     })
@@ -18,21 +18,21 @@ export function addObj(obj) {
 
 export function getObj(id) {
     return request({
-        url: '/admin/leave-bill/' + id,
+        url: '/act/leave-bill/' + id,
         method: 'get'
     })
 }
 
 export function submit(id) {
     return request({
-        url: '/admin/leave-bill/submit/' + id,
+        url: '/act/leave-bill/submit/' + id,
         method: 'get'
     })
 }
 
 export function delObj(ids?: Object) {
     return request({
-        url: '/admin/leave-bill',
+        url: '/act/leave-bill',
         method: 'delete',
         data: ids
     })
@@ -40,7 +40,7 @@ export function delObj(ids?: Object) {
 
 export function putObj(obj) {
     return request({
-        url: '/admin/leave-bill/',
+        url: '/act/leave-bill/',
         method: 'put',
         data: obj
     })

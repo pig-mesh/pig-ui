@@ -187,7 +187,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/admin/sys-job/export', state.queryForm, 'job.xlsx');
+        downBlobFile('/daemon/sys-job/export', state.queryForm, 'job.xlsx');
     };
 
     const handleJobLog = (row: any) => {

@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query: any) {
 	return request({
-		url: '/admin/appuser/page',
+		url: '/app/appuser/page',
 		method: 'get',
 		params: query,
 	});
@@ -10,7 +10,7 @@ export function fetchList(query: any) {
 
 export function addObj(obj: any) {
 	return request({
-		url: '/admin/appuser',
+		url: '/app/appuser',
 		method: 'post',
 		data: obj,
 	});
@@ -18,14 +18,14 @@ export function addObj(obj: any) {
 
 export function getObj(id: string) {
 	return request({
-		url: '/admin/appuser/details/' + id,
+		url: '/app/appuser/details/' + id,
 		method: 'get',
 	});
 }
 
 export function delObj(ids?: object) {
 	return request({
-		url: '/admin/appuser/',
+		url: '/app/appuser/',
 		method: 'delete',
 		data: ids,
 	});
@@ -33,7 +33,7 @@ export function delObj(ids?: object) {
 
 export function putObj(obj: any) {
 	return request({
-		url: '/admin/appuser',
+		url: '/app/appuser',
 		method: 'put',
 		data: obj,
 	});
@@ -41,7 +41,7 @@ export function putObj(obj: any) {
 
 export function getDetails(obj: Object) {
 	return request({
-		url: '/admin/appuser/details/',
+		url: '/app/appuser/details/',
 		method: 'get',
 		params: obj,
 	});

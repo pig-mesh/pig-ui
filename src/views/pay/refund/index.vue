@@ -108,7 +108,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/refund/export', state.queryForm, 'refund.xlsx');
+	downBlobFile('/pay/refund/export', state.queryForm, 'refund.xlsx');
 };
 
 // 多选事件

@@ -12,6 +12,7 @@ import request from '/@/utils/request';
 import { useMessage } from '/@/hooks/message';
 // @ts-ignore
 import * as CryptoJS from 'crypto-js';
+import { validateNull } from './validate';
 
 // 引入组件
 const SvgIcon = defineAsyncComponent(() => import('/@/components/svgIcon/index.vue'));
@@ -335,6 +336,9 @@ const other = {
 	getQueryString: (url: string, paraName: string) => {
 		return getQueryString(url, paraName);
 	},
+	adaptationUrl: (url?: string) => {
+		return adaptationUrl(url);
+	},
 };
 
 export function getQueryString(url: string, paraName: string) {
@@ -400,6 +404,28 @@ export function handleTree(data, id, parentId, children, rootId) {
 export function toUnderline(str: string) {
 	return str.replace(/([A-Z])/g, '_$1').toLowerCase();
 }
+
+/**
+ * 自动适配不同的后端架构
+ * 1. 例如 /act/oa/task ,在微服务架构保持不变,在单体架构编程 /admin/oa/task
+ * 2. 特殊 /gen/xxx ,在微服务架构、单体架构编程 都需保持不变
+ *
+ * @param originUrl 原始路径
+ */
+const adaptationUrl = (originUrl?: string) => {
+	// 微服务架构 不做路径转换,为空不做路径转换
+	const isMicro = import.meta.env.VITE_IS_MICRO;
+	if (validateNull(isMicro) || isMicro === true) {
+		return originUrl;
+	}
+
+	// 如果是代码生成服务，不做路径转换
+	if (originUrl?.startsWith('/gen')) {
+		return originUrl;
+	}
+	// 转为 /admin 路由前缀的请求
+	return `/admin/${originUrl?.split('/').splice(2).join('/')}`;
+};
 
 // 统一批量导出
 export default other;

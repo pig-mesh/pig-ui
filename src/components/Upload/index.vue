@@ -4,7 +4,7 @@
 		<el-upload
 			ref="fileUpload"
 			v-if="props.type === 'default'"
-			:action="props.uploadFileUrl"
+			:action="other.adaptationUrl(props.uploadFileUrl)"
 			:before-upload="handleBeforeUpload"
 			:file-list="fileList"
 			:headers="headers"
@@ -39,7 +39,7 @@
 		<el-upload
 			ref="fileUpload"
 			v-if="props.type === 'simple'"
-			:action="props.uploadFileUrl"
+			:action="other.adaptationUrl(props.uploadFileUrl)"
 			:before-upload="handleBeforeUpload"
 			:file-list="fileList"
 			:headers="headers"
@@ -60,6 +60,7 @@
 <script setup lang="ts" name="upload-file">
 import { useMessage } from '/@/hooks/message';
 import { Local, Session } from '/@/utils/storage';
+import other from "/@/utils/other";
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制

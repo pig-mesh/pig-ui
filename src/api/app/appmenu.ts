@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export const pageList = (params?: Object) => {
 	return request({
-		url: '/admin/appmenu/tree',
+		url: '/app/appmenu/tree',
 		method: 'get',
 		params,
 	});
@@ -10,14 +10,14 @@ export const pageList = (params?: Object) => {
 
 export const info = (id: String) => {
 	return request({
-		url: `/admin/appmenu/${id}`,
+		url: `/app/appmenu/${id}`,
 		method: 'get',
 	});
 };
 
 export const save = (data: Object) => {
 	return request({
-		url: '/admin/appmenu',
+		url: '/app/appmenu',
 		method: 'post',
 		data: data,
 	});
@@ -25,7 +25,7 @@ export const save = (data: Object) => {
 
 export const update = (data: Object) => {
 	return request({
-		url: '/admin/appmenu',
+		url: '/app/appmenu',
 		method: 'put',
 		data: data,
 	});
@@ -33,7 +33,7 @@ export const update = (data: Object) => {
 
 export const addObj = (data: Object) => {
 	return request({
-		url: '/admin/appmenu',
+		url: '/app/appmenu',
 		method: 'post',
 		data: data,
 	});
@@ -41,7 +41,7 @@ export const addObj = (data: Object) => {
 
 export function delObj(ids?: object) {
 	return request({
-		url: '/admin/appmenu',
+		url: '/app/appmenu',
 		method: 'delete',
 		data: ids,
 	});
@@ -49,14 +49,14 @@ export function delObj(ids?: object) {
 
 export function getDetails(obj: Object) {
 	return request({
-		url: '/admin/appmenu/details/' + obj,
+		url: '/app/appmenu/details/' + obj,
 		method: 'get',
 	});
 }
 
 export function getDetailsByName(obj: Object) {
 	return request({
-		url: '/admin/appmenu/detailsByName/' + obj,
+		url: '/app/appmenu/detailsByName/' + obj,
 		method: 'get',
 	});
 }

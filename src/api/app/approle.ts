@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query: any) {
 	return request({
-		url: '/admin/approle/page',
+		url: '/app/approle/page',
 		method: 'get',
 		params: query,
 	});
@@ -10,14 +10,14 @@ export function fetchList(query: any) {
 
 export function list() {
 	return request({
-		url: '/admin/approle/list',
+		url: '/app/approle/list',
 		method: 'get',
 	});
 }
 
 export function addObj(obj: any) {
 	return request({
-		url: '/admin/approle',
+		url: '/app/approle',
 		method: 'post',
 		data: obj,
 	});
@@ -25,14 +25,14 @@ export function addObj(obj: any) {
 
 export function getObj(id: string) {
 	return request({
-		url: '/admin/approle/' + id,
+		url: '/app/approle/' + id,
 		method: 'get',
 	});
 }
 
 export function delObj(ids?: object) {
 	return request({
-		url: '/admin/approle',
+		url: '/app/approle',
 		method: 'delete',
 		data: ids,
 	});
@@ -40,7 +40,7 @@ export function delObj(ids?: object) {
 
 export function putObj(obj: any) {
 	return request({
-		url: '/admin/approle',
+		url: '/app/approle',
 		method: 'put',
 		data: obj,
 	});
@@ -48,14 +48,14 @@ export function putObj(obj: any) {
 
 export function fetchRoleTree(roleId: string) {
 	return request({
-		url: '/admin/appmenu/tree/' + roleId,
+		url: '/app/appmenu/tree/' + roleId,
 		method: 'get',
 	});
 }
 
 export function permissionUpd(roleId: string, menuIds: string) {
 	return request({
-		url: '/admin/approle/menu',
+		url: '/app/approle/menu',
 		method: 'put',
 		data: {
 			roleId: roleId,
@@ -66,14 +66,14 @@ export function permissionUpd(roleId: string, menuIds: string) {
 
 export function getDetails(obj: Object) {
 	return request({
-		url: '/admin/approle/details/' + obj,
+		url: '/app/approle/details/' + obj,
 		method: 'get',
 	});
 }
 
 export function getDetailsByCode(obj: Object) {
 	return request({
-		url: '/admin/approle/detailsByCode/' + obj,
+		url: '/app/approle/detailsByCode/' + obj,
 		method: 'get',
 	});
 }

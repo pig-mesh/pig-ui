@@ -153,7 +153,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/trade/export', state.queryForm, 'trade.xlsx');
+	downBlobFile('/pay/trade/export', state.queryForm, 'trade.xlsx');
 };
 
 // 多选事件

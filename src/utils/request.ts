@@ -1,7 +1,8 @@
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { Session, Local } from '/@/utils/storage';
+import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
-import { useMessageBox } from '../hooks/message';
+import other from './other';
 
 // 配置新建一个 axios 实例
 const service: AxiosInstance = axios.create({
@@ -17,7 +18,7 @@ const service: AxiosInstance = axios.create({
 
 // 添加请求拦截器
 service.interceptors.request.use(
-	(config: InternalAxiosRequestConfig) => {
+	(config: AxiosRequestConfig) => {
 		// get查询参数序列化
 		if (config.method === 'get') {
 			// @ts-ignore
@@ -37,6 +38,8 @@ service.interceptors.request.use(
 			config.headers!['TENANT-ID'] = Local.get('tenantId');
 		}
 
+		//自动适配单体、微服务架构不同的URL
+		config.url = other.adaptationUrl(config.url);
 		return config;
 	},
 	(error) => {

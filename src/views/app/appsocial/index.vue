@@ -145,7 +145,7 @@
 
     // 导出excel
     const exportExcel = () => {
-        downBlobFile('/admin/appsocial/export', state.queryForm, 'appsocial.xlsx');
+        downBlobFile('/app/appsocial/export', state.queryForm, 'appsocial.xlsx');
     };
 
     // 删除操作
