@@ -2,39 +2,39 @@
 	<el-dialog :close-on-click-modal="false" :title="form.publicId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
 		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef">
 			<el-row :gutter="20">
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.publicName')" prop="publicName">
 						<el-input :placeholder="t('param.inputpublicNameTip')" v-model="form.publicName" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.publicKey')" prop="publicKey">
 						<el-input :placeholder="t('param.inputpublicKeyTip')" v-model="form.publicKey" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.publicValue')" prop="publicValue">
 						<el-input :placeholder="t('param.inputpublicValueTip')" v-model="form.publicValue" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.status')" prop="status">
-						<el-select :placeholder="t('param.inputstatusTip')" v-model="form.status">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in status_type"></el-option>
-						</el-select>
+						<el-radio-group v-model="form.status">
+							<el-radio :label="item.value" border v-for="(item, index) in status_type" :key="index">{{ item.label }}</el-radio>
+						</el-radio-group>
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.validateCode')" prop="validateCode">
 						<el-input :placeholder="t('param.inputvalidateCodeTip')" v-model="form.validateCode" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.publicType')" prop="publicType">
 						<el-select :placeholder="t('param.inputpublicTypeTip')" v-model="form.publicType">
 							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in param_type"></el-option>
@@ -42,11 +42,11 @@
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.systemFlag')" prop="systemFlag">
-						<el-select :placeholder="t('param.inputsystemFlagTip')" v-model="form.systemFlag">
-							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in dict_type"></el-option>
-						</el-select>
+						<el-radio-group v-model="form.systemFlag">
+							<el-radio :label="item.value" border v-for="(item, index) in dict_type" :key="index">{{ item.label }}</el-radio>
+						</el-radio-group>
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -64,7 +64,7 @@
 // 定义子组件向父组件传值/事件
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/admin/param';
+import { addObj, getObj, putObj, validateParamsCode, validateParamsName } from '/@/api/admin/param';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 
@@ -86,20 +86,33 @@ const form = reactive({
 	publicValue: '',
 	status: '0',
 	validateCode: '',
-	publicType: '',
+	publicType: '0',
 	systemFlag: '0',
 });
 
 // 定义校验规则
 const dataRules = reactive({
-	publicName: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+	publicName: [
+		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateParamsName(rule, value, callback, form.publicId !== '');
+			},
+			trigger: 'blur',
+		},
+	],
 	publicKey: [
 		{ required: true, message: '参数键不能为空', trigger: 'blur' },
 		{ validator: rule.validatorLowercase, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateParamsCode(rule, value, callback, form.publicId !== '');
+			},
+			trigger: 'blur',
+		},
 	],
 	publicValue: [{ required: true, message: '参数值不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
-	validateCode: [{ required: true, message: '编码不能为空', trigger: 'blur' }],
 	publicType: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
 	systemFlag: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
 });

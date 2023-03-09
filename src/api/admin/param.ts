@@ -1,4 +1,5 @@
 import request from '/@/utils/request';
+import { getObjDetails } from '/@/api/admin/tenant';
 
 export function fetchList(query?: Object) {
 	return request({
@@ -18,7 +19,7 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
 	return request({
-		url: '/admin/param/' + id,
+		url: '/admin/param/details/' + id,
 		method: 'get',
 	});
 }
@@ -43,5 +44,43 @@ export function refreshCache() {
 	return request({
 		url: '/admin/param/sync',
 		method: 'put',
+	});
+}
+
+export function getObjDetails(obj?: object) {
+	return request({
+		url: '/admin/param/details',
+		method: 'get',
+		params: obj,
+	});
+}
+
+export function validateParamsCode(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ publicKey: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('参数编码已经存在'));
+		} else {
+			callback();
+		}
+	});
+}
+
+export function validateParamsName(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ publicName: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('参数名称已经存在'));
+		} else {
+			callback();
+		}
 	});
 }

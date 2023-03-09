@@ -3,6 +3,12 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="mb8" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
+					<el-form-item :label="$t('param.publicName')" prop="publicName">
+						<el-input :placeholder="$t('param.inputpublicNameTip')" style="max-width: 180px" v-model="state.queryForm.publicName" />
+					</el-form-item>
+					<el-form-item :label="$t('param.publicKey')" prop="publicKey">
+						<el-input :placeholder="$t('param.inputpublicKeyTip')" style="max-width: 180px" v-model="state.queryForm.publicKey" />
+					</el-form-item>
 					<el-form-item :label="t('param.systemFlag')" class="ml2" prop="systemFlag">
 						<el-select :placeholder="t('param.inputsystemFlagTip')" v-model="state.queryForm.systemFlag">
 							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in dict_type"></el-option>
