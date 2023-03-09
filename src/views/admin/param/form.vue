@@ -103,7 +103,7 @@ const dataRules = reactive({
 	],
 	publicKey: [
 		{ required: true, message: '参数键不能为空', trigger: 'blur' },
-		{ validator: rule.validatorLowercase, trigger: 'blur' },
+		{ validator: rule.validatorCapital, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateParamsCode(rule, value, callback, form.publicId !== '');
