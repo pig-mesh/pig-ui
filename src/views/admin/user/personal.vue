@@ -61,7 +61,13 @@
 							</el-col>
 							<el-col :span="24" class="mb20">
 								<el-form-item label="新密码" prop="newpassword1">
-									<strength-meter v-model="passwordFormData.newpassword1" :minlength="6" :maxlength="16" placeholder="请输入新密码"></strength-meter>
+									<strength-meter
+										v-model="passwordFormData.newpassword1"
+										:minlength="6"
+										:maxlength="16"
+										placeholder="请输入新密码"
+										@score="passwordScore"
+									></strength-meter>
 									<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
 								</el-form-item>
 							</el-col>
@@ -127,7 +133,7 @@ const formData = ref({
 	email: '',
 	avatar: '',
 	nickname: '',
-	phone: '',
+	phone: ('' as string) || undefined,
 });
 
 const passwordFormData = reactive({
@@ -155,6 +161,13 @@ const validatorPassword2 = (rule: any, value: any, callback: any) => {
 		callback();
 	}
 };
+const validatorScore = (rule: any, value: any, callback: any) => {
+	if (score.value <= 1) {
+		callback(new Error(t('personal.passwordScore')));
+	} else {
+		callback();
+	}
+};
 
 const passwordRuleForm = reactive({
 	password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -165,6 +178,7 @@ const passwordRuleForm = reactive({
 			message: '用户密码长度必须介于 6 和 20 之间',
 			trigger: 'blur',
 		},
+		{ validator: validatorScore, trigger: 'blur' },
 	],
 	newpassword2: [
 		{
@@ -176,6 +190,13 @@ const passwordRuleForm = reactive({
 		{ validator: validatorPassword2, trigger: 'blur' },
 	],
 });
+
+const score = ref(0);
+
+const passwordScore = (e) => {
+	console.log(e, 'eeeeee');
+	score.value = e;
+};
 
 // 头像上传成功
 const handleAvatarSuccess = (url: any) => {
@@ -208,6 +229,11 @@ const handleSaveUser = () => {
 		if (!valid) {
 			return false;
 		}
+
+		if (formData.value.phone && formData.value.phone.indexOf('*') >= 0) {
+			formData.value.phone = undefined;
+		}
+
 		editInfo(formData.value)
 			.then(() => {
 				useMessage().success('修改成功');
