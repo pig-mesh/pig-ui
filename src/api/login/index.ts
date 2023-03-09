@@ -135,3 +135,10 @@ export const getUserInfo = () => {
 		method: 'get',
 	});
 };
+
+export const logout = () => {
+	return request({
+		url: '/admin/token/logout',
+		method: 'delete',
+	});
+};
