@@ -18,7 +18,7 @@ export function addObj(obj: any) {
 
 export function getObj(id: string) {
 	return request({
-		url: '/admin/appuser/' + id,
+		url: '/admin/appuser/details/' + id,
 		method: 'get',
 	});
 }
@@ -41,20 +41,14 @@ export function putObj(obj: any) {
 
 export function getDetails(obj: Object) {
 	return request({
-		url: '/admin/appuser/details/' + obj,
+		url: '/admin/appuser/details/',
 		method: 'get',
-	});
-}
-
-export function getDetailsByPhone(obj: Object) {
-	return request({
-		url: '/admin/appuser/detailsByPhone/' + obj,
-		method: 'get',
+		params: obj,
 	});
 }
 
 export function validateUsername(rule: any, value: any, callback: any, isEdit: boolean) {
-	const flag = new RegExp(/^([a-z\u4e00-\u9fa5\d]+?)$/).test(value);
+	const flag = new RegExp(/^([a-z\d]+?)$/).test(value);
 	if (!flag) {
 		callback(new Error('用户名支持小写英文、数字、中文'));
 	}
@@ -63,7 +57,9 @@ export function validateUsername(rule: any, value: any, callback: any, isEdit: b
 		return callback();
 	}
 
-	getDetails(value).then((response) => {
+	getDetails({
+		username: value,
+	}).then((response) => {
 		const result = response.data;
 		if (result !== null) {
 			callback(new Error('用户名已经存在'));
@@ -77,7 +73,9 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
 	if (isEdit) {
 		return callback();
 	}
-	getDetailsByPhone(value).then((response) => {
+	getDetails({
+		phone: value,
+	}).then((response) => {
 		const result = response.data;
 		if (result !== null) {
 			callback(new Error('手机号已经存在'));
