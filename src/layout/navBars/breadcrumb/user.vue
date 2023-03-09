@@ -87,7 +87,9 @@ const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websock
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 
-const personalDrawer = defineAsyncComponent(() => import('/@/views/admin/user/personal.vue'));
+const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/user/personal.vue'));
+
+import { logout } from '/@/api/login';
 
 // 定义变量内容
 const { locale, t } = useI18n();
@@ -162,6 +164,7 @@ const onHandleCommandClick = (path: string) => {
 			},
 		})
 			.then(async () => {
+				await logout();
 				// 清除缓存/token等
 				Session.clear();
 				// 使用 reload 时，不需要调用 resetRoute() 重置路由
