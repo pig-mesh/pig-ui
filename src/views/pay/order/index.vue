@@ -48,7 +48,6 @@
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
-				border
 				style="width: 100%"
 				v-loading="state.loading"
 			>

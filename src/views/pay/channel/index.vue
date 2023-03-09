@@ -50,7 +50,6 @@
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
-				border
 				max-height="300"
 				style="width: 100%"
 				v-loading="state.loading"
