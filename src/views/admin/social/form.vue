@@ -70,8 +70,8 @@ const form = reactive({
 	id: '',
 	type: '',
 	remark: '',
-	appId: '',
-	appSecret: '',
+	appId: '' as string | undefined,
+	appSecret: '' as string | undefined,
 	redirectUrl: '',
 	ext: '',
 });
@@ -113,11 +113,11 @@ const onSubmit = () => {
 		}
 
 		if (form.appSecret && form.appSecret.indexOf('******') >= 0) {
-			form.appSecret = '';
+			form.appSecret = undefined;
 		}
 
 		if (form.appId && form.appId.indexOf('******') >= 0) {
-			form.appId = '';
+			form.appId = undefined;
 		}
 
 		// 更新
