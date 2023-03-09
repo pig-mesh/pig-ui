@@ -35,10 +35,10 @@
 	</el-dialog>
 
 	<!--校验失败错误数据-->
-	<el-dialog :title="$t('common.validationFailureData')" v-model="state.errorVisible">
+	<el-dialog :title="$t('excel.validationFailureData')" v-model="state.errorVisible">
 		<el-table :data="state.errorData">
-			<el-table-column property="lineNum" :label="$t('common.lineNumbers')" width="100"></el-table-column>
-			<el-table-column property="errors" :label="$t('common.misDescription')" show-overflow-tooltip>
+			<el-table-column property="lineNum" :label="$t('excel.lineNumbers')" width="100"></el-table-column>
+			<el-table-column property="errors" :label="$t('excel.misDescription')" show-overflow-tooltip>
 				<template v-slot="scope">
 					<el-tag type="danger" v-for="error in scope.row.errors" :key="error">{{ error }} </el-tag>
 				</template>
