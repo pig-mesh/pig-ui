@@ -3,7 +3,7 @@ export default {
 		index: 'index',
 		importsysOauthClientDetailsTip: 'import SysOauthClientDetails',
 		id: 'id',
-		clientId: 'clientId',
+		clientId: 'client Id',
 		resourceIds: 'resourceIds',
 		clientSecret: 'clientSecret',
 		scope: 'scope',
