@@ -5,7 +5,7 @@
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('appuser.username')" prop="username">
 						<el-input
-							:placeholder="$t('appuser.inputUsernameTip')"
+							:placeholder="$t('appuser.inputUserNameTip')"
 							@keyup.enter="getDataList"
 							clearable
 							style="width: 240px"
