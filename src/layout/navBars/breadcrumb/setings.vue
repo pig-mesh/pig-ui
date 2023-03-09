@@ -281,13 +281,6 @@
 						<el-switch v-model="getThemeConfig.isWartermark" size="small" @change="onWartermarkChange"></el-switch>
 					</div>
 				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt14">
-					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourWartermarkText') }}</div>
-					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-input v-model="getThemeConfig.wartermarkText" style="width: 90px" @input="onWartermarkTextInput"></el-input>
-					</div>
-				</div>
-
 				<!-- 其它设置 -->
 				<el-divider content-position="left">{{ $t('layout.fiveTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -442,6 +435,7 @@ import Watermark from '/@/utils/wartermark';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
+import { useUserInfo } from '/@/stores/userInfo';
 
 // 定义变量内容
 const { locale } = useI18n();
@@ -565,16 +559,11 @@ const onAddDarkChange = () => {
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {
-	getThemeConfig.value.isWartermark ? Watermark.set(getThemeConfig.value.wartermarkText) : Watermark.del();
+	const username = useUserInfo().userInfos.user.username;
+	getThemeConfig.value.isWartermark ? Watermark.set(username) : Watermark.del();
 	setLocalThemeConfig();
 };
-// 4、界面显示 --> 水印文案
-const onWartermarkTextInput = (val: string) => {
-	getThemeConfig.value.wartermarkText = verifyAndSpace(val);
-	if (getThemeConfig.value.wartermarkText === '') return false;
-	if (getThemeConfig.value.isWartermark) Watermark.set(getThemeConfig.value.wartermarkText);
-	setLocalThemeConfig();
-};
+
 // 5、布局切换
 const onSetLayout = (layout: string) => {
 	Local.set('oldLayout', layout);

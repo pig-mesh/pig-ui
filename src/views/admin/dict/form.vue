@@ -3,17 +3,17 @@
 		<el-dialog :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="60%">
 			<el-form :model="dataForm" :rules="dataRules" label-width="100px" ref="dicDialogFormRef">
 				<el-row :gutter="35">
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.dictType')" prop="dictType">
 							<el-input :placeholder="$t('sysdict.inputDictTypeTip')" clearable v-model="dataForm.dictType"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.description')" prop="description">
 							<el-input :placeholder="$t('sysdict.inputDescriptionTip')" clearable v-model="dataForm.description"></el-input>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
 							<el-radio-group v-model="dataForm.systemFlag">
 								<el-radio-button :key="index" :label="item.value" v-for="(item, index) in dict_type">
@@ -22,9 +22,9 @@
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
-					<el-col :lg="12" :md="12" :sm="12" :xl="12" :xs="24" class="mb20">
+					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.remarks')" prop="remarks">
-							<el-input :placeholder="$t('sysdict.inputRemarksTip')" maxlength="150" type="textarea" v-model="dataForm.remarks"></el-input>
+							<el-input :placeholder="$t('sysdict.inputRemarksTip')" v-model="dataForm.remarks"></el-input>
 						</el-form-item>
 					</el-col>
 				</el-row>
@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" name="systemDicDialog" setup>
-import { addObj, getObj, putObj } from '/@/api/admin/dict';
+import { addObj, getObj, putObj, validateDictType } from '/@/api/admin/dict';
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
@@ -66,6 +66,12 @@ const dataRules = reactive({
 	dictType: [
 		{ required: true, message: '类型不能为空', trigger: 'blur' },
 		{ validator: rule.validatorNameCn, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateDictType(rule, value, callback, dataForm.id !== '');
+			},
+			trigger: 'blur',
+		},
 	],
 	systemFlag: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
 	description: [{ required: true, message: '描述不能为空', trigger: 'blur' }],

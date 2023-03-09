@@ -33,8 +33,16 @@ export function addItemObj(obj: any) {
 
 export function getItemObj(id: string) {
 	return request({
-		url: '/admin/dict/item/' + id,
+		url: '/admin/dict/item/details/' + id,
 		method: 'get',
+	});
+}
+
+export function getItemDetails(obj: object) {
+	return request({
+		url: '/admin/dict/item/details',
+		method: 'get',
+		params: obj,
 	});
 }
 
@@ -63,8 +71,16 @@ export function addObj(obj: any) {
 
 export function getObj(id: string) {
 	return request({
-		url: '/admin/dict/' + id,
+		url: '/admin/dict/details/' + id,
 		method: 'get',
+	});
+}
+
+export function getObjDetails(obj: object) {
+	return request({
+		url: '/admin/dict/details',
+		method: 'get',
+		params: obj,
 	});
 }
 
@@ -88,5 +104,35 @@ export function refreshCache() {
 	return request({
 		url: '/admin/dict/sync',
 		method: 'put',
+	});
+}
+
+export function validateDictType(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ dictType: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('字典类型已经存在'));
+		} else {
+			callback();
+		}
+	});
+}
+
+export function validateDictItemLabel(rule: any, value: any, callback: any, type: string, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getItemDetails({ type: type, label: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('标签已经存在'));
+		} else {
+			callback();
+		}
 	});
 }

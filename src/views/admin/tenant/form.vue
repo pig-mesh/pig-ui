@@ -54,14 +54,15 @@
 </template>
 
 <script setup lang="ts" name="systemTenantDialog">
+import { validateTenantCode, validateTenantName } from '/@/api/admin/tenant';
 import { useDict } from '/@/hooks/dict';
-// 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/admin/tenant';
 import { menuList } from '/@/api/admin/tenant-menu';
 import { useI18n } from 'vue-i18n';
 
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 
 // 定义变量内容
@@ -92,9 +93,24 @@ const menuData = ref([]);
 
 // 定义校验规则
 const dataRules = ref({
-	name: [{ required: true, message: 'name不能为空', trigger: 'blur' }],
-	code: [{ required: true, message: 'code不能为空', trigger: 'blur' }],
-	tenantDomain: [{ required: true, message: 'tenantDomain不能为空', trigger: 'blur' }],
+	name: [
+		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateTenantName(rule, value, callback, form.id !== '');
+			},
+			trigger: 'blur',
+		},
+	],
+	code: [
+		{ required: true, message: '编码不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateTenantCode(rule, value, callback, form.id !== '');
+			},
+			trigger: 'blur',
+		},
+	],
 	startTime: [{ required: true, message: '开始时间不能为空', trigger: 'blur' }],
 	endTime: [{ required: true, message: '结束时间不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: 'status不能为空', trigger: 'blur' }],

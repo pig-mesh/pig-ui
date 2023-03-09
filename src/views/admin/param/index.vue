@@ -59,9 +59,9 @@
 					<template #default="scope">
 						<el-button @click="formDialogRef.openDialog(scope.row.publicId)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 
-						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === 1" placement="top">
+						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
 							<span style="margin-left: 12px">
-								<el-button :disabled="scope.row.systemFlag !== 1" @click="handleDelete([scope.row.publicId])" text type="primary">
+								<el-button :disabled="scope.row.systemFlag !== '0'" @click="handleDelete([scope.row.publicId])" text type="primary">
 									{{ $t('common.delBtn') }}
 								</el-button>
 							</span>

@@ -25,15 +25,16 @@ export const deptRoleList = () => {
 
 export const getObj = (id: string) => {
 	return request({
-		url: '/admin/role/' + id,
+		url: '/admin/role/details/' + id,
 		method: 'get',
 	});
 };
 
-export const getObjByCode = (code: string) => {
+export const getObjDetails = (obj: object) => {
 	return request({
-		url: '/admin/role/code/' + code,
+		url: '/admin/role/details',
 		method: 'get',
+		params: obj,
 	});
 };
 
@@ -78,3 +79,33 @@ export const fetchRoleTree = (roleId: string) => {
 		method: 'get',
 	});
 };
+
+export function validateRoleCode(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ roleCode: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('角色标识已经存在'));
+		} else {
+			callback();
+		}
+	});
+}
+
+export function validateRoleName(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ roleName: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('角色名称已经存在'));
+		} else {
+			callback();
+		}
+	});
+}

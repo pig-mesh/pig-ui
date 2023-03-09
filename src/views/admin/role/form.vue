@@ -59,7 +59,7 @@
 import { rule } from '/@/utils/validate';
 import { depttree } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, getObjByCode, putObj } from '/@/api/admin/role';
+import { addObj, getObj, putObj, validateRoleCode, validateRoleName } from '/@/api/admin/role';
 import { useI18n } from 'vue-i18n';
 
 // 定义子组件向父组件传值/事件
@@ -93,30 +93,28 @@ const dataForm = reactive({
 	},
 });
 
-// 判断ROLE_CODE 是否存在
-const validateRoleCode = (rule: any, value: any, callback: any) => {
-	getObjByCode(value).then((response: any) => {
-		if (form.roleId !== '') callback();
-		const result = response.data;
-		if (result && result.length !== 0) {
-			callback(new Error('同名角色标识已存在'));
-		} else {
-			callback();
-		}
-	});
-};
-
 // 定义校验规则
 const dataRules = ref({
 	roleName: [
 		{ required: true, message: '角色名称不能为空', trigger: 'blur' },
 		{ min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateRoleName(rule, value, callback, form.roleId !== '');
+			},
+			trigger: 'blur',
+		},
 	],
 	roleCode: [
 		{ required: true, message: '角色标识不能为空', trigger: 'blur' },
 		{ min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
 		{ validator: rule.validatorCapital, trigger: 'blur' },
-		{ validator: validateRoleCode, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateRoleCode(rule, value, callback, form.roleId !== '');
+			},
+			trigger: 'blur',
+		},
 	],
 	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],
 	dsType: [{ required: true, message: '请选择数据权限类型', trigger: 'blur' }],

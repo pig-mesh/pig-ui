@@ -71,7 +71,7 @@ export function getDetails(obj: Object) {
 	});
 }
 
-export function getDetailsByPhone(obj: Object) {
+export function getDetailsByCode(obj: Object) {
 	return request({
 		url: '/admin/approle/detailsByCode/' + obj,
 		method: 'get',
@@ -102,7 +102,7 @@ export function validateAppRoleCode(rule: any, value: any, callback: any, isEdit
 	if (isEdit) {
 		return callback();
 	}
-	getDetailsByPhone(value).then((response) => {
+	getDetailsByCode(value).then((response) => {
 		const result = response.data;
 		if (result !== null) {
 			callback(new Error('角色标识已经存在'));

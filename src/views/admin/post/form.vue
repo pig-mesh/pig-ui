@@ -34,11 +34,12 @@
 </template>
 
 <script setup lang="ts" name="systemPostDialog">
+import { useMessage } from '/@/hooks/message';
+import { getObj, addObj, putObj, validatePostCode, validatePostName } from '/@/api/admin/post';
+import { useI18n } from 'vue-i18n';
+
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-import { useMessage } from '/@/hooks/message';
-import { getObj, addObj, putObj } from '/@/api/admin/post';
-import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
@@ -62,16 +63,26 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
-	postCode: [{ required: true, message: '岗位编码不能为空', trigger: 'blur' }],
-	postName: [{ required: true, message: '岗位名称不能为空', trigger: 'blur' }],
+	postCode: [
+		{ required: true, message: '岗位编码不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validatePostCode(rule, value, callback, form.postId !== '');
+			},
+			trigger: 'blur',
+		},
+	],
+	postName: [
+		{ required: true, message: '岗位名称不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validatePostName(rule, value, callback, form.postId !== '');
+			},
+			trigger: 'blur',
+		},
+	],
 	postSort: [{ required: true, message: '岗位排序不能为空', trigger: 'blur' }],
 	remark: [{ required: true, message: '岗位描述不能为空', trigger: 'blur' }],
-	delFlag: [{ required: true, message: '是否删除  -1：已删除  0：正常不能为空', trigger: 'blur' }],
-	createTime: [{ required: true, message: '创建时间不能为空', trigger: 'blur' }],
-	createBy: [{ required: true, message: '创建人不能为空', trigger: 'blur' }],
-	updateTime: [{ required: true, message: '更新时间不能为空', trigger: 'blur' }],
-	updateBy: [{ required: true, message: '更新人不能为空', trigger: 'blur' }],
-	tenantId: [{ required: true, message: '租户ID不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗

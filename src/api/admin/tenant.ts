@@ -26,9 +26,16 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
 	return request({
-		url: '/admin/tenant',
+		url: '/admin/tenant/details/' + id,
 		method: 'get',
-		params: { id },
+	});
+}
+
+export function getObjDetails(obj?: object) {
+	return request({
+		url: '/admin/tenant/details',
+		method: 'get',
+		params: obj,
 	});
 }
 
@@ -45,5 +52,35 @@ export function putObj(obj?: Object) {
 		url: '/admin/tenant',
 		method: 'put',
 		data: obj,
+	});
+}
+
+export function validateTenantName(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ name: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('租户名称已经存在'));
+		} else {
+			callback();
+		}
+	});
+}
+
+export function validateTenantCode(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ code: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('租户编码已经存在'));
+		} else {
+			callback();
+		}
 	});
 }
