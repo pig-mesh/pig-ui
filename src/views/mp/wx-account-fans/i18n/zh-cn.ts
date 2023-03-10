@@ -11,7 +11,7 @@ export default {
 		language: '语言',
 		country: '国家',
 		province: '省份',
-		isBlack: '是否在黑名单',
+		isBlack: '黑名单',
 		city: '城市',
 		tagIds: '分组',
 		headimgUrl: ' headimgUrl',

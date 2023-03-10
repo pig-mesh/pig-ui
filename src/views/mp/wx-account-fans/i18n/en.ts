@@ -11,7 +11,7 @@ export default {
 		language: 'language',
 		country: 'country',
 		province: 'province',
-		isBlack: 'isBlack',
+		isBlack: 'black',
 		city: 'city',
 		tagIds: 'tagIds',
 		headimgUrl: 'headimgUrl',

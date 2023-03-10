@@ -37,7 +37,7 @@
 						<el-tab-pane name="voice" label="voice">
 							<template #label><i class="el-icon-microphone"></i> 语音</template>
 							<div class="add_but">
-								<wx-file-upload @success="getDataList" :uploadData="uploadData"></wx-file-upload>
+								<wx-file-upload @success="getDataList" :uploadData="uploadData" :type="['mp3', 'wma', 'wav', 'amr']"></wx-file-upload>
 							</div>
 							<el-table v-loading="state.loading" :data="state.dataList" stripe border max-height="600px">
 								<el-table-column prop="mediaId" label="media_id"> </el-table-column>

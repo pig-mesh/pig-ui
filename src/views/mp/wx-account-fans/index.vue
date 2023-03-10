@@ -33,14 +33,7 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table
-				v-loading="state.loading"
-				:data="state.dataList"
-				style="width: 100%"
-				@selection-change="handleSelectionChange"
-				@sort-change="sortChangeHandle"
-			>
-				<el-table-column align="center" type="selection" width="60" />
+			<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
 				<el-table-column :label="t('fans.index')" type="index" width="80" />
 				<el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip />
 				<el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
@@ -56,7 +49,7 @@
 						<dict-tag :options="blackList" :value="scope.row.isBlack"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip width="200">
+				<el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip>
 					<template #default="scope">
 						<span v-for="(tag, index) in scope.row.tagList" :key="index">
 							<el-tag>{{ tag.tag }} </el-tag>&nbsp;&nbsp;
@@ -65,7 +58,7 @@
 				</el-table-column>
 				<el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip />
 				<el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="200" fixed="right">
 					<template #default="scope">
 						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)"
 							>{{ $t('common.editBtn') }}
