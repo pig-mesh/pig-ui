@@ -169,15 +169,23 @@ const access = (row: any) => {
 };
 
 const generate = (row: any) => {
-	generateQr(row.appid).then(() => {
-		useMessage().success('获取成功');
-		getDataList();
-	});
+	generateQr(row.appid)
+		.then(() => {
+			useMessage().success('获取成功');
+			getDataList();
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		});
 };
 
 const quota = (row) => {
-	clearQuota(row.appid).then(() => {
-		useMessage().success('清空api的调用quota成功');
-	});
+	clearQuota(row.appid)
+		.then(() => {
+			useMessage().success('清空api的调用quota成功');
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		});
 };
 </script>

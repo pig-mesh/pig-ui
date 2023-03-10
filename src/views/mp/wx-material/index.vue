@@ -39,7 +39,7 @@
 							<div class="add_but">
 								<wx-file-upload @success="getDataList" :uploadData="uploadData"></wx-file-upload>
 							</div>
-							<el-table v-loading="state.loading" :data="state.dataList" stripe border>
+							<el-table v-loading="state.loading" :data="state.dataList" stripe border max-height="600px">
 								<el-table-column prop="mediaId" label="media_id"> </el-table-column>
 								<el-table-column prop="name" label="名称"> </el-table-column>
 								<el-table-column prop="updateTime" label="更新时间"> </el-table-column>
@@ -83,7 +83,7 @@
 									<el-button type="primary" @click="subVideo">提 交</el-button>
 								</template>
 							</el-dialog>
-							<el-table v-loading="state.loading" :data="state.dataList" stripe border>
+							<el-table v-loading="state.loading" :data="state.dataList" stripe border max-height="600px">
 								<el-table-column prop="mediaId" label="media_id"> </el-table-column>
 								<el-table-column prop="name" label="名称"> </el-table-column>
 								<el-table-column prop="updateTime" label="更新时间"> </el-table-column>
