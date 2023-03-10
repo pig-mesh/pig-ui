@@ -86,7 +86,7 @@
 			:title="$t('appuser.importUserTip')"
 			@refreshDataList="getDataList"
 			ref="excelUploadRef"
-			temp-url="/admin/sys-file/local/file/user.xlsx"
+			temp-url="/admin/sys-file/local/file/appuser.xlsx"
 			url="/admin/appuser/import"
 		/>
 	</div>

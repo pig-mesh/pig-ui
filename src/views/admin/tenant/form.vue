@@ -171,7 +171,7 @@ const onSubmit = () => {
 const getTenantData = (id: string) => {
 	// 获取部门数据
 	getObj(id).then((res: any) => {
-		Object.assign(form, res.data[0]);
+		Object.assign(form, res.data);
 	});
 };
 
