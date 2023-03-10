@@ -103,8 +103,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
 const selectMaterial = (item: any) => {
-	emit('selectMaterial', item, objData.accountId);
 	visible.value = false;
+	emit('selectMaterial', item, objData.accountId);
 };
 
 const openDialog = (data: any) => {
