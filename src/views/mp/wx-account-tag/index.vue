@@ -72,7 +72,7 @@
 						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)">{{
 							$t('common.editBtn')
 						}}</el-button>
-						<el-button text type="primary" @click="handleDelete(scope.row)">{{ $t('common.delBtn') }}</el-button>
+						<el-button text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -153,6 +153,7 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
+	selectObjs.value = [];
 	objs.forEach((val: any) => {
 		selectObjs.value.push(val.id);
 	});
@@ -160,13 +161,13 @@ const handleSelectionChange = (objs: any) => {
 };
 
 // 删除操作
-const handleDelete = (row: any) => {
+const handleDelete = (ids: string[]) => {
 	useMessageBox()
 		.confirm(t('common.delConfirmText'))
 		.then(() => {
 			delObjs({
-				id: row.id,
-				wxAccountAppid: row.wxAccountAppid,
+				ids: ids,
+				wxAccountAppid: state.queryForm.wxAccountAppid,
 			})
 				.then(() => {
 					getDataList(false);

@@ -138,7 +138,6 @@ const handleClick = (tab) => {
 	uploadData.mediaType = tab.paneName;
 	uploadData.appId = props.objData.appId;
 
-
 	const tempObjItem = tempObj.value[tab.paneName];
 	if (tempObjItem) {
 		props.objData.repName = tempObjItem.repName ? tempObjItem.repName : null;

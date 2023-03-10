@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
-		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" formDialogRef label-width="90px">
+		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" label-width="90px">
 			<el-row :gutter="24">
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('wxAccountTag.tag')" prop="tag">
@@ -46,6 +46,9 @@ const dataRules = ref({});
 // 打开弹窗
 const openDialog = (row: any, appid: string) => {
 	visible.value = true;
+	form.wxAccountAppid = '';
+	form.tag = '';
+	form.id = '';
 
 	// 重置表单数据
 	if (dataFormRef.value) {
