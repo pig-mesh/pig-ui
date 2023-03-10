@@ -59,6 +59,7 @@
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/mp/wx-account';
 import { useI18n } from 'vue-i18n';
+import { rule } from '/@/utils/validate';
 
 const emit = defineEmits(['refresh']);
 
@@ -76,7 +77,7 @@ const form = reactive({
 	name: '',
 	account: '',
 	appid: '',
-	appsecret: '',
+	appsecret: '' as string | undefined,
 	url: '',
 	token: '',
 	aeskey: '',
@@ -88,7 +89,10 @@ const dataRules = ref({
 	account: [{ required: true, message: '微信号不能为空', trigger: 'blur' }],
 	appid: [{ required: true, message: 'appid不能为空', trigger: 'blur' }],
 	appsecret: [{ required: true, message: '密钥不能为空', trigger: 'blur' }],
-	url: [{ required: true, message: 'url不能为空', trigger: 'blur' }],
+	url: [
+		{ required: true, message: 'url不能为空', trigger: 'blur' },
+		{ validator: rule.url, trigger: 'blur' },
+	],
 	token: [{ required: true, message: 'token不能为空', trigger: 'blur' }],
 	aeskey: [{ required: true, message: '加密密钥不能为空', trigger: 'blur' }],
 });
@@ -115,6 +119,9 @@ const onSubmit = () => {
 	dataFormRef.value.validate((valid: boolean) => {
 		if (!valid) {
 			return false;
+		}
+		if (form.appsecret && form.appsecret.indexOf('*') >= 0) {
+			form.appsecret = undefined;
 		}
 		// 更新
 		if (form.id) {
