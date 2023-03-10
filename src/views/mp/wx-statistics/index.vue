@@ -198,6 +198,9 @@ const initdata = () => {
 		.then((res) => {
 			LintData.value = res.data;
 		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		})
 		.finally(() => {
 			userCumulate();
 			userShard();

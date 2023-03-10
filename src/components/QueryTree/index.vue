@@ -21,6 +21,7 @@
 
 <script setup lang="ts" name="query-tree">
 import { onMounted, reactive, ref, unref } from 'vue';
+import { useMessage } from '/@/hooks/message';
 
 const emit = defineEmits(['search', 'nodeClick']);
 
@@ -65,12 +66,16 @@ const getDeptTree = () => {
 		state.localLoading = true;
 		const result = props.query(unref(searchName));
 		if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
-			result.then((r: any) => {
-				state.List = r.data;
-				if (r.data.length > 0) {
-					handleNodeClick(r.data[0]);
-				}
-			});
+			result
+				.then((r: any) => {
+					state.List = r.data;
+					if (r.data.length > 0) {
+						handleNodeClick(r.data[0]);
+					}
+				})
+				.catch((err) => {
+					useMessage().error(err.msg);
+				});
 		}
 	}
 };

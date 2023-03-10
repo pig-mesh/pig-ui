@@ -239,6 +239,7 @@ const getMenuFun = () => {
 				Object.assign(menuList, data.button);
 			}
 		} else {
+			menuList.length = 0;
 			Object.assign(menuList, {
 				name: '菜单名称',
 				children: [],
@@ -329,6 +330,9 @@ const deleteMenu = () => {
 			showRightFlag.value = false;
 			isActive.value = -1;
 			isSubMenuActive.value = '-1';
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
 		});
 };
 
@@ -338,9 +342,13 @@ const handleSave = () => {
 		.then(() => {
 			saveObj(accountId.value, {
 				button: menuList,
-			}).then(() => {
-				useMessage().success('保存成功');
-			});
+			})
+				.then(() => {
+					useMessage().success('保存成功');
+				})
+				.catch((err) => {
+					useMessage().error(err.msg);
+				});
 		});
 };
 

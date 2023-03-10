@@ -195,9 +195,13 @@ const delMaterial = (item: any) => {
 			delObj({
 				id: item.mediaId,
 				appId: checkAppId.value,
-			}).then(() => {
-				getDataList();
-			});
+			})
+				.then(() => {
+					getDataList();
+				})
+				.catch((err) => {
+					useMessage().error(err.msg);
+				});
 		});
 };
 
@@ -256,10 +260,14 @@ const handleInfo = (row) => {
 	getMaterialVideo({
 		mediaId: row.mediaId,
 		appId: checkAppId.value,
-	}).then((response) => {
-		const downUrl = response.data.downUrl;
-		window.open(downUrl, '_blank');
-	});
+	})
+		.then((response) => {
+			const downUrl = response.data.downUrl;
+			window.open(downUrl, '_blank');
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		});
 };
 </script>
 

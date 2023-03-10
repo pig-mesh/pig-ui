@@ -48,14 +48,7 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table
-				v-loading="state.loading"
-				:data="state.dataList"
-				style="width: 100%"
-				@selection-change="handleSelectionChange"
-				@sort-change="sortChangeHandle"
-			>
-				<el-table-column align="center" type="selection" width="60" />
+			<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
 				<el-table-column :label="t('wxFansMsg.index')" type="index" width="80" />
 				<el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip />
@@ -159,13 +152,17 @@ const resetQuery = () => {
 const accountList = ref([]);
 
 const getAccountList = () => {
-	fetchAccountList().then((res) => {
-		accountList.value = res.data;
-		if (accountList.value.length > 0) {
-			state.queryForm.wxAccountAppid = accountList.value[0].appid;
-			getDataList();
-		}
-	});
+	fetchAccountList()
+		.then((res) => {
+			accountList.value = res.data;
+			if (accountList.value.length > 0) {
+				state.queryForm.wxAccountAppid = accountList.value[0].appid;
+				getDataList();
+			}
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		});
 };
 
 watch(
@@ -182,30 +179,6 @@ onMounted(() => {
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/act/wxFansMsg/export', state.queryForm, 'wxFansMsg.xlsx');
-};
-
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
-	multiple.value = !objs.length;
-};
-
-// 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObjs(ids)
-				.then(() => {
-					getDataList(false);
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
 };
 
 const wxMsgDo = (row) => {

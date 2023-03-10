@@ -2,43 +2,43 @@
 	<el-drawer v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" size="50%">
 		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" formDialogRef label-width="90px">
 			<el-row :gutter="24">
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.name')" prop="name">
 						<el-input v-model="form.name" :placeholder="t('account.inputNameTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.account')" prop="account">
 						<el-input v-model="form.account" :placeholder="t('account.inputAccountTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.appid')" prop="appid">
 						<el-input v-model="form.appid" :placeholder="t('account.inputAppidTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.appsecret')" prop="appsecret">
 						<el-input v-model="form.appsecret" :placeholder="t('account.inputAppsecretTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.url')" prop="url">
 						<el-input v-model="form.url" :placeholder="t('account.inputUrlTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.token')" prop="token">
 						<el-input v-model="form.token" :placeholder="t('account.inputTokenTip')" />
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.aeskey')" prop="aeskey">
 						<el-input v-model="form.aeskey" :placeholder="t('account.inputAeskeyTip')" />
 					</el-form-item>

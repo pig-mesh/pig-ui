@@ -275,6 +275,9 @@ const handleDel = (row) => {
 				useMessage().success('删除成功');
 				getDataList();
 			});
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
 		});
 };
 
@@ -291,18 +294,26 @@ const handleSubmit = () => {
 				},
 				objData.value
 			)
-		).then(() => {
-			useMessage().success('添加成功');
-			getDataList();
-			dialog1Visible.value = false;
-		});
+		)
+			.then(() => {
+				useMessage().success('添加成功');
+				getDataList();
+				dialog1Visible.value = false;
+			})
+			.catch((err) => {
+				useMessage().error(err.msg);
+			});
 	}
 	if (handleType.value === 'edit') {
-		putObj(objData.value).then(() => {
-			useMessage().success('修改成功');
-			getDataList();
-			dialog1Visible.value = false;
-		});
+		putObj(objData.value)
+			.then(() => {
+				useMessage().success('修改成功');
+				getDataList();
+				dialog1Visible.value = false;
+			})
+			.catch((err) => {
+				useMessage().error(err.msg);
+			});
 	}
 };
 

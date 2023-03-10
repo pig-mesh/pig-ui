@@ -2,32 +2,32 @@
 	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable>
 		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" label-width="90px">
 			<el-row :gutter="24">
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.wxAccountName')" prop="wxAccountName">
 						<el-input v-model="form.wxAccountName" disabled />
 					</el-form-item>
 				</el-col>
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.wxAccountAppid')" prop="wxAccountAppid">
 						<el-input v-model="form.wxAccountAppid" disabled />
 					</el-form-item>
 				</el-col>
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.openid')" prop="openid">
 						<el-input v-model="form.openid" disabled />
 					</el-form-item>
 				</el-col>
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.nickname')" prop="nickname">
 						<el-input v-model="form.nickname" disabled />
 					</el-form-item>
 				</el-col>
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.remark')" prop="remark">
 						<el-input v-model="form.remark" :placeholder="t('fans.inputremarkTip')" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="24" class="mb20">
+				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.tagIds')" prop="tagIds">
 						<el-select v-model="form.tagIds" :placeholder="t('fans.inputTagTip')" class="w100" clearable multiple>
 							<el-option v-for="item in tagOption" :key="item.tagId" :label="item.tag" :value="item.tagId" />

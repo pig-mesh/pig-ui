@@ -42,7 +42,6 @@
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('fans.index')" type="index" width="80" />
-				<el-table-column :label="t('fans.id')" prop="id" show-overflow-tooltip />
 				<el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip />
 				<el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
 					<template #default="scope">
