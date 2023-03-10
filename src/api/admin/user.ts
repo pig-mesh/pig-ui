@@ -98,7 +98,7 @@ export const registerUser = (userInfo: object) => {
 export function validateUsername(rule: any, value: any, callback: any, isEdit: boolean) {
 	const flag = new RegExp(/^([a-z\d]+?)$/).test(value);
 	if (!flag) {
-		callback(new Error('用户名支持小写英文、数字、中文'));
+		callback(new Error('用户名支持小写英文、数字'));
 	}
 
 	if (isEdit) {
