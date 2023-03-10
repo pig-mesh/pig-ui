@@ -60,12 +60,12 @@
 				<el-table-column :label="t('account.url')" prop="url" show-overflow-tooltip />
 				<el-table-column :label="t('account.token')" prop="token" show-overflow-tooltip />
 				<el-table-column :label="t('account.aeskey')" prop="aeskey" show-overflow-tooltip />
-				<el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip>
+				<el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip fixed="right" width="150px">
 					<template #default="scope">
-						<a target="_blank" :href="scope.row.qrUrl"><img :src="scope.row.qrUrl" style="width: 100px" /></a>
+						<a target="_blank" :href="scope.row.qrUrl"><img :src="scope.row.qrUrl" style="width: 100px; height: auto" /></a>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="200" fixed="right">
 					<template #default="scope">
 						<el-button v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
 							$t('common.editBtn')

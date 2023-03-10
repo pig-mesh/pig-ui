@@ -126,7 +126,7 @@
 import { fetchAccountList } from '/@/api/mp/wx-account';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, getMaterialVideo, getPage } from '/@/api/mp/wx-material';
+import { delObj, getMaterialOther, getMaterialVideo, getPage } from '/@/api/mp/wx-material';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 const NewsForm = defineAsyncComponent(() => import('./components/news-form.vue'));
@@ -232,6 +232,22 @@ const subVideo = () => {
 		uploadFileVideo.value.submit().then(() => {
 			dialogVideoVisible.value = false;
 		});
+	});
+};
+
+const handleDown = (row: any) => {
+	getMaterialOther({
+		mediaId: row.mediaId,
+		fileName: row.name,
+		appId: checkAppId.value,
+	}).then((response) => {
+		const url = window.URL.createObjectURL(new Blob([response.data]));
+		const link = document.createElement('a');
+		link.style.display = 'none';
+		link.href = url;
+		link.setAttribute('download', row.name);
+		document.body.appendChild(link);
+		link.click();
 	});
 };
 
