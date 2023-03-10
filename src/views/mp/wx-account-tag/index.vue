@@ -45,6 +45,7 @@
 					>
 						{{ $t('common.delBtn') }}
 					</el-button>
+					<el-button icon="Sort" @click="asyncTag">同步</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml10"
@@ -86,7 +87,7 @@
 
 <script lang="ts" name="systemWxAccountTag" setup>
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObjs, getPage } from '/@/api/mp/wx-account-tag';
+import { delObjs, getPage, sync } from '/@/api/mp/wx-account-tag';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { fetchAccountList } from '/@/api/mp/wx-account';
@@ -177,5 +178,11 @@ const handleDelete = (ids: string[]) => {
 					useMessage().error(err.msg);
 				});
 		});
+};
+
+const asyncTag = () => {
+	sync(state.queryForm.wxAccountAppid).then(() => {
+		getDataList();
+	});
 };
 </script>

@@ -203,6 +203,7 @@ const dicDataReqType = ref([
 		label: '事件推送',
 	},
 ]);
+
 const dicRepMate = ref([
 	{
 		value: '1',
@@ -233,7 +234,7 @@ const handleClick = (e: any) => {
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		type: '',
+		type: '1',
 		appId: '',
 	},
 	pageList: getPage,

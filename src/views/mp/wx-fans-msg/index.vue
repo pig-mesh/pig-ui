@@ -4,7 +4,7 @@
 			<el-row v-show="showSearch" class="mb8">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('wxFansMsg.appName')" prop="wxAccountAppid">
-						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.appName')" clearable class="w100">
+						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('wxFansMsg.appName')" clearable class="w100">
 							<el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
 						</el-select>
 					</el-form-item>
@@ -59,6 +59,7 @@
 				<el-table-column :label="t('wxFansMsg.index')" type="index" width="80" />
 				<el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip />
+				<el-table-column :label="t('wxFansMsg.nickName')" prop="nickName" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.openId')" prop="openId" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.repContent')" prop="repContent" show-overflow-tooltip>
 					<template #default="scope">
