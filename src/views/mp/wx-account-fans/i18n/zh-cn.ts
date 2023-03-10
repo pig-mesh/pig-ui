@@ -21,5 +21,6 @@ export default {
 		wxAccountAppid: '公众号appid',
 		inputremarkTip: '请输入备注',
 		inputTagTip: '请选择分组',
+		inputNicknameTip: '请输入粉丝昵称',
 	},
 };

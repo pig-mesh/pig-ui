@@ -9,7 +9,7 @@
 			</el-row>
 			<el-row>
 				<el-col :span="4" :xs="24">
-					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
+					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
 				</el-col>
 				<el-col :span="20">
 					<el-row :gutter="15" class="home-card-two mb15">
@@ -77,8 +77,10 @@ const handleNodeClick = (node: any) => {
 };
 
 const deptData = reactive({
-	queryList: () => {
-		return fetchAccountList();
+	queryList: (name: string) => {
+		return fetchAccountList({
+			name: name,
+		});
 	},
 });
 

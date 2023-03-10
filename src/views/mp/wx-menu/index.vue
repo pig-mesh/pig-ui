@@ -3,7 +3,7 @@
 		<el-row :gutter="20">
 			<el-col :span="4" :xs="24">
 				<el-card class="layout-padding-auto" shadow="hover">
-					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" />
+					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
 				</el-card>
 			</el-col>
 			<el-col :span="20">
@@ -146,8 +146,10 @@ const handleNodeClick = (node: any) => {
 };
 
 const deptData = reactive({
-	queryList: () => {
-		return fetchAccountList();
+	queryList: (name: string) => {
+		return fetchAccountList({
+			name: name,
+		});
 	},
 });
 
@@ -236,6 +238,11 @@ const getMenuFun = () => {
 			if (data && data.button) {
 				Object.assign(menuList, data.button);
 			}
+		} else {
+			Object.assign(menuList, {
+				name: '菜单名称',
+				children: [],
+			});
 		}
 	});
 };

@@ -19,5 +19,6 @@ export default {
 		wxAccountId: 'wxAccountId',
 		wxAccountName: 'wxAccountName',
 		wxAccountAppid: 'wxAccountAppid',
+		inputNicknameTip: 'input nickname',
 	},
 };

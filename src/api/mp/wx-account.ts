@@ -69,10 +69,11 @@ export function putObj(obj) {
 	});
 }
 
-export function fetchAccountList() {
+export function fetchAccountList(obj: object) {
 	return request({
 		url: '/mp/wx-account/list',
 		method: 'get',
+		params: obj,
 	});
 }
 

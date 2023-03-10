@@ -4,7 +4,7 @@
 			<el-row v-show="showSearch" class="mb8">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('fans.nickname')" prop="nickname">
-						<el-input v-model="state.queryForm.nickname" style="max-width: 180px" />
+						<el-input v-model="state.queryForm.nickname" style="max-width: 180px" :placeholder="$t('fans.inputNicknameTip')" />
 					</el-form-item>
 					<el-form-item :label="$t('fans.wxAccountName')" prop="wxAccountAppid">
 						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable class="w100">
