@@ -3,10 +3,11 @@
 		<div v-loading="mainLoading" class="msg-main">
 			<div id="msg-div" class="msg-div">
 				<div v-if="!tableLoading">
-					<div v-if="loadMore" class="el-table__empty-block" @click="loadingMore"><span class="el-table__empty-text">点击加载更多</span></div>
+					<div v-if="loadMore" class="el-table__empty-block" @click="loadingMore"><span
+							class="el-table__empty-text">点击加载更多</span></div>
 					<div v-if="!loadMore" class="el-table__empty-block"><span class="el-table__empty-text">没有更多了</span></div>
 				</div>
-				<div v-for="item in tableData" :key="item.id" class="execution">
+				<div v-for="item in tableData" :key="item.id" class="execution" id="msgTable">
 					<div class="avue-comment" :class="item.type === '2' ? 'avue-comment--reverse' : ''">
 						<div class="avatar-div">
 							<name-avatar v-if="item.type === '1'" scale="2" :name="item.nickName" />
@@ -49,28 +50,22 @@
 									<svg-icon name="local-wx-video" :size="80" @click="loadVideo(item)"></svg-icon>
 								</div>
 								<div v-if="item.repType === 'location'">
-									<el-link
-										type="primary"
-										target="_blank"
-										:href="
-											'https://map.qq.com/?type=marker&isopeninfowin=1&markertype=1&pointx=' +
-											item.repLocationY +
-											'&pointy=' +
+									<el-link type="primary" target="_blank" :href="
+										'https://map.qq.com/?type=marker&isopeninfowin=1&markertype=1&pointx=' +
+										item.repLocationY +
+										'&pointy=' +
+										item.repLocationX +
+										'&name=' +
+										item.repContent +
+										'&ref=joolun'
+									">
+										<img :src="
+											'https://apis.map.qq.com/ws/staticmap/v2/?zoom=10&markers=color:blue|label:A|' +
 											item.repLocationX +
-											'&name=' +
-											item.repContent +
-											'&ref=joolun'
-										"
-									>
-										<img
-											:src="
-												'https://apis.map.qq.com/ws/staticmap/v2/?zoom=10&markers=color:blue|label:A|' +
-												item.repLocationX +
-												',' +
-												item.repLocationY +
-												'&key=PFFBZ-RBM3V-IEEPP-UH6KE-6QUQE-C4BVJ&size=250*180'
-											"
-										/>
+											',' +
+											item.repLocationY +
+											'&key=PFFBZ-RBM3V-IEEPP-UH6KE-6QUQE-C4BVJ&size=250*180'
+										" />
 										<p />
 										<i class="el-icon-map-location"></i>{{ item.repContent }}
 									</el-link>
@@ -82,7 +77,7 @@
 									<div class="avue-card__info" style="height: unset">{{ item.repDesc }}</div>
 								</div>
 								<div v-if="item.repType === 'news'" style="width: 300px">
-									<wx-news :obj-data="JSON.parse(item.content).articles"></wx-news>
+									<wx-news :obj-data="JSON.parse(item.content)"></wx-news>
 								</div>
 								<div v-if="item.repType === 'music'">
 									<el-link type="success" :underline="false" target="_blank" :href="item.repUrl">
@@ -100,7 +95,7 @@
 					</div>
 				</div>
 			</div>
-			<div v-loading="sendLoading" class="msg-send">
+			<div v-loading="sendLoading" class="msg-send" @keyup.enter="sendMsg">
 				<wx-reply :objData="objData"></wx-reply>
 				<el-button type="success" class="send-but" @click="sendMsg">发送(S)</el-button>
 			</div>
@@ -147,11 +142,10 @@ const wxData = reactive({
 const sendMsg = () => {
 	if (objData.value) {
 		if (objData.value.repType === 'news') {
-			if (objData.value.content.newsItem.length > 1) {
+			if (JSON.parse(objData.value.content).length > 1) {
 				useMessage().error('图文消息条数限制在1条以内，已默认发送第一条');
+				objData.value.content = (JSON.parse(objData.value.content))[0];
 			}
-			objData.value.content.newsItem = [objData.value.content.newsItem[0]];
-			objData.value.content = JSON.stringify(objData.value.content);
 		}
 		sendLoading.value = true;
 		addObj(
@@ -165,7 +159,12 @@ const sendMsg = () => {
 		)
 			.then(() => {
 				tableData.value = [];
-				getData();
+				getData().then(() => {
+					//box-container是添加overflow的父div，也就是出现滚动条的div
+					var scrollTarget = document.getElementById("msgTable");
+					//scrollTarget.scrollHeight是获取dom元素的高度，然后设置scrollTop
+					scrollTarget.scrollTop = scrollTarget.scrollHeight;
+				})
 			})
 			.finally(() => {
 				sendLoading.value = false;
@@ -174,8 +173,8 @@ const sendMsg = () => {
 };
 
 const tableData = ref([] as any);
-
 const tableLoading = ref(false);
+
 
 const openDialog = (data: any) => {
 	wxData.wxUserId = data.wxUserId;
@@ -187,7 +186,7 @@ const openDialog = (data: any) => {
 
 const getData = () => {
 	tableLoading.value = true;
-	fetchList({
+	return fetchList({
 		...page,
 		...wxData,
 	}).then((res) => {
@@ -230,6 +229,7 @@ defineExpose({
 	margin-top: -30px;
 	padding: 10px;
 }
+
 .msg-div {
 	height: 50vh;
 	overflow: auto;
@@ -237,13 +237,16 @@ defineExpose({
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
 .msg-send {
 	padding: 10px;
 }
+
 .avatar-div {
 	text-align: center;
 	width: 80px;
 }
+
 .send-but {
 	float: right;
 	margin-top: 8px !important;

@@ -185,7 +185,7 @@ const quota = (row) => {
 			useMessage().success('清空api的调用quota成功');
 		})
 		.catch((err) => {
-			useMessage().error(err.msg);
+			useMessage().error('清空api的调用quota失败');
 		});
 };
 </script>

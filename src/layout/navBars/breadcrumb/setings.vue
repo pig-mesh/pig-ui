@@ -559,7 +559,7 @@ const onAddDarkChange = () => {
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {
-	const username = useUserInfo().userInfos.user.username;
+	const username = useUserInfo().userInfos.user?.username || getThemeConfig.value.globalTitle;
 	getThemeConfig.value.isWartermark ? Watermark.set(username) : Watermark.del();
 	setLocalThemeConfig();
 };

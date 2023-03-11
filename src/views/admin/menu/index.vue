@@ -19,7 +19,6 @@
 			<el-table
 				:data="state.dataList"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				max-height="450"
 				row-key="path"
 				style="width: 100%"
 				v-loading="state.loading"

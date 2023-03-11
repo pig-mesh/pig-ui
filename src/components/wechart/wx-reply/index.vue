@@ -18,8 +18,8 @@
 				<div v-if="!objData.repUrl" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="12" class="col-select">
-							<el-button type="success" @click="openMaterial({ type: 'image', accountId: props.objData.appId })"
-								>素材库选择<i class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'image', accountId: props.objData.appId })">素材库选择<i
+									class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 						<el-col :span="12" class="col-add">
@@ -45,8 +45,8 @@
 				<div v-if="!objData.repName" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="12" class="col-select">
-							<el-button type="success" @click="openMaterial({ type: 'voice', accountId: props.objData.appId })"
-								>素材库选择<i class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'voice', accountId: props.objData.appId })">素材库选择<i
+									class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 						<el-col :span="12" class="col-add">
@@ -60,17 +60,18 @@
 		<el-tab-pane name="video" label="video">
 			<template #label><i class="el-icon-share"></i> 视频</template>
 			<el-row style="text-align: center; flex: 1">
-				<el-input v-model="objData.repName" placeholder="请输入标题"></el-input>
-				<el-input v-model="objData.repDesc" placeholder="请输入描述"></el-input>
-				<div style="text-align: center">
-					<a v-if="objData.repUrl" target="_blank" :href="objData.repUrl"><i class="icon-bofang">&nbsp;播放视频</i></a>
-				</div>
-				<div style="margin: 20px 0"></div>
-				<div style="text-align: center">
-					<el-button type="success" @click="openMaterial({ type: 'video', accountId: props.objData.appId })"
-						>素材库选择<i class="fansel-icon--right"></i>
+				<el-input v-if="objData.repUrl" v-model="objData.repName" placeholder="请输入标题" style="margin: 10px"></el-input>
+				<el-input v-if="objData.repUrl" v-model="objData.repDesc" placeholder="请输入描述" style="margin: 10px"></el-input>
+			</el-row>
+			<el-row style="text-align: center">
+				<el-col :span="12" class="col-select">
+					<a v-if="objData.repUrl" target="_blank" :href="objData.repUrl">
+						<SvgIcon name="local-wx-video" :size="45" />
+					</a></el-col>
+				<el-col :span="12" class="col-add">
+					<el-button type="success" @click="openMaterial({ type: 'video', accountId: props.objData.appId })">素材库选择
 					</el-button>
-				</div>
+				</el-col>
 			</el-row>
 		</el-tab-pane>
 
@@ -78,7 +79,7 @@
 			<template #label><i class="el-icon-news"></i> 图文</template>
 			<el-row>
 				<div v-if="objData.content" class="select-item">
-					<wx-news :obj-data="objData.content.newsItem"></wx-news>
+					<wx-news :obj-data="JSON.parse(objData.content)"></wx-news>
 					<el-row class="ope-row">
 						<el-button type="danger" icon="el-icon-delete" circle @click="deleteObj"></el-button>
 					</el-row>
@@ -86,8 +87,8 @@
 				<div v-if="!objData.content" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="24" class="col-select2">
-							<el-button type="success" @click="openMaterial({ type: 'news', accountId: props.objData.appId })"
-								>素材库选择<i class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'news', accountId: props.objData.appId })">素材库选择<i
+									class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 					</el-row>
@@ -102,8 +103,6 @@
 <script setup lang="ts" name="wx-reply">
 import { getMaterialVideo } from '/@/api/mp/wx-material';
 import { useMessage } from '/@/hooks/message';
-import WxVideo from '/@/assets/icon/wx-video.svg';
-import WxVoice from '/@/assets/icon/wx-voice.svg';
 const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/wechart/wx-material-select/main.vue'));
 
 const WxFileUpload = defineAsyncComponent(() => import('/@/components/wechart/fileUpload/index.vue'));
@@ -169,13 +168,13 @@ const openMaterial = (data: any) => {
 const dialogNewsRef = ref();
 
 const selectMaterial = (item, appId) => {
-	console.log(item, 'itemmmm');
 	let tempObjItem = {
 		repType: '',
 		repMediaId: '',
 		media_id: '',
 		content: '',
 	} as any;
+
 	tempObjItem.repType = props.objData.repType;
 	tempObjItem.repMediaId = item.mediaId;
 	tempObjItem.media_id = item.mediaId;
@@ -207,6 +206,9 @@ const selectMaterial = (item, appId) => {
 			props.objData.repDesc = data.description || '';
 			props.objData.repUrl = data.downUrl;
 		});
+	}
+	if (props.objData.repType === 'news') {
+		props.objData.content = JSON.stringify(item.content.newsItem);
 	}
 	tempObj.value[props.objData.repType] = tempObjItem;
 };
