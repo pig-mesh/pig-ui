@@ -63,7 +63,7 @@
 				</div>
 				<el-input
 					v-model="articlesAdd[isActiveAddNews].digest"
-					:rows="8"
+					:rows="6"
 					type="textarea"
 					placeholder="请输入摘要"
 					class="digest"
@@ -527,7 +527,9 @@ p {
 }
 
 .thumb-but {
+	display: flex;
 	margin: 5px;
+	justify-content: space-between;
 }
 
 .material-img {

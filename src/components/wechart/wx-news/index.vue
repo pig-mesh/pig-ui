@@ -4,7 +4,7 @@
 			<a v-if="index === 0" target="_blank" :href="news.url">
 				<div class="news-main">
 					<div class="news-content">
-						<img class="material-img" :src="news.thumbUrl" width="280px" height="120px" />
+						<img class="material-img" :src="news.thumbUrl" style="width: 280; height: 120" />
 						<div class="news-content-title">
 							<span>{{ news.title }}</span>
 						</div>
