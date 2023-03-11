@@ -189,9 +189,7 @@ const dataRules = ref({
 	encFlag: [{ required: true, message: '是否开启密码加密传输', trigger: 'blur' }],
 	onlineQuantity: [{ required: true, message: '是否允许同时在线', trigger: 'blur' }],
 	autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
-	webServerRedirectUri: [
-		{ required: true, message: '回调地址不能为空', trigger: 'blur' }
-	],
+	webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗

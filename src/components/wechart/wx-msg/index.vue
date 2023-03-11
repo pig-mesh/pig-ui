@@ -3,8 +3,7 @@
 		<div v-loading="mainLoading" class="msg-main">
 			<div id="msg-div" class="msg-div">
 				<div v-if="!tableLoading">
-					<div v-if="loadMore" class="el-table__empty-block" @click="loadingMore"><span
-							class="el-table__empty-text">点击加载更多</span></div>
+					<div v-if="loadMore" class="el-table__empty-block" @click="loadingMore"><span class="el-table__empty-text">点击加载更多</span></div>
 					<div v-if="!loadMore" class="el-table__empty-block"><span class="el-table__empty-text">没有更多了</span></div>
 				</div>
 				<div v-for="item in tableData" :key="item.id" class="execution" id="msgTable">
@@ -50,22 +49,28 @@
 									<svg-icon name="local-wx-video" :size="80" @click="loadVideo(item)"></svg-icon>
 								</div>
 								<div v-if="item.repType === 'location'">
-									<el-link type="primary" target="_blank" :href="
-										'https://map.qq.com/?type=marker&isopeninfowin=1&markertype=1&pointx=' +
-										item.repLocationY +
-										'&pointy=' +
-										item.repLocationX +
-										'&name=' +
-										item.repContent +
-										'&ref=joolun'
-									">
-										<img :src="
-											'https://apis.map.qq.com/ws/staticmap/v2/?zoom=10&markers=color:blue|label:A|' +
-											item.repLocationX +
-											',' +
+									<el-link
+										type="primary"
+										target="_blank"
+										:href="
+											'https://map.qq.com/?type=marker&isopeninfowin=1&markertype=1&pointx=' +
 											item.repLocationY +
-											'&key=PFFBZ-RBM3V-IEEPP-UH6KE-6QUQE-C4BVJ&size=250*180'
-										" />
+											'&pointy=' +
+											item.repLocationX +
+											'&name=' +
+											item.repContent +
+											'&ref=joolun'
+										"
+									>
+										<img
+											:src="
+												'https://apis.map.qq.com/ws/staticmap/v2/?zoom=10&markers=color:blue|label:A|' +
+												item.repLocationX +
+												',' +
+												item.repLocationY +
+												'&key=PFFBZ-RBM3V-IEEPP-UH6KE-6QUQE-C4BVJ&size=250*180'
+											"
+										/>
 										<p />
 										<i class="el-icon-map-location"></i>{{ item.repContent }}
 									</el-link>
@@ -144,7 +149,7 @@ const sendMsg = () => {
 		if (objData.value.repType === 'news') {
 			if (JSON.parse(objData.value.content).length > 1) {
 				useMessage().error('图文消息条数限制在1条以内，已默认发送第一条');
-				objData.value.content = (JSON.parse(objData.value.content))[0];
+				objData.value.content = JSON.parse(objData.value.content)[0];
 			}
 		}
 		sendLoading.value = true;
@@ -161,10 +166,10 @@ const sendMsg = () => {
 				tableData.value = [];
 				getData().then(() => {
 					//box-container是添加overflow的父div，也就是出现滚动条的div
-					var scrollTarget = document.getElementById("msgTable");
+					var scrollTarget = document.getElementById('msgTable');
 					//scrollTarget.scrollHeight是获取dom元素的高度，然后设置scrollTop
 					scrollTarget.scrollTop = scrollTarget.scrollHeight;
-				})
+				});
 			})
 			.finally(() => {
 				sendLoading.value = false;
@@ -174,7 +179,6 @@ const sendMsg = () => {
 
 const tableData = ref([] as any);
 const tableLoading = ref(false);
-
 
 const openDialog = (data: any) => {
 	wxData.wxUserId = data.wxUserId;

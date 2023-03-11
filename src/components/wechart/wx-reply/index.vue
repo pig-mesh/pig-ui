@@ -18,8 +18,8 @@
 				<div v-if="!objData.repUrl" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="12" class="col-select">
-							<el-button type="success" @click="openMaterial({ type: 'image', accountId: props.objData.appId })">素材库选择<i
-									class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'image', accountId: props.objData.appId })"
+								>素材库选择<i class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 						<el-col :span="12" class="col-add">
@@ -45,8 +45,8 @@
 				<div v-if="!objData.repName" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="12" class="col-select">
-							<el-button type="success" @click="openMaterial({ type: 'voice', accountId: props.objData.appId })">素材库选择<i
-									class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'voice', accountId: props.objData.appId })"
+								>素材库选择<i class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 						<el-col :span="12" class="col-add">
@@ -66,11 +66,10 @@
 			<el-row style="text-align: center">
 				<el-col :span="12" class="col-select">
 					<a v-if="objData.repUrl" target="_blank" :href="objData.repUrl">
-						<SvgIcon name="local-wx-video" :size="45" />
-					</a></el-col>
+						<SvgIcon name="local-wx-video" :size="45" /> </a
+				></el-col>
 				<el-col :span="12" class="col-add">
-					<el-button type="success" @click="openMaterial({ type: 'video', accountId: props.objData.appId })">素材库选择
-					</el-button>
+					<el-button type="success" @click="openMaterial({ type: 'video', accountId: props.objData.appId })">素材库选择 </el-button>
 				</el-col>
 			</el-row>
 		</el-tab-pane>
@@ -87,8 +86,8 @@
 				<div v-if="!objData.content" style="width: 100%">
 					<el-row style="text-align: center">
 						<el-col :span="24" class="col-select2">
-							<el-button type="success" @click="openMaterial({ type: 'news', accountId: props.objData.appId })">素材库选择<i
-									class="fansel-icon--right"></i>
+							<el-button type="success" @click="openMaterial({ type: 'news', accountId: props.objData.appId })"
+								>素材库选择<i class="fansel-icon--right"></i>
 							</el-button>
 						</el-col>
 					</el-row>

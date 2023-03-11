@@ -30,11 +30,10 @@ export function doTask(obj) {
 	});
 }
 
-export function delObj(ids?:Object) {
-  return request({
-    url: '/act/task',
-    method: 'delete',
-    data: ids
-  })
+export function delObj(ids?: Object) {
+	return request({
+		url: '/act/task',
+		method: 'delete',
+		data: ids,
+	});
 }
-

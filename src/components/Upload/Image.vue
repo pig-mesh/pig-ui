@@ -26,7 +26,7 @@
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { watch } from 'vue';
-import other from "/@/utils/other";
+import other from '/@/utils/other';
 
 const imageUrl = ref('');
 const fileUpload = ref();
