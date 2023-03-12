@@ -3,13 +3,15 @@
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('datasourceconf.name')" prop="name">
-						<el-input v-model="form.name" :placeholder="t('datasourceconf.inputnameTip')" />
+					<el-form-item :label="t('datasourceconf.dsType')" prop="dsType">
+						<el-select v-model="form.dsType" :placeholder="t('datasourceconf.inputdsTypeTip')">
+							<el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in ds_type"> </el-option>
+						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('datasourceconf.url')" prop="url">
-						<el-input v-model="form.url" :placeholder="t('datasourceconf.inputurlTip')" />
+					<el-form-item :label="t('datasourceconf.name')" prop="name">
+						<el-input v-model="form.name" :placeholder="t('datasourceconf.inputnameTip')" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
@@ -23,35 +25,35 @@
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('datasourceconf.dsType')" prop="dsType">
-						<el-input v-model="form.dsType" :placeholder="t('datasourceconf.inputdsTypeTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('datasourceconf.confType')" prop="confType">
 						<el-radio-group v-model="form.confType">
 							<el-radio :label="Number(item.value)" v-for="(item, index) in ds_config_type" border :key="index">{{ item.label }} </el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('datasourceconf.dsName')" prop="dsName">
-						<el-input v-model="form.dsName" :placeholder="t('datasourceconf.inputdsNameTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="form.confType === 0 && form.dsType === 'mssql'">
 					<el-form-item :label="t('datasourceconf.instance')" prop="instance">
 						<el-input v-model="form.instance" :placeholder="t('datasourceconf.inputinstanceTip')" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="form.confType === 0">
 					<el-form-item :label="t('datasourceconf.port')" prop="port">
-						<el-input v-model="form.port" :placeholder="t('datasourceconf.inputportTip')" />
+						<el-input-number v-model="form.port" :placeholder="t('datasourceconf.inputportTip')" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20">
+				<el-col :span="12" class="mb20" v-if="form.confType === 0">
 					<el-form-item :label="t('datasourceconf.host')" prop="host">
 						<el-input v-model="form.host" :placeholder="t('datasourceconf.inputhostTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20" v-if="form.confType === 0">
+					<el-form-item :label="t('datasourceconf.dsName')" prop="dsName">
+						<el-input v-model="form.dsName" :placeholder="t('datasourceconf.inputdsNameTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="24" class="mb20" v-if="form.confType === 1">
+					<el-form-item :label="t('datasourceconf.url')" prop="url">
+						<el-input v-model="form.url" type="textarea" :placeholder="t('datasourceconf.inputurlTip')" />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -66,20 +68,21 @@
 </template>
 
 <script setup lang="ts" name="systemDatasourceConfDialog">
-// 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/gen/datasource';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 
-const { ds_config_type } = useDict('ds_config_type');
+// 定义字典处理
+const { ds_config_type, ds_type } = useDict('ds_config_type', 'ds_type');
 
 // 提交表单数据
 const form = reactive({
@@ -94,13 +97,31 @@ const form = reactive({
 	confType: 0,
 	dsName: '',
 	instance: '',
-	port: '',
+	port: 0,
 	host: '',
 });
 
+/**
+ *
+ * @param {校验数据源名} rule
+ * @param {*} value
+ * @param {*} callback
+ */
+const validateDsName = (_rule, value, callback) => {
+	var re = /(?=.*[a-z])(?=.*_)/;
+	if (value && !re.test(value)) {
+		callback(new Error('数据源名称不合法, 组名_数据源名形式'));
+	} else {
+		callback();
+	}
+};
+
 // 定义校验规则
 const dataRules = ref({
-	name: [{ required: true, message: '别名不能为空', trigger: 'blur' }],
+	name: [
+		{ required: true, message: '别名不能为空', trigger: 'blur' },
+		{ validator: validateDsName, trigger: 'blur' },
+	],
 	url: [{ required: true, message: 'jdbcurl不能为空', trigger: 'blur' }],
 	username: [{ required: true, message: '用户名不能为空', trigger: 'blur' }],
 	password: [{ required: true, message: '密码不能为空', trigger: 'blur' }],
@@ -113,7 +134,7 @@ const dataRules = ref({
 });
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
 	visible.value = true;
 	form.id = '';
 
@@ -125,7 +146,9 @@ const openDialog = (id: string) => {
 	// 获取DatasourceConf信息
 	if (id) {
 		form.id = id;
-		getDatasourceConfData(id);
+		await getDatasourceConfData(id);
+		// 修改密码时候，原密码打码
+		form.password = '********';
 	}
 };
 
@@ -138,6 +161,10 @@ const onSubmit = () => {
 
 		// 更新
 		if (form.id) {
+			if (form.password.indexOf('********') === 0) {
+				form.password = '';
+			}
+
 			putObj(form)
 				.then(() => {
 					useMessage().success(t('common.editSuccessText'));
@@ -164,7 +191,7 @@ const onSubmit = () => {
 // 初始化表单数据
 const getDatasourceConfData = (id: string) => {
 	// 获取数据
-	getObj(id).then((res: any) => {
+	return getObj(id).then((res: any) => {
 		Object.assign(form, res.data);
 	});
 };

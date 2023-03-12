@@ -111,7 +111,7 @@ const handleDelete = (row: any) => {
 	}
 
 	useMessageBox()
-		.confirm(t('common.delConfirmText') + row.id)
+		.confirm(t('common.delConfirmText'))
 		.then(() => {
 			delObj(row.id)
 				.then(() => {
