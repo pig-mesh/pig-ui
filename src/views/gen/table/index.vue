@@ -40,7 +40,7 @@
 				<el-table-column :label="t('table.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button @click="syncTable(state.queryForm.dsName, scope.row.tableName)" text type="primary">
+						<el-button @click="syncTable(scope.row)" text type="primary">
 							{{ $t('gen.syncBtn') }}
 						</el-button>
 						<el-button @click="openGen(scope.row)" text type="primary">{{ $t('gen.genBtn') }} </el-button>
@@ -55,18 +55,17 @@
 
 <script lang="ts" name="systemTable" setup>
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { fetchList, useSyncTableApi } from '/@/api/gen/table';
+import { fetchList, useSyncTableApi, useTableApi } from '/@/api/gen/table';
 import { list } from '/@/api/gen/datasource';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
+import { validateNull } from '/@/utils/validate';
 
 // 定义变量内容
 const router = useRouter();
-
 // 引入组件
 const { t } = useI18n();
-
 // 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
@@ -96,13 +95,21 @@ onMounted(() => {
 });
 
 const openGen = (row) => {
-	router.push({
-		path: '/gen/gener/index',
-		query: {
-			tableName: row.tableName,
-			dsName: state.queryForm.dsName,
-		},
-	});
+	useTableApi(state.queryForm.dsName, row.tableName)
+		.then((res) => {
+			if (validateNull(res.data.fieldList)) {
+				syncTable(row);
+			}
+		})
+		.finally(() => {
+			router.push({
+				path: '/gen/gener/index',
+				query: {
+					tableName: row.tableName,
+					dsName: state.queryForm.dsName,
+				},
+			});
+		});
 };
 
 const openDesign = (row) => {
@@ -116,8 +123,8 @@ const openDesign = (row) => {
 };
 
 // 同步表数据
-const syncTable = (dsName: string, tableName: string) => {
-	useSyncTableApi(dsName, tableName).then(() => {
+const syncTable = (row) => {
+	useSyncTableApi(state.queryForm.dsName, row.tableName).then(() => {
 		useMessage().success(t('common.optSuccessText'));
 	});
 };

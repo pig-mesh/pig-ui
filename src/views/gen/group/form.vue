@@ -31,13 +31,12 @@
 </template>
 
 <script lang="ts" name="GenGroupDialog" setup>
-// 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/gen/group';
 import { useI18n } from 'vue-i18n';
 import { list as templateList } from '/@/api/gen/template';
-
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 
 // 定义变量内容
@@ -86,35 +85,18 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-		// 更新
-		if (form.id) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+	try {
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 初始化表单数据

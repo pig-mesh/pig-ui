@@ -80,9 +80,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useI18n } from 'vue-i18n';
 import { putObj, useTableApi } from '/@/api/gen/table';
-import { useMessage } from '/@/hooks/message';
 import { list as groupList } from '/@/api/gen/group';
 
 const props = defineProps({
@@ -95,8 +93,6 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['refreshDataList']);
-const { t } = useI18n();
-
 const visible = ref(false);
 const loading = ref(false);
 const dataFormRef = ref();
@@ -131,8 +127,6 @@ const openDialog = (dName: string, tName: string) => {
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields();
 	}
-
-	getTable(dName, tName);
 };
 
 const getTable = (dsName: string, tableName: string) => {
@@ -164,26 +158,19 @@ const dataRules = ref({
 });
 
 // 保存
-const submitHandle = () => {
-	return new Promise((resolve, reject) => {
-		dataFormRef.value.validate((valid: boolean) => {
-			if (!valid) {
-				reject();
-				return false;
-			}
-			loading.value = true;
-			putObj(dataForm)
-				.then(() => {
-					visible.value = false;
-					emit('refreshDataList');
-					useMessage().success(t('common.optSuccessText'));
-					resolve(dataForm);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		});
-	});
+const submitHandle = async () => {
+	try {
+		await dataFormRef.value.validate();
+		loading.value = true;
+		await putObj(dataForm);
+		visible.value = false;
+		emit('refreshDataList');
+		return dataForm;
+	} catch {
+		return Promise.reject();
+	} finally {
+		loading.value = false;
+	}
 };
 
 const genGroupList = () => {

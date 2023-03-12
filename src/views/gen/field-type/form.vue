@@ -29,12 +29,12 @@
 </template>
 
 <script setup lang="ts" name="systemFieldTypeDialog">
+import { rule } from '/@/utils/validate';
+import { useMessage } from '/@/hooks/message';
+import { getObj, addObj, putObj, validateColumnType } from '/@/api/gen/fieldtype';
+import { useI18n } from 'vue-i18n';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-import { useMessage } from '/@/hooks/message';
-import { getObj, addObj, putObj } from '/@/api/gen/fieldtype';
-import { useI18n } from 'vue-i18n';
-
 const { t } = useI18n();
 
 // 定义变量内容
@@ -52,8 +52,19 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
-	columnType: [{ required: true, message: '字段类型不能为空', trigger: 'blur' }],
-	attrType: [{ required: true, message: '属性类型不能为空', trigger: 'blur' }],
+	columnType: [
+		{ required: true, message: '字段类型不能为空', trigger: 'blur' },
+		{ validator: rule.letter, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateColumnType(rule, value, callback, form.id !== '');
+			},
+		},
+	],
+	attrType: [
+		{ required: true, message: '属性类型不能为空', trigger: 'blur' },
+		{ validator: rule.letter, trigger: 'blur' },
+	],
 	packageName: [{ required: true, message: '属性包名不能为空', trigger: 'blur' }],
 	createTime: [{ required: true, message: '创建时间不能为空', trigger: 'blur' }],
 });
@@ -61,50 +72,35 @@ const dataRules = ref({
 // 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
-	form.id = '';
 
 	// 重置表单数据
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields();
 	}
 
-	// 获取FieldType信息
+	// 如果有id参数，表示是编辑操作，需要设置form.id和获取FieldType信息
 	if (id) {
 		form.id = id;
 		getFieldTypeData(id);
+	} else {
+		// 否则是新增操作，需要清空form.id
+		form.id = '';
 	}
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-		// 更新
-		if (form.id) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+	try {
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 初始化表单数据

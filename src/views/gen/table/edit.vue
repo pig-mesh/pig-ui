@@ -50,7 +50,7 @@
 				</vxe-column>
 				<vxe-column field="fieldDict" title="字典类型" width="140">
 					<template #default="{ row }">
-						<vxe-select v-model="row.fieldDict" filterable>
+						<vxe-select v-model="row.fieldDict" filterable clearable>
 							<vxe-option v-for="item in fieldDictList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
 						</vxe-select>
 					</template>
@@ -138,12 +138,7 @@ import Sortable from 'sortablejs';
 import { useTableFieldSubmitApi, useTableApi, fetchDictList } from '/@/api/gen/table';
 import { list } from '/@/api/gen/fieldtype';
 import { VxeTableInstance } from 'vxe-table';
-import { useMessage } from '/@/hooks/message';
-import { useI18n } from 'vue-i18n';
 
-const { t } = useI18n();
-
-// const previewRef = ref()
 const activeName = ref();
 const tableId = ref('');
 const fieldTable = ref<VxeTableInstance>();
@@ -315,10 +310,8 @@ const getTable = (dsName: string, tableName: string) => {
 
 const getFieldTypeList = async () => {
 	typeList.value = [];
-
 	// 获取数据
 	const { data } = await list();
-
 	// 设置属性类型值
 	data.forEach((item: any) => typeList.value.push({ label: item.attrType, value: item.columnType }));
 	// 增加Object类型
@@ -337,10 +330,7 @@ const getDictList = () => {
 const submitHandle = () => {
 	return new Promise((resolve) => {
 		useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
-			useMessage().success(t('common.addSuccessText'));
 			resolve(tableId.value);
-			// visible.value = false // 关闭弹窗
-			// emit('refreshDataList')
 		});
 	});
 };

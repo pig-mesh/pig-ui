@@ -22,7 +22,7 @@
 					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
 						{{ $t('common.exportBtn') }}
 					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(undefined)" class="ml10" icon="Delete" type="primary">
+					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
@@ -44,7 +44,7 @@
 					<template #default="scope">
 						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 
-						<el-button @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleDelete([scope.row.id])" text type="primary">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -65,14 +65,13 @@ import { useI18n } from 'vue-i18n';
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
-
 // 定义变量内容
 const formDialogRef = ref();
 // 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
-const selectObjs = ref([]);
+// 多选rows
+const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -91,29 +90,23 @@ const resetQuery = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (val: any) => {
-	selectObjs.value = val;
-	multiple.value = !val.length;
+const handleSelectionChange = (objs: any) => {
+	objs.forEach((val: any) => {
+		selectObjs.value.push(val.id);
+	});
+	multiple.value = !objs.length;
 };
-
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/gen/fieldtype/export', state.queryForm, 'fieldtype.xlsx');
 };
 
 // 删除操作
-const handleDelete = (row: any) => {
-	if (!row) {
-		selectObjs.value.forEach((val: any) => {
-			handleDelete(val);
-		});
-		return;
-	}
-
+const handleDelete = (ids: string[]) => {
 	useMessageBox()
-		.confirm(t('common.delConfirmText') + row.id)
+		.confirm(t('common.delConfirmText'))
 		.then(() => {
-			delObj(row.id)
+			delObj(ids)
 				.then(() => {
 					getDataList();
 					useMessage().success(t('common.delSuccessText'));

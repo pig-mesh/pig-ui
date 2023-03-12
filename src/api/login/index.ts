@@ -107,7 +107,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 			if (expire) {
 				const expiredPeriod = expire - new Date().getTime();
 				//小于半小时自动续约
-				if (expiredPeriod <= 10 * 30 * 1000) {
+				if (expiredPeriod <= 30 * 60 * 1000) {
 					if (!refreshLock) {
 						refreshLock = true;
 						useUserInfo()

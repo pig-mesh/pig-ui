@@ -2,8 +2,8 @@
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto" shadow="hover">
 			<el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
-				<el-step title="基础信息" />
-				<el-step title="数据修改" />
+				<el-step title="基础信息" @click="go(0)" />
+				<el-step title="数据修改" @click="go(1)" />
 			</el-steps>
 		</el-card>
 
@@ -14,8 +14,8 @@
 			<edit-table ref="editTableRef" :tableName="tableName" :dsName="dsName" v-if="active === 1" />
 
 			<div style="text-align: center">
-				<el-button style="margin-top: 12px" @click="pre" v-if="active > 0">上一步</el-button>
-				<el-button style="margin-top: 12px" @click="next" v-if="active < 1">下一步</el-button>
+				<el-button style="margin-top: 12px" @click="go(1)" v-if="active === 0">下一步</el-button>
+				<el-button style="margin-top: 12px" @click="go(0)" v-if="active === 1">上一步</el-button>
 				<el-button style="margin-top: 12px" @click="preview" v-if="active === 1">保存并预览</el-button>
 				<el-button style="margin-top: 12px" @click="generatorHandle" v-if="active === 1">保存并生成</el-button>
 			</div>
@@ -40,48 +40,24 @@ const previewDialogRef = ref();
 const generatorRef = ref();
 
 const route = useRoute();
-const { t } = useI18n();
-
 const active = ref(0);
-
 const tableId = ref();
-const generatorType = ref();
-
-const next = async () => {
-	if (active.value === 0) {
-		try {
-			const dataform = await generatorRef.value.submitHandle();
-			tableId.value = dataform.id;
-			generatorType.value = dataform.generatorType;
-		} catch (e) {
-			return;
-		}
-	}
-	if (active.value === 1) {
-		try {
-			await editTableRef.value.submitHandle();
-		} catch (e) {
-			return;
-		}
-	}
-
-	if (active.value++ >= 2) {
-		active.value = 2;
-		return;
-	}
-};
-
-const pre = () => {
-	if (active.value-- <= 0) {
-		active.value = 0;
-		return;
-	}
-};
-
 const tableName = ref();
 const dsName = ref();
-
 const editTableRef = ref();
+const generatorType = ref();
+
+const go = async (activeNum) => {
+	if (active.value === activeNum) return;
+	active.value = activeNum;
+	if (activeNum === 0) {
+		await editTableRef.value.submitHandle();
+	} else if (activeNum === 1) {
+		const dataform = await generatorRef.value.submitHandle();
+		tableId.value = dataform.id;
+		generatorType.value = dataform.generatorType;
+	}
+};
 
 const preview = async () => {
 	await editTableRef.value.submitHandle();
@@ -93,14 +69,12 @@ const generatorHandle = async () => {
 	await editTableRef.value.submitHandle();
 	// 生成代码，zip压缩包
 	if (generatorType.value === 0) {
-		downBlobFile('/gen/generator/download?tableIds=' + [tableId.value].join(','), {}, `${tableName.value}.zip`);
+		downBlobFile(`/gen/generator/download?tableIds=${[tableId.value].join(',')}`, {}, `${tableName.value}.zip`);
 	}
 
 	// 写入到指定目录
 	if (generatorType.value === 1) {
-		useGeneratorCodeApi([tableId.value].join(',')).then(() => {
-			useMessage().success(t('common.optSuccessText'));
-		});
+		useGeneratorCodeApi([tableId.value].join(','));
 	}
 };
 
@@ -109,6 +83,7 @@ onMounted(() => {
 	dsName.value = route.query.dsName;
 });
 </script>
+
 <style scoped>
 .layout-padding {
 	height: auto !important;

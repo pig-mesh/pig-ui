@@ -26,15 +26,24 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
 	return request({
-		url: '/gen/fieldtype/' + id,
+		url: '/gen/fieldtype/details/' + id,
 		method: 'get',
 	});
 }
 
-export function delObj(id?: string) {
+export function getObjDetails(obj?: object) {
 	return request({
-		url: '/gen/fieldtype/' + id,
+		url: '/gen/fieldtype/details',
+		method: 'get',
+		params: obj,
+	});
+}
+
+export function delObj(ids?: object) {
+	return request({
+		url: '/gen/fieldtype',
 		method: 'delete',
+		data: ids,
 	});
 }
 
@@ -43,5 +52,20 @@ export function putObj(obj?: Object) {
 		url: '/gen/fieldtype',
 		method: 'put',
 		data: obj,
+	});
+}
+
+export function validateColumnType(rule: any, value: any, callback: any, isEdit: boolean) {
+	if (isEdit) {
+		return callback();
+	}
+
+	getObjDetails({ columnType: value }).then((response) => {
+		const result = response.data;
+		if (result !== null) {
+			callback(new Error('类型已经存在'));
+		} else {
+			callback();
+		}
 	});
 }

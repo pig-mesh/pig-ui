@@ -3,9 +3,6 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="mb8" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-					<el-form-item :label="$t('group.id')" prop="id">
-						<el-input :placeholder="t('group.inputIdTip')" style="max-width: 180px" v-model="state.queryForm.id" />
-					</el-form-item>
 					<el-form-item :label="$t('group.groupName')" prop="groupName">
 						<el-input :placeholder="t('group.inputGroupNameTip')" style="max-width: 180px" v-model="state.queryForm.groupName" />
 					</el-form-item>
@@ -55,6 +52,7 @@
 				<el-table-column :label="t('group.index')" type="index" width="80" />
 				<el-table-column :label="t('group.groupName')" prop="groupName" show-overflow-tooltip />
 				<el-table-column :label="t('group.groupDesc')" prop="groupDesc" show-overflow-tooltip />
+				<el-table-column :label="t('group.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
 						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_group_edit'"
@@ -95,6 +93,7 @@ const multiple = ref(true);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
+	descs: ['create_time'],
 });
 
 //  table hook

@@ -6,6 +6,7 @@ export default {
 		templateName: 'templateName',
 		generatorPath: 'generatorPath',
 		desc: 'templateDesc',
+		createTime: 'createTime',
 		inputIdTip: 'input id',
 		inputTemplateNameTip: 'input templateName',
 		inputGeneratorPathTip: 'input generatorPath',

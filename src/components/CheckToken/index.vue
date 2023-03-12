@@ -14,6 +14,6 @@ onMounted(() => {
 const refreshToken = () => {
 	refreshTime.value = setInterval(() => {
 		checkToken(refreshTime.value, refreshLock.value);
-	}, 30000);
+	}, 60000);
 };
 </script>

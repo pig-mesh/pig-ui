@@ -3,9 +3,6 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="mb8" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-					<el-form-item :label="$t('template.id')" prop="id">
-						<el-input :placeholder="t('template.inputIdTip')" style="max-width: 180px" v-model="state.queryForm.id" />
-					</el-form-item>
 					<el-form-item :label="$t('template.templateName')" prop="templateName">
 						<el-input :placeholder="t('template.inputTemplateNameTip')" style="max-width: 180px" v-model="state.queryForm.templateName" />
 					</el-form-item>
@@ -42,6 +39,7 @@
 				<el-table-column :label="t('template.templateName')" prop="templateName" show-overflow-tooltip />
 				<el-table-column :label="t('template.generatorPath')" prop="generatorPath" show-overflow-tooltip />
 				<el-table-column :label="t('template.desc')" prop="templateDesc" show-overflow-tooltip />
+				<el-table-column :label="t('template.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
 						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_template_edit'"
@@ -84,6 +82,7 @@ const multiple = ref(true);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
+	descs: ['create_time'],
 });
 
 //  table hook

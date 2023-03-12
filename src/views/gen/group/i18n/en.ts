@@ -6,6 +6,7 @@ export default {
 		groupName: 'groupName',
 		groupDesc: 'groupDesc',
 		inputIdTip: 'input id',
+		createTime: 'createTime',
 		inputGroupNameTip: 'input groupName',
 		inputGroupDescTip: 'input groupDesc',
 		templateType: 'template Type',
