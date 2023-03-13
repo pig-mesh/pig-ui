@@ -151,7 +151,7 @@ const dataRules = ref({
 		{ required: true, message: '姓名不能为空', trigger: 'blur' },
 		{ validator: rule.chinese, trigger: 'blur' },
 	],
-	deptId: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
+	dept: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
 	role: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
 	post: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
 	// 手机号校验，不能为空、新增的时不能重复校验
@@ -193,52 +193,46 @@ const openDialog = async (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	if (dataForm.userId) {
+		// 清除*占位符，避免误提交错误的数据
+		if (dataForm.phone && dataForm.phone.includes('*')) {
+			dataForm.phone = undefined;
 		}
-		// 更新方法
-		if (dataForm.userId) {
-			if (dataForm.phone && dataForm.phone.indexOf('*') >= 0) {
-				dataForm.phone = undefined;
-			}
-			if (dataForm.password && dataForm.password.indexOf('******') >= 0) {
-				dataForm.password = undefined;
-			}
-			loading.value = true;
-			putObj(dataForm)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		} else {
-			// 新增方法
-			if (dataForm.phone && dataForm.phone.indexOf('*') > 0) {
-				dataForm.phone = undefined;
-			}
-			loading.value = true;
-			addObj(dataForm)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
+		if (dataForm.password && dataForm.password.includes('******')) {
+			dataForm.password = undefined;
 		}
-	});
+		loading.value = true;
+		putObj(dataForm)
+			.then(() => {
+				useMessage().success(t('common.editSuccessText'));
+				visible.value = false; // 关闭弹窗
+				emit('refresh');
+			})
+			.catch((err) => {
+				useMessage().error(err.msg);
+			})
+			.finally(() => {
+				loading.value = false;
+			});
+	} else {
+		loading.value = true;
+		addObj(dataForm)
+			.then(() => {
+				useMessage().success(t('common.addSuccessText'));
+				visible.value = false; // 关闭弹窗
+				emit('refresh');
+			})
+			.catch((err) => {
+				useMessage().error(err.msg);
+			})
+			.finally(() => {
+				loading.value = false;
+			});
+	}
 };
 
 // 初始化部门数据

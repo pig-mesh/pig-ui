@@ -69,9 +69,6 @@ const getDeptTree = () => {
 			result
 				.then((r: any) => {
 					state.List = r.data;
-					if (r.data.length > 0) {
-						handleNodeClick(r.data[0]);
-					}
 				})
 				.catch((err) => {
 					useMessage().error(err.msg);

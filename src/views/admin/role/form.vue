@@ -164,41 +164,24 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
+const onSubmit = async () => {
 	if (form.dsType === 1) {
 		form.dsScope = deptTreeRef.value.getCheckedKeys().join(',');
 	} else {
 		form.dsScope = '';
 	}
 
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-		// 更新
-		if (form.roleId) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+	try {
+		form.roleId ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.roleId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 初始化角色数据

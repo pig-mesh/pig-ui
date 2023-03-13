@@ -155,6 +155,7 @@ const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = use
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
+	state.queryForm.deptId = '';
 	getDataList();
 };
 
