@@ -23,7 +23,7 @@ export const save = (data: Object) => {
 	});
 };
 
-export const update = (data: Object) => {
+export const putObj = (data: Object) => {
 	return request({
 		url: '/admin/menu',
 		method: 'put',

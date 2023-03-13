@@ -31,7 +31,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel">{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
 					<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
@@ -45,7 +45,6 @@ import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
-
 // 定义变量内容
 const deptDialogFormRef = ref();
 const dataForm = reactive({
@@ -65,6 +64,14 @@ const dataRules = ref({
 
 // 打开弹窗
 const openDialog = (type: string, id: string) => {
+	visible.value = true;
+	dataForm.deptId = '';
+
+	nextTick(() => {
+		deptDialogFormRef.value?.resetFields();
+		dataForm.parentId = id;
+	});
+
 	if (type === 'edit') {
 		getObj(id)
 			.then((res) => {
@@ -73,24 +80,11 @@ const openDialog = (type: string, id: string) => {
 			.catch((err) => {
 				useMessage().error(err.msg);
 			});
-	} else {
-		// 清空表单，此项需加表单验证才能使用
-		nextTick(() => {
-			deptDialogFormRef?.value?.resetFields();
-			dataForm.parentId = id;
-		});
 	}
-	visible.value = true;
+
 	getDeptData();
 };
-// 关闭弹窗
-const closeDialog = () => {
-	visible.value = false;
-};
-// 取消
-const onCancel = () => {
-	closeDialog();
-};
+
 // 提交
 const onSubmit = () => {
 	deptDialogFormRef.value.validate((valid: boolean) => {
@@ -100,7 +94,7 @@ const onSubmit = () => {
 		if (dataForm.deptId) {
 			putObj(dataForm)
 				.then(() => {
-					closeDialog(); // 关闭弹窗
+					visible.value = false; // 关闭弹窗
 					emit('refresh');
 				})
 				.catch((err) => {
@@ -109,7 +103,7 @@ const onSubmit = () => {
 		} else {
 			addObj(dataForm)
 				.then(() => {
-					closeDialog(); // 关闭弹窗
+					visible.value = false; // 关闭弹窗
 					emit('refresh');
 				})
 				.catch((err) => {

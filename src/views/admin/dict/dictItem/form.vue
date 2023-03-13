@@ -37,7 +37,7 @@
 			</el-form>
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel">{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
 					<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
@@ -46,11 +46,13 @@
 </template>
 
 <script setup lang="ts" name="dict-item-form">
+import { useI18n } from 'vue-i18n';
 import { getItemObj, addItemObj, putItemObj, validateDictItemLabel } from '/@/api/admin/dict';
 import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+const { t } = useI18n();
 
 // 定义变量内容
 const dicDialogFormRef = ref();
@@ -85,59 +87,38 @@ const dataRules = reactive({
 
 // 打开弹窗
 const openDialog = (row: any, dictForm: any) => {
+	visible.value = true;
 	dataForm.id = '';
-	if (dictForm) {
-		dataForm.dictId = dictForm.dictId;
-		dataForm.dictType = dictForm.dictType;
-	}
+
+	nextTick(() => {
+		dicDialogFormRef.value?.resetFields();
+	});
+
 	if (row?.id) {
 		getItemObj(row.id).then((res) => {
 			Object.assign(dataForm, res.data);
 		});
-	} else {
-		// 清空表单，此项需加表单验证才能使用
-		nextTick(() => {
-			dicDialogFormRef?.value?.resetFields();
-		});
+	} else if (dictForm) {
+		dataForm.dictId = dictForm.dictId;
+		dataForm.dictType = dictForm.dictType;
 	}
-	visible.value = true;
 };
 
-// 关闭弹窗
-const closeDialog = () => {
-	visible.value = false;
-};
-// 取消
-const onCancel = () => {
-	closeDialog();
-};
 // 提交
-const onSubmit = () => {
-	dicDialogFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		if (dataForm.id) {
-			putItemObj(dataForm)
-				.then(() => {
-					closeDialog(); // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addItemObj(dataForm)
-				.then(() => {
-					closeDialog(); // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+const onSubmit = async () => {
+	const valid = await dicDialogFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		dataForm.id ? await putItemObj(dataForm) : await addItemObj(dataForm);
+		useMessage().success(t(dataForm.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
+
 // 暴露变量
 defineExpose({
 	openDialog,

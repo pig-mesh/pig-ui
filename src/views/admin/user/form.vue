@@ -175,9 +175,9 @@ const openDialog = async (id: string) => {
 	dataForm.userId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 修改获取用户信息
 	if (id) {

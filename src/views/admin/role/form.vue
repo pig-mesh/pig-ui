@@ -149,10 +149,9 @@ const openDialog = (id: string) => {
 	visible.value = true;
 	form.roleId = '';
 
-	// 重置表单数据
-	if (dataFormRef.value) {
+	nextTick(() => {
 		dataFormRef.value.resetFields();
-	}
+	});
 
 	// 获取角色信息
 	if (id) {

@@ -84,13 +84,12 @@ const showSearch = ref(true);
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
+//  table hook
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],
 });
-
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
 
 // 清空搜索条件

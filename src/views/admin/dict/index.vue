@@ -46,7 +46,7 @@
 				<el-table-column :label="$t('sysdict.index')" type="index" width="80" />
 				<el-table-column :label="$t('sysdict.dictType')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-button @click="showDictITem(scope.row)" text type="primary">{{ scope.row.dictType }} </el-button>
+						<el-button @click="dictItemDialogRef.open(scope.row)" text type="primary">{{ scope.row.dictType }} </el-button>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysdict.description')" prop="description" show-overflow-tooltip sortable></el-table-column>
@@ -59,8 +59,8 @@
 				<el-table-column :label="$t('sysdict.createTime')" prop="createTime" show-overflow-tooltip sortable></el-table-column>
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button @click="showDictITem(scope.row)" text type="primary">{{ $t('sysdict.dictItem') }} </el-button>
-						<el-button @click="onOpenEditDic('edit', scope.row)" text type="primary">{{ $t('common.editBtn') }} </el-button>
+						<el-button @click="dictItemDialogRef.open(scope.row)" text type="primary">{{ $t('sysdict.dictItem') }} </el-button>
+						<el-button @click="dicDialogRef.openDialog(scope.row.id)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
 							<span style="margin-left: 12px">
 								<el-button :disabled="scope.row.systemFlag !== '0'" @click="handleDelete([scope.row.id])" text type="primary">
@@ -107,15 +107,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
-// 打开修改字典弹窗
-const onOpenEditDic = (type: string, row: any) => {
-	dicDialogRef.value.openDialog(type, row);
-};
-
-const showDictITem = (row: any) => {
-	dictItemDialogRef.value.open(row);
-};
-
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
@@ -139,6 +130,7 @@ const handleSelectionChange = (objs: any) => {
 	});
 	multiple.value = !objs.length;
 };
+
 //刷新缓存
 const handleRefreshCache = () => {
 	refreshCache().then(() => {

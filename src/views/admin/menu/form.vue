@@ -3,7 +3,7 @@
 		<el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysmenu.menuType')" prop="menType">
+					<el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
 						<el-radio-group v-model="state.ruleForm.menuType">
 							<el-radio-button label="0">菜单</el-radio-button>
 							<el-radio-button label="1">按钮</el-radio-button>
@@ -50,7 +50,7 @@
 						<IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && showembedded">
+				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && state.ruleForm.path.startsWith('http')">
 					<el-form-item :label="$t('sysmenu.embedded')" prop="embedded">
 						<el-radio-group v-model="state.ruleForm.embedded">
 							<el-radio-button label="0">否</el-radio-button>
@@ -86,17 +86,19 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import { info, pageList, update, addObj } from '/@/api/admin/menu';
+import { useI18n } from 'vue-i18n';
+import { info, pageList, putObj, addObj } from '/@/api/admin/menu';
 import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+const { t } = useI18n();
 // 引入组件
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
+// 定义变量内容
 const visible = ref(false);
 const loading = ref(false);
-// 定义变量内容
 const menuDialogFormRef = ref();
 // 定义需要的数据
 const state = reactive({
@@ -116,27 +118,54 @@ const state = reactive({
 	parentData: [] as any[], // 上级菜单数据
 });
 
-// 从后端获取菜单信息
-const getMenuData = () => {
+// 表单校验规则
+const dataRules = reactive({
+	menType: [{ required: true, message: '菜单类型不能为空', trigger: 'blur' }],
+	parentId: [{ required: true, message: '上级菜单不能为空', trigger: 'blur' }],
+	name: [{ required: true, message: '菜单不能为空', trigger: 'blur' }],
+	path: [{ required: true, message: '路径不能为空', trigger: 'blur' }],
+	icon: [{ required: true, message: '图标不能为空', trigger: 'blur' }],
+	permission: [{ required: true, message: '权限代码不能为空', trigger: 'blur' }],
+	sortOrder: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
+});
+
+// 打开弹窗
+const openDialog = (type: string, row?: any) => {
+	state.ruleForm.menuId = '';
+	visible.value = true;
+
+	nextTick(() => {
+		menuDialogFormRef.value?.resetFields();
+		state.ruleForm.parentId = row?.id || '-1';
+	});
+
+	if (row?.id && type === 'edit') {
+		state.ruleForm.menuId = row.id;
+		// 获取当前节点菜单信息
+		getMenuDetail(row.id);
+	}
+	// 渲染上级菜单列表树
+	getAllMenuData();
+};
+
+// 获取菜单节点的详细信息
+const getMenuDetail = (id: string) => {
+	info(id)
+		.then((res) => {
+			Object.assign(state.ruleForm, res.data);
+		})
+		.finally(() => {
+			loading.value = false;
+		});
+};
+
+// 从后端获取菜单信息（含层级）
+const getAllMenuData = () => {
 	state.parentData = [];
 	pageList({
 		type: '0',
 	}).then((res) => {
 		let menu = {
-			createBy: '',
-			createTime: '',
-			delFlag: '',
-			icon: '',
-			keepAlive: '',
-			menuId: '',
-			menuType: '',
-			parentId: '',
-			path: '',
-			embedded: '0',
-			sortOrder: 0,
-			updateBy: '',
-			updateTime: '',
-			visible: '1',
 			id: '-1',
 			name: '根菜单',
 			children: [],
@@ -146,81 +175,18 @@ const getMenuData = () => {
 	});
 };
 
-const showembedded = ref(false);
-
-watch(
-	() => state.ruleForm.path,
-	(val) => {
-		if (val.startsWith('http')) {
-			showembedded.value = true;
-		} else {
-			showembedded.value = false;
-			state.ruleForm.embedded = '0';
-		}
-	}
-);
-
-const dataRules = reactive({
-	menType: [{ required: true, message: '菜单类型不能为空', trigger: 'blur' }],
-	parentId: [{ required: true, message: '上级菜单不能为空', trigger: 'blur' }],
-	name: [{ required: true, message: '菜单不能为空', trigger: 'blur' }],
-	path: [{ required: true, message: '路径不能为空', trigger: 'blur' }],
-	permission: [{ required: true, message: '权限代码不能为空', trigger: 'blur' }],
-	sortOrder: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
-});
-// 打开弹窗
-const openDialog = (type: string, row?: any) => {
-	if (row?.id && type === 'edit') {
-		state.ruleForm.menuId = row.id;
-		// 模拟数据，实际请走接口
-		loading.value = true;
-		info(row.id)
-			.then((res) => {
-				Object.assign(state.ruleForm, res.data);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	} else {
-		// 清空表单，此项需加表单验证才能使用
-		nextTick(() => {
-			menuDialogFormRef?.value?.resetFields();
-			state.ruleForm.parentId = row?.id || '-1';
-		});
-	}
-	visible.value = true;
-	getMenuData();
-};
-
 // 保存数据
-const onSubmit = () => {
-	// 保存 调用刷新
-	if (state.ruleForm.menuId) {
-		loading.value = true;
-		update(state.ruleForm)
-			.then(() => {
-				visible.value = false;
-				emit('refresh');
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	} else {
-		loading.value = true;
-		addObj(state.ruleForm)
-			.then(() => {
-				visible.value = false;
-				emit('refresh');
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
+const onSubmit = async () => {
+	const valid = await menuDialogFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		state.ruleForm.menuId ? await putObj(state.ruleForm) : await addObj(state.ruleForm);
+		useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
 	}
 };
 

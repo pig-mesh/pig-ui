@@ -67,6 +67,7 @@ const handleDelete = (row: any) => {
 				});
 		});
 };
+
 const open = (row: any) => {
 	state.queryForm.dictId = row.id;
 	state.queryForm.dictType = row.dictType;

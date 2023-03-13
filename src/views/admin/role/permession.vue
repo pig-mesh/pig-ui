@@ -17,7 +17,7 @@
 
 			<template #footer>
 				<span class="dialog-footer">
-					<el-button @click="onCancel">取 消</el-button>
+					<el-button @click="state.dialog.isShowDialog = false">取 消</el-button>
 					<el-button type="primary" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
 				</span>
 			</template>
@@ -76,14 +76,7 @@ const openDialog = (row: any) => {
 	state.dialog.isShowDialog = true;
 };
 
-// 关闭弹窗
-const closeDialog = () => {
-	state.dialog.isShowDialog = false;
-};
-// 取消
-const onCancel = () => {
-	closeDialog();
-};
+// 提交授权数据
 const onSubmit = () => {
 	const menuIds = menuTree.value.getCheckedKeys().join(',').concat(',').concat(menuTree.value.getHalfCheckedKeys().join(','));
 	loading.value = true;
@@ -97,6 +90,7 @@ const onSubmit = () => {
 		});
 };
 
+// 遍历节点
 const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[]) => {
 	for (let i = 0; i < json.length; i++) {
 		const item = json[i];
