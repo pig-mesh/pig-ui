@@ -3,20 +3,26 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<v-form-designer ref="vfDesignerRef" :banned-widgets="bannedWidgets" :designer-config="designerConfig">
 				<template #customToolButtons>
-					<el-button link type="primary" @click="exportJsonConfig"> 导出 </el-button>
+					<el-button link type="primary" @click="saveJsonConfig">保存</el-button>
+					<el-button link type="primary" @click="exportJsonConfig">导出</el-button>
+					<el-button link type="primary" @click="formDialogRef.openDialog(dsName, tableName)">历史</el-button>
 				</template>
 			</v-form-designer>
 		</div>
+		<form-dialog ref="formDialogRef" @refresh="handleRefresh" />
 	</div>
 </template>
 
 <script lang="ts" setup>
-import { useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
+import { fetchFormById, useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
 import { handleBlobFile } from '/@/utils/other';
+const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
 const route = useRoute();
 
 const vfDesignerRef = ref();
+
+const formDialogRef = ref();
 
 const bannedWidgets = reactive(['tab', 'card', 'table', 'cascader']);
 
@@ -46,7 +52,7 @@ const designerConfig = reactive({
 	importJsonButton: false,
 
 	//是否显示导出JSON器按钮
-	exportJsonButton: true,
+	exportJsonButton: false,
 
 	//是否显示导出代码按钮
 	exportCodeButton: true,
@@ -59,14 +65,37 @@ onMounted(() => {
 	importJsonConfig();
 });
 
+const tableName = ref();
+const dsName = ref();
 // 根据当前表，获取json配置信息
 const importJsonConfig = () => {
+	tableName.value = route.query.tableName;
+	dsName.value = route.query.dsName;
+
+	if (tableName.value && tableName.value) {
+		useGeneratorVFormApi(dsName.value, tableName.value).then((res) => {
+			vfDesignerRef.value.loadJson(res);
+		});
+	}
+};
+
+const handleRefresh = (id: string) => {
+	fetchFormById(id).then((res) => {
+		vfDesignerRef.value.loadJson(JSON.parse(res.data.formInfo));
+	});
+};
+
+const saveJsonConfig = () => {
 	const tableName = route.query.tableName;
 	const dsName = route.query.dsName;
 
 	if (tableName && dsName) {
-		useGeneratorVFormApi(dsName, tableName).then((res) => {
-			vfDesignerRef.value.loadJson(res);
+		// 先保存表单
+		const formJson = vfDesignerRef.value.getFormJson();
+		useFormConfSaveApi({
+			dsName: dsName,
+			tableName: tableName,
+			formInfo: JSON.stringify(formJson),
 		});
 	}
 };
@@ -78,14 +107,14 @@ const exportJsonConfig = async () => {
 	if (tableName && dsName) {
 		// 先保存表单
 		const formJson = vfDesignerRef.value.getFormJson();
-		await useFormConfSaveApi({
+		const result = await useFormConfSaveApi({
 			dsName: dsName,
 			tableName: tableName,
 			formInfo: JSON.stringify(formJson),
 		});
 
 		//执行 sfc代码生成
-		const res = await useGeneratorVFormSfcApi(dsName, tableName);
+		const res = await useGeneratorVFormSfcApi(result.data.id);
 		handleBlobFile(res, 'form.vue');
 	}
 };

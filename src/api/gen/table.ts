@@ -66,11 +66,11 @@ export const useGeneratorVFormApi = (dsName: any, tableName: any) => {
 	});
 };
 
-export const useGeneratorVFormSfcApi = (dsName: any, tableName: any) => {
+export const useGeneratorVFormSfcApi = (id:string) => {
 	return request({
 		url: '/gen/generator/vform/sfc',
 		method: 'get',
-		params: { dsName: dsName, tableName: tableName },
+		params: { formId: id },
 	});
 };
 
@@ -94,5 +94,27 @@ export function useFormConfSaveApi(obj?: Object) {
 		url: '/gen/form',
 		method: 'post',
 		data: obj,
+	});
+}
+
+export function fetchFormList(query?: Object) {
+	return request({
+		url: '/gen/form/page',
+		method: 'get',
+		params: query,
+	});
+}
+
+export function fetchFormById(id?: string) {
+	return request({
+		url: '/gen/form/' + id,
+		method: 'get',
+	});
+}
+
+export function delFormObj(id?: string) {
+	return request({
+		url: '/gen/form/' + id,
+		method: 'delete',
 	});
 }
