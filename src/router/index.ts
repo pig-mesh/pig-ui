@@ -54,7 +54,7 @@ export function formatFlatteningRoutes(arr: any) {
  * @description isKeepAlive 处理 `name` 值，进行缓存。顶级关闭，全部不缓存
  * @link 参考：https://v3.cn.vuejs.org/api/built-in-components.html#keep-alive
  * @param arr 处理后的一维路由菜单数组
- * @returns 返回将一维数组重新处理成 `定义动态路由（dynamicRoutes）` 的格式
+ * @returns 返回将一维数组重新处理成 `定义动态路由（baseRoutes）` 的格式
  */
 export function formatTwoStageRoutes(arr: any) {
 	if (arr.length <= 0) return false;
@@ -85,7 +85,7 @@ export function formatTwoStageRoutes(arr: any) {
 // 路由加载前
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
-	if (to.meta.title) NProgress.start();
+	if (to.name) NProgress.start();
 	const token = Session.getToken();
 	if (to.meta.isAuth !== undefined && !to.meta.isAuth) {
 		next();

@@ -34,7 +34,7 @@ const onGotoFullPage = () => {
 watch(
 	() => route.path,
 	() => {
-		state.title = <string>route.meta.title;
+		state.title = <string>route.name;
 		state.isLink = <string>route.meta.isLink;
 	},
 	{

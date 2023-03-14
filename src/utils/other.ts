@@ -40,9 +40,9 @@ export function useTitle() {
 	nextTick(() => {
 		let webTitle = '';
 		let globalTitle: string = themeConfig.value.globalTitle;
-		const { path, meta } = router.currentRoute.value;
+		const { path, name } = router.currentRoute.value;
 		if (path === '/login') {
-			webTitle = <string>meta.title;
+			webTitle = <string>name;
 		} else {
 			webTitle = setTagsViewNameI18n(router.currentRoute.value);
 		}
@@ -71,7 +71,7 @@ export function setTagsViewNameI18n(item: any) {
 		}
 	} else {
 		// 非自定义 tagsView 名称
-		tagsViewName = i18n.global.t(meta.title);
+		tagsViewName = i18n.global.t(item.name);
 	}
 	return tagsViewName;
 }

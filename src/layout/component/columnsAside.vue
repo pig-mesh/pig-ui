@@ -13,15 +13,15 @@
 						}
 					"
 					:class="{ 'layout-columns-active': state.liIndex === k, 'layout-columns-hover': state.liHoverIndex === k }"
-					:title="$t(v.meta.title)"
+					:title="$t(v.name)"
 				>
 					<div :class="themeConfig.columnsAsideLayout" v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)">
 						<SvgIcon :name="v.meta.icon" />
 						<div class="columns-vertical-title font12">
 							{{
-								$t(v.meta.title) && $t(v.meta.title).length >= 4
-									? $t(v.meta.title).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
-									: $t(v.meta.title)
+								$t(v.name) && $t(v.name).length >= 4
+									? $t(v.name).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
+									: $t(v.name)
 							}}
 						</div>
 					</div>
@@ -30,9 +30,9 @@
 							<SvgIcon :name="v.meta.icon" />
 							<div class="columns-vertical-title font12">
 								{{
-									$t(v.meta.title) && $t(v.meta.title).length >= 4
-										? $t(v.meta.title).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
-										: $t(v.meta.title)
+									$t(v.name) && $t(v.name).length >= 4
+										? $t(v.name).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
+										: $t(v.name)
 								}}
 							</div>
 						</a>

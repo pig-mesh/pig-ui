@@ -39,7 +39,7 @@ export const Session = {
 ```javascript
 router.beforeEach(async (to, from, next) => {
 	NProgress.configure({ showSpinner: false });
-	if (to.meta.title) NProgress.start();
+	if (to.name) NProgress.start();
 	const token = Session.getToken();
 	if (to.path === '/login' && !token) {
 		next();
@@ -86,8 +86,8 @@ export async function initBackEndControlRoutes() {
 	if ((res.data || []).length <= 0) return Promise.resolve(true);
 	// 存储接口原始路由（未处理component），根据需求选择使用
 	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
-	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children = [...home, ...(await backEndComponent(res.data)), ...staticConfigRoutes];
+	// 处理路由（component），替换 baseRoutes（/@/router/route）第一个顶级 children 的路由
+	baseRoutes[0].children = [...home, ...(await backEndComponent(res.data)), ...dynamicRoutes];
 	// 添加动态路由
 	await setAddRoute();
 	// 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
@@ -98,7 +98,7 @@ export async function initBackEndControlRoutes() {
 1. 整体逻辑是校验 token 是否存储，
 2. 获取登录用户的信息 `await useUserInfo().setUserInfos()`
 3. 获取登录用户的菜单信息 `const res = await getBackEndControlRoutes()`
-4. 讲菜单信息动态添加到前端可以读取到的内容中，供左侧菜单使用 `dynamicRoutes[0].children = [...home,...await backEndComponent(res.data), ...staticConfigRoutes]` 这里我们将 `home` 放在菜单的第一个位置上
+4. 讲菜单信息动态添加到前端可以读取到的内容中，供左侧菜单使用 `baseRoutes[0].children = [...home,...await backEndComponent(res.data), ...dynamicRoutes]` 这里我们将 `home` 放在菜单的第一个位置上
 5. 根据菜单信息生成路由信息 `await setAddRoute();`
 6. 保存路信息到 pinia 中 `await setFilterMenuAndCacheTagsViewRoutes();`
 

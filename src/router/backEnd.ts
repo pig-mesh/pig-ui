@@ -4,7 +4,7 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { useRequestOldRoutes } from '/@/stores/requestOldRoutes';
 import { Session } from '/@/utils/storage';
 import { NextLoading } from '/@/utils/loading';
-import { dynamicRoutes, notFoundAndNoPower, staticConfigRoutes } from '/@/router/route';
+import { baseRoutes, notFoundAndNoPower, dynamicRoutes } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
@@ -46,8 +46,8 @@ export async function initBackEndControlRoutes() {
 	if ((res.data || []).length <= 0) return Promise.resolve(true);
 	// 存储接口原始路由（未处理component），根据需求选择使用
 	useRequestOldRoutes().setRequestOldRoutes(JSON.parse(JSON.stringify(res.data)));
-	// 处理路由（component），替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
-	dynamicRoutes[0].children = [...staticConfigRoutes, ...(await backEndComponent(res.data))];
+	// 处理路由（component），替换 baseRoutes（/@/router/route）第一个顶级 children 的路由
+	baseRoutes[0].children = [...dynamicRoutes, ...(await backEndComponent(res.data))];
 	// 添加动态路由
 	await setAddRoute();
 	// 设置路由到 pinia routesList 中（已处理成多级嵌套路由）及缓存多级嵌套数组处理后的一维数组
@@ -61,7 +61,7 @@ export async function initBackEndControlRoutes() {
  */
 export async function setFilterMenuAndCacheTagsViewRoutes() {
 	const storesRoutesList = useRoutesList(pinia);
-	storesRoutesList.setRoutesList(dynamicRoutes[0].children as any);
+	storesRoutesList.setRoutesList(baseRoutes[0].children as any);
 	setCacheTagsViewRoutes();
 }
 
@@ -71,16 +71,16 @@ export async function setFilterMenuAndCacheTagsViewRoutes() {
  */
 export function setCacheTagsViewRoutes() {
 	const storesTagsView = useTagsViewRoutes(pinia);
-	storesTagsView.setTagsViewRoutes(formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes))[0].children);
+	storesTagsView.setTagsViewRoutes(formatTwoStageRoutes(formatFlatteningRoutes(baseRoutes))[0].children);
 }
 
 /**
  * 处理路由格式及添加捕获所有路由或 404 Not found 路由
- * @description 替换 dynamicRoutes（/@/router/route）第一个顶级 children 的路由
+ * @description 替换 baseRoutes（/@/router/route）第一个顶级 children 的路由
  * @returns 返回替换后的路由数组
  */
 export function setFilterRouteEnd() {
-	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(dynamicRoutes));
+	let filterRouteEnd: any = formatTwoStageRoutes(formatFlatteningRoutes(baseRoutes));
 	// notFoundAndNoPower 防止 404、401 不在 layout 布局中，不设置的话，404、401 界面将全屏显示
 	// 关联问题 No match found for location with path 'xxx'
 	filterRouteEnd[0].children = [...filterRouteEnd[0].children, ...notFoundAndNoPower];
@@ -90,7 +90,7 @@ export function setFilterRouteEnd() {
 /**
  * 添加动态路由
  * @method router.addRoute
- * @description 此处循环为 dynamicRoutes（/@/router/route）第一个顶级 children 的路由一维数组，非多级嵌套
+ * @description 此处循环为 baseRoutes（/@/router/route）第一个顶级 children 的路由一维数组，非多级嵌套
  * @link 参考：https://next.router.vuejs.org/zh/api/#addroute
  */
 export async function setAddRoute() {

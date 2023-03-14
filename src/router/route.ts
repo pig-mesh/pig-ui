@@ -19,7 +19,6 @@ import { RouteRecordRaw } from 'vue-router';
 // 扩展 RouteMeta 接口
 declare module 'vue-router' {
 	interface RouteMeta {
-		title?: string;
 		isLink?: string;
 		isHide?: boolean;
 		isAuth?: boolean;
@@ -32,64 +31,15 @@ declare module 'vue-router' {
 }
 
 /**
- * 定义动态路由
- * 前端添加路由，请在顶级节点的 `children 数组` 里添加
- * @description 未开启 isRequestRoutes 为 true 时使用（前端控制路由），开启时第一个顶级 children 的路由将被替换成接口请求回来的路由数据
- * @description 各字段请查看 `/@/views/system/menu/component/addMenu.vue 下的 ruleForm`
- * @returns 返回路由菜单数据
+ * 定义静态路由（默认路由）
+ * 前端添加路由，请在此处加
  */
 export const dynamicRoutes: Array<RouteRecordRaw> = [
 	{
-		path: '/',
-		name: '/',
-		component: () => import('/@/layout/index.vue'),
-		redirect: '/home',
-		meta: {
-			title: 'hzxc',
-			isKeepAlive: true,
-		},
-		children: [],
-	},
-];
-
-/**
- * 定义404、401界面
- * @link 参考：https://next.router.vuejs.org/zh/guide/essentials/history-mode.html#netlify
- */
-export const notFoundAndNoPower = [
-	{
-		path: '/:path(.*)*',
-		name: 'notFound',
-		component: () => import('/@/views/error/404.vue'),
-		meta: {
-			title: 'staticRoutes.notFound',
-			isHide: true,
-		},
-	},
-	{
-		path: '/401',
-		name: 'noPower',
-		component: () => import('/@/views/error/401.vue'),
-		meta: {
-			title: 'staticRoutes.noPower',
-			isHide: true,
-		},
-	},
-];
-
-/**
- * 定义静态路由（默认路由）
- * 此路由不要动，前端添加路由的话，请在 `dynamicRoutes 数组` 中添加
- * @description 前端控制直接改 dynamicRoutes 中的路由，后端控制不需要修改，请求接口路由数据时，会覆盖 dynamicRoutes 第一个顶级 children 的内容（全屏，不包含 layout 中的路由出口）
- * @returns 返回路由菜单数据
- */
-export const staticConfigRoutes: Array<RouteRecordRaw> = [
-	{
 		path: '/home',
-		name: 'home',
+		name: 'router.home',
 		component: () => import('/@/views/home/index.vue'),
 		meta: {
-			title: 'router.home',
 			isLink: '',
 			isHide: false,
 			isKeepAlive: true,
@@ -100,10 +50,9 @@ export const staticConfigRoutes: Array<RouteRecordRaw> = [
 	},
 	{
 		path: '/personal',
-		name: 'personal',
+		name: 'router.personal',
 		component: () => import('/@/views/admin/user/personal.vue'),
 		meta: {
-			title: 'router.personal',
 			isHide: true,
 		},
 	},
@@ -111,9 +60,6 @@ export const staticConfigRoutes: Array<RouteRecordRaw> = [
 
 /**
  * 定义静态路由（默认路由）
- * 此路由不要动，前端添加路由的话，请在 `dynamicRoutes 数组` 中添加
- * @description 前端控制直接改 dynamicRoutes 中的路由，后端控制不需要修改，请求接口路由数据时，会覆盖 dynamicRoutes 第一个顶级 children 的内容（全屏，不包含 layout 中的路由出口）
- * @returns 返回路由菜单数据
  */
 export const staticRoutes: Array<RouteRecordRaw> = [
 	{
@@ -121,7 +67,6 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		name: 'login',
 		component: () => import('/@/views/login/index.vue'),
 		meta: {
-			title: '登录',
 			isAuth: false,
 		},
 	},
@@ -130,8 +75,47 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		name: 'authredirect',
 		component: () => import('/@/views/login/component/authredirect.vue'),
 		meta: {
-			title: '登录',
 			isAuth: false,
 		},
+	},
+];
+
+/**
+ * 定义404、401界面
+ */
+export const notFoundAndNoPower = [
+	{
+		path: '/:path(.*)*',
+		name: 'staticRoutes.notFound',
+		component: () => import('/@/views/error/404.vue'),
+		meta: {
+			isHide: true,
+		},
+	},
+	{
+		path: '/401',
+		name: 'staticRoutes.noPower',
+		component: () => import('/@/views/error/401.vue'),
+		meta: {
+			isHide: true,
+		},
+	},
+];
+
+/**
+ *  基础性路由
+ *
+ * 所有节点都是挂载此节点下
+ */
+export const baseRoutes: Array<RouteRecordRaw> = [
+	{
+		path: '/',
+		name: '/',
+		component: () => import('/@/layout/index.vue'),
+		redirect: '/home',
+		meta: {
+			isKeepAlive: true,
+		},
+		children: [],
 	},
 ];
