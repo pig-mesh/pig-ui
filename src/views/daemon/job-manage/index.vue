@@ -244,22 +244,21 @@ const handleRunJob = (row: any) => {
 // 删除操作
 const handleDelete = (row: any) => {
 	if (!row) {
-		selectObjs.value.forEach((val: any) => {
-			handleDelete(val);
-		});
+		selectObjs.value.forEach(handleDelete);
 		return;
 	}
+
+	const { jobId, jobName } = row;
 	useMessageBox()
-		.confirm(t('common.delConfirmText') + '(任务名称:' + row.jobName + ')')
-		.then(() => {
-			delObj(row.jobId)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
+		.confirm(`${t('common.delConfirmText')}(任务名称:${jobName})`)
+		.then(async () => {
+			try {
+				await delObj(jobId);
+				getDataList();
+				useMessage().success(t('common.delSuccessText'));
+			} catch (error: any) {
+				useMessage().error(error.msg);
+			}
 		});
 };
 </script>

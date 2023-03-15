@@ -108,9 +108,9 @@ const openDialog = (id: string) => {
 	form.orderId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 获取payTradeOrder信息
 	if (id) {
@@ -119,26 +119,33 @@ const openDialog = (id: string) => {
 	}
 };
 
-// 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		loading.value = true;
-		useRefundApi({ payOrderId: form.orderId, refundAmount: form.amount, remark: form.remark, channelId: form.channelId })
-			.then(() => {
-				useMessage().success(t('common.addSuccessText'));
-				visible.value = false; // 关闭弹窗
-				emit('refresh');
-			})
-			.catch((err: any) => {
-				useMessage().error(err.msg);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	});
+/**
+ * 提交表单数据并执行退款操作。
+ * @returns {Promise<void>} - 执行退款操作的 Promise 实例。
+ */
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		loading.value = true; // 显示加载状态
+
+		await useRefundApi({
+			// 执行退款操作
+			payOrderId: form.orderId,
+			refundAmount: form.amount,
+			remark: form.remark,
+			channelId: form.channelId,
+		});
+
+		useMessage().success(t('common.optSuccessText')); // 如果退款成功，则显示成功提示信息
+		visible.value = false; // 关闭弹窗
+		emit('refresh'); // 触发 refresh 事件
+	} catch (err: any) {
+		useMessage().error(err.msg); // 如果出现异常，则显示错误提示信息
+	} finally {
+		loading.value = false; // 结束加载状态
+	}
 };
 
 // 初始化表单数据

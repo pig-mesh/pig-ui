@@ -19,7 +19,7 @@
 						/>
 					</el-form-item>
 					<el-form-item>
-						<el-button @click="getDataList(true)" icon="Search" type="primary">{{ $t('common.queryBtn') }} </el-button>
+						<el-button @click="getDataList" icon="Search" type="primary">{{ $t('common.queryBtn') }} </el-button>
 						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
@@ -117,16 +117,8 @@ const { downBlobFile, getDataList, currentChangeHandle, sortChangeHandle, sizeCh
 
 // 清空搜索条件
 const resetQuery = () => {
-	queryRef.value.resetFields();
+	queryRef.value?.resetFields();
 	getDataList();
-};
-
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
-	multiple.value = !objs.length;
 };
 
 // 导出excel
@@ -134,20 +126,26 @@ const exportExcel = () => {
 	downBlobFile('/admin/log/export', state.queryForm, 'log.xlsx');
 };
 
-// 删除数据
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(`${t('common.delConfirmText')}?`)
-		.then(() => {
-			// 删除用户的接口
-			delObj(ids)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		});
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+	selectObjs.value.push(...objs.map((val: any) => val.id));
+	multiple.value = !objs.length;
+};
+
+// 删除操作
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

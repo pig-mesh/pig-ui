@@ -2,13 +2,11 @@
 	<div>
 		<template v-for="(item, index) in props.options">
 			<template v-if="values.includes(item.value)">
-				<span v-if="item.elTagType == 'default' || item.elTagType == ''" :key="item.value" :index="index" :class="item.elTagClass">{{
-					item.label
-				}}</span>
+				<span v-if="item.elTagType == 'default' || item.elTagType == ''" :key="index" :index="index" :class="item.elTagClass">{{ item.label }}</span>
 				<el-tag
 					v-else
 					:disable-transitions="true"
-					:key="item.value"
+					:key="index * 2"
 					:index="index"
 					:type="item.elTagType === 'primary' ? '' : item.elTagType"
 					:class="item.elTagClass"
@@ -25,7 +23,7 @@ import { computed } from 'vue';
 const props = defineProps({
 	// 数据
 	options: {
-		type: Array,
+		type: Array as any,
 		default: null,
 	},
 	// 当前的值

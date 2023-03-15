@@ -10,7 +10,7 @@
 			<el-descriptions-item :label="$t('syslog.requestUri')">{{ data.requestUri }}</el-descriptions-item>
 			<el-descriptions-item :label="$t('syslog.createBy')">{{ data.createBy }}</el-descriptions-item>
 			<el-descriptions-item :label="$t('syslog.exception')">
-				<highlightjs v-if="data.exception" autodetect :code="data.exception" />
+				<highlightjs ref="highlight" v-if="data.exception" autodetect :code="data.exception" />
 			</el-descriptions-item>
 		</el-descriptions>
 	</el-drawer>
@@ -20,6 +20,7 @@
 const visible = ref(false);
 
 const data = reactive({} as any);
+const highlight = ref();
 
 const openDialog = (row: any) => {
 	visible.value = true;

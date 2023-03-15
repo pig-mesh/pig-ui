@@ -55,9 +55,7 @@ const { getDataList, sortChangeHandle } = useTable(state);
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.leaveId);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.id));
 	multiple.value = !objs.length;
 };
 

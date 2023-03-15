@@ -3,7 +3,15 @@
 		<el-row :gutter="20">
 			<el-col :span="4" :xs="24">
 				<el-card class="layout-padding-auto" shadow="hover">
-					<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick" />
+					<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">
+						<!-- 没有数据权限提示 -->
+						<template #default="{ node, data }">
+							<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
+								<span>{{ node.label }} <SvgIcon name="ele-Lock" /></span>
+							</el-tooltip>
+							<span v-if="!data.isLock">{{ node.label }}</span>
+						</template>
+					</query-tree>
 				</el-card>
 			</el-col>
 			<el-col :span="20" :xs="24">
@@ -17,7 +25,7 @@
 								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable style="width: 240px" />
 							</el-form-item>
 							<el-form-item>
-								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }} </el-button>
+								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
 								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 							</el-form-item>
 						</el-form>
@@ -87,7 +95,7 @@
 						</el-table-column>
 					</el-table>
 
-					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle"> </pagination>
+					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle"></pagination>
 				</div>
 			</el-col>
 		</el-row>
@@ -139,6 +147,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	pageList: pageList,
 });
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
 
 // 部门树使用的数据
 const deptData = reactive({
@@ -149,12 +158,9 @@ const deptData = reactive({
 	},
 });
 
-//  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
-
 // 清空搜索条件
 const resetQuery = () => {
-	queryRef.value.resetFields();
+	queryRef.value?.resetFields();
 	state.queryForm.deptId = '';
 	getDataList();
 };
@@ -177,29 +183,24 @@ const handleSelectable = (row: any) => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.userId);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.userId));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(ids)
-				.then(() => {
-					getDataList(false);
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
-};
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
 
-onMounted(() => {
-	state.dataList;
-});
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
 </script>

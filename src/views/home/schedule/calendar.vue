@@ -13,7 +13,7 @@
 	<!-- 新增日程的表单 -->
 	<schedule-form ref="scheduleFormRef" @refresh="initscheduleList(formatDate(calendar, 'YYYY-mm'))" />
 	<!-- 日程查询 -->
-	<schedule ref="scheduleRef" />
+	<schedule ref="scheduleRef" @refresh="initscheduleList(formatDate(calendar, 'YYYY-mm'))" />
 </template>
 
 <script setup lang="ts" name="SysScheduleCalendar">

@@ -159,7 +159,10 @@ const initSetTime = () => {
 		initTime();
 	}, 1000);
 };
-// 锁屏时间定时器
+
+/**
+ * 初始化锁屏相关信息
+ */
 const initLockScreen = () => {
 	if (themeConfig.value.isLockScreen) {
 		state.isShowLockScreenIntervalTime = window.setInterval(() => {
@@ -174,6 +177,7 @@ const initLockScreen = () => {
 		clearInterval(state.isShowLockScreenIntervalTime);
 	}
 };
+
 // 存储布局配置
 const setLocalThemeConfig = () => {
 	themeConfig.value.isDrawer = false;
@@ -181,17 +185,22 @@ const setLocalThemeConfig = () => {
 };
 const mes = ref();
 
-// 密码输入点击事件
-const onLockScreenSubmit = () => {
-	checkPassword(state.lockScreenPassword)
-		.then(() => {
-			themeConfig.value.isLockScreen = false;
-			themeConfig.value.lockScreenTime = 30;
-			setLocalThemeConfig();
-		})
-		.catch((err) => {
-			mes.value = err.msg;
-		});
+/**
+ * 处理密码输入事件，验证密码正确性并解锁
+ */
+const onLockScreenSubmit = async () => {
+	try {
+		// 调用checkPassword方法验证密码
+		await checkPassword(state.lockScreenPassword);
+		// 更新全局主题配置中的isLockScreen和lockScreenTime属性
+		themeConfig.value.isLockScreen = false;
+		themeConfig.value.lockScreenTime = 30;
+		// 将最新的主题配置保存到本地存储中
+		setLocalThemeConfig();
+	} catch (err: any) {
+		// 捕获异常并将错误提示信息赋值给mes变量
+		mes.value = err.msg;
+	}
 };
 
 const formData = reactive({});

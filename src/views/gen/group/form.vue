@@ -60,27 +60,22 @@ const dataRules = ref({
 	templateId: [{ required: true, message: '模板不能为空', trigger: 'blur' }],
 });
 
-// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
+	nextTick(() => {
 		dataFormRef.value.resetFields();
-	}
+	});
 
-	// 修改获取用户信息
+	// 如果有 id 参数，获取 genGroup 信息
 	if (id) {
 		form.id = id;
 		getgenGroupData(id);
 	}
 
-	// 获取genGroup信息
-	if (id) {
-		form.id = id;
-		getgenGroupData(id);
-	}
+	// 获取模板信息
 	getTemplateData();
 };
 

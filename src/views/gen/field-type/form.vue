@@ -74,9 +74,9 @@ const openDialog = (id: string) => {
 	visible.value = true;
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 如果有id参数，表示是编辑操作，需要设置form.id和获取FieldType信息
 	if (id) {

@@ -30,6 +30,7 @@ import { pageList } from '/@/api/app/appmenu';
 import { useMessage } from '/@/hooks/message';
 import { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import other from '/@/utils/other';
 
 const { t } = useI18n();
 
@@ -65,7 +66,7 @@ const openDialog = (row: any) => {
 		})
 		.then((r) => {
 			state.treeData = r.data;
-			state.checkedKeys = resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
+			state.checkedKeys = other.resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
 		});
 	state.dialog.isShowDialog = true;
 };
@@ -74,31 +75,18 @@ const openDialog = (row: any) => {
 const closeDialog = () => {
 	state.dialog.isShowDialog = false;
 };
+
 // 取消
 const onCancel = () => {
 	closeDialog();
 };
+
 const onSubmit = () => {
 	const menuIds = menuTree.value.getCheckedKeys().join(',').concat(',').concat(menuTree.value.getHalfCheckedKeys().join(','));
 	permissionUpd(state.roleId, menuIds).then(() => {
 		state.dialog.isShowDialog = false;
 		useMessage().success(t('common.editSuccessText'));
 	});
-};
-
-const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[]) => {
-	for (let i = 0; i < json.length; i++) {
-		const item = json[i];
-		// 国际化
-		item.name = t(item.name);
-		// 存在子节点，递归遍历;不存在子节点，将json的id添加到临时数组中
-		if (item.children && item.children.length !== 0) {
-			resolveAllEunuchNodeId(item.children, idArr, temp);
-		} else {
-			temp.push(idArr.filter((id) => id === item.id));
-		}
-	}
-	return temp;
 };
 
 // 暴露变量

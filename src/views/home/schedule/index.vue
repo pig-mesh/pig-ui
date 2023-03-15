@@ -1,5 +1,5 @@
 <template>
-	<el-drawer v-model="visible" title="日程管理" size="80%">
+	<el-drawer v-model="visible" title="日程管理" size="80%" @close="handleClose">
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row v-show="showSearch" class="mb8">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
@@ -30,15 +30,7 @@
 					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel">
 						{{ $t('common.exportBtn') }}
 					</el-button>
-					<el-button
-						formDialogRef
-						:disabled="multiple"
-						icon="Delete"
-						type="primary"
-						class="ml10"
-						v-auth="'admin_schedule_del'"
-						@click="handleDelete(selectObjs)"
-					>
+					<el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(selectObjs)">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
@@ -96,7 +88,7 @@ import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import DictTag from '/@/components/DictTag/index.vue';
 const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_status');
-
+const emit = defineEmits(['refresh']);
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
@@ -111,19 +103,20 @@ const showSearch = ref(true);
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
+//  table hook
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	createdIsNeed: false,
 	pageList: fetchList,
 });
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {
 	// 清空搜索条件
-	queryRef.value.resetFields();
+	queryRef.value?.resetFields();
+	state.queryForm.date = '';
 	// 清空多选
 	selectObjs.value = [];
 	getDataList();
@@ -136,26 +129,30 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.id));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObjs(ids)
-				.then(() => {
-					getDataList(false);
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObjs(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
+
+//关闭日程刷新首页日程数据
+const handleClose = () => {
+	emit('refresh');
 };
 
 const open = (row: any) => {

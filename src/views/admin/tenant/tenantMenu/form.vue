@@ -47,6 +47,7 @@ import { useMessage } from '/@/hooks/message';
 import { getObj } from '/@/api/admin/tenant-menu';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
+import other from '/@/utils/other';
 const { status_type } = useDict('status_type');
 const { t } = useI18n();
 
@@ -93,56 +94,36 @@ const checkedMenu = ref<any[]>([]);
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
+	checkedMenu.value = [];
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
-	checkedMenu.value = [];
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
+
 	// 获取Tenant信息
 	if (id) {
 		form.id = id;
 		getTenantMenuData(id);
 	}
+
 	getMenuData();
 };
 
 const loading = ref(false);
 
-const onSubmit = () => {
-	loading.value = true;
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			loading.value = false;
-			return false;
-		}
-		form.menuIds = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()].join(',');
-		if (form.id) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					loading.value = false;
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-					loading.value = false;
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					loading.value = false;
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-					loading.value = false;
-				});
-		}
-	});
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 const treeLoading = ref(false);
@@ -151,26 +132,12 @@ const getMenuData = () => {
 	treemenu().then((res) => {
 		menuData.value = res.data;
 		if (form.menuIds) {
-			checkedMenu.value = resolveAllEunuchNodeId(menuData.value, form.menuIds.split(','), []);
+			checkedMenu.value = other.resolveAllEunuchNodeId(menuData.value, form.menuIds.split(','), []);
 		} else {
 			checkedMenu.value = [];
 		}
 		treeLoading.value = false;
 	});
-};
-const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[]) => {
-	for (let i = 0; i < json.length; i++) {
-		const item = json[i];
-		// 国际化
-		item.name = t(item.name);
-		// 存在子节点，递归遍历;不存在子节点，将json的id添加到临时数组中
-		if (item.children && item.children.length !== 0) {
-			resolveAllEunuchNodeId(item.children, idArr, temp);
-		} else {
-			temp.push(idArr.filter((id) => id === item.id));
-		}
-	}
-	return temp;
 };
 
 const getTenantMenuData = (id: string) => {

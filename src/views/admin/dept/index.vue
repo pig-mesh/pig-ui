@@ -35,9 +35,13 @@
 				<el-table-column prop="createTime" :label="$t('sysdept.createTime')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button text type="primary" @click="onOpenAddDept('add', scope.row)" v-auth="'sys_dept_add'"> {{ $t('common.addBtn') }}</el-button>
-						<el-button text type="primary" @click="onOpenEditDept('edit', scope.row)" v-auth="'sys_dept_edit'">{{ $t('common.editBtn') }}</el-button>
-						<el-button text type="primary" @click="onTabelRowDel(scope.row)" v-auth="'sys_dept_del'"> {{ $t('common.delBtn') }}</el-button>
+						<el-button text type="primary" @click="deptDialogRef.openDialog('add', scope.row?.id)" v-auth="'sys_dept_add'">
+							{{ $t('common.addBtn') }}</el-button
+						>
+						<el-button text type="primary" @click="deptDialogRef.openDialog('edit', scope.row?.id)" v-auth="'sys_dept_edit'">{{
+							$t('common.editBtn')
+						}}</el-button>
+						<el-button text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_dept_del'"> {{ $t('common.delBtn') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -63,10 +67,8 @@ import { downBlobFile } from '/@/utils/other';
 // 引入组件
 const DeptForm = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
-
 // 定义变量内容
 const deptDialogRef = ref();
-
 const excelUploadRef = ref();
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -80,32 +82,25 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 
 const { getDataList } = useTable(state);
 
-// 打开新增菜单弹窗
-const onOpenAddDept = (type: string, row: any) => {
-	deptDialogRef.value.openDialog(type, row?.id);
-};
-// 打开编辑菜单弹窗
-const onOpenEditDept = (type: string, row: any) => {
-	deptDialogRef.value.openDialog(type, row.id);
-};
-
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/admin/dept/export', state.queryForm, 'dept.xlsx');
 };
+
 // 删除当前行
-const onTabelRowDel = (row: any) => {
-	useMessageBox()
-		.confirm(`${t('common.delConfirmText')}：${row.name} ?`)
-		.then(() => {
-			delObj(row.id)
-				.then(() => {
-					getDataList();
-					useMessage().success('删除成功');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (row: any) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(row.id);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

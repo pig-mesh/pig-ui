@@ -39,10 +39,11 @@ export function getObj(id?: string) {
 	});
 }
 
-export function delObj(id?: string) {
+export function delObj(ids?: Object) {
 	return request({
-		url: '/gen/dsconf/' + id,
+		url: '/gen/dsconf',
 		method: 'delete',
+		data: ids,
 	});
 }
 

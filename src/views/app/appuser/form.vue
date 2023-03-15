@@ -145,9 +145,9 @@ const openDialog = (id: string) => {
 	dataForm.userId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
+	nextTick(() => {
 		dataFormRef.value.resetFields();
-	}
+	});
 
 	// 修改获取用户信息
 	if (id) {
@@ -158,64 +158,52 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		// 更新方法
-		if (dataForm.userId) {
-			if (dataForm.phone && dataForm.phone.indexOf('*') >= 0) {
-				dataForm.phone = undefined;
-			}
-			if (dataForm.password && dataForm.password.indexOf('******') >= 0) {
-				dataForm.password = undefined;
-			}
-			putObj(dataForm)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			// 新增方法
-			if (dataForm.phone && dataForm.phone.indexOf('*') > 0) {
-				dataForm.phone = undefined;
-			}
-			addObj(dataForm)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
-};
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-// 初始化部门数据
-const getUserData = (id: string) => {
-	// 获取部门数据
+	try {
+		const { userId, phone, password } = dataForm;
+
+		if (userId) {
+			// 清除占位符，避免提交错误的数据
+			if (phone?.includes('*')) dataForm.phone = undefined;
+			if (password?.includes('******')) dataForm.password = undefined;
+
+			loading.value = true;
+			await putObj(dataForm);
+			useMessage().success(t('common.editSuccessText'));
+			visible.value = false; // 关闭弹窗
+			emit('refresh');
+		} else {
+			loading.value = true;
+			await addObj(dataForm);
+			useMessage().success(t('common.addSuccessText'));
+			visible.value = false; // 关闭弹窗
+			emit('refresh');
+		}
+	} catch (error: any) {
+		useMessage().error(error.msg);
+	} finally {
+		loading.value = false;
+	}
+};
+// 初始化用户信息数据
+const getUserData = async (id: string) => {
 	loading.value = true;
-	getObj(id)
-		.then((res) => {
-			Object.assign(dataForm, res.data);
-			dataForm.password = '******';
-			if (res.data.roleList) {
-				dataForm.role = [];
-				res.data.roleList.map((item: any) => {
-					dataForm.role.push(item.roleId);
-				});
-			}
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+
+	try {
+		const { data } = await getObj(id);
+
+		Object.assign(dataForm, data);
+		dataForm.password = '******';
+
+		if (data.roleList) {
+			dataForm.role = data.roleList.map((item: any) => item.roleId);
+		}
+	} finally {
+		loading.value = false;
+	}
 };
 
 // 角色数据

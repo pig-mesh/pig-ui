@@ -53,6 +53,10 @@ const openDialog = async (id: string) => {
 
 const loading = ref(false);
 
+/**
+ * 获取特定资源的代码生成文件，显示在页面上。
+ * @param id 需要渲染的资源 ID。
+ */
 const getGenCodeFile = (id: string) => {
 	loading.value = true;
 	fileTreeOriginal.value = [];

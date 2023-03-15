@@ -46,7 +46,6 @@ const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
-const deptTreeRef = ref();
 const visible = ref(false);
 
 // 提交表单数据
@@ -55,8 +54,6 @@ const form = reactive({
 	roleName: '',
 	roleCode: '',
 	roleDesc: '',
-	dsType: 0,
-	dsScope: '',
 });
 
 // 页面对应元数据
@@ -94,7 +91,6 @@ const dataRules = ref({
 		},
 	],
 	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],
-	dsType: [{ required: true, message: '请选择数据权限类型', trigger: 'blur' }],
 });
 
 // 打开弹窗
@@ -103,10 +99,9 @@ const openDialog = (id: string) => {
 	form.roleId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
-
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 	// 获取角色信息
 	if (id) {
 		form.roleId = id;
@@ -115,41 +110,18 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	if (form.dsType === 1) {
-		form.dsScope = deptTreeRef.value.getCheckedKeys().join(',');
-	} else {
-		form.dsScope = '';
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		form.roleId ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.roleId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
 	}
-
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-
-		// 更新
-		if (form.roleId) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
 };
 
 // 初始化角色数据

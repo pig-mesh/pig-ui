@@ -152,7 +152,7 @@ const handleDelete = (ids: string[]) => {
 		.then(() => {
 			delObjs(ids)
 				.then(() => {
-					getDataList(false);
+					getDataList();
 					useMessage().success(t('common.delSuccessText'));
 				})
 				.catch((err: any) => {

@@ -43,7 +43,7 @@
 					<template #default="scope">
 						<el-button @click="handleView(scope.row.id)" text type="primary" v-auth="'oa_model_view'">模型图 </el-button>
 						<el-button @click="handleDeploy(scope.row.id)" text type="primary" v-auth="'oa_model_add'"> 部署 </el-button>
-						<el-button @click="handleDelete([scope.row.roleId])" text type="primary" v-auth="'oa_model_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'oa_model_del'">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -93,29 +93,26 @@ const resetQuery = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	selectObjs.value = [];
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.id));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(ids)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
-};
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
 
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
 const handleDeploy = (id: string) => {
 	deploy(id).then(() => {
 		useMessage().success(t('common.optSuccessText'));

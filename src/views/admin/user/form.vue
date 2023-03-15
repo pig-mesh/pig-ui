@@ -38,7 +38,7 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.dept')" prop="dept">
+						<el-form-item :label="$t('sysuser.dept')" prop="deptId">
 							<el-tree-select
 								:data="deptData"
 								:props="{ value: 'id', label: 'name', children: 'children' }"
@@ -151,7 +151,7 @@ const dataRules = ref({
 		{ required: true, message: '姓名不能为空', trigger: 'blur' },
 		{ validator: rule.chinese, trigger: 'blur' },
 	],
-	dept: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
+	deptId: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
 	role: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
 	post: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
 	// 手机号校验，不能为空、新增的时不能重复校验
@@ -197,41 +197,30 @@ const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
-	if (dataForm.userId) {
-		// 清除*占位符，避免误提交错误的数据
-		if (dataForm.phone && dataForm.phone.includes('*')) {
-			dataForm.phone = undefined;
+	try {
+		const { userId, phone, password } = dataForm;
+
+		if (userId) {
+			// 清除占位符，避免提交错误的数据
+			if (phone?.includes('*')) dataForm.phone = undefined;
+			if (password?.includes('******')) dataForm.password = undefined;
+
+			loading.value = true;
+			await putObj(dataForm);
+			useMessage().success(t('common.editSuccessText'));
+			visible.value = false; // 关闭弹窗
+			emit('refresh');
+		} else {
+			loading.value = true;
+			await addObj(dataForm);
+			useMessage().success(t('common.addSuccessText'));
+			visible.value = false; // 关闭弹窗
+			emit('refresh');
 		}
-		if (dataForm.password && dataForm.password.includes('******')) {
-			dataForm.password = undefined;
-		}
-		loading.value = true;
-		putObj(dataForm)
-			.then(() => {
-				useMessage().success(t('common.editSuccessText'));
-				visible.value = false; // 关闭弹窗
-				emit('refresh');
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	} else {
-		loading.value = true;
-		addObj(dataForm)
-			.then(() => {
-				useMessage().success(t('common.addSuccessText'));
-				visible.value = false; // 关闭弹窗
-				emit('refresh');
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
+	} catch (error: any) {
+		useMessage().error(error.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

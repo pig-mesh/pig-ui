@@ -47,9 +47,10 @@ const dsName = ref();
 const editTableRef = ref();
 const generatorType = ref();
 
-const go = async (activeNum) => {
+const go = async (activeNum: number) => {
 	if (active.value === activeNum) return;
 	active.value = activeNum;
+
 	if (activeNum === 0) {
 		await editTableRef.value.submitHandle();
 	} else if (activeNum === 1) {

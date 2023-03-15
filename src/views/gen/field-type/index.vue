@@ -89,31 +89,31 @@ const resetQuery = () => {
 	getDataList();
 };
 
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
-	multiple.value = !objs.length;
-};
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/gen/fieldtype/export', state.queryForm, 'fieldtype.xlsx');
 };
 
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+	selectObjs.value.push(...objs.map((val: any) => val.id));
+	multiple.value = !objs.length;
+};
+
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(ids)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

@@ -61,6 +61,9 @@ const handleNodeClick = (item: any) => {
 	emit('nodeClick', item);
 };
 
+/**
+ * 获取部门树形结构数据。
+ */
 const getDeptTree = () => {
 	if (props.query instanceof Function) {
 		state.localLoading = true;

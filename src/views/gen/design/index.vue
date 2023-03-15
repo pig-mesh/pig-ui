@@ -15,6 +15,7 @@
 
 <script lang="ts" setup>
 import { fetchFormById, useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
+import { useMessage } from '/@/hooks/message';
 import { handleBlobFile } from '/@/utils/other';
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
@@ -69,11 +70,10 @@ const tableName = ref();
 const dsName = ref();
 // 根据当前表，获取json配置信息
 const importJsonConfig = () => {
-	tableName.value = route.query.tableName;
-	dsName.value = route.query.dsName;
+	const { tableName, dsName } = route.query;
 
-	if (tableName.value && tableName.value) {
-		useGeneratorVFormApi(dsName.value, tableName.value).then((res) => {
+	if (tableName && tableName) {
+		useGeneratorVFormApi(dsName, tableName).then((res) => {
 			vfDesignerRef.value.loadJson(res);
 		});
 	}
@@ -86,36 +86,36 @@ const handleRefresh = (id: string) => {
 };
 
 const saveJsonConfig = () => {
-	const tableName = route.query.tableName;
-	const dsName = route.query.dsName;
+	const { tableName, dsName } = route.query;
 
 	if (tableName && dsName) {
 		// 先保存表单
 		const formJson = vfDesignerRef.value.getFormJson();
 		useFormConfSaveApi({
-			dsName: dsName,
-			tableName: tableName,
+			dsName,
+			tableName,
 			formInfo: JSON.stringify(formJson),
 		});
 	}
 };
 
+// 使用解构赋值，使代码更加简洁易读；
+// 在对象属性名和变量名一致时，可以使用对象属性的简写方式；
+// 使用模板字面量和变量名插值，使字符串拼接更加直观。
 const exportJsonConfig = async () => {
-	const tableName = route.query.tableName;
-	const dsName = route.query.dsName;
-
-	if (tableName && dsName) {
-		// 先保存表单
+	try {
+		const { tableName, dsName } = route.query;
+		if (!tableName || !dsName) throw new Error('表名或数据源名称不能为空');
 		const formJson = vfDesignerRef.value.getFormJson();
-		const result = await useFormConfSaveApi({
-			dsName: dsName,
-			tableName: tableName,
+		const { data } = await useFormConfSaveApi({
+			dsName,
+			tableName,
 			formInfo: JSON.stringify(formJson),
 		});
-
-		//执行 sfc代码生成
-		const res = await useGeneratorVFormSfcApi(result.data.id);
-		handleBlobFile(res, 'form.vue');
+		const sfcRes = await useGeneratorVFormSfcApi(data.id);
+		handleBlobFile(sfcRes, 'form.vue');
+	} catch (error: any) {
+		useMessage().error(error.message);
 	}
 };
 </script>

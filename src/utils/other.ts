@@ -57,7 +57,7 @@ export function useTitle() {
  */
 export function setTagsViewNameI18n(item: any) {
 	let tagsViewName: string = '';
-	const { query, params, meta } = item;
+	const { query, params } = item;
 	//修复tagsViewName匹配到其他含下列单词的路由
 	const pattern = /^\{("(zh-cn|en|zh-tw)":"[^,]+",?){1,3}}$/;
 	if (query?.tagsViewName || params?.tagsViewName) {
@@ -339,6 +339,9 @@ const other = {
 	adaptationUrl: (url?: string) => {
 		return adaptationUrl(url);
 	},
+	resolveAllEunuchNodeId: (json: any[], idArr: any[], temp: any[] = []) => {
+		return resolveAllEunuchNodeId(json, idArr, temp);
+	},
 };
 
 export function getQueryString(url: string, paraName: string) {
@@ -395,6 +398,21 @@ export function handleTree(data, id, parentId, children, rootId) {
 	});
 	return treeData !== '' ? treeData : data;
 }
+
+/**
+ * 解析所有太监节点ID
+ * @returns
+ */
+const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[] = []) => {
+	for (const item of json) {
+		if (item.children && item.children.length !== 0) {
+			resolveAllEunuchNodeId(item.children, idArr, temp);
+		} else {
+			temp.push(...idArr.filter((id) => id === item.id));
+		}
+	}
+	return temp;
+};
 
 /**
  *

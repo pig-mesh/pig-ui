@@ -182,7 +182,7 @@ const handleDelete = (ids: string[]) => {
 		.then(() => {
 			delObjs(ids)
 				.then(() => {
-					getDataList(false);
+					getDataList();
 					useMessage().success(t('common.delSuccessText'));
 				})
 				.catch((err: any) => {
@@ -197,7 +197,7 @@ const handelBlack = (ids: string[]) => {
 		.then(() => {
 			black(ids, state.queryForm.wxAccountAppid)
 				.then(() => {
-					getDataList(false);
+					getDataList();
 					useMessage().success('拉黑用户成功');
 				})
 				.catch((err: any) => {
@@ -212,7 +212,7 @@ const handelUnBlack = (ids: string[]) => {
 		.then(() => {
 			unblack(ids, state.queryForm.wxAccountAppid)
 				.then(() => {
-					getDataList(false);
+					getDataList();
 					useMessage().success('设置成功');
 				})
 				.catch((err: any) => {

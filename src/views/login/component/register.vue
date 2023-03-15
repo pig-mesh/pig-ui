@@ -117,22 +117,20 @@ const handlePassScore = (e) => {
 	score.value = e;
 };
 
-const handleRegister = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		loading.value = true;
-		registerUser(state.ruleForm)
-			.then(() => {
-				useMessage().success(t('common.optSuccessText'));
-				loading.value = false;
-				emit('afterSuccess');
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			});
-	});
+const handleRegister = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	loading.value = true;
+	registerUser(state.ruleForm)
+		.then(() => {
+			useMessage().success(t('common.optSuccessText'));
+			loading.value = false;
+			emit('afterSuccess');
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		});
 };
 </script>
 

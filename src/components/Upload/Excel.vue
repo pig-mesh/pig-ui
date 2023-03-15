@@ -80,18 +80,32 @@ const state = reactive({
 	},
 });
 
+/**
+ * 下载模板文件
+ */
 const downExcelTemp = () => {
 	other.downBlobFile(other.adaptationUrl(prop.tempUrl), {}, 'temp.xlsx');
 };
 
+/**
+ * 上传进度条变化事件
+ */
 const handleFileUploadProgress = () => {
 	state.upload.isUploading = true;
 };
 
+/**
+ * 上传失败事件处理
+ */
 const handleFileError = () => {
 	useMessage().error('上传失败,数据格式不合法!');
 	state.upload.open = false;
 };
+
+/**
+ * 上传成功事件处理
+ * @param {any} response - 上传成功的响应结果
+ */
 const handleFileSuccess = (response: any) => {
 	state.upload.isUploading = false;
 	state.upload.open = false;
@@ -104,21 +118,32 @@ const handleFileSuccess = (response: any) => {
 		state.errorData = response.data;
 		uploadRef.value.clearFiles();
 		// 刷新表格
-		emit('refreshDataList');
+		emit?.('refreshDataList');
 	} else {
 		useMessage().success(response.msg ? response.msg : '导入成功');
 		// 刷新表格
-		emit('refreshDataList');
+		emit?.('refreshDataList');
 	}
 };
+
+/**
+ * 提交表单，触发上传
+ */
 const submitFileForm = () => {
 	uploadRef.value.submit();
 };
+
+/**
+ * 显示上传文件对话框，并清除上传信息
+ */
 const show = () => {
 	state.upload.isUploading = false;
 	state.upload.open = true;
 };
 
+/**
+ * 计算请求头部信息
+ */
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.getToken(),

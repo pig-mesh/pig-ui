@@ -135,34 +135,31 @@ const resetQuery = () => {
 	getDataList();
 };
 
-// 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value = [];
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.userId);
-	});
-	multiple.value = !objs.length;
-};
-
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/app/appuser/export', state.queryForm, 'users.xlsx');
 };
 
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+	selectObjs.value.push(...objs.map((val: any) => val.userId));
+	multiple.value = !objs.length;
+};
+
 // 删除用户
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			// 删除用户的接口
-			delObj(ids)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

@@ -32,11 +32,13 @@ for (const path in modules) {
 	if (itemize[key![2]]) itemize[key![2]].push(modules[path].default);
 	else itemize[key![2]] = modules[path];
 }
+
 for (const path in pages) {
 	const key = path.match(/(\S+)\/(\S+).ts/);
 	if (itemize[key![2]]) itemize[key![2]].push(pages[path].default);
 	else itemize[key![2]] = pages[path];
 }
+
 // 合并数组对象（非标准数组对象，数组中对象的每项 key、value 都不同）
 function mergeArrObj<T>(list: T, key: string) {
 	let obj = {};
@@ -59,7 +61,6 @@ const stores = useThemeConfig(pinia);
 const { themeConfig } = storeToRefs(stores);
 
 // 导出语言国际化
-// https://vue-i18n.intlify.dev/guide/essentials/fallback.html#explicit-fallback-with-one-locale
 export const i18n = createI18n({
 	legacy: false,
 	silentTranslationWarn: true,
@@ -75,7 +76,9 @@ const messageLocal = {};
 
 const itemizeLocal = { en: [] as any[], 'zh-cn': [] as any[] };
 
-// 远程获取i18n
+/**
+ * 异步请求数据并更新 i18n 相关的信息。
+ */
 try {
 	setTimeout(async () => {
 		const infoI18n = await info();

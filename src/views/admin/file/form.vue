@@ -11,12 +11,10 @@
 
 <script setup lang="ts" name="SysFileDialog">
 const Upload = defineAsyncComponent(() => import('/@/components/Upload/index.vue'));
-
 const emit = defineEmits(['refresh']);
 
 // 定义变量内容
 const visible = ref(false);
-
 // 打开弹窗
 const openDialog = () => {
 	visible.value = true;

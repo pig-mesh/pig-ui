@@ -5,8 +5,8 @@ import other from '/@/utils/other';
 import { useMessage } from '/@/hooks/message';
 
 /**
- * 用户信息
- * @methods setUserInfos 设置用户信息
+ * @function useUserInfo
+ * @returns {UserInfosStore}
  */
 export const useUserInfo = defineStore('userInfo', {
 	state: (): UserInfosState => ({
@@ -18,16 +18,26 @@ export const useUserInfo = defineStore('userInfo', {
 			authBtnList: [],
 		},
 	}),
+
 	actions: {
-		async login(data: any) {
+		/**
+		 * 登录方法
+		 * @function login
+		 * @async
+		 * @param {Object} data - 登录数据
+		 * @returns {Promise<Object>}
+		 */
+		async login(data) {
 			data.grant_type = 'password';
 			data.scope = 'server';
+
 			// 密码加密
 			const user = other.encryption({
 				data: data,
 				key: import.meta.env.VITE_PWD_ENC_KEY,
 				param: ['password'],
 			});
+
 			return new Promise((resolve, reject) => {
 				login(user)
 					.then((res) => {
@@ -42,6 +52,14 @@ export const useUserInfo = defineStore('userInfo', {
 					});
 			});
 		},
+
+		/**
+		 * 手机登录方法
+		 * @function loginByMobile
+		 * @async
+		 * @param {Object} data - 登录数据
+		 * @returns {Promise<Object>}
+		 */
 		async loginByMobile(data) {
 			return new Promise((resolve, reject) => {
 				loginByMobile(data.mobile, data.code)
@@ -57,7 +75,16 @@ export const useUserInfo = defineStore('userInfo', {
 					});
 			});
 		},
-		async loginBySocial(state: string, code: string) {
+
+		/**
+		 * 社交账号登录方法
+		 * @function loginBySocial
+		 * @async
+		 * @param {string} state - 状态
+		 * @param {string} code - 代码
+		 * @returns {Promise<Object>}
+		 */
+		async loginBySocial(state, code) {
 			return new Promise((resolve, reject) => {
 				loginBySocial(state, code)
 					.then((res) => {
@@ -72,24 +99,37 @@ export const useUserInfo = defineStore('userInfo', {
 					});
 			});
 		},
+
+		/**
+		 * 刷新token方法
+		 * @function refreshToken
+		 * @async
+		 * @returns {Promise<any>}
+		 */
 		async refreshToken() {
 			return new Promise((resolve, reject) => {
 				const refreshToken = Session.get('refresh_token');
 				refreshTokenApi(refreshToken)
-					.then((res: any) => {
+					.then((res) => {
 						// 存储token 信息
 						Session.set('token', res.access_token);
 						Session.set('refresh_token', res.refresh_token);
 						resolve(res);
 					})
-					.catch((err: any) => {
+					.catch((err) => {
 						useMessage().error(err.msg);
 						reject(err);
 					});
 			});
 		},
+
+		/**
+		 * 获取用户信息方法
+		 * @function setUserInfos
+		 * @async
+		 */
 		async setUserInfos() {
-			getUserInfo().then((res: any) => {
+			getUserInfo().then((res) => {
 				const userInfo: any = {
 					user: res.data.sysUser,
 					time: new Date().getTime(),

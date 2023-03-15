@@ -197,7 +197,9 @@ const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
 	// 重置表单数据
-	dataFormRef.value?.resetFields();
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 获取sysOauthClientDetails信息
 	if (id) {

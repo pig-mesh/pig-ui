@@ -86,9 +86,9 @@ const openDialog = (id: string) => {
 	form.taskId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 获取oaLeaveBill信息
 	if (id) {
@@ -100,36 +100,37 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const handleTask = (result) => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		loading.value = true;
-		form.taskFlag = result;
-		doTask(form).then(() => {
-			useMessage().success(t('common.optSuccessText'));
-			visible.value = false;
-			emit('refresh');
-		});
+const handleTask = async (result) => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	loading.value = true;
+	form.taskFlag = result;
+	doTask(form).then(() => {
+		useMessage().success(t('common.optSuccessText'));
+		visible.value = false;
+		emit('refresh');
 	});
 };
 
-// 初始化表单数据
-const getTaskById = (id: string) => {
-	// 获取数据
-	loading.value = true;
-	fetchDetail(id)
-		.then((res: any) => {
-			Object.assign(form, res.data);
-			form.comment = res.data.comment ? res.data.comment : '';
-		})
-		.catch((err) => {
-			useMessage().error('操作失败');
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+/**
+ * 根据 ID 获取任务数据并初始化表单。
+ * @param {string} id - 要查询的任务 ID。
+ * @returns {Promise<void>} - 初始化表单的 Promise 实例。
+ */
+const getTaskById = async (id) => {
+	loading.value = true; // 显示加载状态
+
+	try {
+		const res = await fetchDetail(id); // 执行查询操作
+		// 将查询到的数据合并到表单中，并设置表单评论信息
+		Object.assign(form, res.data);
+		form.comment = res.data.comment ?? '';
+	} catch (err) {
+		useMessage().error('操作失败'); // 如果查询失败，则显示错误提示信息
+	} finally {
+		loading.value = false; // 结束加载状态
+	}
 };
 
 // 暴露变量

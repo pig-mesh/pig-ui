@@ -18,7 +18,9 @@
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delFormObj, fetchFormList } from '/@/api/gen/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useI18n } from 'vue-i18n';
 const emit = defineEmits(['refresh']);
+const { t } = useI18n();
 // 搜索变量
 const visible = ref(false);
 //  table hook
@@ -31,19 +33,20 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle } = useTable(state);
 
 // 删除操作
-const handleDelete = (id: string) => {
-	useMessageBox()
-		.confirm('此操作将永久删除')
-		.then(() => {
-			delFormObj(id)
-				.then(() => {
-					getDataList(false);
-					useMessage().success('删除成功');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (id: string) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delFormObj(id);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 回滚

@@ -49,9 +49,10 @@ const props = defineProps({
 	},
 });
 
+// 监听 modelValue 的变化，使 imageUrl 与 modelValue 同步
 watch(
 	() => props.modelValue,
-	(val) => {
+	(val: string) => {
 		if (val) {
 			imageUrl.value = val;
 		}
@@ -59,6 +60,7 @@ watch(
 	{ deep: true, immediate: true }
 );
 
+// 上传成功事件处理
 const handleAvatarSuccess = (res, file) => {
 	if (res.code === 0) {
 		imageUrl.value = res.data.url;
@@ -69,7 +71,9 @@ const handleAvatarSuccess = (res, file) => {
 	}
 };
 
+// 上传前校验
 const beforeAvatarUpload = (rawFile: any) => {
+	// 校检文件格式
 	if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
 		useMessage().error(`文件格式不正确, 请上传 jpeg/png格式文件!`);
 		return false;
@@ -85,6 +89,7 @@ const beforeAvatarUpload = (rawFile: any) => {
 	return true;
 };
 
+// 计算请求头部信息
 const headers = computed(() => {
 	const tenantId = Session.getTenant();
 	return {

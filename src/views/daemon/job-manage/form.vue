@@ -145,9 +145,9 @@ const openDialog = (id: string) => {
 	form.jobId = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
 	// 获取sysJob信息
 	if (id) {
@@ -157,35 +157,18 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-		// 更新
-		if (form.jobId) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+	try {
+		form.jobId ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 初始化表单数据

@@ -51,7 +51,7 @@
 						<el-button @click="handleView(scope.row)" text type="primary">流程图 </el-button>
 						<el-button @click="handleStatus(scope.row, 'suspend')" text type="primary" v-if="!scope.row.suspend">失效 </el-button>
 						<el-button @click="handleStatus(scope.row, 'active')" text type="primary" v-if="scope.row.suspend">激活 </el-button>
-						<el-button @click="handleDelete([scope.row.roleId])" text type="primary" v-auth="'oa_process_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleDelete([scope.row.processonDefinitionId])" text type="primary" v-auth="'oa_process_del'">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -103,27 +103,25 @@ const resetQuery = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	selectObjs.value = [];
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.roleId);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.processonDefinitionId));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(ids)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 //查看流程图
@@ -135,18 +133,19 @@ const handleView = (row: any) => {
 };
 
 // 失效
-const handleStatus = (row, type) => {
-	useMessageBox()
-		.confirm('是否将此流程设置为 ' + type)
-		.then(() => {
-			status(row.processonDefinitionId, type)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.optSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleStatus = async (row, type) => {
+	try {
+		await useMessageBox().confirm('是否将此流程设置为 ' + type);
+	} catch {
+		return;
+	}
+
+	try {
+		await status(row.processonDefinitionId, type)
+		getDataList();
+		useMessage().success(t('common.optSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

@@ -94,9 +94,10 @@ const openDialog = (id: string, row: any) => {
 	form.id = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
+
 	if (row?.date) {
 		form.date = row.date;
 	}
@@ -109,43 +110,20 @@ const openDialog = (id: string, row: any) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		// 更新
-		if (form.id) {
-			loading.value = true;
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		} else {
-			loading.value = true;
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		}
-	});
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		form.id ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
+
 
 // 初始化表单数据
 const getsysScheduleData = (id: string) => {

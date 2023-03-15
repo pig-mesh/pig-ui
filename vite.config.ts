@@ -2,14 +2,12 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
-// vue3 自动引入
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import { svgBuilder } from '/@/components/iconSelector/index';
-
-// 按需加载
 import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
 import viteCompression from 'vite-plugin-compression';
+// @ts-ignore
+import { svgBuilder } from '/@/components/iconSelector/index';
 
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);
@@ -24,42 +22,41 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	return {
 		plugins: [
-			vue(),
-			svgBuilder('./src/assets/icons/'),
-			vueSetupExtend(),
+			vue(), // Vue 插件
+			svgBuilder('./src/assets/icons/'), // 将 SVG 文件转换成 Vue 组件
+			vueSetupExtend(), // setup语法糖增强插件
 			AutoImport({
-				imports: ['vue', 'vue-router', 'pinia'],
-				dts: './auto-imports.d.ts',
+				imports: ['vue', 'vue-router', 'pinia'], // 自动导入的依赖库数组
+				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
 			}),
 			createStyleImportPlugin({
-				resolves: [VxeTableResolve()],
+				resolves: [VxeTableResolve()], // 配置vxetable 按需加载
 			}),
 			topLevelAwait({
-				// The export name of top-level await promise for each chunk module
-				promiseExportName: '__tla',
-				// The function to generate import names of top-level await promise in each chunk module
-				promiseImportName: (i) => `__tla_${i}`,
+				promiseExportName: '__tla', // TLA Promise 变量名
+				promiseImportName: (i) => `__tla_${i}`, // TLA Promise 导入名
 			}),
 			viteCompression({
-				deleteOriginFile: true,
+				deleteOriginFile: true, // 压缩后删除原来的文件
 			}),
 		],
-		root: process.cwd(),
-		resolve: { alias },
+		root: process.cwd(), // 项目根目录
+		resolve: { alias }, // 路径别名配置
 		base: mode.command === 'serve' ? './' : env.VITE_PUBLIC_PATH,
 		optimizeDeps: {
 			include: ['element-plus/lib/locale/lang/zh-cn', 'element-plus/lib/locale/lang/en'],
 		},
 		server: {
-			host: '0.0.0.0',
-			port: env.VITE_PORT as unknown as number,
-			open: env.VITE_OPEN === 'true',
-			hmr: true,
+			host: '0.0.0.0', // 服务器地址
+			port: env.VITE_PORT as unknown as number, // 服务器端口号
+			open: env.VITE_OPEN === 'true', // 是否自动打开浏览器
+			hmr: true, // 启用热更新
 			proxy: {
+				// 代理设置，用于解决跨域问题
 				'/admin': {
-					target: env.VITE_ADMIN_PROXY_PATH,
-					ws: true,
-					changeOrigin: true,
+					target: env.VITE_ADMIN_PROXY_PATH, // 目标服务器地址
+					ws: true, // 是否启用 WebSocket
+					changeOrigin: true, // 是否修改请求头中的 Origin 字段
 				},
 				'/gen': {
 					target: env.VITE_GEN_PROXY_PATH,
@@ -69,8 +66,8 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			},
 		},
 		build: {
-			outDir: 'dist',
-			chunkSizeWarningLimit: 1500,
+			outDir: 'dist', // 打包输出目录
+			chunkSizeWarningLimit: 1500, // 代码分包阈值
 			rollupOptions: {
 				output: {
 					entryFileNames: `assets/[name].[hash].js`,

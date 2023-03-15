@@ -31,6 +31,7 @@ import { pageList } from '/@/api/admin/menu';
 import { useMessage } from '/@/hooks/message';
 import { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import other from '/@/utils/other';
 
 const { t } = useI18n();
 
@@ -68,7 +69,7 @@ const openDialog = (row: any) => {
 		})
 		.then((r) => {
 			state.treeData = r.data;
-			state.checkedKeys = resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
+			state.checkedKeys = other.resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
 		})
 		.finally(() => {
 			loading.value = false;
@@ -88,22 +89,6 @@ const onSubmit = () => {
 		.finally(() => {
 			loading.value = false;
 		});
-};
-
-// 遍历节点
-const resolveAllEunuchNodeId = (json: any[], idArr: any[], temp: any[]) => {
-	for (let i = 0; i < json.length; i++) {
-		const item = json[i];
-		// 国际化
-		item.name = t(item.name);
-		// 存在子节点，递归遍历;不存在子节点，将json的id添加到临时数组中
-		if (item.children && item.children.length !== 0) {
-			resolveAllEunuchNodeId(item.children, idArr, temp);
-		} else {
-			temp.push(idArr.filter((id) => id === item.id));
-		}
-	}
-	return temp;
 };
 
 // 暴露变量

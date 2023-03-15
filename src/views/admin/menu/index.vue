@@ -54,7 +54,7 @@
 
 						<el-tooltip :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)" placement="top">
 							<span style="margin-left: 12px">
-								<el-button :disabled="deleteMenuDisabled(scope.row)" @click="onTabelRowDel(scope.row)" text type="primary" v-auth="'sys_menu_del'">
+								<el-button :disabled="deleteMenuDisabled(scope.row)" @click="handleDelete(scope.row)" text type="primary" v-auth="'sys_menu_del'">
 									{{ $t('common.delBtn') }}
 								</el-button>
 							</span>
@@ -71,9 +71,10 @@
 import { delObj, pageList } from '/@/api/admin/menu';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useI18n } from 'vue-i18n';
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
-
+const { t } = useI18n();
 // 定义变量内容
 const menuDialogRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -100,19 +101,20 @@ const deleteMenuDisabled = (row: any) => {
 	return (row.children || []).length > 0;
 };
 
-// 删除当前菜单
-const onTabelRowDel = (row: any) => {
-	useMessageBox()
-		.confirm(`此操作将永久删除：${row.name}`)
-		.then(() => {
-			delObj(row.id)
-				.then(() => {
-					useMessage().success('删除成功');
-					getDataList();
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+// 删除操作
+const handleDelete = async (row: any) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(row.id);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

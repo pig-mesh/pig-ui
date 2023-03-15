@@ -171,7 +171,7 @@ const handleDelete = (ids: string[]) => {
 				wxAccountAppid: state.queryForm.wxAccountAppid,
 			})
 				.then(() => {
-					getDataList(false);
+					getDataList();
 					useMessage().success(t('common.delSuccessText'));
 				})
 				.catch((err: any) => {

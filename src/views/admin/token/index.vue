@@ -69,50 +69,47 @@ const { t } = useI18n();
 // 定义变量内容
 const queryRef = ref();
 const showSearch = ref(true);
-
 // 多选rows
 const selectObjs = ref([]) as any;
 // 是否可以多选
 const multiple = ref(true);
 
+//  table hook
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		username: '',
 	},
 	pageList: fetchList,
 });
-
-//  table hook
 const { getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {
-	queryRef.value.resetFields();
+	queryRef.value?.resetFields();
 	getDataList();
 };
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.accessToken);
-	});
+	selectObjs.value.push(...objs.map((val: any) => val.accessToken));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (accessTokens: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(accessTokens)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (accessTokens: string[]) => {
+	try {
+		await useMessageBox().confirm(t('systoken.offlineConfirmText'));
+	} catch {
+		return; // 取消删除则直接跳过此方法
+	}
+
+	try {
+		await delObj(accessTokens);
+		getDataList();
+		useMessage().success(t('systoken.offlineSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 判断当前token 是否和登录token一致

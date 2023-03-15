@@ -65,6 +65,7 @@
 </template>
 
 <script lang="ts" name="systemMenuDialog" setup>
+import { useI18n } from 'vue-i18n';
 import { addObj, info, pageList, update, validateByName, validatePermission } from '/@/api/app/appmenu';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
@@ -72,7 +73,7 @@ import { rule } from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 // 引入组件
-
+const { t } = useI18n();
 const visible = ref(false);
 const loading = ref(false);
 // 定义变量内容
@@ -94,38 +95,6 @@ const state = reactive({
 	},
 	parentData: [] as any[], // 上级菜单数据
 });
-
-// 从后端获取菜单信息
-const getMenuData = () => {
-	state.parentData = [];
-	loading.value = true;
-	pageList()
-		.then((res) => {
-			let menu = {
-				createBy: '',
-				createTime: '',
-				delFlag: '',
-				icon: '',
-				keepAlive: '',
-				menuId: '',
-				menuType: '',
-				parentId: '',
-				path: '',
-				sortOrder: 0,
-				updateBy: '',
-				updateTime: '',
-				visible: '',
-				id: '-1',
-				name: '根菜单',
-				children: [] as any[],
-			};
-			menu.children = res.data;
-			state.parentData.push(menu);
-		})
-		.finally(() => {
-			loading.value = false;
-		});
-};
 
 const dataRules = reactive({
 	name: [
@@ -153,65 +122,64 @@ const dataRules = reactive({
 		},
 	],
 });
+
 // 打开弹窗
 const openDialog = (type: string, row?: any) => {
-	if (row?.id && type === 'edit') {
-		state.ruleForm.id = row.id;
-		// 模拟数据，实际请走接口
-		loading.value = true;
-		info(row.id)
-			.then((res) => {
-				Object.assign(state.ruleForm, res.data);
-			})
-			.finally(() => {
-				loading.value = false;
-			});
-	} else {
-		// 清空表单，此项需加表单验证才能使用
-		nextTick(() => {
-			dataFormRef?.value?.resetFields();
-			state.ruleForm.parentId = row?.id || '-1';
-		});
-	}
+	state.ruleForm.menuId = '';
 	visible.value = true;
-	getMenuData();
+
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+		state.ruleForm.parentId = row?.id || '-1';
+	});
+
+	if (row?.id && type === 'edit') {
+		state.ruleForm.menuId = row.id;
+		// 获取当前节点菜单信息
+		getMenuDetail(row.id);
+	}
+	// 渲染上级菜单列表树
+	getAllMenuData();
 };
 
-// 保存数据
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		// 保存 调用刷新
-		if (state.ruleForm.id) {
-			loading.value = true;
-			update(state.ruleForm)
-				.then(() => {
-					visible.value = false;
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		} else {
-			loading.value = true;
-			addObj(state.ruleForm)
-				.then(() => {
-					visible.value = false;
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		}
+// 从后端获取菜单信息（含层级）
+const getAllMenuData = () => {
+	state.parentData = [];
+	pageList({
+		type: '0',
+	}).then((res) => {
+		let menu = {
+			id: '-1',
+			name: '根菜单',
+			children: [],
+		};
+		menu.children = res.data;
+		state.parentData.push(menu);
 	});
+};
+
+const getMenuDetail = (id: string) => {
+	info(id)
+		.then((res) => {
+			Object.assign(state.ruleForm, res.data);
+		})
+		.finally(() => {
+			loading.value = false;
+		});
+};
+
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		state.ruleForm.menuId ? await update(state.ruleForm) : await addObj(state.ruleForm);
+		useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 暴露变量 只有暴漏出来的变量 父组件才能使用

@@ -53,20 +53,21 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
-const handleDelete = (row: any) => {
-	useMessageBox()
-		.confirm(`${t('common.delConfirmText')}：${row.name} ?`)
-		.then(() => {
-			// 删除用户的接口
-			delObj(row.id)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		});
+
+const handleDelete = async (row: any) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(row.id);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 const open = () => {

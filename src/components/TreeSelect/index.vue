@@ -78,6 +78,9 @@ const valueId = computed({
 const valueTitle = ref('');
 const defaultExpandedKey = ref([]);
 
+/**
+ * 初始化下拉菜单选择器的默认值，并设置默认选中和默认展开。
+ */
 function initHandle() {
 	nextTick(() => {
 		const selectedValue = valueId.value;
@@ -93,6 +96,11 @@ function initHandle() {
 		}
 	});
 }
+
+/**
+ * 点击某一节点时触发的事件，更新当前的选中值和展开状态。
+ * @param {Object} node - 被点击的节点对象
+ */
 function handleNodeClick(node) {
 	valueTitle.value = node[props.objMap.label];
 	valueId.value = node[props.objMap.value];
@@ -100,19 +108,37 @@ function handleNodeClick(node) {
 	proxy.$refs.treeSelect.blur();
 	selectFilterData('');
 }
+
+/**
+ * 搜索过滤函数，根据输入的值来过滤显示的节点。
+ * @param {String} val - 输入框内的搜索关键字
+ */
 function selectFilterData(val) {
 	proxy.$refs.selectTree.filter(val);
 }
+
+/**
+ * 根据输入的值来判断节点是否需要显示。
+ * @param {String} value - 输入框内的搜索关键字
+ * @param {Object} data - 当前处理的节点数据
+ * @returns {Boolean} - 是否需要显示此节点
+ */
 function filterNode(value, data) {
 	if (!value) return true;
 	return data[props.objMap['label']].indexOf(value) !== -1;
 }
+/**
+ * 清空当前的选中状态，并重置展开状态。
+ */
 function clearHandle() {
 	valueTitle.value = '';
 	valueId.value = '';
 	defaultExpandedKey.value = [];
 	clearSelected();
 }
+/**
+ * 删除所有选中状态的节点。
+ */
 function clearSelected() {
 	const allNode = document.querySelectorAll('#tree-option .el-tree-node');
 	allNode.forEach((element) => element.classList.remove('is-current'));

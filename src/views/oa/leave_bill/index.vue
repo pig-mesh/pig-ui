@@ -130,42 +130,45 @@ const exportExcel = () => {
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {
-	selectObjs.value = [];
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.leaveId);
-	});
-	console.log(selectObjs);
+	selectObjs.value.push(...objs.map((val: any) => val.leaveId));
 	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (ids: string[]) => {
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(ids)
-				.then(() => {
-					getDataList(false);
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
-const handleSubmit = (row) => {
-	useMessageBox()
-		.confirm(t('common.optConfirmText'))
-		.then(() => {
-			submit(row.leaveId)
-				.then(() => {
-					getDataList(false);
-					useMessage().success(t('common.optSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+/**
+ * 提交表单数据。
+ * @param {object} row 当前行数据。
+ * @returns {void}
+ */
+const handleSubmit = async (row) => {
+	try {
+		await useMessageBox().confirm(t('common.optConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await submit(row.leaveId);
+		getDataList();
+		useMessage().success(t('common.optSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

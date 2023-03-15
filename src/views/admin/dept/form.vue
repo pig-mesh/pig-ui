@@ -40,11 +40,13 @@
 </template>
 
 <script setup lang="ts" name="systemDeptDialog">
+import { useI18n } from 'vue-i18n';
 import { getObj, depttree, addObj, putObj } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+const { t } = useI18n();
 // 定义变量内容
 const deptDialogFormRef = ref();
 const dataForm = reactive({
@@ -86,31 +88,18 @@ const openDialog = (type: string, id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	deptDialogFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		if (dataForm.deptId) {
-			putObj(dataForm)
-				.then(() => {
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		} else {
-			addObj(dataForm)
-				.then(() => {
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		}
-	});
+const onSubmit = async () => {
+	const valid = await deptDialogFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	try {
+		dataForm.deptId ? await putObj(dataForm) : await addObj(dataForm);
+		useMessage().success(t(dataForm.deptId ? 'common.editSuccessText' : 'common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 从后端获取菜单信息

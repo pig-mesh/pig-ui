@@ -171,8 +171,13 @@ const handleRemove = (file: any) => {
 	emit('update:modelValue', listToString(fileList.value));
 };
 
-// 对象转成指定字符串分隔
-const listToString = (list, separator = ',') => {
+/**
+ * 将对象数组转为字符串，以逗号分隔。
+ * @param list 待转换的对象数组。
+ * @param separator 分隔符，默认为逗号。
+ * @returns {string} 返回转换后的字符串。
+ */
+const listToString = (list: { url: string }[], separator = ','): string => {
 	let strs = '';
 	separator = separator || ',';
 	for (let i in list) {
@@ -180,13 +185,16 @@ const listToString = (list, separator = ',') => {
 			strs += list[i].url + separator;
 		}
 	}
-	return strs != '' ? strs.substr(0, strs.length - 1) : '';
+	return strs !== '' ? strs.substr(0, strs.length - 1) : '';
 };
 
 const handleUploadError = () => {
 	useMessage().error('上传文件失败');
 };
 
+/**
+ * 监听 props 中的 modelValue 值变化，更新 fileList。
+ */
 watch(
 	() => props.modelValue,
 	(val) => {

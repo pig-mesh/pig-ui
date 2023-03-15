@@ -17,6 +17,7 @@ export default {
 		inputNameTip: 'input name',
 		importUserTip: 'user import',
 		deleteDisabledTip: 'admin are not allowed to delete',
+		noDataScopeTip: 'no data permissions',
 	},
 	personal: {
 		name: 'personal info',

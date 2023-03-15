@@ -19,7 +19,7 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(undefined)" class="ml10" icon="Delete" type="primary">
+					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
@@ -44,7 +44,7 @@
 
 						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 
-						<el-button @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleDelete([scope.row.id])" text type="primary">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -73,7 +73,7 @@ const formDialogRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 // 多选变量
-const selectObjs = ref([]);
+const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -96,31 +96,26 @@ const resetQuery = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (val: any) => {
-	selectObjs.value = val;
-	multiple.value = !val.length;
+// 多选事件
+const handleSelectionChange = (objs: any) => {
+	selectObjs.value.push(...objs.map((val: any) => val.id));
+	multiple.value = !objs.length;
 };
 
 // 删除操作
-const handleDelete = (row: any) => {
-	if (!row) {
-		selectObjs.value.forEach((val: any) => {
-			handleDelete(val);
-		});
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
 		return;
 	}
 
-	useMessageBox()
-		.confirm(t('common.delConfirmText'))
-		.then(() => {
-			delObj(row.id)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.delSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 </script>

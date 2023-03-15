@@ -78,22 +78,20 @@ const handleSendCode = async () => {
 	});
 };
 
+/**
+ * 处理登录请求。
+ */
 const handleLogin = async () => {
-	loginFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-	});
+	const valid = await loginFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
-	loading.value = true;
-	useUserInfo()
-		.loginByMobile(loginForm)
-		.then(() => {
-			emit('signInSuccess');
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+	try {
+		loading.value = true;
+		await useUserInfo().loginByMobile(loginForm);
+		emit('signInSuccess');
+	} finally {
+		loading.value = false;
+	}
 };
 
 const msg = reactive({

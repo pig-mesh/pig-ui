@@ -64,14 +64,24 @@ onMounted(() => {
 	getQr();
 });
 
-const getQr = () => {
-	if (state.type === '0') {
-		useBuyApi(state.amount).then((res) => {
-			url.value = res.params;
-		});
-	} else {
+/**
+ * 获取支付二维码信息。
+ * @param {Object} state - 包含 type 和 amount 两个属性的对象。
+ * @param {string} state.type - 支付类型。"0" 表示直接购买，其他值表示商品购买。
+ * @param {number} state.amount - 支付金额。
+ * @returns {Promise<string>} - 返回 Promise 实例，包含获取到的支付二维码链接地址。
+ */
+const getQr = async () => {
+	const { type, amount } = state;
+	try {
+		if (type === '0') {
+			const res = await useBuyApi(amount);
+			return res.params; // 直接返回购买 API 返回的二维码链接地址
+		}
 		const tenantId = Session.getTenant();
-		url.value = `${protocol}//${host}/admin/goods/buy?amount=${state.amount}&TENANT-ID=${tenantId}`;
+		return `${protocol}//${host}/admin/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`; // 返回商品购买的二维码链接地址
+	} catch (err) {
+		throw new Error('获取支付信息失败');
 	}
 };
 </script>

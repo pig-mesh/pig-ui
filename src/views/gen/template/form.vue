@@ -72,10 +72,9 @@ const openDialog = (id: string) => {
 	form.id = '';
 
 	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
-
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 	// 获取genTemplate信息
 	if (id) {
 		form.id = id;

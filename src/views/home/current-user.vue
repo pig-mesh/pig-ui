@@ -38,19 +38,21 @@ onMounted(() => {
 	initUserInfo(data.user.userId);
 });
 
-const initUserInfo = (userId: any) => {
-	loading.value = true;
-	getObj(userId)
-		.then((res) => {
-			userData.value = res.data;
-			userData.value.postName = res.data.postList
-				.map((item) => {
-					return item.postName;
-				})
-				.join(',');
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+/**
+ * 根据用户 ID 初始化用户信息。
+ * @param {any} userId - 要查询的用户 ID。
+ * @returns {Promise<void>} - 初始化用户信息的 Promise 实例。
+ */
+ const initUserInfo = async (userId: any): Promise<void> => {
+  try {
+    loading.value = true; // 显示加载状态
+
+    const res = await getObj(userId); // 执行查询操作
+    userData.value = res.data; // 将查询到的数据保存到 userData 变量中
+    userData.value.postName = res.data?.postList?.map((item: any) => item.postName).join(',') || ''; // 将 postList 中的 postName 合并成字符串并保存到 userData 变量中
+  } finally {
+    loading.value = false; // 结束加载状态
+  }
 };
+
 </script>
