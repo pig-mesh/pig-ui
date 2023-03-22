@@ -5,6 +5,15 @@ const {resolve} = require('path')
 export default defineConfig(({mode, command}) => {
     const env = loadEnv(mode, process.cwd())
     return {
+        build: {
+            commonjsOptions: {
+                transformMixedEsModules: true,
+                include: [],
+            },
+        },
+        optimizeDeps: {
+            disabled: false,
+        },
         server: {
             port: 8080,
             proxy: {
