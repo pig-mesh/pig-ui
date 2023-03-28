@@ -53,7 +53,10 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
-
+/**
+ * 处理删除事件。
+ * @param {Object} row - 要删除的数据行对象。
+ */
 const handleDelete = async (row: any) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));

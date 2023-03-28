@@ -1,30 +1,30 @@
 <template>
-	<div class="home-card-item-title">{{ $t('home.quickNavigationToolsTip') }}</div>
-	<div class="home-monitor">
-		<div class="flex-warp" v-if="favoriteRoutes.length > 0">
-			<div class="flex-warp-item" v-for="(v, k) in favoriteRoutes" :key="k">
-				<div class="flex-warp-item-box">
-					<div class="flex-margin">
-						<i :class="v.meta.icon"></i>
-						<el-tag :key="v.path" @click="HandleRoute(v)" class="mx-1" closable @close="handleCloseFavorite(v)">{{ $t(v.name) }}</el-tag>
-					</div>
-				</div>
+	<el-card class="box-card" style="height: 100%">
+		<template #header>
+			<div class="card-header">
+				<span>{{ $t('home.quickNavigationToolsTip') }}</span>
 			</div>
-		</div>
+		</template>
+		<el-row :gutter="10" v-if="favoriteRoutes.length > 0">
+			<el-col :span="6" :key="shortcut.id" v-for="shortcut in favoriteRoutes">
+				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.name" @click="handleRoute(shortcut.path)" />
+			</el-col>
+		</el-row>
 		<el-empty :description="$t('home.addFavoriteRoutesTip')" v-else />
-	</div>
+	</el-card>
 </template>
 
 <script setup lang="ts" name="SysFavoriteDashboard">
 import { storeToRefs } from 'pinia';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
+import shortcutCard from '/@/components/ShortcutCard/index.vue';
 
 const router = useRouter();
 const storesTagsViewRoutes = useTagsViewRoutes();
 const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 
-const HandleRoute = (item: any) => {
-	router.push(item.path);
+const handleRoute = (path: string) => {
+	router.push(path);
 };
 
 const handleCloseFavorite = (item: any) => {

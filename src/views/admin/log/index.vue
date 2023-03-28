@@ -40,13 +40,7 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table
-				:data="state.dataList"
-				@selection-change="handleSelectionChange"
-				@sort-change="sortChangeHandle"
-				style="width: 100%"
-				v-loading="state.loading"
-			>
+			<el-table :data="state.dataList" @selection-change="handleSelectionChange" @sort-change="sortChangeHandle" v-loading="state.loading">
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('syslog.index')" type="index" width="80" />
 				<el-table-column :label="$t('syslog.logType')" show-overflow-tooltip>

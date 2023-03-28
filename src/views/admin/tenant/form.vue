@@ -149,18 +149,21 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化表格数据
-const getTenantData = (id: string) => {
-	// 获取部门数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+/**
+ * 初始化表格数据。
+ * @param {string} id - 部门 ID。
+ */
+const getTenantData = async (id) => {
+	const res = await getObj(id);
+	Object.assign(form, res.data);
 };
 
-const getMenuList = () => {
-	menuList().then((res: any) => {
-		menuData.value = res.data;
-	});
+/**
+ * 获取菜单列表数据。
+ */
+const getMenuList = async () => {
+	const res = await menuList();
+	menuData.value = res.data;
 };
 
 // 暴露变量

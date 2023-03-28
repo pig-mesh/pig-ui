@@ -1,5 +1,5 @@
 <template>
-	<el-card class="box-card">
+	<el-card class="box-card" style="height: 100%">
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.auditLogsTip') }}</span>

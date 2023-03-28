@@ -20,7 +20,6 @@
 							show-checkbox
 							ref="menuTreeRef"
 							:check-strictly="false"
-							v-loading="treeLoading"
 							:data="menuData"
 							:props="defaultProps"
 							:default-checked-keys="checkedMenu"
@@ -117,6 +116,8 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		// 获取已经选择的节点
+		form.menuIds = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()].join(',');
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
@@ -126,25 +127,22 @@ const onSubmit = async () => {
 	}
 };
 
-const treeLoading = ref(false);
-const getMenuData = () => {
-	treeLoading.value = true;
-	treemenu().then((res) => {
-		menuData.value = res.data;
-		if (form.menuIds) {
-			checkedMenu.value = other.resolveAllEunuchNodeId(menuData.value, form.menuIds.split(','), []);
-		} else {
-			checkedMenu.value = [];
-		}
-		treeLoading.value = false;
-	});
+/**
+ * 获取菜单数据
+ */
+const getMenuData = async () => {
+	const res = await treemenu();
+	menuData.value = res.data;
+	checkedMenu.value = form.menuIds ? other.resolveAllEunuchNodeId(menuData.value, form.menuIds.split(','), []) : [];
 };
 
-const getTenantMenuData = (id: string) => {
-	// 获取部门数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data[0]);
-	});
+/**
+ * 获取部门下的菜单数据
+ * @param {string} id - 部门 ID
+ */
+const getTenantMenuData = async (id: string) => {
+	const res = await getObj(id);
+	Object.assign(form, res.data[0]);
 };
 
 // 暴露变量
