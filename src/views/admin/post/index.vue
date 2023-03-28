@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('post.postName')" prop="postName">
 						<el-input :placeholder="$t('post.inputpostNameTip')" style="max-width: 180px" v-model="state.queryForm.postName" />

@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('leave.username')" prop="username">
 						<el-input :placeholder="t('leave.inputUsernameTip')" style="max-width: 180px" v-model="state.queryForm.username" />

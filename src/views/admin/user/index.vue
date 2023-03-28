@@ -2,7 +2,7 @@
 	<div class="layout-padding">
 		<el-row :gutter="20">
 			<el-col :span="4" :xs="24">
-				<el-card class="layout-padding-auto" shadow="hover">
+				<el-card>
 					<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">
 						<!-- 没有数据权限提示 -->
 						<template #default="{ node, data }">
@@ -16,13 +16,13 @@
 			</el-col>
 			<el-col :span="20" :xs="24">
 				<div class="layout-padding-auto layout-padding-view">
-					<el-row v-show="showSearch" class="mb8">
+					<el-row v-show="showSearch" class="mb8 ml10">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('sysuser.username')" prop="username">
-								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable style="width: 240px" />
+								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
 							</el-form-item>
 							<el-form-item :label="$t('sysuser.phone')" prop="phone">
-								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable style="width: 240px" />
+								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
 							</el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>

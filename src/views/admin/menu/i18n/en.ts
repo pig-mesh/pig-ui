@@ -1,7 +1,7 @@
 export default {
 	sysmenu: {
 		index: 'index',
-		name: 'name',
+		name: 'menu name',
 		sortOrder: 'sortOrder',
 		path: 'path',
 		menuType: 'menuType',

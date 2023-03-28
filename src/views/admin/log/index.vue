@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('syslog.logType')" prop="logType">
 						<el-select :placeholder="$t('syslog.inputLogTypeTip')" class="w100" clearable v-model="state.queryForm.logType">

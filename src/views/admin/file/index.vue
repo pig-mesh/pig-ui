@@ -4,13 +4,7 @@
 			<el-row v-show="showSearch" class="mb8">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="$t('file.fileName')" prop="original">
-						<el-input
-							v-model="state.queryForm.original"
-							:placeholder="$t('file.inputoriginalTip')"
-							clearable
-							style="width: 240px"
-							@keyup.enter="getDataList"
-						/>
+						<el-input v-model="state.queryForm.original" :placeholder="$t('file.inputoriginalTip')" clearable @keyup.enter="getDataList" />
 					</el-form-item>
 					<el-form-item>
 						<el-button type="primary" icon="Search" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>

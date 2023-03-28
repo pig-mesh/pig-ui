@@ -25,7 +25,6 @@
 							:default-checked-keys="checkedMenu"
 							node-key="id"
 							highlight-current
-							default-expand-all
 						/>
 					</el-form-item>
 				</el-col>

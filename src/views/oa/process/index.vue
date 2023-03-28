@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto" shadow="hover">
-			<el-row class="mb8" shadow="hover" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('process.category')" prop="category">
 						<el-input :placeholder="$t('process.inputCategoryTip')" style="max-width: 180px" v-model="state.queryForm.category" />

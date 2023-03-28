@@ -1,10 +1,10 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row shadow="hover" v-show="showSearch" class="mb8">
+			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="$t('sysrole.roleName')" prop="roleName">
-						<el-input :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName" style="max-width: 180px" />
+						<el-input :placeholder="$t('sysrole.inputRoleNameTip')" v-model="state.queryForm.roleName" />
 					</el-form-item>
 					<el-form-item class="ml2">
 						<el-button icon="search" type="primary" @click="getDataList">

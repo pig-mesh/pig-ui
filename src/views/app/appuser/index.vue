@@ -1,25 +1,13 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('appuser.username')" prop="username">
-						<el-input
-							:placeholder="$t('appuser.inputUserNameTip')"
-							@keyup.enter="getDataList"
-							clearable
-							style="width: 240px"
-							v-model="state.queryForm.username"
-						/>
+						<el-input :placeholder="$t('appuser.inputUserNameTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.username" />
 					</el-form-item>
 					<el-form-item :label="$t('appuser.phone')" prop="phone">
-						<el-input
-							:placeholder="$t('appuser.inputPhoneTip')"
-							@keyup.enter="getDataList"
-							clearable
-							style="width: 240px"
-							v-model="state.queryForm.phone"
-						/>
+						<el-input :placeholder="$t('appuser.inputPhoneTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.phone" />
 					</el-form-item>
 					<el-form-item>
 						<el-button @click="getDataList" icon="Search" type="primary">{{ $t('common.queryBtn') }} </el-button>

@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
 					<el-form-item :label="$t('param.publicName')" prop="publicName">
 						<el-input :placeholder="$t('param.inputpublicNameTip')" style="max-width: 180px" v-model="state.queryForm.publicName" />

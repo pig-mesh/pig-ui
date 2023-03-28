@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<div class="mb15">
+			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('sysmenu.name')" prop="menuName">
 						<el-input :placeholder="$t('sysmenu.inputNameTip')" clearable style="max-width: 180px" v-model="state.queryForm.menuName" />
@@ -10,12 +10,22 @@
 						<el-button @click="getDataList" class="ml10" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
-							{{ $t('common.addBtn') }}
-						</el-button>
 					</el-form-item>
 				</el-form>
-			</div>
+			</el-row>
+			<el-row>
+				<div class="mb8" style="width: 100%">
+					<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
+						{{ $t('common.addBtn') }}
+					</el-button>
+					<right-toolbar
+						v-model:showSearch="showSearch"
+						class="ml10"
+						style="float: right; margin-right: 20px"
+						@queryTable="getDataList"
+					></right-toolbar>
+				</div>
+			</el-row>
 			<el-table
 				:data="state.dataList"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -77,6 +87,7 @@ const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
 // 定义变量内容
 const menuDialogRef = ref();
+const showSearch = ref(true);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
@@ -88,7 +99,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList } = useTable(state);
 
 // 打开新增菜单弹窗
-const onOpenAddMenu = (type: string, row?: any) => {
+const onOpenAddMenu = (type?: string, row?: any) => {
 	menuDialogRef.value.openDialog(type, row);
 };
 // 打开编辑菜单弹窗

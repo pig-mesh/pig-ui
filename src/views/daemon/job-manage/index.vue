@@ -1,14 +1,13 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8" v-show="showSearch">
+			<el-row class="mb8 ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
 					<el-form-item :label="$t('job.jobName')" prop="jobName">
 						<el-input
 							:placeholder="$t('job.inputjobNameTip')"
 							@keyup.enter="getDataList"
 							clearable
-							style="width: 240px"
 							v-model="state.queryForm.jobName"
 						/>
 					</el-form-item>
@@ -17,7 +16,6 @@
 							:placeholder="$t('job.inputjobGroupTip')"
 							@keyup.enter="getDataList"
 							clearable
-							style="width: 240px"
 							v-model="state.queryForm.jobGroup"
 						/>
 					</el-form-item>

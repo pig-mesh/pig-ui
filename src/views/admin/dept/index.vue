@@ -1,27 +1,37 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<div class="mb15">
+			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-					<el-form-item prop="deptName">
+					<el-form-item prop="deptName" :label="$t('sysdept.name')">
 						<el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px" v-model="state.queryForm.deptName"> </el-input>
 					</el-form-item>
 					<el-form-item class="ml2">
-						<el-button icon="search" type="primary" class="ml10" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
-						</el-button>
-						<el-button icon="folder-add" type="primary" class="ml10" @click="deptDialogRef.openDialog('add')" v-auth="'sys_dept_add'">
-							{{ $t('common.addBtn') }}
-						</el-button>
-						<el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
-							{{ $t('common.importBtn') }}
-						</el-button>
-						<el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
-							{{ $t('common.exportBtn') }}
 						</el-button>
 					</el-form-item>
 				</el-form>
-			</div>
+			</el-row>
+			<el-row>
+				<div class="mb8" style="width: 100%">
+					<el-button icon="folder-add" type="primary" class="ml10" @click="deptDialogRef.openDialog('add')" v-auth="'sys_dept_add'">
+						{{ $t('common.addBtn') }}
+					</el-button>
+					<el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
+						{{ $t('common.importBtn') }}
+					</el-button>
+					<el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
+						{{ $t('common.exportBtn') }}
+					</el-button>
+					<right-toolbar
+						v-model:showSearch="showSearch"
+						class="ml10"
+						style="float: right; margin-right: 20px"
+						@queryTable="getDataList"
+					></right-toolbar>
+				</div>
+			</el-row>
 			<el-table
 				:data="state.dataList"
 				v-loading="state.loading"
@@ -70,6 +80,7 @@ const { t } = useI18n();
 // 定义变量内容
 const deptDialogRef = ref();
 const excelUploadRef = ref();
+const showSearch = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: depttree,
