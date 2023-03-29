@@ -15,7 +15,7 @@ export const login = (data: any) => {
 		method: 'post',
 		params: data,
 		headers: {
-			isToken: false,
+			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
 		},
@@ -31,7 +31,7 @@ export const loginByMobile = (mobile: any, code: any) => {
 	return request({
 		url: '/auth/oauth2/token',
 		headers: {
-			isToken: false,
+			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
 		},
@@ -49,7 +49,7 @@ export const loginBySocial = (state: string, code: string) => {
 	return request({
 		url: '/auth/oauth2/token',
 		headers: {
-			isToken: false,
+			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
 		},
@@ -74,7 +74,7 @@ export const refreshTokenApi = (refresh_token: string) => {
 	return request({
 		url: '/auth/oauth2/token',
 		headers: {
-			isToken: false,
+			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
 		},
@@ -92,7 +92,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 	request({
 		url: '/auth/token/check_token',
 		headers: {
-			isToken: false,
+			skipToken: true,
 			Authorization: basicAuth,
 		},
 		method: 'get',

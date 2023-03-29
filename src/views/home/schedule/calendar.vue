@@ -1,7 +1,7 @@
 <template>
 	<el-calendar v-model="calendar">
 		<template #date-cell="{ data }">
-			<div style="width: 100%; height: 80%" @click="handleSchedule(data)">
+			<div style="width: 100%" @click="handleSchedule(data)">
 				{{ data.day.split('-').slice(2).join('-') }}
 				<span v-if="filterCellSelected(data)">
 					<el-icon><BellFilled /></el-icon>

@@ -28,10 +28,7 @@
 
 <script lang="ts" setup>
 import { useGeneratorCodeApi } from '/@/api/gen/table';
-import { useRoute } from 'vue-router';
 import { downBlobFile } from '/@/utils/other';
-import { useMessage } from '/@/hooks/message';
-import { useI18n } from 'vue-i18n';
 
 const Generator = defineAsyncComponent(() => import('../table/generator.vue'));
 const EditTable = defineAsyncComponent(() => import('../table/edit.vue'));

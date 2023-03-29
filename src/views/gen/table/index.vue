@@ -59,7 +59,6 @@ import { fetchList, useSyncTableApi, useTableApi } from '/@/api/gen/table';
 import { list } from '/@/api/gen/datasource';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { useRouter } from 'vue-router';
 import { validateNull } from '/@/utils/validate';
 
 // 定义变量内容

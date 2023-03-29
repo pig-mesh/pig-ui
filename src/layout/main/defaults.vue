@@ -11,9 +11,6 @@
 </template>
 
 <script setup lang="ts" name="layoutDefaults">
-import { defineAsyncComponent, watch, onMounted, nextTick, ref } from 'vue';
-import { useRoute } from 'vue-router';
-import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
 

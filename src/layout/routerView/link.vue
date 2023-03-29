@@ -14,8 +14,6 @@
 </template>
 
 <script setup lang="ts" name="layoutLinkView">
-import { reactive, watch } from 'vue';
-import { useRoute } from 'vue-router';
 import { verifyUrl } from '/@/utils/toolsValidate';
 
 // 定义变量内容
