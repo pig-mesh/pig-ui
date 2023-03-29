@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<splitpanes horizontal class="default-theme">
+			<splitpanes horizontal>
 				<pane size="60">
 					<splitpanes>
 						<pane size="67">
@@ -38,9 +38,6 @@
 </template>
 
 <script setup lang="ts" name="home">
-import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
-
 const CurrentUser = defineAsyncComponent(() => import('./current-user.vue'));
 const Favorite = defineAsyncComponent(() => import('./favorite.vue'));
 const ScheduleCalendar = defineAsyncComponent(() => import('./schedule/calendar.vue'));

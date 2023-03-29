@@ -9,7 +9,7 @@ export const getDicts = (type: String) => {
 
 export function fetchList(query: any) {
 	return request({
-		url: '/admin/dict/page',
+		url: '/admin/dict/list',
 		method: 'get',
 		params: query,
 	});

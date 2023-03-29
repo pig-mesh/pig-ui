@@ -1,21 +1,19 @@
 <template>
 	<el-dialog title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
-		<el-row :gutter="20">
-			<el-col :span="6">
-				<el-card :gutter="12" shadow="hover" v-loading="loading">
-					<el-scrollbar height="calc(100vh - 300px)">
-						<el-tree
-							ref="treeRef"
-							node-key="id"
-							:data="preview.fileTree"
-							:expand-on-click-node="false"
-							highlight-current
-							@node-click="handleNodeClick"
-						/>
-					</el-scrollbar>
-				</el-card>
-			</el-col>
-			<el-col :span="18">
+		<splitpanes>
+			<pane size="25">
+				<el-scrollbar height="calc(100vh - 300px)" class="mt20">
+					<el-tree
+						ref="treeRef"
+						node-key="id"
+						:data="preview.fileTree"
+						:expand-on-click-node="false"
+						highlight-current
+						@node-click="handleNodeClick"
+					/>
+				</el-scrollbar>
+			</pane>
+			<pane>
 				<el-tabs v-model="preview.activeName">
 					<el-tab-pane
 						v-for="item in previewCodegen"
@@ -26,8 +24,8 @@
 						<highlightjs autodetect :code="item.code" />
 					</el-tab-pane>
 				</el-tabs>
-			</el-col>
-		</el-row>
+			</pane>
+		</splitpanes>
 	</el-dialog>
 </template>
 <script setup lang="ts" name="preview">

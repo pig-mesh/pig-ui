@@ -1,44 +1,49 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-date-picker v-model="beginTime" class="input_width" placeholder="选择开始时间" @change="check"> </el-date-picker>
-					<el-date-picker v-model="endTime" class="input_width" placeholder="选择结束时间" @change="check"> </el-date-picker>
-				</div>
-			</el-row>
-			<el-row>
-				<el-col :span="4" :xs="24">
-					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
-				</el-col>
-				<el-col :span="20">
-					<el-row :gutter="15" class="home-card-two mb15">
-						<el-col :span="12">
-							<div class="home-card-item">
-								<div style="height: 100%" ref="userCumulateRef"></div>
-							</div>
-						</el-col>
-
-						<el-col :span="12">
-							<div class="home-card-item">
-								<div style="height: 100%" ref="userShardRef"></div>
-							</div>
-						</el-col>
-
-						<el-col :span="12">
-							<div class="home-card-item">
-								<div style="height: 100%" ref="upstreamMsgDistMonthRef"></div>
-							</div>
-						</el-col>
-
-						<el-col :span="12">
-							<div class="home-card-item">
-								<div style="height: 100%" ref="interfaceSummaryRef"></div>
-							</div>
-						</el-col>
-					</el-row>
-				</el-col>
-			</el-row>
+			<splitpanes>
+				<pane size="20">
+					<el-date-picker v-model="beginTime" placeholder="选择开始时间" @change="check" style="width: 50%"></el-date-picker>
+					<el-date-picker v-model="endTime" style="width: 50%" placeholder="选择结束时间" @change="check"></el-date-picker>
+					<div class="layout-padding-auto layout-padding-view">
+						<el-scrollbar>
+							<query-tree class="mt10" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
+						</el-scrollbar>
+					</div>
+				</pane>
+				<pane size="80" class="ml10">
+					<splitpanes horizontal>
+						<pane>
+							<splitpanes>
+								<pane>
+									<div class="home-card-item">
+										<div style="height: 100%" ref="userCumulateRef"></div>
+									</div>
+								</pane>
+								<pane>
+									<div class="home-card-item">
+										<div style="height: 100%" ref="userShardRef"></div>
+									</div>
+								</pane>
+							</splitpanes>
+						</pane>
+						<pane>
+							<splitpanes>
+								<pane>
+									<div class="home-card-item">
+										<div style="height: 100%" ref="upstreamMsgDistMonthRef"></div>
+									</div>
+								</pane>
+								<pane>
+									<div class="home-card-item">
+										<div style="height: 100%" ref="interfaceSummaryRef"></div>
+									</div>
+								</pane>
+							</splitpanes>
+						</pane>
+					</splitpanes>
+				</pane>
+			</splitpanes>
 		</div>
 	</div>
 </template>
@@ -221,6 +226,5 @@ const initdata = () => {
 	background: var(--el-color-white);
 	color: var(--el-text-color-primary);
 	border: 1px solid var(--next-border-color-light);
-	margin-top: 20px;
 }
 </style>

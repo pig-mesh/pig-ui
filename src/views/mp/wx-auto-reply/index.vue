@@ -1,12 +1,14 @@
 <template>
 	<div class="layout-padding">
-		<el-row :gutter="20">
-			<el-col :span="4" :xs="24">
-				<el-card class="layout-padding-auto" shadow="hover">
-					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
-				</el-card>
-			</el-col>
-			<el-col :md="20">
+		<splitpanes>
+			<pane size="20">
+				<div class="layout-padding-auto layout-padding-view">
+					<el-scrollbar>
+						<query-tree class="mt10" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
+					</el-scrollbar>
+				</div>
+			</pane>
+			<pane size="80">
 				<div class="layout-padding-auto layout-padding-view">
 					<el-tabs v-model="type" @tab-click="handleClick">
 						<el-tab-pane name="1" label="1">
@@ -97,8 +99,8 @@
 						</el-tab-pane>
 					</el-tabs>
 				</div>
-			</el-col>
-		</el-row>
+			</pane>
+		</splitpanes>
 		<el-dialog :title="handleType === 'add' ? '新增回复消息' : '修改回复消息'" v-model="dialog1Visible" width="50%">
 			<el-form label-width="100px">
 				<el-form-item v-if="type === '2'" label="请求消息类型">

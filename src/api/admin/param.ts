@@ -1,5 +1,4 @@
 import request from '/@/utils/request';
-import { getObjDetails } from '/@/api/admin/tenant';
 
 export function fetchList(query?: Object) {
 	return request({

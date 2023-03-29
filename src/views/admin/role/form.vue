@@ -9,7 +9,12 @@
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="$t('sysrole.roleCode')" prop="roleCode">
-						<el-input :placeholder="$t('sysrole.please_enter_the_role_Code')" clearable v-model="form.roleCode"></el-input>
+						<el-input
+							:placeholder="$t('sysrole.please_enter_the_role_Code')"
+							:disabled="form.roleId !== ''"
+							clearable
+							v-model="form.roleCode"
+						></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24" class="mb20">

@@ -82,6 +82,10 @@ const getDeptTree = () => {
 onMounted(() => {
 	getDeptTree();
 });
+// 方便收到刷新树
+defineExpose({
+	getDeptTree,
+});
 </script>
 
 <style scoped></style>

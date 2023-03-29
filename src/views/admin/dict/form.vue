@@ -5,7 +5,7 @@
 				<el-row :gutter="35">
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.dictType')" prop="dictType">
-							<el-input :placeholder="$t('sysdict.inputDictTypeTip')" clearable v-model="dataForm.dictType"></el-input>
+							<el-input :placeholder="$t('sysdict.inputDictTypeTip')" :disabled="dataForm.id !== ''" clearable v-model="dataForm.dictType"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
@@ -99,10 +99,10 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
-		dataForm.id ? await putObj(dataForm) : await addObj(dataForm);
+		const result = dataForm.id ? await putObj(dataForm) : await addObj(dataForm);
 		useMessage().success(t(dataForm.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
-		emit('refresh');
+		emit('refresh', result.data);
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	}

@@ -1,28 +1,30 @@
 <template>
 	<div class="layout-padding">
-		<el-row :gutter="20">
-			<el-col :span="4" :xs="24">
-				<el-card>
-					<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">
-						<!-- 没有数据权限提示 -->
-						<template #default="{ node, data }">
-							<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
-								<span>{{ node.label }} <SvgIcon name="ele-Lock" /></span>
-							</el-tooltip>
-							<span v-if="!data.isLock">{{ node.label }}</span>
-						</template>
-					</query-tree>
-				</el-card>
-			</el-col>
-			<el-col :span="20" :xs="24">
+		<splitpanes>
+			<pane size="15">
 				<div class="layout-padding-auto layout-padding-view">
-					<el-row v-show="showSearch" class="mb8 ml10">
+					<el-scrollbar>
+						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">
+							<!-- 没有数据权限提示 -->
+							<template #default="{ node, data }">
+								<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
+									<span>{{ node.label }} <SvgIcon name="ele-Lock" /></span>
+								</el-tooltip>
+								<span v-if="!data.isLock">{{ node.label }}</span>
+							</template>
+						</query-tree>
+					</el-scrollbar>
+				</div>
+			</pane>
+			<pane class="ml8">
+				<div class="layout-padding-auto layout-padding-view">
+					<el-row v-show="showSearch" class="mb8">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('sysuser.username')" prop="username">
-								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
+								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable style="width: 240px" />
 							</el-form-item>
 							<el-form-item :label="$t('sysuser.phone')" prop="phone">
-								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
+								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable style="width: 240px" />
 							</el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
@@ -44,15 +46,10 @@
 							<el-button v-auth="'sys_user_del'" :disabled="multiple" class="ml10" icon="Delete" type="primary" @click="handleDelete(selectObjs)">
 								{{ $t('common.delBtn') }}
 							</el-button>
-							<right-toolbar
-								v-model:showSearch="showSearch"
-								class="ml10"
-								style="float: right; margin-right: 20px"
-								@queryTable="getDataList"
-							></right-toolbar>
+							<right-toolbar v-model:showSearch="showSearch" class="ml10 mr20" style="float: right" @queryTable="getDataList"></right-toolbar>
 						</div>
 					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" max-height="450" style="width: 100%" @selection-change="handleSelectionChange">
+					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange">
 						<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
@@ -94,11 +91,10 @@
 							</template>
 						</el-table-column>
 					</el-table>
-
 					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle"></pagination>
 				</div>
-			</el-col>
-		</el-row>
+			</pane>
+		</splitpanes>
 
 		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
 

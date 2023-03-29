@@ -1,125 +1,129 @@
 <template>
 	<div class="layout-padding">
-		<el-row :gutter="20">
-			<el-col :span="4" :xs="24">
-				<el-card class="layout-padding-auto" shadow="hover">
-					<query-tree :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
-				</el-card>
-			</el-col>
-			<el-col :span="20">
+		<splitpanes>
+			<pane size="20">
 				<div class="layout-padding-auto layout-padding-view">
-					<div v-loading="loading" class="public-account-management clearfix">
-						<div class="left">
-							<div class="weixin-hd">
-								<div class="weixin-title">{{ name }}</div>
-							</div>
-							<div class="weixin-menu menu_main clearfix">
-								<div v-for="(item, i) of menuList" :key="i" class="menu_bottom">
-									<div :class="{ active: isActive === i }" class="menu_item el-icon-s-fold" @click="menuClick(i, item)">
-										{{ item.name }}
-									</div>
-									<!-- 以下为二级菜单-->
-									<div v-if="isSubMenuFlag === i" class="submenu">
-										<template v-for="(subItem, k) in item.children">
-											<div v-if="item.children" :key="k" class="subtitle menu_bottom">
-												<div :class="{ active: isSubMenuActive === i + '' + k }" class="menu_subItem" @click="subMenuClick(subItem, i, k)">
-													{{ subItem.name }}
-												</div>
-											</div>
-										</template>
-										<!-- 二级菜单加号， 当长度 小于 5 才显示二级菜单的加号  -->
-										<div v-if="!item.children || item.children.length < 5" class="menu_bottom menu_addicon" @click="addSubMenu(i, item)">
-											<el-icon>
-												<el-icon-plus />
-											</el-icon>
-										</div>
-									</div>
-								</div>
-								<!-- 一级菜单加号 -->
-								<div v-if="menuList.length < 3" class="menu_bottom menu_addicon" @click="addMenu">
-									<el-icon>
-										<el-icon-plus />
-									</el-icon>
-								</div>
-							</div>
-							<div class="save_div">
-								<el-button class="save_btn" type="success" size="small" @click="handleSave">保存并发布菜单</el-button>
-								<el-button class="save_btn" type="danger" size="small" @click="handleDelete">清空菜单</el-button>
-							</div>
-						</div>
-
-						<div v-if="showRightFlag" class="right">
-							<div class="configure_page">
-								<div class="delete_btn">
-									<el-button icon="Delete" size="mini" type="danger" @click="deleteMenu(tempObj)">删除当前菜单 </el-button>
-								</div>
-								<div>
-									<span>菜单名称：</span>
-									<el-input v-model="tempObj.name" class="input_width" clearable placeholder="请输入菜单名称" />
-								</div>
-								<div v-if="showConfigureContent">
-									<div class="menu_content">
-										<span>菜单标识：</span>
-										<el-input v-model="tempObj.menuKey" class="input_width" clearable placeholder="请输入菜单 KEY" />
-									</div>
-									<div class="menu_content">
-										<span>菜单内容：</span>
-										<el-select v-model="tempObj.type" class="menu_option" clearable placeholder="请选择">
-											<el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value" />
-										</el-select>
-									</div>
-									<div class="configur_content" v-if="tempObj.type === 'view'">
-										<span>跳转链接：</span>
-										<el-input class="input_width" v-model="tempObj.url" placeholder="请输入链接" clearable />
-									</div>
-									<div class="configur_content" v-if="tempObj.type === 'miniprogram'">
-										<div class="applet">
-											<span>小程序的 appid ：</span>
-											<el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid" clearable />
-										</div>
-										<div class="applet">
-											<span>小程序的页面路径：</span>
-											<el-input
-												class="input_width"
-												v-model="tempObj.miniProgramPagePath"
-												placeholder="请输入小程序的页面路径，如：pages/index"
-												clearable
-											/>
-										</div>
-										<div class="applet">
-											<span>小程序的备用网页：</span>
-											<el-input class="input_width" v-model="tempObj.url" placeholder="不支持小程序的老版本客户端将打开本网页" clearable />
-										</div>
-										<p class="blue">tips:需要和公众号进行关联才可以把小程序绑定带微信菜单上哟！</p>
-									</div>
-									<div class="configur_content" v-if="tempObj.type === 'article_view_limited'">
-										<el-row>
-											<div class="select-item" v-if="tempObj && tempObj.replyArticles">
-												<wx-news :objData="tempObj.replyArticles" />
-												<el-row class="ope-row">
-													<el-button type="danger" icon="el-icon-delete" circle @click="deleteMaterial" />
-												</el-row>
-											</div>
-											<div v-else>
-												<el-row>
-													<el-col :span="24" style="text-align: center">
-														<el-button type="success" @click="openMaterial"> 素材库选择<i class="fansel-icon--right"></i> </el-button>
-													</el-col>
-												</el-row>
-											</div>
-											<wx-material-select ref="dialogNewsRef" @selectMaterial="selectMaterial" />
-										</el-row>
-									</div>
-									<div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
-										<wx-reply :objData="tempObj" v-if="hackResetWxReplySelect" />
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+					<el-scrollbar>
+						<query-tree class="mt10" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
+					</el-scrollbar>
 				</div>
-			</el-col>
-		</el-row>
+			</pane>
+			<pane>
+				<div class="layout-padding-auto layout-padding-view">
+					<el-scrollbar>
+						<div v-loading="loading" class="public-account-management clearfix">
+							<div class="left">
+								<div class="weixin-hd">
+									<div class="weixin-title">{{ name }}</div>
+								</div>
+								<div class="weixin-menu menu_main clearfix">
+									<div v-for="(item, i) of menuList" :key="i" class="menu_bottom">
+										<div :class="{ active: isActive === i }" class="menu_item el-icon-s-fold" @click="menuClick(i, item)">
+											{{ item.name }}
+										</div>
+										<!-- 以下为二级菜单-->
+										<div v-if="isSubMenuFlag === i" class="submenu">
+											<template v-for="(subItem, k) in item.children">
+												<div v-if="item.children" :key="k" class="subtitle menu_bottom">
+													<div :class="{ active: isSubMenuActive === i + '' + k }" class="menu_subItem" @click="subMenuClick(subItem, i, k)">
+														{{ subItem.name }}
+													</div>
+												</div>
+											</template>
+											<!-- 二级菜单加号， 当长度 小于 5 才显示二级菜单的加号  -->
+											<div v-if="!item.children || item.children.length < 5" class="menu_bottom menu_addicon" @click="addSubMenu(i, item)">
+												<el-icon>
+													<el-icon-plus />
+												</el-icon>
+											</div>
+										</div>
+									</div>
+									<!-- 一级菜单加号 -->
+									<div v-if="menuList.length < 3" class="menu_bottom menu_addicon" @click="addMenu">
+										<el-icon>
+											<el-icon-plus />
+										</el-icon>
+									</div>
+								</div>
+								<div class="save_div">
+									<el-button class="save_btn" type="success" size="small" @click="handleSave">保存并发布菜单</el-button>
+									<el-button class="save_btn" type="danger" size="small" @click="handleDelete">清空菜单</el-button>
+								</div>
+							</div>
+
+							<div v-if="showRightFlag" class="right">
+								<div class="configure_page">
+									<div class="delete_btn">
+										<el-button icon="Delete" size="mini" type="danger" @click="deleteMenu(tempObj)">删除当前菜单 </el-button>
+									</div>
+									<div>
+										<span>菜单名称：</span>
+										<el-input v-model="tempObj.name" class="input_width" clearable placeholder="请输入菜单名称" />
+									</div>
+									<div v-if="showConfigureContent">
+										<div class="menu_content">
+											<span>菜单标识：</span>
+											<el-input v-model="tempObj.menuKey" class="input_width" clearable placeholder="请输入菜单 KEY" />
+										</div>
+										<div class="menu_content">
+											<span>菜单内容：</span>
+											<el-select v-model="tempObj.type" class="menu_option" clearable placeholder="请选择">
+												<el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value" />
+											</el-select>
+										</div>
+										<div class="configur_content" v-if="tempObj.type === 'view'">
+											<span>跳转链接：</span>
+											<el-input class="input_width" v-model="tempObj.url" placeholder="请输入链接" clearable />
+										</div>
+										<div class="configur_content" v-if="tempObj.type === 'miniprogram'">
+											<div class="applet">
+												<span>小程序的 appid ：</span>
+												<el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid" clearable />
+											</div>
+											<div class="applet">
+												<span>小程序的页面路径：</span>
+												<el-input
+													class="input_width"
+													v-model="tempObj.miniProgramPagePath"
+													placeholder="请输入小程序的页面路径，如：pages/index"
+													clearable
+												/>
+											</div>
+											<div class="applet">
+												<span>小程序的备用网页：</span>
+												<el-input class="input_width" v-model="tempObj.url" placeholder="不支持小程序的老版本客户端将打开本网页" clearable />
+											</div>
+											<p class="blue">tips:需要和公众号进行关联才可以把小程序绑定带微信菜单上哟！</p>
+										</div>
+										<div class="configur_content" v-if="tempObj.type === 'article_view_limited'">
+											<el-row>
+												<div class="select-item" v-if="tempObj && tempObj.replyArticles">
+													<wx-news :objData="tempObj.replyArticles" />
+													<el-row class="ope-row">
+														<el-button type="danger" icon="el-icon-delete" circle @click="deleteMaterial" />
+													</el-row>
+												</div>
+												<div v-else>
+													<el-row>
+														<el-col :span="24" style="text-align: center">
+															<el-button type="success" @click="openMaterial"> 素材库选择<i class="fansel-icon--right"></i> </el-button>
+														</el-col>
+													</el-row>
+												</div>
+												<wx-material-select ref="dialogNewsRef" @selectMaterial="selectMaterial" />
+											</el-row>
+										</div>
+										<div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
+											<wx-reply :objData="tempObj" v-if="hackResetWxReplySelect" />
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</el-scrollbar>
+				</div>
+			</pane>
+		</splitpanes>
 	</div>
 </template>
 

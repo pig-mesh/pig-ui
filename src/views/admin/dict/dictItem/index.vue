@@ -1,36 +1,32 @@
 <template>
-	<el-drawer v-model="visible" :title="$t('sysdict.dictItem')" size="80%">
-		<div class="layout-padding-auto layout-padding-view">
-			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button icon="folder-add" type="primary" class="ml10" @click="dictformRef.openDialog(null, state.queryForm)">
-						{{ $t('common.addBtn') }}
-					</el-button>
-					<right-toolbar :search="false" class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList"></right-toolbar>
-				</div>
-				<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
-					<el-table-column prop="dictType" :label="$t('dictItem.dictType')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="value" :label="$t('dictItem.itemValue')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="label" :label="$t('dictItem.label')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="description" :label="$t('dictItem.description')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="sortOrder" :label="$t('dictItem.sortOrder')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="remarks" :label="$t('dictItem.remarks')" show-overflow-tooltip></el-table-column>
-					<el-table-column prop="createTime" :label="$t('dictItem.createTime')" show-overflow-tooltip></el-table-column>
-
-					<el-table-column :label="$t('common.action')" width="150">
-						<template #default="scope">
-							<el-button text type="primary" @click="dictformRef.openDialog(scope.row)"> {{ $t('common.editBtn') }} </el-button>
-							<el-button text type="primary" @click="handleDelete(scope.row)">
-								{{ $t('common.delBtn') }}
-							</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-				<pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"> </pagination>
-			</el-row>
+	<div class="layout-padding-auto layout-padding-view">
+		<div class="mb8">
+			<el-button icon="folder-add" type="primary" class="ml10" @click="dictformRef.openDialog(null, state.queryForm)">
+				{{ $t('common.addBtn') }}
+			</el-button>
+			<right-toolbar :search="false" class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList"></right-toolbar>
 		</div>
+		<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
+			<el-table-column prop="dictType" :label="$t('dictItem.dictType')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="value" :label="$t('dictItem.itemValue')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="label" :label="$t('dictItem.label')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="description" :label="$t('dictItem.description')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="sortOrder" :label="$t('dictItem.sortOrder')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="remarks" :label="$t('dictItem.remarks')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="createTime" :label="$t('dictItem.createTime')" show-overflow-tooltip></el-table-column>
+
+			<el-table-column :label="$t('common.action')" width="150">
+				<template #default="scope">
+					<el-button text type="primary" @click="dictformRef.openDialog(scope.row)"> {{ $t('common.editBtn') }} </el-button>
+					<el-button text type="primary" @click="handleDelete(scope.row)">
+						{{ $t('common.delBtn') }}
+					</el-button>
+				</template>
+			</el-table-column>
+		</el-table>
+		<pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"> </pagination>
 		<dict-form ref="dictformRef" @refresh="getDataList"></dict-form>
-	</el-drawer>
+	</div>
 </template>
 
 <script setup lang="ts" name="dict-item">

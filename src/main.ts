@@ -23,6 +23,10 @@ import 'highlight.js/styles/atom-one-dark.css';
 import 'highlight.js/lib/common';
 import hljsVuePlugin from '@highlightjs/vue-plugin';
 
+// 布局工具
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
+
 const app = createApp(App);
 
 // 导入通用自定义组件
@@ -33,7 +37,9 @@ app.component('uploadExcel', UploadExcel);
 app.component('UploadFile', UploadFile);
 app.component('UploadImg', UploadImg);
 app.component('Editor', Editor);
-
+// 导入布局插件
+app.component('Splitpanes', Splitpanes);
+app.component('Pane', Pane);
 // 全局方法挂载
 app.config.globalProperties.parseTime = parseTime;
 app.config.globalProperties.parseDate = parseDate;
