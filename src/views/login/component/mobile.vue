@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts" name="loginMobile">
-import { reactive } from 'vue';
 import { sendMobileCode } from '/@/api/login';
 import { useMessage } from '/@/hooks/message';
 import { useUserInfo } from '/@/stores/userInfo';
@@ -40,15 +39,18 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const emit = defineEmits(['signInSuccess']);
+
+// 创建一个 ref 对象，并将其初始化为 null
 const loginFormRef = ref();
 const loading = ref(false);
 
-// 定义变量内容
+// 定义响应式对象
 const loginForm = reactive({
 	mobile: '',
 	code: '',
 });
 
+// 定义校验规则
 const loginRules = reactive({
 	mobile: [{ required: true, trigger: 'blur', validator: rule.validatePhone }],
 	code: [
@@ -60,30 +62,28 @@ const loginRules = reactive({
 	],
 });
 
+/**
+ * 处理发送验证码事件。
+ */
 const handleSendCode = async () => {
-	loginFormRef.value.validateField('mobile', (valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+	const valid = await loginFormRef.value.validateField('mobile').catch(() => {});
+	if (!valid) return;
 
-		sendMobileCode(loginForm.mobile).then((response: any) => {
-			if (response.data) {
-				useMessage().success('验证码发送成功');
-				// 调用验证码计时器
-				timeCacl();
-			} else {
-				useMessage().error(response.msg);
-			}
-		});
-	});
+	const response = await sendMobileCode(loginForm.mobile);
+	if (response.data) {
+		useMessage().success('验证码发送成功');
+		timeCacl();
+	} else {
+		useMessage().error(response.msg);
+	}
 };
 
 /**
- * 处理登录请求。
+ * 处理登录事件。
  */
 const handleLogin = async () => {
 	const valid = await loginFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+	if (!valid) return;
 
 	try {
 		loading.value = true;
@@ -94,14 +94,17 @@ const handleLogin = async () => {
 	}
 };
 
+// 定义响应式对象
 const msg = reactive({
 	msgText: t('mobile.codeText'),
 	msgTime: 60,
 	msgKey: false,
 });
 
+/**
+ * 计算并更新倒计时。
+ */
 const timeCacl = () => {
-	// 计时避免重复发送
 	msg.msgText = `${msg.msgTime}秒后重发`;
 	msg.msgKey = true;
 	const time = setInterval(() => {

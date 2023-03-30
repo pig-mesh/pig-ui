@@ -15,19 +15,33 @@
 </template>
 
 <script setup lang="ts" name="SysFavoriteDashboard">
-import { storeToRefs } from 'pinia';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import shortcutCard from '/@/components/ShortcutCard/index.vue';
 
+/**
+ * 获取路由对象的实例。
+ */
 const router = useRouter();
-const storesTagsViewRoutes = useTagsViewRoutes();
-const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
 
+/**
+ * 获取 tagsView 路由列表 store 对象的实例。
+ */
+const storesTagsViewRoutes = useTagsViewRoutes();
+const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes); // 将 tagView 路由列表转换为 Ref 对象
+
+/**
+ * 点击跳转链接触发事件的回调函数。
+ * @param path - 需要跳转的路径。
+ */
 const handleRoute = (path: string) => {
-	router.push(path);
+	router.push(path); // 跳转到指定路由页面
 };
 
+/**
+ * 关闭收藏路由的事件回调函数。
+ * @param item - 需要删除的路由信息。
+ */
 const handleCloseFavorite = (item: any) => {
-	storesTagsViewRoutes.delFavoriteRoutes(item);
+	storesTagsViewRoutes.delFavoriteRoutes(item); // 从收藏路由列表中删除指定路由
 };
 </script>

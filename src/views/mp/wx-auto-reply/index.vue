@@ -75,7 +75,16 @@
 									</el-button>
 								</div>
 							</el-row>
-							<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" max-height="600px" @sort-change="sortChangeHandle">
+							<el-table
+								v-loading="state.loading"
+								:data="state.dataList"
+								style="width: 100%"
+								max-height="600px"
+								@sort-change="sortChangeHandle"
+								border
+								:cell-style="tableStyle.cellStyle"
+								:header-cell-style="tableStyle.headerCellStyle"
+							>
 								<el-table-column label="序号" type="index" width="80" />
 								<el-table-column label="关键词" prop="reqKey" show-overflow-tooltip> </el-table-column>
 								<el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
@@ -245,7 +254,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	createdIsNeed: false,
 });
 
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, tableStyle } = useTable(state);
 
 const dialog1Visible = ref(false);
 

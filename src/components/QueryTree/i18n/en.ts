@@ -3,5 +3,6 @@ export default {
 		hideSearch: 'hideSearch',
 		displayTheSearch: 'displayTheSearch',
 		refresh: 'refresh',
+		print: 'print',
 	},
 };

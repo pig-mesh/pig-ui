@@ -1,4 +1,4 @@
-import { ElMessage } from 'element-plus';
+import { CellStyle, ElMessage } from 'element-plus';
 import other from '/@/utils/other';
 
 /**
@@ -31,6 +31,14 @@ export interface BasicTableProps {
 	ascs?: string[];
 	// props属性对象，类型为any
 	props?: any;
+}
+
+/**
+ * 表格样式。
+ */
+export interface TableStyle {
+	cellStyle: CellStyle<any>;
+	headerCellStyle: CellStyle<any>;
 }
 
 /**
@@ -214,7 +222,21 @@ export function useTable(options?: BasicTableProps) {
 		return other.downBlobFile(url, query, fileName);
 	};
 
+	/**
+	 * 定义表格通用样式
+	 * @returns  css
+	 */
+	const tableStyle: TableStyle = {
+		cellStyle: { textAlign: 'center' },
+		headerCellStyle: {
+			textAlign: 'center',
+			background: 'var(--el-table-row-hover-bg-color)',
+			color: 'var(--el-text-color-primary)',
+		}
+	};
+
 	return {
+		tableStyle,
 		getDataList,
 		sizeChangeHandle,
 		currentChangeHandle,

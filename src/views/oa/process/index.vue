@@ -27,7 +27,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('process.index')" type="index" width="80" />
 				<el-table-column :label="$t('process.processonDefinitionId')" prop="processonDefinitionId" show-overflow-tooltip></el-table-column>
@@ -51,7 +59,9 @@
 						<el-button @click="handleView(scope.row)" text type="primary">流程图 </el-button>
 						<el-button @click="handleStatus(scope.row, 'suspend')" text type="primary" v-if="!scope.row.suspend">失效 </el-button>
 						<el-button @click="handleStatus(scope.row, 'active')" text type="primary" v-if="scope.row.suspend">激活 </el-button>
-						<el-button @click="handleDelete([scope.row.processonDefinitionId])" text type="primary" v-auth="'oa_process_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button @click="handleDelete([scope.row.processonDefinitionId])" text type="primary" v-auth="'oa_process_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -93,7 +103,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {
@@ -141,7 +151,7 @@ const handleStatus = async (row, type) => {
 	}
 
 	try {
-		await status(row.processonDefinitionId, type)
+		await status(row.processonDefinitionId, type);
 		getDataList();
 		useMessage().success(t('common.optSuccessText'));
 	} catch (err: any) {

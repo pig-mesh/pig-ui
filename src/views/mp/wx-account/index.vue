@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm">
 					<el-form-item :label="$t('account.name')" prop="name">
 						<el-input v-model="state.queryForm.name" :placeholder="t('account.inputNameTip')" style="max-width: 180px" />
@@ -22,10 +22,8 @@
 					<el-button v-auth="'mp_wxaccount_add'" class="ml10" formDialogRef icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button v-auth="'mp_wxaccount_export'" class="ml10" formDialogRef icon="Download" type="primary" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
+						plain
 						v-auth="'mp_wxaccount_del'"
 						:disabled="multiple"
 						class="ml10"
@@ -34,9 +32,11 @@
 						type="primary"
 						@click="handleDelete(selectObjs)"
 					>
-						{{ $t('common.delBtn') }}
+						{{ $t('common.mp_wxaccount_export') }}
 					</el-button>
 					<right-toolbar
+						:export="'app_social_details_del'"
+						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -50,6 +50,9 @@
 				style="width: 100%"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('account.index')" type="index" width="80" />
@@ -121,7 +124,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

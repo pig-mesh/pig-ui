@@ -22,7 +22,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table
+				:data="state.dataList"
+				v-loading="state.loading"
+				style="width: 100%"
+				@selection-change="handleSelectionChange"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column type="selection" width="60" align="center" />
 				<el-table-column type="index" :label="t('log.index')" width="80" />
 				<el-table-column prop="jobName" :label="t('log.jobName')" show-overflow-tooltip />
@@ -77,7 +85,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	createdIsNeed: false,
 });
 
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 const openDialog = (id: string) => {
 	visible.value = true;

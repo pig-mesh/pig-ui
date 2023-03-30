@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm">
 					<el-form-item :label="t('social.type')" class="ml2" prop="type">
 						<el-select v-model="state.queryForm.type" :placeholder="t('social.inputTypeTip')">
@@ -21,9 +21,6 @@
 					<el-button v-auth="'sys_social_details_add'" class="ml10" icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button class="ml10" icon="Download" type="primary" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
 						v-auth="'sys_social_details_del'"
 						:disabled="multiple"
@@ -35,6 +32,8 @@
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'sys_social_details_del'"
+						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -42,7 +41,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table
+				v-loading="state.loading"
+				:data="state.dataList"
+				style="width: 100%"
+				@selection-change="handleSelectionChange"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('social.index')" type="index" width="80" />
 				<el-table-column :label="t('social.type')" prop="type" show-overflow-tooltip>
@@ -102,7 +109,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

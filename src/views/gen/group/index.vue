@@ -19,10 +19,8 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'codegen_group_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary" v-auth="'codegen_group_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
+						plain
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
@@ -34,6 +32,8 @@
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'codegen_group_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -47,6 +47,9 @@
 				@sort-change="sortChangeHandle"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('group.index')" type="index" width="80" />
@@ -97,7 +100,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

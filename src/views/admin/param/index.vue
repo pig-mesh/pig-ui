@@ -24,19 +24,29 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
+					<el-button v-auth="'admin_syspublicparam_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
-						{{ $t('common.delBtn') }}
-					</el-button>
-					<el-button @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+
+					<el-button plain v-auth="'admin_syspublicparam_del'" @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 						{{ $t('common.refreshCacheBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
+
+					<el-button
+						plain
+						v-auth="'admin_syspublicparam_del'"
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+						class="ml10"
+						icon="Delete"
+						type="primary"
+					>
+						{{ $t('common.delBtn') }}
 					</el-button>
+
 					<right-toolbar
+						:export="'admin_syspublicparam_del'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -44,7 +54,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50"> </el-table-column>
 				<el-table-column :label="t('param.index')" type="index" width="80" />
 				<el-table-column :label="t('param.publicName')" prop="publicName" show-overflow-tooltip />
@@ -67,7 +85,13 @@
 
 						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
 							<span style="margin-left: 12px">
-								<el-button :disabled="scope.row.systemFlag !== '0'" @click="handleDelete([scope.row.publicId])" text type="primary">
+								<el-button
+									v-auth="'admin_syspublicparam_del'"
+									:disabled="scope.row.systemFlag !== '0'"
+									@click="handleDelete([scope.row.publicId])"
+									text
+									type="primary"
+								>
 									{{ $t('common.delBtn') }}
 								</el-button>
 							</span>
@@ -114,7 +138,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

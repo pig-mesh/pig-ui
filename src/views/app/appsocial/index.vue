@@ -28,10 +28,8 @@
 					>
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
+						plain
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
@@ -43,6 +41,8 @@
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'app_social_details_del'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -56,6 +56,9 @@
 				@sort-change="sortChangeHandle"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('appsocial.index')" type="index" width="80" />
@@ -118,7 +121,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

@@ -20,6 +20,9 @@
 				row-key="path"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('appmenu.name')" prop="name" show-overflow-tooltip></el-table-column>
@@ -76,7 +79,8 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	isPage: false,
 });
-const { getDataList } = useTable(state);
+
+const { getDataList, tableStyle } = useTable(state);
 
 // 多选事件
 const handleSelectionChange = (objs: any) => {

@@ -1,7 +1,7 @@
 <template>
 	<el-drawer v-model="visible" title="日程管理" size="80%" @close="handleClose">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="t('schedule.date')" prop="date">
 						<el-date-picker
@@ -27,16 +27,15 @@
 					<el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog(null, state.queryForm)">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(selectObjs)">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="true"
+						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml10 mr20"
+						style="float: right"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
@@ -47,6 +46,9 @@
 				style="width: 100%"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column type="selection" width="60" align="center" />
 				<el-table-column type="index" :label="t('schedule.index')" width="80" />
@@ -110,7 +112,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: fetchList,
 });
 
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

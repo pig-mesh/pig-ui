@@ -17,22 +17,27 @@
 <script setup lang="ts" name="SysLogDashboard">
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { pageList } from '/@/api/admin/log';
+
 const router = useRouter();
 
-const logState: BasicTableProps = reactive<BasicTableProps>({
-	pageList: pageList,
-	descs: ['create_time'],
+// 创建基本表格参数对象
+const logState: BasicTableProps = reactive({
+	pageList, // 分页列表数据
+	descs: ['create_time'], // 排序方式
 	pagination: {
-		size: 5,
+		size: 5, // 每页显示数据量
 	},
 });
 
+// 使用实例
 useTable(logState);
 
+/**
+ * 处理路由跳转事件
+ * @function
+ */
 const handleRoutr = () => {
-	router.push({
-		path: '/admin/log/index',
-	});
+	router.push('/admin/log/index'); // 跳转到日志管理页面
 };
 </script>
 

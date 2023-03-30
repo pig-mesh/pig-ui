@@ -32,6 +32,9 @@
 				row-key="path"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle?.headerCellStyle"
 			>
 				<el-table-column :label="$t('sysmenu.name')" fixed prop="name" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.sortOrder')" prop="sortOrder" show-overflow-tooltip></el-table-column>
@@ -43,9 +46,9 @@
 				<el-table-column :label="$t('sysmenu.path')" prop="path" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.menuType')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="success" v-if="scope.row.menuType === '0'">左菜单</el-tag>
-						<el-tag type="success" v-if="scope.row.menuType === '2'">顶菜单</el-tag>
-						<el-tag type="info" v-if="scope.row.menuType === '1'">按钮</el-tag>
+						<el-tag v-if="scope.row.menuType === '0'">左菜单</el-tag>
+						<el-tag v-if="scope.row.menuType === '2'">顶菜单</el-tag>
+						<el-tag type="success" v-if="scope.row.menuType === '1'">按钮</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.keepAlive')" show-overflow-tooltip>
@@ -57,12 +60,14 @@
 				<el-table-column :label="$t('sysmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
 					<template #default="scope">
-						<el-button @click="onOpenAddMenu('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
+						<el-button icon="folder-add" @click="onOpenAddMenu('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
 						</el-button>
-						<el-button @click="onOpenEditMenu('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'">{{ $t('common.editBtn') }} </el-button>
+						<el-button icon="edit-pen" @click="onOpenEditMenu('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'"
+							>{{ $t('common.editBtn') }}
+						</el-button>
 
-						<el-tooltip :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)" placement="top">
+						<el-tooltip icon="delete" :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)" placement="top">
 							<span style="margin-left: 12px">
 								<el-button :disabled="deleteMenuDisabled(scope.row)" @click="handleDelete(scope.row)" text type="primary" v-auth="'sys_menu_del'">
 									{{ $t('common.delBtn') }}
@@ -96,7 +101,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	isPage: false,
 });
 
-const { getDataList } = useTable(state);
+const { getDataList, tableStyle } = useTable(state);
 
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type?: string, row?: any) => {

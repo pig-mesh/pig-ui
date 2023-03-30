@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('wxAccountTag.tag')" prop="tag">
 						<el-input v-model="state.queryForm.tag" :placeholder="t('wxAccountTag.inputTagTip')" style="max-width: 180px" />
@@ -45,7 +45,7 @@
 					>
 						{{ $t('common.delBtn') }}
 					</el-button>
-					<el-button icon="Sort" @click="asyncTag">同步</el-button>
+					<el-button plain type="primary" icon="Sort" @click="asyncTag">同步</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml10"
@@ -60,6 +60,9 @@
 				style="width: 100%"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('wxAccountTag.index')" type="index" width="80" />
@@ -136,7 +139,7 @@ watch(
 );
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

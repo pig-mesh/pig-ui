@@ -55,17 +55,19 @@ import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/admin/schedule';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
+
 const emit = defineEmits(['refresh']);
 
+// 获取字典内容
 const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_status');
 
+// 使用国际化实例
 const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-// 定义字典
 
 // 提交表单数据
 const form = reactive({
@@ -88,15 +90,18 @@ const dataRules = ref({
 	date: [{ required: true, message: '日期不能为空', trigger: 'blur' }],
 });
 
-// 打开弹窗
+/**
+ * 打开日程表单弹窗
+ * @function
+ * @param {string} id - 日程ID
+ * @param {Object} row - 行数据
+ */
 const openDialog = (id: string, row: any) => {
 	visible.value = true;
 	form.id = '';
 
 	// 重置表单数据
-	nextTick(() => {
-		dataFormRef.value?.resetFields();
-	});
+	nextTick(() => dataFormRef.value?.resetFields());
 
 	if (row?.date) {
 		form.date = row.date;
@@ -109,13 +114,18 @@ const openDialog = (id: string, row: any) => {
 	}
 };
 
-// 提交
+/**
+ * 提交表单数据
+ * @function
+ * @async
+ */
 const onSubmit = async () => {
+	// 验证表单是否符合规则
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
 	try {
-		form.id ? await putObj(form) : await addObj(form);
+		await (form.id ? putObj(form) : addObj(form));
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
@@ -124,22 +134,19 @@ const onSubmit = async () => {
 	}
 };
 
-
-// 初始化表单数据
+/**
+ * 获取sysSchedule数据
+ * @function
+ * @param {string} id - 日程ID
+ */
 const getsysScheduleData = (id: string) => {
 	// 获取数据
 	loading.value = true;
 	getObj(id)
-		.then((res: any) => {
-			Object.assign(form, res.data);
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+		.then((res: any) => Object.assign(form, res.data))
+		.finally(() => (loading.value = false));
 };
 
 // 暴露变量
-defineExpose({
-	openDialog,
-});
+defineExpose({ openDialog });
 </script>

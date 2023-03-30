@@ -14,12 +14,18 @@
 	</el-card>
 </template>
 
-<script setup lang="ts" name="SysFavoriteDashboard">
+<script setup lang="ts" name="newsLetter">
 import { useMsg } from '/@/stores/msg';
 
+/**
+ * 获取消息列表 store 对象的实例。
+ */
 const mes = useMsg();
 
+/**
+ * 消息列表的计算属性。
+ */
 const newsList = computed(() => {
-	return mes.getAllMsg();
+	return mes.getAllMsg(); // 从 store 中获取所有消息
 });
 </script>

@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('wxFansMsg.appName')" prop="wxAccountAppid">
 						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('wxFansMsg.appName')" clearable class="w100">
@@ -48,7 +48,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
+			<el-table
+				v-loading="state.loading"
+				:data="state.dataList"
+				style="width: 100%"
+				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column :label="t('wxFansMsg.index')" type="index" width="80" />
 				<el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip />
@@ -138,7 +146,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

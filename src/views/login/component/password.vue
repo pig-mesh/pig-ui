@@ -44,66 +44,61 @@
 </template>
 
 <script setup lang="ts" name="password">
-import { reactive, defineAsyncComponent, ref } from 'vue';
+import { reactive, defineAsyncComponent, ref, defineEmits } from 'vue';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
 
+// 使用国际化插件
 const { t } = useI18n();
+
+// 动态加载滑块验证码组件
 const Verify = defineAsyncComponent(() => import('/@/components/verifition/Verify.vue'));
 
 // 定义变量内容
-const emit = defineEmits(['signInSuccess']);
-
-const loginFormRef = ref();
-const loading = ref(false);
+const emit = defineEmits(['signInSuccess']); // 声明事件名称
+const loginFormRef = ref(); // 定义LoginForm表单引用
+const loading = ref(false); // 定义是否正在登录中
 const state = reactive({
-	isShowPassword: false,
+	isShowPassword: false, // 是否显示密码
 	ruleForm: {
-		username: 'admin',
-		password: '123456',
-		code: '',
-		randomStr: 'blockPuzzle',
+		// 表单数据
+		username: 'admin', // 用户名
+		password: '123456', // 密码
+		code: '', // 验证码
+		randomStr: 'blockPuzzle', // 验证码随机数
 	},
 });
 
 const loginRules = reactive({
-	username: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder1') }],
-	password: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder2') }],
+	username: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder1') }], // 用户名校验规则
+	password: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder2') }], // 密码校验规则
 });
 
-// @ts-ignore
-const verifyref = ref<InstanceType<typeof Verify>>(null);
+const verifyref = ref<InstanceType<typeof Verify>>(null); // 定义verify组件引用
 
 // 调用滑块验证码进行校验
-const handleVerify = () => {
-	loginFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-
-		verifyref.value.show();
-	});
+const handleVerify = async () => {
+	const valid = await loginFormRef.value.validate(); // 表单校验
+	if (valid) {
+		verifyref.value.show(); // 显示验证组件
+	}
 };
 
 // 滑块验证码校验成功调用后台登录接口
 const verifySuccess = (params: any) => {
-	state.ruleForm.code = params.captchaVerification;
-	onSignIn();
+	state.ruleForm.code = params.captchaVerification; // 获取验证码
+	onSignIn(); // 调用登录方法
 };
 
 // 账号密码登录
-const onSignIn = () => {
-	loading.value = true;
-	// 调用后台接口进行登录
-	useUserInfo()
-		.login(state.ruleForm)
-		.then(() => {
-			// 登录后前端页面跳转
-			emit('signInSuccess');
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+const onSignIn = async () => {
+	loading.value = true; // 正在登录中
+	try {
+		await useUserInfo().login(state.ruleForm); // 调用登录方法
+		emit('signInSuccess'); // 触发事件
+	} finally {
+		loading.value = false; // 登录结束
+	}
 };
 </script>
 

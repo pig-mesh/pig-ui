@@ -22,11 +22,9 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="exportExcel" class="ml10" formDialogRef icon="Download" type="primary" v-auth="'pay_order_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
 						:disabled="multiple"
+						plain
 						@click="handleDelete(selectObjs)"
 						class="ml10"
 						formDialogRef
@@ -37,6 +35,8 @@
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'pay_order_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -50,6 +50,9 @@
 				@sort-change="sortChangeHandle"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('order.index')" type="index" width="80" />
@@ -118,7 +121,7 @@ const dictType = ref([
 ]);
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

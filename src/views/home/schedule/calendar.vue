@@ -22,7 +22,7 @@ import { list } from '/@/api/admin/schedule';
 
 const ScheduleForm = defineAsyncComponent(() => import('./form.vue'));
 const Schedule = defineAsyncComponent(() => import('./index.vue'));
-const scheduleDataList = ref([] as any);
+const scheduleDataList = ref([]);
 const scheduleFormRef = ref();
 const scheduleRef = ref();
 const calendar = ref(new Date());
@@ -31,6 +31,7 @@ onMounted(() => {
 	initscheduleList(formatDate(calendar.value, 'YYYY-mm'));
 });
 
+// 监听日历日期变化并更新日程数据
 watch(calendar, (val, oldval) => {
 	const newVal = formatDate(val, 'YYYY-mm');
 	const old = formatDate(oldval, 'YYYY-mm');
@@ -39,6 +40,11 @@ watch(calendar, (val, oldval) => {
 	}
 });
 
+/**
+ * 初始化日程数据列表
+ * @function
+ * @param {string} date - YYYY-mm格式的日期字符串
+ */
 const initscheduleList = (date) => {
 	list({
 		month: `${date}-01`,
@@ -47,6 +53,12 @@ const initscheduleList = (date) => {
 	});
 };
 
+/**
+ * 过滤日历中选中的单元格是否有日程
+ * @function
+ * @param {object} data - 当前单元格包含的日期信息
+ * @returns {boolean} 是否有日程
+ */
 const filterCellSelected = (data) => {
 	return (
 		scheduleDataList.value.filter((item) => {
@@ -55,8 +67,12 @@ const filterCellSelected = (data) => {
 	);
 };
 
+/**
+ * 处理日程安排事件，若当前日期下没有日程则打开表单对话框，否则打开日程详情页面
+ * @function
+ * @param {object} data - 当前单元格包含的日期信息
+ */
 const handleSchedule = (data) => {
-	//如果当前日期下日程为空则打开form
 	if (filterCellSelected(data)) {
 		scheduleRef.value.open({ date: parseDate(data.date, null) });
 	} else {

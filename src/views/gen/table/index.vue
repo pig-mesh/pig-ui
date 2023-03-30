@@ -33,7 +33,14 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column :label="t('table.index')" type="index" width="80" />
 				<el-table-column :label="t('table.tableName')" prop="tableName" show-overflow-tooltip />
 				<el-table-column :label="t('table.tableDesc')" prop="tableComment" show-overflow-tooltip />
@@ -81,7 +88,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 初始化数据
 onMounted(() => {

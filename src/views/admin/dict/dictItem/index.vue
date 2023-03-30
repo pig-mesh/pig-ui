@@ -6,7 +6,14 @@
 			</el-button>
 			<right-toolbar :search="false" class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList"></right-toolbar>
 		</div>
-		<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
+		<el-table
+			:data="state.dataList"
+			v-loading="state.loading"
+			style="width: 100%"
+			border
+			:cell-style="tableStyle.cellStyle"
+			:header-cell-style="tableStyle.headerCellStyle"
+		>
 			<el-table-column prop="dictType" :label="$t('dictItem.dictType')" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="value" :label="$t('dictItem.itemValue')" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="label" :label="$t('dictItem.label')" show-overflow-tooltip></el-table-column>
@@ -47,7 +54,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	createdIsNeed: false,
 	pageList: fetchItemList,
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 const handleDelete = async (row: any) => {
 	try {

@@ -27,12 +27,30 @@
 import Cookies from 'js-cookie';
 import other from '/@/utils/other';
 
+/**
+ * 执行跳转事件的函数。
+ * @event signInSuccess
+ */
 const emit = defineEmits(['signInSuccess']);
+
+/**
+ * 存储弹出窗口实例的 Ref 对象。
+ */
 const winOpen = ref();
+
+/**
+ * 计时器对象，用于检查弹出窗口是否关闭。
+ */
 const timer = ref();
 
+/**
+ * 点击按钮触发事件的回调函数，用于打开第三方登录授权页面。
+ * @param thirdpart - 第三方平台名称。
+ */
 const handleClick = (thirdpart: string) => {
 	let url: string = '';
+
+	// 获取授权地址
 	const redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
 	if (thirdpart === 'wechat') {
 		const appid = 'wxd1678d3f83b1d83a';
@@ -48,18 +66,23 @@ const handleClick = (thirdpart: string) => {
 		url = `https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=${client_id}'&state=OSC-LOGIN&redirect_uri=${redirect_uri}`;
 	} else if (thirdpart === 'cas') {
 		let returnUrl = encodeURIComponent(window.location.origin + '?state=CAS-LOGIN/#/authredirect');
-
 		url = `http://127.0.0.1:8080/cas/login?service=${returnUrl}`;
 	}
+
+	// 打开授权窗口并存储实例
 	winOpen.value = other.openWindow(url, thirdpart, 540, 540);
 };
 
+/**
+ * 页面加载后执行的函数，用于检查窗口是否关闭。
+ */
 onMounted(() => {
 	timer.value = window.setInterval(() => {
-		// 判断弹框是否关闭
+		// 检查弹出窗口是否已关闭
 		if (winOpen.value && winOpen.value.closed == true) {
+			// 停止计时器
 			window.clearInterval(timer.value);
-			// 如果已经获取到 token 则执行跳转事件
+			// 如果已获取到 token，则触发跳转事件
 			if (Cookies.get('token')) {
 				emit('signInSuccess');
 			}

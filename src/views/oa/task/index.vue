@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="$t('task.taskName')" prop="taskName">
 						<el-input :placeholder="t('task.inputTaskNameTip')" v-model="state.queryForm.taskName" style="max-width: 180px" />
@@ -16,13 +16,21 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(selectObjs)">
+					<el-button
+						plain
+						v-auth="'oa_task_del'"
+						formDialogRef
+						:disabled="multiple"
+						icon="Delete"
+						type="primary"
+						class="ml10"
+						@click="handleDelete(selectObjs)"
+					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'oa_task_add'"
+						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -36,6 +44,9 @@
 				style="width: 100%"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column type="selection" width="60" align="center" />
 				<el-table-column type="index" :label="t('task.index')" width="80" />
@@ -44,9 +55,9 @@
 				<el-table-column prop="time" :label="t('task.time')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button text type="primary" @click="handleView(scope.row)">流程图 </el-button>
-						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row.taskId)">审批 </el-button>
-						<el-button text type="primary" @click="commentDialogRef.openDialog(scope.row.taskId)">批注 </el-button>
+						<el-button text v-auth="'oa_task_del'" type="primary" @click="handleView(scope.row)">流程图 </el-button>
+						<el-button text v-auth="'oa_task_del'" type="primary" @click="formDialogRef.openDialog(scope.row.taskId)">审批 </el-button>
+						<el-button text v-auth="'oa_task_del'" type="primary" @click="commentDialogRef.openDialog(scope.row.taskId)">批注 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -94,7 +105,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

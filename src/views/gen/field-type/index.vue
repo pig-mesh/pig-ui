@@ -19,13 +19,12 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
+					<el-button plain :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="true"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -33,7 +32,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="t('fieldtype.index')" type="index" width="80" />
 				<el-table-column :label="t('fieldtype.columnType')" prop="columnType" show-overflow-tooltip />
@@ -81,7 +88,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

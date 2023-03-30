@@ -85,7 +85,15 @@
 									<el-button type="primary" @click="subVideo">提 交</el-button>
 								</template>
 							</el-dialog>
-							<el-table v-loading="state.loading" :data="state.dataList" stripe border max-height="600px">
+							<el-table
+								v-loading="state.loading"
+								:data="state.dataList"
+								stripe
+								border
+								max-height="600px"
+								:cell-style="tableStyle.cellStyle"
+								:header-cell-style="tableStyle.headerCellStyle"
+							>
 								<el-table-column prop="mediaId" label="media_id"> </el-table-column>
 								<el-table-column prop="name" label="名称"> </el-table-column>
 								<el-table-column prop="updateTime" label="更新时间"> </el-table-column>
@@ -188,7 +196,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 });
 
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 const delMaterial = (item: any) => {
 	useMessageBox()

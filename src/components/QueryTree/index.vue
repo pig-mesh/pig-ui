@@ -1,6 +1,28 @@
 <template>
 	<div class="head-container">
-		<el-input v-model="searchName" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getDeptTree" />
+		<div style="display: flex">
+			<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getDeptTree" />
+			<el-dropdown :hide-on-click="false" class="mt10 mr10">
+				<el-icon style="transform: rotate(90deg)">
+					<MoreFilled />
+				</el-icon>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item>
+							<el-button
+								:class="buttonClass"
+								link
+								type="primary"
+								:icon="isExpand ? 'expand' : 'fold'"
+								@click="toggleRowExpansionAll(isExpand ? false : true)"
+							>
+								{{ isExpand ? '折叠' : '展开' }}
+							</el-button>
+						</el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+		</div>
 		<el-tree
 			:data="state.List"
 			:props="props.props"
@@ -20,12 +42,15 @@
 </template>
 
 <script setup lang="ts" name="query-tree">
-import { onMounted, reactive, ref, unref } from 'vue';
 import { useMessage } from '/@/hooks/message';
-
 const emit = defineEmits(['search', 'nodeClick']);
 
 const props = defineProps({
+	/**
+	 * 树结构属性配置。
+	 *
+	 * @default { label: 'name', children: 'children', value: 'id' }
+	 */
 	props: {
 		type: Object,
 		default: () => {
@@ -36,14 +61,30 @@ const props = defineProps({
 			};
 		},
 	},
+
+	/**
+	 * 输入框占位符。
+	 *
+	 * @default ''
+	 */
 	placeholder: {
 		type: String,
 		default: '',
 	},
+
+	/**
+	 * 是否显示加载中状态。
+	 *
+	 * @default false
+	 */
 	loading: {
 		type: Boolean,
 		default: false,
 	},
+
+	/**
+	 * 查询函数，必须返回 Promise 类型数据。
+	 */
 	query: {
 		type: Function,
 		required: true,
@@ -51,12 +92,23 @@ const props = defineProps({
 });
 
 const state = reactive({
-	List: [],
-	localLoading: props.loading,
+	List: [], // 树形结构列表数据
+	localLoading: props.loading, // 是否加载中
 });
 
-const searchName = ref();
+const deptTreeRef = ref(); // 部门树形结构组件实例引用
+const searchName = ref(); // 查询关键字
+const isExpand = ref(true); // 是否展开所有节点
 
+const buttonClass = computed(() => {
+	return ['!h-[20px]', 'reset-margin', '!text-gray-500', 'dark:!text-white', 'dark:hover:!text-primary'];
+});
+
+/**
+ * 点击树形结构节点触发的事件。
+ *
+ * @param item 被点击的节点数据。
+ */
 const handleNodeClick = (item: any) => {
 	emit('nodeClick', item);
 };
@@ -67,7 +119,11 @@ const handleNodeClick = (item: any) => {
 const getDeptTree = () => {
 	if (props.query instanceof Function) {
 		state.localLoading = true;
+
+		// 调用传入的查询函数，并将查询关键字作为参数传入
 		const result = props.query(unref(searchName));
+
+		// 如果查询结果为 Promise 类型，则进行后续处理
 		if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
 			result
 				.then((r: any) => {
@@ -79,13 +135,26 @@ const getDeptTree = () => {
 		}
 	}
 };
+
+/**
+ * 切换所有节点的展开/收起状态。
+ *
+ * @param status 目标状态，true 为展开，false 为收起。
+ */
+const toggleRowExpansionAll = (status) => {
+	isExpand.value = status;
+	const nodes = deptTreeRef.value.store._getAllNodes();
+	for (let i = 0; i < nodes.length; i++) {
+		nodes[i].expanded = status;
+	}
+};
+
 onMounted(() => {
 	getDeptTree();
 });
-// 方便收到刷新树
+
+// 方便父组件调用刷新树方法
 defineExpose({
 	getDeptTree,
 });
 </script>
-
-<style scoped></style>

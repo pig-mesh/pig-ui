@@ -30,7 +30,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('model.index')" type="index" width="80" />
 				<el-table-column :label="$t('model.name')" prop="name" show-overflow-tooltip></el-table-column>
@@ -83,7 +91,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

@@ -18,7 +18,7 @@
 			</pane>
 			<pane class="ml8">
 				<div class="layout-padding-auto layout-padding-view">
-					<el-row v-show="showSearch" class="mb8">
+					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('sysuser.username')" prop="username">
 								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable style="width: 240px" />
@@ -37,19 +37,40 @@
 							<el-button v-auth="'sys_user_add'" class="ml10" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
 								{{ $t('common.addBtn') }}
 							</el-button>
-							<el-button v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
+							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
 								{{ $t('common.importBtn') }}
 							</el-button>
-							<el-button v-auth="'sys_user_export'" class="ml10" icon="Download" type="primary" @click="exportExcel">
-								{{ $t('common.exportBtn') }}
-							</el-button>
-							<el-button v-auth="'sys_user_del'" :disabled="multiple" class="ml10" icon="Delete" type="primary" @click="handleDelete(selectObjs)">
+
+							<el-button
+								plain
+								v-auth="'sys_user_del'"
+								:disabled="multiple"
+								class="ml10"
+								icon="Delete"
+								type="primary"
+								@click="handleDelete(selectObjs)"
+							>
 								{{ $t('common.delBtn') }}
 							</el-button>
-							<right-toolbar v-model:showSearch="showSearch" class="ml10 mr20" style="float: right" @queryTable="getDataList"></right-toolbar>
+
+							<right-toolbar
+								v-model:showSearch="showSearch"
+								:export="true"
+								@exportExcel="exportExcel"
+								@queryTable="getDataList"
+								class="ml10 mr20"
+								style="float: right"
+							/>
 						</div>
 					</el-row>
-					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange">
+					<el-table
+						v-loading="state.loading"
+						:data="state.dataList"
+						@selection-change="handleSelectionChange"
+						border
+						:cell-style="tableStyle.cellStyle"
+						:header-cell-style="tableStyle.headerCellStyle"
+					>
 						<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
@@ -73,12 +94,13 @@
 						<el-table-column :label="$t('sysuser.createTime')" prop="createTime" show-overflow-tooltip width="180"></el-table-column>
 						<el-table-column :label="$t('common.action')" width="160" fixed="right">
 							<template #default="scope">
-								<el-button v-auth="'sys_user_edit'" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
+								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
 									{{ $t('common.editBtn') }}
 								</el-button>
 								<el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
 									<span style="margin-left: 12px">
 										<el-button
+											icon="delete"
 											v-auth="'sys_user_del'"
 											:disabled="scope.row.userId === '1'"
 											text
@@ -143,7 +165,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	pageList: pageList,
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 部门树使用的数据
 const deptData = reactive({

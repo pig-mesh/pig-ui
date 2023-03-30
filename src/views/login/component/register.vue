@@ -42,27 +42,43 @@
 </template>
 
 <script setup lang="ts" name="register">
-import { rule } from '/@/utils/validate';
 import { registerUser, validateUsername, validatePhone } from '/@/api/admin/user';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
+import { rule } from '/@/utils/validate';
 
+// 注册生命周期事件
 const emit = defineEmits(['afterSuccess']);
+
+// 按需加载组件
 const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthMeter/index.vue'));
 
+// 使用i18n
 const { t } = useI18n();
+
+// 表单引用
 const dataFormRef = ref();
+
+// 加载中状态
 const loading = ref(false);
+
+// 密码强度得分
+const score = ref('0');
+
+// 组件内部状态
 const state = reactive({
+	// 是否显示密码
 	isShowPassword: false,
+	// 表单内容
 	ruleForm: {
-		username: '',
-		password: '',
-		phone: '',
+		username: '', // 用户名
+		password: '', // 密码
+		phone: '', // 手机号
 	},
 });
 
-const dataRules = ref({
+// 表单验证规则
+const dataRules = reactive({
 	username: [
 		{ required: true, message: '用户名不能为空', trigger: 'blur' },
 		{
@@ -71,8 +87,9 @@ const dataRules = ref({
 			message: '用户名称长度必须介于 5 和 20 之间',
 			trigger: 'blur',
 		},
+		// 自定义方法验证用户名
 		{
-			validator: (rule: any, value: any, callback: any) => {
+			validator: (rule, value, callback) => {
 				validateUsername(rule, value, callback, false);
 			},
 			trigger: 'blur',
@@ -80,12 +97,14 @@ const dataRules = ref({
 	],
 	phone: [
 		{ required: true, message: '手机号不能为空', trigger: 'blur' },
+		// 手机号格式验证方法
 		{
 			validator: rule.validatePhone,
 			trigger: 'blur',
 		},
+		// 自定义方法验证手机号是否重复
 		{
-			validator: (rule: any, value: any, callback: any) => {
+			validator: (rule, value, callback) => {
 				validatePhone(rule, value, callback, false);
 			},
 			trigger: 'blur',
@@ -99,8 +118,9 @@ const dataRules = ref({
 			message: '用户密码长度必须介于 6 和 20 之间',
 			trigger: 'blur',
 		},
+		// 判断密码强度是否达到要求
 		{
-			validator: (rule: any, value: any, callback: any) => {
+			validator: (_rule, _value, callback) => {
 				if (Number(score.value) < 2) {
 					callback('密码强度太低');
 				} else {
@@ -111,26 +131,37 @@ const dataRules = ref({
 		},
 	],
 });
-const score = ref('0');
 
+// 处理密码强度得分变化事件
 const handlePassScore = (e) => {
 	score.value = e;
 };
 
+/**
+ * @name handleRegister
+ * @description 注册事件，包括表单验证、注册、成功后的钩子函数触发
+ */
 const handleRegister = async () => {
+	// 验证表单是否符合规则
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
-	loading.value = true;
-	registerUser(state.ruleForm)
-		.then(() => {
-			useMessage().success(t('common.optSuccessText'));
-			loading.value = false;
-			emit('afterSuccess');
-		})
-		.catch((err) => {
-			useMessage().error(err.msg);
-		});
+	try {
+		// 开始加载
+		loading.value = true;
+		// 调用注册API
+		await registerUser(state.ruleForm);
+		// 注册成功提示
+		useMessage().success(t('common.optSuccessText'));
+		// 触发注册成功后的钩子函数
+		emit('afterSuccess');
+	} catch (err: any) {
+		// 提示错误信息
+		useMessage().error(err.msg);
+	} finally {
+		// 结束加载状态
+		loading.value = false;
+	}
 };
 </script>
 

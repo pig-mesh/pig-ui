@@ -9,7 +9,14 @@
 					<right-toolbar :search="false" class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList"></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%">
+			<el-table
+				:data="state.dataList"
+				v-loading="state.loading"
+				style="width: 100%"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column type="index" :label="$t('tenantmenu.index')" width="80" />
 				<el-table-column prop="name" :label="$t('tenantmenu.name')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('tenantmenu.status')" show-overflow-tooltip>
@@ -20,10 +27,10 @@
 				<el-table-column prop="createTime" :label="$t('tenantmenu.createTime')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)" v-auth="'admin_systenantmenu_edit'">
+						<el-button icon="edit-pen" text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)" v-auth="'admin_systenantmenu_edit'">
 							{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button text type="primary" @click="handleDelete(scope.row)" v-auth="'admin_systenantmenu_del'">
+						<el-button icon="delete" text type="primary" @click="handleDelete(scope.row)" v-auth="'admin_systenantmenu_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>
@@ -51,7 +58,7 @@ const tenantMenuDialogRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: fetchList,
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 /**
  * 处理删除事件。

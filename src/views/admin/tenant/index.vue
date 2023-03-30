@@ -20,18 +20,25 @@
 						{{ $t('common.addBtn') }}
 					</el-button>
 
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary" v-auth="'admin_systenant_export'">
-						{{ $t('common.exportBtn') }}
+					<el-button plain @click="handleTenantMenu()" class="ml10" type="primary" v-auth="'admin_systenant_tenantmenu'">
+						{{ $t('tenantmenu.name') }}
 					</el-button>
 
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'admin_systenant_del'">
+					<el-button
+						plain
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+						class="ml10"
+						icon="Delete"
+						type="primary"
+						v-auth="'admin_systenant_del'"
+					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 
-					<el-button @click="handleTenantMenu()" class="ml10" type="primary" v-auth="'admin_systenant_tenantmenu'">
-						{{ $t('tenantmenu.name') }}
-					</el-button>
 					<right-toolbar
+						:export="'admin_systenant_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -39,7 +46,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50" />
 				<el-table-column :label="t('tenant.index')" type="index" width="80" />
 				<el-table-column :label="t('tenant.name')" prop="name" show-overflow-tooltip />
@@ -60,15 +75,21 @@
 						<dict-tag :options="status_type" :value="scope.row.status"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'admin_systenant_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'admin_systenant_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 
 						<el-tooltip :content="$t('tenant.deleteDisabledTip')" :disabled="scope.row.id !== '1'" placement="top">
 							<span style="margin-left: 12px">
-								<el-button :disabled="scope.row.id === '1'" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'admin_systenant_del'"
+								<el-button
+									icon="delete"
+									:disabled="scope.row.id === '1'"
+									@click="handleDelete([scope.row.id])"
+									text
+									type="primary"
+									v-auth="'admin_systenant_del'"
 									>{{ $t('common.delBtn') }}
 								</el-button>
 							</span>
@@ -126,7 +147,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

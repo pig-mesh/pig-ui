@@ -17,19 +17,18 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="userDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'sys_user_add'">
+					<el-button @click="userDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'app_appuser_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="excelUploadRef.show()" class="ml10" icon="upload-filled" type="primary" v-auth="'sys_user_add'">
+					<el-button plain @click="excelUploadRef.show()" class="ml10" icon="upload-filled" type="primary" v-auth="'app_appuser_export'">
 						{{ $t('common.importBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary" v-auth="'sys_user_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_user_del'">
+					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'app_appuser_del'">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'app_appuser_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -37,7 +36,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('appuser.index')" type="index" width="80" />
 				<el-table-column :label="$t('appuser.username')" prop="username" show-overflow-tooltip></el-table-column>
@@ -56,10 +63,10 @@
 				<el-table-column :label="$t('appuser.createTime')" prop="createTime" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="userDialogRef.openDialog(scope.row.userId)" text type="primary" v-auth="'sys_user_edit'">
+						<el-button @click="userDialogRef.openDialog(scope.row.userId)" text type="primary" v-auth="'app_appuser_edit'">
 							{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.userId])" text type="primary" v-auth="'sys_user_del'">
+						<el-button @click="handleDelete([scope.row.userId])" text type="primary" v-auth="'app_appuser_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>
@@ -115,7 +122,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

@@ -18,14 +18,13 @@
 					<el-button icon="folder-add" type="primary" class="ml10" @click="deptDialogRef.openDialog('add')" v-auth="'sys_dept_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
+					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
-					</el-button>
-					<el-button icon="Download" type="primary" class="ml10" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
 					</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
+						:export="'sys_dept_add'"
+						@exportExcel="exportExcel"
 						class="ml10"
 						style="float: right; margin-right: 20px"
 						@queryTable="getDataList"
@@ -39,19 +38,24 @@
 				row-key="id"
 				default-expand-all
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle?.headerCellStyle"
 			>
 				<el-table-column :label="$t('sysdept.name')" prop="name" width="400" show-overflow-tooltip> </el-table-column>
 				<el-table-column :label="$t('sysdept.weight')" prop="weight" show-overflow-tooltip width="80"></el-table-column>
 				<el-table-column prop="createTime" :label="$t('sysdept.createTime')" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="300">
 					<template #default="scope">
-						<el-button text type="primary" @click="deptDialogRef.openDialog('add', scope.row?.id)" v-auth="'sys_dept_add'">
+						<el-button text type="primary" icon="folder-add" @click="deptDialogRef.openDialog('add', scope.row?.id)" v-auth="'sys_dept_add'">
 							{{ $t('common.addBtn') }}</el-button
 						>
-						<el-button text type="primary" @click="deptDialogRef.openDialog('edit', scope.row?.id)" v-auth="'sys_dept_edit'">{{
+						<el-button text type="primary" icon="edit-pen" @click="deptDialogRef.openDialog('edit', scope.row?.id)" v-auth="'sys_dept_edit'">{{
 							$t('common.editBtn')
 						}}</el-button>
-						<el-button text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_dept_del'"> {{ $t('common.delBtn') }}</el-button>
+						<el-button text type="primary" icon="delete" @click="handleDelete(scope.row)" v-auth="'sys_dept_del'">
+							{{ $t('common.delBtn') }}</el-button
+						>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -91,7 +95,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	descs: ['create_time'],
 });
 
-const { getDataList } = useTable(state);
+const { getDataList, tableStyle } = useTable(state);
 
 // 导出excel
 const exportExcel = () => {

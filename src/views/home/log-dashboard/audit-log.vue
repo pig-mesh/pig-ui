@@ -18,20 +18,22 @@
 <script setup lang="ts" name="SysAuditLogDashboard">
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList } from '/@/api/admin/audit';
+
 const router = useRouter();
 
-const auditState: BasicTableProps = reactive<BasicTableProps>({
+// 创建基本表格参数对象
+const auditState: BasicTableProps = reactive({
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],
 });
 
+// 使用实例
 useTable(auditState);
 
+// 跳转路由
 const handleRoutr = () => {
-	router.push({
-		path: '/admin/audit/index',
-	});
+	router.push('/admin/audit/index');
 };
 </script>
 

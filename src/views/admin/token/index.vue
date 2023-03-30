@@ -31,6 +31,9 @@
 				@sort-change="sortChangeHandle"
 				style="width: 100%"
 				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="$t('systoken.index')" type="index" width="80" />
@@ -81,7 +84,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 	pageList: fetchList,
 });
-const { getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

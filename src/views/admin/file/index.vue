@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="$t('file.fileName')" prop="original">
 						<el-input v-model="state.queryForm.original" :placeholder="$t('file.inputoriginalTip')" clearable @keyup.enter="getDataList" />
@@ -28,7 +28,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" @selection-change="handleSelectionChange">
+			<el-table
+				:data="state.dataList"
+				v-loading="state.loading"
+				style="width: 100%"
+				@selection-change="handleSelectionChange"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column type="selection" width="50" align="center" />
 				<el-table-column type="index" :label="t('file.index')" width="80" />
 				<el-table-column prop="fileName" :label="t('file.fileName')" show-overflow-tooltip />
@@ -78,7 +86,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

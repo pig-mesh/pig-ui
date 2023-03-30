@@ -19,13 +19,20 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'codegen_template_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary" v-auth="'codegen_template_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'codegen_template_del'">
+					<el-button
+						plain
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+						class="ml10"
+						icon="Delete"
+						type="primary"
+						v-auth="'codegen_template_del'"
+					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'codegen_template_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -33,7 +40,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('template.index')" type="index" width="80" />
 				<el-table-column :label="t('template.templateName')" prop="templateName" show-overflow-tooltip />
@@ -86,7 +101,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

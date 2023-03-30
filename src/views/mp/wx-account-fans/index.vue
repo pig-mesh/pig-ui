@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('fans.nickname')" prop="nickname">
 						<el-input v-model="state.queryForm.nickname" style="max-width: 180px" :placeholder="$t('fans.inputNicknameTip')" />
@@ -12,20 +12,20 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item class="ml2">
-						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button formDialogRef icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-						<el-button formDialogRef icon="Sort" @click="asyncFans" v-auth="'mp_wxaccountfans_sync'">同步</el-button>
+						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'mp_fans_export'" class="ml10" formDialogRef icon="Download" type="primary" @click="exportExcel">
-						{{ $t('common.exportBtn') }}
-					</el-button>
+					<el-button type="primary" class="ml10" icon="Sort" @click="asyncFans" v-auth="'mp_wxaccountfans_sync'">同步</el-button>
+
 					<right-toolbar
+						:export="'mp_wxaccountfans_sync'"
+						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -33,7 +33,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" @sort-change="sortChangeHandle">
+			<el-table
+				v-loading="state.loading"
+				:data="state.dataList"
+				style="width: 100%"
+				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column :label="t('fans.index')" type="index" width="80" />
 				<el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip />
 				<el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
@@ -117,7 +125,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 const accountList = ref([]);
 

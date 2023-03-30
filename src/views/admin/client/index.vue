@@ -19,19 +19,36 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'sys_client_add'">
+					<el-button
+						v-aut="'sys_client_add'"
+						@click="formDialogRef.openDialog()"
+						class="ml10"
+						icon="folder-add"
+						type="primary"
+						v-auth="'sys_client_add'"
+					>
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_client_del'">
-						{{ $t('common.delBtn') }}
-					</el-button>
-					<el-button @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+					<el-button v-aut="'sys_client_del'" plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 						{{ $t('common.refreshCacheBtn') }}
 					</el-button>
+
+					<el-button
+						v-aut="'sys_client_del'"
+						plain
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+						class="ml10"
+						icon="Delete"
+						type="primary"
+						v-auth="'sys_client_del'"
+					>
+						{{ $t('common.delBtn') }}
+					</el-button>
+
 					<right-toolbar
+						:export="'sys_client_del'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -39,7 +56,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="60" />
 				<el-table-column :label="t('client.index')" type="index" width="80" />
 				<el-table-column :label="t('client.clientId')" prop="clientId" show-overflow-tooltip />
@@ -99,7 +124,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 删除缓存
 const handleRefreshCache = () => {

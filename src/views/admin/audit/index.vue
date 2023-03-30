@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row v-show="showSearch" class="mb8">
+			<el-row v-show="showSearch">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item :label="$t('audit.auditName')" prop="auditName">
 						<el-input :placeholder="t('audit.inputAuditNameTip')" v-model="state.queryForm.auditName" style="max-width: 180px" />
@@ -22,9 +22,6 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button formDialogRef icon="Download" type="primary" class="ml10" @click="exportExcel" v-auth="'sys_audit_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<el-button
 						formDialogRef
 						:disabled="multiple"
@@ -38,6 +35,8 @@
 					</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
+						:export="'sys_audit_export'"
+						@exportExcel="exportExcel"
 						class="ml10"
 						style="float: right; margin-right: 20px"
 						@queryTable="getDataList"
@@ -50,6 +49,9 @@
 				style="width: 100%"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column type="selection" width="60" align="center" />
 				<el-table-column type="index" :label="$t('audit.index')" width="80" />
@@ -90,7 +92,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: fetchList,
 	descs: ['create_time'],
 });
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

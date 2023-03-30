@@ -15,7 +15,7 @@
 	</el-card>
 </template>
 
-<script setup lang="ts" name="SysFavoriteDashboard">
+<script setup lang="ts" name="currentUser">
 import { useUserInfo } from '/@/stores/userInfo';
 import { getObj } from '/@/api/admin/user';
 

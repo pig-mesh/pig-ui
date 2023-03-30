@@ -19,16 +19,15 @@
 					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'sys_post_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="excelUploadRef.show()" class="ml10" icon="upload-filled" type="primary" v-auth="'sys_post_add'">
+					<el-button plain @click="excelUploadRef.show()" class="ml10" icon="upload-filled" type="primary" v-auth="'sys_post_add'">
 						{{ $t('common.importBtn') }}
 					</el-button>
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary" v-auth="'sys_post_export'">
-						{{ $t('common.exportBtn') }}
-					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_post_del'">
+					<el-button plain :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_post_del'">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
+						:export="'sys_post_export'"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"
@@ -36,7 +35,15 @@
 					></right-toolbar>
 				</div>
 			</el-row>
-			<el-table :data="state.dataList" @selection-change="handleSelectionChange" style="width: 100%" v-loading="state.loading">
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle?.cellStyle"
+				:header-cell-style="tableStyle?.headerCellStyle"
+			>
 				<el-table-column align="center" type="selection" width="50" />
 				<el-table-column :label="t('post.index')" type="index" width="80" />
 				<el-table-column :label="t('post.postCode')" prop="postCode" show-overflow-tooltip />
@@ -45,11 +52,13 @@
 				<el-table-column :label="t('post.remark')" prop="remark" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.postId)" text type="primary" v-auth="'sys_post_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.postId)" text type="primary" v-auth="'sys_post_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 
-						<el-button @click="handleDelete([scope.row.postId])" text type="primary" v-auth="'sys_post_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.postId])" text type="primary" v-auth="'sys_post_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -95,7 +104,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {
