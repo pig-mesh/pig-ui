@@ -104,7 +104,6 @@ const resetQuery = () => {
 };
 
 // 多选事件
-// 多选事件
 const handleSelectionChange = (objs: any) => {
 	selectObjs.value.push(...objs.map((val: any) => val.id));
 	multiple.value = !objs.length;

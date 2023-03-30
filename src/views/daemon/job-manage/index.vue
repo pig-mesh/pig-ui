@@ -6,10 +6,6 @@
 					<el-form-item :label="$t('job.jobName')" prop="jobName">
 						<el-input :placeholder="$t('job.inputjobNameTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.jobName" />
 					</el-form-item>
-					<el-form-item :label="$t('job.jobGroup')" prop="jobGroup">
-						<el-input :placeholder="$t('job.inputjobGroupTip')" @keyup.enter="getDataList" clearable v-model="state.queryForm.jobGroup" />
-					</el-form-item>
-
 					<el-form-item :label="t('job.jobStatus')" prop="jobStatus">
 						<el-select :placeholder="t('job.inputjobStatusTip')" v-model="state.queryForm.jobStatus">
 							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in job_status"></el-option>
@@ -42,7 +38,7 @@
 						class="ml10"
 						style="float: right; margin-right: 20px"
 						v-model:showSearch="showSearch"
-					></right-toolbar>
+					/>
 				</div>
 			</el-row>
 			<el-table
@@ -133,55 +129,67 @@ import { useI18n } from 'vue-i18n';
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
-const { t } = useI18n();
-// 定义查询字典
 
-const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
-// 定义变量内容
+// 获取国际化方法
+const { t } = useI18n();
+
+/** 表单弹窗引用 */
 const formDialogRef = ref();
+/** 作业日志引用 */
 const jobLogRef = ref();
-// 搜索变量
-const queryRef = ref();
+
+/** 搜索表单信息 */
+const queryForm = reactive({
+	jobName: '',
+	jobGroup: '',
+	jobStatus: '',
+	jobExecuteStatus: '',
+});
+/** 是否展示搜索表单 */
 const showSearch = ref(true);
+
 // 多选变量
-const selectObjs = ref([]);
+/** 选中的行 */
+const selectedRows = ref([]);
+/** 是否可以多选 */
 const multiple = ref(true);
 
-const state: BasicTableProps = reactive<BasicTableProps>({
-	queryForm: {
-		jobName: '',
-		jobGroup: '',
-		jobStatus: '',
-		jobExecuteStatus: '',
-	},
+/** 查询字典 */
+const { job_status, job_execute_status, misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
+
+/** 表格状态变量 */
+const state = reactive<BasicTableProps>({
+	queryForm,
 	pageList: fetchList,
 });
 
-//  table hook
+/** 获取表格数据方法 */
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
+/** 重置查询表单 */
 const resetQuery = () => {
-	queryRef.value.resetFields();
+	Object.keys(queryForm).forEach((key) => (queryForm[key] = ''));
 	getDataList();
 };
 
-// 多选事件
-const handleSelectionChange = (val: any) => {
-	selectObjs.value = val;
-	multiple.value = !val.length;
+/** 行选中事件 */
+const handleSelectionChange = (rows) => {
+	selectedRows.value = rows;
+	multiple.value = !rows.length;
 };
 
-// 导出excel
+/** 导出Excel */
 const exportExcel = () => {
 	downBlobFile('/daemon/sys-job/export', state.queryForm, 'job.xlsx');
 };
 
-const handleJobLog = (row: any) => {
+/** 查看作业日志 */
+const handleJobLog = (row) => {
 	jobLogRef.value.openDialog(row.jobId);
 };
 
-const handleEditJob = (row: any) => {
+/** 编辑作业 */
+const handleEditJob = (row) => {
 	const jobStatus = row.jobStatus;
 	if (jobStatus === '1' || jobStatus === '3') {
 		formDialogRef.value.openDialog(row.jobId);
@@ -190,79 +198,87 @@ const handleEditJob = (row: any) => {
 	}
 };
 
-const handleStartJob = (row: any) => {
+/** 启动作业 */
+const handleStartJob = async (row) => {
 	const jobStatus = row.jobStatus;
 	if (jobStatus === '1' || jobStatus === '3') {
-		useMessageBox()
-			.confirm('即将发布或启动(任务名称:' + row.jobName + '), 是否继续?')
-			.then(() => {
-				startJobRa(row.jobId)
-					.then(() => {
-						getDataList();
-						useMessage().success(t('common.optSuccessText'));
-					})
-					.catch((err: any) => {
-						useMessage().error(err.msg);
-					});
-			});
+		try {
+			await useMessageBox().confirm(`即将发布或启动(任务名称: ${row.jobName}), 是否继续?`);
+		} catch {
+			return;
+		}
+
+		try {
+			await startJobRa(row.jobId);
+			getDataList();
+			useMessage().success(t('common.optSuccessText'));
+		} catch (err: any) {
+			useMessage().error(err.msg);
+		}
 	} else {
 		useMessage().error('定时任务已运行');
 	}
 };
 
-const handleShutDownJob = (row: any) => {
+/** 暂停作业 */
+const handleShutDownJob = async (row) => {
 	const jobStatus = row.jobStatus;
 	if (jobStatus === '2') {
-		useMessageBox()
-			.confirm('即将暂停(任务名称:' + row.jobName + '), 是否继续?')
-			.then(() => {
-				shutDownJobRa(row.jobId)
-					.then(() => {
-						getDataList();
-						useMessage().success(t('common.optSuccessText'));
-					})
-					.catch((err: any) => {
-						useMessage().error(err.msg);
-					});
-			});
+		try {
+			await useMessageBox().confirm(`即将暂停(任务名称: ${row.jobName}), 是否继续?`);
+		} catch {
+			return;
+		}
+
+		try {
+			await shutDownJobRa(row.jobId);
+			getDataList();
+			useMessage().success(t('common.optSuccessText'));
+		} catch (err: any) {
+			useMessage().error(err.msg);
+		}
 	} else {
 		useMessage().error('已暂停，不要重复操作');
 	}
 };
 
-const handleRunJob = (row: any) => {
-	useMessageBox()
-		.confirm('立刻执行一次任务(任务名称:' + row.jobName + '), 是否继续?')
-		.then(() => {
-			runJobRa(row.jobId)
-				.then(() => {
-					getDataList();
-					useMessage().success(t('common.optSuccessText'));
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				});
-		});
+/** 运行作业 */
+const handleRunJob = async (row) => {
+	try {
+		await useMessageBox().confirm(`立刻执行一次任务(任务名称: ${row.jobName}), 是否继续?`);
+	} catch {
+		return;
+	}
+
+	try {
+		await runJobRa(row.jobId);
+		getDataList();
+		useMessage().success(t('common.optSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
-// 删除操作
-const handleDelete = (row: any) => {
+/** 删除操作 */
+const handleDelete = async (row) => {
 	if (!row) {
-		selectObjs.value.forEach(handleDelete);
+		selectedRows.value.forEach(handleDelete);
 		return;
 	}
 
 	const { jobId, jobName } = row;
-	useMessageBox()
-		.confirm(`${t('common.delConfirmText')}(任务名称:${jobName})`)
-		.then(async () => {
-			try {
-				await delObj(jobId);
-				getDataList();
-				useMessage().success(t('common.delSuccessText'));
-			} catch (error: any) {
-				useMessage().error(error.msg);
-			}
-		});
+	try {
+		await useMessageBox().confirm(`${t('common.delConfirmText')}(任务名称:${jobName})`);
+	} catch {
+		return;
+	}
+
+	try {
+		await delObj(jobId);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (error: any) {
+		useMessage().error(error.msg);
+	}
 };
 </script>
