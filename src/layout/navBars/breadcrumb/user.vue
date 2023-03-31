@@ -68,10 +68,10 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
+import { logout } from '/@/api/login';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import screenfull from 'screenfull';
 import { useI18n } from 'vue-i18n';
-import { storeToRefs } from 'pinia';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
@@ -84,10 +84,7 @@ import { useMsg } from '/@/stores/msg';
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
-
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/user/personal.vue'));
-
-import { logout } from '/@/api/login';
 
 // 定义变量内容
 const { locale, t } = useI18n();

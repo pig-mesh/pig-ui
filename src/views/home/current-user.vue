@@ -3,7 +3,7 @@
 		<div style="display: flex; justify-content: space-between">
 			<div style="display: flex">
 				<el-avatar style="width: 60px; height: 60px" shape="circle" :size="100" fit="cover" :src="userData.avatar" />
-				<div class="snowy-index-card-left-one-username">
+				<div class="info">
 					<span style="font-weight: 600; margin: 2px; font-size: 18px">{{ userData.name }}</span>
 					<span style="color: #6d737b; margin: 2px">{{ userData.deptName }} | {{ userData.postName }}</span>
 				</div>
@@ -59,7 +59,7 @@ const initUserInfo = async (userId: any): Promise<void> => {
 </script>
 
 <style scoped>
-.snowy-index-card-left-one-username {
+.info {
 	margin-left: 8px;
 	display: flex;
 	flex-direction: column;
