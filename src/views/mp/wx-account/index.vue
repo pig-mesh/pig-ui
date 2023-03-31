@@ -22,18 +22,6 @@
 					<el-button v-auth="'mp_wxaccount_add'" class="ml10" formDialogRef icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button
-						plain
-						v-auth="'mp_wxaccount_del'"
-						:disabled="multiple"
-						class="ml10"
-						formDialogRef
-						icon="Delete"
-						type="primary"
-						@click="handleDelete(selectObjs)"
-					>
-						{{ $t('common.mp_wxaccount_export') }}
-					</el-button>
 					<right-toolbar
 						:export="'app_social_details_del'"
 						@exportExcel="exportExcel"
@@ -63,20 +51,50 @@
 				<el-table-column :label="t('account.url')" prop="url" show-overflow-tooltip />
 				<el-table-column :label="t('account.token')" prop="token" show-overflow-tooltip />
 				<el-table-column :label="t('account.aeskey')" prop="aeskey" show-overflow-tooltip />
-				<el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip fixed="right" width="150px">
+				<el-table-column :label="t('account.qrUrl')" prop="qrUrl" show-overflow-tooltip>
 					<template #default="scope">
-						<a target="_blank" :href="scope.row.qrUrl"><img :src="scope.row.qrUrl" style="width: 100px; height: auto" /></a>
+						<ImageUpload v-model:imageUrl="scope.row.qrUrl" height="80px" width="80px" disabled />
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="200" fixed="right">
+				<el-table-column :label="$t('common.action')" width="100" fixed="right">
 					<template #default="scope">
-						<el-button v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
-							$t('common.editBtn')
-						}}</el-button>
-						<el-button v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}</el-button>
-						<el-button text type="primary" @click="access(scope.row, scope.index)">接入</el-button>
-						<el-button text type="primary" @click="generate(scope.row, scope.index)">二维码</el-button>
-						<el-button text type="primary" @click="quota(scope.row, scope.index)">quota</el-button>
+						<el-dropdown>
+							<span class="el-dropdown-link">
+								更多功能
+								<el-icon class="el-icon--right">
+									<arrow-down />
+								</el-icon>
+							</span>
+							<template #dropdown>
+								<el-dropdown-menu>
+									<el-dropdown-item
+										><el-button icon="edit-pen" v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
+											$t('common.editBtn')
+										}}</el-button></el-dropdown-item
+									>
+									<el-dropdown-item>
+										<el-button icon="delete" v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
+											$t('common.delBtn')
+										}}</el-button></el-dropdown-item
+									>
+									<el-dropdown-item>
+										<el-button icon="DArrowRight" v-auth="'mp_wxaccount_del'" text type="primary" @click="access(scope.row)"
+											>接入</el-button
+										></el-dropdown-item
+									>
+									<el-dropdown-item
+										><el-button icon="Grid" v-auth="'mp_wxaccount_del'" text type="primary" @click="generate(scope.row)"
+											>二维码</el-button
+										></el-dropdown-item
+									>
+									<el-dropdown-item
+										><el-button icon="refresh" v-auth="'mp_wxaccount_del'" text type="primary" @click="quota(scope.row)"
+											>quota</el-button
+										></el-dropdown-item
+									>
+								</el-dropdown-menu>
+							</template>
+						</el-dropdown>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -105,6 +123,7 @@ import commonFunction from '/@/utils/commonFunction';
 
 const { copyText } = commonFunction();
 // 引入组件
+const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
 // 定义查询字典
@@ -187,7 +206,7 @@ const quota = (row) => {
 		.then(() => {
 			useMessage().success('清空api的调用quota成功');
 		})
-		.catch((err) => {
+		.catch(() => {
 			useMessage().error('清空api的调用quota失败');
 		});
 };

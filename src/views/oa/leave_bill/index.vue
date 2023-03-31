@@ -67,13 +67,13 @@
 					</template>
 				</el-table-column>
 				<el-table-column :label="t('leave.leaveTime')" prop="leaveTime" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button @click="handleSubmit(scope.row)" text type="primary" v-if="scope.row.state === '0'"> 提交 </el-button>
-						<el-button @click="formDialogRef.openDialog(scope.row.leaveId)" text type="primary" v-auth="'oa_leave_bill_edit'"
+						<el-button icon="video-play" @click="handleSubmit(scope.row)" text type="primary" v-if="scope.row.state === '0'"> 提交 </el-button>
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.leaveId)" text type="primary" v-auth="'oa_leave_bill_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.leaveId])" text type="primary" v-auth="'oa_leave_bill_del'"
+						<el-button icon="delete" @click="handleDelete([scope.row.leaveId])" text type="primary" v-auth="'oa_leave_bill_del'"
 							>{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

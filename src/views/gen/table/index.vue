@@ -45,13 +45,13 @@
 				<el-table-column :label="t('table.tableName')" prop="tableName" show-overflow-tooltip />
 				<el-table-column :label="t('table.tableDesc')" prop="tableComment" show-overflow-tooltip />
 				<el-table-column :label="t('table.createTime')" prop="createTime" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button @click="syncTable(scope.row)" text type="primary">
+						<el-button icon="Refresh" @click="syncTable(scope.row)" text type="primary">
 							{{ $t('gen.syncBtn') }}
 						</el-button>
-						<el-button @click="openGen(scope.row)" text type="primary">{{ $t('gen.genBtn') }} </el-button>
-						<el-button @click="openDesign(scope.row)" text type="primary">{{ $t('gen.designBtn') }} </el-button>
+						<el-button icon="FolderOpened" @click="openGen(scope.row)" text type="primary">{{ $t('gen.genBtn') }} </el-button>
+						<el-button icon="MagicStick" @click="openDesign(scope.row)" text type="primary">{{ $t('gen.designBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>

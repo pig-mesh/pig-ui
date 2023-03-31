@@ -70,19 +70,19 @@
 				<el-table-column :label="t('client.clientId')" prop="clientId" show-overflow-tooltip />
 				<el-table-column :label="t('client.clientSecret')" prop="clientSecret" show-overflow-tooltip />
 				<el-table-column :label="t('client.scope')" prop="scope" show-overflow-tooltip />
-				<el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip width="200px">
+				<el-table-column :label="t('client.authorizedGrantTypes')" prop="authorizedGrantTypes" show-overflow-tooltip width="400px">
 					<template #default="scope">
-						<dict-tag :options="grant_types" :value="scope.row.authorizedGrantTypes"></dict-tag>
+						<dict-tag :options="grant_types" :value="scope.row.authorizedGrantTypes" />
 					</template>
 				</el-table-column>
 				<el-table-column :label="t('client.accessTokenValidity')" prop="accessTokenValidity" show-overflow-tooltip />
 				<el-table-column :label="t('client.refreshTokenValidity')" prop="refreshTokenValidity" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.clientId)" text type="primary" v-auth="'sys_client_add'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.clientId)" text type="primary" v-auth="'sys_client_add'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_client_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_client_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

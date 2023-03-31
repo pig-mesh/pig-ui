@@ -81,11 +81,14 @@
 				</el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.publicId)" text type="primary">{{ $t('common.editBtn') }} </el-button>
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.publicId)" text type="primary"
+							>{{ $t('common.editBtn') }}
+						</el-button>
 
 						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
 							<span style="margin-left: 12px">
 								<el-button
+									icon="delete"
 									v-auth="'admin_syspublicparam_del'"
 									:disabled="scope.row.systemFlag !== '0'"
 									@click="handleDelete([scope.row.publicId])"

@@ -58,10 +58,10 @@
 				<el-table-column :label="t('group.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_group_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_group_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'codegen_group_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'codegen_group_del'">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>

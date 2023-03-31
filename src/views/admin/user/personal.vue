@@ -1,109 +1,103 @@
 <template>
-	<el-drawer v-model="visible" :title="$t('personal.name')" size="50%">
+	<el-drawer v-model="visible" :title="$t('personal.name')" size="40%">
 		<el-tabs style="height: 200px" class="demo-tabs">
 			<el-tab-pane label="基本信息" v-loading="loading">
-				<el-card shadow="hover" class="layout-padding-auto">
-					<el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt35 mb35" ref="formdataRef">
-						<el-row :gutter="20">
-							<el-col :span="24" class="mb20">
-								<el-form-item label="用户名" prop="avatar">
-									<image-upload class="h100 personal-user-left-upload" @change="handleAvatarSuccess">
-										<img v-if="formData.avatar" :src="formData.avatar" class="avatar" />
-										<el-icon v-else class="avatar-uploader-icon">
-											<Plus />
-										</el-icon>
-									</image-upload>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="用户名" prop="username">
-									<el-input v-model="formData.username" clearable disabled></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="手机" prop="phone">
-									<el-input v-model="formData.phone" placeholder="请输入手机" clearable></el-input>
-								</el-form-item>
-							</el-col>
+				<el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt30" ref="formdataRef">
+					<el-row :gutter="20">
+						<el-col :span="24" class="mb20">
+							<el-form-item prop="avatar">
+								<ImageUpload v-model:imageUrl="formData.avatar" borderRadius="50%">
+									<template #empty>
+										<el-icon><Avatar /></el-icon>
+										<span>请上传头像</span>
+									</template>
+								</ImageUpload>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="用户名" prop="username">
+								<el-input v-model="formData.username" clearable disabled></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="手机" prop="phone">
+								<el-input v-model="formData.phone" placeholder="请输入手机" clearable></el-input>
+							</el-form-item>
+						</el-col>
 
-							<el-col :span="24" class="mb20">
-								<el-form-item label="邮箱" prop="email">
-									<el-input v-model="formData.email" placeholder="请输入邮箱" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="昵称" prop="nickname">
-									<el-input v-model="formData.nickname" placeholder="请输入昵称" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="姓名" prop="name">
-									<el-input v-model="formData.name" placeholder="请输入姓名" clearable></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item>
-									<el-button type="primary" @click="handleSaveUser"> 更新个人信息 </el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-				</el-card>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="邮箱" prop="email">
+								<el-input v-model="formData.email" placeholder="请输入邮箱" clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="昵称" prop="nickname">
+								<el-input v-model="formData.nickname" placeholder="请输入昵称" clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="姓名" prop="name">
+								<el-input v-model="formData.name" placeholder="请输入姓名" clearable></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item>
+								<el-button type="primary" @click="handleSaveUser"> 更新个人信息 </el-button>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="安全信息">
-				<el-card shadow="hover" class="layout-padding-auto">
-					<el-form :model="passwordFormData" :rules="passwordRuleForm" label-width="100px" class="mt35 mb35" ref="passwordFormdataRef">
-						<el-row :gutter="20">
-							<el-col :span="24" class="mb20">
-								<el-form-item label="原密码" prop="password">
-									<el-input v-model="passwordFormData.password" placeholder="请输入密码" clearable type="password"></el-input>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="新密码" prop="newpassword1">
-									<strength-meter
-										v-model="passwordFormData.newpassword1"
-										:minlength="6"
-										:maxlength="16"
-										placeholder="请输入新密码"
-										@score="passwordScore"
-									></strength-meter>
-									<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item label="确认密码" prop="newpassword2">
-									<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16" placeholder="请重复密码"></strength-meter>
-								</el-form-item>
-							</el-col>
-							<el-col :span="24" class="mb20">
-								<el-form-item>
-									<el-button type="primary" @click="handleChangePassword"> 修改密码 </el-button>
-								</el-form-item>
-							</el-col>
-						</el-row>
-					</el-form>
-				</el-card>
+				<el-form :model="passwordFormData" :rules="passwordRuleForm" label-width="100px" class="mt30" ref="passwordFormdataRef">
+					<el-row :gutter="20">
+						<el-col :span="24" class="mb20">
+							<el-form-item label="原密码" prop="password">
+								<el-input v-model="passwordFormData.password" placeholder="请输入密码" clearable type="password"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="新密码" prop="newpassword1">
+								<strength-meter
+									v-model="passwordFormData.newpassword1"
+									:minlength="6"
+									:maxlength="16"
+									placeholder="请输入新密码"
+									@score="passwordScore"
+								></strength-meter>
+								<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item label="确认密码" prop="newpassword2">
+								<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16" placeholder="请重复密码"></strength-meter>
+							</el-form-item>
+						</el-col>
+						<el-col :span="24" class="mb20">
+							<el-form-item>
+								<el-button type="primary" @click="handleChangePassword"> 修改密码 </el-button>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
 			</el-tab-pane>
 			<el-tab-pane label="第三方账号">
-				<el-card shadow="hover" class="layout-padding-auto">
-					<el-table :data="socialList">
-						<el-table-column type="index" label="序号" width="80"></el-table-column>
-						<el-table-column prop="name" label="绑定帐号信息"></el-table-column>
-						<el-table-column label="状态">
-							<template #default="scope">
-								<el-tag v-if="scope.row.openId"> 已绑定 </el-tag>
-								<el-tag v-else> 未绑定 </el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column prop="action" label="操作">
-							<template #default="scope">
-								<el-button @click="Unbinding(scope.row.type)" text type="primary" v-if="scope.row.openId"> 解绑 </el-button>
-								<el-button @click="handleClick(scope.row.type)" text type="primary" v-else> 绑定 </el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-				</el-card>
+				<el-table :data="socialList" class="mt10">
+					<el-table-column type="index" label="序号" width="80"></el-table-column>
+					<el-table-column prop="name" label="平台"></el-table-column>
+					<el-table-column label="状态">
+						<template #default="scope">
+							<el-tag v-if="scope.row.openId"> 已绑定 </el-tag>
+							<el-tag v-else> 未绑定 </el-tag>
+						</template>
+					</el-table-column>
+					<el-table-column prop="action" label="操作">
+						<template #default="scope">
+							<el-button @click="Unbinding(scope.row.type)" text type="primary" v-if="scope.row.openId"> 解绑 </el-button>
+							<el-button @click="handleClick(scope.row.type)" text type="primary" v-else> 绑定 </el-button>
+						</template>
+					</el-table-column>
+				</el-table>
 			</el-tab-pane>
 		</el-tabs>
 	</el-drawer>

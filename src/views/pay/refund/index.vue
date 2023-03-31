@@ -65,7 +65,7 @@
 				<el-table-column :label="t('refund.refundSuccTime')" prop="refundSuccTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<el-button @click="handleDelete([scope.row.refundOrderId])" text type="primary" v-auth="'pay_order_export'"
+						<el-button icon="delete" @click="handleDelete([scope.row.refundOrderId])" text type="primary" v-auth="'pay_order_export'"
 							>{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

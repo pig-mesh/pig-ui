@@ -66,14 +66,14 @@
 				</el-table-column>
 				<el-table-column :label="t('fans.remark')" prop="remark" show-overflow-tooltip />
 				<el-table-column :label="t('fans.wxAccountName')" prop="wxAccountName" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="200" fixed="right">
+				<el-table-column :label="$t('common.action')" width="250" fixed="right">
 					<template #default="scope">
-						<el-button text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)"
+						<el-button icon="edit-pen" text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
-						<el-button text type="primary" @click="handelUnBlack([scope.row.id])" v-if="scope.row.isBlack"> 取消拉黑 </el-button>
-						<el-button text type="primary" @click="handelBlack([scope.row.id])" v-else> 拉黑 </el-button>
+						<el-button icon="delete" text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="CircleCheck" text type="primary" @click="handelUnBlack([scope.row.id])" v-if="scope.row.isBlack"> 取消拉黑 </el-button>
+						<el-button icon="warning" text type="primary" @click="handelBlack([scope.row.id])" v-else> 拉黑 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>

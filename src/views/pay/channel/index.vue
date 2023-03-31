@@ -75,10 +75,10 @@
 
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
-						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'pay_channel_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'pay_channel_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_channel_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_channel_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

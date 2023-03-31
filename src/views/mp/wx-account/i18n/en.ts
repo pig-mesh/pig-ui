@@ -8,6 +8,7 @@ export default {
 		appid: 'appid',
 		appsecret: 'appsecret',
 		url: 'url',
+		export: 'export',
 		token: 'token',
 		aeskey: 'aeskey',
 		qrUrl: 'qrUrl',

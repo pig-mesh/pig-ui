@@ -71,19 +71,19 @@
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
-						<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50" />
+						<el-table-column :selectable="handleSelectable" type="selection" width="50" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
 							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.postList" :key="index" type="success">{{ item.postName }} </el-tag>
+								<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName }} </el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
 							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.roleList" :key="index" type="success">{{ item.roleName }} </el-tag>
+								<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName }} </el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>

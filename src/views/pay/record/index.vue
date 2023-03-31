@@ -60,7 +60,7 @@
 				<el-table-column :label="t('record.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_record_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'pay_record_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

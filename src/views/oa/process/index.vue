@@ -54,12 +54,12 @@
 						<span>{{ parseTime(scope.row.deploymentTime) }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button @click="handleView(scope.row)" text type="primary">流程图 </el-button>
-						<el-button @click="handleStatus(scope.row, 'suspend')" text type="primary" v-if="!scope.row.suspend">失效 </el-button>
-						<el-button @click="handleStatus(scope.row, 'active')" text type="primary" v-if="scope.row.suspend">激活 </el-button>
-						<el-button @click="handleDelete([scope.row.processonDefinitionId])" text type="primary" v-auth="'oa_process_del'"
+						<el-button icon="picture" @click="handleView(scope.row)" text type="primary">流程图 </el-button>
+						<el-button icon="VideoPause" @click="handleStatus(scope.row, 'suspend')" text type="primary" v-if="!scope.row.suspend">失效 </el-button>
+						<el-button icon="VideoPlay" @click="handleStatus(scope.row, 'active')" text type="primary" v-if="scope.row.suspend">激活 </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.processonDefinitionId])" text type="primary" v-auth="'oa_process_del'"
 							>{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

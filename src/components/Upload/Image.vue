@@ -1,128 +1,306 @@
-<!--图片上传组件-->
-
 <template>
-	<div>
+	<div class="upload-box">
 		<el-upload
-			ref="fileUpload"
-			class="avatar-uploader"
-			:action="other.adaptationUrl(props.uploadFileUrl)"
+			action="#"
+			:id="uuid"
+			:class="['upload', self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+			:multiple="false"
+			:disabled="self_disabled"
 			:show-file-list="false"
-			:on-success="handleAvatarSuccess"
-			:before-upload="beforeAvatarUpload"
-			:headers="headers"
-			:limit="props.limit"
+			:http-request="handleHttpUpload"
+			:before-upload="beforeUpload"
+			:on-success="uploadSuccess"
+			:on-error="uploadError"
+			:drag="drag"
+			:accept="fileType.join(',')"
 		>
-			<slot>
-				<img v-if="imageUrl" :src="imageUrl" class="avatar" />
-				<el-icon v-else class="avatar-uploader-icon">
-					<Plus />
-				</el-icon>
-			</slot>
+			<template v-if="imageUrl">
+				<img :src="imageUrl" class="upload-image" />
+				<div class="upload-handle" @click.stop>
+					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
+						<el-icon><Edit /></el-icon>
+						<span>编辑</span>
+					</div>
+					<div class="handle-icon" @click="imgViewVisible = true">
+						<el-icon><ZoomIn /></el-icon>
+						<span>查看</span>
+					</div>
+					<div class="handle-icon" @click="deleteImg" v-if="!self_disabled">
+						<el-icon><Delete /></el-icon>
+						<span>删除</span>
+					</div>
+				</div>
+			</template>
+			<template v-else>
+				<div class="upload-empty">
+					<slot name="empty">
+						<el-icon><Plus /></el-icon>
+						<!-- <span>请上传图片</span> -->
+					</slot>
+				</div>
+			</template>
 		</el-upload>
+		<div class="el-upload__tip">
+			<slot name="tip"></slot>
+		</div>
+		<el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl]" />
 	</div>
 </template>
 
-<script setup lang="ts" name="upload-image">
-import { useMessage } from '/@/hooks/message';
-import { Session } from '/@/utils/storage';
-import { watch } from 'vue';
-import other from '/@/utils/other';
+<script setup lang="ts" name="UploadImg">
+import { ref, computed, inject } from 'vue';
+import { ElNotification, formContextKey, formItemContextKey } from 'element-plus';
+import type { UploadProps, UploadRequestOptions } from 'element-plus';
+import { generateUUID } from '/@/utils/other';
+import request from '/@/utils/request';
 
-const imageUrl = ref('');
-const fileUpload = ref();
-const emit = defineEmits(['update:modelValue', 'change']);
+interface UploadFileProps {
+	imageUrl: string; // 图片地址 ==> 必传
+	uploadFileUrl: string; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
+	drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
+	disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
+	fileSize?: number; // 图片大小限制 ==> 非必传（默认为 5M）
+	fileType?: File.ImageMimeType[]; // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
+	height?: string; // 组件高度 ==> 非必传（默认为 150px）
+	width?: string; // 组件宽度 ==> 非必传（默认为 150px）
+	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
+}
 
-const props = defineProps({
-	modelValue: [String, Array],
-	// 大小限制(MB)
-	fileSize: {
-		type: Number,
-		default: 5,
-	},
-	limit: {
-		type: Number,
-		default: 1,
-	},
-	uploadFileUrl: {
-		type: String,
-		default: '/admin/sys-file/upload',
-	},
+// 接受父组件参数
+const props = withDefaults(defineProps<UploadFileProps>(), {
+	imageUrl: '',
+	uploadFileUrl: '/admin/sys-file/upload',
+	drag: true,
+	disabled: false,
+	fileSize: 5,
+	fileType: () => ['image/jpeg', 'image/png', 'image/gif'],
+	height: '150px',
+	width: '150px',
+	borderRadius: '8px',
 });
 
-// 监听 modelValue 的变化，使 imageUrl 与 modelValue 同步
-watch(
-	() => props.modelValue,
-	(val: string) => {
-		if (val) {
-			imageUrl.value = val;
-		}
-	},
-	{ deep: true, immediate: true }
-);
+// 生成组件唯一id
+const uuid = ref('id-' + generateUUID());
 
-// 上传成功事件处理
-const handleAvatarSuccess = (res, file) => {
-	if (res.code === 0) {
-		imageUrl.value = res.data.url;
-		emit('change', imageUrl.value);
-		emit('update:modelValue', imageUrl.value);
-	} else {
-		fileUpload.value.handleRemove(file);
+// 查看图片
+const imgViewVisible = ref(false);
+// 获取 el-form 组件上下文
+const formContext = inject(formContextKey, void 0);
+// 获取 el-form-item 组件上下文
+const formItemContext = inject(formItemContextKey, void 0);
+// 判断是否禁用上传和删除
+const self_disabled = computed(() => {
+	return props.disabled || formContext?.disabled;
+});
+
+/**
+ * @description 图片上传
+ * @param options upload 所有配置项
+ * */
+interface UploadEmits {
+	(e: 'update:imageUrl', value: string): void;
+}
+const emit = defineEmits<UploadEmits>();
+const handleHttpUpload = async (options: UploadRequestOptions) => {
+	let formData = new FormData();
+	formData.append('file', options.file);
+	try {
+		const { data } = await request({
+			url: props.uploadFileUrl,
+			method: 'post',
+			params: formData,
+		});
+		emit('update:imageUrl', data.url);
+		// 调用 el-form 内部的校验方法（可自动校验）
+		formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
+	} catch (error) {
+		options.onError(error as any);
 	}
 };
 
-// 上传前校验
-const beforeAvatarUpload = (rawFile: any) => {
-	// 校检文件格式
-	if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-		useMessage().error(`文件格式不正确, 请上传 jpeg/png格式文件!`);
-		return false;
-	}
-	// 校检文件大小
-	if (props.fileSize) {
-		const isLt = rawFile.size / 1024 / 1024 < props.fileSize;
-		if (!isLt) {
-			useMessage().error(`上传文件大小不能超过 ${props.fileSize} MB!`);
-			return false;
-		}
-	}
-	return true;
+/**
+ * @description 删除图片
+ * */
+const deleteImg = () => {
+	emit('update:imageUrl', '');
 };
 
-// 计算请求头部信息
-const headers = computed(() => {
-	const tenantId = Session.getTenant();
-	return {
-		Authorization: 'Bearer ' + Session.getToken(),
-		'TENANT-ID': tenantId,
-	};
-});
+/**
+ * @description 编辑图片
+ * */
+const editImg = () => {
+	const dom = document.querySelector(`#${uuid.value} .el-upload__input`);
+	dom && dom.dispatchEvent(new MouseEvent('click'));
+};
+
+/**
+ * @description 文件上传之前判断
+ * @param rawFile 选择的文件
+ * */
+const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
+	const imgSize = rawFile.size / 1024 / 1024 < props.fileSize;
+	const imgType = props.fileType.includes(rawFile.type as File.ImageMimeType);
+	if (!imgType)
+		ElNotification({
+			title: '温馨提示',
+			message: '上传图片不符合所需的格式！',
+			type: 'warning',
+		});
+	if (!imgSize)
+		setTimeout(() => {
+			ElNotification({
+				title: '温馨提示',
+				message: `上传图片大小不能超过 ${props.fileSize}M！`,
+				type: 'warning',
+			});
+		}, 0);
+	return imgType && imgSize;
+};
+
+/**
+ * @description 图片上传成功
+ * */
+const uploadSuccess = () => {
+	ElNotification({
+		title: '温馨提示',
+		message: '图片上传成功！',
+		type: 'success',
+	});
+};
+
+/**
+ * @description 图片上传错误
+ * */
+const uploadError = () => {
+	ElNotification({
+		title: '温馨提示',
+		message: '图片上传失败，请您重新上传！',
+		type: 'error',
+	});
+};
 </script>
-
-<style scoped>
-.avatar-uploader .el-upload {
-	border: 1px dashed var(--el-border-color);
-	border-radius: 6px;
-	cursor: pointer;
-	position: relative;
-	overflow: hidden;
-	transition: var(--el-transition-duration-fast);
+<style scoped lang="scss">
+.is-error {
+	.upload {
+		:deep(.el-upload),
+		:deep(.el-upload-dragger) {
+			border: 1px dashed var(--el-color-danger) !important;
+			&:hover {
+				border-color: var(--el-color-primary) !important;
+			}
+		}
+	}
 }
-
-.avatar-uploader .el-upload:hover {
-	border-color: var(--el-color-primary);
+:deep(.disabled) {
+	.el-upload,
+	.el-upload-dragger {
+		cursor: not-allowed !important;
+		background: var(--el-disabled-bg-color);
+		border: 1px dashed var(--el-border-color-darker) !important;
+		&:hover {
+			border: 1px dashed var(--el-border-color-darker) !important;
+		}
+	}
 }
-
-.el-icon.avatar-uploader-icon {
-	font-size: 28px;
-	color: #8c939d;
-	width: 178px;
-	height: 178px;
-	text-align: center;
-}
-
-.avatar {
-	width: 178px;
-	height: 100%;
+.upload-box {
+	.no-border {
+		:deep(.el-upload) {
+			border: none !important;
+		}
+	}
+	:deep(.upload) {
+		.el-upload {
+			position: relative;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: v-bind(width);
+			height: v-bind(height);
+			overflow: hidden;
+			border: 1px dashed var(--el-border-color-darker);
+			border-radius: v-bind(borderRadius);
+			transition: var(--el-transition-duration-fast);
+			&:hover {
+				border-color: var(--el-color-primary);
+				.upload-handle {
+					opacity: 1;
+				}
+			}
+			.el-upload-dragger {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				height: 100%;
+				padding: 0;
+				overflow: hidden;
+				background-color: transparent;
+				border: 1px dashed var(--el-border-color-darker);
+				border-radius: v-bind(borderRadius);
+				&:hover {
+					border: 1px dashed var(--el-color-primary);
+				}
+			}
+			.el-upload-dragger.is-dragover {
+				background-color: var(--el-color-primary-light-9);
+				border: 2px dashed var(--el-color-primary) !important;
+			}
+			.upload-image {
+				width: 100%;
+				height: 100%;
+				object-fit: contain;
+			}
+			.upload-empty {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				font-size: 12px;
+				line-height: 30px;
+				color: var(--el-color-info);
+				.el-icon {
+					font-size: 28px;
+					color: var(--el-text-color-secondary);
+				}
+			}
+			.upload-handle {
+				position: absolute;
+				top: 0;
+				right: 0;
+				box-sizing: border-box;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				width: 100%;
+				height: 100%;
+				cursor: pointer;
+				background: rgb(0 0 0 / 60%);
+				opacity: 0;
+				transition: var(--el-transition-duration-fast);
+				.handle-icon {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					padding: 0 6%;
+					color: aliceblue;
+					.el-icon {
+						margin-bottom: 40%;
+						font-size: 130%;
+						line-height: 130%;
+					}
+					span {
+						font-size: 85%;
+						line-height: 85%;
+					}
+				}
+			}
+		}
+	}
+	.el-upload__tip {
+		line-height: 18px;
+		text-align: center;
+	}
 }
 </style>

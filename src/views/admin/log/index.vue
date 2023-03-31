@@ -62,12 +62,12 @@
 				<el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('syslog.createTime')" prop="createTime" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
 				<el-table-column :label="$t('syslog.createBy')" prop="createBy" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
-				<el-table-column :label="$t('common.action')" width="100">
+				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="LogDetailRef.openDialog(scope.row)" size="small" text type="primary">
+						<el-button icon="view" @click="LogDetailRef.openDialog(scope.row)" size="small" text type="primary">
 							{{ $t('common.detailBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" size="small" text type="primary">
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" size="small" text type="primary">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

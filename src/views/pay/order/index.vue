@@ -69,7 +69,7 @@
 
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="handleDelete([scope.row.goodsOrderId])" text type="primary" v-auth="'pay_order_del'"
+						<el-button icon="delete" @click="handleDelete([scope.row.goodsOrderId])" text type="primary" v-auth="'pay_order_del'"
 							>{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

@@ -23,6 +23,7 @@
 			<el-row>
 				<div class="mb8" style="width: 100%">
 					<el-button
+						plain
 						formDialogRef
 						:disabled="multiple"
 						icon="Delete"
@@ -63,7 +64,9 @@
 				<el-table-column prop="createTime" :label="$t('audit.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button text type="primary" v-auth="'sys_audit_del'" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" text type="primary" v-auth="'sys_audit_del'" @click="handleDelete([scope.row.id])"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

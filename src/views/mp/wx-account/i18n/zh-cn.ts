@@ -7,6 +7,7 @@ export default {
 		account: '微信号',
 		appid: 'appid',
 		appsecret: '密钥',
+		export: '导出',
 		url: ' url',
 		token: 'token',
 		aeskey: '加密密钥',

@@ -1,18 +1,37 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<div @keyup.enter="getDataList" class="mb15">
-				<el-input :placeholder="$t('appmenu.inputMenuNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"></el-input>
-				<el-button @click="getDataList" class="ml10" icon="search" type="primary">
-					{{ $t('common.queryBtn') }}
-				</el-button>
-				<el-button @click="menuDialogRef.openDialog('add')" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
-					{{ $t('common.addBtn') }}
-				</el-button>
-				<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_post_del'">
-					{{ $t('common.delBtn') }}
-				</el-button>
-			</div>
+			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
+				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
+					<el-form-item :label="$t('appmenu.name')" prop="menuName">
+						<el-input :placeholder="$t('appmenu.inputMenuNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"></el-input>
+					</el-form-item>
+					<el-form-item class="ml2">
+						<el-button @click="getDataList" icon="search" type="primary">
+							{{ $t('common.queryBtn') }}
+						</el-button>
+						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
+					</el-form-item>
+				</el-form>
+			</el-row>
+			<el-row>
+				<div class="mb8" style="width: 100%">
+					<el-button @click="menuDialogRef.openDialog('add')" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
+						{{ $t('common.addBtn') }}
+					</el-button>
+					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_post_del'">
+						{{ $t('common.delBtn') }}
+					</el-button>
+					<right-toolbar
+						v-model:showSearch="showSearch"
+						:export="'sys_role_export'"
+						@exportExcel="exportExcel"
+						class="ml10"
+						style="float: right; margin-right: 20px"
+						@queryTable="getDataList"
+					></right-toolbar>
+				</div>
+			</el-row>
 			<el-table
 				:data="state.dataList"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -41,15 +60,17 @@
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('appmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
 					<template #default="scope">
-						<el-button @click="menuDialogRef.openDialog('add', scope.row?.id)" text type="primary" v-auth="'sys_menu_add'">
+						<el-button icon="add" @click="menuDialogRef.openDialog('add', scope.row?.id)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
 						</el-button>
-						<el-button @click="menuDialogRef.openDialog('edit', scope.row?.id)" text type="primary" v-auth="'sys_menu_edit'"
+						<el-button icon="edit-pen" @click="menuDialogRef.openDialog('edit', scope.row?.id)" text type="primary" v-auth="'sys_menu_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_menu_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_menu_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -66,6 +87,8 @@ import { useI18n } from 'vue-i18n';
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
+const showSearch = ref(true);
+const queryRef = ref();
 // 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
@@ -86,6 +109,12 @@ const { getDataList, tableStyle } = useTable(state);
 const handleSelectionChange = (objs: any) => {
 	selectObjs.value.push(...objs.map((val: any) => val.id));
 	multiple.value = !objs.length;
+};
+
+// 清空搜索条件
+const resetQuery = () => {
+	queryRef.value.resetFields();
+	getDataList();
 };
 
 // 删除操作

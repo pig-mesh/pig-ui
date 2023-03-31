@@ -46,13 +46,13 @@
 				<el-table-column :label="t('datasourceconf.dsType')" prop="dsType" show-overflow-tooltip />
 				<el-table-column :label="t('datasourceconf.username')" prop="username" show-overflow-tooltip />
 				<el-table-column :label="t('datasourceconf.createTime')" prop="createTime" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button @click="downloadDoc(scope.row.name)" text type="primary">{{ $t('datasourceconf.docBtn') }} </el-button>
+						<el-button icon="document" @click="downloadDoc(scope.row.name)" text type="primary">{{ $t('datasourceconf.docBtn') }} </el-button>
 
-						<el-button @click="formDialogRef.openDialog(scope.row.id)" text type="primary">{{ $t('common.editBtn') }} </el-button>
+						<el-button icon="edit" @click="formDialogRef.openDialog(scope.row.id)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 
-						<el-button @click="handleDelete([scope.row.id])" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>

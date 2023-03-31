@@ -41,7 +41,7 @@
 				<el-table-column :label="$t('systoken.clientId')" prop="clientId" show-overflow-tooltip width="100"></el-table-column>
 				<el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip>
 					<template #default="scope">
-						<el-button link type="success" v-if="filterOwnToken(scope.row)">
+						<el-button link type="danger" v-if="filterOwnToken(scope.row)">
 							{{ scope.row.accessToken }}
 						</el-button>
 					</template>
@@ -49,7 +49,7 @@
 				<el-table-column :label="$t('systoken.expiresAt')" prop="expiresAt" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="100">
 					<template #default="scope">
-						<el-button @click="handleDelete([scope.row.accessToken])" size="small" text type="primary" v-auth="'sys_user_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.accessToken])" size="small" text type="primary" v-auth="'sys_user_del'">
 							{{ $t('systoken.offlineBtn') }}
 						</el-button>
 					</template>

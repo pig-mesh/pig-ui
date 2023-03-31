@@ -58,15 +58,17 @@
 				<el-table-column :label="$t('approle.roleCode')" prop="roleCode" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('approle.roleDesc')" prop="roleDesc" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('approle.createTime')" prop="createTime" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button @click="roleDialogRef.openDialog(scope.row.roleId)" text type="primary" v-auth="'app_approle_edit'"
+						<el-button icon="edit-pen" @click="roleDialogRef.openDialog(scope.row.roleId)" text type="primary" v-auth="'app_approle_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 
-						<el-button @click="handleDelete([scope.row.roleId])" text type="primary" v-auth="'app_approle_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.roleId])" text type="primary" v-auth="'app_approle_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 
-						<el-button @click="permessionRef.openDialog(scope.row)" text type="primary" v-auth="'app_approle_perm'"
+						<el-button icon="turn-off" @click="permessionRef.openDialog(scope.row)" text type="primary" v-auth="'app_approle_perm'"
 							>{{ $t('approle.permissionTip') }}
 						</el-button>
 					</template>

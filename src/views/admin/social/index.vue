@@ -63,10 +63,10 @@
 				<el-table-column :label="t('social.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button v-auth="'sys_social_details_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)"
+						<el-button icon="edit-pen" v-auth="'sys_social_details_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button v-auth="'sys_social_details_del'" text type="primary" @click="handleDelete([scope.row.id])"
+						<el-button icon="delete" v-auth="'sys_social_details_del'" text type="primary" @click="handleDelete([scope.row.id])"
 							>{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

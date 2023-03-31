@@ -53,11 +53,13 @@
 				<el-table-column prop="taskId" :label="t('task.taskId')" show-overflow-tooltip />
 				<el-table-column prop="taskName" :label="t('task.taskName')" show-overflow-tooltip />
 				<el-table-column prop="time" :label="t('task.time')" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
-						<el-button text v-auth="'oa_task_del'" type="primary" @click="handleView(scope.row)">流程图 </el-button>
-						<el-button text v-auth="'oa_task_del'" type="primary" @click="formDialogRef.openDialog(scope.row.taskId)">审批 </el-button>
-						<el-button text v-auth="'oa_task_del'" type="primary" @click="commentDialogRef.openDialog(scope.row.taskId)">批注 </el-button>
+						<el-button icon="picture" text v-auth="'oa_task_del'" type="primary" @click="handleView(scope.row)">流程图 </el-button>
+						<el-button icon="pointer" text v-auth="'oa_task_del'" type="primary" @click="formDialogRef.openDialog(scope.row.taskId)">审批 </el-button>
+						<el-button icon="ChatLineSquare" text v-auth="'oa_task_del'" type="primary" @click="commentDialogRef.openDialog(scope.row.taskId)"
+							>批注
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

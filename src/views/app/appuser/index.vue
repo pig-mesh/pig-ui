@@ -52,7 +52,7 @@
 				<el-table-column :label="$t('appuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('appuser.role')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag :key="index" type="success" v-for="(item, index) in scope.row.roleList">{{ item.roleName }} </el-tag>
+						<el-tag :key="index" v-for="(item, index) in scope.row.roleList">{{ item.roleName }} </el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('appuser.lockFlag')" show-overflow-tooltip>
@@ -63,10 +63,10 @@
 				<el-table-column :label="$t('appuser.createTime')" prop="createTime" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button @click="userDialogRef.openDialog(scope.row.userId)" text type="primary" v-auth="'app_appuser_edit'">
+						<el-button icon="edit-pen" @click="userDialogRef.openDialog(scope.row.userId)" text type="primary" v-auth="'app_appuser_edit'">
 							{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.userId])" text type="primary" v-auth="'app_appuser_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.userId])" text type="primary" v-auth="'app_appuser_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

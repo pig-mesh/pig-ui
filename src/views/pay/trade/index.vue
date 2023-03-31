@@ -75,6 +75,7 @@
 				<el-table-column :label="$t('common.action')" fixed="right" width="150">
 					<template #default="scope">
 						<el-button
+							icon="RefreshLeft"
 							@click="refundDialogRef.openDialog(scope.row.orderId)"
 							text
 							type="primary"
@@ -82,7 +83,9 @@
 							v-auth="'pay_trade_del'"
 							>{{ $t('trade.refundBtn') }}
 						</el-button>
-						<el-button @click="handleDelete([scope.row.orderId])" text type="primary" v-auth="'pay_trade_del'">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.orderId])" text type="primary" v-auth="'pay_trade_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
