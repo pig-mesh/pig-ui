@@ -188,13 +188,7 @@ const passwordRuleForm = reactive({
 const score = ref(0);
 
 const passwordScore = (e) => {
-	console.log(e, 'eeeeee');
 	score.value = e;
-};
-
-// 头像上传成功
-const handleAvatarSuccess = (url: any) => {
-	formData.value.avatar = url;
 };
 
 const handleChangePassword = () => {
@@ -272,7 +266,6 @@ const initUserInfo = (userId: any) => {
 	getObj(userId)
 		.then((res) => {
 			formData.value = res.data;
-			console.log(formData.value, 'formData');
 			initSocialList();
 		})
 		.catch((err) => {

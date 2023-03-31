@@ -133,7 +133,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题、登录form顶部右侧）
-			globalTitle: 'PigX 快速开发框架',
+			globalTitle: 'PIGX ADMIN',
 			// 网站副标题（登录左侧底部页顶部文字）
 			globalViceTitle: 'PigX 快速开发框架',
 			// 网站副标题（登录页顶部文字）

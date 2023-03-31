@@ -509,7 +509,7 @@ const onIsFixedHeaderChange = () => {
 	getThemeConfig.value.isFixedHeaderChange = getThemeConfig.value.isFixedHeader ? false : true;
 	setLocalThemeConfig();
 };
-// 3、界面设置 --> 经典布局分割菜单
+// 3、界面设置 --> 经典布局分割菜单 (顶部菜单)
 const onClassicSplitMenuChange = () => {
 	getThemeConfig.value.isBreadcrumb = false;
 	setLocalThemeConfig();

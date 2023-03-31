@@ -1,6 +1,5 @@
 <template>
 	<div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
-		<img :src="logoMini" class="layout-logo-medium-img" />
 		<span>{{ themeConfig.globalTitle }}</span>
 	</div>
 	<div class="layout-logo-size" v-else @click="onThemeConfigChange">
@@ -9,8 +8,6 @@
 </template>
 
 <script setup lang="ts" name="layoutLogo">
-import { computed } from 'vue';
-import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import logoMini from '/@/assets/logo-mini.svg';
 
@@ -45,15 +42,14 @@ const onThemeConfigChange = () => {
 	span {
 		white-space: nowrap;
 		display: inline-block;
+		font-size: 21.5px;
+		font-weight: 700;
+		white-space: nowrap;
 	}
 	&:hover {
 		span {
 			color: var(--color-primary-light-2);
 		}
-	}
-	&-medium-img {
-		width: 20px;
-		margin-right: 5px;
 	}
 }
 .layout-logo-size {

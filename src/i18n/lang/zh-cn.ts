@@ -137,7 +137,7 @@ export default {
 		threeIsCollapse: '菜单水平折叠',
 		threeIsUniqueOpened: '菜单手风琴',
 		threeIsFixedHeader: '固定 Header',
-		threeIsClassicSplitMenu: '经典布局分割菜单',
+		threeIsClassicSplitMenu: '经典布局顶部菜单',
 		threeIsLockScreen: '开启锁屏',
 		threeLockScreenTime: '自动锁屏(s/秒)',
 		fourTitle: '界面显示',

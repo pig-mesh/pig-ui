@@ -24,8 +24,11 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumb">
+import { reactive, computed, onMounted } from 'vue';
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
 import { Local } from '/@/utils/storage';
 import other from '/@/utils/other';
+import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useRoutesList } from '/@/stores/routesList';
 
@@ -89,10 +92,12 @@ const initRouteSplit = (path: string) => {
 	state.routeSplitIndex = 1;
 	getBreadcrumbList(routesList.value);
 	state.breadcrumbList.push(route);
-
-	if (route.name === 'home' || (route.name === 'notFound' && state.breadcrumbList.length > 1)) state.breadcrumbList.shift();
-	if (state.breadcrumbList.length > 0)
+	// 首页或异常页只显示第一个
+	if (route.name === 'router.home' || (route.name === 'staticRoutes.notFound' && state.breadcrumbList.length > 1)) {
+		state.breadcrumbList.splice(0, state.breadcrumbList.length - 1);
+	} else if (state.breadcrumbList.length > 0) {
 		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
+	}
 };
 // 页面加载时
 onMounted(() => {

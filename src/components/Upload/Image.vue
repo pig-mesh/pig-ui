@@ -56,7 +56,7 @@ import request from '/@/utils/request';
 
 interface UploadFileProps {
 	imageUrl: string; // 图片地址 ==> 必传
-	uploadFileUrl: string; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
+	uploadFileUrl?: string; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
 	drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
 	disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
 	fileSize?: number; // 图片大小限制 ==> 非必传（默认为 5M）
@@ -108,7 +108,10 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 		const { data } = await request({
 			url: props.uploadFileUrl,
 			method: 'post',
-			params: formData,
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+			data: formData,
 		});
 		emit('update:imageUrl', data.url);
 		// 调用 el-form 内部的校验方法（可自动校验）
