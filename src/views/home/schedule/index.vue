@@ -14,7 +14,7 @@
 					<el-form-item :label="$t('schedule.title')" prop="title">
 						<el-input :placeholder="t('schedule.inputTitleTip')" v-model="state.queryForm.title" style="max-width: 180px" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

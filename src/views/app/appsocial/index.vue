@@ -1,14 +1,14 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="t('appsocial.type')" class="ml2" prop="type">
 						<el-select :placeholder="t('appsocial.inputTypeTip')" v-model="state.queryForm.type">
 							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in app_social_type"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>

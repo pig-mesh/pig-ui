@@ -12,7 +12,7 @@
 					<el-form-item :label="$t('audit.createBy')" prop="createBy">
 						<el-input :placeholder="t('audit.inputCreateByTip')" v-model="state.queryForm.createBy" style="max-width: 180px" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

@@ -1,12 +1,12 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto" shadow="hover">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('model.category')" prop="category">
 						<el-input :placeholder="$t('model.inputCategoryTip')" style="max-width: 180px" v-model="state.queryForm.category" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" icon="search" type="primary" v-auth="'oa_model_view'">
 							{{ $t('common.queryBtn') }}
 						</el-button>

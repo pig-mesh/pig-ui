@@ -16,7 +16,7 @@
 							<el-option v-for="item in repType" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

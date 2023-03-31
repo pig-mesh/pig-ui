@@ -140,8 +140,8 @@ export const useThemeConfig = defineStore('themeConfig', {
 			globalViceTitleMsg: '专注、免费、开源、维护、解疑',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
 			globalI18n: 'zh-cn',
-			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'large'
-			globalComponentSize: 'large',
+			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'default'
+			globalComponentSize: 'default',
 			// footer 页面作者
 			footerAuthor: '©2023 pig4cloud.com',
 		},

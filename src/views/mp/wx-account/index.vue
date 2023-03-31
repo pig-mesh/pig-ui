@@ -9,7 +9,7 @@
 					<el-form-item :label="$t('account.account')" prop="account">
 						<el-input v-model="state.queryForm.account" :placeholder="t('account.inputAccountTip')" style="max-width: 180px" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('i18n.name')" prop="name">
 						<el-input :placeholder="t('i18n.inputKeyTip')" style="max-width: 180px" v-model="state.queryForm.name" />
@@ -12,7 +12,7 @@
 					<el-form-item :label="$t('i18n.en')" prop="en">
 						<el-input :placeholder="t('i18n.inputEnTip')" style="max-width: 180px" v-model="state.queryForm.en" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>

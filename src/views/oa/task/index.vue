@@ -6,7 +6,7 @@
 					<el-form-item :label="$t('task.taskName')" prop="taskName">
 						<el-input :placeholder="t('task.inputTaskNameTip')" v-model="state.queryForm.taskName" style="max-width: 180px" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

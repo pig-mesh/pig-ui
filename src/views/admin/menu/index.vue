@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
+			<el-row shadow="hover" v-show="showSearch" class="ml10">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('sysmenu.name')" prop="menuName">
 						<el-input :placeholder="$t('sysmenu.inputNameTip')" clearable style="max-width: 180px" v-model="state.queryForm.menuName" />
@@ -69,7 +69,14 @@
 
 						<el-tooltip icon="delete" :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)" placement="top">
 							<span style="margin-left: 12px">
-								<el-button :disabled="deleteMenuDisabled(scope.row)" @click="handleDelete(scope.row)" text type="primary" v-auth="'sys_menu_del'">
+								<el-button
+									icon="delete"
+									:disabled="deleteMenuDisabled(scope.row)"
+									@click="handleDelete(scope.row)"
+									text
+									type="primary"
+									v-auth="'sys_menu_del'"
+								>
 									{{ $t('common.delBtn') }}
 								</el-button>
 							</span>

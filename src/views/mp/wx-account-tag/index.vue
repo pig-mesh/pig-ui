@@ -11,7 +11,7 @@
 							<el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
 						</el-select>
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>

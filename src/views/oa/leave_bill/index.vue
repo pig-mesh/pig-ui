@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('leave.username')" prop="username">
 						<el-input :placeholder="t('leave.inputUsernameTip')" style="max-width: 180px" v-model="state.queryForm.username" />
@@ -11,7 +11,7 @@
 							<el-option :key="index" :label="item.label" :value="item.value" v-for="(item, index) in leave_status"></el-option>
 						</el-select>
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" formDialogRef icon="search" type="primary" v-auth="'oa_leave_bill_view'">
 							{{ $t('common.queryBtn') }}
 						</el-button>

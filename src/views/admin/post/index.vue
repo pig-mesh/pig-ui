@@ -1,12 +1,12 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('post.postName')" prop="postName">
 						<el-input :placeholder="$t('post.inputpostNameTip')" style="max-width: 180px" v-model="state.queryForm.postName" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
@@ -50,7 +50,7 @@
 				<el-table-column :label="t('post.postName')" prop="postName" show-overflow-tooltip />
 				<el-table-column :label="t('post.postSort')" prop="postSort" show-overflow-tooltip />
 				<el-table-column :label="t('post.remark')" prop="remark" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
 						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.postId)" text type="primary" v-auth="'sys_post_edit'"
 							>{{ $t('common.editBtn') }}

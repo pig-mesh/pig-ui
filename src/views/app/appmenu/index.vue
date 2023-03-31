@@ -1,12 +1,12 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row shadow="hover" v-show="showSearch" class="mb8 ml10">
+			<el-row shadow="hover" v-show="showSearch" class="ml10">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('appmenu.name')" prop="menuName">
 						<el-input :placeholder="$t('appmenu.inputMenuNameTip')" style="max-width: 180px" v-model="state.queryForm.menuName"></el-input>
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>

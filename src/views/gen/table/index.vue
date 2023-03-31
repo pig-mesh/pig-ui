@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row class="mb8 ml10" v-show="showSearch">
+			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item label="数据源" prop="name">
 						<el-select @change="getDataList" placeholder="请选择数据源" style="width: 100%" v-model="state.queryForm.dsName">
@@ -12,7 +12,7 @@
 					<el-form-item :label="$t('table.tableName')" prop="tableName">
 						<el-input :placeholder="$t('table.inputtableNameTip')" style="max-width: 180px" v-model="state.queryForm.tableName" />
 					</el-form-item>
-					<el-form-item class="ml2">
+					<el-form-item>
 						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
