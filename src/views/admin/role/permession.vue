@@ -1,6 +1,6 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
+		<el-dialog :title="state.dialog.title" width="30%" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
 			<el-tree
 				v-loading="loading"
 				ref="menuTree"

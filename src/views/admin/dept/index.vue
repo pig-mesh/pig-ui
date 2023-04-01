@@ -73,7 +73,7 @@
 
 <script setup lang="ts" name="systemDept">
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { depttree, delObj } from '/@/api/admin/dept';
+import { deptTree, delObj } from '/@/api/admin/dept';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { downBlobFile } from '/@/utils/other';
@@ -87,7 +87,7 @@ const excelUploadRef = ref();
 const showSearch = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
-	pageList: depttree,
+	pageList: deptTree,
 	queryForm: {
 		deptName: '',
 	},

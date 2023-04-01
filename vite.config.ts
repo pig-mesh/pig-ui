@@ -7,7 +7,7 @@ import topLevelAwait from 'vite-plugin-top-level-await';
 import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
 import viteCompression from 'vite-plugin-compression';
 // @ts-ignore
-import { svgBuilder } from '/@/components/iconSelector/index';
+import { svgBuilder } from '/@/components/IconSelector/index';
 
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);

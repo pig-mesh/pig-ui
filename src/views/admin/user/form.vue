@@ -85,7 +85,7 @@
 import { addObj, getObj, putObj, validatePhone, validateUsername } from '/@/api/admin/user';
 import { list as roleList } from '/@/api/admin/role';
 import { list as postList } from '/@/api/admin/post';
-import { depttree } from '/@/api/admin/dept';
+import { deptTree } from '/@/api/admin/dept';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
@@ -252,7 +252,7 @@ const getUserData = (id: string) => {
 // 初始化部门数据
 const getDeptData = () => {
 	// 获取部门数据
-	depttree().then((res) => {
+	deptTree().then((res) => {
 		deptData.value = res.data;
 	});
 };

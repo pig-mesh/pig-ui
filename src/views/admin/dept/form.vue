@@ -41,7 +41,7 @@
 
 <script setup lang="ts" name="systemDeptDialog">
 import { useI18n } from 'vue-i18n';
-import { getObj, depttree, addObj, putObj } from '/@/api/admin/dept';
+import { getObj, deptTree, addObj, putObj } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
 
 // 定义子组件向父组件传值/事件
@@ -104,7 +104,7 @@ const onSubmit = async () => {
 
 // 从后端获取菜单信息
 const getDeptData = async () => {
-	depttree().then((res) => {
+	deptTree().then((res) => {
 		parentData.value = [];
 		const dept = {
 			id: '0',

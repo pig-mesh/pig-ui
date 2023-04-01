@@ -101,7 +101,7 @@ const handleNodeClick = (data: any) => {
 
 // 刷新树
 const handleRefreshTree = async (data: any) => {
-	await dictTreeRef.value.getDeptTree();
+	await dictTreeRef.value.getdeptTree();
 	// 选择当前编辑、新增的节点
 	handleNodeClick(data);
 };
@@ -117,7 +117,7 @@ const handleDelete = async (ids: string[]) => {
 	try {
 		await delObj(ids);
 		useMessage().success(t('common.delSuccessText'));
-		dictTreeRef.value.getDeptTree();
+		dictTreeRef.value.getdeptTree();
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	}

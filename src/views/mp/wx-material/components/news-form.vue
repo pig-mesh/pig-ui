@@ -93,9 +93,9 @@
 import { useMessageBox } from '/@/hooks/message';
 import { addObj, materialNewsUpdate } from '/@/api/mp/wx-material';
 
-const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/wechart/wx-material-select/main.vue'));
+const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
 
-const WxFileUpload = defineAsyncComponent(() => import('/@/components/wechart/fileUpload/index.vue'));
+const WxFileUpload = defineAsyncComponent(() => import('/@/components/Wechat/fileUpload/index.vue'));
 
 const WxMaterialSelectRef = ref();
 

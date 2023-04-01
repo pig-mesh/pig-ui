@@ -100,7 +100,7 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue', 'get', 'clear']);
 
 // 引入组件
-const IconList = defineAsyncComponent(() => import('/@/components/iconSelector/list.vue'));
+const IconList = defineAsyncComponent(() => import('/@/components/IconSelector/list.vue'));
 
 // 定义变量内容
 const inputWidthRef = ref();

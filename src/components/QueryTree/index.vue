@@ -1,7 +1,7 @@
 <template>
 	<div class="head-container">
 		<div style="display: flex">
-			<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getDeptTree" />
+			<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getdeptTree" />
 			<el-dropdown :hide-on-click="false" class="mt10 mr10">
 				<el-icon style="transform: rotate(90deg)">
 					<MoreFilled />
@@ -116,7 +116,7 @@ const handleNodeClick = (item: any) => {
 /**
  * 获取部门树形结构数据。
  */
-const getDeptTree = () => {
+const getdeptTree = () => {
 	if (props.query instanceof Function) {
 		state.localLoading = true;
 
@@ -150,11 +150,11 @@ const toggleRowExpansionAll = (status) => {
 };
 
 onMounted(() => {
-	getDeptTree();
+	getdeptTree();
 });
 
 // 方便父组件调用刷新树方法
 defineExpose({
-	getDeptTree,
+	getdeptTree,
 });
 </script>

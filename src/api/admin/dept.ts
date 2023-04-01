@@ -1,6 +1,6 @@
 import request from '/@/utils/request';
 
-export const depttree = (params?: Object) => {
+export const deptTree = (params?: Object) => {
 	return request({
 		url: '/admin/dept/tree',
 		method: 'get',

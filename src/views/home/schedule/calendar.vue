@@ -1,11 +1,9 @@
 <template>
 	<el-calendar v-model="calendar">
 		<template #date-cell="{ data }">
-			<div style="width: 100%" @click="handleSchedule(data)">
+			<div class="calendar-cell" @click="handleSchedule(data)">
 				{{ data.day.split('-').slice(2).join('-') }}
-				<span v-if="filterCellSelected(data)">
-					<el-icon><BellFilled /></el-icon>
-				</span>
+				<div class="box-yello" v-if="filterCellSelected(data)"></div>
 			</div>
 		</template>
 	</el-calendar>
@@ -80,3 +78,27 @@ const handleSchedule = (data) => {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+.el-calendar-table {
+	.calendar-cell {
+		position: relative;
+		text-align: center;
+		height: 100%;
+		align-items: center;
+		display: flex;
+		justify-content: center;
+	}
+	.box-yello {
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: #e6a23c;
+		opacity: 0.6;
+		padding: 0;
+		border-radius: 5%;
+	}
+}
+</style>

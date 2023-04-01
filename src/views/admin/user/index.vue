@@ -132,7 +132,7 @@
 
 <script lang="ts" name="systemUser" setup>
 import { delObj, pageList } from '/@/api/admin/user';
-import { depttree } from '/@/api/admin/dept';
+import { deptTree } from '/@/api/admin/dept';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useDict } from '/@/hooks/dict';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -170,7 +170,7 @@ const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableS
 // 部门树使用的数据
 const deptData = reactive({
 	queryList: (name: String) => {
-		return depttree({
+		return deptTree({
 			deptName: name,
 		});
 	},

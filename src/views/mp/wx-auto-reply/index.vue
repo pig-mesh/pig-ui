@@ -148,7 +148,7 @@ import { getPage, delObj, addObj, putObj } from '/@/api/mp/wx-auto-reply';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
-const WxReply = defineAsyncComponent(() => import('/@/components/wechart/wx-reply/index.vue'));
+const WxReply = defineAsyncComponent(() => import('/@/components/Wechat/wx-reply/index.vue'));
 
 // 点击树
 const handleNodeClick = (node: any) => {

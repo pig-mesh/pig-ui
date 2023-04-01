@@ -108,7 +108,7 @@ import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { fetchAccountList } from '/@/api/mp/wx-account';
 
-const WxMsg = defineAsyncComponent(() => import('/@/components/wechart/wx-msg/index.vue'));
+const WxMsg = defineAsyncComponent(() => import('/@/components/Wechat/wx-msg/index.vue'));
 
 const { t } = useI18n();
 // 定义查询字典

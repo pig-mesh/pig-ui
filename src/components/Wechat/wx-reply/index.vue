@@ -65,8 +65,7 @@
 			</el-row>
 			<el-row style="text-align: center">
 				<el-col :span="12" class="col-select">
-					<a v-if="objData.repUrl" target="_blank" :href="objData.repUrl">
-						<SvgIcon name="local-wx-video" :size="45" /> </a
+					<a v-if="objData.repUrl" target="_blank" :href="objData.repUrl"> <SvgIcon name="local-wx-video" :size="45" /> </a
 				></el-col>
 				<el-col :span="12" class="col-add">
 					<el-button type="success" @click="openMaterial({ type: 'video', accountId: props.objData.appId })">素材库选择 </el-button>
@@ -102,11 +101,11 @@
 <script setup lang="ts" name="wx-reply">
 import { getMaterialVideo } from '/@/api/mp/wx-material';
 import { useMessage } from '/@/hooks/message';
-const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/wechart/wx-material-select/main.vue'));
+const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
 
-const WxFileUpload = defineAsyncComponent(() => import('/@/components/wechart/fileUpload/index.vue'));
+const WxFileUpload = defineAsyncComponent(() => import('/@/components/Wechat/fileUpload/index.vue'));
 
-const WxNews = defineAsyncComponent(() => import('/@/components/wechart/wx-news/index.vue'));
+const WxNews = defineAsyncComponent(() => import('/@/components/Wechat/wx-news/index.vue'));
 
 const props = defineProps({
 	objData: {

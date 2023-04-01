@@ -94,7 +94,7 @@ import { useMessage } from '/@/hooks/message';
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 // 引入组件
-const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
+const IconSelector = defineAsyncComponent(() => import('/@/components/IconSelector/index.vue'));
 
 // 定义变量内容
 const visible = ref(false);

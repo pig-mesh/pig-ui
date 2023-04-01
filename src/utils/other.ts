@@ -15,7 +15,7 @@ import * as CryptoJS from 'crypto-js';
 import { validateNull } from './validate';
 
 // 引入组件
-const SvgIcon = defineAsyncComponent(() => import('/@/components/svgIcon/index.vue'));
+const SvgIcon = defineAsyncComponent(() => import('/@/components/SvgIcon/index.vue'));
 
 /**
  * 导出全局注册 element plus svg 图标

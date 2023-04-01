@@ -12,7 +12,7 @@ import 'element-plus/dist/index.css';
 import VForm3 from 'form-designer'; //引入VForm3库
 import 'form-designer/dist/designer.style.css'; //引入VForm3样式
 
-import elementIcons from '/@//components/svgIcon/svgicon';
+import elementIcons from '/@/components/SvgIcon/svgicon';
 import '/@/theme/index.scss';
 import 'vxe-table/lib/style.css';
 import 'xe-utils';

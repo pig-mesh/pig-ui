@@ -62,7 +62,7 @@
 
 <script lang="ts" name="systemRoleDialog" setup>
 import { rule } from '/@/utils/validate';
-import { depttree } from '/@/api/admin/dept';
+import { deptTree } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj, validateRoleCode, validateRoleName } from '/@/api/admin/role';
 import { useI18n } from 'vue-i18n';
@@ -203,7 +203,7 @@ const getRoleData = (id: string) => {
 
 // 获取菜单结构数据
 const getDeptData = () => {
-	depttree().then((res: any) => {
+	deptTree().then((res: any) => {
 		dataForm.deptData = res.data;
 	});
 };

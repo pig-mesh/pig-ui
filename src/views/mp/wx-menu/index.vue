@@ -134,13 +134,13 @@ import { saveObj, getObj } from '/@/api/mp/wx-menu';
 import { fetchAccountList } from '/@/api/mp/wx-account';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 
-const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/wechart/wx-material-select/main.vue'));
+const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
 
-const WxReply = defineAsyncComponent(() => import('/@/components/wechart/wx-reply/index.vue'));
+const WxReply = defineAsyncComponent(() => import('/@/components/Wechat/wx-reply/index.vue'));
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
-const WxNews = defineAsyncComponent(() => import('/@/components/wechart/wx-news/index.vue'));
+const WxNews = defineAsyncComponent(() => import('/@/components/Wechat/wx-news/index.vue'));
 
 // 点击树
 const handleNodeClick = (node: any) => {

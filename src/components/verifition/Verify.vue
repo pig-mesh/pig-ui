@@ -34,8 +34,8 @@
  * @description 分发验证码使用
  * */
 import { computed, ref, toRefs, watchEffect, defineAsyncComponent } from 'vue';
-const VerifySlide = defineAsyncComponent(() => import('/@/components/verifition/Verify/VerifySlide.vue'));
-const VerifyPoints = defineAsyncComponent(() => import('/@/components/verifition/Verify/VerifyPoints.vue'));
+const VerifySlide = defineAsyncComponent(() => import('/@/components/Verifition/Verify/VerifySlide.vue'));
+const VerifyPoints = defineAsyncComponent(() => import('/@/components/Verifition/Verify/VerifyPoints.vue'));
 
 export default {
 	name: 'Vue2Verify',

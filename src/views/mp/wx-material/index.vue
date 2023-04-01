@@ -140,8 +140,8 @@ import { delObj, getMaterialOther, getMaterialVideo, getPage } from '/@/api/mp/w
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 const NewsForm = defineAsyncComponent(() => import('./components/news-form.vue'));
-const WxFileUpload = defineAsyncComponent(() => import('/@/components/wechart/fileUpload/index.vue'));
-const WxNews = defineAsyncComponent(() => import('/@/components/wechart/wx-news/index.vue'));
+const WxFileUpload = defineAsyncComponent(() => import('/@/components/Wechat/fileUpload/index.vue'));
+const WxNews = defineAsyncComponent(() => import('/@/components/Wechat/wx-news/index.vue'));
 
 const deptData = reactive({
 	queryList: (name: string) => {
