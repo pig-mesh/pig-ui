@@ -150,3 +150,9 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 </script>
+
+<style lang="scss" scoped>
+pre code.hljs {
+	width: 65%;
+}
+</style>
