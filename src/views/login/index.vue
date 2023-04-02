@@ -17,7 +17,7 @@
 			</div>
 			<div class="login-box">
 				<div class="login-form">
-					<div class="login-title">{{ getThemeConfig.globalTitle }} 欢迎您！</div>
+					<div class="login-title">{{ getThemeConfig.globalTitle }}</div>
 					<el-tabs v-model="tabsActiveName">
 						<!-- 用户名密码登录 -->
 						<el-tab-pane :label="$t('label.one1')" name="account">
@@ -43,10 +43,9 @@
 </template>
 
 <script setup lang="ts" name="loginIndex">
-import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
-import illustration from '/@/assets/login/illustration.svg';
+import illustration from '/@/assets/login/login_bg.svg';
 import bg from '/@/assets/login/bg.png';
 import miniQr from '/@/assets/login/mini_qr.png';
 import { useI18n } from 'vue-i18n';
@@ -80,11 +79,6 @@ const getThemeConfig = computed(() => {
 	return themeConfig.value;
 });
 
-// 页面加载时
-onMounted(() => {
-	NextLoading.done();
-});
-
 // 登录成功后的跳转处理事件
 const signInSuccess = async () => {
 	const isNoPower = await initBackEndControlRoutes();
@@ -109,26 +103,9 @@ const signInSuccess = async () => {
 		NextLoading.start();
 	}
 };
+
+// 页面加载时
+onMounted(() => {
+	NextLoading.done();
+});
 </script>
-
-<style scoped lang="scss">
-:deep(.el-input-group__append, .el-input-group__prepend) {
-	padding: 0;
-}
-
-.translation {
-	::v-deep(.el-dropdown-menu__item) {
-		padding: 5px 40px;
-	}
-
-	.check-zh {
-		position: absolute;
-		left: 20px;
-	}
-
-	.check-en {
-		position: absolute;
-		left: 20px;
-	}
-}
-</style>

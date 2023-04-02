@@ -64,6 +64,15 @@
 	width: 100%;
 }
 
+.el-form-item__content {
+	.el-select {
+		width: 100% !important;
+	}
+	.el-date-editor {
+		width: 100% !important;
+	}
+}
+
 /* Alert 警告
 ------------------------------- */
 .el-alert {

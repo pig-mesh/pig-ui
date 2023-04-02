@@ -22,6 +22,7 @@
 		"element-plus": "2.3.1",
 		"form-designer": "^0.0.2",
 		"highlight.js": "^11.7.0",
+		"driver.js": "^0.9.8",
 		"js-cookie": "^3.0.1",
 		"mitt": "^3.0.0",
 		"nprogress": "^0.2.0",

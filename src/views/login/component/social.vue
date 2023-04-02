@@ -1,23 +1,23 @@
 <template>
 	<div class="social-container">
 		<div @click="handleClick('cas')">
-			<SvgIcon name="local-cas" :size="45" />
+			<SvgIcon name="local-cas" :size="35" />
 			<p class="title">CAS</p>
 		</div>
 		<div @click="handleClick('wechat')">
-			<SvgIcon name="local-wechat" :size="45" />
+			<SvgIcon name="local-wechat" :size="35" />
 			<p class="title">微信</p>
 		</div>
 		<div @click="handleClick('tencent')">
-			<SvgIcon name="local-qq" :size="45" />
+			<SvgIcon name="local-qq" :size="35" />
 			<p class="title">QQ</p>
 		</div>
 		<div @click="handleClick('gitee')">
-			<SvgIcon name="local-gitee" :size="45" />
+			<SvgIcon name="local-gitee" :size="30" />
 			<p class="title">Gitee</p>
 		</div>
 		<div @click="handleClick('osc')">
-			<SvgIcon name="local-oschina" :size="45" />
+			<SvgIcon name="local-oschina" :size="30" />
 			<p class="title">开源中国</p>
 		</div>
 	</div>
@@ -90,39 +90,3 @@ onMounted(() => {
 	}, 500);
 });
 </script>
-<style lang="scss">
-svg:hover {
-	color: #409eff;
-}
-</style>
-<style rel="stylesheet/scss" lang="scss" scoped>
-.social-container {
-	margin: 20px 0;
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
-	.box {
-		cursor: pointer;
-	}
-
-	.iconfont {
-		color: #fff;
-		font-size: 30px;
-	}
-
-	.container {
-		$height: 50px;
-		display: inline-block;
-		width: $height;
-		height: $height;
-		line-height: $height;
-		text-align: center;
-		border-radius: 4px;
-		margin-bottom: 10px;
-	}
-
-	.title {
-		text-align: center;
-	}
-}
-</style>

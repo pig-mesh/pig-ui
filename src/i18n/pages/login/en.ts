@@ -31,6 +31,10 @@ export default {
 		wechatApp: 'WeChat sweep code experience mobile',
 	},
 	signInText: 'welcome back!',
+	tenant_guide: {
+		title: 'please select a tenant click here',
+		description: 'please select a tenant you only need to select it the first time you use it',
+	},
 	browserMsgText:
 		'Warm tip: it is recommended to use Google, Microsoft edge, version 79.0.1072.62 and above browsers, and 360 browser, please use speed mode',
 };

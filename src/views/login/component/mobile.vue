@@ -120,30 +120,3 @@ const timeCacl = () => {
 };
 </script>
 
-<style scoped lang="scss">
-.login-content-form {
-	margin-top: 20px;
-
-	@for $i from 1 through 4 {
-		.login-animation#{$i} {
-			opacity: 0;
-			animation-name: error-num;
-			animation-duration: 0.5s;
-			animation-fill-mode: forwards;
-			animation-delay: calc($i/10) + s;
-		}
-	}
-
-	.login-content-code {
-		width: 100%;
-		padding: 0;
-	}
-
-	.login-content-submit {
-		width: 100%;
-		letter-spacing: 2px;
-		font-weight: 300;
-		margin-top: 15px;
-	}
-}
-</style>

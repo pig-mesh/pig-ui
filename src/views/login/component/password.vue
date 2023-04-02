@@ -31,9 +31,6 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item>
-			<Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }" ref="verifyref" />
-		</el-form-item>
 		<el-form-item class="login-animation4">
 			<el-button type="primary" class="login-content-submit" v-waves @click="handleVerify" :loading="loading">
 				<span>{{ $t('password.accountBtnText') }}</span>
@@ -41,6 +38,7 @@
 		</el-form-item>
 		<div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div>
 	</el-form>
+	<Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }" ref="verifyref" />
 </template>
 
 <script setup lang="ts" name="password">
@@ -101,47 +99,3 @@ const onSignIn = async () => {
 	}
 };
 </script>
-
-<style scoped lang="scss">
-.login-content-form {
-	margin-top: 20px;
-
-	@for $i from 1 through 4 {
-		.login-animation#{$i} {
-			opacity: 0;
-			animation-name: error-num;
-			animation-duration: 0.5s;
-			animation-fill-mode: forwards;
-			animation-delay: calc($i/10) + s;
-		}
-	}
-
-	.login-content-password {
-		display: inline-block;
-		width: 20px;
-		cursor: pointer;
-
-		&:hover {
-			color: #909399;
-		}
-	}
-
-	.login-content-code {
-		width: 100%;
-		padding: 0;
-		font-weight: bold;
-		letter-spacing: 5px;
-	}
-
-	.login-content-submit {
-		width: 100%;
-		letter-spacing: 2px;
-		font-weight: 300;
-		margin-top: 15px;
-	}
-
-	.login-msg {
-		color: var(--el-text-color-placeholder);
-	}
-}
-</style>
