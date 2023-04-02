@@ -1,6 +1,6 @@
 export default {
 	datasourceconf: {
-		index: '序号',
+		index: '#',
 		importDatasourceConfTip: '导入数据源',
 		id: '主键',
 		name: '别名',

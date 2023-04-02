@@ -55,7 +55,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="createTime" :label="$t('sysrole.createTime')" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('common.action')" width="300">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
 						<el-button text type="primary" icon="edit-pen" v-auth="'sys_role_edit'" @click="roleDialogRef.openDialog(scope.row.roleId)">{{
 							$t('common.editBtn')

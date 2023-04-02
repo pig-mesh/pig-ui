@@ -1,6 +1,6 @@
 export default {
 	account: {
-		index: '序号',
+		index: '#',
 		importwxAccountTip: '导入公众号账户表',
 		id: '主键',
 		name: '名称',

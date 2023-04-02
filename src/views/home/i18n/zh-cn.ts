@@ -8,7 +8,7 @@ export default {
 		newsletterTip: '站内信',
 	},
 	schedule: {
-		index: '序号',
+		index: '#',
 		importsysScheduleTip: '导入日程',
 		id: 'id',
 		title: '标题',

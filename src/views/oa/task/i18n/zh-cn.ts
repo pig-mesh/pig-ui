@@ -1,6 +1,6 @@
 export default {
 	task: {
-		index: '序号',
+		index: '#',
 		taskId: 'ID',
 		taskName: '任务名称',
 		time: '提交时间',
@@ -11,7 +11,7 @@ export default {
 		inputCommentTip: '请输入批注名称',
 	},
 	comment: {
-		index: '序号',
+		index: '#',
 		userId: '用户',
 		fullMessage: '批注',
 		time: '时间',

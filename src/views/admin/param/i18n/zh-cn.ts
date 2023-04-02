@@ -1,6 +1,6 @@
 export default {
 	param: {
-		index: '序号',
+		index: '#',
 		importsysPublicParamTip: '导入公共参数配置表',
 		publicId: '编号',
 		publicName: '名称',

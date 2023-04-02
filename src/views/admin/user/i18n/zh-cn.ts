@@ -1,6 +1,6 @@
 export default {
     sysuser: {
-        index: '序号',
+        index: '#',
         username: '用户名',
         name: '姓名',
         phone: '手机号',

@@ -1,6 +1,6 @@
 export default {
 	systoken: {
-		index: '序号',
+		index: '#',
 		userId: '用户ID',
 		username: '用户名',
 		clientId: '客户端',

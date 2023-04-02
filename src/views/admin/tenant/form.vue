@@ -124,7 +124,7 @@ const openDialog = (id: string): void => {
 
 	// 重置表单数据
 	nextTick(() => {
-		dataFormRef.value?.resetFields?.();
+		dataFormRef.value?.resetFields();
 	});
 
 	if (id) {

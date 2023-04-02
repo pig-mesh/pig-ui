@@ -6,7 +6,7 @@ export default {
 		prewBtn: '预览',
 	},
 	table: {
-		index: '序号',
+		index: '#',
 		importTableTip: '导入列属性',
 		id: 'id',
 		tableName: '表名',

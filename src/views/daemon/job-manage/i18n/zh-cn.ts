@@ -1,6 +1,6 @@
 export default {
 	job: {
-		index: '序号',
+		index: '#',
 		importsysJobTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',
@@ -54,7 +54,7 @@ export default {
 		inputremarkTip: '请输入备注信息',
 	},
 	log: {
-		index: '序号',
+		index: '#',
 		importsysJobLogTip: '导入定时任务执行日志表',
 		jobLogId: '任务日志ID',
 		jobId: '任务id',

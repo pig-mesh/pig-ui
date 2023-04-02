@@ -1,6 +1,6 @@
 export default {
 	fans: {
-		index: '序号',
+		index: '#',
 		importwxAccountFansTip: '导入微信公众号粉丝表',
 		id: '主键',
 		openid: '用户标识',
