@@ -22,10 +22,9 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="exportExcel" class="ml10" icon="Download" type="primary">
-						{{ $t('common.exportBtn') }}
-					</el-button>
 					<right-toolbar
+						:export="true"
+						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
 						style="float: right; margin-right: 20px"

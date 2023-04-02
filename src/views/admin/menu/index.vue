@@ -58,7 +58,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="200">
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
 					<template #default="scope">
 						<el-button icon="folder-add" @click="onOpenAddMenu('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
