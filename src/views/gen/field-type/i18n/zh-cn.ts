@@ -1,6 +1,6 @@
 export default {
 	fieldtype: {
-		index: '序号',
+		index: '#',
 		importFieldTypeTip: '导入列属性',
 		id: 'id',
 		columnType: '字段类型',

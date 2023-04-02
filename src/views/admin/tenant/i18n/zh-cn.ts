@@ -1,6 +1,6 @@
 export default {
 	tenant: {
-		index: '序号',
+		index: '#',
 		importTenantTip: '导入租户',
 		id: '租户id',
 		name: '租户名称',
@@ -32,7 +32,7 @@ export default {
 	},
 	tenantmenu: {
 		name: '租户套餐',
-		index: '序号',
+		index: '#',
 		status: '状态',
 		createTime: '创建',
 	},

@@ -1,6 +1,6 @@
 export default {
 	i18n: {
-		index: '序号',
+		index: '#',
 		id: 'id',
 		name: '名称',
 		zhCn: '中文',

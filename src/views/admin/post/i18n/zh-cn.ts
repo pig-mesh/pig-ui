@@ -1,6 +1,6 @@
 export default {
 	post: {
-		index: '序号',
+		index: '#',
 		importPostTip: '导入岗位管理',
 		postId: '岗位ID',
 		postCode: '岗位编码',
