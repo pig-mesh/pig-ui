@@ -9,8 +9,8 @@ import other from '/@/utils/other';
 import ElementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 
-import VForm3 from 'form-designer'; //引入VForm3库
-import 'form-designer/dist/designer.style.css'; //引入VForm3样式
+import VForm3 from 'form-designer-plus'; //引入VForm3库
+import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
 import elementIcons from '/@/components/SvgIcon/svgicon';
 import '/@/theme/index.scss';

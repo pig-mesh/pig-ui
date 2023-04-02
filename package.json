@@ -20,7 +20,7 @@
 		"crypto-js": "^3.1.9-1",
 		"echarts": "^5.4.1",
 		"element-plus": "2.3.1",
-		"form-designer": "^0.0.2",
+		"form-designer-plus": "^0.0.1",
 		"highlight.js": "^11.7.0",
 		"driver.js": "^0.9.8",
 		"js-cookie": "^3.0.1",
