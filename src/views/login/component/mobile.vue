@@ -23,7 +23,7 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation3">
-			<el-button round type="primary" v-waves class="login-content-submit" @click="handleLogin" :loading="loading">
+			<el-button type="primary" v-waves class="login-content-submit" @click="handleLogin" :loading="loading">
 				<span>{{ $t('mobile.btnText') }}</span>
 			</el-button>
 		</el-form-item>

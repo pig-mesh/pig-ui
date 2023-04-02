@@ -17,6 +17,8 @@ export default {
 		phonePlaceholder4: 'Please enter Phone',
 		accountBtnText: 'Sign in',
 		registerBtnText: 'Register',
+		readAccept: 'I have read it carefully and accept',
+		privacyPolicy: 'Privacy Policy',
 	},
 	mobile: {
 		placeholder1: 'Please input mobile phone number',
@@ -26,6 +28,7 @@ export default {
 	},
 	scan: {
 		text: 'Open the mobile phone to scan and quickly log in / register',
+		wechatApp: 'WeChat sweep code experience mobile',
 	},
 	signInText: 'welcome back!',
 	browserMsgText:

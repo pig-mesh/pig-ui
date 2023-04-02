@@ -17,6 +17,8 @@ export default {
 		phonePlaceholder4: '请输入手机号',
 		accountBtnText: '登 录',
 		registerBtnText: '注 册',
+		readAccept: '我已仔细阅读并接受',
+		privacyPolicy: '《隐私政策》',
 	},
 	mobile: {
 		placeholder1: '请输入手机号',
@@ -26,6 +28,7 @@ export default {
 	},
 	scan: {
 		text: '打开手机扫一扫，快速登录/注册',
+		wechatApp: '微信扫码体验移动端',
 	},
 	signInText: '欢迎回来！',
 	browserMsgText: '* 温馨提示：建议使用谷歌、Microsoft Edge，版本 79.0.1072.62 及以上浏览器，360浏览器请使用极速模式',

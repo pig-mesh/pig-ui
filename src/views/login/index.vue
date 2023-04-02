@@ -1,46 +1,41 @@
 <template>
-	<div class="login-container flex">
-		<div class="login-left">
-			<div class="login-left-logo">
-				<img :src="logoMini" />
-				<div class="login-left-logo-text">
-					<span>{{ getThemeConfig.globalViceTitle }}</span>
-					<span class="login-left-logo-text-msg">{{ getThemeConfig.globalViceTitleMsg }}</span>
-				</div>
-			</div>
-			<div class="login-left-img">
-				<img :src="loginMain" />
-			</div>
-			<img :src="loginBg" class="login-left-waves" />
+	<div class="select-none">
+		<div class="tenant">
+			<!--  租户选择 -->
+			<tenant />
 		</div>
-		<div class="login-right flex">
-			<div class="login-right-warp flex-margin">
-				<div class="login-right-warp-mian">
-					<div class="login-right-warp-main-title">{{ getThemeConfig.globalTitle }} 欢迎您！</div>
-					<div class="login-right-warp-main-form">
-						<div>
-							<!--  租户选择 -->
-							<tenant />
-							<el-tabs v-model="tabsActiveName">
-								<!-- 用户名密码登录 -->
-								<el-tab-pane :label="$t('label.one1')" name="account">
-									<Password @signInSuccess="signInSuccess" />
-								</el-tab-pane>
-								<!-- 手机号登录 -->
-								<el-tab-pane :label="$t('label.two2')" name="mobile">
-									<Mobile @signInSuccess="signInSuccess" />
-								</el-tab-pane>
-								<!-- 社交登录 -->
-								<el-tab-pane :label="$t('label.three3')" name="social">
-									<Social @signInSuccess="signInSuccess" />
-								</el-tab-pane>
-								<!-- 注册 -->
-								<el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
-									<Register @afterSuccess="tabsActiveName = 'account'" />
-								</el-tab-pane>
-							</el-tabs>
-						</div>
-					</div>
+		<div class="mini_qr">
+			<!-- 扫码体验移动端 -->
+			<img :src="miniQr" />
+			<p>{{ t('scan.wechatApp') }}</p>
+		</div>
+		<img :src="bg" class="wave" />
+		<div class="flex-c absolute right-5 top-3"></div>
+		<div class="login-container">
+			<div class="img">
+				<img :src="illustration" />
+			</div>
+			<div class="login-box">
+				<div class="login-form">
+					<div class="login-title">{{ getThemeConfig.globalTitle }} 欢迎您！</div>
+					<el-tabs v-model="tabsActiveName">
+						<!-- 用户名密码登录 -->
+						<el-tab-pane :label="$t('label.one1')" name="account">
+							<Password @signInSuccess="signInSuccess" />
+						</el-tab-pane>
+						<!-- 手机号登录 -->
+						<el-tab-pane :label="$t('label.two2')" name="mobile">
+							<Mobile @signInSuccess="signInSuccess" />
+						</el-tab-pane>
+						<!-- 社交登录 -->
+						<el-tab-pane :label="$t('label.three3')" name="social">
+							<Social @signInSuccess="signInSuccess" />
+						</el-tab-pane>
+						<!-- 注册 -->
+						<el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
+							<Register @afterSuccess="tabsActiveName = 'account'" />
+						</el-tab-pane>
+					</el-tabs>
 				</div>
 			</div>
 		</div>
@@ -51,9 +46,9 @@
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
-import logoMini from '/@/assets/logo-mini.svg';
-import loginMain from '/@/assets/login-main.svg';
-import loginBg from '/@/assets/login-bg.svg';
+import illustration from '/@/assets/login/illustration.svg';
+import bg from '/@/assets/login/bg.png';
+import miniQr from '/@/assets/login/mini_qr.png';
 import { useI18n } from 'vue-i18n';
 import { formatAxis } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
@@ -117,165 +112,23 @@ const signInSuccess = async () => {
 </script>
 
 <style scoped lang="scss">
-.login-container {
-	height: 100%;
-	background: var(--el-color-white);
+:deep(.el-input-group__append, .el-input-group__prepend) {
+	padding: 0;
+}
 
-	.login-left {
-		flex: 1;
-		position: relative;
-		background-color: rgba(211, 239, 255, 1);
-		margin-right: 100px;
-
-		.login-left-logo {
-			display: flex;
-			align-items: center;
-			position: absolute;
-			top: 50px;
-			left: 80px;
-			z-index: 1;
-			animation: logoAnimation 0.3s ease;
-
-			img {
-				width: 52px;
-				height: 52px;
-			}
-
-			.login-left-logo-text {
-				display: flex;
-				flex-direction: column;
-
-				span {
-					margin-left: 10px;
-					font-size: 28px;
-					color: #26a59a;
-				}
-
-				.login-left-logo-text-msg {
-					font-size: 12px;
-					color: #32a99e;
-				}
-			}
-		}
-
-		.login-left-img {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-			width: 100%;
-			height: 52%;
-
-			img {
-				width: 100%;
-				height: 100%;
-				animation: error-num 0.6s ease;
-			}
-		}
-
-		.login-left-waves {
-			position: absolute;
-			top: 0;
-			right: -100px;
-		}
+.translation {
+	::v-deep(.el-dropdown-menu__item) {
+		padding: 5px 40px;
 	}
 
-	.login-right {
-		width: 700px;
+	.check-zh {
+		position: absolute;
+		left: 20px;
+	}
 
-		.login-right-warp {
-			border: 1px solid var(--el-color-primary-light-3);
-			border-radius: 3px;
-			width: 500px;
-			height: 560px;
-			position: relative;
-			overflow: hidden;
-			background-color: var(--el-color-white);
-
-			.login-right-warp-one,
-			.login-right-warp-two {
-				position: absolute;
-				display: block;
-				width: inherit;
-				height: inherit;
-
-				&::before,
-				&::after {
-					content: '';
-					position: absolute;
-					z-index: 1;
-				}
-			}
-
-			.login-right-warp-one {
-				&::before {
-					filter: hue-rotate(0deg);
-					top: 0px;
-					left: 0;
-					width: 100%;
-					height: 3px;
-					background: linear-gradient(90deg, transparent, var(--el-color-primary));
-					animation: loginLeft 3s linear infinite;
-				}
-
-				&::after {
-					filter: hue-rotate(60deg);
-					top: -100%;
-					right: 2px;
-					width: 3px;
-					height: 100%;
-					background: linear-gradient(180deg, transparent, var(--el-color-primary));
-					animation: loginTop 3s linear infinite;
-					animation-delay: 0.7s;
-				}
-			}
-
-			.login-right-warp-two {
-				&::before {
-					filter: hue-rotate(120deg);
-					bottom: 2px;
-					right: -100%;
-					width: 100%;
-					height: 3px;
-					background: linear-gradient(270deg, transparent, var(--el-color-primary));
-					animation: loginRight 3s linear infinite;
-					animation-delay: 1.4s;
-				}
-
-				&::after {
-					filter: hue-rotate(300deg);
-					bottom: -100%;
-					left: 0px;
-					width: 3px;
-					height: 100%;
-					background: linear-gradient(360deg, transparent, var(--el-color-primary));
-					animation: loginBottom 3s linear infinite;
-					animation-delay: 2.1s;
-				}
-			}
-
-			.login-right-warp-mian {
-				display: flex;
-				flex-direction: column;
-				height: 100%;
-
-				.login-right-warp-main-title {
-					height: 130px;
-					line-height: 130px;
-					font-size: 27px;
-					text-align: center;
-					letter-spacing: 3px;
-					animation: logoAnimation 0.3s ease;
-					animation-delay: 0.3s;
-					color: var(--el-text-color-primary);
-				}
-
-				.login-right-warp-main-form {
-					flex: 1;
-					padding: 0 50px 50px;
-				}
-			}
-		}
+	.check-en {
+		position: absolute;
+		left: 20px;
 	}
 }
 </style>

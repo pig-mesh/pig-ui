@@ -138,3 +138,8 @@ defineExpose({
 	openDialog,
 });
 </script>
+<style lang="scss">
+.el-form-item__content div p img {
+	width: 100%;
+}
+</style>

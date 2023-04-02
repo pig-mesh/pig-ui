@@ -16,7 +16,7 @@
 								</div>
 							</el-row>
 							<el-scrollbar>
-								<query-tree ref="dictTreeRef" class="mt10" :query="state.queryList" @node-click="handleNodeClick" placeholder="请输入字典项或名称">
+								<query-tree ref="dictTreeRef" :query="state.queryList" @node-click="handleNodeClick" placeholder="请输入字典项或名称">
 									<template #default="{ data }">
 										<span class="custom-tree-node">
 											<span class="label">{{ data.description }}</span>
@@ -40,7 +40,7 @@
 									</template>
 								</query-tree>
 							</el-scrollbar>
-							<el-footer style="height: 50px">
+							<el-footer style="height: 40px; line-height: 40px">
 								<el-button type="primary" size="small" icon="Download" style="width: 100%" @click="exportExcel">{{
 									$t('common.exportBtn')
 								}}</el-button>

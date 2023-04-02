@@ -90,14 +90,17 @@ onMounted(() => {
 	}, 500);
 });
 </script>
-
+<style lang="scss">
+svg:hover {
+	color: #409eff;
+}
+</style>
 <style rel="stylesheet/scss" lang="scss" scoped>
 .social-container {
 	margin: 20px 0;
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-
 	.box {
 		cursor: pointer;
 	}

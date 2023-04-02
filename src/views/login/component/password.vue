@@ -35,7 +35,7 @@
 			<Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'" :imgSize="{ width: '330px', height: '155px' }" ref="verifyref" />
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="handleVerify" :loading="loading">
+			<el-button type="primary" class="login-content-submit" v-waves @click="handleVerify" :loading="loading">
 				<span>{{ $t('password.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>

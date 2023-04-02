@@ -1,29 +1,34 @@
 <template>
 	<div class="head-container">
-		<div style="display: flex">
-			<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable style="margin-bottom: 20px" @change="getdeptTree" />
-			<el-dropdown :hide-on-click="false" class="mt10 mr10">
-				<el-icon style="transform: rotate(90deg)">
-					<MoreFilled />
-				</el-icon>
-				<template #dropdown>
-					<el-dropdown-menu>
-						<el-dropdown-item>
-							<el-button
-								:class="buttonClass"
-								link
-								type="primary"
-								:icon="isExpand ? 'expand' : 'fold'"
-								@click="toggleRowExpansionAll(isExpand ? false : true)"
-							>
-								{{ isExpand ? '折叠' : '展开' }}
-							</el-button>
-						</el-dropdown-item>
-					</el-dropdown-menu>
-				</template>
-			</el-dropdown>
+		<div class="head-container-header">
+			<div class="head-container-header-input">
+				<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable @change="getdeptTree" />
+			</div>
+			<div class="head-container-header-dropdown">
+				<el-dropdown :hide-on-click="false">
+					<el-icon style="transform: rotate(90deg)">
+						<MoreFilled />
+					</el-icon>
+					<template #dropdown>
+						<el-dropdown-menu>
+							<el-dropdown-item>
+								<el-button
+									:class="buttonClass"
+									link
+									type="primary"
+									:icon="isExpand ? 'expand' : 'fold'"
+									@click="toggleRowExpansionAll(isExpand ? false : true)"
+								>
+									{{ isExpand ? '折叠' : '展开' }}
+								</el-button>
+							</el-dropdown-item>
+						</el-dropdown-menu>
+					</template>
+				</el-dropdown>
+			</div>
 		</div>
 		<el-tree
+			class="mt20"
 			:data="state.List"
 			:props="props.props"
 			:expand-on-click-node="false"
@@ -158,3 +163,18 @@ defineExpose({
 	getdeptTree,
 });
 </script>
+<style lang="scss" scoped>
+.head-container {
+	&-header {
+		display: flex;
+		align-items: center;
+		&-input {
+			width: 90%;
+		}
+		&-dropdown {
+			flex: 1;
+			margin-left: 5%;
+		}
+	}
+}
+</style>

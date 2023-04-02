@@ -9,15 +9,20 @@
 .el-button--default i.iconfont,
 .el-button--default i.fa {
 	font-size: 14px !important;
-	margin-right: 5px;
 }
 
 .el-button--small i.iconfont,
 .el-button--small i.fa {
 	font-size: 12px !important;
-	margin-right: 5px;
 }
-
+.el-button [class*='el-icon'] + span {
+	margin-left: 6px;
+}
+// 面包屑修改默认颜色和字体粗细
+.layout-navbars-tagsview-ul {
+	color: #000000;
+	font-weight: 700;
+}
 /* Input 输入框、InputNumber 计数器
 ------------------------------- */
 // 菜单搜索
@@ -43,11 +48,20 @@
 		.el-form-item--small.el-form-item:last-of-type {
 			margin-bottom: 18px !important;
 		}
+		// 修改表单项默认右边距
+		.el-form-item {
+			margin-right: 12px;
+		}
 	}
 
 	.el-form-item .el-form-item__label .el-icon {
 		margin-right: 0px;
 	}
+}
+
+// 修改数字输入框默认宽度为100%
+.el-input-number {
+	width: 100%;
 }
 
 /* Alert 警告
@@ -274,7 +288,7 @@
 }
 
 .el-dialog__body {
-	max-height: calc(90vh - 111px) !important;
+	max-height: calc(90vh - 80px) !important;
 	overflow-y: auto;
 	overflow-x: hidden;
 }
@@ -287,7 +301,9 @@
 
 /* Table 表格 element plus 2.2.0 版本
 ------------------------------- */
+// 表格修改默认颜色
 .el-table {
+	color: #000000;
 	.el-button.is-text {
 		padding: 0;
 	}

@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
 		<el-tag :color="randomColor()" class="container-tag">
-			<SvgIcon :name="props.icon" />
+			<SvgIcon :name="props.icon" :size="25" color="#ffffff" />
 		</el-tag>
 		<span class="container-span">{{ $t(props.label) }}</span>
 	</div>
@@ -84,5 +84,6 @@ const randomNum = (minNum, maxNum) => {
 .container-span {
 	max-width: 60%;
 	font-weight: 500;
+	margin-left: 10px;
 }
 </style>

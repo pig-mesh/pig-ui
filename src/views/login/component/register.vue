@@ -33,8 +33,16 @@
 				</template>
 			</el-input>
 		</el-form-item>
+		<el-form-item>
+			<el-checkbox v-model="state.ruleForm.checked">
+				{{ $t('password.readAccept') }}
+			</el-checkbox>
+			<el-button link type="primary">
+				{{ $t('password.privacyPolicy') }}
+			</el-button>
+		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="handleRegister" :loading="loading">
+			<el-button type="primary" class="login-content-submit" v-waves @click="handleRegister" :loading="loading">
 				<span>{{ $t('password.registerBtnText') }}</span>
 			</el-button>
 		</el-form-item>
@@ -74,6 +82,7 @@ const state = reactive({
 		username: '', // 用户名
 		password: '', // 密码
 		phone: '', // 手机号
+		checked: '', // 是否同意条款
 	},
 });
 
@@ -130,6 +139,7 @@ const dataRules = reactive({
 			trigger: 'blur',
 		},
 	],
+	checked: [{ required: true, message: '请阅读并同意条款', trigger: 'blur' }],
 });
 
 // 处理密码强度得分变化事件

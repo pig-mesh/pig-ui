@@ -166,7 +166,7 @@ const sendMsg = () => {
 				tableData.value = [];
 				getData().then(() => {
 					//box-container是添加overflow的父div，也就是出现滚动条的div
-					var scrollTarget = document.getElementById('msgTable');
+					var scrollTarget = document.getElementById('msg-div');
 					//scrollTarget.scrollHeight是获取dom元素的高度，然后设置scrollTop
 					scrollTarget.scrollTop = scrollTarget.scrollHeight;
 				});
