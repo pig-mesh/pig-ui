@@ -38,14 +38,8 @@ export function useTitle() {
 	const stores = useThemeConfig(pinia);
 	const { themeConfig } = storeToRefs(stores);
 	nextTick(() => {
-		let webTitle = '';
 		let globalTitle: string = themeConfig.value.globalTitle;
-		const { path, name } = router.currentRoute.value;
-		if (path === '/login') {
-			webTitle = <string>name;
-		} else {
-			webTitle = setTagsViewNameI18n(router.currentRoute.value);
-		}
+		let webTitle = setTagsViewNameI18n(router.currentRoute.value);
 		document.title = `${webTitle} - ${globalTitle}` || globalTitle;
 	});
 }

@@ -1,40 +1,39 @@
-// 定义内容
 export default {
 	label: {
-		one1: 'User name login',
-		two2: 'Mobile number',
-		three3: 'social login',
-		register: 'register account',
+		one1: 'Account login',
+		two2: 'SMS login',
+		three3: 'Social login',
+		register: 'Create account',
 	},
 	link: {
 		one3: 'Third party login',
 		two4: 'Links',
 	},
 	password: {
-		accountPlaceholder1: 'The user name admin or not is common',
-		accountPlaceholder2: 'Password: 123456',
+		accountPlaceholder1: 'The username "admin" is common, please use another',
+		accountPlaceholder2: 'Password',
 		accountPlaceholder3: 'Please enter the verification code',
-		phonePlaceholder4: 'Please enter Phone',
+		phonePlaceholder4: 'Please enter your phone number',
 		accountBtnText: 'Sign in',
-		registerBtnText: 'Register',
-		readAccept: 'I have read it carefully and accept',
-		privacyPolicy: 'Privacy Policy',
+		registerBtnText: 'Create account',
+		readAccept: 'I have read and accept',
+		privacyPolicy: 'the Privacy Policy',
 	},
 	mobile: {
-		placeholder1: 'Please input mobile phone number',
+		placeholder1: 'Please enter your mobile number',
 		placeholder2: 'Please enter the verification code',
-		codeText: 'Get code',
+		codeText: 'Get verification code',
 		btnText: 'Sign in',
 	},
 	scan: {
-		text: 'Open the mobile phone to scan and quickly log in / register',
-		wechatApp: 'WeChat sweep code experience mobile',
+		text: 'Use your mobile device to scan and quickly log in or create an account',
+		wechatApp: 'Scan with WeChat app for quick access',
 	},
-	signInText: 'welcome back!',
+	signInText: 'Welcome back!',
 	tenant_guide: {
-		title: 'please select a tenant click here',
-		description: 'please select a tenant you only need to select it the first time you use it',
+		title: 'Please select a tenant by clicking here',
+		description: 'You only need to select a tenant once for future use',
 	},
 	browserMsgText:
-		'Warm tip: it is recommended to use Google, Microsoft edge, version 79.0.1072.62 and above browsers, and 360 browser, please use speed mode',
+		'Tip: For best results, we recommend using Google Chrome, Microsoft Edge (version 79.0.1072.62 or higher), or the 360 browser with speed mode enabled.',
 };

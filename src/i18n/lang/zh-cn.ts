@@ -68,6 +68,8 @@ export default {
 		layoutIframeViewTwo: '内嵌 iframe2',
 	},
 	staticRoutes: {
+		login: '登录',
+		authredirect: '回调页',
 		signIn: '登录',
 		notFound: '找不到此页面',
 		noPower: '没有权限',

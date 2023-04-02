@@ -64,7 +64,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 export const staticRoutes: Array<RouteRecordRaw> = [
 	{
 		path: '/login',
-		name: 'login',
+		name: 'staticRoutes.login',
 		component: () => import('/@/views/login/index.vue'),
 		meta: {
 			isAuth: false,
@@ -72,7 +72,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 	},
 	{
 		path: '/authredirect',
-		name: 'authredirect',
+		name: 'staticRoutes.authredirect',
 		component: () => import('/@/views/login/component/authredirect.vue'),
 		meta: {
 			isAuth: false,
