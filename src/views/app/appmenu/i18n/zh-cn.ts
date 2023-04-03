@@ -1,6 +1,6 @@
 export default {
 	appmenu: {
-		index: '序号',
+		index: '#',
 		name: '菜单名称',
 		sortOrder: '排序',
 		path: '路由路径',

@@ -47,8 +47,10 @@
 				<el-table-column prop="createTime" :label="t('file.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button text type="primary" v-auth="'sys_file_del'" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}</el-button>
-						<el-button type="primary" text @click="download(scope.row, scope.index)">{{ $t('common.download') }}</el-button>
+						<el-button icon="delete" text type="primary" v-auth="'sys_file_del'" @click="handleDelete([scope.row.id])">{{
+							$t('common.delBtn')
+						}}</el-button>
+						<el-button icon="download" type="primary" text @click="download(scope.row, scope.index)">{{ $t('common.download') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

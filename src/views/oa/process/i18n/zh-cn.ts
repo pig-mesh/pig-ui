@@ -1,6 +1,6 @@
 export default {
 	process: {
-		index: '序号',
+		index: '#',
 		processonDefinitionId: '模型ID',
 		name: '模型名称',
 		key: '模型标识',

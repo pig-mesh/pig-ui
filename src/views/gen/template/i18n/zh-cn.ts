@@ -1,6 +1,6 @@
 export default {
 	template: {
-		index: '序号',
+		index: '#',
 		importgenTemplateTip: '导入模板',
 		id: '主键',
 		templateName: '模板名称',

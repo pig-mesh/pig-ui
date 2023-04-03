@@ -1,6 +1,6 @@
 export default {
 	audit: {
-		index: '序号',
+		index: '#',
 		importsysAuditLogTip: '导入审计记录表',
 		id: '主键',
 		auditName: '审计名称',

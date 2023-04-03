@@ -1,6 +1,6 @@
 export default {
 	refund: {
-		index: '序号',
+		index: '#',
 		importpayRefundOrderTip: '导入退款订单表',
 		refundOrderId: '退款订单号',
 		payOrderId: '支付订单号',

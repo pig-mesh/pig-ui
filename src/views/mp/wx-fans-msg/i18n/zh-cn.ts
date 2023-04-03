@@ -1,6 +1,6 @@
 export default {
 	wxFansMsg: {
-		index: '序号',
+		index: '#',
 		importwxMsgTip: '导入微信消息',
 		id: '主键',
 		appName: '公众号名称',

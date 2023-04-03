@@ -1,6 +1,6 @@
 export default {
 	group: {
-		index: '序号',
+		index: '#',
 		importgenGroupTip: '导入模板分组',
 		id: ' id',
 		groupName: '分组名称',

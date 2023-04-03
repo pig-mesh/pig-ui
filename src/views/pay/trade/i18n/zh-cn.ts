@@ -1,6 +1,6 @@
 export default {
 	trade: {
-		index: '序号',
+		index: '#',
 		importpayTradeOrderTip: '导入支付订单表',
 		orderId: ' 支付订单号',
 		channelId: ' 渠道ID',

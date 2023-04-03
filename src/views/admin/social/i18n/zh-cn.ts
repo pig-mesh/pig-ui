@@ -1,6 +1,6 @@
 export default {
 	social: {
-		index: '序号',
+		index: '#',
 		importappSocialDetailsTip: '导入系统社交登录账号表',
 		id: '主鍵',
 		type: '类型',

@@ -1,6 +1,6 @@
 export default {
 	leave: {
-		index: '序号',
+		index: '#',
 		importoaLeaveBillTip: '导入请假表',
 		leaveId: '主键',
 		username: '用户名',

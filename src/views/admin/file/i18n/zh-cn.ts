@@ -1,6 +1,6 @@
 export default {
 	file: {
-		index: '序号',
+		index: '#',
 		importsysFileTip: '导入文件管理表',
 		id: '编号',
 		fileName: '文件名称',

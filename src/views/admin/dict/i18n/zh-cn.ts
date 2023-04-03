@@ -1,6 +1,6 @@
 export default {
 	sysdict: {
-		index: '序号',
+		index: '#',
 		importsysDictTip: '导入字典表',
 		id: '编号',
 		dictType: '字典类型',
@@ -28,7 +28,7 @@ export default {
 		deleteDisabledTip: '系统内置数据不能删除',
 	},
 	dictItem: {
-		index: '序号',
+		index: '#',
 		importsysDictItemTip: '导入字典项',
 		id: '编号',
 		dictId: ' dictId',

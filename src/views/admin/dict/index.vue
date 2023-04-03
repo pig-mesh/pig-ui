@@ -10,7 +10,7 @@
 									<el-button @click="dicDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 										{{ $t('common.addBtn') }}
 									</el-button>
-									<el-button @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+									<el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 										{{ $t('common.refreshCacheBtn') }}
 									</el-button>
 								</div>

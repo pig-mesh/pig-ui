@@ -1,6 +1,6 @@
 export default {
 	wxAccountTag: {
-		index: '序号',
+		index: '#',
 		importwxAccountTagTip: '导入标签管理',
 		id: '主键',
 		tag: '标签',

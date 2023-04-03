@@ -1,5 +1,5 @@
 <template>
-	<div class="layout-footer pb15">
+	<div class="layout-footer pb5">
 		<div class="layout-footer-warp">
 			<div class="mt5">{{ footerAuthor }}</div>
 		</div>

@@ -1,6 +1,6 @@
 export default {
 	record: {
-		index: '序号',
+		index: '#',
 		importpayNotifyRecordTip: '导入通知记录日志表',
 		id: 'ID',
 		notifyId: '响应ID',

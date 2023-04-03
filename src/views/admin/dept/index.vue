@@ -45,7 +45,7 @@
 				<el-table-column :label="$t('sysdept.name')" prop="name" width="400" show-overflow-tooltip> </el-table-column>
 				<el-table-column :label="$t('sysdept.weight')" prop="weight" show-overflow-tooltip width="80"></el-table-column>
 				<el-table-column prop="createTime" :label="$t('sysdept.createTime')" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="300">
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
 					<template #default="scope">
 						<el-button text type="primary" icon="folder-add" @click="deptDialogRef.openDialog('add', scope.row?.id)" v-auth="'sys_dept_add'">
 							{{ $t('common.addBtn') }}</el-button

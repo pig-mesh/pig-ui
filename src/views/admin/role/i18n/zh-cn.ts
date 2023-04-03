@@ -1,6 +1,6 @@
 export default {
 	sysrole: {
-		index: '序号',
+		index: '#',
 		roleName: '角色名称',
 		inputRoleNameTip: '请输入角色名称',
 		permissionTip: '授权',

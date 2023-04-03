@@ -1,6 +1,6 @@
 export default {
 	order: {
-		index: '序号',
+		index: '#',
 		importpayGoodsOrderTip: '导入商品订单表',
 		goodsOrderId: '商品订单ID',
 		goodsId: '商品ID',

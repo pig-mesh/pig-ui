@@ -1,6 +1,6 @@
 export default {
 	channel: {
-		index: '序号',
+		index: '#',
 		importpayChannelTip: '导入支付渠道表',
 		id: '渠道主键ID',
 		mchId: '商户ID',

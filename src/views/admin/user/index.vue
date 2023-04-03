@@ -34,7 +34,7 @@
 					</el-row>
 					<el-row>
 						<div class="mb8" style="width: 100%">
-							<el-button v-auth="'sys_user_add'" class="ml10" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
+							<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
 								{{ $t('common.addBtn') }}
 							</el-button>
 							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
@@ -55,7 +55,7 @@
 
 							<right-toolbar
 								v-model:showSearch="showSearch"
-								:export="true"
+								:export="'sys_user_export'"
 								@exportExcel="exportExcel"
 								@queryTable="getDataList"
 								class="ml10 mr20"
@@ -71,7 +71,7 @@
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
-						<el-table-column :selectable="handleSelectable" type="selection" width="50" />
+						<el-table-column :selectable="handleSelectable" type="selection" width="60" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
