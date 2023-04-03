@@ -21,7 +21,10 @@
 						:name="item.codePath"
 						:key="item.codePath"
 					>
-						<highlightjs autodetect :code="item.code" />
+						<el-button style="position: absolute; top: 10px; right: 20px; z-index: 9" type="primary" @click="copyText(item.code)">复制代码</el-button>
+						<el-scrollbar height="calc(100vh - 300px)">
+							<highlightjs autodetect :code="item.code" />
+						</el-scrollbar>
 					</el-tab-pane>
 				</el-tabs>
 			</pane>
@@ -31,6 +34,9 @@
 <script setup lang="ts" name="preview">
 import { useGeneratorPreviewApi } from '/@/api/gen/table';
 import { handleTree } from '/@/utils/other';
+import commonFunction from '/@/utils/commonFunction';
+
+const { copyText } = commonFunction();
 
 const visible = ref(false);
 // ======== 显示页面 ========
