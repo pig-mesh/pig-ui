@@ -6,8 +6,10 @@
 			</div>
 		</template>
 		<el-row :gutter="10" v-if="favoriteRoutes.length > 0">
-			<el-col :span="6" :key="shortcut.id" v-for="shortcut in favoriteRoutes">
+			<el-col class="shortcutCard" :span="6" :key="shortcut.id" v-for="(shortcut, index) in favoriteRoutes">
+				<div class="shortcutCardClose" @click="handleCloseFavorite(shortcut)">×</div>
 				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.name" @click="handleRoute(shortcut.path)" />
+				<!-- <el-icon v-if="index == currentIndex"><CircleCloseFilled /></el-icon> -->
 			</el-col>
 		</el-row>
 		<el-empty :description="$t('home.addFavoriteRoutesTip')" v-else />
@@ -44,4 +46,31 @@ const handleRoute = (path: string) => {
 const handleCloseFavorite = (item: any) => {
 	storesTagsViewRoutes.delFavoriteRoutes(item); // 从收藏路由列表中删除指定路由
 };
+
+/*  */
+let currentIndex = ref();
+
+/*  */
+const handleShowCloseBtn = (item: any, index: any) => {
+	currentIndex.value = index;
+};
+/*  */
+const handleHideCloseBtn = () => {
+	currentIndex.value = null;
+};
 </script>
+
+<style lang="scss" scoped>
+.shortcutCard {
+	position: relative;
+	.shortcutCardClose {
+		position: absolute;
+		top: 0;
+		right: 50%;
+		font-weight: 700;
+		font-size: 20px;
+		cursor: pointer;
+		color: #6d6b6b;
+	}
+}
+</style>
