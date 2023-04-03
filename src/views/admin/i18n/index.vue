@@ -22,7 +22,7 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'admin_i18n_add'">
+					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'sys_i18n_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
@@ -35,13 +35,13 @@
 						formDialogRef
 						icon="Delete"
 						type="primary"
-						v-auth="'admin_i18n_del'"
+						v-auth="'sys_i18n_del'"
 					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 
 					<right-toolbar
-						:export="'admin_i18n_export'"
+						:export="'sys_i18n_export'"
 						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
@@ -69,10 +69,10 @@
 				<el-table-column :label="t('i18n.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'admin_i18n_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'sys_i18n_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'admin_i18n_del'">
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_i18n_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>

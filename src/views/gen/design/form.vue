@@ -3,10 +3,10 @@
 		<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" @sort-change="sortChangeHandle">
 			<el-table-column type="index" label="序号" width="60" />
 			<el-table-column prop="createTime" label="设计时间" show-overflow-tooltip />
-			<el-table-column label="操作" width="100">
+			<el-table-column label="操作" width="150">
 				<template #default="scope">
-					<el-button text type="primary" @click="handleRollback(scope.row.id)">回滚</el-button>
-					<el-button text type="primary" @click="handleDelete(scope.row.id)">删除</el-button>
+					<el-button icon="refresh" text type="primary" @click="handleRollback(scope.row.id)">回滚</el-button>
+					<el-button icon="delete" text type="primary" @click="handleDelete(scope.row.id)">删除</el-button>
 				</template>
 			</el-table-column>
 		</el-table>

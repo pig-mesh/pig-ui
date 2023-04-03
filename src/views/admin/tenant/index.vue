@@ -16,11 +16,11 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'admin_systenant_add'">
+					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'sys_systenant_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 
-					<el-button plain @click="handleTenantMenu()" class="ml10" type="primary" v-auth="'admin_systenant_tenantmenu'">
+					<el-button plain @click="handleTenantMenu()" class="ml10" type="primary" v-auth="'sys_systenant_tenantmenu'">
 						{{ $t('tenantmenu.name') }}
 					</el-button>
 
@@ -31,13 +31,13 @@
 						class="ml10"
 						icon="Delete"
 						type="primary"
-						v-auth="'admin_systenant_del'"
+						v-auth="'sys_systenant_del'"
 					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 
 					<right-toolbar
-						:export="'admin_systenant_export'"
+						:export="'sys_systenant_export'"
 						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
@@ -77,7 +77,7 @@
 				</el-table-column>
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
-						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'admin_systenant_edit'"
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'sys_systenant_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 
@@ -89,7 +89,7 @@
 									@click="handleDelete([scope.row.id])"
 									text
 									type="primary"
-									v-auth="'admin_systenant_del'"
+									v-auth="'sys_systenant_del'"
 									>{{ $t('common.delBtn') }}
 								</el-button>
 							</span>

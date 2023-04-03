@@ -24,17 +24,17 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'admin_syspublicparam_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
+					<el-button v-auth="'sys_syspublicparam_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
 
-					<el-button plain v-auth="'admin_syspublicparam_del'" @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+					<el-button plain v-auth="'sys_syspublicparam_del'" @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 						{{ $t('common.refreshCacheBtn') }}
 					</el-button>
 
 					<el-button
 						plain
-						v-auth="'admin_syspublicparam_del'"
+						v-auth="'sys_syspublicparam_del'"
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
@@ -45,7 +45,7 @@
 					</el-button>
 
 					<right-toolbar
-						:export="'admin_syspublicparam_del'"
+						:export="'sys_syspublicparam_del'"
 						@exportExcel="exportExcel"
 						@queryTable="getDataList"
 						class="ml10"
@@ -89,7 +89,7 @@
 							<span style="margin-left: 12px">
 								<el-button
 									icon="delete"
-									v-auth="'admin_syspublicparam_del'"
+									v-auth="'sys_syspublicparam_del'"
 									:disabled="scope.row.systemFlag !== '0'"
 									@click="handleDelete([scope.row.publicId])"
 									text

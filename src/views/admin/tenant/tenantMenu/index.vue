@@ -3,7 +3,7 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button icon="folder-add" type="primary" class="ml10" @click="tenantMenuDialogRef.openDialog()" v-auth="'admin_systenantmenu_add'">
+					<el-button icon="folder-add" type="primary" class="ml10" @click="tenantMenuDialogRef.openDialog()" v-auth="'sys_systenantmenu_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<right-toolbar :search="false" class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList"></right-toolbar>
@@ -27,10 +27,10 @@
 				<el-table-column prop="createTime" :label="$t('tenantmenu.createTime')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button icon="edit-pen" text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)" v-auth="'admin_systenantmenu_edit'">
+						<el-button icon="edit-pen" text type="primary" @click="tenantMenuDialogRef.openDialog(scope.row.id)" v-auth="'sys_systenantmenu_edit'">
 							{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button icon="delete" text type="primary" @click="handleDelete(scope.row)" v-auth="'admin_systenantmenu_del'">
+						<el-button icon="delete" text type="primary" @click="handleDelete(scope.row)" v-auth="'sys_systenantmenu_del'">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>
