@@ -1,6 +1,6 @@
 export default {
 	file: {
-		index: 'index',
+		index: '#',
 		importsysFileTip: 'import SysFile',
 		id: 'id',
 		fileName: 'fileName',

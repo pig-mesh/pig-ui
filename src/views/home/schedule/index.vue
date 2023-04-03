@@ -50,7 +50,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column type="selection" width="60" align="center" />
+				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" :label="t('schedule.index')" width="80" />
 				<el-table-column prop="title" :label="t('schedule.title')" show-overflow-tooltip />
 				<el-table-column prop="type" :label="t('schedule.type')" show-overflow-tooltip>

@@ -1,6 +1,6 @@
 export default {
 	wxAccountTag: {
-		index: 'index',
+		index: '#',
 		importwxAccountTagTip: 'import WxAccountTag',
 		id: 'id',
 		tag: 'tag',

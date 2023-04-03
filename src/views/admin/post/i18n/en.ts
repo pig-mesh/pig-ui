@@ -1,6 +1,6 @@
 export default {
 	post: {
-		index: 'index',
+		index: '#',
 		importPostTip: ' import Post',
 		postId: 'postId',
 		postCode: 'postCode',

@@ -1,6 +1,6 @@
 export default {
 	audit: {
-		index: 'index',
+		index: '#',
 		importsysAuditLogTip: 'import SysAuditLog',
 		id: 'id',
 		auditName: 'auditName',

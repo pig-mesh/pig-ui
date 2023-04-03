@@ -1,6 +1,6 @@
 export default {
 	model: {
-		index: 'index',
+		index: '#',
 		id: 'id',
 		name: 'name',
 		key: 'key',

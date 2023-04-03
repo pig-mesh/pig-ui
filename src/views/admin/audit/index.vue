@@ -54,7 +54,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column type="selection" width="60" align="center" />
+				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" :label="$t('audit.index')" width="80" />
 				<el-table-column prop="auditName" :label="$t('audit.auditName')" show-overflow-tooltip />
 				<el-table-column prop="auditField" :label="$t('audit.auditField')" show-overflow-tooltip />

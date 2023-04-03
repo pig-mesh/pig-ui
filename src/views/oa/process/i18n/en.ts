@@ -1,6 +1,6 @@
 export default {
 	process: {
-		index: 'index',
+		index: '#',
 		id: 'id',
 		name: 'name',
 		key: 'key',

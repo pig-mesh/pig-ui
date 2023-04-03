@@ -1,6 +1,6 @@
 export default {
 	task: {
-		index: 'index',
+		index: '#',
 		taskId: 'taskId',
 		taskName: 'taskName',
 		time: 'time',
@@ -11,7 +11,7 @@ export default {
 		inputCommentTip: 'input comment',
 	},
 	comment: {
-		index: 'index',
+		index: '#',
 		userId: 'userId',
 		fullMessage: 'fullMessage',
 		time: 'time',

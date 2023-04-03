@@ -48,7 +48,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column type="selection" width="60" align="center" />
+				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" :label="t('task.index')" width="80" />
 				<el-table-column prop="taskId" :label="t('task.taskId')" show-overflow-tooltip />
 				<el-table-column prop="taskName" :label="t('task.taskName')" show-overflow-tooltip />

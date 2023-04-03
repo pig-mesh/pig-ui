@@ -184,6 +184,13 @@ body,
 	}
 }
 
+// 面包屑修改默认颜色和字体粗细
+.layout-navbars-tagsview-ul {
+	.is-active {
+		font-weight: 900;
+	}
+}
+
 /* element plus 全局样式
 ------------------------------- */
 .layout-breadcrumb-seting {

@@ -1,6 +1,6 @@
 export default {
 	wxFansMsg: {
-		index: 'index',
+		index: '#',
 		importwxMsgTip: 'import WxMsg',
 		id: 'id',
 		appName: 'appName',

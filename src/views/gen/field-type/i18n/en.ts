@@ -1,6 +1,6 @@
 export default {
 	fieldtype: {
-		index: 'index',
+		index: '#',
 		importFieldTypeTip: ' import FieldType',
 		id: 'id',
 		columnType: 'columnType',

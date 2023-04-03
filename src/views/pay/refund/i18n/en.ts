@@ -1,6 +1,6 @@
 export default {
 	refund: {
-		index: 'index',
+		index: '#',
 		importpayRefundOrderTip: 'import PayRefundOrder',
 		refundOrderId: 'refundOrderId',
 		payOrderId: 'payOrderId',

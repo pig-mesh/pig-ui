@@ -1,6 +1,6 @@
 export default {
 	datasourceconf: {
-		index: 'index',
+		index: '#',
 		importDatasourceConfTip: ' import DatasourceConf',
 		id: 'id',
 		name: 'name',

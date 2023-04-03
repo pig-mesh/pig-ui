@@ -1,6 +1,6 @@
 export default {
 	tenant: {
-		index: 'index',
+		index: '#',
 		importTenantTip: ' import Tenant',
 		id: 'id',
 		name: 'name',
@@ -32,7 +32,7 @@ export default {
 	},
 	tenantmenu: {
 		name: 'tenantmenu',
-		index: 'index',
+		index: '#',
 		status: 'status',
 		createTime: 'createTime',
 	},

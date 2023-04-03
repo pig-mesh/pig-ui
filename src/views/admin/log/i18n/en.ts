@@ -1,6 +1,6 @@
 export default {
 	syslog: {
-		index: 'index',
+		index: '#',
 		logType: 'logType',
 		title: 'title',
 		remoteAddr: 'remoteAddr',

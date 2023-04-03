@@ -1,6 +1,6 @@
 export default {
 	order: {
-		index: 'index',
+		index: '#',
 		importpayGoodsOrderTip: 'import PayGoodsOrder',
 		goodsOrderId: 'goodsOrderId',
 		goodsId: 'goodsId',

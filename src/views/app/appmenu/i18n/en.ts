@@ -1,6 +1,6 @@
 export default {
 	appmenu: {
-		index: 'index',
+		index: '#',
 		name: 'name',
 		sortOrder: 'sortOrder',
 		path: 'path',

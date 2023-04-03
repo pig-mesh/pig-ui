@@ -1,6 +1,6 @@
 export default {
 	leave: {
-		index: 'index',
+		index: '#',
 		importoaLeaveBillTip: 'import OaLeaveBill',
 		leaveId: 'leaveId',
 		username: 'username',

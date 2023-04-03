@@ -1,6 +1,6 @@
 export default {
 	channel: {
-		index: 'index',
+		index: '#',
 		importpayChannelTip: 'import PayChannel',
 		id: 'id',
 		mchId: 'mchId',

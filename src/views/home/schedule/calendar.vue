@@ -1,16 +1,12 @@
 <template>
-	<el-card class="box-card" style="height: 100%; overflow: auto">
-		<template #header> 日程 </template>
-		<el-calendar v-model="calendar">
-			<template #date-cell="{ data }">
-				<div class="calendar-cell" @click="handleSchedule(data)">
-					{{ data.day.split('-').slice(2).join('-') }}
-					<div class="box-yello" v-if="filterCellSelected(data)"></div>
-				</div>
-			</template>
-		</el-calendar>
-	</el-card>
-
+	<el-calendar v-model="calendar">
+		<template #date-cell="{ data }">
+			<div class="calendar-cell" @click="handleSchedule(data)">
+				{{ data.day.split('-').slice(2).join('-') }}
+				<div class="box-yello" v-if="filterCellSelected(data)"></div>
+			</div>
+		</template>
+	</el-calendar>
 	<!-- 新增日程的表单 -->
 	<schedule-form ref="scheduleFormRef" @refresh="initscheduleList(formatDate(calendar, 'YYYY-mm'))" />
 	<!-- 日程查询 -->

@@ -1,6 +1,6 @@
 export default {
 	job: {
-		index: 'index',
+		index: '#',
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',
@@ -54,7 +54,7 @@ export default {
 		inputremarkTip: 'input remark',
 	},
 	log: {
-		index: 'index',
+		index: '#',
 		importsysJobLogTip: 'import SysJobLog',
 		jobLogId: 'jobLogId',
 		jobId: 'jobId',

@@ -6,7 +6,7 @@ export default {
 		prewBtn: 'preview',
 	},
 	table: {
-		index: 'index',
+		index: '#',
 		importTableTip: ' import Table',
 		id: 'id',
 		tableName: 'tableName',

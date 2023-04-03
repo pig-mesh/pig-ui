@@ -57,7 +57,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="60" />
+				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="t('channel.index')" fixed type="index" width="80" />
 				<el-table-column :label="t('channel.appId')" prop="appId" show-overflow-tooltip width="160" />
 				<el-table-column :label="t('channel.channelName')" prop="channelName" show-overflow-tooltip width="100" />

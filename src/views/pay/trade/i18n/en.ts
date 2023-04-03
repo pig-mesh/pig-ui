@@ -1,6 +1,6 @@
 export default {
 	trade: {
-		index: 'index',
+		index: '#',
 		importpayTradeOrderTip: 'import PayTradeOrder',
 		orderId: 'orderId',
 		channelId: 'channelId',

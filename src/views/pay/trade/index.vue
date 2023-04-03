@@ -55,7 +55,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="60" />
+				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="t('trade.index')" fixed type="index" width="80" />
 				<el-table-column :label="t('trade.orderId')" prop="orderId" show-overflow-tooltip width="120" />
 				<el-table-column :label="t('trade.channelId')" prop="channelId" show-overflow-tooltip width="120" />

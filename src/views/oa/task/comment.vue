@@ -9,7 +9,7 @@
 					@selection-change="handleSelectionChange"
 					@sort-change="sortChangeHandle"
 				>
-					<el-table-column type="selection" width="60" align="center" />
+					<el-table-column type="selection" width="40" align="center" />
 					<el-table-column type="index" :label="t('comment.index')" width="80" />
 					<el-table-column prop="userId" :label="t('comment.userId')" show-overflow-tooltip />
 					<el-table-column prop="fullMessage" :label="t('comment.fullMessage')" show-overflow-tooltip>

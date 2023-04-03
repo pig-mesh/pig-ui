@@ -51,7 +51,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="60" />
+				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="t('record.index')" type="index" width="80" />
 				<el-table-column :label="t('record.notifyId')" prop="notifyId" show-overflow-tooltip />
 				<el-table-column :label="t('record.request')" prop="request" show-overflow-tooltip />

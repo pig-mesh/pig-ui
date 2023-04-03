@@ -24,7 +24,7 @@
 								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
 							</el-form-item>
 							<el-form-item :label="$t('sysuser.phone')" prop="phone">
-								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable/>
+								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
 							</el-form-item>
 							<el-form-item>
 								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
@@ -71,8 +71,8 @@
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
-						<el-table-column :selectable="handleSelectable" type="selection" width="60" />
-						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
+						<el-table-column :selectable="handleSelectable" type="selection" width="40" />
+						<el-table-column :label="$t('sysuser.index')" type="index" width="40" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
@@ -102,7 +102,7 @@
 										<el-button
 											icon="delete"
 											v-auth="'sys_user_del'"
-											:disabled="scope.row.userId === '1'"
+											:disabled="scope.row.username === 'admin'"
 											text
 											type="primary"
 											@click="handleDelete([scope.row.userId])"
@@ -196,7 +196,7 @@ const exportExcel = () => {
 
 // 是否可以多选
 const handleSelectable = (row: any) => {
-	return row.userId !== '1';
+	return row.username !== 'admin';
 };
 
 // 多选事件

@@ -1,6 +1,6 @@
 export default {
 	group: {
-		index: 'index',
+		index: '#',
 		importgenGroupTip: 'import GenGroup',
 		id: 'id',
 		groupName: 'groupName',

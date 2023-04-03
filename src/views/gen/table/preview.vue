@@ -21,7 +21,7 @@
 						:name="item.codePath"
 						:key="item.codePath"
 					>
-						<el-button style="position: absolute; top: 10px; right: 20px; z-index: 9" type="primary" @click="copyText(item.code)">复制代码</el-button>
+						<SvgIcon name="ele-CopyDocument" :size="25" class="copy_btn" @click="copyText(item.code)" />
 						<el-scrollbar height="calc(100vh - 300px)">
 							<highlightjs autodetect :code="item.code" />
 						</el-scrollbar>
@@ -131,3 +131,13 @@ defineExpose({
 	openDialog,
 });
 </script>
+
+<style scoped lang="scss">
+.copy_btn {
+	position: absolute;
+	top: 10px;
+	right: 20px;
+	z-index: 9;
+	color: white;
+}
+</style>

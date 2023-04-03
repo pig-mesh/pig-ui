@@ -1,6 +1,6 @@
 export default {
 	account: {
-		index: 'index',
+		index: '#',
 		importwxAccountTip: 'import WxAccount',
 		id: 'id',
 		name: 'name',

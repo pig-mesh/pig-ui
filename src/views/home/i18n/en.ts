@@ -8,7 +8,7 @@ export default {
 		newsletterTip: 'news letter',
 	},
 	schedule: {
-		index: 'index',
+		index: '#',
 		importsysScheduleTip: 'import SysSchedule',
 		id: 'id',
 		title: 'title',

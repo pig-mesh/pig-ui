@@ -85,5 +85,6 @@ const randomNum = (minNum, maxNum) => {
 	max-width: 60%;
 	font-weight: 500;
 	margin-left: 10px;
+	color: #6d6b6b;
 }
 </style>

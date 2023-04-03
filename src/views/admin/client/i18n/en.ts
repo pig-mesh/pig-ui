@@ -1,6 +1,6 @@
 export default {
 	client: {
-		index: 'index',
+		index: '#',
 		importsysOauthClientDetailsTip: 'import SysOauthClientDetails',
 		id: 'id',
 		clientId: 'client Id',

@@ -1,6 +1,6 @@
 export default {
 	sysdict: {
-		index: 'index',
+		index: '#',
 		importsysDictTip: 'import SysDict',
 		id: 'id',
 		dictType: 'dictType',
@@ -25,7 +25,7 @@ export default {
 		deleteDisabledTip: 'system data cannot be deleted ',
 	},
 	dictItem: {
-		index: 'index',
+		index: '#',
 		importsysDictItemTip: 'import SysDictItem',
 		id: 'id',
 		dictId: 'dictId',

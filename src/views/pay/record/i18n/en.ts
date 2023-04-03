@@ -1,6 +1,6 @@
 export default {
 	record: {
-		index: 'index',
+		index: '#',
 		importpayNotifyRecordTip: 'import PayNotifyRecord',
 		id: 'id',
 		notifyId: 'notifyId',

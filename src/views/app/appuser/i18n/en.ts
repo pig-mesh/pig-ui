@@ -1,6 +1,6 @@
 export default {
 	appuser: {
-		index: 'index',
+		index: '#',
 		username: 'username',
 		name: 'name',
 		phone: 'phone',

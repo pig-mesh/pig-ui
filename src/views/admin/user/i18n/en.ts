@@ -1,6 +1,6 @@
 export default {
 	sysuser: {
-		index: 'index',
+		index: '#',
 		username: 'username',
 		name: 'name',
 		phone: 'phone',

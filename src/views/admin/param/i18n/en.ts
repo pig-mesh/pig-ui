@@ -1,6 +1,6 @@
 export default {
 	param: {
-		index: 'index',
+		index: '#',
 		importsysPublicParamTip: 'import SysPublicParam',
 		publicId: 'publicId',
 		publicName: 'publicName',

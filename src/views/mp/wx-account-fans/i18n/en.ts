@@ -1,6 +1,6 @@
 export default {
 	fans: {
-		index: 'index',
+		index: '#',
 		importwxAccountFansTip: 'import WxAccountFans',
 		id: 'id',
 		openid: 'openid',

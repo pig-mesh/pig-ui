@@ -1,6 +1,6 @@
 export default {
 	systoken: {
-		index: 'index',
+		index: '#',
 		userId: 'userId',
 		username: 'username',
 		clientId: 'clientId',

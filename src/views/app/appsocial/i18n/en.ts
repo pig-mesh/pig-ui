@@ -1,6 +1,6 @@
 export default {
 	appsocial: {
-		index: 'index',
+		index: '#',
 		importappSocialDetailsTip: 'import AppSocialDetails',
 		id: 'id',
 		type: 'type',

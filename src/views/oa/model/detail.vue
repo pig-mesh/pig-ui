@@ -7,6 +7,8 @@
 </template>
 
 <script lang="ts" name="modelView" setup>
+import { Session } from '/@/utils/storage';
+
 const route = useRoute();
 
 const src = ref('');
@@ -20,6 +22,8 @@ onMounted(() => {
 });
 
 const init = () => {
+	const token = Session.getToken();
+	window.sessionStorage.setItem('token', JSON.stringify(token));
 	src.value = '/admin/modeler.html?modelId=' + route.query.id;
 };
 </script>

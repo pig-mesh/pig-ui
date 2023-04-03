@@ -1,6 +1,6 @@
 export default {
 	template: {
-		index: 'index',
+		index: '#',
 		importgenTemplateTip: 'import GenTemplate',
 		id: 'id',
 		templateName: 'templateName',
