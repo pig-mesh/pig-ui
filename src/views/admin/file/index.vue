@@ -37,7 +37,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column type="selection" width="50" align="center" />
+				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" :label="t('file.index')" width="80" />
 				<el-table-column prop="fileName" :label="t('file.fileName')" show-overflow-tooltip />
 				<el-table-column prop="bucketName" :label="t('file.bucketName')" show-overflow-tooltip />

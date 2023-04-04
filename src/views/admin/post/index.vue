@@ -44,8 +44,8 @@
 				:cell-style="tableStyle?.cellStyle"
 				:header-cell-style="tableStyle?.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="t('post.index')" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="t('post.index')" type="index" width="60" />
 				<el-table-column :label="t('post.postCode')" prop="postCode" show-overflow-tooltip />
 				<el-table-column :label="t('post.postName')" prop="postName" show-overflow-tooltip />
 				<el-table-column :label="t('post.postSort')" prop="postSort" show-overflow-tooltip />

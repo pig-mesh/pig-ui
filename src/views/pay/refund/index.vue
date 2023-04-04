@@ -55,7 +55,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('refund.index')" fixed type="index" width="80" />
+				<el-table-column :label="t('refund.index')" fixed type="index" width="60" />
 				<el-table-column :label="t('refund.refundOrderId')" prop="refundOrderId" show-overflow-tooltip />
 				<el-table-column :label="t('refund.payOrderId')" prop="payOrderId" show-overflow-tooltip />
 				<el-table-column :label="t('refund.channelId')" prop="channelId" show-overflow-tooltip />

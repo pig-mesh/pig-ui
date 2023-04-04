@@ -61,7 +61,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('file.index')" type="index" width="80" />
+				<el-table-column :label="t('file.index')" type="index" width="60" />
 				<el-table-column :label="t('i18n.name')" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('i18n.zhCn')" prop="zhCn" show-overflow-tooltip />
 				<el-table-column :label="t('i18n.en')" prop="en" show-overflow-tooltip />

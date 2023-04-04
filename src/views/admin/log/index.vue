@@ -48,8 +48,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="$t('syslog.index')" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="$t('syslog.index')" type="index" width="60" />
 				<el-table-column :label="$t('syslog.logType')" show-overflow-tooltip>
 					<template #default="scope">
 						<dict-tag :options="log_type" :value="scope.row.logType"></dict-tag>

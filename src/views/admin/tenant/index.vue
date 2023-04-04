@@ -55,8 +55,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50" />
-				<el-table-column :label="t('tenant.index')" type="index" width="80" />
+				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="40" />
+				<el-table-column :label="t('tenant.index')" type="index" width="60" />
 				<el-table-column :label="t('tenant.name')" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('tenant.code')" prop="code" show-overflow-tooltip />
 				<el-table-column :label="t('tenant.tenantDomain')" prop="tenantDomain" show-overflow-tooltip />

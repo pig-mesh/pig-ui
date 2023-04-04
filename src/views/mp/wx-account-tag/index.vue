@@ -65,7 +65,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('wxAccountTag.index')" type="index" width="80" />
+				<el-table-column :label="t('wxAccountTag.index')" type="index" width="60" />
 				<el-table-column :label="t('wxAccountTag.tag')" prop="tag" show-overflow-tooltip />
 				<el-table-column :label="t('wxAccountTag.wxAccountId')" prop="wxAccountId" show-overflow-tooltip />
 				<el-table-column :label="t('wxAccountTag.wxAccountName')" prop="wxAccountName" show-overflow-tooltip />

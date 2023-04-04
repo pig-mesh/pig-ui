@@ -43,7 +43,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
+				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="$t('appmenu.name')" prop="name" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('appmenu.sortOrder')" prop="sortOrder" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('appmenu.path')" prop="path" show-overflow-tooltip></el-table-column>

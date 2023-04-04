@@ -36,8 +36,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="$t('process.index')" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="$t('process.index')" type="index" width="60" />
 				<el-table-column :label="$t('process.processonDefinitionId')" prop="processonDefinitionId" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('process.name')" prop="name" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('process.key')" prop="key" show-overflow-tooltip></el-table-column>

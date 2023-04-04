@@ -50,8 +50,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="t('job.index')" fixed="left" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="t('job.index')" fixed="left" type="index" width="60" />
 				<el-table-column :label="t('job.jobName')" fixed="left" prop="jobName" show-overflow-tooltip width="120" />
 				<el-table-column :label="t('job.jobGroup')" prop="jobGroup" show-overflow-tooltip width="120" />
 				<el-table-column :label="t('job.jobStatus')" prop="jobStatus" show-overflow-tooltip width="120">

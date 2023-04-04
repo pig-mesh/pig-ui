@@ -43,7 +43,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="60" />
-				<el-table-column :label="t('account.index')" type="index" width="80" />
+				<el-table-column :label="t('account.index')" type="index" width="60" />
 				<el-table-column :label="t('account.name')" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('account.account')" prop="account" show-overflow-tooltip />
 				<el-table-column :label="t('account.appid')" prop="appid" show-overflow-tooltip />

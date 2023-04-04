@@ -72,7 +72,7 @@
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
 						<el-table-column :selectable="handleSelectable" type="selection" width="40" />
-						<el-table-column :label="$t('sysuser.index')" type="index" width="40" fixed="left" />
+						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
 						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>

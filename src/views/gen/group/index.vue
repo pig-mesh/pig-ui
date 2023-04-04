@@ -52,7 +52,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('group.index')" type="index" width="80" />
+				<el-table-column :label="t('group.index')" type="index" width="60" />
 				<el-table-column :label="t('group.groupName')" prop="groupName" show-overflow-tooltip />
 				<el-table-column :label="t('group.groupDesc')" prop="groupDesc" show-overflow-tooltip />
 				<el-table-column :label="t('group.createTime')" prop="createTime" show-overflow-tooltip />

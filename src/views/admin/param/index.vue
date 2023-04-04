@@ -63,8 +63,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="50"> </el-table-column>
-				<el-table-column :label="t('param.index')" type="index" width="80" />
+				<el-table-column :selectable="handleSelectable" align="center" type="selection" width="40"/>
+				<el-table-column :label="t('param.index')" type="index" width="60" />
 				<el-table-column :label="t('param.publicName')" prop="publicName" show-overflow-tooltip />
 				<el-table-column :label="t('param.publicKey')" prop="publicKey" show-overflow-tooltip />
 				<el-table-column :label="t('param.publicValue')" prop="publicValue" show-overflow-tooltip />

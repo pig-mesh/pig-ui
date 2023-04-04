@@ -51,7 +51,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('social.index')" type="index" width="80" />
+				<el-table-column :label="t('social.index')" type="index" width="60" />
 				<el-table-column :label="t('social.type')" prop="type" show-overflow-tooltip>
 					<template #default="scope">
 						<dict-tag :options="social_type" :value="scope.row.type"></dict-tag>

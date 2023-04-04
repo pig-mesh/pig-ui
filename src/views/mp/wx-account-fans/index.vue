@@ -42,7 +42,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column :label="t('fans.index')" type="index" width="80" />
+				<el-table-column :label="t('fans.index')" type="index" width="60" />
 				<el-table-column :label="t('fans.openid')" prop="openid" show-overflow-tooltip />
 				<el-table-column :label="t('fans.subscribeStatus')" prop="subscribeStatus" show-overflow-tooltip>
 					<template #default="scope">

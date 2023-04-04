@@ -39,8 +39,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="t('datasourceconf.index')" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="t('datasourceconf.index')" type="index" width="60" />
 				<el-table-column :label="t('datasourceconf.name')" prop="name" show-overflow-tooltip />
 				<el-table-column :label="t('datasourceconf.dsName')" prop="dsName" show-overflow-tooltip />
 				<el-table-column :label="t('datasourceconf.dsType')" prop="dsType" show-overflow-tooltip />

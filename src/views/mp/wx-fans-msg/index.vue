@@ -57,7 +57,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column :label="t('wxFansMsg.index')" type="index" width="80" />
+				<el-table-column :label="t('wxFansMsg.index')" type="index" width="60" />
 				<el-table-column :label="t('wxFansMsg.appName')" prop="appName" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.repType')" prop="repType" show-overflow-tooltip />
 				<el-table-column :label="t('wxFansMsg.nickName')" prop="nickName" show-overflow-tooltip />

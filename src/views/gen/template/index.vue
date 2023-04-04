@@ -50,7 +50,7 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column align="center" type="selection" width="40" />
-				<el-table-column :label="t('template.index')" type="index" width="80" />
+				<el-table-column :label="t('template.index')" type="index" width="60" />
 				<el-table-column :label="t('template.templateName')" prop="templateName" show-overflow-tooltip />
 				<el-table-column :label="t('template.generatorPath')" prop="generatorPath" show-overflow-tooltip />
 				<el-table-column :label="t('template.desc')" prop="templateDesc" show-overflow-tooltip />

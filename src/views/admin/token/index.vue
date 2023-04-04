@@ -35,8 +35,8 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="50" />
-				<el-table-column :label="$t('systoken.index')" type="index" width="80" />
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="$t('systoken.index')" type="index" width="60" />
 				<el-table-column :label="$t('systoken.username')" prop="username" show-overflow-tooltip width="150"></el-table-column>
 				<el-table-column :label="$t('systoken.clientId')" prop="clientId" show-overflow-tooltip width="100"></el-table-column>
 				<el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip>

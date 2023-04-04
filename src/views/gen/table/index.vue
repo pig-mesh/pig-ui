@@ -40,7 +40,7 @@
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column :label="t('table.index')" type="index" width="80" />
+				<el-table-column :label="t('table.index')" type="index" width="60" />
 				<el-table-column :label="t('table.tableName')" prop="tableName" show-overflow-tooltip />
 				<el-table-column :label="t('table.tableDesc')" prop="tableComment" show-overflow-tooltip />
 				<el-table-column :label="t('table.createTime')" prop="createTime" show-overflow-tooltip />
