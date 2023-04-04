@@ -1,6 +1,6 @@
 export default {
 	home: {
-		addFavoriteRoutesTip: '暂无数据,标签页右键收藏',
+		addFavoriteRoutesTip: '当前无数据，请在标签页上右键单击以收藏',
 		quickNavigationToolsTip: '快捷导航栏',
 		systemLogsTip: '系统日志',
 		auditLogsTip: '审计日志',

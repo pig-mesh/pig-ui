@@ -372,3 +372,7 @@
 	background-color: var(--el-color-primary) !important;
 	color: var(--el-color-white) !important;
 }
+
+.el-empty {
+	--el-empty-padding: 0 0 !important;
+}
