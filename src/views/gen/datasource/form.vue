@@ -90,7 +90,7 @@ const form = reactive({
 	name: '',
 	url: '',
 	username: '',
-	password: '' as string || undefined,
+	password: ('' as string) || undefined,
 	createTime: '',
 	updateTime: '',
 	dsType: '',

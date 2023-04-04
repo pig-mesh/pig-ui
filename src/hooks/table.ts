@@ -232,7 +232,7 @@ export function useTable(options?: BasicTableProps) {
 			textAlign: 'center',
 			background: 'var(--el-table-row-hover-bg-color)',
 			color: 'var(--el-text-color-primary)',
-		}
+		},
 	};
 
 	return {

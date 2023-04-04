@@ -66,7 +66,7 @@ export const useGeneratorVFormApi = (dsName: any, tableName: any) => {
 	});
 };
 
-export const useGeneratorVFormSfcApi = (id:string) => {
+export const useGeneratorVFormSfcApi = (id: string) => {
 	return request({
 		url: '/gen/generator/vform/sfc',
 		method: 'get',

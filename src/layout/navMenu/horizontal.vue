@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts" name="navMenuHorizontal">
-import {  RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from 'vue-router';
 import { useRoutesList } from '/@/stores/routesList';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
