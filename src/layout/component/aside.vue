@@ -17,11 +17,12 @@ import { useRoutesList } from '/@/stores/routesList';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import mittBus from '/@/utils/mitt';
+import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
 const Vertical = defineAsyncComponent(() => import('/@/layout/navMenu/vertical.vue'));
-
+const { locale } = useI18n();
 // 定义变量内容
 const layoutAsideScrollbarRef = ref();
 const stores = useRoutesList();
@@ -56,15 +57,20 @@ const setCollapseStyle = computed(() => {
 			return [asideBrColor, 'layout-aside-mobile', 'layout-aside-mobile-close'];
 		}
 	} else {
-		if (layout === 'columns') {
-			// 分栏布局，菜单收起时宽度给 1px
-			if (isCollapse) return [asideBrColor, 'layout-aside-pc-1'];
-			else return [asideBrColor, 'layout-aside-pc-220'];
-		} else {
-			// 其它布局给 64px
-			if (isCollapse) return [asideBrColor, 'layout-aside-pc-64'];
-			else return [asideBrColor, 'layout-aside-pc-220'];
-		}
+		return [
+			asideBrColor,
+			layout === 'columns'
+				? isCollapse
+					? 'layout-aside-pc-1'
+					: locale.value === 'en'
+					? 'layout-aside-pc-250'
+					: 'layout-aside-pc-220'
+				: isCollapse
+				? 'layout-aside-pc-64'
+				: locale.value === 'en'
+				? 'layout-aside-pc-250'
+				: 'layout-aside-pc-220',
+		];
 	}
 });
 // 设置显示/隐藏 logo
