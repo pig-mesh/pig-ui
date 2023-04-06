@@ -46,6 +46,7 @@ app.config.globalProperties.parseDate = parseDate;
 app.config.globalProperties.dateTimeStr = dateTimeStr;
 app.config.globalProperties.dateStr = dateStr;
 app.config.globalProperties.timeStr = timeStr;
+app.config.globalProperties.baseURL = import.meta.env.VITE_API_URL;
 
 directive(app);
 other.elSvg(app);

@@ -53,15 +53,17 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			hmr: true, // 启用热更新
 			proxy: {
 				// 代理设置，用于解决跨域问题
-				'/admin': {
+				'/api': {
 					target: env.VITE_ADMIN_PROXY_PATH, // 目标服务器地址
 					ws: true, // 是否启用 WebSocket
 					changeOrigin: true, // 是否修改请求头中的 Origin 字段
+					rewrite: (path) => path.replace(/^\/api/, ''),
 				},
-				'/gen': {
-					target: env.VITE_GEN_PROXY_PATH,
-					ws: true,
+				'/api/gen': {
+					//单体架构下特殊处理代码生成模块代理
+					target: env.VITE_IS_MICRO === 'true' ? env.VITE_ADMIN_PROXY_PATH : env.VITE_GEN_PROXY_PATH,
 					changeOrigin: true,
+					rewrite: (path) => path.replace(/^\/api/, ''),
 				},
 			},
 		},

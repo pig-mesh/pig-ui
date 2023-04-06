@@ -458,8 +458,13 @@ export function toUnderline(str: string) {
 const adaptationUrl = (originUrl?: string) => {
 	// 微服务架构 不做路径转换,为空不做路径转换
 	const isMicro = import.meta.env.VITE_IS_MICRO;
-	if (validateNull(isMicro) || isMicro === true) {
+	if (validateNull(isMicro) || isMicro === 'true') {
 		return originUrl;
+	}
+
+	// 验证码服务
+	if (originUrl?.startsWith('/code/')) {
+		return `/admin/${originUrl}`;
 	}
 
 	// 如果是代码生成服务，不做路径转换

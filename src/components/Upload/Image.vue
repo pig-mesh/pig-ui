@@ -15,7 +15,7 @@
 			:accept="fileType.join(',')"
 		>
 			<template v-if="imageUrl">
-				<img :src="imageUrl" class="upload-image" />
+				<img :src="baseURL + imageUrl" class="upload-image" />
 				<div class="upload-handle" @click.stop>
 					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
 						<el-icon><Edit /></el-icon>

@@ -10,14 +10,17 @@ import { useUserInfo } from '/@/stores/userInfo';
 export const login = (data: any) => {
 	const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT);
 	Session.set('basicAuth', basicAuth);
+	const { username, password, randomStr, code, grant_type, scope } = data;
 	return request({
 		url: '/auth/oauth2/token',
 		method: 'post',
-		params: data,
+		params: { username, randomStr, code, grant_type, scope },
+		data: { password: password },
 		headers: {
 			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 	});
 };
@@ -34,6 +37,7 @@ export const loginByMobile = (mobile: any, code: any) => {
 			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		method: 'post',
 		params: { mobile: 'SMS@' + mobile, code: code, grant_type, scope },
@@ -52,6 +56,7 @@ export const loginBySocial = (state: string, code: string) => {
 			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		method: 'post',
 		params: { mobile: state + '@' + code, code: code, grant_type, scope },
@@ -60,7 +65,7 @@ export const loginBySocial = (state: string, code: string) => {
 
 export const sendMobileCode = (mobile: any) => {
 	return request({
-		url: '/auth/mobile/' + mobile,
+		url: '/admin/mobile/' + mobile,
 		method: 'get',
 	});
 };
@@ -77,6 +82,7 @@ export const refreshTokenApi = (refresh_token: string) => {
 			skipToken: true,
 			'TENANT-ID': '1',
 			Authorization: basicAuth,
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		method: 'post',
 		params: { refresh_token, grant_type, scope },
@@ -94,6 +100,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 		headers: {
 			skipToken: true,
 			Authorization: basicAuth,
+			'Content-Type': 'application/x-www-form-urlencoded',
 		},
 		method: 'get',
 		params: { token: Session.getToken() },
@@ -131,7 +138,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
  */
 export const getUserInfo = () => {
 	return request({
-		url: '/auth/user/info',
+		url: '/admin/user/info',
 		method: 'get',
 	});
 };

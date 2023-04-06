@@ -10,7 +10,6 @@ import other from './other';
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 50000, // 全局超时时间
-	headers: { 'Content-Type': 'application/json' },
 });
 
 /**

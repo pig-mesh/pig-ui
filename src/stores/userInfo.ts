@@ -47,7 +47,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
-						useMessage().error('服务器异常，请联系管理员');
+						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
 			});
@@ -70,7 +70,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
-						useMessage().error(err.msg);
+						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
 			});
@@ -94,7 +94,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
-						useMessage().error('登录失败，账号未绑定');
+						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
 			});

@@ -6,7 +6,7 @@
 			:limit="1"
 			accept=".xlsx, .xls"
 			:headers="headers"
-			:action="other.adaptationUrl(url)"
+			:action="baseURL + other.adaptationUrl(url)"
 			:disabled="state.upload.isUploading"
 			:on-progress="handleFileUploadProgress"
 			:on-success="handleFileSuccess"
