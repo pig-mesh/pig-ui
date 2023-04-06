@@ -1,6 +1,6 @@
 <template>
 	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="handleVerify">
-		<el-form-item class="login-animation1">
+		<el-form-item class="login-animation1" prop="username">
 			<el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon">
@@ -9,7 +9,7 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2">
+		<el-form-item class="login-animation2" prop="password">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
@@ -76,7 +76,7 @@ const verifyref = ref<InstanceType<typeof Verify>>(null); // 定义verify组件�
 
 // 调用滑块验证码进行校验
 const handleVerify = async () => {
-	const valid = await loginFormRef.value.validate(); // 表单校验
+	const valid = await loginFormRef.value.validate().catch(() => {}); // 表单校验
 	if (valid) {
 		verifyref.value.show(); // 显示验证组件
 	}
