@@ -464,7 +464,7 @@ const adaptationUrl = (originUrl?: string) => {
 
 	// 验证码服务
 	if (originUrl?.startsWith('/code/')) {
-		return `/admin/${originUrl}`;
+		return `/admin${originUrl}`;
 	}
 
 	// 如果是代码生成服务，不做路径转换

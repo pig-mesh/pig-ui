@@ -180,7 +180,7 @@ const handleSelectionChange = (rows) => {
 
 /** 导出Excel */
 const exportExcel = () => {
-	downBlobFile('/daemon/sys-job/export', state.queryForm, 'job.xlsx');
+	downBlobFile('/job/sys-job/export', state.queryForm, 'job.xlsx');
 };
 
 /** 查看作业日志 */
