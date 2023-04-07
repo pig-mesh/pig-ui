@@ -61,6 +61,13 @@
 	--el-mask-color: rgb(42 42 42 / 80%);
 	--el-fill-color-lighter: var(--next-color-hover-rgba) !important;
 
+	.el-table {
+		color: var(--next-color-white);
+		.el-button.is-text {
+			padding: 0;
+		}
+	}
+
 	// button
 	.el-button {
 		&:hover {
