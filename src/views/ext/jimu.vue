@@ -1,7 +1,8 @@
 <template>
 	<div class="layout-padding">
 		<el-scrollbar class="main">
-			<iframe :src="src" class="iframe" />
+			<iframe :src="src" class="iframe" v-if="isMicro === 'true'" />
+			<span v-else>单体架构暂不支持报表设计器</span>
 		</el-scrollbar>
 	</div>
 </template>
@@ -11,8 +12,8 @@ import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
 const { proxy } = getCurrentInstance();
 const route = useRoute();
-
 const src = ref('');
+const isMicro = import.meta.env.VITE_IS_MICRO;
 
 watch([route], () => {
 	init();
@@ -24,9 +25,9 @@ onMounted(() => {
 
 const init = () => {
 	const token = Session.getToken();
-	window.sessionStorage.setItem('token', JSON.stringify(token));
-	let url = proxy.baseURL + other.adaptationUrl('/act/modeler.html?modelId=' + route.query.id);
-	src.value = url;
+	const tenantId = Session.getTenant();
+	let url = proxy.baseURL + `/jimu/jmreport/list?token=${tenantId}_${token}`;
+	src.value = other.adaptationUrl(url);
 };
 </script>
 

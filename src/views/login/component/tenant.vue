@@ -21,6 +21,7 @@ import Driver from 'driver.js';
 import { fetchList } from '/@/api/admin/tenant';
 import { Local, Session } from '/@/utils/storage';
 import { useI18n } from 'vue-i18n';
+import Cookies from 'js-cookie';
 
 const { t } = useI18n();
 
@@ -69,6 +70,7 @@ const handleAutoTenant = () => {
 const handleCommand = (tenant: any) => {
 	Session.set('tenantId', tenant.id); // 写入到 session 存储
 	Local.set('tenantId', tenant.id); // 写入到 local 存储
+	Cookies.set('tenantId', tenant.id); //写入到 cookie 方便第三方使用
 };
 
 /**
@@ -105,7 +107,7 @@ const guide = () => {
  */
 onMounted(async () => {
 	await getTenantList(); // 获取租户列表
-	tenant.value = Local.get('tenantId'); // 从本地存储读取当前租户信息
+	tenant.value = Session.getTenant(); // 从本地存储读取当前租户信息
 
 	if (autoTenantEnable) {
 		handleAutoTenant(); // 自动根据域名匹配租户信息

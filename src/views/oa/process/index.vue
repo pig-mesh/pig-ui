@@ -75,7 +75,6 @@
 </template>
 
 <script lang="ts" name="model" setup>
-import { ComponentInternalInstance } from 'vue';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObj, fetchList, status } from '/@/api/oa/process';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -85,7 +84,7 @@ import other from '/@/utils/other';
 
 // 引入组件
 const { t } = useI18n();
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
+const { proxy } = getCurrentInstance();
 
 // 定义变量内容
 const showPicDialog = ref(false);
@@ -139,12 +138,10 @@ const handleDelete = async (ids: string[]) => {
 
 //查看流程图
 const handleView = (row: any) => {
-	let url =
-		proxy.baseURL +
-		`/act/process/resource/${row.deploymentId}/${
-			row.processonDefinitionId
-		}/image?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
-	actPicUrl.value = other.adaptationUrl(url);
+	let url = `/act/process/resource/${row.deploymentId}/${
+		row.processonDefinitionId
+	}/image?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	actPicUrl.value = proxy.baseURL + other.adaptationUrl(url);
 	showPicDialog.value = true;
 };
 

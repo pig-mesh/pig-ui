@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Session, Local } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
@@ -36,7 +36,7 @@ service.interceptors.request.use(
 		}
 
 		// 统一增加TENANT-ID请求头
-		const tenantId = Local.get('tenantId');
+		const tenantId = Session.getTenant()
 		if (tenantId && !config.headers?.skipTenant) {
 			config.headers!['TENANT-ID'] = tenantId;
 		}

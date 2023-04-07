@@ -77,7 +77,6 @@
 </template>
 
 <script setup lang="ts" name="systemTask">
-import { ComponentInternalInstance } from 'vue';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList, delObj } from '/@/api/oa/task';
 import { useI18n } from 'vue-i18n';
@@ -88,8 +87,8 @@ import other from '/@/utils/other';
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const CommentDialog = defineAsyncComponent(() => import('./comment.vue'));
+const { proxy } = getCurrentInstance();
 const { t } = useI18n();
-const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 
 // 定义查询字典
 const formDialogRef = ref();
@@ -152,8 +151,8 @@ const handleDelete = async (ids: string[]) => {
 
 //查看流程图
 const handleView = (row: any) => {
-	let url = proxy.baseURL + `/act/task/view/${row.taskId}?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
-	actPicUrl.value = other.adaptationUrl(url);
+	let url = `/act/task/view/${row.taskId}?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	actPicUrl.value = proxy.baseURL + other.adaptationUrl(url);
 	showPicDialog.value = true;
 };
 </script>

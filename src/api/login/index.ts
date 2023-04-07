@@ -145,7 +145,7 @@ export const getUserInfo = () => {
 
 export const logout = () => {
 	return request({
-		url: '/admin/token/logout',
+		url: '/auth/token/logout',
 		method: 'delete',
 	});
 };
