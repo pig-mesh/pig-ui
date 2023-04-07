@@ -4,6 +4,12 @@ import { validateNull } from '/@/utils/validate';
 import { useUserInfo } from '/@/stores/userInfo';
 
 /**
+ * https://www.ietf.org/rfc/rfc6749.txt
+ * OAuth 协议 4.3.1 要求格式为 form 而不是 JSON 注意！
+ */
+const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
+
+/**
  * 登录
  * @param data
  */
@@ -18,9 +24,8 @@ export const login = (data: any) => {
 		data: { password: password },
 		headers: {
 			skipToken: true,
-			'TENANT-ID': '1',
 			Authorization: basicAuth,
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': FORM_CONTENT_TYPE,
 		},
 	});
 };
@@ -35,9 +40,8 @@ export const loginByMobile = (mobile: any, code: any) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			'TENANT-ID': '1',
 			Authorization: basicAuth,
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': FORM_CONTENT_TYPE,
 		},
 		method: 'post',
 		params: { mobile: 'SMS@' + mobile, code: code, grant_type, scope },
@@ -54,9 +58,8 @@ export const loginBySocial = (state: string, code: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			'TENANT-ID': '1',
 			Authorization: basicAuth,
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': FORM_CONTENT_TYPE,
 		},
 		method: 'post',
 		params: { mobile: state + '@' + code, code: code, grant_type, scope },
@@ -80,9 +83,8 @@ export const refreshTokenApi = (refresh_token: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			'TENANT-ID': '1',
 			Authorization: basicAuth,
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': FORM_CONTENT_TYPE,
 		},
 		method: 'post',
 		params: { refresh_token, grant_type, scope },
@@ -100,7 +102,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 		headers: {
 			skipToken: true,
 			Authorization: basicAuth,
-			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Type': FORM_CONTENT_TYPE,
 		},
 		method: 'get',
 		params: { token: Session.getToken() },

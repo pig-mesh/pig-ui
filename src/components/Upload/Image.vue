@@ -15,7 +15,8 @@
 			:accept="fileType.join(',')"
 		>
 			<template v-if="imageUrl">
-				<img :src="imageUrl.indexOf('http') > 0 ? baseURL + imageUrl : imageUrl" class="upload-image" />
+				<!-- 如果返回的是OSS 地址则不需要增加 baseURL -->
+				<img :src="imageUrl.includes('http') ? imageUrl : baseURL + imageUrl" class="upload-image" />
 				<div class="upload-handle" @click.stop>
 					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
 						<el-icon><Edit /></el-icon>

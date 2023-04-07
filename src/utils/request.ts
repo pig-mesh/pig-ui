@@ -29,15 +29,15 @@ service.interceptors.request.use(
 			};
 		}
 
-		// 统一增加Authorization请求头
+		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
-		if (token && !config.headers?.isToken) {
+		if (token && !config.headers?.skipToken) {
 			config.headers!['Authorization'] = `Bearer ${token}`;
 		}
 
 		// 统一增加TENANT-ID请求头
-		const tenantId = Session.getTenant()
-		if (tenantId && !config.headers?.skipTenant) {
+		const tenantId = Session.getTenant();
+		if (tenantId) {
 			config.headers!['TENANT-ID'] = tenantId;
 		}
 
