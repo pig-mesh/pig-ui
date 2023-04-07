@@ -7,6 +7,7 @@
 </template>
 
 <script lang="ts" name="modelView" setup>
+import { ComponentInternalInstance } from 'vue';
 import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
 const { proxy } = getCurrentInstance() as ComponentInternalInstance;

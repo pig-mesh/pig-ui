@@ -13,14 +13,14 @@
 </template>
 
 <script setup lang="ts" name="wngEditor">
-// https://www.wangeditor.com/v5/for-frame.html#vue3
+import { ComponentInternalInstance } from 'vue';
 import '@wangeditor/editor/dist/css/style.css';
 import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
 // @ts-ignore
 import { IDomEditor } from '@wangeditor/editor';
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
 import { Session } from '/@/utils/storage';
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 
 // 定义父组件传过来的值
 const props = defineProps({

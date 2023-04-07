@@ -75,6 +75,7 @@
 </template>
 
 <script lang="ts" name="model" setup>
+import { ComponentInternalInstance } from 'vue';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObj, fetchList, status } from '/@/api/oa/process';
 import { useMessage, useMessageBox } from '/@/hooks/message';

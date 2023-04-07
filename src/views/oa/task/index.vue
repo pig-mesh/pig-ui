@@ -77,6 +77,7 @@
 </template>
 
 <script setup lang="ts" name="systemTask">
+import { ComponentInternalInstance } from 'vue';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList, delObj } from '/@/api/oa/task';
 import { useI18n } from 'vue-i18n';
