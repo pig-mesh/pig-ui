@@ -76,10 +76,11 @@ const getQr = async () => {
 	try {
 		if (type === '0') {
 			const res = await useBuyApi(amount);
-			return res.params; // 直接返回购买 API 返回的二维码链接地址
+			url.value = res.params; // 直接返回购买 API 返回的二维码链接地址
+		} else {
+			const tenantId = Session.getTenant();
+			url.value = `${protocol}//${host}/admin/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`; // 返回商品购买的二维码链接地址
 		}
-		const tenantId = Session.getTenant();
-		return `${protocol}//${host}/admin/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`; // 返回商品购买的二维码链接地址
 	} catch (err) {
 		throw new Error('获取支付信息失败');
 	}
