@@ -20,6 +20,7 @@ import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
 import { IDomEditor } from '@wangeditor/editor';
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
 import { Session } from '/@/utils/storage';
+const { proxy } = getCurrentInstance();
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -50,7 +51,7 @@ const props = defineProps({
 	getText: String,
 	uploadFileUrl: {
 		type: String,
-		default: '/admin/sys-file/upload',
+		default: `/admin/sys-file/upload`,
 	},
 });
 
@@ -68,10 +69,10 @@ const headers = computed(() => {
 // 定义上传需要的字段信息
 const uploadAttr = reactive({
 	fieldName: 'file',
-	server: props.uploadFileUrl,
+	server: proxy.baseURL + props.uploadFileUrl,
 	headers: headers,
 	customInsert(res, insertFn) {
-		insertFn(res.data.url);
+		insertFn(proxy.baseURL + res.data.url);
 	},
 });
 
