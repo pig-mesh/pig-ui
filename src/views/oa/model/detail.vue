@@ -7,8 +7,9 @@
 </template>
 
 <script lang="ts" name="modelView" setup>
+import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
-
+const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 const route = useRoute();
 
 const src = ref('');
@@ -24,7 +25,8 @@ onMounted(() => {
 const init = () => {
 	const token = Session.getToken();
 	window.sessionStorage.setItem('token', JSON.stringify(token));
-	src.value = '/admin/modeler.html?modelId=' + route.query.id;
+	let url = proxy.baseURL + other.adaptationUrl('/act/modeler.html?modelId=' + route.query.id);
+	src.value = url;
 };
 </script>
 

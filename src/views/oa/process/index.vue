@@ -80,9 +80,11 @@ import { delObj, fetchList, status } from '/@/api/oa/process';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { Session } from '/@/utils/storage';
+import other from '/@/utils/other';
 
 // 引入组件
 const { t } = useI18n();
+const { proxy } = getCurrentInstance() as ComponentInternalInstance;
 
 // 定义变量内容
 const showPicDialog = ref(false);
@@ -136,9 +138,12 @@ const handleDelete = async (ids: string[]) => {
 
 //查看流程图
 const handleView = (row: any) => {
-	actPicUrl.value = `/admin/process/resource/${row.deploymentId}/${
-		row.processonDefinitionId
-	}/image?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	let url =
+		proxy.baseURL +
+		`/act/process/resource/${row.deploymentId}/${
+			row.processonDefinitionId
+		}/image?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	actPicUrl.value = other.adaptationUrl(url);
 	showPicDialog.value = true;
 };
 
