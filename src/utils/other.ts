@@ -455,7 +455,7 @@ export function toUnderline(str: string) {
  *
  * @param originUrl 原始路径
  */
-const adaptationUrl = (originUrl?: string) => {
+const adaptationUrl = (originUrl: string) => {
 	// 微服务架构 不做路径转换,为空不做路径转换
 	const isMicro = import.meta.env.VITE_IS_MICRO;
 	if (validateNull(isMicro) || isMicro === 'true') {

@@ -128,7 +128,7 @@
 </template>
 
 <script lang="ts" name="wx-menu" setup>
-import { saveObj, getObj } from '/@/api/mp/wx-menu';
+import { saveObj, getObj, publishObj } from '/@/api/mp/wx-menu';
 
 // 部门树使用的数据
 import { fetchAccountList } from '/@/api/mp/wx-account';
@@ -340,21 +340,17 @@ const deleteMenu = () => {
 		});
 };
 
-const handleSave = () => {
-	useMessageBox()
-		.confirm('确定要保存该菜单吗?')
-		.then(() => {
-			saveObj(accountId.value, {
-				button: menuList,
-			})
-				.then(() => {
-					useMessage().success('保存成功');
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
-		});
+const handleSave = async () => {
+  try {
+    await useMessageBox().confirm('确定要保存该菜单吗?');
+    await saveObj(accountId.value, { button: menuList });
+    await publishObj(accountId.value);
+    useMessage().error('发布成功');
+  } catch (err:any) {
+    useMessage().error(err.msg);
+  }
 };
+
 
 const deleteMaterial = () => {
 	tempObj.value.replyArticles = [];

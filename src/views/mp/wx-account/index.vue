@@ -120,6 +120,7 @@ import { clearQuota, delObjs, fetchList, generateQr } from '/@/api/mp/wx-account
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import commonFunction from '/@/utils/commonFunction';
+import other from '/@/utils/other';
 
 const { copyText } = commonFunction();
 // 引入组件
@@ -187,7 +188,8 @@ const dialogFormVisible = ref(false);
 const wxurl = ref('');
 const access = (row: any) => {
 	dialogFormVisible.value = true;
-	wxurl.value = row.url + '/mp/' + row.appid + '/portal';
+	let url = baseUrl + row.url + '/mp/' + row.appid + '/portal';
+	wxurl.value = other.adaptationUrl(url);
 };
 
 const generate = (row: any) => {
