@@ -6,7 +6,6 @@
 </template>
 
 <script lang="ts" name="modelView" setup>
-import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
 const { proxy } = getCurrentInstance();
 const route = useRoute();

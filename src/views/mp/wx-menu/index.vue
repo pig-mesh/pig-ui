@@ -341,16 +341,15 @@ const deleteMenu = () => {
 };
 
 const handleSave = async () => {
-  try {
-    await useMessageBox().confirm('确定要保存该菜单吗?');
-    await saveObj(accountId.value, { button: menuList });
-    await publishObj(accountId.value);
-    useMessage().error('发布成功');
-  } catch (err:any) {
-    useMessage().error(err.msg);
-  }
+	try {
+		await useMessageBox().confirm('确定要保存该菜单吗?');
+		await saveObj(accountId.value, { button: menuList });
+		await publishObj(accountId.value);
+		useMessage().error('发布成功');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
-
 
 const deleteMaterial = () => {
 	tempObj.value.replyArticles = [];

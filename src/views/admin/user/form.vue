@@ -232,21 +232,21 @@ const onSubmit = async () => {
  * @return {Promise} - 包含用户数据的 Promise 对象
  */
 const getUserData = async (id) => {
-  try {
-    loading.value = true;
-    const { data } = await getObj(id);
-    Object.assign(dataForm, data);
-    if (data.roleList) {
-      dataForm.role = data.roleList.map(item => item.roleId);
-    }
-    if (data.postList) {
-      dataForm.post = data.postList.map(item => item.postId);
-    }
-  } catch (err:any) {
-    useMessage().error(err.msg);
-  } finally {
-    loading.value = false;
-  }
+	try {
+		loading.value = true;
+		const { data } = await getObj(id);
+		Object.assign(dataForm, data);
+		if (data.roleList) {
+			dataForm.role = data.roleList.map((item) => item.roleId);
+		}
+		if (data.postList) {
+			dataForm.post = data.postList.map((item) => item.postId);
+		}
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
 // 初始化部门数据
