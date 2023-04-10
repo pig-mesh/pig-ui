@@ -11,6 +11,7 @@ export default {
 		password: 'password',
 		dept: 'dept',
 		email: 'email',
+		avatar: 'avatar',
 		nickname: 'nickname',
 		inputNameTip: 'input name',
 		inputRoleTip: 'input role',

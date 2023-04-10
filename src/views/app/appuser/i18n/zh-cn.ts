@@ -12,6 +12,7 @@ export default {
 		dept: '部门',
 		email: '邮箱',
 		nickname: '昵称',
+		avatar: '头像',
 		inputNameTip: '请输入姓名',
 		inputRoleTip: '请选择角色',
 		inputUserNameTip: '请输入用户名',

@@ -48,8 +48,14 @@
 				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="$t('appuser.index')" type="index" width="60" />
 				<el-table-column :label="$t('appuser.username')" prop="username" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('appuser.name')" prop="name" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('appuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('appuser.nickname')" prop="nickname" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('appuser.avatar')" prop="avatar" show-overflow-tooltip>
+					<template #default="scope">
+						<div style="display: flex; justify-content: center">
+							<ImageUpload v-model:imageUrl="scope.row.avatar" height="50px" width="50px" disabled />
+						</div>
+					</template>
+				</el-table-column>
 				<el-table-column :label="$t('appuser.role')" show-overflow-tooltip>
 					<template #default="scope">
 						<el-tag :key="index" v-for="(item, index) in scope.row.roleList">{{ item.roleName }} </el-tag>
@@ -96,6 +102,7 @@ import { useI18n } from 'vue-i18n';
 
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
+const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
 
 const { lock_flag } = useDict('lock_flag');
 const { t } = useI18n();
