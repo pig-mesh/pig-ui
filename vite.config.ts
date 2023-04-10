@@ -37,7 +37,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				promiseImportName: (i) => `__tla_${i}`, // TLA Promise 导入名
 			}),
 			viteCompression({
-				deleteOriginFile: true, // 压缩后删除原来的文件
+				deleteOriginFile: false, // 压缩后删除原来的文件
 			}),
 		],
 		root: process.cwd(), // 项目根目录
