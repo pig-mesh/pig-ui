@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef">
+		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('appsocial.type')" prop="type">
@@ -42,8 +42,8 @@
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
-				<el-button @click="visible = false" formDialogRef>{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" formDialogRef type="primary">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -64,6 +64,8 @@ const { t } = useI18n();
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
+const loading = ref(false);
+
 // 定义字典
 const { app_social_type } = useDict('app_social_type');
 
@@ -117,6 +119,7 @@ const onSubmit = async () => {
 	form.appId = form.appId?.includes('******') ? undefined : form.appId;
 
 	try {
+		loading.value = true;
 		if (form.id) {
 			await putObj(form);
 			useMessage().success(t('common.editSuccessText'));
@@ -128,6 +131,8 @@ const onSubmit = async () => {
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

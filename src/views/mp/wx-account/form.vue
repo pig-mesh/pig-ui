@@ -1,6 +1,6 @@
 <template>
 	<el-drawer v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" size="50%">
-		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" formDialogRef label-width="90px">
+		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" label-width="90px">
 			<el-row :gutter="24">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('account.name')" prop="name">
@@ -48,7 +48,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-drawer>
@@ -69,7 +69,6 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-// 定义字典
 
 // 提交表单数据
 const form = reactive({
@@ -115,47 +114,31 @@ const openDialog = (id: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		if (form.appsecret && form.appsecret.indexOf('*') >= 0) {
-			form.appsecret = undefined;
-		}
-		// 更新
-		if (form.id) {
-			loading.value = true;
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		} else {
-			loading.value = true;
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		}
-	});
-};
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+	const { id, ...rest } = form;
+	if (form.appsecret && form.appsecret.includes('*')) {
+		form.appsecret = undefined;
+	}
 
+	loading.value = true;
+	try {
+		if (id) {
+			await putObj(rest);
+			useMessage().success(t('common.editSuccessText'));
+		} else {
+			await addObj(rest);
+			useMessage().success(t('common.addSuccessText'));
+		}
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
+};
 // 初始化表单数据
 const getwxAccountData = (id: string) => {
 	// 获取数据

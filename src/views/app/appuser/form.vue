@@ -52,7 +52,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -194,10 +194,8 @@ const getUserData = async (id: string) => {
 
 	try {
 		const { data } = await getObj(id);
-
 		Object.assign(dataForm, data);
 		dataForm.password = '******';
-
 		if (data.roleList) {
 			dataForm.role = data.roleList.map((item: any) => item.roleId);
 		}

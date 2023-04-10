@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('datasourceconf.dsType')" prop="dsType">
@@ -60,8 +60,8 @@
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
-				<el-button @click="visible = false" formDialogRef>{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit" formDialogRef>{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -80,6 +80,7 @@ const { t } = useI18n();
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
+const loading = ref(false);
 
 // 定义字典处理
 const { ds_config_type, ds_type } = useDict('ds_config_type', 'ds_type');
@@ -160,12 +161,15 @@ const onSubmit = async () => {
 	form.password = form.password?.includes('******') ? undefined : form.password;
 
 	try {
+		loading.value = true;
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

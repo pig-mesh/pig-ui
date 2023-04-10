@@ -19,30 +19,14 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button
-						v-aut="'sys_client_add'"
-						@click="formDialogRef.openDialog()"
-						class="ml10"
-						icon="folder-add"
-						type="primary"
-						v-auth="'sys_client_add'"
-					>
+					<el-button v-auth="'sys_client_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button v-aut="'sys_client_del'" plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+					<el-button v-auth="'sys_client_del'" plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
 						{{ $t('common.refreshCacheBtn') }}
 					</el-button>
 
-					<el-button
-						v-aut="'sys_client_del'"
-						plain
-						:disabled="multiple"
-						@click="handleDelete(selectObjs)"
-						class="ml10"
-						icon="Delete"
-						type="primary"
-						v-auth="'sys_client_del'"
-					>
+					<el-button plain :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'sys_client_del'">
 						{{ $t('common.delBtn') }}
 					</el-button>
 

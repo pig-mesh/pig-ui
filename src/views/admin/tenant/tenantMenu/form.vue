@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('tenant.name')" prop="name">
@@ -53,6 +53,7 @@ const emit = defineEmits(['refresh']);
 
 const dataFormRef = ref();
 const visible = ref(false);
+const loading = ref(false);
 const menuTreeRef = ref();
 
 const form = reactive({
@@ -108,13 +109,12 @@ const openDialog = (id: string) => {
 	getMenuData();
 };
 
-const loading = ref(false);
-
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		// 获取已经选择的节点
 		form.menuIds = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()].join(',');
 		form.id ? await putObj(form) : await addObj(form);
@@ -123,6 +123,8 @@ const onSubmit = async () => {
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

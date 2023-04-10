@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" :close-on-click-modal="false" :title="form.jobId ? $t('common.editBtn') : $t('common.addBtn')" draggable>
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="120px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.jobName')" prop="jobName">
@@ -76,7 +76,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button formDialogRef @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button formDialogRef type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button formDialogRef type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -98,6 +98,8 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const cronPopover = ref();
 const visible = ref(false);
+const loading = ref(false);
+
 // 定义字典
 const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
@@ -162,12 +164,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		form.jobId ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.jobId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

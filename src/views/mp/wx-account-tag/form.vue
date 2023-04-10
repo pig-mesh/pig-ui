@@ -12,18 +12,19 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
 </template>
 
 <script lang="ts" name="WxAccountTagDialog" setup>
-// 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
 import { useMessage } from '/@/hooks/message';
 import { addObj, putObj } from '/@/api/mp/wx-account-tag';
 import { useI18n } from 'vue-i18n';
+
+// 定义子组件向父组件传值/事件
+const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
 
@@ -61,42 +62,28 @@ const openDialog = (row: any, appid: string) => {
 };
 
 // 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		loading.value = true;
-		if (form.id) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
-		}
-	});
-};
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
 
+	loading.value = true;
+
+	try {
+		if (form.id) {
+			await putObj(form);
+			useMessage().success(t('common.editSuccessText'));
+		} else {
+			await addObj(form);
+			useMessage().success(t('common.addSuccessText'));
+		}
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
+};
 // 暴露变量
 defineExpose({
 	openDialog,

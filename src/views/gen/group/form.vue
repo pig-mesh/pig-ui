@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')">
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('group.groupName')" prop="groupName">
@@ -24,7 +24,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -42,6 +42,7 @@ const { t } = useI18n();
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
+const loading = ref(false);
 const templateData = ref<any[]>([]);
 // 定义字典
 
@@ -85,12 +86,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

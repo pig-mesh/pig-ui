@@ -79,7 +79,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -150,13 +150,9 @@ const openDialog = (type: string, row?: any) => {
 
 // 获取菜单节点的详细信息
 const getMenuDetail = (id: string) => {
-	info(id)
-		.then((res) => {
-			Object.assign(state.ruleForm, res.data);
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+	info(id).then((res) => {
+		Object.assign(state.ruleForm, res.data);
+	});
 };
 
 // 从后端获取菜单信息（含层级）
@@ -181,12 +177,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		state.ruleForm.menuId ? await putObj(state.ruleForm) : await addObj(state.ruleForm);
 		useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

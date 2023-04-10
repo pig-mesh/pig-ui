@@ -24,8 +24,7 @@ onMounted(() => {
 const init = () => {
 	const token = Session.getToken();
 	const tenantId = Session.getTenant();
-	let url = `/gv?token=${token}&TENANT-ID=${tenantId}`;
-	src.value = proxy.baseURL + other.adaptationUrl(url);
+	src.value = proxy.baseURL + `/gv?token=${token}&TENANT-ID=${tenantId}`;
 };
 </script>
 

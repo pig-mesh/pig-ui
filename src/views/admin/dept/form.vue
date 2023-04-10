@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dept-dialog-container">
 		<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="769px">
-			<el-form ref="deptDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules">
+			<el-form ref="deptDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
 				<el-row :gutter="20">
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
@@ -32,7 +32,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -57,6 +57,7 @@ const dataForm = reactive({
 });
 const parentData = ref<any[]>([]);
 const visible = ref(false);
+const loading = ref(false);
 
 const dataRules = ref({
 	parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
@@ -93,12 +94,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		dataForm.deptId ? await putObj(dataForm) : await addObj(dataForm);
 		useMessage().success(t(dataForm.deptId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

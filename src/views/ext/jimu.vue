@@ -26,8 +26,7 @@ onMounted(() => {
 const init = () => {
 	const token = Session.getToken();
 	const tenantId = Session.getTenant();
-	let url = proxy.baseURL + `/jimu/jmreport/list?token=${tenantId}_${token}`;
-	src.value = other.adaptationUrl(url);
+	src.value = proxy.baseURL + `/jimu/jmreport/list?token=${tenantId}_${token}`;
 };
 </script>
 

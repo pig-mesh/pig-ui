@@ -24,8 +24,6 @@
 					</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
-						:export="'sys_role_export'"
-						@exportExcel="exportExcel"
 						class="ml10"
 						style="float: right; margin-right: 20px"
 						@queryTable="getDataList"
@@ -62,10 +60,10 @@
 				<el-table-column :label="$t('appmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
 					<template #default="scope">
-						<el-button icon="add" @click="menuDialogRef.openDialog('add', scope.row?.id)" text type="primary" v-auth="'sys_menu_add'">
+						<el-button icon="add" @click="menuDialogRef.openDialog('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
 						</el-button>
-						<el-button icon="edit-pen" @click="menuDialogRef.openDialog('edit', scope.row?.id)" text type="primary" v-auth="'sys_menu_edit'"
+						<el-button icon="edit-pen" @click="menuDialogRef.openDialog('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'sys_menu_del'"

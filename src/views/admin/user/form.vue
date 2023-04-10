@@ -74,7 +74,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button @click="onSubmit" type="primary">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -224,29 +224,29 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化部门数据
-const getUserData = (id: string) => {
-	// 获取部门数据
-	loading.value = true;
-	return getObj(id)
-		.then((res) => {
-			Object.assign(dataForm, res.data);
-			if (res.data.roleList) {
-				dataForm.role = [];
-				res.data.roleList.map((item: any) => {
-					dataForm.role.push(item.roleId);
-				});
-			}
-			if (res.data.postList) {
-				dataForm.post = [];
-				res.data.postList.map((item: any) => {
-					dataForm.post.push(item.postId);
-				});
-			}
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+/**
+ * 从服务器获取用户数据
+ *
+ * @async
+ * @param {string} id - 用户 ID
+ * @return {Promise} - 包含用户数据的 Promise 对象
+ */
+const getUserData = async (id) => {
+  try {
+    loading.value = true;
+    const { data } = await getObj(id);
+    Object.assign(dataForm, data);
+    if (data.roleList) {
+      dataForm.role = data.roleList.map(item => item.roleId);
+    }
+    if (data.postList) {
+      dataForm.post = data.postList.map(item => item.postId);
+    }
+  } catch (err:any) {
+    useMessage().error(err.msg);
+  } finally {
+    loading.value = false;
+  }
 };
 
 // 初始化部门数据

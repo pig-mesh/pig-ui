@@ -1,7 +1,7 @@
 <template>
 	<div class="system-dic-dialog-container">
 		<el-dialog :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="60%">
-			<el-form :model="dataForm" :rules="dataRules" label-width="100px" ref="dicDialogFormRef">
+			<el-form :model="dataForm" :rules="dataRules" label-width="100px" ref="dicDialogFormRef" v-loading="loading">
 				<el-row :gutter="35">
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysdict.dictType')" prop="dictType">
@@ -32,7 +32,7 @@
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button @click="onSubmit" type="primary">{{ $t('common.confirmButtonText') }}</el-button>
+					<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 				</span>
 			</template>
 		</el-dialog>
@@ -54,6 +54,7 @@ const { t } = useI18n();
 const dicDialogFormRef = ref();
 
 const visible = ref(false);
+const loading = ref(false);
 
 const dataForm = reactive({
 	id: '',
@@ -99,12 +100,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		const result = dataForm.id ? await putObj(dataForm) : await addObj(dataForm);
 		useMessage().success(t(dataForm.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh', result.data);
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

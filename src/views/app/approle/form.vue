@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef">
+		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="35">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="$t('approle.roleName')" prop="roleName">
@@ -27,7 +27,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" type="primary">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -47,6 +47,7 @@ const { t } = useI18n();
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
+const loading = ref(false);
 
 // 提交表单数据
 const form = reactive({
@@ -115,12 +116,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
+		loading.value = true;
 		form.roleId ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.roleId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 

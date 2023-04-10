@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.goodsOrderId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('order.goodsId')" prop="goodsId">
@@ -44,7 +44,7 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" type="primary">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -123,12 +123,15 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
-		form.id ? await putObj(form) : await addObj(form);
-		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
+		loading.value = true;
+		form.goodsOrderId ? await putObj(form) : await addObj(form);
+		useMessage().success(t(form.goodsOrderId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
 	}
 };
 
