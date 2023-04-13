@@ -124,7 +124,7 @@ const dataRules = ref({
 	],
 	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],
 	dsType: [{ required: true, message: '请选择数据权限类型', trigger: 'blur' }],
-	menu_authority: [{ required: true, message: '菜单权限不能为空', trigger: 'blur' }],
+	menu_authority: [{ required: true, message: '数据权限不能为空', trigger: 'blur' }],
 });
 
 const dictType = ref([

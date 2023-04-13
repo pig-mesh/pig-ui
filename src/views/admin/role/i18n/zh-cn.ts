@@ -13,7 +13,7 @@ export default {
 		please_enter_a_role_name: '请输入角色名称',
 		please_enter_the_role_Code: '请输入角色标识',
 		please_enter_the_role_description: '请输入角色描述',
-		menu_authority: '菜单权限',
+		menu_authority: '数据权限',
 		please_select: 'please select',
 	},
 };
