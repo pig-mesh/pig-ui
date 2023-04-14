@@ -6,7 +6,7 @@
 			</el-button>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item v-for="item in tenantList" :key="item.id" :command="item" :class="{ selected: true }">
+					<el-dropdown-item v-for="item in tenantList" :key="item.id" :command="item" :style="selectBgColor(item.id)">
 						{{ item.name }}
 					</el-dropdown-item>
 				</el-dropdown-menu>
@@ -103,13 +103,24 @@ const guide = () => {
 };
 
 /**
+ * 选择的租户高亮显示
+ * @param {string} id - 租户id
+ * @returns {Object} - 返回包含'background-color'和color属性的对象
+ */
+const selectBgColor = (id: string) => {
+	if (id === Session.getTenant()) {
+		return { 'background-color': 'var(--el-dropdown-menuItem-hover-fill)', color: 'var(--el-dropdown-menuItem-hover-color)' };
+	}
+};
+
+/**
  * 初始化函数，包括获取租户列表、读取当前租户信息、自动匹配租户、以及引导新用户了解租户信息流程。
  */
 onMounted(async () => {
 	await getTenantList(); // 获取租户列表
 	tenant.value = Session.getTenant(); // 从本地存储读取当前租户信息
 
-	if (autoTenantEnable) {
+	if (autoTenantEnable.value) {
 		handleAutoTenant(); // 自动根据域名匹配租户信息
 	}
 
