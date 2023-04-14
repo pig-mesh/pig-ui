@@ -53,8 +53,8 @@
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.keepAlive')" show-overflow-tooltip>
 					<template #default="scope">
-						<el-tag type="info" v-if="scope.row.keepAlive === '0'">关闭</el-tag>
-						<el-tag type="success" v-if="scope.row.keepAlive === '1'">开启</el-tag>
+						<el-tag v-if="scope.row.meta.isKeepAlive">开启</el-tag>
+						<el-tag type="info" v-else>关闭</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
