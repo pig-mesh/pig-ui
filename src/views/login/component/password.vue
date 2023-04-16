@@ -50,7 +50,7 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 
 // 动态加载滑块验证码组件
-const Verify = defineAsyncComponent(() => import('/@/components/verifition/Verify.vue'));
+const Verify = defineAsyncComponent(() => import('/@/components/Verifition/Verify.vue'));
 
 // 定义变量内容
 const emit = defineEmits(['signInSuccess']); // 声明事件名称
