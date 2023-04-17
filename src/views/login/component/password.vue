@@ -73,12 +73,17 @@ const loginRules = reactive({
 });
 
 const verifyref = ref<InstanceType<typeof Verify>>(null); // 定义verify组件引用
+// 是否开启验证码
+const verifyEnable = ref(import.meta.env.VITE_VERIFY_ENABLE === 'true');
 
 // 调用滑块验证码进行校验
 const handleVerify = async () => {
 	const valid = await loginFormRef.value.validate().catch(() => {}); // 表单校验
-	if (valid) {
+
+	if (valid && verifyEnable.value) {
 		verifyref.value.show(); // 显示验证组件
+	} else if (valid) {
+		onSignIn(); // 调用登录方法
 	}
 };
 
