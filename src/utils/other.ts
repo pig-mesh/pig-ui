@@ -176,8 +176,9 @@ export function handleOpenLink(val: RouteItem) {
  * 打开小窗口
  */
 export const openWindow = (url: string, title: string, w: number, h: number) => {
-	// Fixes dual-screen position                            Most browsers       Firefox
+	// @ts-ignore
 	const dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left;
+	// @ts-ignore
 	const dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top;
 
 	const width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
@@ -396,7 +397,7 @@ export function getQueryString(url: string, paraName: string) {
  * @param rootId
  * @returns {*}
  */
-export function handleTree(data, id, parentId, children, rootId) {
+export function handleTree(data: any, id: any, parentId: any, children: any, rootId: any) {
 	id = id || 'id';
 	parentId = parentId || 'parentId';
 	children = children || 'children';
@@ -404,7 +405,7 @@ export function handleTree(data, id, parentId, children, rootId) {
 		rootId ||
 		Math.min.apply(
 			Math,
-			data.map((item) => {
+			data.map((item: any) => {
 				return item[parentId];
 			})
 		) ||
@@ -412,8 +413,8 @@ export function handleTree(data, id, parentId, children, rootId) {
 	//对源数据深度克隆
 	const cloneData = JSON.parse(JSON.stringify(data));
 	//循环所有项
-	const treeData = cloneData.filter((father) => {
-		const branchArr = cloneData.filter((child) => {
+	const treeData = cloneData.filter((father: any) => {
+		const branchArr = cloneData.filter((child: any) => {
 			//返回每一项的子级数组
 			return father[id] === child[parentId];
 		});
@@ -455,7 +456,7 @@ export function toUnderline(str: string) {
  *
  * @param originUrl 原始路径
  */
-const adaptationUrl = (originUrl: string) => {
+const adaptationUrl = (originUrl?: string) => {
 	// 微服务架构 不做路径转换,为空不做路径转换
 	const isMicro = import.meta.env.VITE_IS_MICRO;
 	if (validateNull(isMicro) || isMicro === 'true') {

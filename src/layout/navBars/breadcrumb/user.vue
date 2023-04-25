@@ -97,7 +97,14 @@ const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
 
-const state = reactive({
+interface State {
+	[key: string]: boolean | string;
+	isScreenfull: boolean;
+	disabledI18n: string;
+	disabledSize: string;
+}
+
+const state = reactive<State>({
 	isScreenfull: false,
 	disabledI18n: 'zh-cn',
 	disabledSize: 'large',

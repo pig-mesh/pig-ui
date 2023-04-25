@@ -22,7 +22,6 @@ import { fetchList, putObj, refreshObj } from '/@/api/admin/route';
 import type { QueryLanguageId } from 'vue3-ts-jsoneditor';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
-import { renderValue } from 'vanilla-jsoneditor';
 
 const { t } = useI18n();
 const jsonData = ref({});
