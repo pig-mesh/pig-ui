@@ -10,7 +10,7 @@ export default {
 		createTime: '创建时间',
 		updateTime: '更新时间',
 		remarks: '备注',
-		systemFlag: '字典类型',
+		systemFlag: '配置类型',
 		delFlag: ' delFlag',
 		tenantId: '所属租户',
 		inputIdTip: '请输入编号',

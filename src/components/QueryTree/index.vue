@@ -4,7 +4,7 @@
 			<div class="head-container-header-input">
 				<el-input v-model="searchName" suffix-icon="search" :placeholder="placeholder" clearable @change="getdeptTree" />
 			</div>
-			<div class="head-container-header-dropdown">
+			<div class="head-container-header-dropdown" v-if="showExpand">
 				<el-dropdown :hide-on-click="false">
 					<el-icon style="transform: rotate(90deg)">
 						<MoreFilled />
@@ -93,6 +93,14 @@ const props = defineProps({
 	query: {
 		type: Function,
 		required: true,
+	},
+
+	/**
+	 * 是否显示折叠控制
+	 */
+	showExpand: {
+		type: Boolean,
+		default: false,
 	},
 });
 

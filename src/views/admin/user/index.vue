@@ -4,7 +4,7 @@
 			<pane size="15">
 				<div class="layout-padding-auto layout-padding-view">
 					<el-scrollbar>
-						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" @node-click="handleNodeClick">
+						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" :show-expand="true" @node-click="handleNodeClick">
 							<!-- 没有数据权限提示 -->
 							<template #default="{ node, data }">
 								<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
