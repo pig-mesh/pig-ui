@@ -173,7 +173,7 @@ const resetQuery = () => {
 };
 
 /** 行选中事件 */
-const handleSelectionChange = (rows) => {
+const handleSelectionChange = (rows: any) => {
 	selectedRows.value = rows;
 	multiple.value = !rows.length;
 };

@@ -127,8 +127,8 @@ const exportExcel = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.taskId));
+const handleSelectionChange = (objs: { taskId: string }[]) => {
+	selectObjs.value = objs.map(({ taskId }) => taskId);
 	multiple.value = !objs.length;
 };
 

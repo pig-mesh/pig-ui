@@ -50,7 +50,7 @@
 						<el-button icon="delete" text type="primary" v-auth="'sys_file_del'" @click="handleDelete([scope.row.id])">{{
 							$t('common.delBtn')
 						}}</el-button>
-						<el-button icon="download" type="primary" text @click="download(scope.row, scope.index)">{{ $t('common.download') }}</el-button>
+						<el-button icon="download" type="primary" text @click="download(scope.row)">{{ $t('common.download') }}</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -102,8 +102,8 @@ const download = (row: any) => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.id));
+const handleSelectionChange = (objs: { id: string }[]) => {
+	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 

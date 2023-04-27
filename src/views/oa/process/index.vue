@@ -114,8 +114,8 @@ const resetQuery = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.processonDefinitionId));
+const handleSelectionChange = (objs: { processonDefinitionId: string }[]) => {
+	selectObjs.value = objs.map(({ processonDefinitionId }) => processonDefinitionId);
 	multiple.value = !objs.length;
 };
 

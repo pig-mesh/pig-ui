@@ -118,8 +118,8 @@ const exportExcel = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.postId));
+const handleSelectionChange = (objs: { postId: string }[]) => {
+	selectObjs.value = objs.map(({ postId }) => postId);
 	multiple.value = !objs.length;
 };
 

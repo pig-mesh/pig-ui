@@ -19,8 +19,19 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'mp_wxaccount_add'" class="ml10" formDialogRef icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
+					<el-button v-auth="'mp_wxaccount_add'" class="ml10" icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
 						{{ $t('common.addBtn') }}
+					</el-button>
+					<el-button
+						plain
+						v-auth="'mp_wxaccount_add'"
+						class="ml10"
+						icon="Delete"
+						type="primary"
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+					>
+						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
 						:export="'app_social_details_del'"
@@ -67,31 +78,25 @@
 							</span>
 							<template #dropdown>
 								<el-dropdown-menu>
-									<el-dropdown-item
-										><el-button icon="edit-pen" v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)">{{
-											$t('common.editBtn')
-										}}</el-button></el-dropdown-item
-									>
 									<el-dropdown-item>
-										<el-button icon="delete" v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])">{{
-											$t('common.delBtn')
-										}}</el-button></el-dropdown-item
-									>
+										<el-button icon="edit-pen" v-auth="'mp_wxaccount_edit'" text type="primary" @click="formDialogRef.openDialog(scope.row.id)"
+											>{{ $t('common.editBtn') }}
+										</el-button>
+									</el-dropdown-item>
 									<el-dropdown-item>
-										<el-button icon="DArrowRight" v-auth="'mp_wxaccount_del'" text type="primary" @click="access(scope.row)"
-											>接入</el-button
-										></el-dropdown-item
-									>
-									<el-dropdown-item
-										><el-button icon="Grid" v-auth="'mp_wxaccount_del'" text type="primary" @click="generate(scope.row)"
-											>二维码</el-button
-										></el-dropdown-item
-									>
-									<el-dropdown-item
-										><el-button icon="refresh" v-auth="'mp_wxaccount_del'" text type="primary" @click="quota(scope.row)"
-											>quota</el-button
-										></el-dropdown-item
-									>
+										<el-button icon="delete" v-auth="'mp_wxaccount_del'" text type="primary" @click="handleDelete([scope.row.id])"
+											>{{ $t('common.delBtn') }}
+										</el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button icon="DArrowRight" v-auth="'mp_wxaccount_del'" text type="primary" @click="access(scope.row)">接入 </el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button icon="Grid" v-auth="'mp_wxaccount_del'" text type="primary" @click="generate(scope.row)">二维码 </el-button>
+									</el-dropdown-item>
+									<el-dropdown-item>
+										<el-button icon="refresh" v-auth="'mp_wxaccount_del'" text type="primary" @click="quota(scope.row)">quota </el-button>
+									</el-dropdown-item>
 								</el-dropdown-menu>
 							</template>
 						</el-dropdown>
@@ -121,7 +126,7 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
-const { proxy } = getCurrentInstance();
+
 const { copyText } = commonFunction();
 // 引入组件
 const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
@@ -161,10 +166,8 @@ const exportExcel = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	objs.forEach((val: any) => {
-		selectObjs.value.push(val.id);
-	});
+const handleSelectionChange = (objs: { id: string }[]) => {
+	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 

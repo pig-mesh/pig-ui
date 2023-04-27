@@ -167,8 +167,8 @@ const handleRefreshCache = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.publicId));
+const handleSelectionChange = (objs: { publicId: string }[]) => {
+	selectObjs.value = objs.map(({ publicId }) => publicId);
 	multiple.value = !objs.length;
 };
 

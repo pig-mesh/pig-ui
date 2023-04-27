@@ -93,8 +93,8 @@ const resetQuery = () => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.accessToken));
+const handleSelectionChange = (objs: { accessToken: string }[]) => {
+	selectObjs.value = objs.map(({ accessToken }) => accessToken);
 	multiple.value = !objs.length;
 };
 

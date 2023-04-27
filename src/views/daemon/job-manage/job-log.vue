@@ -94,8 +94,8 @@ const openDialog = (id: string) => {
 };
 
 // 多选事件
-const handleSelectionChange = (objs: any) => {
-	selectObjs.value.push(...objs.map((val: any) => val.jobLogId));
+const handleSelectionChange = (objs: { jobLogId: string }[]) => {
+	selectObjs.value = objs.map(({ jobLogId }) => jobLogId);
 	multiple.value = !objs.length;
 };
 
