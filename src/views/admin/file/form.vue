@@ -1,6 +1,6 @@
 <template>
 	<el-dialog title="上传文件" v-model="visible" :close-on-click-modal="false" draggable>
-		<upload @change="success" />
+		<upload @change="success" :model-value="fileList" />
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
@@ -15,8 +15,11 @@ const emit = defineEmits(['refresh']);
 
 // 定义变量内容
 const visible = ref(false);
+const fileList = ref([]);
+
 // 打开弹窗
 const openDialog = () => {
+	fileList.value = [];
 	visible.value = true;
 };
 
