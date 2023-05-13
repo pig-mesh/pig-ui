@@ -44,7 +44,7 @@
 		<div class="el-upload__tip">
 			<slot name="tip"></slot>
 		</div>
-		<el-image-viewer :teleported="true" v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl]" />
+		<el-image-viewer :teleported="true" v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl.includes('http') ? imageUrl : baseURL + imageUrl]" />
 	</div>
 </template>
 
