@@ -40,7 +40,7 @@
 				<el-table-column :label="$t('sysmenu.sortOrder')" prop="sortOrder" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.icon')" prop="icon" show-overflow-tooltip>
 					<template #default="scope">
-						<SvgIcon :name="scope.row.icon" />
+						<SvgIcon :name="scope.row.meta.icon" />
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.path')" prop="path" show-overflow-tooltip></el-table-column>
