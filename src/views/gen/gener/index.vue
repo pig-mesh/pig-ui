@@ -1,13 +1,13 @@
 <template>
 	<div class="layout-padding">
 		<el-card class="layout-padding-auto" shadow="hover">
-			<el-steps :active="active" finish-status="success" simple style="margin-top: 20px">
+			<el-steps :active="active" finish-status="success" simple>
 				<el-step title="基础信息" @click="go(0)" />
 				<el-step title="数据修改" @click="go(1)" />
 			</el-steps>
 		</el-card>
 
-		<el-card class="layout-padding-auto" style="margin-top: 20px" shadow="hover">
+		<el-card class="layout-padding-auto mt5" shadow="hover">
 			<!-- 生成基本信息设置 -->
 			<generator ref="generatorRef" :tableName="tableName" :dsName="dsName" v-if="active === 0" />
 			<!-- 字段编辑设置 -->

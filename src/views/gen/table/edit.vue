@@ -1,149 +1,125 @@
 <template>
 	<el-tabs v-model="activeName" @tab-click="handleClick">
+		<!-- 属性设置面板 -->
 		<el-tab-pane label="属性设置" name="field">
-			<vxe-table
-				ref="fieldTable"
-				align="center"
-				border
-				row-key
-				class="sortable-row-gen"
-				:data="fieldList"
-				:loading="loading"
-				:checkbox-config="{ checkStrictly: true }"
-				:edit-config="{ trigger: 'click', mode: 'cell' }"
-			>
-				<vxe-column type="seq" width="60"></vxe-column>
-				<vxe-column width="60" title="拖动">
-					<template #default>
-						<span class="drag-btn">
-							<i class="vxe-icon-sort"></i>
-						</span>
-					</template>
-					<template #header>
-						<el-tooltip class="item" effect="dark" content="按住后可以上下拖动排序" placement="top-start">
-							<i class="vxe-icon-question-circle-fill"></i>
-						</el-tooltip>
-					</template>
-				</vxe-column>
-				<vxe-column field="fieldName" title="字段名"></vxe-column>
-				<vxe-column field="fieldComment" title="说明" :edit-render="{ name: 'input' }"></vxe-column>
-				<vxe-column field="fieldType" title="字段类型"></vxe-column>
-				<vxe-column field="attrName" title="属性名" :edit-render="{ name: 'input' }"></vxe-column>
-				<vxe-column field="attrType" title="属性类型">
+			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" drag-sort placeholder="暂无数据">
+				<el-table-column label="字段名" prop="fieldName" show-overflow-tooltip></el-table-column>
+				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-select v-model="row.attrType" @change="handleChangeRow(row)">
-							<vxe-option v-for="item in typeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-						</vxe-select>
+						<el-input v-model="row.fieldComment" placeholder="请输入说明"></el-input>
 					</template>
-				</vxe-column>
-				<vxe-column field="autoFill" title="自动填充">
+				</el-table-column>
+				<el-table-column label="字段类型" prop="fieldType" show-overflow-tooltip></el-table-column>
+				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-select v-model="row.autoFill">
-							<vxe-option v-for="item in fillList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-						</vxe-select>
+						<el-input v-model="row.attrName" placeholder="请输入属性名"></el-input>
 					</template>
-				</vxe-column>
-				<vxe-column field="primaryPk" title="主键" width="60">
+				</el-table-column>
+				<el-table-column label="属性类型" prop="attrType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-checkbox v-model="row.primaryPk"></vxe-checkbox>
+						<el-select v-model="row.attrType" placeholder="请选择属性类型" @change="handleChangeRow(row)">
+							<el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
 					</template>
-				</vxe-column>
-				<vxe-column field="fieldDict" title="字典类型" width="140">
+				</el-table-column>
+				<el-table-column label="自动填充" prop="autoFill" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-select v-model="row.fieldDict" filterable clearable>
-							<vxe-option v-for="item in fieldDictList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-						</vxe-select>
+						<el-select v-model="row.autoFill" placeholder="请选择类型">
+							<el-option v-for="item in fillList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
 					</template>
-				</vxe-column>
-			</vxe-table>
+				</el-table-column>
+				<el-table-column label="主键" prop="primaryPk" width="60" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-checkbox v-model="row.primaryPk"></el-checkbox>
+					</template>
+				</el-table-column>
+				<el-table-column label="字典类型" prop="fieldDict" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable>
+							<el-option v-for="item in fieldDictList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</template>
+				</el-table-column>
+			</sc-form-table>
 		</el-tab-pane>
+		<!-- 列表设置面板 -->
 		<el-tab-pane label="列表查询" name="third">
-			<vxe-grid
-				ref="gridTable"
-				align="center"
-				border
-				row-key
-				:data="fieldList"
-				:loading="loading"
-				:columns="fieldListColumns"
-				:checkbox-config="{ checkStrictly: true }"
-				:edit-config="{ trigger: 'click', mode: 'cell' }"
-			>
-				<template #gridItem="{ row }">
-					<vxe-checkbox v-model="row.gridItem"></vxe-checkbox>
-				</template>
-				<template #gridSort="{ row }">
-					<vxe-checkbox v-model="row.gridSort"></vxe-checkbox>
-				</template>
-				<template #queryFormType="{ row }">
-					<vxe-select v-model="row.queryFormType">
-						<vxe-option v-for="item in queryTypeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-					</vxe-select>
-				</template>
-				<template #queryItem="{ row }">
-					<vxe-checkbox v-model="row.queryItem"></vxe-checkbox>
-				</template>
-				<template #queryType="{ row }">
-					<vxe-select v-model="row.queryType">
-						<vxe-option v-for="item in queryList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-					</vxe-select>
-				</template>
-			</vxe-grid>
+			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
+				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
+				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
+				<el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-checkbox v-model="row.gridItem"></el-checkbox>
+					</template>
+				</el-table-column>
+				<el-table-column label="是否排序" prop="gridSort" width="100" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-checkbox v-model="row.gridSort"></el-checkbox>
+					</template>
+				</el-table-column>
+				<el-table-column label="查询表单类型" prop="queryFormType" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-select v-model="row.queryFormType" placeholder="请选择查询表单类型">
+							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</template>
+				</el-table-column>
+				<el-table-column label="是否显示" prop="gridSort" width="100" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-checkbox v-model="row.queryItem"></el-checkbox>
+					</template>
+				</el-table-column>
+				<el-table-column label="查询方式" prop="queryType" show-overflow-tooltip>
+					<template #default="{ row }">
+						<el-select v-model="row.queryTypeList" placeholder="请选择查询方式">
+							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</template>
+				</el-table-column>
+			</sc-form-table>
 		</el-tab-pane>
 		<el-tab-pane label="表单页面" name="form">
-			<vxe-table
-				ref="formTable"
-				align="center"
-				border
-				row-key
-				:data="fieldList"
-				:loading="loading"
-				:checkbox-config="{ checkStrictly: true }"
-				:edit-config="{ trigger: 'click', mode: 'cell' }"
-			>
-				<vxe-column field="attrName" title="属性名"></vxe-column>
-				<vxe-column field="fieldComment" title="说明"></vxe-column>
-				<vxe-column field="formType" title="表单类型" width="200">
+			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
+				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
+				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
+				<el-table-column label="表单类型" prop="formType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-select v-model="row.formType">
-							<vxe-option v-for="item in formTypeList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-						</vxe-select>
+						<el-select v-model="row.formType" placeholder="请选择表单类型">
+							<el-option v-for="item in formTypeList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
 					</template>
-				</vxe-column>
-				<vxe-column field="formItem" title="表单显示" width="100">
+				</el-table-column>
+				<el-table-column label="是否显示" prop="formItem" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-checkbox v-model="row.formItem"></vxe-checkbox>
+						<el-checkbox v-model="row.formItem"></el-checkbox>
 					</template>
-				</vxe-column>
-				<vxe-column field="formRequired" title="表单必填" width="100">
+				</el-table-column>
+				<el-table-column label="表单必填" prop="formRequired" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-checkbox v-model="row.formRequired"></vxe-checkbox>
+						<el-checkbox v-model="row.formRequired"></el-checkbox>
 					</template>
-				</vxe-column>
-				<vxe-column field="formValidator" title="表单效验">
+				</el-table-column>
+				<el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
 					<template #default="{ row }">
-						<vxe-select v-model="row.formValidator">
-							<vxe-option v-for="item in formValidatorList" :key="item.value" :value="item.value" :label="item.label"></vxe-option>
-						</vxe-select>
+						<el-select v-model="row.formValidator" placeholder="请选择表单效验">
+							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
 					</template>
-				</vxe-column>
-			</vxe-table>
+				</el-table-column>
+			</sc-form-table>
 		</el-tab-pane>
 	</el-tabs>
 </template>
 
 <script setup lang="ts">
-import { TabsPaneContext } from 'element-plus/es';
-import Sortable from 'sortablejs';
 import { useTableFieldSubmitApi, useTableApi, fetchDictList } from '/@/api/gen/table';
 import { list } from '/@/api/gen/fieldtype';
-import { VxeTableInstance } from 'vxe-table';
+
+const scFormTable = defineAsyncComponent(() => import('/@/components/FormTable/index.vue'));
 
 const activeName = ref();
 const tableId = ref('');
-const fieldTable = ref<VxeTableInstance>();
-const formTable = ref<VxeTableInstance>();
-const gridTable = ref<VxeTableInstance>();
 
 const props = defineProps({
 	tableName: {
