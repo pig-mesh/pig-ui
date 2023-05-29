@@ -47,7 +47,9 @@ onUnmounted(() => {
 const initWebSocket = () => {
 	// ws地址
 	let host = window.location.host;
-	let wsUri = `ws://${host}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
+	//  baseURL
+	let baseURL = import.meta.env.VITE_API_URL;
+	let wsUri = `ws://${host}${baseURL}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
 	// 建立连接
 	state.webSocket = new WebSocket(wsUri);
 	// 连接成功
