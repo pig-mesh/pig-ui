@@ -47,15 +47,7 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.cronExpression')" prop="cronExpression">
-						<el-popover ref="cronPopover" :width="550" trigger="click" placement="left" :visible="popoverVisible">
-							<template #default>
-								<crontab @fill="changeCron" @hide="popoverVis(false)" :expression="form.cronExpression"></crontab>
-							</template>
-
-							<template #reference>
-								<el-input v-model="form.cronExpression" :placeholder="t('job.inputcronExpressionTip')" @click="popoverVis(true)" />
-							</template>
-						</el-popover>
+            <crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
 					</el-form-item>
 				</el-col>
 
