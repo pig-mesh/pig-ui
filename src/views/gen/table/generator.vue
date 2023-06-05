@@ -2,9 +2,18 @@
 	<el-form :model="dataForm" :rules="dataRules" label-width="120px" ref="dataFormRef" v-loading="loading">
 		<el-row>
 			<el-col :span="12" class="mb20">
-				<el-form-item label="表名" prop="tableName">
-					<el-input disabled placeholder="表名" v-model="dataForm.tableName"></el-input>
-				</el-form-item>
+				<el-row>
+					<el-col :span="20">
+						<el-form-item label="表名" prop="tableName">
+							<el-input disabled placeholder="表名" :value="tableNameStr"></el-input>
+						</el-form-item>
+					</el-col>
+					<el-col :span="4">
+						<el-button plain icon="Search" class="ml10" @click="childTableRef.openDialog(dataForm)"> 子表 </el-button>
+						<!-- 配置子表 -->
+						<child-table-config v-model="childForm" ref="childTableRef" />
+					</el-col>
+				</el-row>
 			</el-col>
 			<el-col :span="12" class="mb20">
 				<el-form-item label="说明" prop="tableComment">
@@ -83,6 +92,8 @@
 import { putObj, useTableApi } from '/@/api/gen/table';
 import { list as groupList } from '/@/api/gen/group';
 
+const ChildTableConfig = defineAsyncComponent(() => import('./child.vue'));
+
 const props = defineProps({
 	tableName: {
 		type: String,
@@ -96,6 +107,9 @@ const emit = defineEmits(['refreshDataList']);
 const visible = ref(false);
 const loading = ref(false);
 const dataFormRef = ref();
+const childTableRef = ref();
+const childForm = ref();
+const tableNameStr = ref('');
 const dataForm = reactive({
 	id: '',
 	generatorType: 0,
@@ -113,22 +127,10 @@ const dataForm = reactive({
 	tableName: '' as string,
 	dsName: '' as string,
 	style: '', //  默认风格 element-plus
+	childTableName: '',
 });
 
 const groupDataList = ref([]);
-
-const openDialog = (dName: string, tName: string) => {
-	visible.value = true;
-	dataForm.id = '';
-	dataForm.tableName = tName;
-	dataForm.dsName = dName;
-
-	// 重置表单数据
-	if (dataFormRef.value) {
-		dataFormRef.value.resetFields();
-	}
-};
-
 const getTable = (dsName: string, tableName: string) => {
 	loading.value = true;
 	useTableApi(dsName, tableName)
@@ -162,7 +164,7 @@ const submitHandle = async () => {
 	try {
 		await dataFormRef.value.validate();
 		loading.value = true;
-		await putObj(dataForm);
+		await putObj(Object.assign(dataForm, childForm.value));
 		visible.value = false;
 		emit('refreshDataList');
 		return dataForm;
@@ -179,6 +181,15 @@ const genGroupList = () => {
 	});
 };
 
+watch(
+	() => childForm,
+	() => {
+		const { childTableName } = childForm.value || {};
+		tableNameStr.value = childTableName ? `${props.tableName} + ${childTableName}` : props.tableName;
+	},
+	{ deep: true, immediate: true }
+);
+
 onMounted(() => {
 	// 重置表单数据
 	if (dataFormRef.value) {
@@ -193,7 +204,6 @@ onMounted(() => {
 });
 
 defineExpose({
-	openDialog,
 	submitHandle,
 });
 </script>

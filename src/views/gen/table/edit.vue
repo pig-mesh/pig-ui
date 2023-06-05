@@ -45,7 +45,7 @@
 		</el-tab-pane>
 		<!-- 列表设置面板 -->
 		<el-tab-pane label="列表查询" name="third">
-			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
+			<sc-form-table ref="gridTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
 				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
 				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
 				<el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
@@ -72,15 +72,15 @@
 				</el-table-column>
 				<el-table-column label="查询方式" prop="queryType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.queryTypeList" placeholder="请选择查询方式">
-							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
+						<el-select v-model="row.queryType" placeholder="请选择查询方式">
+							<el-option v-for="item in queryList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
 				</el-table-column>
 			</sc-form-table>
 		</el-tab-pane>
 		<el-tab-pane label="表单页面" name="form">
-			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
+			<sc-form-table ref="formTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
 				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
 				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
 				<el-table-column label="表单类型" prop="formType" show-overflow-tooltip>
@@ -115,6 +115,7 @@
 <script setup lang="ts">
 import { useTableFieldSubmitApi, useTableApi, fetchDictList } from '/@/api/gen/table';
 import { list } from '/@/api/gen/fieldtype';
+import Sortable from 'sortablejs';
 
 const scFormTable = defineAsyncComponent(() => import('/@/components/FormTable/index.vue'));
 
@@ -131,10 +132,7 @@ const props = defineProps({
 });
 
 const handleClick = (tab: TabsPaneContext) => {
-	if (tab.paneName !== 'field') {
-		formTable.value?.loadData(fieldList.value);
-		gridTable.value?.loadData(fieldList.value);
-	}
+
 };
 
 const visible = ref(false);
@@ -254,7 +252,7 @@ onMounted(() => {
 
 const rowDrop = () => {
 	nextTick(() => {
-		const el: any = window.document.querySelector('.body--wrapper>.vxe-table--body tbody');
+		const el: any = window.document.querySelector('#pane-field');
 		sortable.value = Sortable.create(el, {
 			handle: '.drag-btn',
 			onEnd: (e: any) => {

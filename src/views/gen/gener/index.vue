@@ -27,9 +27,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { useGeneratorCodeApi } from '/@/api/gen/table';
+import { useMessage } from '/@/hooks/message';
 import { downBlobFile } from '/@/utils/other';
 
+const { t } = useI18n();
 const Generator = defineAsyncComponent(() => import('../table/generator.vue'));
 const EditTable = defineAsyncComponent(() => import('../table/edit.vue'));
 const PreviewDialog = defineAsyncComponent(() => import('../table/preview.vue'));
@@ -72,7 +75,9 @@ const generatorHandle = async () => {
 
 	// 写入到指定目录
 	if (generatorType.value === 1) {
-		useGeneratorCodeApi([tableId.value].join(','));
+		useGeneratorCodeApi([tableId.value].join(',')).then(() => {
+			useMessage().success(t('common.optSuccessText'));
+		});
 	}
 };
 

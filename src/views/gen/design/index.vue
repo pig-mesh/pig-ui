@@ -4,7 +4,7 @@
 			<v-form-designer ref="vfDesignerRef" :banned-widgets="bannedWidgets" :designer-config="designerConfig">
 				<template #customToolButtons>
 					<el-button link type="primary" @click="saveJsonConfig">保存</el-button>
-					<el-button link type="primary" @click="exportJsonConfig">导出</el-button>
+					<el-button link type="primary" @click="exportSfcConfig">导出</el-button>
 					<el-button link type="primary" @click="formDialogRef.openDialog(dsName, tableName)">历史</el-button>
 				</template>
 			</v-form-designer>
@@ -14,6 +14,7 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
 import { fetchFormById, useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
 import { useMessage } from '/@/hooks/message';
 import { handleBlobFile } from '/@/utils/other';
@@ -66,6 +67,7 @@ onMounted(() => {
 	importJsonConfig();
 });
 
+const { t } = useI18n();
 const tableName = ref();
 const dsName = ref();
 // 根据当前表，获取json配置信息
@@ -95,14 +97,13 @@ const saveJsonConfig = () => {
 			dsName,
 			tableName,
 			formInfo: JSON.stringify(formJson),
+		}).then(() => {
+			useMessage().success(t('common.optSuccessText'));
 		});
 	}
 };
 
-// 使用解构赋值，使代码更加简洁易读；
-// 在对象属性名和变量名一致时，可以使用对象属性的简写方式；
-// 使用模板字面量和变量名插值，使字符串拼接更加直观。
-const exportJsonConfig = async () => {
+const exportSfcConfig = async () => {
 	try {
 		const { tableName, dsName } = route.query;
 		if (!tableName || !dsName) throw new Error('表名或数据源名称不能为空');

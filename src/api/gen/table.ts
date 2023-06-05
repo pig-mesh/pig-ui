@@ -46,6 +46,14 @@ export const useTableApi = (dsName: string, tableName: string) => {
 	return request.get('/gen/table/' + dsName + '/' + tableName);
 };
 
+export const useListTableApi = (dsName: string) => {
+	return request.get('/gen/table/list/' + dsName);
+};
+
+export const useListTableColumnApi = (dsName: string, tableName: string) => {
+	return request.get('/gen/table/column/' + dsName + '/' + tableName);
+};
+
 export const useTableFieldSubmitApi = (dsName: string, tableName: string, fieldList: any) => {
 	return request.put('/gen/table/field/' + dsName + '/' + tableName, fieldList);
 };
