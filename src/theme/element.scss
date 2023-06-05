@@ -376,8 +376,3 @@
 .el-empty {
 	--el-empty-padding: 0 0 !important;
 }
-
-.el-button {
-	// 防止被tailwindcss默认样式覆盖
-	background-color: var(--el-button-bg-color, var(--el-color-white));
-}

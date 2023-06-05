@@ -93,7 +93,7 @@ try {
 		i18n.global.mergeLocaleMessage('zh-cn', messageLocal['zh-cn']);
 		i18n.global.mergeLocaleMessage('en', messageLocal['en']);
 		i18n.global.locale.value = themeConfig.value.globalI18n;
-	}, 50);
+	}, 10);
 } catch (e) {
 	// 考虑请求不过去没有后台的情况下导致的i18n失效
 }
