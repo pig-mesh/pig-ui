@@ -1,4 +1,5 @@
 import request from '/@/utils/request';
+import axios from 'axios';
 
 export function fetchList(query?: Object) {
 	return request({
@@ -47,18 +48,19 @@ export function putObj(obj?: Object) {
 	});
 }
 
-export function info() {
-	return request({
-		url: '/admin/i18n/info',
-		method: 'get',
-	});
-}
-
 export function refreshCache() {
 	return request({
 		url: '/admin/i18n/sync',
 		method: 'put',
 	});
+}
+
+/**
+ *  注意这里使用原声axios对象进行操作，request 实例中依赖i18n 所以还没有初始化会报错
+ * @returns
+ */
+export function info() {
+	return axios.get(import.meta.env.VITE_API_URL + '/admin/i18n/info');
 }
 
 export function validateName(rule: any, value: any, callback: any, isEdit: boolean) {

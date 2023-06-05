@@ -39,6 +39,15 @@ for (const path in pages) {
 	else itemize[key![2]] = pages[path];
 }
 
+// 后台加载的国际化数据进行合并
+try {
+	const infoI18n = await info();
+	itemize['en'].push(...infoI18n.data.data['en']);
+	itemize['zh-cn'].push(...infoI18n.data.data['zh-cn']);
+} catch (e) {
+	// 考虑请求不过去没有后台的情况下导致的i18n失效
+}
+
 // 合并数组对象（非标准数组对象，数组中对象的每项 key、value 都不同）
 function mergeArrObj<T>(list: T, key: string) {
 	let obj = {};
@@ -71,29 +80,3 @@ export const i18n = createI18n({
 	fallbackLocale: zhcnLocale.name,
 	messages,
 });
-
-const messageLocal = {};
-
-const itemizeLocal = { en: [] as any[], 'zh-cn': [] as any[] };
-
-/**
- * 异步请求数据并更新 i18n 相关的信息。
- */
-try {
-	setTimeout(async () => {
-		const infoI18n = await info();
-		itemizeLocal['zh-cn'].push(...infoI18n.data['zh-cn']);
-		itemizeLocal.en.push(...infoI18n.data.en);
-		for (const key in itemizeLocal) {
-			messageLocal[key] = {
-				name: key,
-				...mergeArrObj(itemizeLocal, key),
-			};
-		}
-		i18n.global.mergeLocaleMessage('zh-cn', messageLocal['zh-cn']);
-		i18n.global.mergeLocaleMessage('en', messageLocal['en']);
-		i18n.global.locale.value = themeConfig.value.globalI18n;
-	}, 10);
-} catch (e) {
-	// 考虑请求不过去没有后台的情况下导致的i18n失效
-}
