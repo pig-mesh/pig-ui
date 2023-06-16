@@ -127,7 +127,7 @@ export function validateDictItemLabel(rule: any, value: any, callback: any, type
 		return callback();
 	}
 
-	getItemDetails({ type: type, label: value }).then((response) => {
+	getItemDetails({ dictType: type, label: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
 			callback(new Error('标签已经存在'));
