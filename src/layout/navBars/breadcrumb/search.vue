@@ -66,11 +66,7 @@ const menuSearch = (queryString: string, cb: Function) => {
 // 菜单搜索过滤
 const createFilter = (queryString: string) => {
 	return (restaurant: RouteItem) => {
-		return (
-			restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-			restaurant.meta!.title!.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-			t(restaurant.meta!.title!).indexOf(queryString.toLowerCase()) > -1
-		);
+		return restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 || t(restaurant!.name!).indexOf(queryString.toLowerCase()) > -1;
 	};
 };
 // 初始化菜单数据
