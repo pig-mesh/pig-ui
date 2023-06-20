@@ -54,6 +54,7 @@ module.exports = {
 		'vue/no-template-key': 'off',
 		'vue/no-v-html': 'off',
 		'vue/comment-directive': 'off',
+		'vue/no-mutating-props': 'off',
 		'vue/no-parsing-error': 'off',
 		'vue/no-deprecated-v-on-native-modifier': 'off',
 		'vue/multi-word-component-names': 'off',
@@ -72,5 +73,6 @@ module.exports = {
 		'no-case-declarations': 'off',
 		'no-console': 'error',
 		'no-redeclare': 'off',
+		'no-mixed-spaces-and-tabs': 'off',
 	},
 };

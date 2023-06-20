@@ -1,5 +1,5 @@
 <template>
-	<el-tabs v-model="activeName" @tab-click="handleClick">
+	<el-tabs v-model="activeName">
 		<!-- 属性设置面板 -->
 		<el-tab-pane label="属性设置" name="field">
 			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" drag-sort placeholder="暂无数据">
@@ -103,7 +103,7 @@
 				<el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
 					<template #default="{ row }">
 						<el-select v-model="row.formValidator" placeholder="请选择表单效验">
-							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
+							<el-option v-for="item in formValidatorList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
 				</el-table-column>
@@ -130,10 +130,6 @@ const props = defineProps({
 		type: String,
 	},
 });
-
-const handleClick = (tab: TabsPaneContext) => {
-
-};
 
 const visible = ref(false);
 
@@ -308,16 +304,6 @@ const submitHandle = () => {
 		});
 	});
 };
-
-const fieldListColumns = reactive([
-	{ field: 'attrName', title: '属性名' },
-	{ field: 'fieldComment', title: '说明' },
-	{ field: 'gridItem', title: '列表显示', slots: { default: 'gridItem' } },
-	{ field: 'gridSort', title: '是否排序', slots: { default: 'gridSort' } },
-	{ field: 'queryFormType', title: '查询表单类型', slots: { default: 'queryFormType' } },
-	{ field: 'queryItem', title: '查询显示', slots: { default: 'queryItem' } },
-	{ field: 'queryType', title: '查询方式', slots: { default: 'queryType' } },
-]);
 
 defineExpose({
 	openDialog,

@@ -116,7 +116,6 @@ const queryRef = ref();
 const showSearch = ref(true);
 // 多选变量
 const selectObjs = ref([]) as any;
-const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
@@ -173,12 +172,6 @@ const resetQuery = () => {
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/mp/fans/export', state.queryForm, 'fans.xlsx');
-};
-
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
-	selectObjs.value = objs.map(({ id }) => id);
-	multiple.value = !objs.length;
 };
 
 // 删除操作

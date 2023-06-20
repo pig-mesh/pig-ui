@@ -231,7 +231,7 @@ const onSubmit = async () => {
  * @param {string} id - 用户 ID
  * @return {Promise} - 包含用户数据的 Promise 对象
  */
-const getUserData = async (id:string) => {
+const getUserData = async (id: string) => {
 	try {
 		loading.value = true;
 		const { data } = await getObj(id);

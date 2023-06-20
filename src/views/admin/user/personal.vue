@@ -304,7 +304,7 @@ const initSocialList = () => {
 
 const Unbinding = (type) => {
 	UnbindingUser(type)
-		.then((res) => {
+		.then(() => {
 			useMessage().success('解绑成功');
 		})
 		.catch((err) => {

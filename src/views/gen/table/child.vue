@@ -41,7 +41,7 @@ import { useListTableApi, useListTableColumnApi } from '/@/api/gen/table';
 
 const emit = defineEmits(['update:modelValue']);
 
-const props = defineProps({
+defineProps({
 	modelValue: Object,
 });
 

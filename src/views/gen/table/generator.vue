@@ -91,6 +91,7 @@
 <script lang="ts" setup>
 import { putObj, useTableApi } from '/@/api/gen/table';
 import { list as groupList } from '/@/api/gen/group';
+import { Local } from '/@/utils/storage';
 
 const ChildTableConfig = defineAsyncComponent(() => import('./child.vue'));
 
@@ -138,6 +139,15 @@ const getTable = (dsName: string, tableName: string) => {
 			Object.assign(dataForm, res.data);
 			let list = res.data.groupList;
 			dataForm.style = list[0].id;
+
+			// 如果是保存路径的形式，有限使用本地配置项
+			const frontendPath = Local.get('frontendPath');
+			const backendPath = Local.get('backendPath');
+
+			if (frontendPath && backendPath) {
+				dataForm.frontendPath = frontendPath;
+				dataForm.backendPath = backendPath;
+			}
 		})
 		.finally(() => {
 			loading.value = false;
@@ -171,6 +181,11 @@ const submitHandle = async () => {
 	} catch {
 		return Promise.reject();
 	} finally {
+		//保存路径至Local 中方便下次使用
+		if (dataForm.generatorType === 1) {
+			Local.set('frontendPath', dataForm.frontendPath);
+			Local.set('backendPath', dataForm.backendPath);
+		}
 		loading.value = false;
 	}
 };

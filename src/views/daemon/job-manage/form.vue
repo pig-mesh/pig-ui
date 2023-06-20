@@ -47,7 +47,7 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.cronExpression')" prop="cronExpression">
-            <crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
+						<crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
 					</el-form-item>
 				</el-col>
 
@@ -88,7 +88,6 @@ const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
-const cronPopover = ref();
 const visible = ref(false);
 const loading = ref(false);
 
@@ -111,10 +110,6 @@ const form = reactive({
 	jobExecuteStatus: '',
 	remark: '',
 });
-
-const changeCron = (e: string) => {
-	form.cronExpression = e;
-};
 
 const popoverVis = (bol: boolean) => {
 	popoverVisible.value = bol;

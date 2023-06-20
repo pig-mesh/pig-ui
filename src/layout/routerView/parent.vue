@@ -43,10 +43,7 @@ const state = reactive<ParentViewState>({
 const setTransitionName = computed(() => {
 	return themeConfig.value.animation;
 });
-// 获取组件缓存列表(name值)
-const getKeepAliveNames = computed(() => {
-	return themeConfig.value.isTagsview ? cachedViews.value : state.keepAliveNameList;
-});
+
 // 设置 iframe 显示/隐藏
 const isIframePage = computed(() => {
 	return route.meta.isIframe;

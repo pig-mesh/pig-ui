@@ -102,8 +102,8 @@
 
 <script lang="ts" name="systemWxMsg" setup>
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObjs, fetchList } from '/@/api/mp/wx-fans-msg';
-import { useMessage, useMessageBox } from '/@/hooks/message';
+import { fetchList } from '/@/api/mp/wx-fans-msg';
+import { useMessage } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { fetchAccountList } from '/@/api/mp/wx-account';

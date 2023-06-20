@@ -29,7 +29,6 @@
 </template>
 
 <script setup lang="ts" name="systemFieldTypeDialog">
-import { rule } from '/@/utils/validate';
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj, validateColumnType } from '/@/api/gen/fieldtype';
 import { useI18n } from 'vue-i18n';
