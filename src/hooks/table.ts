@@ -127,8 +127,8 @@ export function useTable(options?: BasicTableProps) {
 					...state.queryForm,
 					current: state.pagination?.current,
 					size: state.pagination?.size,
-					descs: state.descs,
-					ascs: state.ascs,
+					descs: state.descs?.join(','),
+					ascs: state.ascs?.join(','),
 				});
 
 				// 设置表格展示的数据数组
