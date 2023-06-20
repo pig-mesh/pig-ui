@@ -275,6 +275,7 @@ export default {
 									y: 5.0,
 								}),
 								secretKey.value
+								// eslint-disable-next-line no-mixed-spaces-and-tabs
 						  )
 						: JSON.stringify({ x: moveLeftDistance, y: 5.0 }),
 					token: backToken.value,
@@ -305,6 +306,7 @@ export default {
 											y: 5.0,
 										}),
 									secretKey.value
+									// eslint-disable-next-line no-mixed-spaces-and-tabs
 							  )
 							: backToken.value + '---' + JSON.stringify({ x: moveLeftDistance, y: 5.0 });
 						setTimeout(() => {

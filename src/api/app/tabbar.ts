@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 
 export function fetchList(query?: Object) {
 	return request({
-		url: '/app/appArticle/page',
+		url: '/app/appTabbar/list',
 		method: 'get',
 		params: query,
 	});
@@ -10,7 +10,7 @@ export function fetchList(query?: Object) {
 
 export function addObj(obj?: Object) {
 	return request({
-		url: '/app/appArticle',
+		url: '/app/appTabbar',
 		method: 'post',
 		data: obj,
 	});
@@ -18,14 +18,14 @@ export function addObj(obj?: Object) {
 
 export function getObj(id?: string) {
 	return request({
-		url: `/app/appArticle/details/${id}/1`,
+		url: '/app/appTabbar/' + id,
 		method: 'get',
 	});
 }
 
 export function delObjs(ids?: Object) {
 	return request({
-		url: '/app/appArticle',
+		url: '/app/appTabbar',
 		method: 'delete',
 		data: ids,
 	});
@@ -33,7 +33,7 @@ export function delObjs(ids?: Object) {
 
 export function putObj(obj?: Object) {
 	return request({
-		url: '/app/appArticle',
+		url: '/app/appTabbar',
 		method: 'put',
 		data: obj,
 	});

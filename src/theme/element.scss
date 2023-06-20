@@ -376,3 +376,9 @@
 .el-empty {
 	--el-empty-padding: 0 0 !important;
 }
+
+// 防止被tailwindcss默认样式覆盖
+svg {
+	display: inline;
+	vertical-align: baseline;
+}

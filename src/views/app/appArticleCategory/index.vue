@@ -89,7 +89,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {
@@ -103,12 +103,6 @@ const resetQuery = () => {
 // 导出excel
 const exportExcel = () => {
 	downBlobFile('/app/appArticleCategory/export', state.queryForm, 'appArticleCategory.xlsx');
-};
-
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
-	selectObjs.value = objs.map(({ id }) => id);
-	multiple.value = !objs.length;
 };
 
 // 删除操作

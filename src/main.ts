@@ -12,7 +12,7 @@ import 'element-plus/dist/index.css';
 import VForm3 from 'form-designer-plus'; //引入VForm3库
 import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
-import { ElementIcons, Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor, Tip } from '/@/components/index';
+import { ElementIcons, Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor, Tip, DelWrap } from '/@/components/index';
 import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
 import 'highlight.js/styles/atom-one-dark.css';
 import 'highlight.js/lib/common';
@@ -33,6 +33,7 @@ app.component('UploadFile', UploadFile);
 app.component('UploadImg', UploadImg);
 app.component('Editor', Editor);
 app.component('Tip', Tip);
+app.component('DelWrap', DelWrap);
 // 导入布局插件
 app.component('Splitpanes', Splitpanes);
 app.component('Pane', Pane);

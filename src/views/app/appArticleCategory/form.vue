@@ -36,7 +36,6 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/app/appArticleCategory';
-import { rule } from '/@/utils/validate';
 const emit = defineEmits(['refresh']);
 
 // 定义变量内容

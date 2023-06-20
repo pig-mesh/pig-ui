@@ -19,16 +19,16 @@
 				<img :src="imageUrl.includes('http') ? imageUrl : baseURL + imageUrl" class="upload-image" />
 				<div class="upload-handle" @click.stop>
 					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
-						<el-icon><Edit /></el-icon>
-						<span>编辑</span>
+						<el-icon :size="props.iconSize"><Edit /></el-icon>
+						<span v-if="!props.iconSize">编辑</span>
 					</div>
 					<div class="handle-icon" @click="imgViewVisible = true">
-						<el-icon><ZoomIn /></el-icon>
-						<span>查看</span>
+						<el-icon :size="props.iconSize"><ZoomIn /></el-icon>
+						<span v-if="!props.iconSize">查看</span>
 					</div>
 					<div class="handle-icon" @click="deleteImg" v-if="!self_disabled">
-						<el-icon><Delete /></el-icon>
-						<span>删除</span>
+						<el-icon :size="props.iconSize"><Delete /></el-icon>
+						<span v-if="!props.iconSize">删除</span>
 					</div>
 				</div>
 			</template>
@@ -44,7 +44,12 @@
 		<div class="el-upload__tip">
 			<slot name="tip"></slot>
 		</div>
-		<el-image-viewer :teleported="true" v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl.includes('http') ? imageUrl : baseURL + imageUrl]" />
+		<el-image-viewer
+			:teleported="true"
+			v-if="imgViewVisible"
+			@close="imgViewVisible = false"
+			:url-list="[imageUrl.includes('http') ? imageUrl : baseURL + imageUrl]"
+		/>
 	</div>
 </template>
 
@@ -65,6 +70,7 @@ interface UploadFileProps {
 	height?: string; // 组件高度 ==> 非必传（默认为 150px）
 	width?: string; // 组件宽度 ==> 非必传（默认为 150px）
 	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
+	iconSize?: number;
 }
 
 // 接受父组件参数

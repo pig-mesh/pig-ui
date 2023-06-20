@@ -5,7 +5,7 @@
 import { provinceAndCityData, provinceAndCityDataPlus, regionData, regionDataPlus } from '/@/utils/chinaArea';
 
 const emit = defineEmits(['update:value', 'change']);
-const optionsData = ref()
+const optionsData = ref();
 const props = defineProps({
 	// 当前的值
 	modelValue: String,
@@ -16,13 +16,13 @@ const props = defineProps({
 	},
 	plus: {
 		type: Boolean,
-		default: false
-	}
+		default: false,
+	},
 });
 
 const selectedOptions = computed({
 	get: () => {
-		return props.modelValue?.split(',')
+		return props.modelValue?.split(',');
 	},
 	set: (val) => {
 		emit('update:value', val?.join(','));
@@ -30,8 +30,8 @@ const selectedOptions = computed({
 });
 
 const handleChange = (value: String[]) => {
-	emit('change', value.join(','))
-}
+	emit('change', value.join(','));
+};
 
 onMounted(() => {
 	const { plus, type } = props;
@@ -41,6 +41,4 @@ onMounted(() => {
 		optionsData.value = type === 2 ? provinceAndCityData : regionData;
 	}
 });
-
-
 </script>

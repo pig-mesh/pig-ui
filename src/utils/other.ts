@@ -368,6 +368,13 @@ const other = {
 	resolveAllEunuchNodeId: (json: any[], idArr: any[], temp: any[] = []) => {
 		return resolveAllEunuchNodeId(json, idArr, temp);
 	},
+	getNonDuplicateID: () => {
+		return getNonDuplicateID();
+	},
+
+	addUnit: (value: string | number, unit = 'px') => {
+		return addUnit(value, unit);
+	},
 };
 
 export function getQueryString(url: string, paraName: string) {
@@ -474,6 +481,26 @@ const adaptationUrl = (originUrl?: string) => {
 	}
 	// 转为 /admin 路由前缀的请求
 	return `/admin/${originUrl?.split('/').splice(2).join('/')}`;
+};
+
+/**
+ * @description 获取不重复的id
+ * @param length { Number } id的长度
+ * @return { String } id
+ */
+const getNonDuplicateID = (length = 8) => {
+	let idStr = Date.now().toString(36);
+	idStr += Math.random().toString(36).substring(3, length);
+	return idStr;
+};
+
+/**
+ * @description 添加单位
+ * @param {String | Number} value 值 100
+ * @param {String} unit 单位 px em rem
+ */
+const addUnit = (value: string | number, unit = 'px') => {
+	return !Object.is(Number(value), NaN) ? `${value}${unit}` : value;
 };
 
 // 统一批量导出

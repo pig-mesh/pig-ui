@@ -64,7 +64,6 @@
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList, delObjs } from '/@/api/app/appArticle';
 import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 // 定义查询字典
 
