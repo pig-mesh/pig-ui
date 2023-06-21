@@ -32,13 +32,21 @@ service.interceptors.request.use(
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
-			config.headers!['Authorization'] = `Bearer ${token}`;
+			config.headers![CommonHeaderEnum.AUTHORIZATION] = `Bearer ${token}`;
 		}
 
 		// 统一增加TENANT-ID请求头
 		const tenantId = Session.getTenant();
 		if (tenantId) {
-			config.headers!['TENANT-ID'] = tenantId;
+			config.headers![CommonHeaderEnum.TENANT_ID] = tenantId;
+		}
+
+		// 请求报文加密
+		if (config.headers![CommonHeaderEnum.ENC_FLAG]) {
+			const enc = other.encryption(JSON.stringify(config.data), import.meta.env.VITE_PWD_ENC_KEY);
+			config.data = {
+				encryption: enc,
+			};
 		}
 
 		// 自动适配单体和微服务架构不同的URL
@@ -62,6 +70,14 @@ const handleResponse = (response: AxiosResponse<any>) => {
 	if (response.data.code === 1) {
 		throw response.data;
 	}
+
+	// 针对密文返回解密
+	if (response.data.encryption) {
+		const originData = JSON.parse(other.decryption(response.data.encryption, import.meta.env.VITE_PWD_ENC_KEY));
+		response.data = originData;
+		return response.data;
+	}
+
 	return response.data;
 };
 
@@ -81,6 +97,13 @@ service.interceptors.response.use(handleResponse, (error) => {
 	}
 	return Promise.reject(error.response.data);
 });
+
+// 常用header
+export enum CommonHeaderEnum {
+	'TENANT_ID' = 'TENANT-ID',
+	'ENC_FLAG' = 'Enc-Flag',
+	'AUTHORIZATION' = 'Authorization',
+}
 
 // 导出 axios 实例
 export default service;
