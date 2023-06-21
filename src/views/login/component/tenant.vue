@@ -6,8 +6,8 @@
 			</el-button>
 			<template #dropdown>
 				<el-dropdown-menu>
-					<el-dropdown-item v-for="item in tenantList" :key="item.id" :command="item" :style="selectBgColor(item.id)">
-						{{ item.name }}
+					<el-dropdown-item v-for="item in tenantList" :key="item.id" :command="item">
+						{{ item.name }} <el-icon class="ml8" v-if="selectBgFlag(item.id)"><Check /></el-icon>
 					</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -107,10 +107,8 @@ const guide = () => {
  * @param {string} id - 租户id
  * @returns {Object} - 返回包含'background-color'和color属性的对象
  */
-const selectBgColor = (id: string) => {
-	if (id === Session.getTenant()) {
-		return { 'background-color': 'var(--el-dropdown-menuItem-hover-fill)', color: 'var(--el-dropdown-menuItem-hover-color)' };
-	}
+const selectBgFlag = (id: string) => {
+	return id === Session.getTenant() ? 'Check' : '';
 };
 
 /**
