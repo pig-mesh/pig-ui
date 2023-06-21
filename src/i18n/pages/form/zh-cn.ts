@@ -4,6 +4,7 @@ export default {
 		queryBtn: '查询',
 		addBtn: '新 增',
 		editBtn: '修 改',
+		expandBtn: '展开/折叠',
 		delBtn: '删除',
 		detailBtn: '详情',
 		refreshCacheBtn: '刷新缓存',

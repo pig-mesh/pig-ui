@@ -18,6 +18,7 @@
 					<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
+					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }} </el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml10"
@@ -27,6 +28,7 @@
 				</div>
 			</el-row>
 			<el-table
+				ref="tableRef"
 				:data="state.dataList"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 				row-key="path"
@@ -98,8 +100,10 @@ import { useI18n } from 'vue-i18n';
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
 // 定义变量内容
+const tableRef = ref();
 const menuDialogRef = ref();
 const showSearch = ref(true);
+const isExpand = ref(false);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
@@ -122,6 +126,22 @@ const onOpenEditMenu = (type: string, row: any) => {
 //是否禁用删除
 const deleteMenuDisabled = (row: any) => {
 	return (row.children || []).length > 0;
+};
+
+// 展开折叠树
+const handleExpand = async () => {
+	isExpand.value = !isExpand.value;
+	const dataList = await pageList();
+	toggleExpand(dataList.data, isExpand.value);
+};
+
+const toggleExpand = (children: any[], unfold = true) => {
+	for (const key in children) {
+		tableRef.value?.toggleRowExpansion(children[key], unfold);
+		if (children[key].children) {
+			toggleExpand(children[key].children!, unfold);
+		}
+	}
 };
 
 // 删除操作

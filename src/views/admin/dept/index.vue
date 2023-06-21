@@ -21,6 +21,7 @@
 					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
 					</el-button>
+					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }} </el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						:export="'sys_dept_add'"
@@ -32,6 +33,7 @@
 				</div>
 			</el-row>
 			<el-table
+				ref="tableRef"
 				:data="state.dataList"
 				v-loading="state.loading"
 				style="width: 100%"
@@ -77,14 +79,17 @@ import { deptTree, delObj } from '/@/api/admin/dept';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { downBlobFile } from '/@/utils/other';
+import { data } from 'autoprefixer';
 
 // 引入组件
 const DeptForm = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
 // 定义变量内容
+const tableRef = ref();
 const deptDialogRef = ref();
 const excelUploadRef = ref();
 const showSearch = ref(true);
+const isExpand = ref(false);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: deptTree,
@@ -96,6 +101,22 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 const { getDataList, tableStyle } = useTable(state);
+
+// 展开折叠树
+const handleExpand = async () => {
+	isExpand.value = !isExpand.value;
+	const dataList = await deptTree();
+	toggleExpand(dataList.data, isExpand.value);
+};
+
+const toggleExpand = (children: any[], unfold = true) => {
+	for (const key in children) {
+		tableRef.value?.toggleRowExpansion(children[key], unfold);
+		if (children[key].children) {
+			toggleExpand(children[key].children!, unfold);
+		}
+	}
+};
 
 // 导出excel
 const exportExcel = () => {
