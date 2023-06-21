@@ -2,6 +2,7 @@ import request from '/@/utils/request';
 import { Session } from '/@/utils/storage';
 import { validateNull } from '/@/utils/validate';
 import { useUserInfo } from '/@/stores/userInfo';
+import other from '/@/utils/other';
 
 /**
  * https://www.ietf.org/rfc/rfc6749.txt
@@ -16,12 +17,14 @@ const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
 export const login = (data: any) => {
 	const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT);
 	Session.set('basicAuth', basicAuth);
-	const { username, password, randomStr, code, grant_type, scope } = data;
+	// 密码加密
+	const encPassword = other.encryption(data.password, import.meta.env.VITE_PWD_ENC_KEY);
+	const { username, randomStr, code, grant_type, scope } = data;
 	return request({
 		url: '/auth/oauth2/token',
 		method: 'post',
 		params: { username, randomStr, code, grant_type, scope },
-		data: { password: password },
+		data: { password: encPassword },
 		headers: {
 			skipToken: true,
 			Authorization: basicAuth,

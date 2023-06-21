@@ -27,19 +27,12 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @param {Object} data - 登录数据
 		 * @returns {Promise<Object>}
 		 */
-		async login(data) {
+		async login(data:any) {
 			data.grant_type = 'password';
 			data.scope = 'server';
 
-			// 密码加密
-			const user = other.encryption({
-				data: data,
-				key: import.meta.env.VITE_PWD_ENC_KEY,
-				param: ['password'],
-			});
-
 			return new Promise((resolve, reject) => {
-				login(user)
+				login(data)
 					.then((res) => {
 						// 存储token 信息
 						Session.set('token', res.access_token);
