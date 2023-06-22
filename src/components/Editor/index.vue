@@ -1,10 +1,10 @@
 <template>
-	<div class="editor-container">
-		<Toolbar :editor="editorRef" :mode="mode" />
+	<div class="flex flex-col border border-br" :style="styles">
+		<Toolbar class="border-b border-br" :editor="editorRef" :mode="mode" />
 		<Editor
+			class="flex-1 overflow-y-auto"
 			:mode="mode"
 			:defaultConfig="state.editorConfig"
-			:style="{ height }"
 			v-model="state.editorVal"
 			@onCreated="handleCreated"
 			@onChange="handleChange"
@@ -14,11 +14,12 @@
 
 <script setup lang="ts" name="wngEditor">
 import '@wangeditor/editor/dist/css/style.css';
-import { reactive, shallowRef, watch, onBeforeUnmount } from 'vue';
+import { reactive, shallowRef, watch, onBeforeUnmount, CSSProperties } from 'vue';
 // @ts-ignore
 import { IDomEditor } from '@wangeditor/editor';
 import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
 import { Session } from '/@/utils/storage';
+import other from '/@/utils/other';
 const { proxy } = getCurrentInstance();
 
 // 定义父组件传过来的值
@@ -42,7 +43,12 @@ const props = defineProps({
 	// 高度
 	height: {
 		type: String,
-		default: () => '310px',
+		default: () => '310',
+	},
+	// 宽度
+	width: {
+		type: String,
+		default: () => 'auto',
 	},
 	// 双向绑定，用于获取 editor.getHtml()
 	getHtml: String,
@@ -87,21 +93,29 @@ const state = reactive({
 	editorVal: props.getHtml,
 });
 
+const styles = computed<CSSProperties>(() => ({
+	height: other.addUnit(props.height),
+	width: other.addUnit(props.width),
+}));
+
 // 编辑器回调函数
 const handleCreated = (editor: IDomEditor) => {
 	editorRef.value = editor;
 };
+
 // 编辑器内容改变时
 const handleChange = (editor: IDomEditor) => {
 	emit('update:getHtml', editor.getHtml());
 	emit('update:getText', editor.getText());
 };
+
 // 页面销毁时
 onBeforeUnmount(() => {
 	const editor = editorRef.value;
 	if (editor == null) return;
 	editor.destroy();
 });
+
 // 监听是否禁用改变
 watch(
 	() => props.disable,

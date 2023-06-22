@@ -1,8 +1,8 @@
 <template>
 	<div class="layout-padding-auto layout-padding-view">
 		<el-card shadow="never">
-			<el-form ref="dataFormRef" class="ls-form" :model="form" label-width="85px" :rules="dataRules">
-				<div class="xl:flex">
+			<el-form ref="dataFormRef" class="form" :model="form" label-width="85px" :rules="dataRules">
+				<div class="flex">
 					<div>
 						<el-form-item label="文章标题" prop="title">
 							<div class="w-80">
@@ -77,7 +77,7 @@
 							</el-col>
 						</el-row>
 						<el-form-item label="文章内容" required prop="content">
-							<editor v-model:get-html="form.content" />
+							<editor v-model:get-html="form.content" :height="500" :width="600" />
 						</el-form-item>
 						<div style="text-align: center">
 							<el-button type="primary" @click="onSubmit">保存</el-button>
