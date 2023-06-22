@@ -1,8 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-scrollbar class="main">
-			<iframe :src="src" class="iframe" v-if="isMicro === 'true'" />
-			<span v-else>单体架构暂不支持报表设计器</span>
+			<iframe src="/ext/jimu" class="iframe" />
 		</el-scrollbar>
 	</div>
 </template>
