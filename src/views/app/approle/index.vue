@@ -67,10 +67,6 @@
 						<el-button icon="delete" @click="handleDelete([scope.row.roleId])" text type="primary" v-auth="'app_approle_del'"
 							>{{ $t('common.delBtn') }}
 						</el-button>
-
-						<el-button icon="turn-off" @click="permessionRef.openDialog(scope.row)" text type="primary" v-auth="'app_approle_perm'"
-							>{{ $t('approle.permissionTip') }}
-						</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -86,8 +82,6 @@
 			temp-url="/admin/sys-file/local/file/approle.xlsx"
 			url="/admin/approle/import"
 		/>
-		<!-- 授权 -->
-		<permession ref="permessionRef" />
 	</div>
 </template>
 
@@ -99,12 +93,10 @@ import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const RoleDialog = defineAsyncComponent(() => import('./form.vue'));
-const Permession = defineAsyncComponent(() => import('./permession.vue'));
 const { t } = useI18n();
 
 // 定义变量内容
 const roleDialogRef = ref();
-const permessionRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
