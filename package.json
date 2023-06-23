@@ -26,7 +26,7 @@
 		"echarts": "^5.4.1",
 		"vue-echarts": "^6.2.3",
 		"element-plus": "2.3.1",
-		"form-designer-plus": "~0.1.0-beta.1684733206",
+		"form-designer-plus": "^0.1.5",
 		"highlight.js": "^11.7.0",
 		"js-cookie": "^3.0.1",
 		"mitt": "^3.0.0",
