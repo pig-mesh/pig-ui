@@ -146,6 +146,10 @@ const dictType = ref([
 		label: '本级',
 		value: '3',
 	},
+  {
+    label: '本人',
+    value: '4',
+  },
 ]);
 
 //  table hook
