@@ -43,7 +43,7 @@
 			>
 				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" label="#" width="40" />
-				<el-table-column prop="cid" label="分类" show-overflow-tooltip />
+				<el-table-column prop="cname" label="分类" show-overflow-tooltip />
 				<el-table-column prop="title" label="标题" show-overflow-tooltip />
 				<el-table-column prop="author" label="作者" show-overflow-tooltip />
 				<el-table-column prop="visit" label="浏览" show-overflow-tooltip />

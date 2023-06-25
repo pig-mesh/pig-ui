@@ -1546,10 +1546,10 @@ form-data@^4.0.0:
     combined-stream "^1.0.8"
     mime-types "^2.1.12"
 
-form-designer-plus@~0.1.0-beta.1684733206:
-  version "0.1.0-beta.1684733206"
-  resolved "https://registry.yarnpkg.com/form-designer-plus/-/form-designer-plus-0.1.0-beta.1684733206.tgz#ef8b83097e67c38a810736b7712e32d0e81105ad"
-  integrity sha512-K7DQAcIEGQnJt3heKD+9LcRw0QeaYlxeVYyBVYUnR1UBsgMDCdFLjX6rge8Kv/t8Fd5j7btuTKkjamt1obVUdQ==
+form-designer-plus@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/form-designer-plus/-/form-designer-plus-0.1.5.tgz#5b1dacf17e91dc3f7bde05206c678c039334d286"
+  integrity sha512-PRiwfwTPHxzFYPtXhGG5IE4KezM4orNuruaGBWVK+qh8BE3UaTM2glL99Fiy3f8a4lEyxpiQH67KIB0j/T5xiw==
 
 fraction.js@^4.2.0:
   version "4.2.0"

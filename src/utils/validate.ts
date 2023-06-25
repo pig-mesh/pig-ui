@@ -148,14 +148,15 @@ export const rule = {
 	},
 
 	regExp(rule, value, callback) {
-		//空值不校验
 		if (validateNull(value) || value.length <= 0) {
 			callback();
 			return;
 		}
-		const pattern = eval(rule.regExp);
+
+		const pattern = new RegExp(rule.regExp);
+
 		if (!pattern.test(value)) {
-			let errTxt = rule.errorMsg || 'invalid value';
+			const errTxt = rule.errorMsg || 'invalid value';
 			callback(new Error(errTxt));
 		} else {
 			callback();
@@ -187,19 +188,19 @@ export const getRegExp = function (validatorName) {
 	return commonRegExp[validatorName];
 };
 
-const validateFn = function (validatorName, rule, value, callback, defaultErrorMsg) {
-	//空值不校验
-	if (validateNull(value) || value.length <= 0) {
-		callback();
-		return;
-	}
+const validateFn = (validatorName, rule, value, callback, defaultErrorMsg) => {
+  if (validateNull(value) || value.length <= 0) {
+    callback();
+    return;
+  }
 
-	const reg = eval(getRegExp(validatorName));
+  const reg = new RegExp(getRegExp(validatorName));
 
-	if (!reg.test(value)) {
-		let errTxt = rule.errorMsg || defaultErrorMsg;
-		callback(new Error(errTxt));
-	} else {
-		callback();
-	}
+  if (!reg.test(value)) {
+    const errTxt = rule.errorMsg || defaultErrorMsg;
+    callback(new Error(errTxt));
+  } else {
+    callback();
+  }
 };
+
