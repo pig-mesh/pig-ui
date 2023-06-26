@@ -223,7 +223,7 @@ body,
 }
 .flex-center {
 	@extend .flex;
-	flex-direction: column;
+	flex-direction: column !important;
 	width: 100%;
 	overflow: hidden;
 }
