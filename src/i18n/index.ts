@@ -2,7 +2,6 @@ import { createI18n } from 'vue-i18n';
 import pinia from '/@/stores/index';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import { info } from '/@/api/admin/i18n';
 
 // 定义语言国际化内容
 
@@ -39,14 +38,6 @@ for (const path in pages) {
 	else itemize[key![2]] = pages[path];
 }
 
-// 后台加载的国际化数据进行合并
-try {
-	const infoI18n = await info();
-	itemize['en'].push(...infoI18n.data.data['en']);
-	itemize['zh-cn'].push(...infoI18n.data.data['zh-cn']);
-} catch (e) {
-	// 考虑请求不过去没有后台的情况下导致的i18n失效
-}
 
 // 合并数组对象（非标准数组对象，数组中对象的每项 key、value 都不同）
 function mergeArrObj<T>(list: T, key: string) {

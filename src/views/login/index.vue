@@ -1,9 +1,5 @@
 <template>
 	<div class="select-none">
-		<div class="tenant">
-			<!--  租户选择 -->
-			<tenant />
-		</div>
 		<div class="mini_qr">
 			<!-- 扫码体验移动端 -->
 			<img :src="miniQr" />
@@ -26,10 +22,6 @@
 						<!-- 手机号登录 -->
 						<el-tab-pane :label="$t('label.two2')" name="mobile">
 							<Mobile @signInSuccess="signInSuccess" />
-						</el-tab-pane>
-						<!-- 社交登录 -->
-						<el-tab-pane :label="$t('label.three3')" name="social">
-							<Social @signInSuccess="signInSuccess" />
 						</el-tab-pane>
 						<!-- 注册 -->
 						<el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
@@ -57,9 +49,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
 const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
-const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
-const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();

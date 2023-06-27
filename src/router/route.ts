@@ -69,15 +69,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		meta: {
 			isAuth: false,
 		},
-	},
-	{
-		path: '/authredirect',
-		name: 'staticRoutes.authredirect',
-		component: () => import('/@/views/login/component/authredirect.vue'),
-		meta: {
-			isAuth: false,
-		},
-	},
+	}
 ];
 
 /**
