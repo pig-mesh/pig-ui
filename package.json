@@ -1,9 +1,9 @@
 {
-	"name": "pigx-ui",
-	"version": "5.1.0",
+	"name": "pig-ui",
+	"version": "3.7.0",
 	"description": "PIGCLOUD微服务开发平台",
 	"author": "pig4cloud",
-	"license": "不对外分发 pig4cloud 版权所有，请购买商业版权",
+	"license": "Apache-2.0",
 	"scripts": {
 		"dev": "vite --force",
 		"build": "vite build",

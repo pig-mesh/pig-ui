@@ -4,16 +4,16 @@ services:
     build:
       context: .
     restart: always
-    container_name: pigx-ui
-    image: pigx-ui
+    container_name: pig-ui
+    image: pig-ui
     networks:
-      - pigx_default
+      - pig_default
     external_links:
-      - pigx-gateway
+      - pig-gateway
     ports:
       - 80:80
 
-# 加入到后端网络， 默认为 pigx_default  | docker network ls   查看
+# 加入到后端网络， 默认为 pig_default  | docker network ls   查看
 networks:
-  pigx_default:
+  pig_default:
     external: true
