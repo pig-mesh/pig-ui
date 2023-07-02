@@ -40,12 +40,14 @@ for (const path in pages) {
 }
 
 // 后台加载的国际化数据进行合并
-try {
-	const infoI18n = await info();
-	itemize['en'].push(...infoI18n.data.data['en']);
-	itemize['zh-cn'].push(...infoI18n.data.data['zh-cn']);
-} catch (e) {
-	// 考虑请求不过去没有后台的情况下导致的i18n失效
+async function mergeInfoI18n() {
+	try {
+		const infoI18n = await info();
+		itemize['en'].push(...infoI18n.data.data['en']);
+		itemize['zh-cn'].push(...infoI18n.data.data['zh-cn']);
+	} catch (e) {
+		// 考虑请求不过去没有后台的情况下导致的i18n失效
+	}
 }
 
 // 合并数组对象（非标准数组对象，数组中对象的每项 key、value 都不同）
@@ -57,20 +59,24 @@ function mergeArrObj<T>(list: T, key: string) {
 	return obj;
 }
 
-for (const key in itemize) {
-	messages[key] = {
-		name: key,
-		el: element[key].el,
-		...mergeArrObj(itemize, key),
-	};
-}
+(async () => {
+	await mergeInfoI18n();
+
+	for (const key in itemize) {
+		messages[key] = {
+			name: key,
+			el: element[key].el,
+			...mergeArrObj(itemize, key),
+		};
+	}
+})();
 
 // 读取 pinia 默认语言
 const stores = useThemeConfig(pinia);
 const { themeConfig } = storeToRefs(stores);
 
 // 导出语言国际化
-export const i18n = createI18n({
+const i18n = createI18n({
 	legacy: false,
 	silentTranslationWarn: true,
 	missingWarn: false,
@@ -80,3 +86,5 @@ export const i18n = createI18n({
 	fallbackLocale: zhcnLocale.name,
 	messages,
 });
+
+export { i18n };
