@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<el-scrollbar class="main">
-			<iframe src="/ext/jimu" class="iframe" />
+			<iframe :src="src" class="iframe" />
 		</el-scrollbar>
 	</div>
 </template>
