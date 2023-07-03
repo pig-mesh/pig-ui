@@ -1,20 +1,29 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog :title="state.dialog.title" width="30%" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
-			<el-tree
-				v-loading="loading"
-				ref="menuTree"
-				:data="state.treeData"
-				:default-checked-keys="state.checkedKeys"
-				:check-strictly="false"
-				:props="state.defaultProps"
-				class="filter-tree"
-				node-key="id"
-				highlight-current
-				show-checkbox
-				default-expand-all
-			/>
-
+		<el-dialog width="30%" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
+			<template #header>
+				<div class="flex items-center justify-between">
+					<div>{{ state.dialog.title }}</div>
+					<div class="flex mr-16">
+						<el-checkbox label="展开/折叠" @change="handleExpand" />
+						<el-checkbox label="全选/不全选" @change="handleSelectAll" />
+					</div>
+				</div>
+			</template>
+			<el-scrollbar class="h-[400px] sm:h-[600px]">
+				<el-tree
+					v-loading="loading"
+					ref="menuTree"
+					:data="state.treeData"
+					:default-checked-keys="state.checkedKeys"
+					:check-strictly="!checkStrictly"
+					:props="state.defaultProps"
+					class="filter-tree"
+					node-key="id"
+					highlight-current
+					show-checkbox
+				/>
+			</el-scrollbar>
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="state.dialog.isShowDialog = false">取 消</el-button>
@@ -32,10 +41,12 @@ import { useMessage } from '/@/hooks/message';
 import { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import other from '/@/utils/other';
+import { CheckboxValueType } from 'element-plus';
 
 const { t } = useI18n();
 
 const menuTree = ref();
+const checkStrictly = ref(true);
 const loading = ref(false);
 
 const state = reactive({
@@ -75,6 +86,22 @@ const openDialog = (row: any) => {
 			loading.value = false;
 		});
 	state.dialog.isShowDialog = true;
+};
+
+const handleExpand = (check: CheckboxValueType) => {
+	const treeList = state.treeData;
+	for (let i = 0; i < treeList.length; i++) {
+		//@ts-ignore
+		menuTree.value.store.nodesMap[treeList[i].id].expanded = check;
+	}
+};
+
+const handleSelectAll = (check: CheckboxValueType) => {
+	if (check) {
+		menuTree.value?.setCheckedKeys(state.treeData.map((item) => item.id));
+	} else {
+		menuTree.value?.setCheckedKeys([]);
+	}
 };
 
 // 提交授权数据
