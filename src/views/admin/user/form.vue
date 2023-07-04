@@ -255,7 +255,9 @@ const getDeptData = () => {
 	deptTree().then((res) => {
 		deptData.value = res.data;
 		// 默认选择第一个
-		dataForm.deptId = res.data[0].id;
+    if (!dataForm.userId) {
+      dataForm.deptId = res.data[0].id;
+    }
 	});
 };
 
@@ -264,7 +266,9 @@ const getPostData = () => {
 	postList().then((res) => {
 		postData.value = res.data;
 		// 默认选择第一个
-		dataForm.post = [res.data[0].postId];
+    if (!dataForm.userId) {
+      dataForm.post = [res.data[0].postId];
+    }
 	});
 };
 // 角色数据
@@ -272,7 +276,9 @@ const getRoleData = () => {
 	roleList().then((res) => {
 		roleData.value = res.data;
 		// 默认选择第一个
-		dataForm.role = [res.data[0].roleId];
+    if (!dataForm.userId) {
+      dataForm.role = [res.data[0].roleId];
+    }
 	});
 };
 
