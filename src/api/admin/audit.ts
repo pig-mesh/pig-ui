@@ -17,7 +17,7 @@ export function getObj(id?: string) {
 
 export function delObjs(ids?: Object) {
 	return request({
-		url: '/admin/audit',
+		url: '/admin/audit/delete',
 		method: 'delete',
 		data: ids,
 	});
