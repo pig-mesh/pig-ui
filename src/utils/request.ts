@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Session } from '/@/utils/storage';
-import { useMessageBox } from '/@/hooks/message';
+import {useMessage, useMessageBox} from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
 
@@ -86,6 +86,11 @@ const handleResponse = (response: AxiosResponse<any>) => {
  */
 service.interceptors.response.use(handleResponse, (error) => {
 	const status = Number(error.response.status) || 200;
+	if (status === 424) {
+		useMessage().error("演示环境，仅供预览")
+		return
+	}
+
 	if (status === 424) {
 		useMessageBox()
 			.confirm('令牌状态已过期，请点击重新登录')
