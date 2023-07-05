@@ -86,7 +86,7 @@ const handleResponse = (response: AxiosResponse<any>) => {
  */
 service.interceptors.response.use(handleResponse, (error) => {
 	const status = Number(error.response.status) || 200;
-	if (status === 424) {
+	if (status === 423) {
 		useMessage().error("演示环境，仅供预览")
 		return
 	}
