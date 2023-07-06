@@ -27,7 +27,7 @@
 
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('leave.content')" prop="content">
-						<editor :placeholder="t('leave.inputContentTip')" v-model:get-html="form.content" />
+						<editor :placeholder="t('leave.inputContentTip')" v-model:get-html="form.content" v-if="visible" />
 					</el-form-item>
 				</el-col>
 			</el-row>
