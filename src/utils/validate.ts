@@ -175,32 +175,31 @@ export const rule = {
 
 export const getRegExp = function (validatorName) {
 	const commonRegExp = {
-		number: '/^[-]?\\d+(\\.\\d+)?$/',
-		letter: '/^[A-Za-z]+$/',
-		letterAndNumber: '/^[A-Za-z0-9]+$/',
-		mobilePhone: '/^[1][3-9][0-9]{9}$/',
-		letterStartNumberIncluded: '/^[A-Za-z]+[A-Za-z\\d]*$/',
-		noChinese: '/^[^\u4e00-\u9fa5]+$/',
-		chinese: '/^[\u4e00-\u9fa5]+$/',
-		email: '/^([-_A-Za-z0-9.]+)@([_A-Za-z0-9]+\\.)+[A-Za-z0-9]{2,3}$/',
-		url: '/^(http:\\/\\/|https:\\/\\/)[a-z0-9]+([\\-\\.]{1}[a-z0-9]+)*\\.[a-z]{2,5}(:[0-9]{1,5})?(\\/.*)?|^((http:\\/\\/|https:\\/\\/)?([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(:\\d{0,5})?(\\/.*)?$/',
+		number: '^[-]?\\d+(\\.\\d+)?$',
+		letter: '^[A-Za-z]+$',
+		letterAndNumber: '^[A-Za-z0-9]+$',
+		mobilePhone: '^[1][3-9][0-9]{9}$',
+		letterStartNumberIncluded: '^[A-Za-z]+[A-Za-z\\d]*$',
+		noChinese: '^[^\u4e00-\u9fa5]+$',
+		chinese: '^[\u4e00-\u9fa5]+$',
+		email: '^([-_A-Za-z0-9.]+)@([_A-Za-z0-9]+\\.)+[A-Za-z0-9]{2,3}$',
+		url: '(https?|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]'
 	};
 	return commonRegExp[validatorName];
 };
 
 const validateFn = (validatorName, rule, value, callback, defaultErrorMsg) => {
-  if (validateNull(value) || value.length <= 0) {
-    callback();
-    return;
-  }
+	if (validateNull(value) || value.length <= 0) {
+		callback();
+		return;
+	}
 
-  const reg = new RegExp(getRegExp(validatorName));
+	const reg = new RegExp(getRegExp(validatorName));
 
-  if (!reg.test(value)) {
-    const errTxt = rule.errorMsg || defaultErrorMsg;
-    callback(new Error(errTxt));
-  } else {
-    callback();
-  }
+	if (!reg.test(value)) {
+		const errTxt = rule.errorMsg || defaultErrorMsg;
+		callback(new Error(errTxt));
+	} else {
+		callback();
+	}
 };
-

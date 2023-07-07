@@ -27,28 +27,6 @@
 						></el-input>
 					</el-form-item>
 				</el-col>
-				<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24" class="mb20">
-					<el-form-item :label="$t('sysrole.menu_authority')" prop="dsType">
-						<el-select :placeholder="$t('sysrole.please_select')" class="w100" clearable v-model="form.dsType">
-							<el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in dictType" />
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :span="24" class="mb20" v-if="form.dsType === 1">
-					<el-form-item>
-						<el-tree
-							:check-strictly="true"
-							:data="dataForm.deptData"
-							:default-checked-keys="dataForm.checkedDsScope"
-							:props="dataForm.deptProps"
-							default-expand-all
-							highlight-current
-							node-key="id"
-							ref="deptTreeRef"
-							show-checkbox
-						/>
-					</el-form-item>
-				</el-col>
 			</el-row>
 		</el-form>
 		<template #footer>
@@ -84,7 +62,6 @@ const form = reactive({
 	roleName: '',
 	roleCode: '',
 	roleDesc: '',
-	dsType: 0,
 	dsScope: '',
 });
 
@@ -122,33 +99,8 @@ const dataRules = ref({
 			trigger: 'blur',
 		},
 	],
-	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],
-	dsType: [{ required: true, message: '请选择数据权限类型', trigger: 'blur' }],
-	menu_authority: [{ required: true, message: '数据权限不能为空', trigger: 'blur' }],
+	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }]
 });
-
-const dictType = ref([
-	{
-		label: '全部',
-		value: 0,
-	},
-	{
-		label: '自定义',
-		value: 1,
-	},
-	{
-		label: '本级及子级',
-		value: 2,
-	},
-	{
-		label: '本级',
-		value: 3,
-	},
-	{
-		label: '本人',
-		value: 4,
-	},
-]);
 
 // 打开弹窗
 const openDialog = (id: string) => {
@@ -170,12 +122,6 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	if (form.dsType === 1) {
-		form.dsScope = deptTreeRef.value.getCheckedKeys().join(',');
-	} else {
-		form.dsScope = '';
-	}
-
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 

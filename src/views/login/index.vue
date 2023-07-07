@@ -1,10 +1,5 @@
 <template>
 	<div class="select-none">
-		<div class="mini_qr">
-			<!-- 扫码体验移动端 -->
-			<img :src="miniQr" />
-			<p>{{ t('scan.wechatApp') }}</p>
-		</div>
 		<img :src="bg" class="wave" />
 		<div class="flex-c absolute right-5 top-3"></div>
 		<div class="login-container">

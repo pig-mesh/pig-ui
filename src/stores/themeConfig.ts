@@ -101,7 +101,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启水印
 			isWartermark: true,
 			// 水印文案
-			wartermarkText: 'PigX',
+			wartermarkText: 'Pig',
 
 			/**
 			 * 其它设置
@@ -133,9 +133,9 @@ export const useThemeConfig = defineStore('themeConfig', {
 			 * 全局网站标题 / 副标题
 			 */
 			// 网站主标题（菜单导航、浏览器当前网页标题、登录form顶部右侧）
-			globalTitle: 'PIGX ADMIN',
+			globalTitle: 'PIG ADMIN',
 			// 网站副标题（登录左侧底部页顶部文字）
-			globalViceTitle: 'PigX 快速开发框架',
+			globalViceTitle: 'Pig 快速开发框架',
 			// 网站副标题（登录页顶部文字）
 			globalViceTitleMsg: '专注、免费、开源、维护、解疑',
 			// 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn

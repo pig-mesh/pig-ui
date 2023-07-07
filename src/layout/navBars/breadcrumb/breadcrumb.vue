@@ -11,11 +11,11 @@
 				<el-breadcrumb-item v-for="(v, k) in state.breadcrumbList" :key="!v.meta.tagsViewName ? v.name : v.meta.tagsViewName">
 					<span v-if="k === state.breadcrumbList.length - 1" class="layout-navbars-breadcrumb-span">
 						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />
-						<div v-if="!v.meta.tagsViewName">{{ $t(v.name) }}</div>
+						<div v-if="!v.meta.tagsViewName">{{ other.setMenuI18n(v) }}</div>
 						<div v-else>{{ v.meta.tagsViewName }}</div>
 					</span>
 					<a v-else @click.prevent="onBreadcrumbClick(v)">
-						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />{{ $t(v.name) }}
+						<SvgIcon :name="v.meta.icon" class="layout-navbars-breadcrumb-iconfont" v-if="themeConfig.isBreadcrumbIcon" />{{ other.setMenuI18n(v) }}
 					</a>
 				</el-breadcrumb-item>
 			</transition-group>
@@ -96,7 +96,7 @@ const initRouteSplit = (path: string) => {
 	if (route.name === 'router.home' || (route.name === 'staticRoutes.notFound' && state.breadcrumbList.length > 1)) {
 		state.breadcrumbList.splice(0, state.breadcrumbList.length - 1);
 	} else if (state.breadcrumbList.length > 0) {
-		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
+		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setMenuI18n(<RouteToFrom>route);
 	}
 };
 // 页面加载时

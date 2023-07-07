@@ -35,12 +35,6 @@ service.interceptors.request.use(
 			config.headers![CommonHeaderEnum.AUTHORIZATION] = `Bearer ${token}`;
 		}
 
-		// 统一增加TENANT-ID请求头
-		const tenantId = Session.getTenant();
-		if (tenantId) {
-			config.headers![CommonHeaderEnum.TENANT_ID] = tenantId;
-		}
-
 		// 请求报文加密
 		if (config.headers![CommonHeaderEnum.ENC_FLAG]) {
 			const enc = other.encryption(JSON.stringify(config.data), import.meta.env.VITE_PWD_ENC_KEY);

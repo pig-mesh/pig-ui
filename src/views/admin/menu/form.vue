@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" :destroy-on-close="true" draggable>
 		<el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
@@ -30,6 +30,11 @@
 						<el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
 					</el-form-item>
 				</el-col>
+        <el-col :span="12" class="mb20">
+          <el-form-item :label="$t('sysmenu.enName')" prop="enName">
+            <el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputEnNameTip')"></el-input>
+          </el-form-item>
+        </el-col>
 				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
 					<el-form-item :label="$t('sysmenu.path')" prop="path">
 						<el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')" />
@@ -105,6 +110,7 @@ const state = reactive({
 	ruleForm: {
 		menuId: '',
 		name: '',
+    enName: '',
 		permission: '',
 		parentId: '',
 		icon: '',

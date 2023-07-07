@@ -44,13 +44,12 @@
 				<el-table-column :label="t('table.tableName')" prop="tableName" show-overflow-tooltip />
 				<el-table-column :label="t('table.tableDesc')" prop="tableComment" show-overflow-tooltip />
 				<el-table-column :label="t('table.createTime')" prop="createTime" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="250">
+				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
 						<el-button icon="Refresh" @click="syncTable(scope.row)" text type="primary">
 							{{ $t('gen.syncBtn') }}
 						</el-button>
 						<el-button icon="FolderOpened" @click="openGen(scope.row)" text type="primary">{{ $t('gen.genBtn') }} </el-button>
-						<el-button icon="MagicStick" @click="openDesign(scope.row)" text type="primary">{{ $t('gen.designBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -114,16 +113,6 @@ const openGen = (row) => {
 				},
 			});
 		});
-};
-
-const openDesign = (row) => {
-	router.push({
-		path: '/gen/design/index',
-		query: {
-			tableName: row.tableName,
-			dsName: state.queryForm.dsName,
-		},
-	});
 };
 
 // 同步表数据

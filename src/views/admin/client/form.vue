@@ -60,47 +60,6 @@
 					</el-form-item>
 				</el-col>
 			</el-row>
-
-			<el-collapse v-model="collapseActive">
-				<el-collapse-item name="1" title="安全属性">
-					<template #title>
-						<el-icon class="header-icon">
-							<info-filled />
-						</el-icon>
-						安全属性
-					</template>
-
-					<el-row>
-						<el-col :span="12" class="mb20">
-							<el-form-item :label="t('client.captchaFlag')" prop="captchaFlag">
-								<el-radio-group v-model="form.captchaFlag">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in captcha_flag_types">
-										{{ item.label }}
-									</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12" class="mb20">
-							<el-form-item :label="t('client.encFlag')" prop="encFlag">
-								<el-radio-group v-model="form.encFlag">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in enc_flag_types">
-										{{ item.label }}
-									</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-						<el-col :span="12" class="mb20">
-							<el-form-item :label="t('client.onlineQuantity')" prop="onlineQuantity">
-								<el-radio-group v-model="form.onlineQuantity">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in enc_flag_types">
-										{{ item.label }}
-									</el-radio>
-								</el-radio-group>
-							</el-form-item>
-						</el-col>
-					</el-row>
-				</el-collapse-item>
-			</el-collapse>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
@@ -129,11 +88,9 @@ const visible = ref(false);
 const loading = ref(false);
 
 // 定义字典
-const { grant_types, common_status, captcha_flag_types, enc_flag_types } = useDict(
+const { grant_types, common_status } = useDict(
 	'grant_types',
 	'common_status',
-	'captcha_flag_types',
-	'enc_flag_types'
 );
 
 // 提交表单数据
@@ -158,8 +115,6 @@ const form = reactive({
 	captchaFlag: '1',
 	encFlag: '1',
 });
-
-const collapseActive = ref('1');
 
 // 定义校验规则
 const dataRules = ref({
@@ -187,9 +142,6 @@ const dataRules = ref({
 		{ required: true, message: '刷新时效不能为空', trigger: 'blur' },
 		{ type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur' },
 	],
-	captchaFlag: [{ required: true, message: '是否开启验证码校验', trigger: 'blur' }],
-	encFlag: [{ required: true, message: '是否开启密码加密传输', trigger: 'blur' }],
-	onlineQuantity: [{ required: true, message: '是否允许同时在线', trigger: 'blur' }],
 	autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
 	webServerRedirectUri: [{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
 });

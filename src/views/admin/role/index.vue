@@ -49,11 +49,6 @@
 				<el-table-column prop="roleName" :label="$t('sysrole.roleName')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="roleCode" :label="$t('sysrole.roleCode')" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="roleDesc" :label="$t('sysrole.roleDesc')" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="data_authority" :label="$t('sysrole.data_authority')" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="dictType" :value="scope.row.dsType"></dict-tag>
-					</template>
-				</el-table-column>
 				<el-table-column prop="createTime" :label="$t('sysrole.createTime')" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
@@ -128,29 +123,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	descs: ['create_time'],
 });
-
-const dictType = ref([
-	{
-		label: '全部',
-		value: '0',
-	},
-	{
-		label: '自定义',
-		value: '1',
-	},
-	{
-		label: '本级及子级',
-		value: '2',
-	},
-	{
-		label: '本级',
-		value: '3',
-	},
-  {
-    label: '本人',
-    value: '4',
-  },
-]);
 
 //  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);

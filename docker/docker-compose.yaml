@@ -1,6 +1,6 @@
 version: '3'
 services:
-  pigx-ui:
+  pig-ui:
     build:
       context: .
     restart: always
