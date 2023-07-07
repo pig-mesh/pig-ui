@@ -77,6 +77,7 @@ const dataRules = ref({
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.leaveId = '';
+  form.content = '';
 
 	// 重置表单数据
 
