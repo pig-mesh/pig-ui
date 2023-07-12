@@ -17,8 +17,11 @@ const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
 export const login = (data: any) => {
     const basicAuth = 'Basic ' + window.btoa(import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT);
     Session.set('basicAuth', basicAuth);
+    let encPassword = data.password;
     // 密码加密
-    const encPassword = other.encryption(data.password, import.meta.env.VITE_PWD_ENC_KEY);
+    if (import.meta.env.VITE_PWD_ENC_KEY) {
+        encPassword = other.encryption(data.password, import.meta.env.VITE_PWD_ENC_KEY);
+    }
     const {username, randomStr, code, grant_type, scope} = data;
     return request({
         url: '/auth/oauth2/token',
