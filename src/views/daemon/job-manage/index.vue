@@ -255,7 +255,7 @@ const handleRunJob = async (row) => {
 		getDataList();
 		useMessage().success(t('common.optSuccessText'));
 	} catch (err: any) {
-		useMessage().error(err.msg);
+		useMessage().error('运行失败');
 	}
 };
 
@@ -278,7 +278,7 @@ const handleDelete = async (row) => {
 		getDataList();
 		useMessage().success(t('common.delSuccessText'));
 	} catch (error: any) {
-		useMessage().error(error.msg);
+		useMessage().error('删除失败');
 	}
 };
 </script>
