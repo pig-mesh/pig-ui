@@ -16,8 +16,10 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
 import { fetchFormById, useFormConfSaveApi, useGeneratorVFormApi, useGeneratorVFormSfcApi } from '/@/api/gen/table';
-import { useMessage } from '/@/hooks/message';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { handleBlobFile } from '/@/utils/other';
+import mittBus from '/@/utils/mitt';
+
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
 const route = useRoute();
@@ -78,6 +80,13 @@ const importJsonConfig = () => {
 		useGeneratorVFormApi(dsName, tableName).then((res) => {
 			vfDesignerRef.value.loadJson(res);
 		});
+	} else {
+		useMessageBox()
+			.confirm('表单初始化失败，请重新选择表点击设计打开')
+			.then(() => {
+				// 关闭当前tab
+				mittBus.emit('onCurrentContextmenuClick', Object.assign({}, { contextMenuClickId: 1, ...route }));
+			});
 	}
 };
 
