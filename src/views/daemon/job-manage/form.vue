@@ -157,7 +157,7 @@ const onSubmit = async () => {
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
-		useMessage().error(err.msg);
+		useMessage().error('任务异常');
 	} finally {
 		loading.value = false;
 	}
