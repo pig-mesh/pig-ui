@@ -5,10 +5,12 @@ import router from './router';
 import { directive } from '/@/directive';
 import { i18n } from '/@/i18n';
 import other from '/@/utils/other';
-import '/@/theme/index.scss';
 
 import ElementPlus from 'element-plus';
+import '/@/theme/tailwind.css';
 import 'element-plus/dist/index.css';
+import '/@/theme/index.scss';
+
 import VForm3 from 'form-designer-plus'; //引入VForm3库
 import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
