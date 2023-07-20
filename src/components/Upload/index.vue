@@ -11,6 +11,7 @@
 			:limit="limit"
 			:on-error="handleUploadError"
 			:on-remove="handleRemove"
+			:on-preview="handlePreview"
 			:data="data"
 			:auto-upload="autoUpload"
 			:on-success="handleUploadSuccess"
@@ -143,7 +144,7 @@ const handleBeforeUpload = (file: File) => {
 // 上传成功回调
 function handleUploadSuccess(res: any, file: any) {
 	if (res.code === 0) {
-		uploadList.value.push({ name: res.data.fileName, url: res.data.url });
+		uploadList.value.push({ name: file.name, url: res.data.url });
 		uploadedSuccessfully();
 	} else {
 		number.value--;
@@ -168,6 +169,10 @@ const handleRemove = (file: any) => {
 	fileList.value = fileList.value.filter((f) => !(f === file.url));
 	emit('change', listToString(fileList.value));
 	emit('update:modelValue', listToString(fileList.value));
+};
+
+const handlePreview = (file: any) => {
+	other.downBlobFile(file.url, {}, file.name);
 };
 
 /**

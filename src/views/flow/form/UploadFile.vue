@@ -2,7 +2,7 @@
 	<div>
 		<upload-file
 			v-model="form.props.value"
-			:disabled="form.perm === 'R'"
+			:disabled="form.perm === 'E'"
 			:fileSize="form.props.maxSize"
 			:limit="form.props.max"
 			:fileType="form.props.suffixArray"
