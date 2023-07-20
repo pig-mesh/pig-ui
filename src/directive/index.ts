@@ -12,4 +12,10 @@ export function directive(app: App) {
 	authDirective(app);
 	// 按钮波浪指令
 	wavesDirective(app);
+	// focus
+	app.directive('focus', {
+		mounted(el) {
+			el.focus();
+		},
+	});
 }
