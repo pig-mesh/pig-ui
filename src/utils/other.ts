@@ -395,6 +395,9 @@ const other = {
 	addUnit: (value: string | number, unit = 'px') => {
 		return addUnit(value, unit);
 	},
+	validateNull: (value: any) => {
+		return validateNull(value);
+	},
 };
 
 export function getQueryString(url: string, paraName: string) {
