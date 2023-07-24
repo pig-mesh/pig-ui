@@ -7,7 +7,6 @@
 </template>
 <script lang="ts" setup>
 import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
-import { defineExpose } from 'vue';
 
 let props = defineProps({
 	mode: {

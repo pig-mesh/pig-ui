@@ -102,12 +102,10 @@
 	</el-drawer>
 </template>
 <script setup type="ts">
-import {ref, watch, computed, onMounted} from 'vue'
 import $func from '../../utils/index'
-import {setTypes, selectModes, selectRanges} from '../../utils/const'
+import {setTypes} from '../../utils/const'
 import {useStore} from '../../stores/index'
 import {useFlowStore} from '../../stores/flow'
-import {ElTable} from 'element-plus'
 
 let flowStore = useFlowStore();
 
@@ -153,8 +151,6 @@ const openEvent = () => {
 }
 
 import selectShow from "/@/views/flow/workflow/components/dialog/selectAndShow.vue";
-
-const {proxy} = getCurrentInstance();
 
 
 let approverConfig = ref({})

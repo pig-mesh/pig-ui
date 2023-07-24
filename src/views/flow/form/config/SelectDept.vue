@@ -44,8 +44,6 @@ var defaultValue = computed({
 	},
 });
 
-const { proxy } = getCurrentInstance();
-
 //校验
 const validate = () => {
 	return true;

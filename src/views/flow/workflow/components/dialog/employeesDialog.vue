@@ -17,7 +17,7 @@
 import selectBox from '../selectBox.vue';
 import selectResult from '../selectResult.vue';
 import { computed, watch, ref, onMounted } from 'vue';
-import { departments, getDebounceData, searchVal } from './common';
+import { departments, searchVal } from './common';
 import other from '/@/utils/other';
 
 const selectBoxRef = ref();

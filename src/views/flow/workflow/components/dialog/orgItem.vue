@@ -6,7 +6,7 @@
 			:key="item.id"
 			:closable="!disabled"
 			@close="removeItem(index, item.id, item.type)"
-			:type="item.type === 'dept' ? 'primary' : item.type === 'user' ? 'warning' : 'success'"
+			:type="item.type === 'dept' ? '' : item.type === 'user' ? 'warning' : 'success'"
 			size="large"
 		>
 			{{ item.name }}
