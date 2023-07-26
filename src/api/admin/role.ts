@@ -56,7 +56,7 @@ export const putObj = (obj: Object) => {
 
 export const delObj = (ids: Object) => {
 	return request({
-		url: '/admin/role/',
+		url: '/admin/role',
 		method: 'delete',
 		data: ids,
 	});
