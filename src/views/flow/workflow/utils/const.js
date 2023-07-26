@@ -10,7 +10,7 @@ export let placeholderList = ['发起人', '审批人', '抄送人'];
 
 export let setTypes = [
 	{ value: 1, label: '指定成员' },
-	//{ value: 2, label: '部门主管' },
+	{ value: 2, label: '部门主管' },
 	{ value: 3, label: '角色' },
 	{ value: 4, label: '发起人自选' },
 	{ value: 5, label: '发起人自己' },

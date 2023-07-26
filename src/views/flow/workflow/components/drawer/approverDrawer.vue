@@ -19,6 +19,10 @@
 				</el-radio-group>
 
 				<el-divider />
+				<template v-if="approverConfig.assignedType === 2">
+					<h4>选择部门</h4>
+					<select-show v-model:orgList="approverConfig.nodeUserList" type="dept"></select-show>
+				</template>
 				<template v-if="approverConfig.assignedType === 3">
 					<h4>选择角色</h4>
 
@@ -52,11 +56,11 @@
 					v-if="
 						((approverConfig.multiple === true && approverConfig.assignedType === 4) ||
 							(approverConfig.assignedType === 1 && approverConfig.nodeUserList.length > 1) ||
+							approverConfig.assignedType === 2 ||
 							approverConfig.assignedType === 3 ||
 							(approverConfig.assignedType === 7 && approverConfig.deptLeaderLevel > 1) ||
 							(approverConfig.assignedType === 8 && isMultiUserForm(approverConfig.formUserId))) &&
-						approverConfig.assignedType != 5 &&
-						approverConfig.assignedType != 2
+						approverConfig.assignedType != 5
 					"
 				>
 					<h4>多人审批时采用的审批方式</h4>
@@ -72,13 +76,6 @@
 						</p>
 					</el-radio-group>
 				</template>
-				<template v-if="approverConfig.assignedType === 2">
-					<h4>指定审批层级</h4>
-					<span style="margin-right: 5px; font-size: 14px">第</span>
-					<el-input-number v-model="approverConfig.deptLeaderLevel" :step="1" :min="1" :max="20" step-strictly size="small" />
-					<span style="margin-left: 5px; font-size: 14px">级部门主管</span>
-				</template>
-
 				<el-divider />
 
 				<h4>审批人为空时</h4>
@@ -102,7 +99,6 @@
 	</el-drawer>
 </template>
 <script setup type="ts">
-import $func from '../../utils/index'
 import {setTypes} from '../../utils/const'
 import {useStore} from '../../stores/index'
 import {useFlowStore} from '../../stores/flow'
@@ -195,8 +191,8 @@ const assignedTypeChangeEvent = (e) => {
 }
 
 const saveApprover = () => {
+	approverConfig.value.error = !checkApproval(approverConfig.value);
 
-	approverConfig.value.error = !$func.checkApproval(approverConfig.value);
 	setApproverConfig({
 		value: approverConfig.value,
 		flag: true,
@@ -206,6 +202,33 @@ const saveApprover = () => {
 }
 const closeDrawer = () => {
 	setApprover(false)
+}
+
+const 	checkApproval = (nodeConfig) =>{
+	if (nodeConfig.assignedType == 1 || nodeConfig.assignedType == 2 || nodeConfig.assignedType == 3) {
+
+//指定成员
+if (nodeConfig.nodeUserList.length == 0) {
+	return false;
+
+}
+} else if (nodeConfig.assignedType == 8 && nodeConfig.formUserId.length == 0) {
+//表单
+return false;
+}
+
+//审批人为空
+if (nodeConfig.nobody.handler === 'TO_USER' && nodeConfig.nobody.assignedUser.length == 0) {
+return false;
+}
+//操作权限
+let operList = nodeConfig.operList;
+let length = operList?.filter(res => res.checked).length;
+if (length == 0) {
+return false;
+}
+
+return true;
 }
 </script>
 <style scoped></style>
