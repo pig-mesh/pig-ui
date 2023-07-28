@@ -18,7 +18,7 @@ export function addObj(obj: object) {
 
 export function getObj(id: string) {
 	return request({
-		url: '/admin/tenant-menu/',
+		url: '/admin/tenant-menu',
 		method: 'get',
 		params: {
 			id: id,

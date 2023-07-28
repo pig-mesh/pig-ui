@@ -208,14 +208,13 @@ onMounted(() => {
 
 // 查询分组列表
 const handleQuery = () => {
-	queryGroupList()
-		.then((res) => {
-			const { data } = res;
-			successGroupList.value = data;
-		})
-		.then(() => {
+	queryGroupList().then((res) => {
+		const { data } = res;
+		successGroupList.value = data;
+		if (data.length > 0) {
 			getDataList();
-		});
+		}
+	});
 };
 
 // 删除分组
