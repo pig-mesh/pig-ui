@@ -16,9 +16,6 @@ import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
 import { ElementIcons, Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor, Tip, DelWrap } from '/@/components/index';
 import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
-import 'highlight.js/styles/atom-one-dark.css';
-import 'highlight.js/lib/common';
-import hljsVuePlugin from '@highlightjs/vue-plugin';
 
 // 布局工具
 import { Splitpanes, Pane } from 'splitpanes';
@@ -56,5 +53,4 @@ app
 	.use(ElementIcons) // elementIcons 图标全局引入
 	.use(VForm3) // 表单设计
 	.use(i18n) // 国际化
-	.use(hljsVuePlugin) // 代码高亮
 	.mount('#app');

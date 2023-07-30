@@ -1,8 +1,8 @@
 <template>
-	<el-dialog title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
+	<el-dialog fullscreen title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
 		<splitpanes>
 			<pane size="25">
-				<el-scrollbar height="calc(100vh - 300px)" class="mt20">
+				<el-scrollbar height="calc(100vh - 100px)" class="mt20">
 					<el-tree
 						ref="treeRef"
 						node-key="id"
@@ -23,7 +23,7 @@
 					>
 						<SvgIcon name="ele-CopyDocument" :size="25" class="copy_btn" @click="copyText(item.code)" />
 					</el-tab-pane>
-					<code-editor ref="codeEditorRef" theme="darcula" v-model="previewCodeStr" mode="go" readOnly height="calc(100vh - 300px)"></code-editor>
+					<code-editor ref="codeEditorRef" theme="darcula" v-model="previewCodeStr" mode="go" readOnly height="calc(100vh - 100px)"></code-editor>
 				</el-tabs>
 			</pane>
 		</splitpanes>
