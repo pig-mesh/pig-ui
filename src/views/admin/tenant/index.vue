@@ -75,8 +75,12 @@
 						<dict-tag :options="status_type" :value="scope.row.status"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="200">
+				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
+            <el-button icon="HomeFilled" @click="individuationRef.openDialog(scope.row.id)" text type="primary" v-auth="'sys_systenant_edit'"
+            >{{ $t('tenant.individuationBtn') }}
+            </el-button>
+
 						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'sys_systenant_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
@@ -102,6 +106,10 @@
 
 		<!-- 编辑、新增  -->
 		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
+
+    <!-- 编辑、新增  -->
+    <individuation  ref="individuationRef" />
+
 		<!-- 导入excel -->
 		<upload-excel
 			:title="$t('tenant.importTenantTip')"
@@ -124,11 +132,13 @@ import { useDict } from '/@/hooks/dict';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const Individuation = defineAsyncComponent(() => import('./individuation.vue'));
 const TenantMenu = defineAsyncComponent(() => import('./tenantMenu/index.vue'));
 const { t } = useI18n();
 
 // 定义变量内容
 const formDialogRef = ref();
+const individuationRef = ref();
 const excelUploadRef = ref();
 const TenantMenuRef = ref();
 // 搜索变量

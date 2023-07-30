@@ -15,6 +15,7 @@ export default {
 		createTime: 'createTime',
 		updateTime: 'updateTime',
 		menuId: 'menuIds',
+		individuationBtn: 'individuation',
 		inputidTip: 'input id',
 		inputnameTip: 'input name',
 		inputcodeTip: 'input code',
