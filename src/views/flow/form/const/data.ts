@@ -250,20 +250,7 @@ const formGroupConfig: FormGroupVO[] = [
 					self: false,
 					value: [],
 				},
-			},
-			{
-				name: '明细',
-				type: 'Layout',
-				typeName: '明细',
-				icon: 'ShoppingBag',
-				placeholder: '请选择',
-				required: false,
-				props: {
-					value: [],
-					min: 1,
-					max: 10,
-				},
-			},
+			}
 		],
 	},
 ];

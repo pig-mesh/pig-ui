@@ -59,7 +59,6 @@
 							终止流程
 						</el-button>
 
-						<el-button type="primary" size="small" link icon="Picture" @click="viewImage(scope.row)"> 流程图 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -89,15 +88,11 @@
 					></flow-node-format>
 				</template>
 			</el-drawer>
-
-			<!--			查看流程图-->
-			<view-process-instance-image ref="viewImageRef" />
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
-import ViewProcessInstanceImage from '/@/components/Task/ViewProcessInstanceImage.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import { queryMineStarted, stopProcessInstance } from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
@@ -144,14 +139,7 @@ const deal = (row) => {
 	});
 };
 const currentOpenFlowForm = ref();
-const viewImageRef = ref();
 
-/**
- * 点击查看流程图
- */
-const viewImage = (row) => {
-	viewImageRef.value.view(row);
-};
 
 /**
  * 查询

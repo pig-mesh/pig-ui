@@ -45,7 +45,6 @@
 				<el-table-column fixed="right" label="操作" width="200">
 					<template #default="scope">
 						<el-button type="primary" size="small" icon="View" link @click="deal(scope.row)"> 查看 </el-button>
-						<el-button type="primary" size="small" link icon="Picture" @click="viewImage(scope.row)"> 流程图 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -76,16 +75,11 @@
 				></flow-node-format>
 			</template>
 		</el-drawer>
-
-		<!--			查看流程图-->
-		<view-process-instance-image ref="viewImageRef" />
 	</div>
 </template>
 
 <script setup lang="ts">
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
-import ViewProcessInstanceImage from '/@/components/Task/ViewProcessInstanceImage.vue';
-
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 
 import { queryMineCC, queryMineCCDetail } from '/@/api/flow/task';
@@ -123,14 +117,7 @@ const deal = (row) => {
 	});
 };
 const currentOpenFlowForm = ref();
-const viewImageRef = ref();
 
-/**
- * 点击查看流程图
- */
-const viewImage = (row) => {
-	viewImageRef.value.view(row);
-};
 
 /**
  * 查询

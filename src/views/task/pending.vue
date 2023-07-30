@@ -47,7 +47,6 @@
 				<el-table-column fixed="right" label="操作" width="200">
 					<template #default="scope">
 						<el-button type="primary" size="small" link icon="VideoPlay" @click="deal(scope.row)"> 开始处理 </el-button>
-						<el-button type="primary" size="small" link icon="Picture" @click="viewImage(scope.row)"> 流程图 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -92,9 +91,6 @@
 				</template>
 			</el-drawer>
 
-			<!--查看流程图-->
-			<view-process-instance-image ref="viewImageRef" />
-
 			<!--同意提交处理-->
 			<agree-handle @taskSubmitEvent="taskSubmitEvent" ref="agreeHandler"></agree-handle>
 
@@ -105,7 +101,6 @@
 </template>
 <script setup lang="ts">
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
-import ViewProcessInstanceImage from '/@/components/Task/ViewProcessInstanceImage.vue';
 import AgreeHandle from './handler/agree.vue';
 import RefuseHandle from './handler/refuse.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
@@ -144,7 +139,6 @@ const deal = (row: any) => {
 	});
 };
 const currentOpenFlowForm = ref();
-const viewImageRef = ref();
 const addLayoutOneItem = (id: Number) => {
 	for (var item of currentOpenFlowForm.value) {
 		if (item.id !== id) {
@@ -165,12 +159,6 @@ const deleteLayoutOneItem = (id, index) => {
 	}
 };
 
-/**
- * 点击查看流程图
- */
-const viewImage = (row: any) => {
-	viewImageRef.value.view(row);
-};
 
 const agreeHandler = ref();
 const refuseHandler = ref();
