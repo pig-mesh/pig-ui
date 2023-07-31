@@ -55,7 +55,7 @@
 						<IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
 					</el-form-item>
 				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && state.ruleForm.path.startsWith('http')">
+				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && state.ruleForm.path?.startsWith('http')">
 					<el-form-item :label="$t('sysmenu.embedded')" prop="embedded">
 						<el-radio-group v-model="state.ruleForm.embedded">
 							<el-radio-button label="0">否</el-radio-button>
@@ -116,7 +116,7 @@ const state = reactive({
 		icon: '',
 		path: '',
 		sortOrder: 0,
-		menuType: '0',
+		menuType: '1',
 		keepAlive: '0',
 		visible: '1',
 		embedded: '0',
