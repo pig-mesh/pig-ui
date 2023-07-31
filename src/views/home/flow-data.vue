@@ -3,12 +3,12 @@
     <el-row>
       <el-col :span="12">
         <router-link to="/task/pending">
-          <el-statistic title="待办任务✍️" :value="data.pendingNum"/>
+          <el-statistic title="待办任务✍️" :value="state.pendingNum"/>
         </router-link>
       </el-col>
       <el-col :span="12">
         <router-link to="/task/cc">
-          <el-statistic title="抄送任务🔖️" :value="data.copyNum"/>
+          <el-statistic title="抄送任务🔖️" :value="state.copyNum"/>
         </router-link>
       </el-col>
     </el-row>
@@ -18,15 +18,15 @@
 <script setup name="flowData">
 import {queryTaskData} from "/@/api/flow/task";
 
-const data = reactive({
+const state = reactive({
   pendingNum: 0,
   copyNum: 0
 })
 
 onMounted(async () => {
   const { data } = await queryTaskData();
-  data.pendingNum = data?.pendingNum || 0;
-  data.copyNum = data?.copyNum || 0;
+  state.pendingNum = data?.pendingNum || 0;
+  state.copyNum = data?.copyNum || 0;
 });
 </script>
 <style scoped>
