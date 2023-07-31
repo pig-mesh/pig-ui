@@ -7,7 +7,14 @@
 						<pane size="67">
 							<splitpanes horizontal>
 								<pane size="30">
-									<current-user />
+                  <splitpanes>
+                    <pane size="50">
+                      <current-user />
+                    </pane>
+                    <pane size="50">
+                      <flow-data />
+                    </pane>
+                  </splitpanes>
 								</pane>
 								<pane size="70">
 									<favorite />
@@ -44,4 +51,5 @@ const ScheduleCalendar = defineAsyncComponent(() => import('./schedule/calendar.
 const SysLog = defineAsyncComponent(() => import('./log-dashboard/sys-log.vue'));
 const AuditLog = defineAsyncComponent(() => import('./log-dashboard/audit-log.vue'));
 const NewsLetter = defineAsyncComponent(() => import('./newsletter.vue'));
+const FlowData = defineAsyncComponent(() => import('./flow-data.vue'));
 </script>

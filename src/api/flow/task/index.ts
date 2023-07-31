@@ -1,5 +1,13 @@
 import request from '/@/utils/request';
 
+// 查询用户首页数据看板
+export function queryTaskData(){
+	return request({
+		url: '/task/task/queryTaskData',
+		method: 'get'
+	});
+}
+
 // 查询抄送详细信息
 export function queryMineCCDetail(param: any) {
 	return request({
@@ -78,17 +86,6 @@ export function queryTask(taskId: string, view: boolean) {
 	});
 }
 
-/**
- * 查看流程图
- *
- * @param data
- */
-export function showImage(processInstanceId: string) {
-	return request({
-		url: '/task/process-instance/showImg?procInsId=' + processInstanceId,
-		method: 'get',
-	});
-}
 
 // 完成任务
 export function completeTask(param: Object) {
