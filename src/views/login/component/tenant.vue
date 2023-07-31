@@ -136,17 +136,6 @@ const initTenantConfig = () => {
 
     themeConfig.value.miniQr = tenant.miniQr
 
-    if (tenant?.logo) {
-      let favicon: HTMLLinkElement = document.querySelector('link[rel="icon"]')!
-      if (favicon) {
-        favicon.href = tenant.logo
-        return
-      }
-      favicon = document.createElement('link')
-      favicon.rel = 'icon'
-      favicon.href = tenant.logo
-      document.head.appendChild(favicon)
-    }
   })
 }
 /**
