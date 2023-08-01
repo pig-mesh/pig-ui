@@ -129,21 +129,14 @@ export const useThemeConfig = defineStore('themeConfig', {
              */
             // 是否开启后端控制路由
             isRequestRoutes: true,
-            /**
-             * 全局网站标题 / 副标题
-             */
-            // 网站主标题（菜单导航、浏览器当前网页标题、登录form顶部右侧）
-            globalTitle: 'PIGX ADMIN',
             // 默认初始语言，可选值"<zh-cn|en|zh-tw>"，默认 zh-cn
             globalI18n: 'zh-cn',
             // 默认全局组件大小，可选值"<large|'default'|small>"，默认 'default'
             globalComponentSize: 'default',
-            // footer
-            footerAuthor: '©2023 pig4cloud.com',
-            // 登录页背景图
-            background: '/@/assets/login/login_bg.svg',
-            // 移动端APP二维码
-            miniQr: '/@/assets/login/mini_qr.png'
+            // 网站主标题（菜单导航、浏览器当前网页标题、登录form顶部右侧）
+            globalTitle: import.meta.env.VITE_GLOBAL_TITLE,
+            // footer 标题内容
+            footerAuthor: import.meta.env.VITE_FOOTER_TITLE
         },
     }),
     actions: {

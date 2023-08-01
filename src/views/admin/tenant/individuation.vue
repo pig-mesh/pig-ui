@@ -26,15 +26,6 @@
           </el-form-item>
         </el-col>
         <el-col :span="24" class="mt-4">
-          <el-form-item prop="logo" label-width="120px" align="left">
-            <template #label>
-              {{ t('individuation.logo') }}
-              <tip content="浏览器标签显示此网站的缩略图表"/>
-            </template>
-            <upload-img v-model:image-url="form.logo"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" class="mt-4">
           <el-form-item :label="t('individuation.background')" prop="background" label-width="120px" align="left">
             <upload-img v-model:image-url="form.background"/>
           </el-form-item>
@@ -51,11 +42,9 @@
 </template>
 
 <script setup lang="ts" name="systemTenantDialog">
-import {validateTenantCode, validateTenantName} from '/@/api/admin/tenant';
 import {useDict} from '/@/hooks/dict';
 import {useMessage} from '/@/hooks/message';
-import {getObj, addObj, putObj} from '/@/api/admin/tenant';
-import {menuList} from '/@/api/admin/tenant-menu';
+import {getObj, putObj} from '/@/api/admin/tenant';
 import {useI18n} from 'vue-i18n';
 import UploadImg from "/@/components/Upload/Image.vue";
 import {useThemeConfig} from "/@/stores/themeConfig";
@@ -83,7 +72,6 @@ const {themeConfig} = storeToRefs(stores);
 const form = reactive({
   id: '',
   websiteName: themeConfig.value.globalTitle,
-  logo: '',
   background: '',
   miniQr: '',
   footer: themeConfig.value.footerAuthor,

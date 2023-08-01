@@ -6,7 +6,7 @@
     </div>
     <div class="mini_qr">
       <!-- 扫码体验移动端 -->
-      <img :src="!themeConfig.miniQr || themeConfig.miniQr.includes('@') ?  miniQr:baseURL +  themeConfig.miniQr"/>
+      <img :src="!themeConfig.miniQr ?  miniQr:baseURL +  themeConfig.miniQr"/>
       <p>{{ t('scan.wechatApp') }}</p>
     </div>
     <img :src="bg" class="wave"/>
@@ -14,7 +14,7 @@
     <div class="login-container">
       <div class="img">
         <img
-            :src="!themeConfig.background || themeConfig.background.includes('@') ?  illustration:baseURL + themeConfig.background"/>
+            :src="!themeConfig.background ?  illustration:baseURL + themeConfig.background"/>
       </div>
       <div class="login-box">
         <div class="login-form">

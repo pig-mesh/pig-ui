@@ -77,6 +77,8 @@ const handleCommand = (tenant: any) => {
   Session.set('tenantId', tenant.id); // 写入到 session 存储
   Local.set('tenantId', tenant.id); // 写入到 local 存储
   Cookies.set('tenantId', tenant.id); //写入到 cookie 方便第三方使用
+  // 刷新初始化租户信息
+  window.location.reload()
 };
 
 /**
@@ -119,18 +121,13 @@ const selectBgFlag = (id: string) => {
 
 
 const initTenantConfig = () => {
-
   const stores = useThemeConfig(pinia);
   const {themeConfig} = storeToRefs(stores);
   // 初始化租户个性化设置
   tenantList.value.filter((item: any) => item.id === tenant.value).forEach((tenant: any) => {
-    if (tenant?.websiteName) {
-      themeConfig.value.globalTitle = tenant.websiteName
-    }
+    themeConfig.value.globalTitle = tenant?.websiteName || import.meta.env.VITE_GLOBAL_TITLE
 
-    if (tenant?.footer) {
-      themeConfig.value.footerAuthor = tenant.footer
-    }
+    themeConfig.value.footerAuthor = tenant.footer || import.meta.env.VITE_FOOTER_TITLE
 
     themeConfig.value.background = tenant.background
 
