@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { Session } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
-import other from '/@/utils/other';
 import { useMessage } from '/@/hooks/message';
 
 /**

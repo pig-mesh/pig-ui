@@ -117,18 +117,17 @@ const openDialog = (id: string) => {
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
-	const { id, ...rest } = form;
 	if (form.appsecret && form.appsecret.includes('*')) {
 		form.appsecret = undefined;
 	}
 
 	loading.value = true;
 	try {
-		if (id) {
-			await putObj(rest);
+		if (form.id) {
+			await putObj(form);
 			useMessage().success(t('common.editSuccessText'));
 		} else {
-			await addObj(rest);
+			await addObj(form);
 			useMessage().success(t('common.addSuccessText'));
 		}
 		visible.value = false;

@@ -8,9 +8,6 @@
 					<span style="color: #6d737b; margin: 2px">{{ userData.deptName }} | {{ userData.postName }}</span>
 				</div>
 			</div>
-			<span style="margin: 2px">
-				{{ parseTime(date) }}
-			</span>
 		</div>
 	</el-card>
 </template>
@@ -20,7 +17,6 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { getObj } from '/@/api/admin/user';
 
 const { proxy } = getCurrentInstance();
-const date = ref(new Date());
 
 const userData = ref({
 	postName: '',
@@ -32,9 +28,6 @@ const userData = ref({
 } as any);
 const loading = ref(false);
 
-setInterval(() => {
-	date.value = new Date();
-}, 1000);
 
 onMounted(() => {
 	const data = useUserInfo().userInfos;

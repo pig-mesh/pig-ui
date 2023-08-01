@@ -1,31 +1,26 @@
 <template>
-	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
-			<el-row :gutter="24">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('template.templateName')" prop="templateName">
-						<el-input :placeholder="t('template.inputTemplateNameTip')" v-model="form.templateName" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('template.desc')" prop="templateDesc">
-						<el-input :placeholder="t('template.inputDescTip')" v-model="form.templateDesc" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('template.generatorPath')" prop="generatorPath">
-						<el-input :placeholder="t('template.inputGeneratorPathTip')" v-model="form.generatorPath" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('template.templateCode')" prop="templateCode">
-						<el-input :placeholder="t('template.inputTemplateCode')" :rows="4" type="textarea" v-model="form.templateCode" />
-					</el-form-item>
-				</el-col>
-			</el-row>
+	<el-dialog fullscreen :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
+		<el-form :model="form" :rules="dataRules" formDialogRef ref="dataFormRef" v-loading="loading">
+			<el-container>
+				<el-aside width="80%">
+					<code-editor v-model="form.templateCode" theme="darcula" mode="velocity" height="700"></code-editor>
+				</el-aside>
+				<el-main>
+					<el-row>
+						<el-form-item :label="t('template.templateName')" prop="templateName">
+							<el-input :placeholder="t('template.inputTemplateNameTip')" v-model="form.templateName" />
+						</el-form-item>
+						<el-form-item :label="t('template.desc')" prop="templateDesc">
+							<el-input :placeholder="t('template.inputDescTip')" v-model="form.templateDesc" />
+						</el-form-item>
+						<el-form-item :label="t('template.generatorPath')" prop="generatorPath">
+							<el-input :placeholder="t('template.inputGeneratorPathTip')" v-model="form.generatorPath" />
+						</el-form-item>
+					</el-row>
+				</el-main>
+			</el-container>
 		</el-form>
+
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
@@ -41,6 +36,7 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/gen/template';
 import { useI18n } from 'vue-i18n';
 
+const CodeEditor = defineAsyncComponent(() => import('/@/components/CodeEditor/index.vue'));
 const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
@@ -89,6 +85,8 @@ const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
+	// 校验模板是否为空
+
 	try {
 		loading.value = true;
 		form.id ? await putObj(form) : await addObj(form);
@@ -114,3 +112,14 @@ defineExpose({
 	openDialog,
 });
 </script>
+
+<style scoped>
+.splitpanes__pane {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-family: Helvetica, Arial, sans-serif;
+	color: rgba(255, 255, 255, 0.6);
+	font-size: 5em;
+}
+</style>

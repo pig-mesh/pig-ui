@@ -84,10 +84,10 @@ declare interface ThemeConfigState {
 		layout: string;
 		isRequestRoutes: boolean;
 		globalTitle: string;
-		globalViceTitle: string;
-		globalViceTitleMsg: string;
 		globalI18n: string;
 		globalComponentSize: string;
 		footerAuthor: string;
+		background: string;
+		miniQr: string;
 	};
 }

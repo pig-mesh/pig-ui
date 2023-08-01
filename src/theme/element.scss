@@ -106,7 +106,7 @@
 
 .el-menu-item,
 .el-sub-menu__title {
-	color: var(--next-bg-menuBarColor);
+	color: var(--next-bg-menuBarColor) !important;
 }
 
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题

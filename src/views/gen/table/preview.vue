@@ -1,8 +1,8 @@
 <template>
-	<el-dialog title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
+	<el-dialog fullscreen title="代码预览" v-model="visible" width="90%" top="3vh" append-to-body :close-on-click-modal="false">
 		<splitpanes>
 			<pane size="25">
-				<el-scrollbar height="calc(100vh - 300px)" class="mt20">
+				<el-scrollbar height="calc(100vh - 100px)" class="mt20">
 					<el-tree
 						ref="treeRef"
 						node-key="id"
@@ -14,7 +14,7 @@
 				</el-scrollbar>
 			</pane>
 			<pane>
-				<el-tabs v-model="preview.activeName">
+				<el-tabs v-model="preview.activeName" @tab-click="handleTabClick">
 					<el-tab-pane
 						v-for="item in previewCodegen"
 						:label="item.codePath.substring(item.codePath.lastIndexOf('/') + 1)"
@@ -22,10 +22,8 @@
 						:key="item.codePath"
 					>
 						<SvgIcon name="ele-CopyDocument" :size="25" class="copy_btn" @click="copyText(item.code)" />
-						<el-scrollbar height="calc(100vh - 300px)">
-							<highlightjs autodetect :code="item.code" />
-						</el-scrollbar>
 					</el-tab-pane>
+					<code-editor ref="codeEditorRef" theme="darcula" v-model="previewCodeStr" mode="go" readOnly height="calc(100vh - 100px)"></code-editor>
 				</el-tabs>
 			</pane>
 		</splitpanes>
@@ -35,6 +33,7 @@
 import { useGeneratorPreviewApi } from '/@/api/gen/table';
 import { handleTree } from '/@/utils/other';
 import commonFunction from '/@/utils/commonFunction';
+const CodeEditor = defineAsyncComponent(() => import('/@/components/CodeEditor/index.vue'));
 
 const { copyText } = commonFunction();
 
@@ -48,6 +47,7 @@ const preview = reactive({
 });
 
 const previewCodegen = ref([]);
+const previewCodeStr = ref('');
 const fileTreeOriginal = ref([] as any[]);
 
 const openDialog = async (id: string) => {
@@ -56,6 +56,7 @@ const openDialog = async (id: string) => {
 };
 
 const loading = ref(false);
+const codeEditorRef = ref();
 
 /**
  * 获取特定资源的代码生成文件，显示在页面上。
@@ -71,6 +72,7 @@ const getGenCodeFile = (id: string) => {
 				fileTreeOriginal.value.push(res[index].codePath);
 			}
 			// 默认选中第一个 选项卡
+			previewCodeStr.value = res[0].code;
 			preview.activeName = res[0].codePath;
 			const files = handleFiles(fileTreeOriginal);
 			preview.fileTree = handleTree(files, 'id', 'parentId', 'children', '/');
@@ -84,7 +86,20 @@ const handleNodeClick = async (data: any, node: any) => {
 	if (node && !node.isLeaf) {
 		return false;
 	}
+
 	preview.activeName = data.id;
+
+	const filteredCode = previewCodegen.value.filter((code: any) => code.codePath === data.id);
+	if (filteredCode.length > 0) {
+		previewCodeStr.value = filteredCode[0].code;
+	}
+};
+
+const handleTabClick = (item: any) => {
+	const filteredCode = previewCodegen.value.filter((code: any) => code.codePath === item.paneName);
+	if (filteredCode.length > 0) {
+		previewCodeStr.value = filteredCode[0].code;
+	}
 };
 
 /**

@@ -5,18 +5,17 @@ import router from './router';
 import { directive } from '/@/directive';
 import { i18n } from '/@/i18n';
 import other from '/@/utils/other';
-import '/@/theme/index.scss';
 
 import ElementPlus from 'element-plus';
+import '/@/theme/tailwind.css';
 import 'element-plus/dist/index.css';
+import '/@/theme/index.scss';
+
 import VForm3 from 'form-designer-plus'; //引入VForm3库
 import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
 import { ElementIcons, Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor, Tip, DelWrap } from '/@/components/index';
 import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
-import 'highlight.js/styles/atom-one-dark.css';
-import 'highlight.js/lib/common';
-import hljsVuePlugin from '@highlightjs/vue-plugin';
 
 // 布局工具
 import { Splitpanes, Pane } from 'splitpanes';
@@ -54,5 +53,4 @@ app
 	.use(ElementIcons) // elementIcons 图标全局引入
 	.use(VForm3) // 表单设计
 	.use(i18n) // 国际化
-	.use(hljsVuePlugin) // 代码高亮
 	.mount('#app');

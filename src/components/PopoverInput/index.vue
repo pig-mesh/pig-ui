@@ -18,7 +18,7 @@
 					<el-input
 						v-else
 						v-model.trim="inputValue"
-						:maxlength="limit"
+						:maxlength="maxlength"
 						:show-word-limit="showLimit"
 						:type="type"
 						:size="size"
@@ -45,7 +45,7 @@ import { useEventListener } from '@vueuse/core';
 import type { PropType } from 'vue';
 
 const props = defineProps({
-	value: {
+	modelValue: {
 		type: String,
 	},
 	type: {
@@ -82,28 +82,34 @@ const props = defineProps({
 		default: true,
 	},
 });
-const emit = defineEmits(['confirm']);
+const emit = defineEmits(['confirm', 'update:modelValue']);
+
 const visible = ref(false);
 const inPopover = ref(false);
 const inputValue = ref();
 const handleConfirm = () => {
 	close();
 	emit('confirm', inputValue.value);
+	emit('update:modelValue', inputValue.value);
 };
+
 const handleOpen = () => {
 	if (props.disabled) {
 		return;
 	}
 	visible.value = true;
+	inputValue.value = '';
 };
+
 const close = () => {
 	visible.value = false;
 };
 
 watch(
-	() => props.value,
+	() => inputValue.value,
 	(value) => {
-		inputValue.value = value;
+		console.log("asdasd",value)
+		emit('update:modelValue', value);
 	},
 	{
 		immediate: true,

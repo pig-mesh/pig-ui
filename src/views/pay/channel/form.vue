@@ -23,8 +23,8 @@
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('channel.mchId')" prop="mchId">
-						<el-input :placeholder="t('channel.inputMchIdTip')" v-model="form.mchId" />
+					<el-form-item :label="t('channel.mchId')" prop="channelMchId">
+						<el-input :placeholder="t('channel.inputMchIdTip')" v-model="form.channelMchId" />
 					</el-form-item>
 				</el-col>
 
@@ -110,7 +110,7 @@ const dataRules = ref({
 	],
 	channelName: [{ required: true, message: '渠道名称不能为空', trigger: 'blur' }],
 
-	mchId: [
+	channelMchId: [
 		{ required: true, message: '商户ID不能为空', trigger: 'blur' },
 		{ validator: rule.letterAndNumber, trigger: 'blur' },
 	],

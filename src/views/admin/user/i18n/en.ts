@@ -14,10 +14,12 @@ export default {
 		nickname: 'nickname',
 		inputUsernameTip: 'input username',
 		inputPhoneTip: 'input phone',
+		inputPasswordTip: 'input password',
 		inputNameTip: 'input name',
 		importUserTip: 'user import',
 		deleteDisabledTip: 'admin are not allowed to delete',
 		noDataScopeTip: 'no data permissions',
+		passwordBtn: 'password',
 	},
 	personal: {
 		name: 'personal info',

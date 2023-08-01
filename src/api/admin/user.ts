@@ -50,15 +50,16 @@ export function getDetails(obj: Object) {
 // 更改个人信息
 export function editInfo(obj: Object) {
 	return request({
-		url: '/admin/user/edit',
+		url: '/admin/user/personal/edit',
 		method: 'put',
 		data: obj,
 	});
 }
 
+// 更改个人密码
 export function password(obj: Object) {
 	return request({
-		url: '/admin/user/password',
+		url: '/admin/user/personal/password',
 		method: 'put',
 		data: obj,
 	});

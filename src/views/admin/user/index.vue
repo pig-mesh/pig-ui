@@ -94,25 +94,36 @@
 								<el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)" active-value="0" inactive-value="9"></el-switch>
 							</template>
 						</el-table-column>
-						<el-table-column :label="$t('sysuser.createTime')" prop="createTime" show-overflow-tooltip width="180"></el-table-column>
-						<el-table-column :label="$t('common.action')" width="160" fixed="right">
+						<el-table-column :label="$t('common.action')" width="200" fixed="right">
 							<template #default="scope">
-								<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
-									{{ $t('common.editBtn') }}
-								</el-button>
-								<el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
-									<span style="margin-left: 12px">
-										<el-button
-											icon="delete"
-											v-auth="'sys_user_del'"
-											:disabled="scope.row.username === 'admin'"
-											text
-											type="primary"
-											@click="handleDelete([scope.row.userId])"
-											>{{ $t('common.delBtn') }}
-										</el-button>
-									</span>
-								</el-tooltip>
+								<div style="display: flex">
+									<!-- 重置密码 -->
+									<popover-input v-model="inputPassword" @confirm="changePassword(scope.row)">
+										<template #default>
+											<el-button v-auth="'sys_user_edit'" icon="RefreshLeft" text type="primary" class="mr-4">
+												{{ $t('sysuser.passwordBtn') }}
+											</el-button>
+										</template>
+									</popover-input>
+									<!-- 修改信息 -->
+									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
+										{{ $t('common.editBtn') }}
+									</el-button>
+									<!-- 删除用户 -->
+									<el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
+										<span style="margin-left: 12px">
+											<el-button
+												icon="delete"
+												v-auth="'sys_user_del'"
+												:disabled="scope.row.username === 'admin'"
+												text
+												type="primary"
+												@click="handleDelete([scope.row.userId])"
+												>{{ $t('common.delBtn') }}
+											</el-button>
+										</span>
+									</el-tooltip>
+								</div>
 							</template>
 						</el-table-column>
 					</el-table>
@@ -143,6 +154,7 @@ import { useI18n } from 'vue-i18n';
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
+const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInput/index.vue'));
 
 const { t } = useI18n();
 
@@ -151,6 +163,7 @@ const userDialogRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
+const inputPassword = ref();
 
 // 多选rows
 const selectObjs = ref([]) as any;
@@ -224,7 +237,25 @@ const handleDelete = async (ids: string[]) => {
 };
 
 //表格内开关 (用户状态)
-const changeSwitch = async (row: object) => {
+const changeSwitch = async (row: any) => {
+	// 不修改密码
+	row.password = undefined;
+	row.phone = undefined;
+	await putObj(row);
+	useMessage().success(t('common.optSuccessText'));
+	getDataList();
+};
+
+//修改用户密码
+const changePassword = async (row: any) => {
+	if(!inputPassword.value || inputPassword.value.length < 6 || inputPassword.value.length > 20){
+		useMessage().error(t('sysuser.inputPasswordTip'))
+		return
+	}
+
+	row.phone = undefined;
+	row.password = inputPassword.value;
+	console.log(row.password)
 	await putObj(row);
 	useMessage().success(t('common.optSuccessText'));
 	getDataList();

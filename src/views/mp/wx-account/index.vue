@@ -110,7 +110,7 @@
 		<form-dialog ref="formDialogRef" @refresh="getDataList(false)" />
 
 		<el-dialog v-model="dialogFormVisible" title="接入">
-			<el-input v-model="wxurl" readonly>
+			<el-input v-model="wxurl">
 				<template #append>
 					<el-button @click="copyText(wxurl)">复制链接</el-button>
 				</template>
@@ -126,7 +126,7 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
-
+const { proxy } = getCurrentInstance();
 const { copyText } = commonFunction();
 // 引入组件
 const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
@@ -188,7 +188,7 @@ const handleDelete = (ids: string[]) => {
 };
 
 const dialogFormVisible = ref(false);
-const wxurl = ref('');
+const wxurl = ref();
 const access = (row: any) => {
 	dialogFormVisible.value = true;
 	let url = '/mp/' + row.appid + '/portal';
