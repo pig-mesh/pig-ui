@@ -283,7 +283,14 @@ const getFieldTypeList = async () => {
 	// 获取数据
 	const { data } = await list();
 	// 设置属性类型值
-	data.forEach((item: any) => typeList.value.push({ label: item.attrType, value: item.columnType }));
+  const typeMap = new Map();
+  data.forEach((item: any) => {
+    const { attrType, columnType } = item;
+    if (!typeMap.has(attrType)) {
+      typeMap.set(attrType, columnType);
+      typeList.value.push({ label: attrType, value: columnType })
+    }
+  });
 	// 增加Object类型
 	typeList.value.push({ label: 'Object', value: 'Object' });
 };
