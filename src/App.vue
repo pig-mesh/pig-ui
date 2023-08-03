@@ -2,7 +2,7 @@
 	<el-config-provider :size="getGlobalComponentSize" :locale="getGlobalI18n">
 		<router-view v-show="setLockScreen" />
 		<LockScreen v-if="themeConfig.isLockScreen" />
-		<Setings ref="setingsRef" v-show="themeConfig.lockScreenTime > 1" />
+		<Setings ref="settingRef" v-show="themeConfig.lockScreenTime > 1" />
 		<CloseFull v-if="!themeConfig.isLockScreen" />
 	</el-config-provider>
 </template>
@@ -23,7 +23,7 @@ const CloseFull = defineAsyncComponent(() => import('/@/layout/navBars/breadcrum
 
 // 定义变量内容
 const { messages, locale } = useI18n();
-const setingsRef = ref();
+const settingRef = ref();
 const route = useRoute();
 const stores = useTagsViewRoutes();
 const storesThemeConfig = useThemeConfig();
@@ -56,7 +56,7 @@ onMounted(() => {
 	nextTick(() => {
 		// 监听布局配'置弹窗点击打开
 		mittBus.on('openSetingsDrawer', () => {
-			setingsRef.value.openDrawer();
+			settingRef.value.openDrawer();
 		});
 		// 获取缓存中的布局配置
 		if (Local.get('themeConfig')) {
