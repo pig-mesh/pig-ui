@@ -6,8 +6,8 @@
 	"license": "不对外分发 pig4cloud 版权所有，请购买商业版权",
 	"scripts": {
 		"dev": "vite --force",
-		"build": "vite build",
-		"build:docker": "vite build --outDir ./docker/dist/",
+		"build": "NODE_OPTIONS=--max-old-space-size=4096 vite build",
+		"build:docker": "NODE_OPTIONS=--max-old-space-size=4096 vite build --outDir ./docker/dist/",
 		"lint:eslint": "eslint --fix --ext .js,.ts,.vue ./src",
 		"prettier": "prettier --write ."
 	},
