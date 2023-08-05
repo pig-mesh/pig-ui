@@ -10,6 +10,9 @@ import other from './other';
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 50000, // 全局超时时间
+	paramsSerializer:  (params: any) => {
+		return qs.stringify(params, { arrayFormat: 'repeat' });
+	}
 });
 
 /**
@@ -21,14 +24,6 @@ const service: AxiosInstance = axios.create({
  */
 service.interceptors.request.use(
 	(config: AxiosRequestConfig) => {
-		// 对get请求参数进行序列化
-		if (config.method === 'get') {
-			// @ts-ignore 使用qs库来序列化查询参数
-			config.paramsSerializer = (params: any) => {
-				return qs.stringify(params, { arrayFormat: 'repeat' });
-			};
-		}
-
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
