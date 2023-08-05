@@ -22,6 +22,8 @@ export default {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		download: '下载',
+		expand: '展开/折叠',
+		selectAll: '全选/不全选',
 	},
 	message: {
 		box: {

@@ -3,12 +3,12 @@
     <el-row>
       <el-col :span="12">
         <router-link to="/task/pending">
-          <el-statistic title="待办任务✍️" :value="state.pendingNum"/>
+          <el-statistic :title="$t('home.pendingTask')" :value="state.pendingNum"/>
         </router-link>
       </el-col>
       <el-col :span="12">
         <router-link to="/task/cc">
-          <el-statistic title="抄送任务🔖️" :value="state.copyNum"/>
+          <el-statistic :title="$t('home.copyTask')" :value="state.copyNum"/>
         </router-link>
       </el-col>
     </el-row>
@@ -25,8 +25,8 @@ const state = reactive({
 
 onMounted(async () => {
   const { data } = await queryTaskData();
-  state.pendingNum = data?.pendingNum || 0;
-  state.copyNum = data?.copyNum || 0;
+  state.pendingNum = Number.parseInt(data?.pendingNum || 0)
+  state.copyNum = Number.parseInt(data?.copyNum || 0)
 });
 </script>
 <style scoped>

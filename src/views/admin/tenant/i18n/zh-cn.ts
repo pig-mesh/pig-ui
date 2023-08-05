@@ -32,7 +32,7 @@ export default {
         deleteDisabledTip: '基础租户不允许删除',
     },
     tenantmenu: {
-        name: '租户套餐',
+        name: '套餐',
         index: '#',
         status: '状态',
         createTime: '创建',

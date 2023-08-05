@@ -84,3 +84,10 @@ export function validateTenantCode(rule: any, value: any, callback: any, isEdit:
 		}
 	});
 }
+
+export function treemenu() {
+	return request({
+		url: '/admin/tenant/tree/menu',
+		method: 'get',
+	});
+}

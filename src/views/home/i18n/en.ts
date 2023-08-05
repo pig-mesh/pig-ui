@@ -6,6 +6,8 @@ export default {
 		auditLogsTip: 'audit logs',
 		moreTip: 'more',
 		newsletterTip: 'news letter',
+		pendingTask: 'pending task✍️',
+		copyTask: 'copy task🔖',
 	},
 	schedule: {
 		index: '#',

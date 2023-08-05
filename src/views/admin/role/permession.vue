@@ -5,8 +5,8 @@
 				<div class="flex items-center justify-between">
 					<div>{{ state.dialog.title }}</div>
 					<div class="flex mr-16">
-						<el-checkbox label="展开/折叠" @change="handleExpand" />
-						<el-checkbox label="全选/不全选" @change="handleSelectAll" />
+            <el-checkbox :label="$t('common.expand')" @change="handleExpand"/>
+            <el-checkbox :label="$t('common.selectAll')" @change="handleSelectAll"/>
 					</div>
 				</div>
 			</template>

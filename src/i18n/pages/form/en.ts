@@ -23,6 +23,8 @@ export default {
 		confirmButtonText: 'Confirm',
 		cancelButtonText: 'Cancel',
 		download: 'Download',
+		expand: 'Expand',
+		selectAll: 'SelectAll',
 	},
 	message: {
 		box: {
