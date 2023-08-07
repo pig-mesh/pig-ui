@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card style="height: 100%">
     <el-row>
       <el-col :span="12">
         <router-link to="/task/pending">
