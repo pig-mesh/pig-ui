@@ -58,6 +58,7 @@
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				style="width: 100%"
+        row-key="publicId"
 				v-loading="state.loading"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -157,7 +158,7 @@ const handleSelectable = (row: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/param/export', state.queryForm, 'param.xlsx');
+	downBlobFile('/admin/param/export', Object.assign(state.queryForm,{ids:selectObjs}), 'param.xlsx');
 };
 
 const handleRefreshCache = () => {

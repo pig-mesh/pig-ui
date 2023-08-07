@@ -45,6 +45,7 @@
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				style="width: 100%"
+        row-key="jobId"
 				v-loading="state.loading"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -180,7 +181,7 @@ const handleSelectionChange = (rows: any) => {
 
 /** 导出Excel */
 const exportExcel = () => {
-	downBlobFile('/job/sys-job/export', state.queryForm, 'job.xlsx');
+	downBlobFile('/job/sys-job/export', Object.assign(state.queryForm,{ids:selectedRows}), 'job.xlsx');
 };
 
 /** 查看作业日志 */

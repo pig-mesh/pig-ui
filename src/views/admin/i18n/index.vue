@@ -55,6 +55,7 @@
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
 				style="width: 100%"
+        row-key="id"
 				v-loading="state.loading"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -138,7 +139,7 @@ const handleRefreshCache = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/i18n/export', state.queryForm, 'i18n.xlsx');
+	downBlobFile('/admin/i18n/export', Object.assign(state.queryForm,{ids:selectObjs}), 'i18n.xlsx');
 };
 
 // 多选事件

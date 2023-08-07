@@ -44,11 +44,12 @@
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
 				v-loading="state.loading"
+        row-key="id"
 				border
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
-				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column align="center" type="selection" :reserve-selection="true"  width="40" />
 				<el-table-column :label="$t('syslog.index')" type="index" width="60" />
 				<el-table-column :label="$t('syslog.logType')" show-overflow-tooltip>
 					<template #default="scope">
@@ -108,7 +109,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 		logType: '',
 		createTime: '',
 	},
-	selectObjs: [],
 	pageList: pageList,
 	descs: ['create_time'],
 });
@@ -124,7 +124,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/log/export', state.queryForm, 'log.xlsx');
+	downBlobFile('/admin/log/export', Object.assign(state.queryForm,{ids:selectObjs}), 'log.xlsx');
 };
 
 // 多选事件

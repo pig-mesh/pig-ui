@@ -45,6 +45,7 @@
 				v-loading="state.loading"
 				:data="state.dataList"
 				style="width: 100%"
+        row-key="id"
 				@selection-change="handleSelectionChange"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -119,7 +120,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/social/export', state.queryForm, 'social.xlsx');
+	downBlobFile('/admin/social/export', Object.assign(state.queryForm,{ids:selectObjs}), 'social.xlsx');
 };
 
 // 多选事件

@@ -48,6 +48,7 @@
 				:data="state.dataList"
 				v-loading="state.loading"
 				style="width: 100%"
+        row-key="id"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
 				border
@@ -108,7 +109,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/audit/export', state.queryForm, 'audit.xlsx');
+	downBlobFile('/admin/audit/export', Object.assign(state.queryForm,{ids:selectObjs}), 'audit.xlsx');
 };
 
 // 多选事件

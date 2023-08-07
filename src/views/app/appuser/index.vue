@@ -23,7 +23,7 @@
 					<el-button plain @click="excelUploadRef.show()" class="ml10" icon="upload-filled" type="primary" v-auth="'app_appuser_export'">
 						{{ $t('common.importBtn') }}
 					</el-button>
-					<el-button :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'app_appuser_del'">
+					<el-button plain :disabled="multiple" @click="handleDelete(selectObjs)" class="ml10" icon="Delete" type="primary" v-auth="'app_appuser_del'">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
@@ -40,6 +40,7 @@
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				style="width: 100%"
+        row-key="userId"
 				v-loading="state.loading"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -139,7 +140,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/app/appuser/export', state.queryForm, 'users.xlsx');
+	downBlobFile('/app/appuser/export',Object.assign( state.queryForm,{ids:selectObjs}), 'users.xlsx');
 };
 
 // 多选事件

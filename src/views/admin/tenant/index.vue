@@ -48,6 +48,7 @@
 				style="width: 100%"
 				v-loading="state.loading"
 				border
+        row-key="id"
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
@@ -165,7 +166,7 @@ const handleSelectable = (row: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/tenant/export', state.queryForm, 'tenant.xlsx');
+	downBlobFile('/admin/tenant/export', Object.assign(state.queryForm,{ids:selectObjs}), 'tenant.xlsx');
 };
 
 // 多选事件

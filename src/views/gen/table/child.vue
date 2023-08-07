@@ -37,7 +37,8 @@
 	</el-dialog>
 </template>
 <script setup lang="ts" name="child">
-import { useListTableApi, useListTableColumnApi } from '/@/api/gen/table';
+import {useListTableApi, useListTableColumnApi, useSyncTableApi} from '/@/api/gen/table';
+import {useMessage} from "/@/hooks/message";
 
 const emit = defineEmits(['update:modelValue']);
 
@@ -104,6 +105,11 @@ const getChildTableColumnList = (val: string) => {
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
+  // 同步子表数据
+  useSyncTableApi(currentDsName.value,form.childTableName).then(() => {
+    useMessage().success('子表信息同步成功')
+  });
+
 	visible.value = false;
 };
 

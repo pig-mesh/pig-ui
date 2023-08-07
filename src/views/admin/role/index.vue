@@ -39,7 +39,8 @@
 				:data="state.dataList"
 				v-loading="state.loading"
 				style="width: 100%"
-				@selection-change="handleSelectionChange"
+        row-key="roleId"
+        @selection-change="handleSelectionChange"
 				border
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
@@ -163,7 +164,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/role/export', state.queryForm, 'role.xlsx');
+	downBlobFile('/admin/role/export',Object.assign(state.queryForm,{ids:selectObjs}), 'role.xlsx');
 };
 
 // 是否可以多选

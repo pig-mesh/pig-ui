@@ -70,7 +70,8 @@
 						v-loading="state.loading"
 						:data="state.dataList"
 						@selection-change="handleSelectionChange"
-						border
+            row-key="userId"
+            border
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
@@ -205,7 +206,7 @@ const handleNodeClick = (e: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/user/export', state.queryForm, 'users.xlsx');
+	downBlobFile('/admin/user/export', Object.assign(state.queryForm,{ids:selectObjs}), 'users.xlsx');
 };
 
 // 是否可以多选

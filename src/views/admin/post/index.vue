@@ -40,6 +40,7 @@
 				@selection-change="handleSelectionChange"
 				style="width: 100%"
 				v-loading="state.loading"
+        row-key="postId"
 				border
 				:cell-style="tableStyle?.cellStyle"
 				:header-cell-style="tableStyle?.headerCellStyle"
@@ -114,7 +115,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/post/export', state.queryForm, 'post.xlsx');
+	downBlobFile('/admin/post/export', Object.assign(state.queryForm,{ids:selectObjs}), 'post.xlsx');
 };
 
 // 多选事件
