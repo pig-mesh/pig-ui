@@ -175,18 +175,7 @@ All.prototype = {
 					if (valueElement.type === 'SelectUser' || valueElement.type === 'SelectDept') {
 						valueShow = value.map((res) => res.name).join(',');
 					} else if (valueElement.type === 'SingleSelect') {
-						let options = valueElement.props.options;
-						if (!options) {
-							options = [];
-						}
-						//valueShow = value.map(res => res.name).join(",")
-						var arr = [];
-						for (var ite of options) {
-							if (value.indexOf(ite.key) > -1) {
-								arr.push(ite.value);
-							}
-						}
-						valueShow = arr.join(',');
+						valueShow =  value.map(res=>res.value).join(",")
 					} else {
 						if (!valueShow) {
 							valueShow = '?';
@@ -209,6 +198,10 @@ All.prototype = {
 						conArr.push(name + ' 小于 ' + valueShow);
 					} else if (expression === '<=') {
 						conArr.push(name + ' 小于等于 ' + valueShow);
+					} else if (expression === 'contain') {
+						conArr.push(name + " 包含 " + valueShow);
+					} else if (expression === 'notcontain') {
+						conArr.push(name + " 不包含 " + valueShow);
 					}
 				}
 

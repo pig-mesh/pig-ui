@@ -227,7 +227,6 @@ $center_width: 360px;
 }
 
 .drag-content {
-	height: 550px;
 	border: 1px solid;
 	width: $center_width;
 	border-radius: 10px;
@@ -249,7 +248,6 @@ $center_width: 360px;
 }
 
 .deleteIcon {
-	position: absolute;
 	margin-left: calc(#{$center_width} - 50px);
 	z-index: 20;
 }

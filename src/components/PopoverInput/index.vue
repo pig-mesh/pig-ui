@@ -108,7 +108,6 @@ const close = () => {
 watch(
 	() => inputValue.value,
 	(value) => {
-		console.log("asdasd",value)
 		emit('update:modelValue', value);
 	},
 	{

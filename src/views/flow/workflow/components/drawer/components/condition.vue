@@ -83,6 +83,13 @@ let expression = ref({
 			key: '!=',
 			name: '不等于',
 		},
+    , {
+      key: "contain",
+      name: "包含"
+    }, {
+      key: "notcontain",
+      name: "不包含"
+    }
 	],
 
 	Textarea: [
