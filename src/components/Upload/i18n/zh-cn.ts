@@ -11,5 +11,7 @@ export default {
 		size: '大小不超过',
 		format: '格式为',
 		file: '的文件',
+		sizeErrorText: '文件大小不超过',
+		typeErrorText: '文件类型错误，请上传 ',
 	},
 };

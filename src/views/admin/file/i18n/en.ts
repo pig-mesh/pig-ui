@@ -26,5 +26,8 @@ export default {
 		inputupdateTimeTip: 'input updateTime',
 		inputdelFlagTip: 'input delFlag',
 		inputtenantIdTip: 'input tenantId',
+		image: 'image',
+		video: 'video',
+		file: 'file',
 	},
 };

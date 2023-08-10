@@ -17,9 +17,9 @@
 									<file-item :uri="element" :file-size="size" :type="type"></file-item>
 								</del-wrap>
 								<div class="text-xs text-center operation-btns">
-									<span>修改</span>
+									<span>{{ $t('material.edit') }}</span>
 									|
-									<span @click.stop="handlePreview(element)">查看</span>
+									<span @click.stop="handlePreview(element)">{{ $t('material.view') }}</span>
 								</div>
 							</div>
 						</template>
@@ -43,7 +43,7 @@
 								}"
 							>
 								<el-icon><Plus /></el-icon>
-								<span>添加</span>
+								<span>{{ $t('material.add') }}</span>
 							</div>
 						</slot>
 					</div>

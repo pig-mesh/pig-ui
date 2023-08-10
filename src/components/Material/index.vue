@@ -34,11 +34,11 @@
 													teleported
 												>
 													<div>
-														<el-dropdown-item> 命名分组 </el-dropdown-item>
+														<el-dropdown-item> {{ $t('material.addGroup') }} </el-dropdown-item>
 													</div>
 												</popover-input>
 												<div @click="handleDeleteCate(data.id)">
-													<el-dropdown-item>删除分组</el-dropdown-item>
+													<el-dropdown-item>{{ $t('material.delGroup') }}</el-dropdown-item>
 												</div>
 											</el-dropdown-menu>
 										</template>
@@ -52,20 +52,22 @@
 
 			<div class="flex justify-center p-2 border-t border-br">
 				<popover-input @confirm="handleAddCate" size="default" width="400px" :limit="20" show-limit teleported>
-					<el-button> 添加分组 </el-button>
+					<el-button> {{ $t('material.addGroup') }} </el-button>
 				</popover-input>
 			</div>
 		</div>
 		<div class="flex flex-col material__center">
 			<div class="flex operate-btn">
 				<div class="flex flex-1">
-					<el-button icon="folder-add" type="primary" class="ml10" v-auth="'sys_file_del'" @click="visibleUpload = true"> 上传 </el-button>
+					<el-button icon="folder-add" type="primary" class="ml10" v-auth="'sys_file_del'" @click="visibleUpload = true"
+						>{{ $t('material.uploadFileTip') }}
+					</el-button>
 
-					<el-button v-if="mode == 'page'" :disabled="!select.length" @click.stop="batchFileDelete()"> 删除 </el-button>
+					<el-button v-if="mode == 'page'" :disabled="!select.length" @click.stop="batchFileDelete()"> {{ $t('common.delBtn') }} </el-button>
 
-					<popup v-if="mode == 'page'" class="ml-3" @confirm="batchFileMove" :disabled="!select.length" title="移动文件">
+					<popup v-if="mode == 'page'" class="ml-3" @confirm="batchFileMove" :disabled="!select.length" :title="$t('material.moveBtn')">
 						<template #trigger>
-							<el-button :disabled="!select.length">移动</el-button>
+							<el-button :disabled="!select.length">{{ $t('material.moveBtn') }}</el-button>
 						</template>
 
 						<div>
@@ -78,7 +80,7 @@
 						</div>
 					</popup>
 				</div>
-				<el-input class="mr-16 ml-80" placeholder="请输入名称" v-model="fileParams.original" @keyup.enter="refresh">
+				<el-input class="mr-16 ml-80" :placeholder="$t('file.inputfileNameTip')" v-model="fileParams.original" @keyup.enter="refresh">
 					<template #append>
 						<el-button @click="refresh">
 							<template #icon>
@@ -88,7 +90,7 @@
 					</template>
 				</el-input>
 				<div class="flex items-center ml-2">
-					<el-tooltip content="列表视图" placement="top">
+					<el-tooltip :content="$t('material.list')" placement="top">
 						<div
 							class="list-icon"
 							:class="{
@@ -99,7 +101,7 @@
 							<el-icon><Expand /></el-icon>
 						</div>
 					</el-tooltip>
-					<el-tooltip content="平铺视图" placement="top">
+					<el-tooltip :content="$t('material.grid')" placement="top">
 						<div
 							class="list-icon"
 							:class="{
@@ -114,7 +116,7 @@
 			</div>
 			<div class="mt-3" v-if="mode == 'page'">
 				<el-checkbox :disabled="!pager.lists.length" v-model="isCheckAll" @change="selectAll" :indeterminate="isIndeterminate">
-					当页全选
+					{{ $t('material.allCheck') }}
 				</el-checkbox>
 			</div>
 			<div class="flex flex-col flex-1 min-h-0 mb-1 material-center__content">
@@ -141,10 +143,10 @@
 									show-limit
 									teleported
 								>
-									<el-button type="primary" link> 重命名 </el-button>
+									<el-button type="primary" link> {{ $t('material.rename') }} </el-button>
 								</popover-input>
-								<el-button type="primary" link @click="handleDownFile(item)" v-if="type === 'file'"> 下载 </el-button>
-								<el-button type="primary" link @click="handlePreview(getFileUri(item))" v-else> 查看 </el-button>
+								<el-button type="primary" link @click="handleDownFile(item)" v-if="type === 'file'"> {{ $t('material.download') }} </el-button>
+								<el-button type="primary" link @click="handlePreview(getFileUri(item))" v-else> {{ $t('material.view') }} </el-button>
 							</div>
 						</li>
 					</ul>
@@ -203,7 +205,7 @@
 					</el-table-column>
 				</el-table>
 
-				<div class="flex items-center justify-center flex-1" v-if="!pager.lists.length">暂无数据~</div>
+				<div class="flex items-center justify-center flex-1" v-if="!pager.lists.length">{{ $t('el.transfer.noData') }}~</div>
 			</div>
 			<div>
 				<pagination v-bind="pager" @change="getFileList" layout="total, prev, pager, next, jumper" />
@@ -234,7 +236,7 @@
 		<preview v-model="showPreview" :url="previewUrl" :type="type" />
 	</div>
 
-	<el-dialog title="上传文件" v-model="visibleUpload" :close-on-click-modal="false" draggable>
+	<el-dialog :title="$t('material.uploadFileTip')" v-model="visibleUpload" :close-on-click-modal="false" draggable>
 		<upload-file @change="refresh" v-if="props.type === 'image'" :data="{ groupId: cateId, type: typeValue }" :fileType="['png', 'jpg', 'jpeg']" />
 
 		<upload-file @change="refresh" v-if="props.type === 'video'" :data="{ groupId: cateId, type: typeValue }" :fileType="['mp4']" />

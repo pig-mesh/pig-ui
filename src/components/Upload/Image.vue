@@ -20,15 +20,15 @@
 				<div class="upload-handle" @click.stop>
 					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
 						<el-icon :size="props.iconSize"><Edit /></el-icon>
-						<span v-if="!props.iconSize">编辑</span>
+						<span v-if="!props.iconSize">{{ $t('common.editBtn') }}</span>
 					</div>
 					<div class="handle-icon" @click="imgViewVisible = true">
 						<el-icon :size="props.iconSize"><ZoomIn /></el-icon>
-						<span v-if="!props.iconSize">查看</span>
+						<span v-if="!props.iconSize">{{ $t('common.viewBtn') }}</span>
 					</div>
 					<div class="handle-icon" @click="deleteImg" v-if="!self_disabled">
 						<el-icon :size="props.iconSize"><Delete /></el-icon>
-						<span v-if="!props.iconSize">删除</span>
+						<span v-if="!props.iconSize">{{ $t('common.delBtn') }}</span>
 					</div>
 				</div>
 			</template>

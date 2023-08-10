@@ -5,6 +5,7 @@ export default {
 		addBtn: 'Add',
 		editBtn: 'Edit',
 		delBtn: 'Delete',
+		viewBtn: 'View',
 		detailBtn: 'Details',
 		exportBtn: 'Export',
 		expandBtn: 'expand/phrase ',

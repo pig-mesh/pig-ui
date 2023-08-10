@@ -21,11 +21,11 @@
 			<!-- 底部弹窗页脚 -->
 			<template #footer>
 				<div class="dialog-footer">
-					<el-button v-if="cancelButtonText" @click="handleEvent('cancel')">
-						{{ cancelButtonText }}
+					<el-button @click="handleEvent('cancel')">
+						{{ $t('common.cancelButtonText') }}
 					</el-button>
-					<el-button v-if="confirmButtonText" type="primary" @click="handleEvent('confirm')">
-						{{ confirmButtonText }}
+					<el-button type="primary" @click="handleEvent('confirm')">
+						{{ $t('common.confirmButtonText') }}
 					</el-button>
 				</div>
 			</template>
@@ -45,16 +45,6 @@ export default defineComponent({
 			// 弹窗内容
 			type: String,
 			default: '',
-		},
-		confirmButtonText: {
-			// 确认按钮内容
-			type: [String, Boolean],
-			default: '确定',
-		},
-		cancelButtonText: {
-			// 取消按钮内容
-			type: [String, Boolean],
-			default: '取消',
 		},
 		width: {
 			// 弹窗的宽度

@@ -24,7 +24,9 @@ export default {
 		inputupdateByTip: '请输入修改人',
 		inputcreateTimeTip: '请输入上传时间',
 		inputupdateTimeTip: '请输入更新时间',
-		inputdelFlagTip: '请输入${field.fieldComment}',
 		inputtenantIdTip: '请输入所属租户',
+		image: '图片',
+		video: '视频',
+		file: '文件',
 	},
 };

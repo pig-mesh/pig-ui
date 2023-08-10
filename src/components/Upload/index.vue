@@ -62,6 +62,7 @@
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
+import { useI18n } from 'vue-i18n';
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制
@@ -109,7 +110,7 @@ const number = ref(0);
 const fileList = ref([]) as any;
 const uploadList = ref([]) as any;
 const fileUpload = ref();
-
+const { t } = useI18n();
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.get('token'),
@@ -125,7 +126,7 @@ const handleBeforeUpload = (file: File) => {
 		const fileExt = fileName[fileName.length - 1];
 		const isTypeOk = props.fileType.indexOf(fileExt) >= 0;
 		if (!isTypeOk) {
-			useMessage().error(`文件格式不正确, 请上传${props.fileType.join('/')}格式文件!`);
+			useMessage().error(`${t('excel.typeErrorText')} ${props.fileType.join('/')}!`);
 			return false;
 		}
 	}
@@ -133,7 +134,7 @@ const handleBeforeUpload = (file: File) => {
 	if (props.fileSize) {
 		const isLt = file.size / 1024 / 1024 < props.fileSize;
 		if (!isLt) {
-			useMessage().error(`上传文件大小不能超过 ${props.fileSize} MB!`);
+			useMessage().error(`${t('excel.sizeErrorText')} ${props.fileSize} MB!`);
 			return false;
 		}
 	}

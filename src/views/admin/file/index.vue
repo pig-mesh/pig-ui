@@ -13,20 +13,22 @@
 </template>
 
 <script lang="ts" setup name="fileCenter">
-const Material = defineAsyncComponent(() => import('/@/components/Material/index.vue'));
+import { useI18n } from 'vue-i18n';
 
+const Material = defineAsyncComponent(() => import('/@/components/Material/index.vue'));
+const { t } = useI18n();
 const tabsMap = [
 	{
 		type: 'image',
-		name: '图片',
+		name: t('file.image'),
 	},
 	{
 		type: 'video',
-		name: '视频',
+		name: t('file.video'),
 	},
 	{
 		type: 'file',
-		name: '文件',
+		name: t('file.file'),
 	},
 ];
 const activeTab = ref('image');

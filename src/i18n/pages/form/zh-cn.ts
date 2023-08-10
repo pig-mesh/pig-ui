@@ -6,6 +6,7 @@ export default {
 		editBtn: '修 改',
 		expandBtn: '展开/折叠',
 		delBtn: '删除',
+		viewBtn: '查看',
 		detailBtn: '详情',
 		refreshCacheBtn: '刷新缓存',
 		exportBtn: '导出',
