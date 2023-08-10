@@ -7,27 +7,27 @@
 						<div class="item-wrapper">
 							<span class="iconfont"></span>
 						</div>
-						<p>审批人</p>
+						<p>{{ $t('flow.approver') }}</p>
 					</a>
 					<a class="add-node-popover-item notifier" @click="addType(2)">
 						<div class="item-wrapper">
 							<span class="iconfont"></span>
 						</div>
-						<p>抄送人</p>
+						<p>{{ $t('flow.carbonCopyRecipient') }}</p>
 					</a>
 
 					<a class="add-node-popover-item condition" @click="addType(4)">
 						<div class="item-wrapper">
 							<span class="iconfont"></span>
 						</div>
-						<p>条件分支</p>
+						<p>{{ $t('flow.conditionalBranching') }}</p>
 					</a>
 
 					<a class="add-node-popover-item ParallelGateway" @click="addType(5)">
 						<div class="item-wrapper">
 							<span class="iconfont"></span>
 						</div>
-						<p>并行分支</p>
+						<p>{{ $t('flow.parallelBranch') }}</p>
 					</a>
 				</div>
 				<template #reference>
@@ -206,141 +206,141 @@ const addType = (type) => {
 </script>
 <style scoped lang="css">
 .add-node-btn-box {
-  width: 240px;
-  display: inline-flex;
-  flex-shrink: 0;
-  position: relative;
+	width: 240px;
+	display: inline-flex;
+	flex-shrink: 0;
+	position: relative;
 }
 
 .add-node-btn-box::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -1;
-  margin: auto;
-  width: 2px;
-  height: 100%;
-  background-color: #cacaca;
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: -1;
+	margin: auto;
+	width: 2px;
+	height: 100%;
+	background-color: #cacaca;
 }
 
 .add-node-btn {
-  user-select: none;
-  width: 240px;
-  padding: 20px 0 32px;
-  display: flex;
-  justify-content: center;
-  flex-shrink: 0;
-  flex-grow: 1;
+	user-select: none;
+	width: 240px;
+	padding: 20px 0 32px;
+	display: flex;
+	justify-content: center;
+	flex-shrink: 0;
+	flex-grow: 1;
 }
 
 .add-node-btn .btn {
-  outline: none;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
-  width: 30px;
-  height: 30px;
-  background: #3296fa;
-  border-radius: 50%;
-  position: relative;
-  border: none;
-  line-height: 30px;
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+	outline: none;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+	width: 30px;
+	height: 30px;
+	background: #3296fa;
+	border-radius: 50%;
+	position: relative;
+	border: none;
+	line-height: 30px;
+	transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .add-node-btn .btn .iconfont {
-  color: #fff;
-  font-size: 16px;
+	color: #fff;
+	font-size: 16px;
 }
 
 .add-node-btn .btn:hover {
-  transform: scale(1.3);
-  box-shadow: 0 13px 27px 0 rgba(0, 0, 0, 0.1);
+	transform: scale(1.3);
+	box-shadow: 0 13px 27px 0 rgba(0, 0, 0, 0.1);
 }
 
 .add-node-btn .btn:active {
-  transform: none;
-  background: #1e83e9;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
+	transform: none;
+	background: #1e83e9;
+	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 </style>
 <style scoped lang="scss">
 @import '/@/views/flow/workflow/css/workflow.css';
 
 .add-node-popover-body {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
 
-  .add-node-popover-item {
-    margin-right: 10px;
-    cursor: pointer;
-    text-align: center;
-    flex: 1;
+	.add-node-popover-item {
+		margin-right: 10px;
+		cursor: pointer;
+		text-align: center;
+		flex: 1;
 
-    .item-wrapper {
-      user-select: none;
-      display: inline-block;
-      width: 80px;
-      height: 80px;
-      margin-bottom: 5px;
-      background: #fff;
-      border: 1px solid #e2e2e2;
-      border-radius: 50%;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+		.item-wrapper {
+			user-select: none;
+			display: inline-block;
+			width: 80px;
+			height: 80px;
+			margin-bottom: 5px;
+			background: #fff;
+			border: 1px solid #e2e2e2;
+			border-radius: 50%;
+			transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 
-      .iconfont {
-        font-size: 35px;
-        line-height: 80px;
-      }
-    }
+			.iconfont {
+				font-size: 35px;
+				line-height: 80px;
+			}
+		}
 
-    &.approver {
-      .item-wrapper {
-        color: #ff943e;
-      }
-    }
+		&.approver {
+			.item-wrapper {
+				color: #ff943e;
+			}
+		}
 
-    &.notifier {
-      .item-wrapper {
-      //color: #3296fa
-      }
-    }
+		&.notifier {
+			.item-wrapper {
+				//color: #3296fa
+			}
+		}
 
-    &.condition {
-      .item-wrapper {
-        color: #15bc83;
-      }
-    }
+		&.condition {
+			.item-wrapper {
+				color: #15bc83;
+			}
+		}
 
-    &.ParallelGateway {
-      .item-wrapper {
-        color: rgb(255, 69, 0);
-      }
-    }
+		&.ParallelGateway {
+			.item-wrapper {
+				color: rgb(255, 69, 0);
+			}
+		}
 
-    &:hover {
-      .item-wrapper {
-        background: #3296fa;
-        box-shadow: 0 10px 20px 0 rgba(50, 150, 250, 0.4);
-      }
+		&:hover {
+			.item-wrapper {
+				background: #3296fa;
+				box-shadow: 0 10px 20px 0 rgba(50, 150, 250, 0.4);
+			}
 
-      .iconfont {
-        color: #fff;
-      }
-    }
+			.iconfont {
+				color: #fff;
+			}
+		}
 
-    &:active {
-      .item-wrapper {
-        box-shadow: none;
-        background: #eaeaea;
-      }
+		&:active {
+			.item-wrapper {
+				box-shadow: none;
+				background: #eaeaea;
+			}
 
-      .iconfont {
-      //color: inherit
-      }
-    }
-  }
+			.iconfont {
+				//color: inherit
+			}
+		}
+	}
 }
 </style>

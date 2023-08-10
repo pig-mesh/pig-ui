@@ -36,8 +36,8 @@ computed(() => {
 
 <template>
 	<div>
-		<el-form-item label="业务前缀">
-			<el-input placeholder="请输入业务前缀" v-model="config.props.prefix" />
+		<el-form-item :label="$t('flow.servicePrefix')">
+			<el-input :placeholder="$t('flow.servicePrefixTips')" v-model="config.props.prefix" />
 		</el-form-item>
 	</div>
 </template>

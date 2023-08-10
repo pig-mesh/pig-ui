@@ -4,7 +4,7 @@
 			<el-icon>
 				<Plus />
 			</el-icon>
-			请点击左侧组件拖拽到此处
+			{{ $t('flow.emptyComponent') }}
 		</el-text>
 	</div>
 </template>

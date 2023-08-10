@@ -3,6 +3,7 @@ import { FormGroupVO } from './types';
 const formGroupConfig: FormGroupVO[] = [
 	{
 		name: '文本',
+		type: 'Text',
 		formList: [
 			{
 				name: '流水号',
@@ -75,6 +76,7 @@ const formGroupConfig: FormGroupVO[] = [
 	},
 	{
 		name: '数值',
+		type: 'Number',
 		formList: [
 			{
 				name: '数字',
@@ -104,6 +106,7 @@ const formGroupConfig: FormGroupVO[] = [
 	},
 	{
 		name: '日期-时间',
+		type: 'DateTime',
 		formList: [
 			{
 				name: '日期',
@@ -145,6 +148,7 @@ const formGroupConfig: FormGroupVO[] = [
 	},
 	{
 		name: '选项',
+		type: 'Option',
 		formList: [
 			{
 				name: '单选',
@@ -194,6 +198,7 @@ const formGroupConfig: FormGroupVO[] = [
 	},
 	{
 		name: '其他',
+		type: 'Other',
 		formList: [
 			{
 				name: '图片',
@@ -250,7 +255,7 @@ const formGroupConfig: FormGroupVO[] = [
 					self: false,
 					value: [],
 				},
-			}
+			},
 		],
 	},
 ];

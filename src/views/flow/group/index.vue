@@ -3,10 +3,10 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row shadow="hover" class="mt-4 ml-8">
 				<div class="flex justify-start">
-					<el-button class="button" @click.stop="toCreateFlow(undefined)" type="primary" :icon="Plus">创建流程 </el-button>
+					<el-button class="button" @click.stop="toCreateFlow(undefined)" type="primary" :icon="Plus">{{ $t('flow.creationProcess') }} </el-button>
 					<popover-input @confirm="addGroupInputBlur" class="ml-4">
 						<template #default>
-							<el-button :icon="Plus">新建分组</el-button>
+							<el-button :icon="Plus">{{ $t('flow.creationGroup') }}</el-button>
 						</template>
 					</popover-input>
 				</div>
@@ -32,22 +32,22 @@
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
-						<el-table-column prop="flowId" label="流程编号" width="250" />
-						<el-table-column prop="logo" label="图标" width="80" show-overflow-tooltip>
+						<el-table-column prop="flowId" label="#" width="250" />
+						<el-table-column prop="logo" :label="$t('flow.logo')" width="80" show-overflow-tooltip>
 							<template #default="{ row }">
 								<upload-img disabled v-model:imageUrl="row.logo" width="50px" height="50px"></upload-img>
 							</template>
 						</el-table-column>
-						<el-table-column prop="name" label="流程名称" show-overflow-tooltip>
+						<el-table-column prop="name" :label="$t('flow.name')" show-overflow-tooltip>
 							<template #default="{ row }">
 								{{ row.name }}
 								<el-tag v-if="row.stop" type="danger">已停用</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
-						<el-table-column prop="rangeShow" label="使用范围" show-overflow-tooltip>
+						<el-table-column prop="createTime" :label="$t('flow.createTime')" show-overflow-tooltip></el-table-column>
+						<el-table-column prop="rangeShow" :label="$t('flow.scopeOfUse')" show-overflow-tooltip>
 							<template #default="{ row }">
-								{{ row.rangeShow && row.rangeShow.length > 0 ? row.rangeShow : '所有人' }}
+								{{ row.rangeShow && row.rangeShow.length > 0 ? row.rangeShow : $t('flow.allUser') }}
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('common.action')" width="200">

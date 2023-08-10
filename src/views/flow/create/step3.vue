@@ -13,7 +13,7 @@
 						<nodeWrap v-model:nodeConfig="nodeConfig" />
 						<div class="end-node">
 							<div class="end-node-circle"></div>
-							<div class="end-node-text">流程结束</div>
+							<div class="end-node-text">{{ $t('flow.end') }}</div>
 						</div>
 					</div>
 				</section>
@@ -36,11 +36,14 @@ import promoterDrawer from '../workflow/components/drawer/promoterDrawer.vue';
 import approverDrawer from '../workflow/components/drawer/approverDrawer.vue';
 import copyerDrawer from '../workflow/components/drawer/copyerDrawer.vue';
 import conditionDrawer from '../workflow/components/drawer/conditionDrawer.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 let tipList = ref([]);
 let nowVal = ref(100);
 let nodeConfig = ref({
-	nodeName: '发起人',
+	nodeName: t('flow.initiator'),
 	type: 0,
 	id: 'root',
 	formPerms: {},

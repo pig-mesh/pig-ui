@@ -1,7 +1,7 @@
 <template>
 	<el-drawer
 		:append-to-body="true"
-		title="发起人"
+		:title="$t('flow.initiator')"
 		v-model="visible"
 		class="set_promoter"
 		:show-close="false"

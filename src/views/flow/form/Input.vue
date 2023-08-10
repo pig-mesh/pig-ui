@@ -5,8 +5,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import { defineExpose } from 'vue';
-
 let props = defineProps({
 	mode: {
 		type: String,

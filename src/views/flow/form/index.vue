@@ -2,9 +2,9 @@
 	<el-container>
 		<el-aside width="400px">
 			<div effect="dark">
-				<h4 style="text-align: center">组件库</h4>
+				<h4 style="text-align: center">{{ $t('flow.componentLibrary') }}</h4>
 				<div v-for="item in oriFormList" :key="item.id">
-					<h5 style="padding-left: 60px">{{ item.name }}</h5>
+					<h5 style="padding-left: 60px">{{ $i18n.locale === 'en' ? item.type : item.name }}</h5>
 					<draggable
 						v-model="item.formList"
 						ghost-class="ghost"
@@ -20,7 +20,7 @@
 					>
 						<template #item="{ element }">
 							<div class="zj">
-								<el-button size="large" style="width: 100%" :icon="element.icon">{{ element.name }}</el-button>
+								<el-button size="large" style="width: 100%" :icon="element.icon">{{ $i18n.locale === 'en' ? element.type : element.name }}</el-button>
 							</div>
 						</template>
 					</draggable>
@@ -68,17 +68,17 @@
 						</div>
 					</template>
 					<el-form label-width="120px" label-position="top">
-						<el-form-item required label="标题">
+						<el-form-item required :label="$t('flow.title')">
 							<el-input v-model="currentForm.name" maxlength="10" />
 						</el-form-item>
 
-						<el-form-item label="提示" :required="currentForm?.type === 'Description'">
+						<el-form-item :label="$t('flow.tips')" :required="currentForm?.type === 'Description'">
 							<el-input v-model="currentForm.placeholder" maxlength="50" />
 						</el-form-item>
 
 						<component :is="getFormConfigWidget(currentForm?.type)" :id="currentForm?.id" ref="currentFormConfigRef"></component>
-						<el-form-item label="其他">
-							<el-checkbox v-model="currentForm.required" label="必填" />
+						<el-form-item :label="$t('flow.other')">
+							<el-checkbox v-model="currentForm.required" :label="$t('flow.required')" />
 						</el-form-item>
 					</el-form>
 				</el-drawer>

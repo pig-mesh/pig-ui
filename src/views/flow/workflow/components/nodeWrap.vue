@@ -146,6 +146,7 @@ import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
 import $func from '../utils/index';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
+import { useI18n } from 'vue-i18n';
 
 let _uid = getCurrentInstance().uid;
 
@@ -160,9 +161,10 @@ let defaultText = computed(() => {
 	return placeholderList[props.nodeConfig.type];
 });
 
+const {t} = useI18n()
 var placeHolder = computed(() => {
 	if (props.nodeConfig.type == 0) {
-		return $func.arrToStr(props.nodeConfig.nodeUserList) || '所有人';
+		return $func.arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
 	}
 	if (props.nodeConfig.type == 1) {
 		return $func.setApproverStr(props.nodeConfig);

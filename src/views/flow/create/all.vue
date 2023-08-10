@@ -6,19 +6,19 @@
 				<div class="f2">
 					<span class="center_t" effect="dark" :activeStep="activeStep == 0" @click="activeStep = 0">
 						<span :activeStep="activeStep == 0">1</span>
-						<span>基础信息</span>
+						<span>{{ $t('flow.basicInformation') }}</span>
 					</span>
 					<span class="center_t" effect="dark" :activeStep="activeStep == 1" @click="activeStep = 1">
 						<span :activeStep="activeStep == 1">2</span>
-						<span>表单设计</span>
+						<span>{{ $t('flow.formDesign') }}</span>
 					</span>
 					<span class="center_t" effect="dark" :activeStep="activeStep == 2" @click="activeStep = 2">
 						<span :activeStep="activeStep == 2">3</span>
-						<span>流程设计</span>
+						<span>{{ $t('flow.processDesign') }}</span>
 					</span>
 				</div>
 				<div class="f3">
-					<el-button type="primary" @click="publish">发 布</el-button>
+					<el-button type="primary" @click="publish">{{ $t('flow.publish') }}</el-button>
 				</div>
 			</div>
 			<el-scrollbar height="calc(100vh - 250px)">
@@ -27,23 +27,23 @@
 				<step3 v-show="activeStep === 2" :nodeConfigObj="step3NodeConfig" ref="step3Ref" />
 			</el-scrollbar>
 			<!--			//验证每一步-->
-			<el-dialog v-model="validateDialogShow" title="流程检查">
+			<el-dialog v-model="validateDialogShow" :title="$t('flow.processCheck')">
 				<el-steps :active="validateFlowStep" finish-status="success" simple style="margin-top: 20px">
-					<el-step title="基础信息" />
-					<el-step title="表单设计" />
-					<el-step title="流程设计" />
+					<el-step :title="$t('flow.basicInformation')" />
+					<el-step :title="$t('flow.formDesign')" />
+					<el-step :title="$t('flow.processDesign')" />
 				</el-steps>
 
 				<div style="text-align: center">
-					<el-result v-if="validateFlowStep == 3" icon="success" title="检查成功" sub-title="流程检查完成，现在提交？">
+					<el-result v-if="validateFlowStep == 3" icon="success" :title="$t('flow.checkSuccess')" :sub-title="$t('flow.checkSubSuccess')">
 						<template #extra>
-							<el-button type="primary" @click="submitFlow">提交</el-button>
+							<el-button type="primary" @click="submitFlow">{{ $t('flow.submit') }}</el-button>
 						</template>
 					</el-result>
 
 					<el-result
-						title="检查中"
-						sub-title="正在检查流程信息"
+						:title="$t('flow.checkIng')"
+						:sub-title="$t('flow.checkSubIng')"
 						v-if="validateErrMsg.length == 0 && validateDialogShow && validatingShow && validateFlowStep < 3"
 					>
 						<template #icon>
@@ -63,7 +63,7 @@
 							</div>
 						</template>
 						<template #extra>
-							<el-button type="primary" @click="gotoEdit">去修改</el-button>
+							<el-button type="primary" @click="gotoEdit">{{ $t('common.editBtn') }}</el-button>
 						</template>
 					</el-result>
 				</div>

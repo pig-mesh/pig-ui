@@ -3,28 +3,28 @@
 		<div class="container-div">
 			<el-card class="box-card" style="padding-right: 10%; padding-left: 10%">
 				<el-form ref="ruleForm" :model="form" :rules="rules" label-position="top" status-icon label-width="120px" @submit.prevent>
-					<el-form-item label="图标" prop="logo">
+					<el-form-item :label="$t('flow.')" prop="logo">
 						<upload-img v-model:imageUrl="form.logo"  height="100px" width="100px">
 							<template #empty>
 								<el-icon>
 									<Avatar />
 								</el-icon>
-								<span>请上传图标</span>
+								<span>{{ $t('flow.logo') }}</span>
 							</template>
 						</upload-img>
 					</el-form-item>
-					<el-form-item label="名称" prop="name">
+					<el-form-item :label="$t('flow.name')" prop="name">
 						<el-input v-model="form.name" />
 					</el-form-item>
-					<el-form-item label="说明" prop="remark">
+					<el-form-item :label="$t('flow.remark')" prop="remark">
 						<el-input v-model="form.remark" />
 					</el-form-item>
-					<el-form-item label="分组" prop="groupId">
-						<el-select v-model="form.groupId" placeholder="请选择流程组">
+					<el-form-item :label="$t('flow.group')" prop="groupId">
+						<el-select v-model="form.groupId" :placeholder="$t('flow.groupTips')">
 							<el-option v-for="item in groupList" :key="item.id" :label="item.groupName" :value="item.id" />
 						</el-select>
 					</el-form-item>
-					<el-form-item label="管理员" prop="admin">
+					<el-form-item :label="$t('flow.admin')" prop="admin">
 						<select-show v-model:orgList="form.admin" type="user" :multiple="false"></select-show>
 					</el-form-item>
 				</el-form>
