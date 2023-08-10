@@ -59,7 +59,11 @@
 				<el-table-column :label="$t('syslog.remoteAddr')" prop="remoteAddr" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('syslog.method')" prop="method" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('syslog.serviceId')" prop="serviceId" show-overflow-tooltip></el-table-column>
-				<el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip></el-table-column>
+				<el-table-column :label="$t('syslog.time')" prop="time" show-overflow-tooltip>
+					<template #default="scope">
+						<span v-if="scope.row.time">{{scope.row.time}}/ms</span>
+					</template>
+				</el-table-column>
 				<el-table-column :label="$t('syslog.createTime')" prop="createTime" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
 				<el-table-column :label="$t('syslog.createBy')" prop="createBy" show-overflow-tooltip sortable="custom" width="200"></el-table-column>
 				<el-table-column :label="$t('common.action')" width="150">
