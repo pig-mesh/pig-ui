@@ -133,7 +133,7 @@ export function backEndComponent(routes: any) {
 			}
 			item.path = '/iframes/' + window.btoa(item.path);
 		} else if (item.path) {
-			item.component = dynamicImport(dynamicViewsModules, item.path as string);
+			item.component = dynamicImport(dynamicViewsModules, item.path.split('/:')[0]);
 		}
 		item.children && backEndComponent(item.children);
 		if (item.children) {
