@@ -70,8 +70,8 @@
 						v-loading="state.loading"
 						:data="state.dataList"
 						@selection-change="handleSelectionChange"
-            row-key="userId"
-            border
+						row-key="userId"
+						border
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
@@ -206,7 +206,7 @@ const handleNodeClick = (e: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/user/export', Object.assign(state.queryForm,{ids:selectObjs}), 'users.xlsx');
+	downBlobFile('/admin/user/export', Object.assign(state.queryForm, { ids: selectObjs }), 'users.xlsx');
 };
 
 // 是否可以多选
@@ -249,14 +249,13 @@ const changeSwitch = async (row: any) => {
 
 //修改用户密码
 const changePassword = async (row: any) => {
-	if(!inputPassword.value || inputPassword.value.length < 6 || inputPassword.value.length > 20){
-		useMessage().error(t('sysuser.inputPasswordTip'))
-		return
+	if (!inputPassword.value || inputPassword.value.length < 6 || inputPassword.value.length > 20) {
+		useMessage().error(t('sysuser.inputPasswordTip'));
+		return;
 	}
 
 	row.phone = undefined;
 	row.password = inputPassword.value;
-	console.log(row.password)
 	await putObj(row);
 	useMessage().success(t('common.optSuccessText'));
 	getDataList();

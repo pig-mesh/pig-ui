@@ -1,42 +1,32 @@
 <template>
-	<div class="system-dept-dialog-container">
-		<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="769px">
-			<el-form ref="deptDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
-				<el-row :gutter="20">
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
-							<el-tree-select
-								v-model="dataForm.parentId"
-								:data="parentData"
-								:props="{ value: 'id', label: 'name', children: 'children' }"
-								class="w100"
-								clearable
-								check-strictly
-								:render-after-expand="false"
-								:placeholder="$t('sysdept.inputparentIdTip')"
-							/>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdept.name')" prop="name">
-							<el-input v-model="dataForm.name" :placeholder="$t('sysdept.inputnameTip')" clearable />
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdept.sortOrder')" prop="sortOrder">
-							<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" clearable />
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
-			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
-				</span>
-			</template>
-		</el-dialog>
-	</div>
+	<el-dialog :title="dataForm.deptId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="600">
+		<el-form ref="deptDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
+			<el-form-item :label="$t('sysdept.parentId')" prop="parentId">
+				<el-tree-select
+					v-model="dataForm.parentId"
+					:data="parentData"
+					:props="{ value: 'id', label: 'name', children: 'children' }"
+					class="w100"
+					clearable
+					check-strictly
+					:render-after-expand="false"
+					:placeholder="$t('sysdept.inputparentIdTip')"
+				/>
+			</el-form-item>
+			<el-form-item :label="$t('sysdept.name')" prop="name">
+				<el-input v-model="dataForm.name" :placeholder="$t('sysdept.inputnameTip')" clearable />
+			</el-form-item>
+			<el-form-item :label="$t('sysdept.sortOrder')" prop="sortOrder">
+				<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" clearable />
+			</el-form-item>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script setup lang="ts" name="systemDeptDialog">

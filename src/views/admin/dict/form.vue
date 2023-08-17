@@ -1,42 +1,30 @@
 <template>
-	<div class="system-dic-dialog-container">
-		<el-dialog :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="60%">
-			<el-form :model="dataForm" :rules="dataRules" label-width="100px" ref="dicDialogFormRef" v-loading="loading">
-				<el-row :gutter="35">
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdict.dictType')" prop="dictType">
-							<el-input :placeholder="$t('sysdict.inputDictTypeTip')" :disabled="dataForm.id !== ''" clearable v-model="dataForm.dictType"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdict.description')" prop="description">
-							<el-input :placeholder="$t('sysdict.inputDescriptionTip')" clearable v-model="dataForm.description"></el-input>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
-							<el-radio-group v-model="dataForm.systemFlag">
-								<el-radio-button :key="index" :label="item.value" v-for="(item, index) in dict_type">
-									{{ item.label }}
-								</el-radio-button>
-							</el-radio-group>
-						</el-form-item>
-					</el-col>
-					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysdict.remarks')" prop="remarks">
-							<el-input :placeholder="$t('sysdict.inputRemarksTip')" v-model="dataForm.remarks"></el-input>
-						</el-form-item>
-					</el-col>
-				</el-row>
-			</el-form>
-			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
-				</span>
-			</template>
-		</el-dialog>
-	</div>
+	<el-dialog :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="600">
+		<el-form :model="dataForm" :rules="dataRules" label-width="100px" ref="dicDialogFormRef" v-loading="loading">
+			<el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
+				<el-radio-group v-model="dataForm.systemFlag">
+					<el-radio border :key="index" :label="item.value" v-for="(item, index) in dict_type">
+						{{ item.label }}
+					</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item :label="$t('sysdict.dictType')" prop="dictType">
+				<el-input :placeholder="$t('sysdict.inputDictTypeTip')" :disabled="dataForm.id !== ''" clearable v-model="dataForm.dictType"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysdict.description')" prop="description">
+				<el-input :placeholder="$t('sysdict.inputDescriptionTip')" clearable v-model="dataForm.description"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysdict.remarks')" prop="remarks">
+				<el-input type="textarea" maxlength="100" :rows="3" :placeholder="$t('sysdict.inputRemarksTip')" v-model="dataForm.remarks"></el-input>
+			</el-form-item>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script lang="ts" name="systemDicDialog" setup>

@@ -1,23 +1,15 @@
 <template>
-	<el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
+	<el-dialog :close-on-click-modal="false" width="600" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
 		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
-			<el-row :gutter="20">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('i18n.name')" prop="name">
-						<el-input :placeholder="t('i18n.inputKeyTip')" v-model="form.name" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('i18n.zhCn')" prop="zhCn">
-						<el-input :placeholder="t('i18n.inputZhCnTip')" v-model="form.zhCn" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('i18n.en')" prop="en">
-						<el-input :placeholder="t('i18n.inputEnTip')" v-model="form.en" />
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="t('i18n.name')" prop="name">
+				<el-input :placeholder="t('i18n.inputKeyTip')" v-model="form.name" />
+			</el-form-item>
+			<el-form-item :label="t('i18n.zhCn')" prop="zhCn">
+				<el-input :placeholder="t('i18n.inputZhCnTip')" v-model="form.zhCn" />
+			</el-form-item>
+			<el-form-item :label="t('i18n.en')" prop="en">
+				<el-input :placeholder="t('i18n.inputEnTip')" v-model="form.en" />
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

@@ -1,28 +1,18 @@
 <template>
-	<el-dialog :title="form.postId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog :title="form.postId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="600" :close-on-click-modal="false" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px" v-loading="loading">
-			<el-row :gutter="20">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('post.postCode')" prop="postCode">
-						<el-input v-model="form.postCode" :placeholder="t('post.inputpostCodeTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('post.postName')" prop="postName">
-						<el-input v-model="form.postName" :placeholder="t('post.inputpostNameTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('post.postSort')" prop="postSort">
-						<el-input-number v-model="form.postSort" :placeholder="t('post.inputpostSortTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('post.remark')" prop="remark">
-						<el-input v-model="form.remark" :placeholder="t('post.inputremarkTip')" />
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="t('post.postCode')" prop="postCode">
+				<el-input v-model="form.postCode" :placeholder="t('post.inputpostCodeTip')" />
+			</el-form-item>
+			<el-form-item :label="t('post.postName')" prop="postName">
+				<el-input v-model="form.postName" :placeholder="t('post.inputpostNameTip')" />
+			</el-form-item>
+			<el-form-item :label="t('post.postSort')" prop="postSort">
+				<el-input-number v-model="form.postSort" :placeholder="t('post.inputpostSortTip')" />
+			</el-form-item>
+			<el-form-item :label="t('post.remark')" prop="remark">
+				<el-input type="textarea" maxlength="100" row="3" v-model="form.remark" :placeholder="t('post.inputremarkTip')" />
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

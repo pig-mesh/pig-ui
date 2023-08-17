@@ -1,80 +1,64 @@
 <template>
-	<el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog
+		:title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')"
+		v-model="visible"
+		width="600"
+		:close-on-click-modal="false"
+		draggable
+	>
 		<el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
-			<el-row :gutter="20">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
-						<el-radio-group v-model="state.ruleForm.menuType">
-							<el-radio-button label="0">菜单</el-radio-button>
-							<el-radio-button label="1">按钮</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
-						<el-tree-select
-							v-model="state.ruleForm.parentId"
-							:data="state.parentData"
-							:render-after-expand="false"
-							:props="{ value: 'id', label: 'name', children: 'children' }"
-							class="w100"
-							clearable
-							check-strictly
-							:placeholder="$t('sysmenu.inputParentIdTip')"
-						>
-						</el-tree-select>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysmenu.name')" prop="name">
-						<el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
-					<el-form-item :label="$t('sysmenu.path')" prop="path">
-						<el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '1'">
-					<el-form-item :label="$t('sysmenu.permission')" prop="permission">
-						<el-input v-model="state.ruleForm.permission" maxlength="50" :placeholder="$t('sysmenu.inputPermissionTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysmenu.sortOrder')" prop="sortOrder">
-						<el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
-					<el-form-item :label="$t('sysmenu.icon')" prop="icon">
-						<IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0' && state.ruleForm.path?.startsWith('http')">
-					<el-form-item :label="$t('sysmenu.embedded')" prop="embedded">
-						<el-radio-group v-model="state.ruleForm.embedded">
-							<el-radio-button label="0">否</el-radio-button>
-							<el-radio-button label="1">是</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
-					<el-form-item :label="$t('sysmenu.keepAlive')" prop="keepAlive">
-						<el-radio-group v-model="state.ruleForm.keepAlive">
-							<el-radio-button label="0">否</el-radio-button>
-							<el-radio-button label="1">是</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20" v-if="state.ruleForm.menuType === '0'">
-					<el-form-item :label="$t('sysmenu.visible')" prop="visible">
-						<el-radio-group v-model="state.ruleForm.visible">
-							<el-radio-button label="0">否</el-radio-button>
-							<el-radio-button label="1">是</el-radio-button>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
+				<el-radio-group v-model="state.ruleForm.menuType">
+					<el-radio border label="0">菜单</el-radio>
+					<el-radio border label="1">按钮</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
+				<el-tree-select
+					v-model="state.ruleForm.parentId"
+					:data="state.parentData"
+					:render-after-expand="false"
+					:props="{ value: 'id', label: 'name', children: 'children' }"
+					class="w100"
+					clearable
+					check-strictly
+					:placeholder="$t('sysmenu.inputParentIdTip')"
+				>
+				</el-tree-select>
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.name')" prop="name">
+				<el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.path')" prop="path" v-if="state.ruleForm.menuType === '0'">
+				<el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')" />
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.permission')" prop="permission" v-if="state.ruleForm.menuType === '1'">
+				<el-input v-model="state.ruleForm.permission" maxlength="50" :placeholder="$t('sysmenu.inputPermissionTip')" />
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.sortOrder')" prop="sortOrder">
+				<el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right" />
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.icon')" prop="icon" v-if="state.ruleForm.menuType === '0'">
+				<IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon" />
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.embedded')" prop="embedded" v-if="state.ruleForm.menuType === '0' && state.ruleForm.path?.startsWith('http')">
+				<el-radio-group v-model="state.ruleForm.embedded">
+					<el-radio border label="0">否</el-radio>
+					<el-radio border label="1">是</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.keepAlive')" prop="keepAlive" v-if="state.ruleForm.menuType === '0'">
+				<el-radio-group v-model="state.ruleForm.keepAlive">
+					<el-radio border label="0">否</el-radio>
+					<el-radio border label="1">是</el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item :label="$t('sysmenu.visible')" prop="visible" v-if="state.ruleForm.menuType === '0'">
+				<el-radio-group v-model="state.ruleForm.visible">
+					<el-radio border label="0">否</el-radio>
+					<el-radio border label="1">是</el-radio>
+				</el-radio-group>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

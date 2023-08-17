@@ -1,25 +1,17 @@
 <template>
-	<el-dialog v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')">
+	<el-dialog v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
-			<el-row :gutter="24">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('group.groupName')" prop="groupName">
-						<el-input v-model="form.groupName" :placeholder="t('group.inputGroupNameTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('group.groupDesc')" prop="groupDesc">
-						<el-input v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="24" class="mb20">
-					<el-form-item :label="$t('group.templateType')" prop="templateId">
-						<el-select v-model="form.templateId" :placeholder="$t('group.selectType')" class="w100" clearable multiple>
-							<el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
-						</el-select>
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="t('group.groupName')" prop="groupName">
+				<el-input v-model="form.groupName" :placeholder="t('group.inputGroupNameTip')" />
+			</el-form-item>
+			<el-form-item :label="$t('group.templateType')" prop="templateId">
+				<el-select v-model="form.templateId" :placeholder="$t('group.selectType')" class="w100" clearable multiple>
+					<el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
+				</el-select>
+			</el-form-item>
+			<el-form-item :label="t('group.groupDesc')" prop="groupDesc">
+				<el-input type="textarea" maxlength="100" :rows="5" v-model="form.groupDesc" :placeholder="t('group.inputGroupDescTip')" />
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

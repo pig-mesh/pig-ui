@@ -1,5 +1,5 @@
 <template>
-	<el-drawer v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" size="50%">
+	<el-dialog v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" size="50%">
 		<el-form ref="dataFormRef" v-loading="loading" :model="form" :rules="dataRules" label-width="90px">
 			<el-row :gutter="24">
 				<el-col :span="12" class="mb20">
@@ -51,7 +51,7 @@
 				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
-	</el-drawer>
+	</el-dialog>
 </template>
 
 <script lang="ts" name="WxAccountDialog" setup>

@@ -1,28 +1,15 @@
 <template>
-	<el-dialog :close-on-click-modal="false" :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
+	<el-dialog :close-on-click-modal="false" :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" width="600" draggable v-model="visible">
 		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
-			<el-row :gutter="35">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('approle.roleName')" prop="roleName">
-						<el-input :placeholder="$t('approle.please_enter_a_role_name')" clearable v-model="form.roleName"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('approle.roleCode')" prop="roleCode">
-						<el-input :placeholder="$t('approle.please_enter_the_role_Code')" clearable v-model="form.roleCode"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24" class="mb20">
-					<el-form-item :label="$t('approle.roleDesc')" prop="roleDesc">
-						<el-input
-							:placeholder="$t('approle.please_enter_the_role_description')"
-							maxlength="150"
-							type="textarea"
-							v-model="form.roleDesc"
-						></el-input>
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="$t('approle.roleName')" prop="roleName">
+				<el-input :placeholder="$t('approle.please_enter_a_role_name')" clearable v-model="form.roleName"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('approle.roleCode')" prop="roleCode">
+				<el-input :placeholder="$t('approle.please_enter_the_role_Code')" clearable v-model="form.roleCode"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('approle.roleDesc')" prop="roleDesc">
+				<el-input :placeholder="$t('approle.please_enter_the_role_description')" maxlength="150" type="textarea" v-model="form.roleDesc"></el-input>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

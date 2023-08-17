@@ -1,55 +1,39 @@
 <template>
-	<el-dialog :close-on-click-modal="false" :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
+	<el-dialog :close-on-click-modal="false" :title="form.roleId ? $t('common.editBtn') : $t('common.addBtn')" width="600" draggable v-model="visible">
 		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
-			<el-row :gutter="35">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysrole.roleName')" prop="roleName">
-						<el-input :placeholder="$t('sysrole.please_enter_a_role_name')" clearable v-model="form.roleName"></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="$t('sysrole.roleCode')" prop="roleCode">
-						<el-input
-							:placeholder="$t('sysrole.please_enter_the_role_Code')"
-							:disabled="form.roleId !== ''"
-							clearable
-							v-model="form.roleCode"
-						></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24" class="mb20">
-					<el-form-item :label="$t('sysrole.roleDesc')" prop="roleDesc">
-						<el-input
-							:placeholder="$t('sysrole.please_enter_the_role_description')"
-							maxlength="150"
-							type="textarea"
-							v-model="form.roleDesc"
-						></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :lg="24" :md="24" :sm="24" :xl="24" :xs="24" class="mb20">
-					<el-form-item :label="$t('sysrole.menu_authority')" prop="dsType">
-						<el-select :placeholder="$t('sysrole.please_select')" class="w100" clearable v-model="form.dsType">
-							<el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in dictType" />
-						</el-select>
-					</el-form-item>
-				</el-col>
-				<el-col :span="24" class="mb20" v-if="form.dsType === 1">
-					<el-form-item>
-						<el-tree
-							:check-strictly="true"
-							:data="dataForm.deptData"
-							:default-checked-keys="dataForm.checkedDsScope"
-							:props="dataForm.deptProps"
-							default-expand-all
-							highlight-current
-							node-key="id"
-							ref="deptTreeRef"
-							show-checkbox
-						/>
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item :label="$t('sysrole.roleName')" prop="roleName">
+				<el-input :placeholder="$t('sysrole.please_enter_a_role_name')" clearable v-model="form.roleName"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysrole.roleCode')" prop="roleCode">
+				<el-input :placeholder="$t('sysrole.please_enter_the_role_Code')" :disabled="form.roleId !== ''" clearable v-model="form.roleCode"></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysrole.roleDesc')" prop="roleDesc">
+				<el-input
+					maxlength="100"
+					:rows="3"
+					:placeholder="$t('sysrole.please_enter_the_role_description')"
+					type="textarea"
+					v-model="form.roleDesc"
+				></el-input>
+			</el-form-item>
+			<el-form-item :label="$t('sysrole.menu_authority')" prop="dsType">
+				<el-select :placeholder="$t('sysrole.please_select')" class="w100" clearable v-model="form.dsType">
+					<el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in dictType" />
+				</el-select>
+			</el-form-item>
+			<el-form-item v-if="form.dsType === 1">
+				<el-tree
+					:check-strictly="true"
+					:data="dataForm.deptData"
+					:default-checked-keys="dataForm.checkedDsScope"
+					:props="dataForm.deptProps"
+					default-expand-all
+					highlight-current
+					node-key="id"
+					ref="deptTreeRef"
+					show-checkbox
+				/>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

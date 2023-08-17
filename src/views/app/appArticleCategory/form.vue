@@ -1,27 +1,17 @@
 <template>
-	<el-dialog :title="form.id ? '编辑' : '新增'" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog :title="form.id ? '编辑' : '新增'" v-model="visible" width="600" :close-on-click-modal="false" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
-			<el-row :gutter="24">
-				<el-col :span="12" class="mb20">
-					<el-form-item label="名称" prop="name">
-						<el-input v-model="form.name" placeholder="请输入名称" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item label="排序" prop="sort">
-						<el-input-number :min="1" :max="1000" v-model="form.sort" placeholder="请输入排序"></el-input-number>
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20">
-					<el-form-item label="是否显示" prop="isShow">
-						<el-radio-group v-model="form.isShow">
-							<el-radio :label="item.value" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-col>
-			</el-row>
+			<el-form-item label="名称" prop="name">
+				<el-input v-model="form.name" placeholder="请输入名称" />
+			</el-form-item>
+			<el-form-item label="排序" prop="sort">
+				<el-input-number :min="1" :max="1000" v-model="form.sort" placeholder="请输入排序"></el-input-number>
+			</el-form-item>
+			<el-form-item label="是否显示" prop="isShow">
+				<el-radio-group v-model="form.isShow">
+					<el-radio :label="item.value" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
+				</el-radio-group>
+			</el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">

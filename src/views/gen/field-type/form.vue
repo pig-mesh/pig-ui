@@ -1,23 +1,15 @@
 <template>
-	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" width="600" :close-on-click-modal="false" draggable>
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
-			<el-row :gutter="20">
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('fieldtype.columnType')" prop="columnType">
-						<el-input v-model="form.columnType" :placeholder="t('fieldtype.inputcolumnTypeTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('fieldtype.attrType')" prop="attrType">
-						<el-input v-model="form.attrType" :placeholder="t('fieldtype.inputattrTypeTip')" />
-					</el-form-item>
-				</el-col>
-				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('fieldtype.packageName')" prop="packageName">
-						<el-input v-model="form.packageName" :placeholder="t('fieldtype.inputpackageNameTip')" />
-					</el-form-item>
-				</el-col>
-			</el-row>
+      <el-form-item :label="t('fieldtype.columnType')" prop="columnType">
+        <el-input v-model="form.columnType" :placeholder="t('fieldtype.inputcolumnTypeTip')" />
+      </el-form-item>
+      <el-form-item :label="t('fieldtype.attrType')" prop="attrType">
+        <el-input v-model="form.attrType" :placeholder="t('fieldtype.inputattrTypeTip')" />
+      </el-form-item>
+      <el-form-item :label="t('fieldtype.packageName')" prop="packageName">
+        <el-input v-model="form.packageName" :placeholder="t('fieldtype.inputpackageNameTip')" />
+      </el-form-item>
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
