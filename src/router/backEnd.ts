@@ -133,7 +133,8 @@ export function backEndComponent(routes: any) {
 			}
 			item.path = '/iframes/' + window.btoa(item.path);
 		} else if (item.path) {
-			item.component = dynamicImport(dynamicViewsModules, item.path as string);
+			// 增加动态参数的判断 如果path 中包含:则说明是动态参数路由
+			item.component = dynamicImport(dynamicViewsModules, item.path.split('/:')[0]);
 		}
 		item.children && backEndComponent(item.children);
 		if (item.children) {
@@ -154,7 +155,7 @@ export function dynamicImport(dynamicViewsModules: Record<string, Function>, com
 
 	const matchKeys = keys.filter((key) => {
 		const k = key.replace(/..\/views|../, '');
-		return k.startsWith(`${component}.vue`) || k.startsWith(`/${component}.vue`);
+		return k.startsWith(`${component}.vue`);
 	});
 	if (matchKeys?.length === 1) {
 		const matchKey = matchKeys[0];
