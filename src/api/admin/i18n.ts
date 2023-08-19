@@ -26,7 +26,7 @@ export function getObj(id?: string) {
 
 export function getObjDetails(obj?: object) {
 	return request({
-		url: '/admin/i18n/details/',
+		url: '/admin/i18n/details',
 		method: 'get',
 		params: obj,
 	});
