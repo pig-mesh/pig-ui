@@ -63,7 +63,7 @@ export function putItemObj(obj: any) {
 
 export function addObj(obj: any) {
 	return request({
-		url: '/admin/dict/',
+		url: '/admin/dict',
 		method: 'post',
 		data: obj,
 	});
@@ -94,7 +94,7 @@ export function delObj(ids: Object) {
 
 export function putObj(obj: any) {
 	return request({
-		url: '/admin/dict/',
+		url: '/admin/dict',
 		method: 'put',
 		data: obj,
 	});

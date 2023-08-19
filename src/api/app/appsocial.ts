@@ -25,7 +25,7 @@ export function getObj(id?: string) {
 
 export function delObj(ids?: object) {
 	return request({
-		url: '/app/appsocial/',
+		url: '/app/appsocial',
 		method: 'delete',
 		data: ids,
 	});

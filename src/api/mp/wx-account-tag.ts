@@ -58,7 +58,7 @@ export function sync(appId) {
 
 export function list(appId) {
 	return request({
-		url: '/mp/wx-account-tag/list/',
+		url: '/mp/wx-account-tag/list',
 		method: 'get',
 		params: { wxAccountAppid: appId },
 	});

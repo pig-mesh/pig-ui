@@ -25,7 +25,7 @@ export function getObj(id: string) {
 
 export function delObj(ids?: object) {
 	return request({
-		url: '/app/appuser/',
+		url: '/app/appuser',
 		method: 'delete',
 		data: ids,
 	});
@@ -41,7 +41,7 @@ export function putObj(obj: any) {
 
 export function getDetails(obj: Object) {
 	return request({
-		url: '/app/appuser/details/',
+		url: '/app/appuser/details',
 		method: 'get',
 		params: obj,
 	});

@@ -10,7 +10,7 @@ export const deptTree = (params?: Object) => {
 
 export const addObj = (obj: Object) => {
 	return request({
-		url: '/admin/dept/',
+		url: '/admin/dept',
 		method: 'post',
 		data: obj,
 	});
@@ -32,7 +32,7 @@ export const delObj = (id: string) => {
 
 export const putObj = (obj: Object) => {
 	return request({
-		url: '/admin/dept/',
+		url: '/admin/dept',
 		method: 'put',
 		data: obj,
 	});
