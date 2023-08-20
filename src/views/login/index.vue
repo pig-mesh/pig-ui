@@ -54,7 +54,6 @@ import {formatAxis} from '/@/utils/formatTime';
 import {useMessage} from '/@/hooks/message';
 import {Session} from '/@/utils/storage';
 import {initBackEndControlRoutes} from '/@/router/backEnd';
-import other from "/@/utils/other";
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));

@@ -20,6 +20,14 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+
+import txt from '/@/assets/txt.png';
+import word from '/@/assets/word.png';
+import excel from '/@/assets/excel.png';
+import pdf from '/@/assets/pdf.png';
+import ppt from '/@/assets/ppt.png';
+import folder from '/@/assets/icon_folder.png';
+
 export default defineComponent({
 	props: {
 		// 图片地址
@@ -41,26 +49,26 @@ export default defineComponent({
 	methods: {
 		getFileImage(uri?: string) {
 			if (uri?.includes('txt')) {
-				return '/@/assets/txt.png';
+				return txt;
 			}
 
 			if (uri?.includes('xls')) {
-				return '/@/assets/excel.png';
+				return excel;
 			}
 
 			if (uri?.includes('doc')) {
-				return '/@/assets/word.png';
+				return word;
 			}
 
 			if (uri?.includes('pdf')) {
-				return '/@/assets/pdf.png';
+				return pdf;
 			}
 
 			if (uri?.includes('ppt')) {
-				return '/@/assets/ppt.png';
+				return ppt;
 			}
 
-			return '/@/assets/icon_folder.png';
+			return folder;
 		},
 	},
 });
