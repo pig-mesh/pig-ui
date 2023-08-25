@@ -63,7 +63,7 @@
 									<div v-if="showConfigureContent">
 										<div class="menu_content">
 											<span>菜单标识：</span>
-											<el-input v-model="tempObj.menuKey" class="input_width" clearable placeholder="请输入菜单 KEY" />
+											<el-input v-model="tempObj.key" class="input_width" clearable placeholder="请输入菜单 KEY" />
 										</div>
 										<div class="menu_content">
 											<span>菜单内容：</span>
@@ -345,7 +345,7 @@ const handleSave = async () => {
 		await useMessageBox().confirm('确定要保存该菜单吗?');
 		await saveObj(accountId.value, { button: menuList });
 		await publishObj(accountId.value);
-		useMessage().error('发布成功');
+		useMessage().success('发布成功');
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	}
