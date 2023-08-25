@@ -23,7 +23,7 @@ export default {
 		checkIng: '检查中',
 		checkSubIng: '正在检查流程信息',
 		emptyComponent: '请点击左侧组件拖拽到此处',
-		logo: '图表',
+		logo: '图标',
 		name: '名称',
 		createTime: '创建时间',
 		scopeOfUse: '使用范围',

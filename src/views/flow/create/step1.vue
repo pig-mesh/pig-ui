@@ -3,7 +3,7 @@
 		<div class="container-div">
 			<el-card class="box-card" style="padding-right: 10%; padding-left: 10%">
 				<el-form ref="ruleForm" :model="form" :rules="rules" label-position="top" status-icon label-width="120px" @submit.prevent>
-					<el-form-item :label="$t('flow.')" prop="logo">
+					<el-form-item :label="$t('flow.logo')" prop="logo">
 						<upload-img v-model:imageUrl="form.logo"  height="100px" width="100px">
 							<template #empty>
 								<el-icon>
