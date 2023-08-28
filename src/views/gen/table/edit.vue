@@ -3,6 +3,11 @@
 		<!-- 属性设置面板 -->
 		<el-tab-pane label="属性设置" name="field">
 			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" drag-sort placeholder="暂无数据">
+        <el-table-column label="主键" prop="primaryPk" width="80" show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-checkbox v-model="row.primaryPk" true-label="1" false-label="0" disabled></el-checkbox>
+          </template>
+        </el-table-column>
 				<el-table-column label="字段名" prop="fieldName" show-overflow-tooltip></el-table-column>
 				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip>
 					<template #default="{ row }">
@@ -29,11 +34,6 @@
 						</el-select>
 					</template>
 				</el-table-column>
-				<el-table-column label="主键" prop="primaryPk" width="60" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.primaryPk"></el-checkbox>
-					</template>
-				</el-table-column>
 				<el-table-column label="字典类型" prop="fieldDict" show-overflow-tooltip>
 					<template #default="{ row }">
 						<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable>
@@ -50,29 +50,29 @@
 				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
 				<el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-checkbox v-model="row.gridItem"></el-checkbox>
+						<el-checkbox v-model="row.gridItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
 					</template>
 				</el-table-column>
 				<el-table-column label="是否排序" prop="gridSort" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-checkbox v-model="row.gridSort"></el-checkbox>
+						<el-checkbox v-model="row.gridSort" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
 					</template>
 				</el-table-column>
+        <el-table-column label="查询显示" prop="gridSort" width="100" show-overflow-tooltip>
+          <template #default="{ row }">
+            <el-checkbox v-model="row.queryItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
+          </template>
+        </el-table-column>
 				<el-table-column label="查询表单类型" prop="queryFormType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.queryFormType" placeholder="请选择查询表单类型">
+						<el-select v-model="row.queryFormType" placeholder="请选择查询表单类型" :disabled="row.primaryPk === '1'">
 							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
 				</el-table-column>
-				<el-table-column label="是否显示" prop="gridSort" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.queryItem"></el-checkbox>
-					</template>
-				</el-table-column>
 				<el-table-column label="查询方式" prop="queryType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.queryType" placeholder="请选择查询方式">
+						<el-select v-model="row.queryType" placeholder="请选择查询方式" :disabled="row.primaryPk === '1'">
 							<el-option v-for="item in queryList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
@@ -85,24 +85,24 @@
 				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
 				<el-table-column label="表单类型" prop="formType" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.formType" placeholder="请选择表单类型">
+						<el-select v-model="row.formType" placeholder="请选择表单类型" :disabled="row.primaryPk === '1'">
 							<el-option v-for="item in formTypeList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
 				</el-table-column>
 				<el-table-column label="是否显示" prop="formItem" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-checkbox v-model="row.formItem"></el-checkbox>
+						<el-checkbox v-model="row.formItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
 					</template>
 				</el-table-column>
 				<el-table-column label="表单必填" prop="formRequired" width="100" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-checkbox v-model="row.formRequired"></el-checkbox>
+						<el-checkbox v-model="row.formRequired" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
 					</template>
 				</el-table-column>
 				<el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.formValidator" placeholder="请选择表单效验">
+						<el-select v-model="row.formValidator" placeholder="请选择表单效验" :disabled="row.primaryPk === '1'">
 							<el-option v-for="item in formValidatorList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>

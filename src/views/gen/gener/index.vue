@@ -69,12 +69,12 @@ const preview = async () => {
 const generatorHandle = async () => {
 	await editTableRef.value.submitHandle();
 	// 生成代码，zip压缩包
-	if (generatorType.value === 0) {
+	if (generatorType.value === '0') {
 		downBlobFile(`/gen/generator/download?tableIds=${[tableId.value].join(',')}`, {}, `${tableName.value}.zip`);
 	}
 
 	// 写入到指定目录
-	if (generatorType.value === 1) {
+	if (generatorType.value === '1') {
 		useGeneratorCodeApi([tableId.value].join(',')).then(() => {
 			useMessage().success(t('common.optSuccessText'));
 		});

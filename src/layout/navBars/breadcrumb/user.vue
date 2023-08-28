@@ -62,7 +62,7 @@
 			</template>
 		</el-dropdown>
 		<Search ref="searchRef" />
-		<global-websocket uri="/act/ws/info" v-if="websocketEnable" @rollback="rollback" />
+		<global-websocket uri="/api/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
 		<personal-drawer ref="personalDrawerRef"></personal-drawer>
 	</div>
 </template>
