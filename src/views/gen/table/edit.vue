@@ -36,7 +36,7 @@
 				</el-table-column>
 				<el-table-column label="字典类型" prop="fieldDict" show-overflow-tooltip>
 					<template #default="{ row }">
-						<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable>
+						<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable :disabled="row.primaryPk === '1'">
 							<el-option v-for="item in fieldDictList" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</template>
