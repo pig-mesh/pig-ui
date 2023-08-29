@@ -63,16 +63,16 @@
       <el-col :span="12" class="mb20">
         <el-form-item label="生成方式" prop="generatorType">
           <el-radio-group v-model="dataForm.generatorType">
-            <el-radio border  :label="1">自定义路径</el-radio>
-            <el-radio border  :label="0">ZIP 压缩包</el-radio>
+            <el-radio border label="1">自定义路径</el-radio>
+            <el-radio border label="0">ZIP 压缩包</el-radio>
           </el-radio-group>
         </el-form-item>
       </el-col>
       <el-col :span="24" class="mb20">
-        <el-form-item label="后端生成路径" prop="backendPath" v-if="dataForm.generatorType === 1">
+        <el-form-item label="后端生成路径" prop="backendPath" v-if="dataForm.generatorType === '1'">
           <el-input placeholder="后端生成路径" v-model="dataForm.backendPath"></el-input>
         </el-form-item>
-        <el-form-item label="前端生成路径" prop="frontendPath" v-if="dataForm.generatorType === 1">
+        <el-form-item label="前端生成路径" prop="frontendPath" v-if="dataForm.generatorType === '1'">
           <el-input placeholder="前端生成路径" v-model="dataForm.frontendPath"></el-input>
         </el-form-item>
       </el-col>
@@ -102,7 +102,7 @@ const childForm = ref();
 const tableNameStr = ref('');
 const dataForm = reactive({
   id: '',
-  generatorType: 0,
+  generatorType: '0',
   formLayout: 1,
   backendPath: '',
   frontendPath: '',
@@ -171,7 +171,7 @@ const submitHandle = async () => {
     return Promise.reject();
   } finally {
     //保存路径至Local 中方便下次使用
-    if (dataForm.generatorType === 1) {
+    if (dataForm.generatorType === '1') {
       Local.set('frontendPath', dataForm.frontendPath);
       Local.set('backendPath', dataForm.backendPath);
     }
