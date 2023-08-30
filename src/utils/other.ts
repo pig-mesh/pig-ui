@@ -235,6 +235,23 @@ export function decryption(src: string, keyWord: string) {
 }
 
 /**
+ * SM4加密处理
+ */
+const sm = await import('sm-crypto');
+export function sm4Encryption(src: string, keyWord: string) {
+	return sm.sm4.encrypt(src, keyWord);
+}
+
+/**
+ * SM4解密处理
+ * @param {*} params 参数列表
+ * @returns 明文
+ */
+export function sm4Decryption(src: string, keyWord: string) {
+	return sm.sm4.decrypt(src, keyWord);
+}
+
+/**
  * Base64 加密
  * @param {*} src  明文
  * @returns 密文
