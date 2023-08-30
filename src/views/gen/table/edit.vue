@@ -268,8 +268,8 @@ const getTable = (dsName: string, tableName: string) => {
 		.then((res) => {
 			tableId.value = res.data.id;
 			fieldList.value = res.data.fieldList.map((item) => {
-				item.queryFormType = propToType[item.fieldType];
-				item.formType = propToType[item.fieldType];
+				item.queryFormType ? item.queryFormType :  propToType[item.fieldType];
+				item.formType ? item.formType : propToType[item.fieldType];
 				return item;
 			});
 		})
