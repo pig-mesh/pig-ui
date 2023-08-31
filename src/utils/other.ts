@@ -12,6 +12,7 @@ import request from '/@/utils/request';
 import { useMessage } from '/@/hooks/message';
 // @ts-ignore
 import * as CryptoJS from 'crypto-js';
+import {sm4} from 'sm-crypto'
 import { validateNull } from './validate';
 
 // 引入组件
@@ -237,9 +238,8 @@ export function decryption(src: string, keyWord: string) {
 /**
  * SM4加密处理
  */
-const sm = await import('sm-crypto');
 export function sm4Encryption(src: string, keyWord: string) {
-	return sm.sm4.encrypt(src, keyWord);
+	return sm4.encrypt(src, keyWord);
 }
 
 /**
@@ -248,7 +248,7 @@ export function sm4Encryption(src: string, keyWord: string) {
  * @returns 明文
  */
 export function sm4Decryption(src: string, keyWord: string) {
-	return sm.sm4.decrypt(src, keyWord);
+	return sm4.decrypt(src, keyWord);
 }
 
 /**
