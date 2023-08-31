@@ -7,7 +7,7 @@ services:
     container_name: pigx-ui
     image: pigx-ui
     networks:
-      - pigx_default
+      - spring_cloud_default
     external_links:
       - pigx-gateway
     ports:
@@ -15,5 +15,5 @@ services:
 
 # 加入到后端网络， 默认为 pigx_default  | docker network ls   查看
 networks:
-  pigx_default:
+  spring_cloud_default:
     external: true
