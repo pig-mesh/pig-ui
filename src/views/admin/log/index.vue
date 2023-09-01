@@ -70,7 +70,7 @@
 						<el-button icon="view" @click="LogDetailRef.openDialog(scope.row)" size="small" text type="primary">
 							{{ $t('common.detailBtn') }}
 						</el-button>
-						<el-button icon="delete" @click="handleDelete([scope.row.id])" size="small" text type="primary">
+						<el-button v-auth="'sys_log_del'" icon="delete" @click="handleDelete([scope.row.id])" size="small" text type="primary">
 							{{ $t('common.delBtn') }}
 						</el-button>
 					</template>
