@@ -20,6 +20,7 @@ import { delFormObj, fetchFormList } from '/@/api/gen/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 const emit = defineEmits(['refresh']);
+const route = useRoute();
 const { t } = useI18n();
 // 搜索变量
 const visible = ref(false);
@@ -55,9 +56,10 @@ const handleRollback = (id: string) => {
 };
 
 // 打开弹窗
-const openDialog = (dsName: string, tableName: string) => {
+const openDialog = () => {
+  const { tableName, dsName } = route.query;
 	visible.value = true;
-	state.queryForm.dsName = dsName;
+  state.queryForm.dsName = dsName;
 	state.queryForm.tableName = tableName;
 	getDataList();
 };

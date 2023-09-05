@@ -5,7 +5,7 @@
 				<template #customToolButtons>
 					<el-button link type="primary" @click="saveJsonConfig">保存</el-button>
 					<el-button link type="primary" @click="exportSfcConfig">导出</el-button>
-					<el-button link type="primary" @click="formDialogRef.openDialog(dsName, tableName)">历史</el-button>
+					<el-button link type="primary" @click="formDialogRef.openDialog()">历史</el-button>
 				</template>
 			</v-form-designer>
 		</div>
@@ -21,13 +21,10 @@ import { handleBlobFile } from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-
+const { t } = useI18n();
 const route = useRoute();
-
 const vfDesignerRef = ref();
-
 const formDialogRef = ref();
-
 const bannedWidgets = reactive(['tab', 'card', 'table', 'cascader']);
 
 const designerConfig = reactive({
@@ -69,14 +66,12 @@ onMounted(() => {
 	importJsonConfig();
 });
 
-const { t } = useI18n();
-const tableName = ref();
-const dsName = ref();
+
 // 根据当前表，获取json配置信息
 const importJsonConfig = () => {
 	const { tableName, dsName } = route.query;
 
-	if (tableName && tableName) {
+	if (tableName && dsName) {
 		useGeneratorVFormApi(dsName, tableName).then((res) => {
 			vfDesignerRef.value.loadJson(res);
 		});
@@ -93,7 +88,8 @@ const importJsonConfig = () => {
 const handleRefresh = (id: string) => {
 	fetchFormById(id).then((res) => {
 		vfDesignerRef.value.loadJson(JSON.parse(res.data.formInfo));
-	});
+    useMessage().success(t('common.optSuccessText'));
+  });
 };
 
 const saveJsonConfig = () => {
