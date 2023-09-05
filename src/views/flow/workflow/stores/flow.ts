@@ -17,7 +17,7 @@ export const useFlowStore = defineStore('flow', {
 				name: '',
 				flowId: '',
 				groupId: undefined,
-				admin: adminList,
+				adminList: adminList,
 				remark: '',
 			},
 			step2: [] as FormVO[],
@@ -33,7 +33,7 @@ export const useFlowStore = defineStore('flow', {
 				name: '',
 				flowId: '',
 				groupId: undefined,
-				admin: adminList,
+				adminList: adminList,
 				remark: '',
 			};
 		},
