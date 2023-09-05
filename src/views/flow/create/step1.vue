@@ -24,8 +24,8 @@
 							<el-option v-for="item in groupList" :key="item.id" :label="item.groupName" :value="item.id" />
 						</el-select>
 					</el-form-item>
-					<el-form-item :label="$t('flow.admin')" prop="admin">
-						<select-show v-model:orgList="form.admin" type="user" :multiple="false"></select-show>
+					<el-form-item :label="$t('flow.admin')" prop="adminList">
+						<select-show v-model:orgList="form.adminList" type="user" :multiple="false"></select-show>
 					</el-form-item>
 				</el-form>
 			</el-card>
@@ -78,7 +78,7 @@ const rules = reactive<FormRules>({
 			trigger: 'change',
 		},
 	],
-	admin: [
+  adminList: [
 		{
 			required: true,
 			message: '请选择管理员',
