@@ -288,7 +288,7 @@ const getFieldTypeList = async () => {
     const { attrType, columnType } = item;
     if (!typeMap.has(attrType)) {
       typeMap.set(attrType, columnType);
-      typeList.value.push({ label: attrType, value: columnType })
+      typeList.value.push({ label: attrType, value: attrType })
     }
   });
   // 增加Object类型
