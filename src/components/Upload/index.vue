@@ -39,7 +39,7 @@
 		<el-upload
 			ref="fileUpload"
 			v-if="props.type === 'simple'"
-			:action="other.adaptationUrl(props.uploadFileUrl)"
+			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)"
 			:before-upload="handleBeforeUpload"
 			:file-list="fileList"
 			:headers="headers"
