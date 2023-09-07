@@ -122,7 +122,7 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @async
 		 */
 		async setUserInfos() {
-			getUserInfo().then((res) => {
+			await getUserInfo().then((res) => {
 				const userInfo: any = {
 					user: res.data.sysUser,
 					time: new Date().getTime(),
