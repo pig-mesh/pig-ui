@@ -144,7 +144,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 /**
  * 获取用户信息
  */
-export const getUserInfo = async () => {
+export const getUserInfo = () => {
 	return request({
 		url: '/admin/user/info',
 		method: 'get',
