@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest, centos-latest]
+        os: [windows-latest, macOS-latest, centos-latest]
         node-version: [16.x, 18.x]
         npm-client: [npm, yarn, pnpm]
 
@@ -36,3 +36,15 @@ jobs:
 
       - name: Build
         run: ${{ matrix.npm-client }} run build
+
+      - name: Notify failure
+        if: ${{ failure() }}
+        env:
+          QYWX_ROBOT_URL: ${{ secrets.QYWX_ROBOT_URL }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{
+            "msgtype": "text",
+            "text": {
+              "content": "UI 编译任务任务执行失败，请检查！https://github.com/pig-mesh/pig-ui"
+            }
+          }' $QYWX_ROBOT_URL
