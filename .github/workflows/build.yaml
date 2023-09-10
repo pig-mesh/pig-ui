@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, macOS-latest, centos-latest]
+        os: [windows-latest, macOS-latest, macos-arm64, ubuntu-latest]
         node-version: [16.x, 18.x]
         npm-client: [npm, yarn, pnpm]
 
