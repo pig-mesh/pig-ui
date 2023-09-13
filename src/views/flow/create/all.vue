@@ -129,7 +129,7 @@ onMounted(() => {
 		getFlowDetail(flowId).then((res) => {
 			var { data } = res;
 
-			store.step1.adminList = JSON.parse(data.admin);
+			store.step1.adminList = JSON.parse(data.adminList);
 			store.step1.name = data.name;
 			store.step1.logo = data.logo;
 			if (!cp || !(parseInt(cp) === 1)) {
@@ -218,7 +218,7 @@ const submitFlow = () => {
 		let flow = other.deepClone(step1);
 		flow.formItems = JSON.stringify(step2);
 		flow.process = JSON.stringify(res);
-		flow.admin = JSON.stringify(step1.adminList);
+		flow.adminList = JSON.stringify(step1.adminList);
 
 		addFlow(flow).then((res) => {
 			validateDialogShow.value = false;
