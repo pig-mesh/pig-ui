@@ -218,7 +218,7 @@ const submitFlow = () => {
 		let flow = other.deepClone(step1);
 		flow.formItems = JSON.stringify(step2);
 		flow.process = JSON.stringify(res);
-		flow.admin = JSON.stringify(step1.adminList);
+		flow.adminList = JSON.stringify(step1.adminList);
 
 		addFlow(flow).then((res) => {
 			validateDialogShow.value = false;
