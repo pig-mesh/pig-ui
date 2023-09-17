@@ -1,0 +1,50 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+
+jobs:
+  task:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macOS-latest, ubuntu-latest]
+        node-version: [16.x, 18.x]
+        npm-client: [npm, yarn, pnpm]
+
+    steps:
+      - uses: pnpm/action-setup@v2
+        if: matrix.npm-client == 'pnpm'
+        name: Install pnpm
+        with:
+          version: 7
+          run_install: false
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: ${{ matrix.npm-client }} install
+
+      - name: Build
+        run: ${{ matrix.npm-client }} run build
+
+      - name: Notify failure
+        if: ${{ failure() }}
+        env:
+          QYWX_ROBOT_URL: ${{ secrets.QYWX_ROBOT_URL }}
+        run: |
+          curl -H "Content-Type: application/json" -X POST -d '{
+            "msgtype": "text",
+            "text": {
+              "content": "UI 编译任务任务执行失败，请检查！https://github.com/pig-mesh/pig-ui"
+            }
+          }' $QYWX_ROBOT_URL

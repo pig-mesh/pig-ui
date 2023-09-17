@@ -25,7 +25,7 @@
         <el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.enName')" prop="enName">
-        <el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputEnNameTip')"></el-input>
+        <el-input v-model="state.ruleForm.enName" clearable :placeholder="$t('sysmenu.inputEnNameTip')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.path')" prop="path" v-if="state.ruleForm.menuType === '0'">
         <el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')"/>
