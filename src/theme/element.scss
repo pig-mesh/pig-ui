@@ -127,6 +127,8 @@
 .el-menu-item .iconfont,
 .el-sub-menu .iconfont,
 .el-menu-item .fa,
+.el-menu-item .svg-icon,
+.el-sub-menu .svg-icon,
 .el-sub-menu .fa {
 	@include generalIcon;
 }
