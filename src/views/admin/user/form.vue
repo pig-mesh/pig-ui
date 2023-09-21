@@ -179,17 +179,17 @@ const openDialog = async (id: string) => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 修改获取用户信息
+	// 加载使用的数据
+	getDeptData();
+	getPostData();
+	getRoleData();
+
+    // 修改获取用户信息
 	if (id) {
 		dataForm.userId = id;
 		await getUserData(id);
 		dataForm.password = '******';
 	}
-
-	// 加载使用的数据
-	getDeptData();
-	getPostData();
-	getRoleData();
 };
 
 // 提交
