@@ -6,7 +6,7 @@ export default {
 		auditLogsTip: '审计日志',
 		moreTip: '更多',
 		newsletterTip: '站内信',
-		pendingTask: '代办任务✍️',
+		pendingTask: '待办任务✍️',
 		copyTask: '抄送任务🔖',
 	},
 	schedule: {

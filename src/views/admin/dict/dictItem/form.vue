@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
+	<el-dialog v-model="visible" destroy-on-close :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
 		<el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
 			<el-form-item :label="$t('dictItem.dictType')" prop="dictType">
 				<el-input v-model="dataForm.dictType" clearable disabled :placeholder="$t('dictItem.inputDictTypeTip')"></el-input>
@@ -17,13 +17,7 @@
 				<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')" clearable></el-input-number>
 			</el-form-item>
 			<el-form-item :label="$t('dictItem.remarks')" prop="remarks">
-				<el-input
-					type="textarea"
-					maxlength="100"
-					:rows="3"
-					v-model="dataForm.remarks"
-					:placeholder="$t('dictItem.inputRemarksTip')"
-				></el-input>
+				<el-input type="textarea" maxlength="100" :rows="3" v-model="dataForm.remarks" :placeholder="$t('dictItem.inputRemarksTip')"></el-input>
 			</el-form-item>
 		</el-form>
 		<template #footer>
