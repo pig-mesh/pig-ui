@@ -1,6 +1,6 @@
 <template>
   <div class="system-dic-dialog-container">
-    <el-dialog v-model="visible" :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
+    <el-dialog v-model="visible" destroy-on-close :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
       <el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
         <el-form-item :label="$t('dictItem.dictType')" prop="dictType">
           <el-input v-model="dataForm.dictType" clearable disabled
