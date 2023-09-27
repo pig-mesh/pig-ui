@@ -73,6 +73,10 @@ const props = defineProps({
 		type: Number,
 		default: 200,
 	},
+  maxlength: {
+    type: Number,
+    default: 20,
+  },
 	showLimit: {
 		type: Boolean,
 		default: false,
