@@ -200,6 +200,12 @@ const onLockScreenSubmit = async () => {
 	} catch (err: any) {
 		// 捕获异常并将错误提示信息赋值给mes变量
 		mes.value = err.msg;
+		if(err.msg == '用户凭证已过期'){
+			themeConfig.value.isLockScreen = false;
+			themeConfig.value.lockScreenTime = 30;
+			// 将最新的主题配置保存到本地存储中
+			setLocalThemeConfig();
+    	}
 	}
 };
 
