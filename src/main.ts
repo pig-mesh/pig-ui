@@ -46,7 +46,7 @@ other.elSvg(app);
 app
 	.use(pinia) // pinia 存储
 	.use(router) // 路由
-	.use(ElementPlus, { i18n: i18n.global.t }) // ElementPlus 全局引入
+	.use(ElementPlus) // ElementPlus 全局引入
 	.use(ElementIcons) // elementIcons 图标全局引入
 	.use(i18n) // 国际化
 	.mount('#app');
