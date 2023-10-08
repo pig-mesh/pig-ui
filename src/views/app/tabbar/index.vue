@@ -5,7 +5,7 @@
 				<div class="pages-preview mx-[30px]">
 					<div class="flex tabbar">
 						<div class="flex flex-col items-center justify-center flex-1 tabbar-item" v-for="(item, index) in tabbar.list" :key="index">
-							<img class="w-[22px] h-[22px]" :src="item.unselected" alt="" />
+							<img class="w-[22px] h-[22px]" :src="baseURL + item.unselected" alt="" />
 							<div class="leading-3 text-[12px] mt-[4px]">{{ item.name }}</div>
 						</div>
 					</div>
