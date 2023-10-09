@@ -77,6 +77,7 @@ declare interface ThemeConfigState {
 		isIsDark: boolean;
 		isWartermark: boolean;
 		wartermarkText: string;
+		quickLinkNum: number;
 		tagsStyle: string;
 		animation: string;
 		columnsAsideStyle: string;

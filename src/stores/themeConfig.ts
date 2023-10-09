@@ -102,7 +102,8 @@ export const useThemeConfig = defineStore('themeConfig', {
             isWartermark: true,
             // 水印文案
             wartermarkText: 'PigX',
-
+            // 首页快捷导航上限
+            quickLinkNum: 12,
             /**
              * 其它设置
              */

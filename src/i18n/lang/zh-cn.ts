@@ -107,6 +107,7 @@ export default {
 		fullscreen: '当前页全屏',
 		closeFullscreen: '关闭全屏',
 		favorite: '收藏',
+		favoriteMax: '快捷导航数量超过上限，请移除部分'
 	},
 	notFound: {
 		foundTitle: '地址输入错误，请重新输入地址~',

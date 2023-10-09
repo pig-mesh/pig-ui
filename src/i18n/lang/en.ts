@@ -114,6 +114,7 @@ export default {
 		fullscreen: 'Fullscreen',
 		closeFullscreen: 'Close Fullscreen',
 		favorite: 'Favorite',
+		favoriteMax: 'The number of shortcut navigation exceeds the upper limit. Please remove some shortcuts'
 	},
 	notFound: {
 		foundTitle: 'Wrong Address Input, Please Re-enter the Address~',
