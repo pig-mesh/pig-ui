@@ -15,6 +15,9 @@ import '/@/theme/index.scss';
 import VForm3 from 'form-designer-plus'; //
 import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
 
+import vue3TreeOrg from 'vue3-tree-org';
+import "vue3-tree-org/lib/vue3-tree-org.css";
+
 import { ElementIcons, Pagination, RightToolbar, DictTag, UploadExcel, UploadFile, UploadImg, Editor, Tip, DelWrap } from '/@/components/index';
 import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
 
@@ -53,5 +56,6 @@ app
 	.use(ElementPlus) // ElementPlus 全局引入
 	.use(ElementIcons) // elementIcons 图标全局引入
 	.use(VForm3) // 表单设计
+	.use(vue3TreeOrg) // 组织架构组件
 	.use(i18n) // 国际化
 	.mount('#app');
