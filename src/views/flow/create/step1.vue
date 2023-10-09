@@ -35,7 +35,7 @@
 
 <script lang="ts" setup>
 import type { FormRules } from 'element-plus';
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 import { queryGroupList } from '/@/api/flow/group';
 
 const { proxy } = getCurrentInstance();

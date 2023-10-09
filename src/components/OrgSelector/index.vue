@@ -16,8 +16,8 @@
 </template>
 
 <script setup lang="ts">
-import employeesDialog from '/@/views/flow/workflow/components/dialog/employeesDialog.vue';
-import orgItem from '/@/views/flow/workflow/components/dialog/orgItem.vue';
+import employeesDialog from './employeesDialog.vue';
+import orgItem from './orgItem.vue';
 
 let selectUserDialogVisible = ref(false);
 const afterSelectUser = (data) => {
@@ -44,7 +44,7 @@ let props = defineProps({
 
 	type: {
 		type: String,
-		default: 'org',
+		default: 'user',
 	},
 	multiple: {
 		type: Boolean,

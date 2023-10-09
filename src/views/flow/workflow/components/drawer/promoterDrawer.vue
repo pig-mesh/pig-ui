@@ -22,7 +22,7 @@
 	</el-drawer>
 </template>
 <script setup>
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 import { useFlowStore } from '../../stores/flow';
 import { useStore } from '../../stores/index';
 import FormPerm from './components/formPerm.vue';

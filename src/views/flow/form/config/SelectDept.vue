@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { computed, defineExpose } from 'vue';
+import employeesDialog from '/@/components/OrgSelector/employeesDialog.vue';
+import orgItem from '/@/components/OrgSelector/orgItem.vue';
+import { useFlowStore } from '../../workflow/stores/flow';
+import { Plus } from '@element-plus/icons-vue';
+import { ref } from 'vue';
 
 let props = defineProps({
 	id: {
@@ -7,12 +11,6 @@ let props = defineProps({
 		default: '',
 	},
 });
-import employeesDialog from '/@/views/flow/workflow/components/dialog/employeesDialog.vue';
-import orgItem from '/@/views/flow/workflow/components/dialog/orgItem.vue';
-
-import { useFlowStore } from '../../workflow/stores/flow';
-import { Plus } from '@element-plus/icons-vue';
-import { ref } from 'vue';
 
 let flowStore = useFlowStore();
 

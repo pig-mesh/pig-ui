@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 
 let props = defineProps({
 	nodeUser: {

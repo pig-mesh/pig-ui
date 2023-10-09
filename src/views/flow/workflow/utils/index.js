@@ -68,23 +68,9 @@ All.prototype = {
 				.toString();
 		}
 	},
-	toggleClass(arr, elem, key = 'id') {
-		return arr.some((item) => {
-			return item[key] == elem[key];
-		});
-	},
 	toChecked(arr, elem, key = 'id') {
 		var isIncludes = this.toggleClass(arr, elem, key);
 		!isIncludes ? arr.push(elem) : this.removeEle(arr, elem, key);
-	},
-	removeEle(arr, elem, key = 'id') {
-		var includesIndex;
-		arr.map((item, index) => {
-			if (item[key] == elem[key]) {
-				includesIndex = index;
-			}
-		});
-		arr.splice(includesIndex, 1);
 	},
 	checkApproval(nodeConfig) {
 		if (nodeConfig.assignedType == 1) {

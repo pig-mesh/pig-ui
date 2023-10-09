@@ -246,7 +246,7 @@ let expression = ref(
     }
 )
 
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 import other from '/@/utils/other';
 </script>
 

@@ -35,4 +35,3 @@ const removeItem = (index, id, type) => {
 	);
 };
 </script>
-<style></style>

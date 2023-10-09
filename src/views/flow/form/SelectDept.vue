@@ -6,7 +6,7 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 
 let props = defineProps({
 	mode: {

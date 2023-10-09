@@ -6,38 +6,35 @@
  */
 
 import {deptRoleList} from '/@/api/admin/role';
-import {orgTree,orgTreeSearcheUser} from '/@/api/flow/org';
+import {orgTree, orgTreeSearcheUser} from '/@/api/admin/dept';
 
-export let searchVal = ref('');
-export let departments = ref({
+export const searchVal = ref('');
+export const departments = ref({
     titleDepartments: [], childDepartments: [], roleList: [], employees: [],
 });
-export let roles = ref({});
-export let getRoleList = async () => {
+export const roles = ref({});
+export const getRoleList = async () => {
     let {
         data: {list},
     } = await deptRoleList();
     roles.value = list;
 };
-export let getDepartmentList = async (parentId = 0, type = 'org') => {
+export const getDepartmentList = async (parentId = 0, type = 'org') => {
     // let { data } = await getDepartments({ parentId })
 
     let {data} = await orgTree(type, parentId);
 
     departments.value = data;
 };
-export let getDebounceData = async (event, type = 1) => {
+export const getDebounceData = async (event: any, type = 1) => {
     if (event) {
         let data = {
-            userName: event, pageNum: 1, pageSize: 30,
+            username: event, pageNum: 1, pageSize: 30,
         };
         if (type === 1) {
             departments.value.childDepartments = [];
             let res = await orgTreeSearcheUser(data);
             departments.value.employees = res.data;
-        } else {
-            let res = await getRoles(data);
-            roles.value = res.data.list;
         }
     } else {
         type === 1 ? await getDepartmentList() : await getRoleList();

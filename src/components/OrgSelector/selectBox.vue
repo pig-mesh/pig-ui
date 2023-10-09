@@ -4,8 +4,8 @@
         v-model="searchVal"
         class="w-50 m-2"
         style="width: 100%"
-        v-if="type !== 'role'"
-        placeholder="搜索成员"
+        v-if="type === 'user'"
+        :placeholder="$t('orgSelecotr.search')"
         @input="getDebounceData($event)"
         :prefix-icon="Search"
     />
@@ -72,7 +72,12 @@
   </div>
 </template>
 <script setup>
-import { useUserInfo } from '/@/stores/userInfo';
+import {useUserInfo} from '/@/stores/userInfo';
+
+import {departments, getDebounceData, getDepartmentList, searchVal} from './common';
+import other from '/@/utils/other';
+import UploadImg from "/@/components/Upload/Image.vue";
+import {Grid, Search, Share} from '@element-plus/icons-vue';
 
 var props = defineProps({
   selectedList: {
@@ -96,16 +101,14 @@ const currentUserId = computed(() => {
   return useUserInfo().userInfos.user.userId;
 });
 
-import { Delete, Edit, Search, Share, OfficeBuilding, Grid } from '@element-plus/icons-vue';
 
 const queryData = (pid) => {
   getDepartmentList(pid, props.type).then((res) => {
     let selectedList = props.selectedList;
 
-    for (var it of dataList.value) {
-      for (var item of it.data) {
-        var b = selectedList.filter((res) => res.id === item.id && res.type === item.type).length > 0;
-        item.selected = b;
+    for (const it of dataList.value) {
+      for (const item of it.data) {
+        item.selected = selectedList.filter((res) => res.id === item.id && res.type === item.type).length > 0;
       }
     }
   });
@@ -122,8 +125,8 @@ let roleList = computed(() => {
   return departments.value.roleList;
 });
 
-var dataList = computed(() => {
-  let newVar = [
+const dataList = computed(() => {
+  return [
     {
       type: 'dept',
       data: deptList.value,
@@ -135,18 +138,12 @@ var dataList = computed(() => {
     {
       type: 'role',
       data: roleList.value,
-    },
+    }
   ];
-  return newVar;
 });
 
 const { proxy } = getCurrentInstance();
 
-import { computed, reactive, watch, onMounted, defineExpose } from 'vue';
-
-import { departments, getDebounceData, getDepartmentList, searchVal } from './dialog/common';
-import other, { deepClone } from '/@/utils/other';
-import UploadImg from "/@/components/Upload/Image.vue";
 
 let emits = defineEmits(['update:selectedList']);
 
@@ -165,7 +162,7 @@ const changeEvent = (e) => {
     e.selected = true;
     selectedList.push(e);
   } else {
-    for (var it of dataList.value) {
+    for (const it of dataList.value) {
       let filter = it.data.filter((res) => res.id === e.id && res.type === e.type);
       if (filter.length > 0) {
         filter[0].selected = false;
@@ -196,7 +193,7 @@ watch(
 );
 </script>
 <style scoped lang="scss">
-@import '../css/dialog.css';
+@import './dialog.css';
 
 .select-box {
   height: 420px;
@@ -269,7 +266,7 @@ watch(
 }
 
 .check_box a.active::after {
-  background: url(../assets/images/check_box.png) no-repeat center;
+  background: url(./assets/check_box.png) no-repeat center;
 }
 
 .f11 {

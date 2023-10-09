@@ -20,7 +20,7 @@
 	</el-drawer>
 </template>
 <script setup>
-import selectShow from '/@/views/flow/workflow/components/dialog/selectAndShow.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
 
 import $func from '../../utils/index';
 import { useStore } from '../../stores/index';
