@@ -59,7 +59,7 @@ const initscheduleList = (date) => {
 const filterCellSelected = (data) => {
 	return (
 		scheduleDataList.value.filter((item) => {
-			return item.date.indexOf(data.day) >= 0;
+			return item.date.includes(data.day);
 		}).length > 0
 	);
 };

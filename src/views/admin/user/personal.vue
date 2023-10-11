@@ -218,7 +218,7 @@ const handleSaveUser = () => {
 			return false;
 		}
 
-		if (formData.value.phone && formData.value.phone.indexOf('*') >= 0) {
+		if (formData.value.phone && formData.value.phone.includes('*')) {
 			formData.value.phone = undefined;
 		}
 

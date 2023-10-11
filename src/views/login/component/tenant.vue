@@ -62,7 +62,7 @@ const handleAutoTenant = () => {
   let domain = window.location.host; // 获取当前页面所在的域名
   tenantList.value.forEach((tenant: any) => {
     // 遍历租户列表
-    if (domain.indexOf(tenant.tenantDomain) >= 0) {
+    if (domain.includes(tenant.tenantDomain)) {
       // 如果域名匹配当前租户，则自动填充租户信息
       handleCommand(tenant);
     }

@@ -178,19 +178,19 @@ export function useTable(options?: BasicTableProps) {
 		const prop = other.toUnderline(column.prop);
 		if (column.order === 'descending') {
 			state.descs?.push(prop);
-			if (state.ascs!.indexOf(prop) >= 0) {
+			if (state.ascs!.includes(prop)) {
 				state.ascs?.splice(state.ascs.indexOf(prop), 1);
 			}
 		} else if (column.order === 'ascending') {
 			state.ascs?.push(prop);
-			if (state.descs!.indexOf(prop) >= 0) {
+			if (state.descs!.includes(prop)) {
 				state.descs?.splice(state.descs.indexOf(prop), 1);
 			}
 		} else {
-			if (state.ascs!.indexOf(prop) >= 0) {
+			if (state.ascs!.includes(prop)) {
 				state.ascs?.splice(state.ascs.indexOf(prop), 1);
 			}
-			if (state.descs!.indexOf(prop) >= 0) {
+			if (state.descs!.includes(prop)) {
 				state.descs?.splice(state.descs.indexOf(prop), 1);
 			}
 		}

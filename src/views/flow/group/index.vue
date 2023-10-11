@@ -158,7 +158,7 @@ const showFavorite = (row) => {
     return true
   }
 
-  return !favoriteRoutes.value.find(o => o.path.indexOf(row.flowId) > 0)
+  return !favoriteRoutes.value.find(o => o.path.includes(row.flowId))
 }
 
 // 路由实例
