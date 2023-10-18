@@ -6,11 +6,12 @@
 					<el-form-item :label="$t('sysmenu.name')" prop="menuName">
 						<el-input :placeholder="$t('sysmenu.inputNameTip')" clearable style="max-width: 180px" v-model="state.queryForm.menuName" />
 					</el-form-item>
-					<el-form-item>
-						<el-button @click="getDataList" class="ml10" icon="search" type="primary">
-							{{ $t('common.queryBtn') }}
-						</el-button>
-					</el-form-item>
+          <el-form-item>
+            <el-button @click="query" class="ml10" icon="search" type="primary">
+              {{ $t('common.queryBtn') }}
+            </el-button>
+            <el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }}</el-button>
+          </el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
@@ -102,6 +103,7 @@ const { t } = useI18n();
 // 定义变量内容
 const tableRef = ref();
 const menuDialogRef = ref();
+const queryRef = ref();
 const showSearch = ref(true);
 const isExpand = ref(false);
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -142,6 +144,19 @@ const toggleExpand = (children: any[], unfold = true) => {
 			toggleExpand(children[key].children!, unfold);
 		}
 	}
+};
+
+// 搜索事件
+const query = () => {
+  state.dataList = [];
+  getDataList();
+};
+
+// 清空搜索条件
+const resetQuery = () => {
+  queryRef.value.resetFields();
+  state.dataList = [];
+  getDataList();
 };
 
 // 删除操作
