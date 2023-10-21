@@ -258,6 +258,8 @@ import FileItem from './file.vue';
 import Preview from './preview.vue';
 import type { Ref } from 'vue';
 import other from '/@/utils/other';
+const { proxy } = getCurrentInstance();
+
 const props = defineProps({
 	fileSize: {
 		type: String,
@@ -346,7 +348,7 @@ const handlePreview = (url: string) => {
  * @param {any} item - 文件项对象
  */
 const handleDownFile = (item: any) => {
-	other.downBlobFile(`/admin/sys-file/${item.bucketName}/${item.fileName}`, {}, item.original);
+	other.downBlobFile(`/admin/sys-file/oss/file?fileName=${item.fileName}`, {}, item.original);
 };
 
 watch(
@@ -387,7 +389,7 @@ watch(
 );
 
 const getFileUri = (item: any) => {
-	return `/api/admin/sys-file/${item.bucketName}/${item.fileName}`;
+	return `${proxy.baseURL}/admin/sys-file/oss/file?fileName=${item.fileName}`;
 };
 
 onMounted(() => {

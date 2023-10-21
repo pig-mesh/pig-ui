@@ -71,6 +71,7 @@ interface UploadFileProps {
 	width?: string; // 组件宽度 ==> 非必传（默认为 150px）
 	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
 	iconSize?: number;
+  dir?: string; // 文件目录
 }
 
 // 接受父组件参数
@@ -84,6 +85,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 	height: '150px',
 	width: '150px',
 	borderRadius: '8px',
+  dir: ''
 });
 
 // 生成组件唯一id
@@ -111,6 +113,7 @@ const emit = defineEmits<UploadEmits>();
 const handleHttpUpload = async (options: UploadRequestOptions) => {
 	let formData = new FormData();
 	formData.append('file', options.file);
+	formData.append('dir', props.dir);
 	try {
 		const { data } = await request({
 			url: props.uploadFileUrl,

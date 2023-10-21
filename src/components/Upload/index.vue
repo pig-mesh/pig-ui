@@ -12,7 +12,7 @@
 			:on-error="handleUploadError"
 			:on-remove="handleRemove"
 			:on-preview="handlePreview"
-			:data="data"
+			:data="formData"
 			:auto-upload="autoUpload"
 			:on-success="handleUploadSuccess"
 			class="upload-file-uploader"
@@ -48,7 +48,7 @@
 			:auto-upload="autoUpload"
 			:on-error="handleUploadError"
 			:on-remove="handleRemove"
-			:data="data"
+			:data="formData"
 			:on-success="handleUploadSuccess"
 			class="upload-file-uploader"
 			multiple
@@ -97,7 +97,11 @@ const props = defineProps({
 	},
 	data: {
 		type: Object,
+    default:{}
 	},
+  dir: {
+    type: String
+  },
 	autoUpload: {
 		type: Boolean,
 		default: true,
@@ -111,11 +115,18 @@ const fileList = ref([]) as any;
 const uploadList = ref([]) as any;
 const fileUpload = ref();
 const { t } = useI18n();
+
+// 请求头处理
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.get('token'),
 		'TENANT-ID': Session.getTenant(),
 	};
+});
+
+// 请求参数处理
+const formData = computed(() => {
+  return Object.assign(props.data,{dir: props.dir});
 });
 
 // 上传前校检格式和大小
