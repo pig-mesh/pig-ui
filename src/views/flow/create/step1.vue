@@ -34,9 +34,12 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormRules } from 'element-plus';
+import type {FormRules} from 'element-plus';
 import selectShow from '/@/components/OrgSelector/index.vue';
-import { queryGroupList } from '/@/api/flow/group';
+import {queryGroupList} from '/@/api/flow/group';
+import {useRoute} from 'vue-router';
+import {useFlowStore} from '../workflow/stores/flow';
+import {GroupVO} from '/@/api/flow/group/types';
 
 const { proxy } = getCurrentInstance();
 
@@ -87,10 +90,14 @@ const rules = reactive<FormRules>({
 	],
 });
 
-import { useRoute } from 'vue-router';
+let props = defineProps({
+  groupId: {
+    type: Number,
+    default: undefined,
+  },
+});
 
 const route = useRoute();
-
 const groupList = ref<GroupVO[]>([]);
 
 onMounted(() => {
@@ -108,21 +115,9 @@ watch(
 	}
 );
 
-let props = defineProps({
-	groupId: {
-		type: Number,
-		default: undefined,
-	},
-});
+const flowStore = useFlowStore();
 
-import { reactive, ref, computed } from 'vue';
-
-import { useFlowStore } from '../workflow/stores/flow';
-import { GroupVO } from '/@/api/flow/group/types';
-
-let flowStore = useFlowStore();
-
-var form = computed(() => {
+const form = computed(() => {
 	return flowStore.step1;
 });
 </script>

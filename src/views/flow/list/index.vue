@@ -17,15 +17,19 @@
 
       <el-tabs tab-position="left" class="mt-4 ml-8">
         <el-tab-pane :label="item.name" v-for="item in successGroupList" :key="item.name">
-          <div style="display: flex; flex-direction: row; flex-wrap: wrap">
-            <div v-for="(flow, index1) in item.items" :key="index1" class="item">
-              <div class="f1">
-                <upload-img v-model:imageUrl="flow.logo" disabled width="50px" height="50px"></upload-img>
-              </div>
-              <div class="f2">
-                <div>{{ flow.name }}</div>
-                <el-link @click="startProcess(flow)" type="primary">发起流程</el-link>
-                <div></div>
+          <div class="flex flex-col">
+            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              <div v-for="(flow, index1) in item.items" :key="index1"
+                   class="flex items-start rounded-xl p-4 shadow-lg bg-blue-50 hover:scale-110 hover:shadow-lg relative">
+                <div class="flex h-12 w-12 ml-8 items-center justify-center rounded-full border border-blue-100 bg-blue-50">
+                  <upload-img v-model:imageUrl="flow.logo" disabled width="50px" height="50px"></upload-img>
+                </div>
+                <div class="ml-8">
+                  <h2 class="font-semibold">{{ flow.name }}</h2>
+                  <p class="mt-2 text-sm text-gray-500">
+                    <el-link @click="startProcess(flow)" type="primary">发起流程</el-link>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
