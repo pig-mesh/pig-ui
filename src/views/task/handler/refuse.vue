@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { defineExpose } from 'vue';
-import { completeTask } from '/@/api/flow/task';
+import {defineExpose} from 'vue';
+import {completeTask, stopProcessInstance} from '/@/api/flow/task';
 
 const dialogVisible = ref(false);
 
 const submitDesc = ref('');
 
 const currentData = ref();
+const currentProcessInstanceId = ref('')
 const currentOpenFlowForm = ref();
 
 const handle = (row, formData) => {
+  currentProcessInstanceId.value = row.processInstanceId;
 	currentData.value = row;
 	currentOpenFlowForm.value = formData;
 
@@ -49,14 +51,19 @@ const submit = () => {
 		paramMap: formData,
 		taskId: currentData.value.taskId,
 		taskLocalParamMap: {
-			approveDesc: submitDesc.value,
+			approveDesc: '拒绝原因：' + submitDesc.value,
 		},
 	};
 
 	completeTask(param).then((res) => {
 		dialogVisible.value = false;
 
-		emit('taskSubmitEvent');
+    //  停止流程
+    stopProcessInstance({
+      processInstanceId: currentProcessInstanceId.value
+    }).then(()=>{
+      emit('taskSubmitEvent');
+    })
 	});
 };
 </script>
