@@ -88,10 +88,11 @@
 
 				<el-table-column :label="$t('common.action')" fixed="right" width="300">
 					<template #default="scope">
-						<el-button @click="handleJobLog(scope.row)" text type="primary">日志</el-button>
+						<el-button @click="handleJobLog(scope.row)" text type="primary">{{ $t('job.jobLogBtn') }}</el-button>
 
 						<el-button v-auth="'job_sys_job_start_job'" @click="handleStartJob(scope.row)" text type="primary" v-if="scope.row.jobStatus !== '2'"
-							>启动
+							>
+              {{ $t('job.jobStartBtn') }}
 						</el-button>
 
 						<el-button
@@ -100,14 +101,15 @@
 							text
 							type="primary"
 							v-if="scope.row.jobStatus === '2'"
-							>暂停
+							>
+              {{ $t('job.jobPauseBtn') }}
 						</el-button>
 
 						<el-button v-auth="'job_sys_job_edit'" @click="handleEditJob(scope.row)" text type="primary">{{ $t('common.editBtn') }} </el-button>
 
-						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text type="primary">执行</el-button>
+						<el-button v-auth="'job_sys_job_start_job'" @click="handleRunJob(scope.row)" text type="primary">{{ $t('job.jobRunBtn') }}</el-button>
 
-						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary">{{ $t('common.delBtn') }} </el-button>
+						<el-button v-auth="'job_sys_job_del'" @click="handleDelete(scope.row)" text type="primary" :disabled="scope.row.jobStatus === '2'">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -121,11 +123,11 @@
 </template>
 
 <script lang="ts" name="systemSysJob" setup>
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, fetchList, runJobRa, shutDownJobRa, startJobRa } from '/@/api/daemon/job';
-import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useDict } from '/@/hooks/dict';
-import { useI18n } from 'vue-i18n';
+import {BasicTableProps, useTable} from '/@/hooks/table';
+import {delObj, fetchList, runJobRa, shutDownJobRa, startJobRa} from '/@/api/daemon/job';
+import {useMessage, useMessageBox} from '/@/hooks/message';
+import {useDict} from '/@/hooks/dict';
+import {useI18n} from 'vue-i18n';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));

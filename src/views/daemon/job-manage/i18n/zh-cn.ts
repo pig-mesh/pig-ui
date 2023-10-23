@@ -1,6 +1,10 @@
 export default {
 	job: {
 		index: '#',
+		jobLogBtn:'日志',
+		jobStartBtn:'启动',
+		jobRunBtn:'执行',
+		jobPauseBtn:'暂停',
 		importsysJobTip: '导入定时任务调度表',
 		jobId: '任务id',
 		jobName: '任务名称',

@@ -1,6 +1,10 @@
 export default {
 	job: {
 		index: '#',
+		jobLogBtn:'log',
+		jobStartBtn:'start',
+		jobRunBtn:'execute',
+		jobPauseBtn:'pause',
 		importsysJobTip: 'import SysJob',
 		jobId: 'jobId',
 		jobName: 'jobName',
