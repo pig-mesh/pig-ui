@@ -8,11 +8,18 @@ export const fetchList = (query?: Object) => {
 	});
 };
 
-export const putObj = (obj?: object) => {
+export const addObj = (obj?: object) => {
 	return request({
 		url: '/admin/route',
-		method: 'put',
+		method: 'post',
 		data: obj,
+	});
+};
+
+export const deleteObj = (routeId?: string) => {
+	return request({
+		url: '/admin/route/' + routeId,
+		method: 'delete'
 	});
 };
 
