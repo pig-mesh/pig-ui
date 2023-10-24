@@ -108,7 +108,7 @@
           </div>
           <div class="h-50 ml-4 flex w-auto flex-col justify-center">
             <p class="font-dm text-sm font-medium text-gray-600">使用CPU</p>
-            <h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ baseInfo.used_cpu_user_children * 100 }} %</h4>
+            <h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ Number(baseInfo.used_cpu_user_children).toFixed(2) }} %</h4>
           </div>
         </div>
         <div
