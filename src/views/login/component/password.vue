@@ -49,11 +49,24 @@
         <img :src="imgSrc" @click="getVerifyImageCode">
       </el-col>
     </el-form-item>
-    <el-form-item class="login-animation4">
-      <el-button type="primary" class="login-content-submit" v-waves @click="handleVerify" :loading="loading">
-        <span>{{ $t('password.accountBtnText') }}</span>
+    <el-form-item class="login-animation4 mt-4">
+      <el-button type="primary"  class="login-content-submit rounded-lg" v-waves @click="handleVerify"
+                 :loading="loading">
+        <span class="tracking-wide font-semibold">{{ $t('password.accountBtnText') }}</span>
       </el-button>
     </el-form-item>
+
+    <div class="relative flex items-center justify-between">
+      <div class="text-sm ml-auto">
+        <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.MOBILE)">
+          验证码登录
+        </a>
+        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
+          注册账号
+        </a>
+      </div>
+    </div>
+
     <div class="font12 mt30 login-animation4 login-msg">{{ $t('browserMsgText') }}</div>
   </el-form>
   <Verify @success="verifySuccess" :mode="'pop'" :captchaType="'blockPuzzle'" v-if="verifyEnable"
@@ -61,10 +74,11 @@
 </template>
 
 <script setup lang="ts" name="password">
-import {reactive, defineAsyncComponent, ref, defineEmits} from 'vue';
+import {defineAsyncComponent, defineEmits, reactive, ref} from 'vue';
 import {useUserInfo} from '/@/stores/userInfo';
 import {useI18n} from 'vue-i18n';
 import {generateUUID} from "/@/utils/other";
+import {LoginTypeEnum} from "/@/api/login";
 
 // 使用国际化插件
 const {t} = useI18n();
@@ -73,7 +87,7 @@ const {t} = useI18n();
 const Verify = defineAsyncComponent(() => import('/@/components/Verifition/Verify.vue'));
 
 // 定义变量内容
-const emit = defineEmits(['signInSuccess']); // 声明事件名称
+const emit = defineEmits(['signInSuccess','change']); // 声明事件名称
 const loginFormRef = ref(); // 定义LoginForm表单引用
 const loading = ref(false); // 定义是否正在登录中
 const state = reactive({

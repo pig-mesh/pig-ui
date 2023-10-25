@@ -35,5 +35,5 @@ export default {
 		description: '请选择租户，只需要在第一次使用时进行选择。',
 	},
 	signInText: '欢迎回来！',
-	browserMsgText: '* 温馨提示：建议使用谷歌、Microsoft Edge，版本 79.0.1072.62 及以上浏览器，360浏览器请使用极速模式',
+	browserMsgText: '* 温馨提示：建议使用谷歌、Microsoft Edge，版本 80 及以上浏览器，360浏览器请使用极速模式',
 };

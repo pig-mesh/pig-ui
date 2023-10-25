@@ -18,25 +18,24 @@
       </div>
       <div class="login-box">
         <div class="login-form">
-          <div class="login-title">{{ getThemeConfig.globalTitle }}</div>
-          <el-tabs v-model="tabsActiveName">
-            <!-- 用户名密码登录 -->
-            <el-tab-pane :label="$t('label.one1')" name="account">
-              <Password @signInSuccess="signInSuccess"/>
-            </el-tab-pane>
-            <!-- 手机号登录 -->
-            <el-tab-pane :label="$t('label.two2')" name="mobile">
-              <Mobile @signInSuccess="signInSuccess"/>
-            </el-tab-pane>
-            <!-- 社交登录 -->
-            <el-tab-pane :label="$t('label.three3')" name="social">
-              <Social @signInSuccess="signInSuccess"/>
-            </el-tab-pane>
-            <!-- 注册 -->
-            <el-tab-pane :label="$t('label.register')" name="register" v-if="registerEnable">
-              <Register @afterSuccess="tabsActiveName = 'account'"/>
-            </el-tab-pane>
-          </el-tabs>
+          <div class="my-3 text-6xl font-semibold">{{ getThemeConfig.globalTitle }}</div>
+          <div class="flex justify-center self-center">
+            <div class="p-12 bg-white mx-auto rounded-3xl w-96 ">
+              <div class="space-y-0">
+                <register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType"/>
+                <password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess"
+                          @change="changeLoginType"/>
+                <mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess"
+                        @change="changeLoginType"/>
+                <div class="flex items-center justify-center space-x-2 my-5">
+                  <span class="h-px w-16 bg-gray-100"></span>
+                  <span class="text-gray-300 font-normal">or</span>
+                  <span class="h-px w-16 bg-gray-100"></span>
+                </div>
+                <social @signInSuccess="signInSuccess"/>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -54,6 +53,7 @@ import {formatAxis} from '/@/utils/formatTime';
 import {useMessage} from '/@/hooks/message';
 import {Session} from '/@/utils/storage';
 import {initBackEndControlRoutes} from '/@/router/backEnd';
+import {LoginTypeEnum} from "/@/api/login";
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
@@ -69,11 +69,14 @@ const {t} = useI18n();
 const route = useRoute();
 const router = useRouter();
 
-// 是否开启注册
-const registerEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
+// 登录方式
+const loginType = ref(LoginTypeEnum.PASSWORD)
 
-// 默认选择账号密码登录方式
-const tabsActiveName = ref('account');
+// 修改登录类型
+const changeLoginType = (type: LoginTypeEnum) => {
+  debugger
+  loginType.value = type
+}
 
 // 获取布局配置信息
 const getThemeConfig = computed(() => {

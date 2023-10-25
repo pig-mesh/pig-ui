@@ -1,7 +1,7 @@
 import request from '/@/utils/request';
-import { Session } from '/@/utils/storage';
-import { validateNull } from '/@/utils/validate';
-import { useUserInfo } from '/@/stores/userInfo';
+import {Session} from '/@/utils/storage';
+import {validateNull} from '/@/utils/validate';
+import {useUserInfo} from '/@/stores/userInfo';
 import other from '/@/utils/other';
 
 /**
@@ -9,6 +9,13 @@ import other from '/@/utils/other';
  * OAuth 协议 4.3.1 要求格式为 form 而不是 JSON 注意！
  */
 const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
+
+// 登录方式
+export enum LoginTypeEnum {
+	PASSWORD,
+	MOBILE,
+	REGISTER
+}
 
 /**
  * 登录

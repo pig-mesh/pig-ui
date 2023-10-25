@@ -35,5 +35,5 @@ export default {
 		description: 'You only need to select a tenant once for future use',
 	},
 	browserMsgText:
-		'Tip: For best results, we recommend using Google Chrome, Microsoft Edge (version 79.0.1072.62 or higher), or the 360 browser with speed mode enabled.',
+		'Tip: For best results, we recommend using Google Chrome, Microsoft Edge (version 80 or higher), or the 360 browser with speed mode enabled.',
 };
