@@ -63,6 +63,10 @@ const handleAutoTenant = () => {
   tenantList.value.forEach((tenant: any) => {
     // 遍历租户列表
     if (domain.includes(tenant.tenantDomain)) {
+      // 如果当前租户已经选中不需要执行
+      if (Session.getTenant() == tenant.id) {
+        return
+      }
       // 如果域名匹配当前租户，则自动填充租户信息
       handleCommand(tenant);
     }
