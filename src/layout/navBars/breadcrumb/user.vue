@@ -68,17 +68,18 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import { logout } from '/@/api/login';
-import { ElMessageBox, ElMessage } from 'element-plus';
+import {logout} from '/@/api/login';
+import {ElMessage, ElMessageBox} from 'element-plus';
 import screenfull from 'screenfull';
-import { useI18n } from 'vue-i18n';
-import { useUserInfo } from '/@/stores/userInfo';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {useI18n} from 'vue-i18n';
+import {useUserInfo} from '/@/stores/userInfo';
+import {useThemeConfig} from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import { Session, Local } from '/@/utils/storage';
-import { formatAxis } from '/@/utils/formatTime';
-import { useMsg } from '/@/stores/msg';
+import {Local, Session} from '/@/utils/storage';
+import {formatAxis} from '/@/utils/formatTime';
+import {useMsg} from '/@/stores/msg';
+import {fetchUserMessageList} from "/@/api/admin/message";
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
@@ -216,16 +217,21 @@ const rollback = (msg: string) => {
 	useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxis(new Date()) });
 };
 
-const isDot = computed(() => {
-	return useMsg().getAllMsg().length > 0;
-});
-
+// 获取是否显示未读
+const isDot = ref(false)
+const getIsDot = () =>{
+  fetchUserMessageList({ category: '1', readFlag: '0'}).then(res => {
+    isDot.value = (res.data.total !== 0)
+  })
+}
 // 页面加载时
 onMounted(() => {
 	if (Local.get('themeConfig')) {
 		initI18nOrSize('globalComponentSize', 'disabledSize');
 		initI18nOrSize('globalI18n', 'disabledI18n');
 	}
+
+  getIsDot()
 });
 </script>
 

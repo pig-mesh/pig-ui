@@ -97,7 +97,7 @@ export default {
 		dropdown5: 'Log Out',
 		searchPlaceholder: 'Menu Search: Supports Chinese and Routing Path',
 		newTitle: 'Notice',
-		newBtn: 'All Read',
+		newBtn: 'All',
 		newGo: 'Go to the Notification Center',
 		newDesc: 'No Notice',
 		logOutTitle: 'Tips',

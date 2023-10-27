@@ -90,7 +90,7 @@ export default {
 		dropdown5: '退出登录',
 		searchPlaceholder: '菜单搜索：支持中文、路由路径',
 		newTitle: '通知',
-		newBtn: '全部已读',
+		newBtn: '全部',
 		newGo: '前往通知中心',
 		newDesc: '暂无通知',
 		logOutTitle: '提示',

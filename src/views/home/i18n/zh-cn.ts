@@ -9,6 +9,10 @@ export default {
 		pendingTask: '待办任务✍️',
 		copyTask: '抄送任务🔖',
 	},
+	msg:{
+	   readed:'已读',
+       unread:'未读'
+	},
 	schedule: {
 		index: '#',
 		importsysScheduleTip: '导入日程',

@@ -74,7 +74,6 @@ const loginType = ref(LoginTypeEnum.PASSWORD)
 
 // 修改登录类型
 const changeLoginType = (type: LoginTypeEnum) => {
-  debugger
   loginType.value = type
 }
 

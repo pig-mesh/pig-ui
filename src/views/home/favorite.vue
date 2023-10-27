@@ -1,5 +1,5 @@
 <template>
-	<el-card class="box-card" style="height: 100%">
+	<el-card class="box-card h-full">
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.quickNavigationToolsTip') }}</span>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts" name="SysFavoriteDashboard">
-import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
+import {useTagsViewRoutes} from '/@/stores/tagsViewRoutes';
 import shortcutCard from '/@/components/ShortcutCard/index.vue';
 
 /**

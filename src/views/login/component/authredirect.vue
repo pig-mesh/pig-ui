@@ -21,7 +21,6 @@ onMounted(async () => {
     code = other.getQueryString(url, 'authCode');
   }
 
-  debugger
 	// 分割登录参数
 	let state = other.getQueryString(url, 'state');
 	let type = state.split('-')[1];

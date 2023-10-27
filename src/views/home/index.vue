@@ -50,6 +50,6 @@ const Favorite = defineAsyncComponent(() => import('./favorite.vue'));
 const ScheduleCalendar = defineAsyncComponent(() => import('./schedule/calendar.vue'));
 const SysLog = defineAsyncComponent(() => import('./log-dashboard/sys-log.vue'));
 const AuditLog = defineAsyncComponent(() => import('./log-dashboard/audit-log.vue'));
-const NewsLetter = defineAsyncComponent(() => import('./newsletter.vue'));
+const NewsLetter = defineAsyncComponent(() => import('./news/index.vue'));
 const FlowData = defineAsyncComponent(() => import('./flow-data.vue'));
 </script>

@@ -9,6 +9,10 @@ export default {
 		pendingTask: 'pending task✍️',
 		copyTask: 'copy task🔖',
 	},
+	msg:{
+		readed:'readed',
+		unread:'unread'
+	},
 	schedule: {
 		index: '#',
 		importsysScheduleTip: 'import SysSchedule',
