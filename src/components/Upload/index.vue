@@ -59,10 +59,11 @@
 </template>
 
 <script setup lang="ts" name="upload-file">
-import { useMessage } from '/@/hooks/message';
-import { Session } from '/@/utils/storage';
+import {useMessage} from '/@/hooks/message';
+import {Session} from '/@/utils/storage';
 import other from '/@/utils/other';
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
+
 const props = defineProps({
 	modelValue: [String, Array],
 	// 数量限制
@@ -100,7 +101,8 @@ const props = defineProps({
     default:{}
 	},
   dir: {
-    type: String
+    type: String,
+    default: ''
   },
 	autoUpload: {
 		type: Boolean,

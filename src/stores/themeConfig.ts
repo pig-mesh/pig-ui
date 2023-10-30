@@ -65,7 +65,7 @@ export const useThemeConfig = defineStore('themeConfig', {
             // 初始化变量，用于更新菜单 el-scrollbar 的高度，请勿删除
             isFixedHeaderChange: false,
             // 是否开启经典布局分割菜单（仅经典布局生效）
-            isClassicSplitMenu: false,
+            isClassicSplitMenu: true,
             // 是否开启自动锁屏
             isLockScreen: false,
             // 开启自动锁屏倒计时(s/秒)

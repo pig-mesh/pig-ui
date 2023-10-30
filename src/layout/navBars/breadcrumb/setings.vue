@@ -9,6 +9,74 @@
 			@close="onDrawerClose"
 		>
 			<el-scrollbar class="layout-breadcrumb-seting-bar">
+        <!-- 布局切换 -->
+        <el-divider content-position="left">{{ $t('layout.sixTitle') }}</el-divider>
+        <div class="layout-drawer-content-flex">
+          <!-- defaults 布局 -->
+          <div class="layout-drawer-content-item" @click="onSetLayout('defaults')">
+            <section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'defaults' }">
+              <aside class="el-aside" style="width: 20px"></aside>
+              <section class="el-container is-vertical">
+                <header class="el-header" style="height: 10px"></header>
+                <main class="el-main"></main>
+              </section>
+            </section>
+            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'defaults' }">
+              <div class="layout-tips-box">
+                <p class="layout-tips-txt">{{ $t('layout.sixDefaults') }}</p>
+              </div>
+            </div>
+          </div>
+          <!-- classic 布局 -->
+          <div class="layout-drawer-content-item" @click="onSetLayout('classic')">
+            <section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'classic' }">
+              <header class="el-header" style="height: 10px"></header>
+              <section class="el-container">
+                <aside class="el-aside" style="width: 20px"></aside>
+                <section class="el-container is-vertical">
+                  <main class="el-main"></main>
+                </section>
+              </section>
+            </section>
+            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'classic' }">
+              <div class="layout-tips-box">
+                <p class="layout-tips-txt">{{ $t('layout.sixClassic') }}</p>
+              </div>
+            </div>
+          </div>
+          <!-- transverse 布局 -->
+          <div class="layout-drawer-content-item" @click="onSetLayout('transverse')">
+            <section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'transverse' }">
+              <header class="el-header" style="height: 10px"></header>
+              <section class="el-container">
+                <section class="el-container is-vertical">
+                  <main class="el-main"></main>
+                </section>
+              </section>
+            </section>
+            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'transverse' }">
+              <div class="layout-tips-box">
+                <p class="layout-tips-txt">{{ $t('layout.sixTransverse') }}</p>
+              </div>
+            </div>
+          </div>
+          <!-- columns 布局 -->
+          <div class="layout-drawer-content-item" @click="onSetLayout('columns')">
+            <section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }">
+              <aside class="el-aside-dark" style="width: 10px"></aside>
+              <aside class="el-aside" style="width: 20px"></aside>
+              <section class="el-container is-vertical">
+                <header class="el-header" style="height: 10px"></header>
+                <main class="el-main"></main>
+              </section>
+            </section>
+            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
+              <div class="layout-tips-box">
+                <p class="layout-tips-txt">{{ $t('layout.sixColumns') }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
 				<!-- 全局主题 -->
 				<el-divider content-position="left">{{ $t('layout.oneTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex">
@@ -245,7 +313,7 @@
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-switch
 							v-model="getThemeConfig.isSortableTagsView"
-							:disabled="state.isMobile ? true : false"
+							:disabled="!!state.isMobile"
 							size="small"
 							@change="onSortableTagsViewChange"
 						></el-switch>
@@ -333,75 +401,6 @@
 						</el-select>
 					</div>
 				</div>
-
-				<!-- 布局切换 -->
-				<el-divider content-position="left">{{ $t('layout.sixTitle') }}</el-divider>
-				<div class="layout-drawer-content-flex">
-					<!-- defaults 布局 -->
-					<div class="layout-drawer-content-item" @click="onSetLayout('defaults')">
-						<section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'defaults' }">
-							<aside class="el-aside" style="width: 20px"></aside>
-							<section class="el-container is-vertical">
-								<header class="el-header" style="height: 10px"></header>
-								<main class="el-main"></main>
-							</section>
-						</section>
-						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'defaults' }">
-							<div class="layout-tips-box">
-								<p class="layout-tips-txt">{{ $t('layout.sixDefaults') }}</p>
-							</div>
-						</div>
-					</div>
-					<!-- classic 布局 -->
-					<div class="layout-drawer-content-item" @click="onSetLayout('classic')">
-						<section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'classic' }">
-							<header class="el-header" style="height: 10px"></header>
-							<section class="el-container">
-								<aside class="el-aside" style="width: 20px"></aside>
-								<section class="el-container is-vertical">
-									<main class="el-main"></main>
-								</section>
-							</section>
-						</section>
-						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'classic' }">
-							<div class="layout-tips-box">
-								<p class="layout-tips-txt">{{ $t('layout.sixClassic') }}</p>
-							</div>
-						</div>
-					</div>
-					<!-- transverse 布局 -->
-					<div class="layout-drawer-content-item" @click="onSetLayout('transverse')">
-						<section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'transverse' }">
-							<header class="el-header" style="height: 10px"></header>
-							<section class="el-container">
-								<section class="el-container is-vertical">
-									<main class="el-main"></main>
-								</section>
-							</section>
-						</section>
-						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'transverse' }">
-							<div class="layout-tips-box">
-								<p class="layout-tips-txt">{{ $t('layout.sixTransverse') }}</p>
-							</div>
-						</div>
-					</div>
-					<!-- columns 布局 -->
-					<div class="layout-drawer-content-item" @click="onSetLayout('columns')">
-						<section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }">
-							<aside class="el-aside-dark" style="width: 10px"></aside>
-							<aside class="el-aside" style="width: 20px"></aside>
-							<section class="el-container is-vertical">
-								<header class="el-header" style="height: 10px"></header>
-								<main class="el-main"></main>
-							</section>
-						</section>
-						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
-							<div class="layout-tips-box">
-								<p class="layout-tips-txt">{{ $t('layout.sixColumns') }}</p>
-							</div>
-						</div>
-					</div>
-				</div>
 				<div class="copy-config">
 					<el-alert :title="$t('layout.tipText')" type="warning" :closable="false"> </el-alert>
 					<el-button class="copy-config-btn" type="primary" ref="copyConfigBtnRef" @click="onCopyConfigClick">
@@ -423,18 +422,18 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbSeting">
-import { nextTick, onUnmounted, onMounted, computed, reactive } from 'vue';
-import { ElMessage } from 'element-plus';
-import { useI18n } from 'vue-i18n';
-import { storeToRefs } from 'pinia';
-import { useThemeConfig } from '/@/stores/themeConfig';
-import { useChangeColor } from '/@/utils/theme';
-import { Local } from '/@/utils/storage';
+import {computed, nextTick, onMounted, onUnmounted, reactive} from 'vue';
+import {ElMessage} from 'element-plus';
+import {useI18n} from 'vue-i18n';
+import {storeToRefs} from 'pinia';
+import {useThemeConfig} from '/@/stores/themeConfig';
+import {useChangeColor} from '/@/utils/theme';
+import {Local} from '/@/utils/storage';
 import Watermark from '/@/utils/wartermark';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import { useUserInfo } from '/@/stores/userInfo';
+import {useUserInfo} from '/@/stores/userInfo';
 
 // 定义变量内容
 const { locale } = useI18n();
