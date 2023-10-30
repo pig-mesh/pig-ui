@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts" name="layoutClassic">
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {useThemeConfig} from '/@/stores/themeConfig';
 
 // 引入组件
 const LayoutAside = defineAsyncComponent(() => import('/@/layout/component/aside.vue'));
@@ -28,6 +28,11 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 
 // 判断是否显示 tasgview
 const isTagsview = computed(() => {
+  let { layout } = themeConfig.value;
+  // 经典模式首页没有tagview
+  if(layout === 'classic' && route.path === '/home'){
+    return false
+  }
 	return themeConfig.value.isTagsview;
 });
 // 重置滚动条高度，更新子级 scrollbar

@@ -105,6 +105,7 @@ const dataRules = ref({
 const openDialog = (id: string) => {
   visible.value = true
   form.id = ''
+  form.content = ''
 
   // 重置表单数据
   nextTick(() => {

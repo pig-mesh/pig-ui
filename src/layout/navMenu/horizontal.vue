@@ -6,7 +6,7 @@
 					<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 						<template #title>
 							<SvgIcon :name="val.meta.icon" />
-							<span>{{ $t(val.name) }}</span>
+							<span class="font-semibold">{{ $t(val.name) }}</span>
 						</template>
 						<SubItem :chil="val.children" />
 					</el-sub-menu>
@@ -14,7 +14,7 @@
 						<el-menu-item :index="val.path" :key="val.path">
 							<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
 								<SvgIcon :name="val.meta.icon" />
-								{{ $t(val.name) }}
+                <p class="font-semibold">{{ $t(val.name) }}</p>
 							</template>
 							<template #title v-else>
 								<a class="w100" @click.prevent="onALinkClick(val)">
@@ -31,9 +31,9 @@
 </template>
 
 <script setup lang="ts" name="navMenuHorizontal">
-import { RouteRecordRaw } from 'vue-router';
-import { useRoutesList } from '/@/stores/routesList';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {RouteRecordRaw} from 'vue-router';
+import {useRoutesList} from '/@/stores/routesList';
+import {useThemeConfig} from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 

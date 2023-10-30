@@ -1,6 +1,6 @@
 <template>
 	<div class="h100" v-show="!isTagsViewCurrenFull">
-		<el-aside class="layout-aside" :class="setCollapseStyle">
+		<el-aside class="layout-aside" :class="setCollapseStyle" v-if="setShowAside">
 			<Logo v-if="setShowLogo" />
 			<el-scrollbar class="flex-auto" ref="layoutAsideScrollbarRef" @mouseenter="onAsideEnterLeave(true)" @mouseleave="onAsideEnterLeave(false)">
 				<Vertical :menuList="state.menuList" />
@@ -10,14 +10,15 @@
 </template>
 
 <script setup lang="ts" name="layoutAside">
-import { defineAsyncComponent, reactive, computed, watch, onBeforeMount, ref } from 'vue';
-import { storeToRefs } from 'pinia';
+import {computed, defineAsyncComponent, onBeforeMount, reactive, ref, watch} from 'vue';
+import {storeToRefs} from 'pinia';
 import pinia from '/@/stores/index';
-import { useRoutesList } from '/@/stores/routesList';
-import { useThemeConfig } from '/@/stores/themeConfig';
-import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
+import {useRoutesList} from '/@/stores/routesList';
+import {useThemeConfig} from '/@/stores/themeConfig';
+import {useTagsViewRoutes} from '/@/stores/tagsViewRoutes';
 import mittBus from '/@/utils/mitt';
-import { useI18n } from 'vue-i18n';
+import {useI18n} from 'vue-i18n';
+import {useRoute} from "vue-router";
 
 // 引入组件
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
@@ -73,11 +74,24 @@ const setCollapseStyle = computed(() => {
 		];
 	}
 });
+
+const route = useRoute();
+// 设置是否显示左侧菜单栏
+const setShowAside = computed(() => {
+  let { layout } = themeConfig.value;
+  if(layout !== 'classic'){
+    return true
+  }
+  // 首页不显示侧边栏
+  return route.path !== '/home'
+});
+
 // 设置显示/隐藏 logo
 const setShowLogo = computed(() => {
 	let { layout, isShowLogo } = themeConfig.value;
 	return (isShowLogo && layout === 'defaults') || (isShowLogo && layout === 'columns');
 });
+
 // 关闭移动端蒙版
 const closeLayoutAsideMobileMode = () => {
 	const el = document.querySelector('.layout-aside-mobile-mode');

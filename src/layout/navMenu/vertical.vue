@@ -8,6 +8,7 @@
 		:collapse-transition="false"
 	>
 		<template v-for="val in menuLists">
+      <!-- 三级菜单 -->
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 				<template #title>
 					<SvgIcon :name="val.meta.icon" />
@@ -16,10 +17,11 @@
 				<SubItem :chil="val.children" />
 			</el-sub-menu>
 			<template v-else>
+        <!-- 二级菜单       -->
 				<el-menu-item :index="val.path" :key="val.path">
 					<SvgIcon :name="val.meta.icon" />
 					<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-						<span>{{ $t(val.name) }} </span>
+						<span>{{ $t(val.name) }}</span>
 					</template>
 					<template #title v-else>
 						<a class="w100" @click.prevent="onALinkClick(val)">{{ $t(val.name) }}</a>
@@ -31,8 +33,8 @@
 </template>
 
 <script setup lang="ts" name="navMenuVertical">
-import { RouteRecordRaw } from 'vue-router';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {RouteRecordRaw} from 'vue-router';
+import {useThemeConfig} from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 
 // 引入组件
