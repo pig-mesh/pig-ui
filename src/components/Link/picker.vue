@@ -1,6 +1,6 @@
 <template>
 	<div class="flex-1 link-picker" @click="!disabled && popupRef?.open()">
-		<el-input :model-value="getLink" placeholder="请选择链接123" readonly :disabled="disabled"> </el-input>
+		<el-input :model-value="getLink" placeholder="请选择链接" readonly :disabled="disabled"> </el-input>
 		<popup ref="popupRef" width="700px" title="链接选择" @confirm="handleConfirm">
 			<link-content v-model="activeLink" />
 		</popup>
@@ -8,9 +8,10 @@
 </template>
 
 <script lang="ts" setup>
-import { LinkTypeEnum, type Link } from '.';
+import {type Link, LinkTypeEnum} from '.';
 import LinkContent from './index.vue';
 import Popup from '/@/components/Popup/index.vue';
+
 const props = defineProps({
 	modelValue: {
 		type: Object,
