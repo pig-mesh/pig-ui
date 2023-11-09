@@ -3,8 +3,8 @@
     <div
         class="relative flex items-center justify-center">
       <!-- 待办任务 -->
-      <div class="w-auto flex-row items-center">
-        <div class="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
+      <div class="flex-row items-center w-auto">
+        <div class="p-3 rounded-full bg-lightPrimary dark:bg-navy-700">
                         <span class="flex items-center text-brand-500 dark:text-white">
                           <svg t="1697994355915" class="icon" viewBox="0 0 1024 1024" version="1.1"
                                xmlns="http://www.w3.org/2000/svg" p-id="8441" width="32" height="32"><path
@@ -13,15 +13,15 @@
                         </span>
         </div>
       </div>
-      <router-link to="/task/pending">
-        <div class="h-50 ml-4 flex w-auto flex-col justify-center">
-          <p class="font-dm text-sm font-medium text-gray-600">{{ $t('home.pendingTask') }}</p>
+      <router-link to="/flow/task/pending">
+        <div class="flex flex-col justify-center w-auto ml-4 h-50">
+          <p class="text-sm font-medium text-gray-600 font-dm">{{ $t('home.pendingTask') }}</p>
           <h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ state.pendingNum }}</h4>
         </div>
       </router-link>
       <!-- 抄送任务 -->
-      <div class="ml-8 w-auto flex-row items-center">
-        <div class="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
+      <div class="flex-row items-center w-auto ml-8">
+        <div class="p-3 rounded-full bg-lightPrimary dark:bg-navy-700">
                         <span class="flex items-center text-brand-500 dark:text-white">
 <svg t="1697994410210" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9746"
      width="32" height="32"><path
@@ -30,9 +30,9 @@
                         </span>
         </div>
       </div>
-      <router-link to="/task/cc">
-        <div class="h-50 ml-4 flex w-auto flex-col justify-center">
-          <p class="font-dm text-sm font-medium text-gray-600">{{ $t('home.copyTask') }}</p>
+      <router-link to="/flow/task/cc">
+        <div class="flex flex-col justify-center w-auto ml-4 h-50">
+          <p class="text-sm font-medium text-gray-600 font-dm">{{ $t('home.copyTask') }}</p>
           <h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ state.copyNum }}</h4>
         </div>
       </router-link>

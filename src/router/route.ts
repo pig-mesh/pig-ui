@@ -51,7 +51,7 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 	{
 		path: '/personal',
 		name: 'router.personal',
-		component: () => import('/@/views/admin/user/personal.vue'),
+		component: () => import('/@/views/admin/system/user/personal.vue'),
 		meta: {
 			isHide: true,
 		},

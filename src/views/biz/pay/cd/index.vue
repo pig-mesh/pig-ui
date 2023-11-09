@@ -138,16 +138,3 @@ const getQr = async () => {
 };
 </script>
 
-<style scoped>
-.center-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.qrcode-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px; /* adjust margin as needed */
-}
-</style>

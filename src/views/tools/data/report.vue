@@ -1,7 +1,6 @@
 <template>
 	<div class="layout-padding">
-    <iframe :src="src" class="iframe" v-if="isMicro === 'true'" />
-    <span v-else>单体架构暂不支持大屏设计器</span>
+    <iframe :src="src" class="iframe" />
 	</div>
 </template>
 

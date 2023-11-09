@@ -68,24 +68,24 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
-import {logout} from '/@/api/login';
-import {ElMessage, ElMessageBox} from 'element-plus';
+import { logout } from '/@/api/login';
+import { ElMessage, ElMessageBox } from 'element-plus';
 import screenfull from 'screenfull';
-import {useI18n} from 'vue-i18n';
-import {useUserInfo} from '/@/stores/userInfo';
-import {useThemeConfig} from '/@/stores/themeConfig';
+import { useI18n } from 'vue-i18n';
+import { useUserInfo } from '/@/stores/userInfo';
+import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import {Local, Session} from '/@/utils/storage';
-import {formatAxis} from '/@/utils/formatTime';
-import {useMsg} from '/@/stores/msg';
-import {fetchUserMessageList} from "/@/api/admin/message";
+import { Local, Session } from '/@/utils/storage';
+import { formatAxis } from '/@/utils/formatTime';
+import { useMsg } from '/@/stores/msg';
+import { fetchUserMessageList } from '/@/api/admin/message';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
-const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/user/personal.vue'));
+const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
 
 // 定义变量内容
 const { locale, t } = useI18n();
@@ -167,12 +167,9 @@ const onHandleCommandClick = (path: string) => {
 			},
 		})
 			.then(async () => {
-        // 关闭全部的标签页
-        mittBus.emit(
-            "onCurrentContextmenuClick",
-            Object.assign({}, { contextMenuClickId: 3, ...router })
-        );
-        // 调用后台接口
+				// 关闭全部的标签页
+				mittBus.emit('onCurrentContextmenuClick', Object.assign({}, { contextMenuClickId: 3, ...router }));
+				// 调用后台接口
 				await logout();
 				// 清除缓存/token等
 				Session.clear();
@@ -218,12 +215,12 @@ const rollback = (msg: string) => {
 };
 
 // 获取是否显示未读
-const isDot = ref(false)
-const getIsDot = () =>{
-  fetchUserMessageList({ category: '1', readFlag: '0'}).then(res => {
-    isDot.value = (res.data.total !== 0)
-  })
-}
+const isDot = ref(false);
+const getIsDot = () => {
+	fetchUserMessageList({ category: '1', readFlag: '0' }).then((res) => {
+		isDot.value = res.data.total !== 0;
+	});
+};
 // 页面加载时
 onMounted(() => {
 	if (Local.get('themeConfig')) {
@@ -231,7 +228,7 @@ onMounted(() => {
 		initI18nOrSize('globalI18n', 'disabledI18n');
 	}
 
-  getIsDot()
+	getIsDot();
 });
 </script>
 
