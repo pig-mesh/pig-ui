@@ -38,16 +38,16 @@ jobs:
         run: ${{ matrix.npm-client }} install
 
       - name: Build
-        run: ${{ matrix.npm-client }} run build
+        run: ${{ matrix.npm-client }} run build:docker
 
       - name: Login to Docker Registry
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }} registry.cn-hangzhou.aliyuncs.com
 
       - name: Build and push Docker images
         run: |
-          docker-compose build
+          docker-compose -f ./docker/docker-compose.yaml build
           registry="registry.cn-hangzhou.aliyuncs.com/pigx/"
-          for service in $(docker-compose config --services); do
+          for service in $(docker-compose -f ./docker/docker-compose.yaml config --services); do
             docker tag ${service}:latest ${registry}${service}:latest
             docker push ${registry}${service}:latest
           done
