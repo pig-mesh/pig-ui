@@ -8,10 +8,12 @@ export default {
 		newsletterTip: '站内信',
 		pendingTask: '待办任务✍️',
 		copyTask: '抄送任务🔖',
+		schedule: '日程',
+		reminders: '提醒',
 	},
-	msg:{
-	   readed:'已读',
-       unread:'未读'
+	msg: {
+		readed: '已读',
+		unread: '未读',
 	},
 	schedule: {
 		index: '#',

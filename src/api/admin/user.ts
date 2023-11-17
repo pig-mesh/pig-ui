@@ -65,7 +65,7 @@ export function password(obj: Object) {
 	});
 }
 
-export function UnbindingUser(type) {
+export function unbindingUser(type) {
 	return request({
 		url: '/admin/user/unbinding',
 		method: 'post',

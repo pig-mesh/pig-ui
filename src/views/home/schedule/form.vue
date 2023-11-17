@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false">
+	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
 		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="24" class="mb20">
@@ -25,7 +25,7 @@
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('schedule.date')" prop="date">
-						<el-date-picker type="date" :placeholder="t('schedule.inputDateTip')" v-model="form.date" :value-format="dateStr"></el-date-picker>
+						<el-date-picker type="date" :placeholder="t('schedule.inputDateTip')" v-model="form.date" :value-format="dateStr" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
@@ -51,10 +51,10 @@
 </template>
 
 <script setup lang="ts" name="SysScheduleDialog">
-import { useMessage } from '/@/hooks/message';
-import { getObj, addObj, putObj } from '/@/api/admin/schedule';
-import { useI18n } from 'vue-i18n';
-import { useDict } from '/@/hooks/dict';
+import {useMessage} from '/@/hooks/message';
+import {addObj, getObj, putObj} from '/@/api/admin/schedule';
+import {useI18n} from 'vue-i18n';
+import {useDict} from '/@/hooks/dict';
 
 const emit = defineEmits(['refresh']);
 

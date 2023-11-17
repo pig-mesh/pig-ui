@@ -8,10 +8,12 @@ export default {
 		newsletterTip: 'news letter',
 		pendingTask: 'pending task✍️',
 		copyTask: 'copy task🔖',
+		schedule: 'schedule',
+		reminders: 'Reminders',
 	},
-	msg:{
-		readed:'readed',
-		unread:'unread'
+	msg: {
+		readed: 'readed',
+		unread: 'unread',
 	},
 	schedule: {
 		index: '#',
