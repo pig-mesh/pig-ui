@@ -4,6 +4,7 @@ export default {
 		importsysFileTip: 'import SysFile',
 		id: 'id',
 		fileName: 'fileName',
+		uploadFile: 'upload file',
 		bucketName: 'bucketName',
 		original: 'original',
 		type: 'type',

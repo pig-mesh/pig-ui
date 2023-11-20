@@ -4,6 +4,7 @@
 <script setup lang="ts" name="global-websocket">
 import { ElNotification } from 'element-plus';
 import { Session } from '/@/utils/storage';
+import other from "/@/utils/other";
 
 const emit = defineEmits(['rollback']);
 
@@ -49,7 +50,7 @@ const initWebSocket = () => {
 	let host = window.location.host;
 	//  baseURL
 	let baseURL = import.meta.env.VITE_API_URL;
-	let wsUri = `ws://${host}${baseURL}${props.uri}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
+	let wsUri = `ws://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
 	// 建立连接
 	state.webSocket = new WebSocket(wsUri);
 	// 连接成功

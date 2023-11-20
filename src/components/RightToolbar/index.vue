@@ -21,7 +21,10 @@
 			<el-tooltip class="item" effect="dark" :content="$t('queryTree.refresh')" placement="top">
 				<el-button circle icon="Refresh" @click="handleRefresh()" />
 			</el-tooltip>
-		</el-row>
+
+      <!-- 插槽 -->
+      <slot></slot>
+    </el-row>
 	</div>
 </template>
 

@@ -3,6 +3,7 @@ export default {
 		index: '#',
 		importsysFileTip: '导入文件管理表',
 		id: '编号',
+		uploadFile: '上传文件',
 		fileName: '文件名称',
 		bucketName: '桶名称',
 		original: '原文件名',

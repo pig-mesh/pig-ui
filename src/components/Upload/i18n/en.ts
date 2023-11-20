@@ -11,5 +11,7 @@ export default {
 		size: 'size not exceeding',
 		format: 'format',
 		file: 'file',
+		sizeErrorText: 'file size error, max ',
+		typeErrorText: 'file type error, upload ',
 	},
 };

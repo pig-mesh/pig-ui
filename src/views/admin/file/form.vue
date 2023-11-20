@@ -1,5 +1,5 @@
 <template>
-	<el-dialog title="上传文件" v-model="visible" :close-on-click-modal="false" draggable>
+	<el-dialog :title="$t('file.uploadFile')" v-model="visible" :close-on-click-modal="false" draggable>
 		<upload @change="success" :model-value="fileList" />
 		<template #footer>
 			<span class="dialog-footer">

@@ -4,5 +4,6 @@ export default {
 		displayTheSearch: '显示搜索',
 		refresh: '刷新',
 		print: '打印',
+		view: '视图'
 	},
 };

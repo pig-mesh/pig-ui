@@ -18,7 +18,7 @@
 					<el-input
 						v-else
 						v-model.trim="inputValue"
-						:maxlength="limit"
+						:maxlength="maxlength"
 						:show-word-limit="showLimit"
 						:type="type"
 						:size="size"
@@ -27,8 +27,8 @@
 					/>
 				</div>
 				<div class="flex-none popover-input__btns">
-					<el-button link @click="close">取消</el-button>
-					<el-button type="primary" :size="size" @click="handleConfirm">确定</el-button>
+					<el-button link @click="close">{{ $t('common.cancelButtonText') }}</el-button>
+					<el-button type="primary" :size="size" @click="handleConfirm">{{ $t('common.confirmButtonText') }}</el-button>
 				</div>
 			</div>
 			<template #reference>
@@ -45,7 +45,7 @@ import { useEventListener } from '@vueuse/core';
 import type { PropType } from 'vue';
 
 const props = defineProps({
-	value: {
+	modelValue: {
 		type: String,
 	},
 	type: {
@@ -73,6 +73,10 @@ const props = defineProps({
 		type: Number,
 		default: 200,
 	},
+  maxlength: {
+    type: Number,
+    default: 20,
+  },
 	showLimit: {
 		type: Boolean,
 		default: false,
@@ -82,28 +86,33 @@ const props = defineProps({
 		default: true,
 	},
 });
-const emit = defineEmits(['confirm']);
+const emit = defineEmits(['confirm', 'update:modelValue']);
+
 const visible = ref(false);
 const inPopover = ref(false);
 const inputValue = ref();
 const handleConfirm = () => {
 	close();
 	emit('confirm', inputValue.value);
+	emit('update:modelValue', inputValue.value);
 };
+
 const handleOpen = () => {
 	if (props.disabled) {
 		return;
 	}
 	visible.value = true;
+	inputValue.value = '';
 };
+
 const close = () => {
 	visible.value = false;
 };
 
 watch(
-	() => props.value,
+	() => inputValue.value,
 	(value) => {
-		inputValue.value = value;
+		emit('update:modelValue', value);
 	},
 	{
 		immediate: true,
