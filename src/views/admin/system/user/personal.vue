@@ -93,7 +93,7 @@
 					</el-table-column>
 					<el-table-column prop="action" label="操作">
 						<template #default="scope">
-							<el-button @click="Unbinding(scope.row.type)" text type="primary" v-if="scope.row.openId"> 解绑 </el-button>
+							<el-button @click="unbinding(scope.row.type)" text type="primary" v-if="scope.row.openId"> 解绑 </el-button>
 							<el-button @click="handleClick(scope.row.type)" text type="primary" v-else> 绑定 </el-button>
 						</template>
 					</el-table-column>
@@ -104,13 +104,13 @@
 </template>
 
 <script setup lang="ts" name="personal">
-import { useUserInfo } from '/@/stores/userInfo';
-import { editInfo, getObj, password, UnbindingUser } from '/@/api/admin/user';
-import { useMessage } from '/@/hooks/message';
-import { rule } from '/@/utils/validate';
+import {useUserInfo} from '/@/stores/userInfo';
+import {editInfo, getObj, password, unbindingUser} from '/@/api/admin/user';
+import {useMessage} from '/@/hooks/message';
+import {rule} from '/@/utils/validate';
 import other from '/@/utils/other';
-import { Session } from '/@/utils/storage';
-import { useI18n } from 'vue-i18n';
+import {Session} from '/@/utils/storage';
+import {useI18n} from 'vue-i18n';
 
 const { t } = useI18n();
 
@@ -127,6 +127,8 @@ const formData = ref({
 	email: '',
 	avatar: '',
 	nickname: '',
+	wxDingUserid: '',
+	wxCpUserid: '',
 	phone: ('' as string) || undefined,
 });
 
@@ -187,7 +189,7 @@ const passwordRuleForm = reactive({
 
 const score = ref(0);
 
-const passwordScore = (e) => {
+const passwordScore = (e: any) => {
 	score.value = e;
 };
 
@@ -235,21 +237,18 @@ const handleSaveUser = () => {
 };
 
 const handleClick = (thirdpart: string) => {
-	let appid, client_id, redirect_uri, url;
+	let redirect_uri, url;
 	redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
-	if (thirdpart === 'wechat') {
-		appid = 'wxd1678d3f83b1d83a';
-		url = `https://open.weixin.qq.com/connect/qrconnect?appid=${appid}&redirect_uri=${redirect_uri}&state=WX-BIND&response_type=code&scope=snsapi_login#wechat_redirect`;
-	} else if (thirdpart === 'tencent') {
-		client_id = '101322838';
-		url = `https://graph.qq.com/oauth2.0/authorize?response_type=code&state=QQ-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
-	} else if (thirdpart === 'gitee') {
-		client_id = '0c29cfd9cb1e0037fc837521bc08c1a7483d8fd9b3e123d46beec59a5544a881';
-		url = `https://gitee.com/oauth/authorize?response_type=code&state=GITEE-BIND&client_id=${client_id}&redirect_uri=${redirect_uri}`;
-	} else if (thirdpart === 'osc') {
-		client_id = 'neIIqlwGsjsfsA6uxNqD';
-		url = `https://www.oschina.net/action/oauth2/authorize?response_type=code&client_id=${client_id}&state=OSC-BIND&redirect_uri=${redirect_uri}`;
+
+	if (thirdpart === 'cp') {
+    const appid = import.meta.env.VITE_CP_LOGIN_APPID;
+    const agentId = import.meta.env.VITE_CP_LOGIN_AGENTID;
+		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${appid}&agentid=${agentId}&redirect_uri=${redirect_uri}&state=CP-BIND`;
+	} else if (thirdpart === 'dingding') {
+    const clientId = import.meta.env.VITE_DINGDING_APPID;
+		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${clientId}&scope=openid&state=DINGTALK-BIND&prompt=consent`;
 	}
+
 	other.openWindow(url, thirdpart, 540, 540);
 };
 
@@ -280,30 +279,20 @@ const socialList = ref([] as any);
 const initSocialList = () => {
 	socialList.value = [
 		{
-			name: '微信公众号',
-			type: 'wechat',
-			openId: formData.value.wxOpenid,
+			name: '企业微信',
+			type: 'cp',
+			openId: formData.value.wxCpUserid,
 		},
 		{
-			name: 'QQ',
-			type: 'tencent',
-			openId: formData.value.qqOpenid,
-		},
-		{
-			name: 'gitee',
-			type: 'gitee',
-			openId: formData.value.giteeOpenId,
-		},
-		{
-			name: '开源中国',
-			type: 'osc',
-			openId: formData.value.oscOpenId,
+			name: '钉钉办公',
+			type: 'dingding',
+			openId: formData.value.wxDingUserid,
 		},
 	];
 };
 
-const Unbinding = (type) => {
-	UnbindingUser(type)
+const unbinding = (type: string) => {
+	unbindingUser(type)
 		.then(() => {
 			useMessage().success('解绑成功');
 		})

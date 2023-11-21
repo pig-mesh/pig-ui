@@ -17,9 +17,9 @@ onMounted(async () => {
 		code = other.getQueryString(url, 'ticket');
 	}
 
-  if (validateNull(code)) {
-    code = other.getQueryString(url, 'authCode');
-  }
+	if (validateNull(code)) {
+		code = other.getQueryString(url, 'authCode');
+	}
 
 	// 分割登录参数
 	let state = other.getQueryString(url, 'state');
