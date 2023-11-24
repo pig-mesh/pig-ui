@@ -15,3 +15,12 @@ export const delObj = (ids: object) => {
 		data: ids,
 	});
 };
+
+
+export const getSum = (params?: Object) => {
+	return request({
+		url: '/admin/log/sum',
+		method: 'get',
+		params,
+	});
+};
