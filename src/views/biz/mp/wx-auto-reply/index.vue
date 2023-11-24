@@ -141,10 +141,10 @@
 </template>
 
 <script setup lang="ts" name="wx-auto-reply">
-import { fetchAccountList } from '/@/api/mp/wx-account';
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { useMessage, useMessageBox } from '/@/hooks/message';
-import { getPage, delObj, addObj, putObj } from '/@/api/mp/wx-auto-reply';
+import {fetchAccountList} from '/@/api/mp/wx-account';
+import {BasicTableProps, useTable} from '/@/hooks/table';
+import {useMessage, useMessageBox} from '/@/hooks/message';
+import {addObj, delObj, getPage, putObj} from '/@/api/mp/wx-auto-reply';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
@@ -227,7 +227,7 @@ const dicRepMate = ref([
 ]);
 
 const deptData = reactive({
-	queryList: (name: string) => {
+	queryList: (name?: string) => {
 		return fetchAccountList({
 			name: name,
 		});
@@ -340,6 +340,14 @@ const handleAdd = () => {
 		appId: accountId.value,
 	};
 };
+
+// 默认选择第一个公众号
+onMounted(async () => {
+  const { data } = await deptData.queryList();
+  if (data?.length > 0) {
+    handleNodeClick(data[0]);
+  }
+});
 </script>
 
 <style scoped></style>

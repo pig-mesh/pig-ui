@@ -49,9 +49,9 @@
 </template>
 
 <script setup lang="ts" name="wx-statistics">
-import { useMessage } from '/@/hooks/message';
-import { fetchAccountList, fetchStatistics } from '/@/api/mp/wx-account';
-import { markRaw } from 'vue';
+import {useMessage} from '/@/hooks/message';
+import {fetchAccountList, fetchStatistics} from '/@/api/mp/wx-account';
+import {markRaw} from 'vue';
 import * as echarts from 'echarts';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
@@ -82,7 +82,7 @@ const handleNodeClick = (node: any) => {
 };
 
 const deptData = reactive({
-	queryList: (name: string) => {
+	queryList: (name?: string) => {
 		return fetchAccountList({
 			name: name,
 		});
@@ -213,6 +213,14 @@ const initdata = () => {
 			interfaceSummary();
 		});
 };
+
+// 默认选择第一个公众号
+onMounted(async () => {
+  const { data } = await deptData.queryList();
+  if (data?.length > 0) {
+    handleNodeClick(data[0]);
+  }
+});
 </script>
 
 <style scoped>

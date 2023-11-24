@@ -133,10 +133,10 @@
 </template>
 
 <script setup lang="ts" name="wx-material">
-import { fetchAccountList } from '/@/api/mp/wx-account';
-import { useMessage, useMessageBox } from '/@/hooks/message';
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, getMaterialOther, getMaterialVideo, getPage } from '/@/api/mp/wx-material';
+import {fetchAccountList} from '/@/api/mp/wx-account';
+import {useMessage, useMessageBox} from '/@/hooks/message';
+import {BasicTableProps, useTable} from '/@/hooks/table';
+import {delObj, getMaterialOther, getMaterialVideo, getPage} from '/@/api/mp/wx-material';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 const NewsForm = defineAsyncComponent(() => import('./components/news-form.vue'));
@@ -144,7 +144,7 @@ const WxFileUpload = defineAsyncComponent(() => import('/@/components/Wechat/fil
 const WxNews = defineAsyncComponent(() => import('/@/components/Wechat/wx-news/index.vue'));
 
 const deptData = reactive({
-	queryList: (name: string) => {
+	queryList: (name?: string) => {
 		return fetchAccountList({
 			name: name,
 		});
@@ -295,6 +295,14 @@ const handleInfo = (row) => {
 			useMessage().error(err.msg);
 		});
 };
+
+// 默认选择第一个公众号
+onMounted(async () => {
+  const { data } = await deptData.queryList();
+  if (data?.length > 0) {
+    handleNodeClick(data[0]);
+  }
+});
 </script>
 
 <style lang="scss" scoped>

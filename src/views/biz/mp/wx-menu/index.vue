@@ -128,11 +128,11 @@
 </template>
 
 <script lang="ts" name="wx-menu" setup>
-import { saveObj, getObj, publishObj } from '/@/api/mp/wx-menu';
+import {getObj, publishObj, saveObj} from '/@/api/mp/wx-menu';
 
 // 部门树使用的数据
-import { fetchAccountList } from '/@/api/mp/wx-account';
-import { useMessage, useMessageBox } from '/@/hooks/message';
+import {fetchAccountList} from '/@/api/mp/wx-account';
+import {useMessage, useMessageBox} from '/@/hooks/message';
 
 const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
 
@@ -150,7 +150,7 @@ const handleNodeClick = (node: any) => {
 };
 
 const deptData = reactive({
-	queryList: (name: string) => {
+	queryList: (name?: string) => {
 		return fetchAccountList({
 			name: name,
 		});
@@ -385,6 +385,14 @@ const selectMaterial = (item) => {
 };
 
 const handleDelete = () => {};
+
+// 默认选择第一个公众号
+onMounted(async () => {
+  const { data } = await deptData.queryList();
+  if (data?.length > 0) {
+    handleNodeClick(data[0]);
+  }
+});
 </script>
 
 <style lang="scss" scoped>
