@@ -133,127 +133,128 @@
         </el-table-column>
       </el-table>
       <!-- 卡片视图  -->
-      <div v-if="!tableViewRef" class="p-4">
-        <div class="mx-auto">
-          <!-- Main -->
-          <div class="grid sm:grid-cols-2 sm:gap-x-6 lg:grid-cols-4">
-            <div
-                v-for="job in state.dataList"
-                class="w-full max-w-sm  rounded-[10px] drop-shadow-xl divide-y divide-gray-200 bg-white"
-            >
-              <div aria-label="header" class="flex space-x-4 items-center p-4">
-                <div aria-label="avatar" class="flex mr-auto items-center space-x-4">
-                  <div class="space-y-2 flex flex-col flex-1">
-                    <div class="text-lg font-bold text-navy-700 dark:text-white">
-                      {{ job.jobName }}
+      <el-scrollbar v-if="!tableViewRef">
+        <div class="p-4">
+          <div class="mx-auto">
+            <!-- Main -->
+            <div class="grid grid-cols-4">
+              <div
+                  v-for="job in state.dataList"
+                  class="w-full max-w-sm mt-2 rounded-[10px] drop-shadow-xl divide-y divide-gray-200 bg-white"
+              >
+                <div aria-label="header" class="flex space-x-4 items-center p-4">
+                  <div aria-label="avatar" class="flex mr-auto items-center space-x-4">
+                    <div class="space-y-2 flex flex-col flex-1">
+                      <div class="text-lg font-bold text-navy-700 dark:text-white">
+                        {{ job.jobName }}
+                      </div>
+                      <p class="font-normal text-base leading-tight text-gray-500 truncate">
+                        {{ job.jobGroup }} / {{ job_type.find(item => item.value === job.jobType).label }}
+                      </p>
                     </div>
-                    <p class="font-normal text-base leading-tight text-gray-500 truncate">
-                      {{ job.jobGroup }} / {{ job_type.find(item => item.value === job.jobType).label }}
-                    </p>
                   </div>
                 </div>
-              </div>
-              <div aria-label="navigation" class="py-2">
-                <nav class="grid gap-1">
-                  <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
+                <div aria-label="navigation" class="py-2">
+                  <nav class="grid gap-1">
+                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
                          hover:bg-gray-100 rounded-md">
-                    <span class="font-medium">{{ $t('job.jobStatus') }}:</span>
-                    <span>{{ job_status.find(item => item.value === job.jobStatus).label }}</span>
-                  </div>
-                  <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
+                      <span class="font-medium">{{ $t('job.jobStatus') }}:</span>
+                      <span>{{ job_status.find(item => item.value === job.jobStatus).label }}</span>
+                    </div>
+                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
                          hover:bg-gray-100 rounded-md">
-                    <span class="font-medium">{{ $t('job.cronExpression') }}:</span>
-                    <span>{{ job.cronExpression }}</span>
-                  </div>
-                  <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
+                      <span class="font-medium">{{ $t('job.cronExpression') }}:</span>
+                      <span>{{ job.cronExpression }}</span>
+                    </div>
+                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
                          hover:bg-gray-100 rounded-md">
-                    <span class="font-medium">{{ $t('job.previousTime') }}:</span>
-                    <span>{{ job.previousTime }}</span>
-                  </div>
-                  <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
+                      <span class="font-medium">{{ $t('job.previousTime') }}:</span>
+                      <span>{{ job.previousTime }}</span>
+                    </div>
+                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
                          hover:bg-gray-100 rounded-md">
-                    <span class="font-medium">{{ $t('job.nextTime') }}:</span>
-                    <span>{{ job.nextTime }}</span>
-                  </div>
-                  <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
+                      <span class="font-medium">{{ $t('job.nextTime') }}:</span>
+                      <span>{{ job.nextTime }}</span>
+                    </div>
+                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
                          hover:bg-gray-100 rounded-md">
-                    <span class="font-medium">{{ $t('job.jobExecuteStatus') }}:</span>
-                    <span>
+                      <span class="font-medium">{{ $t('job.jobExecuteStatus') }}:</span>
+                      <span>
                           <el-icon v-if="job.jobExecuteStatus === '1'"><CircleCloseFilled/></el-icon>
                           <el-icon v-if="job.jobExecuteStatus === '0'"><CircleCheckFilled/></el-icon>
                       </span>
-                  </div>
-                </nav>
-              </div>
-              <div aria-label="footer" class="pt-2">
-                <div class="flex items-center justify-center  min-w-full">
-                  <nav class="flex">
-                    <a
-                        @click="handleJobLog(job)"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('job.jobLogBtn') }}</span>
-                    </a>
-                    <a
-                        v-auth="'job_sys_job_start_job'"
-                        @click="handleStartJob(job)"
-                        v-if="job.jobStatus !== '2'"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('job.jobStartBtn') }}</span>
-                    </a>
-                    <a
-                        v-auth="'job_sys_job_shutdown_job'"
-                        @click="handleShutDownJob(job)"
-                        v-if="job.jobStatus === '2'"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('job.jobPauseBtn') }}</span>
-                    </a>
-                    <a
-                        v-auth="'job_sys_job_shutdown_job'"
-                        @click="handleShutDownJob(job)"
-                        v-if="job.jobStatus === '2'"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('job.jobPauseBtn') }}</span>
-                    </a>
-                    <a
-                        v-auth="'job_sys_job_edit'" @click="handleEditJob(job)"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span> {{ $t('common.editBtn') }}</span>
-                    </a>
-                    <a
-                        v-auth="'job_sys_job_start_job'" @click="handleRunJob(job)"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('job.jobRunBtn') }}</span>
-                    </a>
-
-                    <a
-                        v-auth="'job_sys_job_del'" @click="handleDelete(job)" type="primary"
-                        v-if="job.jobStatus !== '2'"
-                        href="javascript:;"
-                        class="px-2 py-2 text-primary"
-                    >
-                      <span>{{ $t('common.delBtn') }}</span>
-                    </a>
+                    </div>
                   </nav>
+                </div>
+                <div aria-label="footer" class="pt-2">
+                  <div class="flex items-center justify-center  min-w-full">
+                    <nav class="flex">
+                      <a
+                          @click="handleJobLog(job)"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('job.jobLogBtn') }}</span>
+                      </a>
+                      <a
+                          v-auth="'job_sys_job_start_job'"
+                          @click="handleStartJob(job)"
+                          v-if="job.jobStatus !== '2'"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('job.jobStartBtn') }}</span>
+                      </a>
+                      <a
+                          v-auth="'job_sys_job_shutdown_job'"
+                          @click="handleShutDownJob(job)"
+                          v-if="job.jobStatus === '2'"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('job.jobPauseBtn') }}</span>
+                      </a>
+                      <a
+                          v-auth="'job_sys_job_shutdown_job'"
+                          @click="handleShutDownJob(job)"
+                          v-if="job.jobStatus === '2'"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('job.jobPauseBtn') }}</span>
+                      </a>
+                      <a
+                          v-auth="'job_sys_job_edit'" @click="handleEditJob(job)"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span> {{ $t('common.editBtn') }}</span>
+                      </a>
+                      <a
+                          v-auth="'job_sys_job_start_job'" @click="handleRunJob(job)"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('job.jobRunBtn') }}</span>
+                      </a>
+
+                      <a
+                          v-auth="'job_sys_job_del'" @click="handleDelete(job)" type="primary"
+                          v-if="job.jobStatus !== '2'"
+                          href="javascript:;"
+                          class="px-2 py-2 text-primary"
+                      >
+                        <span>{{ $t('common.delBtn') }}</span>
+                      </a>
+                    </nav>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
+
         </div>
-
-      </div>
-
+      </el-scrollbar>
 
       <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"/>
     </div>

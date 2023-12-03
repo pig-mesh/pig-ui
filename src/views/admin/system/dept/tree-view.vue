@@ -15,6 +15,7 @@
         :node-add="addNode"
         :node-delete="delNode"
         :node-edit="editNode"
+        @on-node-click="onNodeClick"
     />
   </div>
   <dept-form ref="deptDialogRef" @refresh="getOrgData()"/>
@@ -22,7 +23,7 @@
 
 <script lang="ts" name="treeView" setup>
 import {useMessage, useMessageBox} from "/@/hooks/message";
-import {deptTree, delObj} from '/@/api/admin/dept';
+import {delObj, deptTree} from '/@/api/admin/dept';
 import {getObj} from '/@/api/admin/tenant';
 import {Session} from "/@/utils/storage";
 import {useI18n} from "vue-i18n";
@@ -88,6 +89,24 @@ const checkNode = (node) => {
     return false;
   }
   return true;
+}
+
+/**
+ * 当用户左键点击节点，模拟触发组件的右键事件
+ * @param e
+ */
+const onNodeClick = (e: any) => {
+  const { clientX, clientY } = e
+  const rightFun = new MouseEvent('contextmenu', {
+    bubbles: true,
+    cancelable: false,
+    view: window,
+    button: 2,
+    buttons: 0,
+    clientX,
+    clientY
+  })
+  e.target.dispatchEvent(rightFun)
 }
 
 /**

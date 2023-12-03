@@ -5,7 +5,7 @@ export default {
 		systemLogsTip: '系统日志',
 		auditLogsTip: '审计日志',
 		moreTip: '更多',
-		newsletterTip: '站内信',
+		newsletterTip: '公告',
 		pendingTask: '待办任务✍️',
 		copyTask: '抄送任务🔖',
 		schedule: '日程',
