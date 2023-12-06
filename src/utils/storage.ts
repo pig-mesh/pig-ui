@@ -42,20 +42,20 @@ export const Local = {
 export const Session = {
 	// 设置临时缓存
 	set(key: string, val: any) {
-		if (key === 'token' || key === 'refresh_token') {
+		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') {
 			Cookies.set(key, val);
 		}
 		window.sessionStorage.setItem(key, JSON.stringify(val));
 	},
 	// 获取临时缓存
 	get(key: string) {
-		if (key === 'token' || key === 'refresh_token') return Cookies.get(key);
+		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') return Cookies.get(key);
 		let json = <string>window.sessionStorage.getItem(key);
 		return JSON.parse(json);
 	},
 	// 移除临时缓存
 	remove(key: string) {
-		if (key === 'token' || key === 'refresh_token') return Cookies.remove(key);
+		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') return Cookies.remove(key);
 		window.sessionStorage.removeItem(key);
 	},
 	// 移除全部临时缓存

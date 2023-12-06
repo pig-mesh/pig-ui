@@ -138,6 +138,9 @@ const initTenantConfig = () => {
     themeConfig.value.miniQr = tenant.miniQr
 
   })
+
+  // cookie 写入一份
+  Session.set('tenantId', tenant.value)
 }
 /**
  * 初始化函数，包括获取租户列表、读取当前租户信息、自动匹配租户、以及引导新用户了解租户信息流程。
