@@ -1,6 +1,6 @@
 <template>
 	<el-drawer title="路由配置" size="50%" v-model="visible">
-		<vue-jsoneditor mode="tree" :queryLanguagesIds="queryLanguages" v-model:json="jsonData" />
+		<vue-jsoneditor mode="tree" :queryLanguagesIds="queryLanguages" v-model:json="jsonData" v-if="show"/>
 		<div class="flex items-center justify-center mt-4">
 			<el-button type="primary" @click="submit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 		</div>
@@ -87,6 +87,7 @@ const openDialog = async (id?: string) => {
 	} else {
     jsonData.value = demoData;
   }
+  show.value = true
 	return;
 };
 
