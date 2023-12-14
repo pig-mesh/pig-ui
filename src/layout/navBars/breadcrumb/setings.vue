@@ -349,6 +349,12 @@
 						<el-switch v-model="getThemeConfig.isWartermark" size="small" @change="onWartermarkChange"></el-switch>
 					</div>
 				</div>
+        <div class="layout-breadcrumb-seting-bar-flex mt15">
+          <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsChat') }}</div>
+          <div class="layout-breadcrumb-seting-bar-flex-value">
+            <el-switch v-model="getThemeConfig.isChat" size="small" @change="onChatChange"></el-switch>
+          </div>
+        </div>
 				<!-- 其它设置 -->
 				<el-divider content-position="left">{{ $t('layout.fiveTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -560,6 +566,11 @@ const onWartermarkChange = () => {
 	const username = useUserInfo().userInfos.user?.username || getThemeConfig.value.globalTitle;
 	getThemeConfig.value.isWartermark ? Watermark.set(username) : Watermark.del();
 	setLocalThemeConfig();
+};
+
+// 4、界面显示 --> 开启大模型
+const onChatChange = () => {
+  setLocalThemeConfig();
 };
 
 // 5、布局切换
