@@ -126,7 +126,7 @@ const handleDelete = async (ids: string[]) => {
 const addOrUpdate = (id?: string) => {
 	const tagsViewName = id ? `${t('article.edit')}:${id}` : t('article.add');
 	router.push({
-		path: '/app/appArticle/form',
+		path: '/biz/app/appArticle/form',
 		query: { id: id, tagsViewName: tagsViewName },
 	});
 };

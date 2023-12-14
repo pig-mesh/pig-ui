@@ -174,7 +174,7 @@ const handleSend = async (id: string) => {
   try {
     await sendObj({id: id});
     getDataList();
-    useMessage().success('删除成功');
+    useMessage().success('推送成功');
   } catch (err: any) {
     useMessage().error(err.msg);
   }
