@@ -205,7 +205,7 @@ const onLockScreenSubmit = async () => {
 			themeConfig.value.lockScreenTime = 30;
 			// 将最新的主题配置保存到本地存储中
 			setLocalThemeConfig();
-    	}
+    }
 	}
 };
 
