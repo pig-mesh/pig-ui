@@ -28,7 +28,7 @@
 				<div v-show="state.isShowLoockLogin" class="layout-lock-screen-login">
 					<div class="layout-lock-screen-login-box">
 						<div class="layout-lock-screen-login-box-img">
-							<img :src="formData.avatar" />
+							<img :src="baseURL + formData.avatar" />
 						</div>
 						<div class="layout-lock-screen-login-box-name">{{ formData.username }}</div>
 						<div class="layout-lock-screen-login-box-value">
@@ -209,7 +209,10 @@ const onLockScreenSubmit = async () => {
 	}
 };
 
-const formData = reactive({});
+const formData = reactive({
+  username:'',
+  avatar:''
+});
 // 页面加载时
 onMounted(() => {
 	const data = useUserInfo().userInfos;
