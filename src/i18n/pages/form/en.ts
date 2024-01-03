@@ -7,6 +7,7 @@ export default {
 		delBtn: 'Delete',
 		detailBtn: 'Details',
 		exportBtn: 'Export',
+		viewBtn: 'View',
 		expandBtn: 'expand/phrase ',
 		refreshCacheBtn: 'Refresh cache',
 		importBtn: 'Import',
