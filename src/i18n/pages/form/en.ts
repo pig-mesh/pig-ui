@@ -14,6 +14,7 @@ export default {
 		importUserTip: 'Import user',
 		queryDeptTip: 'Enter department name',
 		resetBtn: 'Reset',
+		copyBtn:'Copy',
 		action: 'Action',
 		optSuccessText: 'Operation successful',
 		optConfirmText: 'Confirm this operation?',

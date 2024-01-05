@@ -13,6 +13,7 @@ export default {
 		importBtn: '导入',
 		queryDeptTip: '请输入部门名称',
 		resetBtn: '重置',
+		copyBtn: '复制',
 		action: '操作',
 		optSuccessText: '操作成功',
 		editSuccessText: '修改成功',
