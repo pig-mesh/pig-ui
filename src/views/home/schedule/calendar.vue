@@ -39,7 +39,7 @@
 				</li>
 			</ul>
 		</template>
-		<el-empty v-if="reminders.length === 0" class="text-center" />
+		<el-empty :image-size="120" v-if="reminders.length === 0" class="text-center" />
 	</div>
 	<!-- 新增日程的表单 -->
 	<schedule-form ref="scheduleFormRef" @refresh="initscheduleList()" />

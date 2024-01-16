@@ -11,7 +11,7 @@
 				{{ item.createBy }} : {{ item.auditField }} {{ item.afterVal }} => {{ item.beforeVal }}
 			</el-timeline-item>
 		</el-timeline>
-		<el-empty v-else />
+		<el-empty :image-size="120" v-else />
 	</el-card>
 </template>
 
@@ -26,6 +26,9 @@ const auditState: BasicTableProps = reactive({
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],
+  pagination: {
+    size: 4, // 每页显示数据量
+  },
 });
 
 // 使用实例

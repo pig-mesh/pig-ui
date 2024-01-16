@@ -6,9 +6,16 @@
     </div>
     <div class="content-box">
       <template v-if="newsList.length > 0">
-        <div class="content-box-item" v-for="(v, k) in newsList" :key="k" @click="contentRef.openDialog(v)">
-          <div>{{ v.title }}</div>
-          <div class="content-box-time">{{ v.createTime }}</div>
+        <div class="relative">
+          <div class="content-box-item" v-for="(v, k) in newsList" :key="k" @click="contentRef.openDialog(v)">
+            <button
+                class="py-1 px-3 -left-8 -top-2 border bg-primary text-white font-bold">
+              {{parseDate(v.createTime)}}
+            </button>
+            <div class="purple_border p-2 border border-gray-400">
+              {{ v.title }}
+            </div>
+          </div>
         </div>
       </template>
       <el-empty :description="$t('user.newDesc')" v-else></el-empty>

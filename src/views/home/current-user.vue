@@ -1,5 +1,5 @@
 <template>
-	<el-card style="height: 100%">
+	<el-card class="h-full">
 		<div style="display: flex; justify-content: space-between">
 			<div style="display: flex">
 				<el-avatar style="width: 60px; height: 60px" shape="circle" :size="100" fit="cover" :src="userData.avatar" />
