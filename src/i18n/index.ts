@@ -70,7 +70,7 @@ export const i18n = createI18n({
     messages,
 });
 
-fetchI18n()
+await fetchI18n()
 
 // 远程获取i18n
 async function fetchI18n() {
