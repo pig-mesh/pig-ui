@@ -23,12 +23,12 @@
 											<span class="code">{{ data.dictType }}</span>
 											<span class="do">
 												<el-button-group>
-													<el-button icon="el-icon-edit" size="small" @click.stop="dicDialogRef.openDialog(data.id)"></el-button>
+													<el-button icon="Edit" size="small" @click.stop="dicDialogRef.openDialog(data.id)"></el-button>
 													<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="data.systemFlag === '0'" placement="top">
 														<span style="margin-left: 12px">
 															<el-button
 																:disabled="data.systemFlag !== '0'"
-																icon="el-icon-delete"
+																icon="Delete"
 																size="small"
 																@click.stop="handleDelete([data.id])"
 															></el-button>
