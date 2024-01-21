@@ -1,12 +1,21 @@
+<script lang="ts">
+export default {
+	title: '当前用户',
+	icon: 'User',
+	description: '获取当前用户信息展示',
+};
+</script>
+
 <template>
-	<el-card class="h-full">
-		<div style="display: flex; justify-content: space-between">
-			<div style="display: flex">
-				<el-avatar style="width: 60px; height: 60px" shape="circle" :size="100" fit="cover" :src="userData.avatar" />
-				<div class="info">
-					<span style="font-weight: 600; margin: 2px; font-size: 18px">{{ userData.name }}</span>
-					<span style="color: #6d737b; margin: 2px">{{ userData.deptName }} | {{ userData.postName }}</span>
-				</div>
+	<el-card class="flex items-center justify-center h-[191px]">
+		<div class="flex items-center justify-center">
+			<div class="relative">
+				<img class="object-cover w-16 h-16 rounded-full" :src="userData.avatar" alt="Avatar" />
+				<div class="absolute inset-0 rounded-full shadow-inner"></div>
+			</div>
+			<div class="ml-8">
+				<h2 class="text-lg font-bold text-gray-800">{{ userData.name }}</h2>
+				<p class="text-gray-600">{{ userData.deptName }} | {{ userData.postName }}</p>
 			</div>
 		</div>
 	</el-card>
@@ -27,7 +36,6 @@ const userData = ref({
 	deptName: '',
 } as any);
 const loading = ref(false);
-
 
 onMounted(() => {
 	const data = useUserInfo().userInfos;

@@ -1,5 +1,12 @@
+<script lang="ts">
+export default {
+	title: '审计日志',
+	icon: 'DocumentCopy',
+	description: '审计日志列表',
+};
+</script>
 <template>
-	<el-card class="box-card" style="height: 100%">
+	<el-card class="box-card h-96">
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.auditLogsTip') }}</span>
@@ -26,9 +33,9 @@ const auditState: BasicTableProps = reactive({
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],
-  pagination: {
-    size: 4, // 每页显示数据量
-  },
+	pagination: {
+		size: 4, // 每页显示数据量
+	},
 });
 
 // 使用实例

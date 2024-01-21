@@ -1,5 +1,12 @@
+<script lang="ts">
+export default {
+	title: '系统日志',
+	icon: 'Monitor',
+	description: '系统日志列表',
+};
+</script>
 <template>
-	<el-card class="box-card h-full">
+	<el-card class="h-96 box-card">
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.systemLogsTip') }}</span>
@@ -43,7 +50,7 @@ const handleRoutr = () => {
 
 <style scoped lang="scss">
 .card-header {
-  display: flex;
+	display: flex;
 	justify-content: space-between;
 	align-items: center;
 }
