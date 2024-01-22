@@ -113,21 +113,20 @@ const handleChange = (editor: IDomEditor) => {
 onBeforeUnmount(() => {
 	const editor = editorRef.value;
 	if (editor == null) return;
-	editor.destroy();
+  emit('update:getHtml', '');
+  emit('update:getText', '');
+  editor.destroy();
 });
 
 // 监听是否禁用改变
-watch(
-	() => props.disable,
-	(bool) => {
-		const editor = editorRef.value;
-		if (editor == null) return;
-		bool ? editor.disable() : editor.enable();
-	},
-	{
-		deep: true,
-	}
-);
+onMounted(() =>{
+  nextTick(()=>{
+    const editor = editorRef.value;
+    if (editor == null) return;
+    props.disable ? editor.disable() : editor.enable();
+  })
+})
+
 // 监听双向绑定值改变，用于回显
 watch(
 	() => props.getHtml,

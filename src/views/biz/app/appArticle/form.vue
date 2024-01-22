@@ -82,7 +82,7 @@
               </el-col>
             </el-row>
             <el-form-item label="文章内容" required prop="content">
-              <editor v-model:get-html="form.content" height="500" width="600"/>
+              <editor v-model:get-html="form.content" height="500" width="600" :disable="form.id !== ''"/>
             </el-form-item>
             <div style="text-align: center">
               <el-button type="primary" @click="onSubmit">保存</el-button>
