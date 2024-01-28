@@ -22,12 +22,10 @@ export const login = (data: any) => {
     if (import.meta.env.VITE_PWD_ENC_KEY) {
         encPassword = other.encryption(data.password, import.meta.env.VITE_PWD_ENC_KEY);
     }
-    const {username, randomStr, code, grant_type, scope} = data;
     return request({
         url: '/auth/oauth2/token',
         method: 'post',
-        params: {username, randomStr, code, grant_type, scope},
-        data: {password: encPassword},
+        data: {...data, password: encPassword},
         headers: {
             skipToken: true,
             Authorization: basicAuth,
@@ -50,7 +48,7 @@ export const loginByMobile = (mobile: any, code: any) => {
             'Content-Type': FORM_CONTENT_TYPE,
         },
         method: 'post',
-        params: {mobile: mobile, code: code, grant_type, scope},
+        data: {mobile: mobile, code: code, grant_type, scope},
     });
 };
 
@@ -68,7 +66,7 @@ export const loginBySocial = (state: string, code: string) => {
             'Content-Type': FORM_CONTENT_TYPE,
         },
         method: 'post',
-        params: {mobile: state + '@' + code, code: code, grant_type, scope},
+        data: {mobile: state + '@' + code, code: code, grant_type, scope},
     });
 };
 
@@ -93,7 +91,7 @@ export const refreshTokenApi = (refresh_token: string) => {
             'Content-Type': FORM_CONTENT_TYPE,
         },
         method: 'post',
-        params: {refresh_token, grant_type, scope},
+        data: {refresh_token, grant_type, scope},
     });
 };
 
@@ -145,10 +143,10 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
  * 获取用户信息
  */
 export const getUserInfo = () => {
-	return request({
-		url: '/admin/user/info',
-		method: 'get',
-	});
+    return request({
+        url: '/admin/user/info',
+        method: 'get',
+    });
 };
 
 export const logout = () => {
