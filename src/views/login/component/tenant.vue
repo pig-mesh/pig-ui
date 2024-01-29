@@ -28,6 +28,7 @@ import Cookies from 'js-cookie';
 import {useThemeConfig} from "/@/stores/themeConfig";
 import pinia from "/@/stores";
 import {storeToRefs} from "pinia";
+import {validateNull} from "/@/utils/validate";
 
 const {t} = useI18n();
 
@@ -62,7 +63,7 @@ const handleAutoTenant = () => {
   let domain = window.location.host; // 获取当前页面所在的域名
   tenantList.value.forEach((tenant: any) => {
     // 遍历租户列表
-    if (domain.includes(tenant.tenantDomain)) {
+    if (!validateNull(tenant.tenantDomain) && domain.includes(tenant.tenantDomain)) {
       // 如果当前租户已经选中不需要执行
       if (Session.getTenant() == tenant.id) {
         return
