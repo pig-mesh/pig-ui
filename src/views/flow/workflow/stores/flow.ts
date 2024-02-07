@@ -21,6 +21,7 @@ export const useFlowStore = defineStore('flow', {
 				remark: '',
 			},
 			step2: [] as FormVO[],
+			step3:{}
 		};
 	},
 	actions: {
@@ -40,5 +41,8 @@ export const useFlowStore = defineStore('flow', {
 		clearStep2() {
 			this.step2 = [];
 		},
+		setStep3(p: any) {
+			this.step3 = p;
+		}
 	},
 });

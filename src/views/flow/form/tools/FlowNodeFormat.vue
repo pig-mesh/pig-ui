@@ -74,7 +74,7 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 							<div style="height: 40px; line-height: 40px; font-size: 10px">
 								{{ item1.name }}
 							</div>
-							<div style="height: 40px; line-height: 40px; font-size: 10px">(添加了评论)</div>
+							<div style="height: 40px; line-height: 40px; font-size: 10px">(添加了评论) {{ item1.showTime }}</div>
 						</div>
 						<div class="box-card" style="margin-bottom: 10px; padding: 5px; background-color: var(--el-fill-color-light)">
 							{{ item1.approveDesc }}

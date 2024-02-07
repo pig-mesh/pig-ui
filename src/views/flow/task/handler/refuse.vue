@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {defineExpose} from 'vue';
-import {completeTask, stopProcessInstance} from '/@/api/flow/task';
+import {completeTask} from '/@/api/flow/task';
 
 const dialogVisible = ref(false);
 
@@ -11,6 +11,7 @@ const currentProcessInstanceId = ref('')
 const currentOpenFlowForm = ref();
 
 const handle = (row, formData) => {
+  submitDesc.value = '';
   currentProcessInstanceId.value = row.processInstanceId;
 	currentData.value = row;
 	currentOpenFlowForm.value = formData;
@@ -36,8 +37,7 @@ const submit = () => {
 				var v = {};
 
 				for (var subItem of array) {
-					let value = subItem.props.value;
-					v[subItem.id] = value;
+          v[subItem.id] = subItem.props.value;
 				}
 				d.push(v);
 			}
@@ -47,23 +47,17 @@ const submit = () => {
 
 	formData[currentData.value.nodeId + '_approve_condition'] = false;
 
-	var param = {
-		paramMap: formData,
-		taskId: currentData.value.taskId,
-		taskLocalParamMap: {
-			approveDesc: '拒绝原因：' + submitDesc.value,
-		},
-	};
+  const param = {
+    paramMap: formData,
+    taskId: currentData.value.taskId,
+    taskLocalParamMap: {
+      approveDesc: '拒绝原因：' + submitDesc.value,
+    },
+  };
 
-	completeTask(param).then((res) => {
+  completeTask(param).then((res) => {
 		dialogVisible.value = false;
-
-    //  停止流程
-    stopProcessInstance({
-      processInstanceId: currentProcessInstanceId.value
-    }).then(()=>{
-      emit('taskSubmitEvent');
-    })
+    emit('taskSubmitEvent');
 	});
 };
 </script>
