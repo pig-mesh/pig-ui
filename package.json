@@ -40,7 +40,7 @@
 		"splitpanes": "^3.1.5",
 		"tailwindcss": "^3.0.24",
 		"v-calendar": "3.1.2",
-		"vue": "^3.2.47",
+		"vue": "3.4.15",
 		"vue-clipboard3": "^2.0.0",
 		"vue-echarts": "6.6.1",
 		"vue-i18n": "9.2.2",
