@@ -8,6 +8,7 @@
 // https://github.com/modood/Administrative-divisions-of-China/blob/master/dist/pca-code.json
 import allAreas from './pca-code.json'
 
+// 定义props
 const props = defineProps({
   // 当前的值
   modelValue: String,
@@ -23,6 +24,7 @@ const props = defineProps({
   },
 });
 
+// 定义optionProps
 const optionProps = {
   checkStrictly: props.plus,
   label: 'name',
@@ -33,6 +35,7 @@ const optionProps = {
 let areas = ref(allAreas)
 const emit = defineEmits(['update:modelValue', 'change']);
 
+// 计算属性selectedOptions
 const selectedOptions = computed({
   get: () => {
     return props.modelValue?.split(',');
@@ -42,7 +45,9 @@ const selectedOptions = computed({
   },
 });
 
+// 处理change事件的函数
 const handleChange = (value: String[]) => {
   emit('change', value.join(','));
 };
+
 </script>
