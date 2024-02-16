@@ -72,7 +72,6 @@
 </template>
 
 <script setup lang="ts" name="wx-material-select">
-import { defineEmits } from 'vue';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { getPage } from '/@/api/mp/wx-material';
 const WxNews = defineAsyncComponent(() => import('../wx-news/index.vue'));

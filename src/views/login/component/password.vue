@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts" name="password">
-import {defineAsyncComponent, defineEmits, reactive, ref} from 'vue';
+import {defineAsyncComponent, reactive, ref} from 'vue';
 import {useUserInfo} from '/@/stores/userInfo';
 import {useI18n} from 'vue-i18n';
 import {generateUUID} from "/@/utils/other";
