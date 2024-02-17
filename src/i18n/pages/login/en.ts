@@ -28,6 +28,7 @@ export default {
 	scan: {
 		text: 'Use your mobile device to scan and quickly log in or create an account',
 		wechatApp: 'Scan with WeChat app for quick access',
+		appErrorTip: 'The login fails because the application is not configured'
 	},
 	signInText: 'Welcome back!',
 	tenant_guide: {

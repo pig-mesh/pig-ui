@@ -38,3 +38,10 @@ export function putObj(obj?: Object) {
 		data: obj,
 	});
 }
+
+export function getLoginAppList(id?: string) {
+	return request({
+		url: '/admin/social/getLoginAppList',
+		method: 'get',
+	});
+}
