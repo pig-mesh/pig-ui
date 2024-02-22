@@ -9,7 +9,7 @@
 			</el-form-item>
 			<el-form-item label="是否显示" prop="isShow">
 				<el-radio-group v-model="form.isShow">
-					<el-radio :label="item.value" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
+					<el-radio :label="Number(item.value)" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
 				</el-radio-group>
 			</el-form-item>
 		</el-form>
@@ -40,13 +40,13 @@ const form = reactive({
 	id: '',
 	name: '',
 	sort: 0,
-	isShow: '',
+	isShow: 1,
 });
 
 // 定义校验规则
 const dataRules = ref({
 	name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
-	isShow: [{ required: true, message: '是否显示: 0=否, 1=是不能为空', trigger: 'blur' }],
+	isShow: [{ required: true, message: '是否显示', trigger: 'blur' }],
 });
 
 // 打开弹窗
