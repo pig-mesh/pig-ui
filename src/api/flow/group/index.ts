@@ -54,7 +54,7 @@ export function queryGroupFlowList(params?: Object) {
  * 查询我可发起的组和流程
  */
 
-export function queryMineStartGroupFlowList(hidden?: Boolean): AxiosPromise<GroupVO[]> {
+export function queryMineStartGroupFlowList(hidden?: string): AxiosPromise<GroupVO[]> {
 	return request({
 		url: '/task/combination/group/listCurrentUserStartGroup',
 		method: 'get',
