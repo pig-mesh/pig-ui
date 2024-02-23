@@ -81,7 +81,7 @@ import {BasicTableProps, useTable} from "/@/hooks/table";
 import {delObjs, fetchList} from "/@/api/admin/sysArea";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useDict} from '/@/hooks/dict';
-import {useI18n} from "_vue-i18n@9.2.2@vue-i18n";
+import {useI18n} from "vue-i18n";
 const { t } = useI18n();
 
 // 省市区查询组件
