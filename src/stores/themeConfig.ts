@@ -100,8 +100,8 @@ export const useThemeConfig = defineStore('themeConfig', {
             isInvert: false,
             // 是否开启水印
             isWartermark: true,
-            // 是否开启大模型
-            isChat: true,
+            // 是否开启AI助手
+            isChat: false,
             // 水印文案
             wartermarkText: 'PigX',
             // 首页快捷导航上限

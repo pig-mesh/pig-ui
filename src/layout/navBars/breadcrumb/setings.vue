@@ -568,7 +568,7 @@ const onWartermarkChange = () => {
 	setLocalThemeConfig();
 };
 
-// 4、界面显示 --> 开启大模型
+// 4、界面显示 --> 开启AI助手
 const onChatChange = () => {
   setLocalThemeConfig();
 };

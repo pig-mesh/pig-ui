@@ -14,7 +14,7 @@
     <div v-show="chatContainer" class="fixed bottom-24 right-4 w-96 mb-12">
       <div class="bg-gray-100 shadow-md rounded-lg max-w-lg w-full">
         <div class="p-4 border-b bg-primary text-white rounded-t-lg flex justify-between items-center">
-          <p class="text-lg font-semibold">PIGX LLaMA Chat (即将上线)</p>
+          <p class="text-lg font-semibold">AI 助手</p>
           <button @click="chatContainer = false"
                   class="text-gray-300 hover:text-gray-400 focus:outline-none focus:text-gray-400">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"
