@@ -73,7 +73,7 @@
 import {useMessage} from "/@/hooks/message";
 import {getObj, addObj, putObj, validateAdCode} from '/@/api/admin/sysArea'
 import {useDict} from "/@/hooks/dict";
-import {useI18n} from "_vue-i18n@9.2.2@vue-i18n";
+import {useI18n} from "vue-i18n";
 
 const ChinaArea = defineAsyncComponent(() => import("/@/components/ChinaArea/index.vue"));
 const emit = defineEmits(['refresh']);
