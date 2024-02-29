@@ -2,12 +2,12 @@
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row shadow="hover" v-show="showSearch" class="ml10">
-				<el-form :model="queryParams" ref="queryRef" :inline="true" @keyup.enter="handleQuery">
+				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="发起时间" prop="taskTime">
-						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="queryParams.taskTime" is-range range-separator="To" />
+						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="state.queryForm.taskTime" is-range range-separator="To" />
 					</el-form-item>
 					<el-form-item>
-						<el-button icon="search" type="primary" @click="handleQuery">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
 						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
@@ -21,7 +21,7 @@
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
-						@queryTable="handleQuery"
+						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
 			</el-row>
@@ -29,7 +29,7 @@
 			<el-table
 				ref="dataTableRef"
 				v-loading="loading"
-				:data="ccList"
+				:data="state.dataList"
 				highlight-current-row
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -49,13 +49,8 @@
 				</el-table-column>
 			</el-table>
 
-			<pagination
-				v-if="total > 0"
-				v-model:total="total"
-				v-model:page="queryParams.pageNum"
-				v-model:limit="queryParams.pageSize"
-				@pagination="handleQuery"
-			/>
+      <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
+                  v-bind="state.pagination"></pagination>
 		</div>
 		<!--			右侧抽屉-->
 		<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
@@ -82,27 +77,26 @@
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 
-import { queryMineCC, queryMineCCDetail } from '/@/api/flow/task';
+import {queryMineCC, queryMineCCDetail} from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 
-const state: BasicTableProps = reactive<BasicTableProps>({});
-const { tableStyle } = useTable(state);
+
+const state: BasicTableProps = reactive<BasicTableProps>({
+  pageList: queryMineCC,
+  queryForm: {
+    taskTime: undefined,
+  },
+});
+
+const { tableStyle ,getDataList, currentChangeHandle,
+  sortChangeHandle,
+  sizeChangeHandle, } = useTable(state);
 
 const rightDrawerVisible = ref(false);
 
 const loading = ref(false);
 const showSearch = ref(true);
 const queryRef = ref();
-const total = ref(0);
-
-const queryParams = reactive({
-	pageNum: 1,
-	pageSize: 10,
-	taskTime: undefined,
-});
-
-const ccList = ref();
-
 const currentData = ref();
 /**
  * 点击开始处理
@@ -118,36 +112,19 @@ const deal = (row) => {
 };
 const currentOpenFlowForm = ref();
 
-
-/**
- * 查询
- */
-function handleQuery() {
-	loading.value = true;
-	queryMineCC(queryParams)
-		.then(({ data }) => {
-			ccList.value = data.records;
-			total.value = data.total;
-		})
-		.finally(() => {
-			loading.value = false;
-		});
-}
-
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
-	handleQuery();
+	getDataList();
 };
 
 onMounted(() => {
-	handleQuery();
+	getDataList();
 });
 
 const formValue = computed(() => {
-	var obj = {};
-
-	for (var item of currentOpenFlowForm.value) {
+  const obj = {};
+  for (const item of currentOpenFlowForm.value) {
 		obj[item.id] = item.props.value;
 	}
 	return obj;

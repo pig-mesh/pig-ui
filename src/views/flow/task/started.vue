@@ -2,18 +2,18 @@
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row shadow="hover" v-show="showSearch" class="ml10">
-				<el-form :model="queryParams" ref="queryRef" :inline="true" @keyup.enter="handleQuery">
+				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="状态" prop="status">
-						<el-select style="width: 100%" v-model="queryParams.status" placeholder="请选择状态">
+						<el-select style="width: 100%" v-model="state.queryForm.status" placeholder="请选择状态">
 							<el-option :key="1" label="进行中" :value="1" />
 							<el-option :key="2" label="已结束" :value="2" />
 						</el-select>
 					</el-form-item>
 					<el-form-item label="发起时间" prop="taskTime">
-						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="queryParams.taskTime" is-range range-separator="To" />
+						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="state.queryForm.taskTime" is-range range-separator="To" />
 					</el-form-item>
 					<el-form-item>
-						<el-button icon="search" type="primary" @click="handleQuery">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
 						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
@@ -27,7 +27,7 @@
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
-						@queryTable="handleQuery"
+						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
 			</el-row>
@@ -35,7 +35,7 @@
 			<el-table
 				ref="dataTableRef"
 				v-loading="loading"
-				:data="dataList"
+				:data="state.dataList"
 				highlight-current-row
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -63,13 +63,8 @@
 				</el-table-column>
 			</el-table>
 
-			<pagination
-				v-if="total > 0"
-				v-model:total="total"
-				v-model:page="queryParams.pageNum"
-				v-model:limit="queryParams.pageSize"
-				@pagination="handleQuery"
-			/>
+      <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
+                  v-bind="state.pagination"></pagination>
 			<!--			右侧抽屉-->
 			<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
 				<template #header>
@@ -94,35 +89,33 @@
 <script setup lang="ts">
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import { queryMineStarted, stopProcessInstance } from '/@/api/flow/task';
+import {queryMineStarted, stopProcessInstance} from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 
-const state: BasicTableProps = reactive<BasicTableProps>({});
-const { tableStyle } = useTable(state);
 const rightDrawerVisible = ref(false);
 
 const loading = ref(false);
 const showSearch = ref(true);
-const total = ref(0);
 const queryRef = ref();
+const state: BasicTableProps = reactive<BasicTableProps>({
+  pageList: queryMineStarted,
+  queryForm: {
+    taskTime: undefined,
+    status: 1,
+  },
+});
 
+const { tableStyle ,getDataList, currentChangeHandle,
+  sortChangeHandle,
+  sizeChangeHandle, } = useTable(state);
 function stop(row) {
 	stopProcessInstance({
 		processInstanceId: row.processInstanceId,
 	}).then((res) => {
-		handleQuery();
+		getDataList();
 	});
 }
-
-const queryParams = reactive({
-	pageNum: 1,
-	pageSize: 10,
-	taskTime: undefined,
-	status: 1,
-});
-
-const dataList = ref();
 
 const currentData = ref();
 /**
@@ -140,36 +133,19 @@ const deal = (row) => {
 };
 const currentOpenFlowForm = ref();
 
-
-/**
- * 查询
- */
-function handleQuery() {
-	loading.value = true;
-	queryMineStarted(queryParams)
-		.then(({ data }) => {
-			dataList.value = data.records;
-			total.value = data.total;
-		})
-		.finally(() => {
-			loading.value = false;
-		});
-}
-
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
-	handleQuery();
+	getDataList();
 };
 
 onMounted(() => {
-	handleQuery();
+	getDataList();
 });
 
 const formValue = computed(() => {
-	var obj = {};
-
-	for (var item of currentOpenFlowForm.value) {
+  const obj = {};
+  for (const item of currentOpenFlowForm.value) {
 		obj[item.id] = item.props.value;
 	}
 	return obj;
