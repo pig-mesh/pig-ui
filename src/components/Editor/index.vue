@@ -96,6 +96,7 @@ const state = reactive({
 const styles = computed<CSSProperties>(() => ({
 	height: other.addUnit(props.height),
 	width: other.addUnit(props.width),
+  'z-index': 1000,
 }));
 
 // 编辑器回调函数
