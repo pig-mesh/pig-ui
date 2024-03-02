@@ -30,7 +30,7 @@
 		"postcss": "8.4.35",
 		"qs": "6.11.2",
 		"screenfull": "6.0.2",
-		"sm-crypto": "0.3.12",
+		"sm-crypto": "0.3.13",
 		"sortablejs": "1.15.1",
 		"splitpanes": "3.1.5",
 		"tailwindcss": "3.4.0",
