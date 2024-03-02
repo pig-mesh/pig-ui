@@ -21,7 +21,7 @@
 		"codemirror": "5.65.16",
 		"crypto-js": "4.2.0",
 		"driver.js": "0.9.8",
-		"echarts": "5.4.3",
+		"echarts": "5.5.0",
 		"element-plus": "2.6.0",
 		"js-cookie": "3.0.5",
 		"mitt": "3.0.1",
