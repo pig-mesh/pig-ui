@@ -36,7 +36,7 @@
 
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('schedule.content')" prop="content">
-						<editor v-model:get-html="form.content" :placeholder="t('schedule.inputContentTip')" />
+						<editor v-model:get-html="form.content" :placeholder="t('schedule.inputContentTip')" :disable="form.id !== ''" v-if="visible" />
 					</el-form-item>
 				</el-col>
 			</el-row>

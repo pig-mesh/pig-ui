@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineExpose } from 'vue';
-import { completeTask } from '/@/api/flow/task';
+import {defineExpose} from 'vue';
+import {completeTask} from '/@/api/flow/task';
 
 const dialogVisible = ref(false);
 
@@ -10,9 +10,9 @@ const currentData = ref();
 const currentOpenFlowForm = ref();
 
 const handle = (row, formData) => {
-	currentData.value = row;
+  submitDesc.value = '';
+  currentData.value = row;
 	currentOpenFlowForm.value = formData;
-
 	dialogVisible.value = true;
 };
 
@@ -22,20 +22,19 @@ const emit = defineEmits(['taskSubmitEvent']);
 const submit = () => {
 	let value = currentOpenFlowForm.value;
 
-	var formData = {};
-	for (var item of value) {
+  const formData = {};
+  for (const item of value) {
 		formData[item.id] = item.props.value;
 
 		if (item.type === 'Layout') {
 			let subList = item.props.value;
 
-			var d = [];
-			for (var array of subList) {
+      const d = [];
+      for (const array of subList) {
 				var v = {};
 
 				for (var subItem of array) {
-					let value = subItem.props.value;
-					v[subItem.id] = value;
+          v[subItem.id] = subItem.props.value;
 				}
 				d.push(v);
 			}
@@ -45,15 +44,15 @@ const submit = () => {
 
 	formData[currentData.value.nodeId + '_approve_condition'] = true;
 
-	var param = {
-		paramMap: formData,
-		taskId: currentData.value.taskId,
-		taskLocalParamMap: {
-			approveDesc: submitDesc.value,
-		},
-	};
+  const param = {
+    paramMap: formData,
+    taskId: currentData.value.taskId,
+    taskLocalParamMap: {
+      approveDesc: submitDesc.value,
+    },
+  };
 
-	completeTask(param).then((res) => {
+  completeTask(param).then((res) => {
 		dialogVisible.value = false;
 
 		emit('taskSubmitEvent');

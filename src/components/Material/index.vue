@@ -145,8 +145,8 @@
 								>
 									<el-button type="primary" link> {{ $t('material.rename') }} </el-button>
 								</popover-input>
-								<el-button type="primary" link @click="handleDownFile(item)" v-if="type === 'file'"> {{ $t('material.download') }} </el-button>
-								<el-button type="primary" link @click="handlePreview(getFileUri(item))" v-else> {{ $t('material.view') }} </el-button>
+								<el-button type="primary" link @click="handleDownFile(item)"> {{ $t('material.download') }} </el-button>
+								<el-button type="primary" link @click="handlePreview(getFileUri(item))" v-if="type !== 'file'"> {{ $t('material.view') }} </el-button>
 							</div>
 						</li>
 					</ul>

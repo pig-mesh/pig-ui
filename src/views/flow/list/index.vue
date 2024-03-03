@@ -58,7 +58,7 @@ const queryForm = reactive({
 
 // 查询流程列表
 const handleQuery = async () => {
-  const res = await queryMineStartGroupFlowList(false);
+  const res = await queryMineStartGroupFlowList('0');
   const {data} = res;
 
   // 根据用户输入的flowName进行过滤

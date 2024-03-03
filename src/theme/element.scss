@@ -60,6 +60,7 @@
 }
 
 .el-form-item__content {
+	min-width: var(--el-form-inline-content-width);
 	.el-select {
 		width: 100% !important;
 	}
@@ -148,86 +149,32 @@
 	background-color: unset !important;
 }
 
-// 子级菜单背景颜色
-// .el-menu--inline {
-// 	background: var(--next-bg-menuBar-light-1);
-// }
 // 水平菜单、横向菜单折叠 a 标签
 .el-popper.is-dark a {
 	color: var(--el-color-white) !important;
 	text-decoration: none;
 }
 
-// 水平菜单、横向菜单折叠背景色
-.el-popper.is-pure.is-light {
-	// 水平菜单
-	.el-menu--vertical {
-		background: var(--next-bg-menuBar);
-
-		.el-sub-menu.is-active .el-sub-menu__title {
-			color: var(--el-menu-active-color);
-		}
-
-		.el-popper.is-pure.is-light {
-			.el-menu--vertical {
-				.el-sub-menu .el-sub-menu__title {
-					background-color: unset !important;
-					color: var(--next-bg-menuBarColor);
-				}
-
-				.el-sub-menu.is-active .el-sub-menu__title {
-					color: var(--el-menu-active-color);
-				}
-			}
-		}
-	}
-
-	// 横向菜单
-	.el-menu--horizontal {
-		background: var(--next-bg-topBar);
-
-		.el-menu-item,
-		.el-sub-menu {
-			height: 50px !important;
-			line-height: 50px !important;
-			color: var(--next-bg-topBarColor);
-
-			.el-sub-menu__title {
-				height: 50px !important;
-				line-height: 50px !important;
-				color: var(--next-bg-topBarColor);
-			}
-
-			.el-popper.is-pure.is-light {
-				.el-menu--horizontal {
-					.el-sub-menu .el-sub-menu__title {
-						background-color: unset !important;
-						color: var(--next-bg-topBarColor);
-					}
-
-					.el-sub-menu.is-active .el-sub-menu__title {
-						color: var(--el-menu-active-color);
-					}
-				}
-			}
-		}
-
-		.el-menu-item.is-active,
-		.el-sub-menu.is-active .el-sub-menu__title {
-			color: var(--el-menu-active-color);
-		}
-	}
-}
 
 // 横向菜单（经典、横向）布局
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;
 	width: 100% !important;
 
+    // 横向布局默认选中的字体颜色同步为左侧菜单颜色（默认黑色）
+    .el-sub-menu.is-active .el-sub-menu__title {
+      color: var(--next-bg-menuBarColor) !important;
+    }
+
+    // 经典布局，当选中状态的时候字体颜色同步为左侧菜单颜色（默认黑色）
 	.el-menu-item,
 	.el-sub-menu__title {
 		height: 50px !important;
-		color: var(--next-bg-topBarColor);
+		color: var(--next-bg-topBarColor) !important;
+        &:hover,
+        &.is-active {
+          color: var(--next-bg-menuBarColor) !important;
+        }
 	}
 
 	.el-menu-item:not(.is-active):hover,

@@ -157,6 +157,7 @@ export default {
 		fourIsInvert: '色弱模式',
 		fourIsDark: '深色模式',
 		fourIsWartermark: '开启水印',
+		fourIsChat: '开启AI助手',
 		fourWartermarkText: '水印文案',
 		fiveTitle: '其它设置',
 		fiveTagsStyle: 'Tagsview 风格',

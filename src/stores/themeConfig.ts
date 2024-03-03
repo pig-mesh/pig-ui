@@ -23,9 +23,9 @@ export const useThemeConfig = defineStore('themeConfig', {
              * 顶栏设置
              */
             // 默认顶栏导航背景颜色
-            topBar: '#ffffff',
+            topBar: '#2E5CF6',
             // 默认顶栏导航字体颜色
-            topBarColor: '#606266',
+            topBarColor: '#FFFFFF',
             // 是否开启顶栏背景颜色渐变
             isTopBarColorGradual: false,
 
@@ -100,6 +100,8 @@ export const useThemeConfig = defineStore('themeConfig', {
             isInvert: false,
             // 是否开启水印
             isWartermark: true,
+            // 是否开启AI助手
+            isChat: false,
             // 水印文案
             wartermarkText: 'PigX',
             // 首页快捷导航上限

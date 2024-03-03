@@ -1,23 +1,37 @@
 <template>
-	<el-card class="box-card h-full">
+	<el-card class="h-[191px] box-card">
 		<template #header>
 			<div class="card-header">
-				<span>{{ $t('home.quickNavigationToolsTip') }}</span>
+				<span>{{ props.title }}</span>
 			</div>
 		</template>
-		<el-row :gutter="10" v-if="favoriteRoutes.length > 0">
-			<el-col class="shortcutCard" :span="6" :key="shortcut.id" v-for="shortcut in favoriteRoutes">
+		<el-row :gutter="10" v-if="showRoutes.length > 0">
+			<el-col class="shortcutCard" :span="6" :key="shortcut.id" v-for="shortcut in showRoutes">
 				<SvgIcon name="ele-Close" :size="12" class="shortcutCardClose" @click="handleCloseFavorite(shortcut)" />
 				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.name" @click="handleRoute(shortcut.path)" />
 			</el-col>
 		</el-row>
-		<el-empty :description="$t('home.addFavoriteRoutesTip')" v-else />
+		<el-empty :image-size="48" :description="props.emptyDescription" v-else />
 	</el-card>
 </template>
 
-<script setup lang="ts" name="SysFavoriteDashboard">
-import {useTagsViewRoutes} from '/@/stores/tagsViewRoutes';
+<script setup lang="ts" name="Shortcut">
+import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import shortcutCard from '/@/components/ShortcutCard/index.vue';
+
+const props = defineProps({
+	title: {
+		type: String,
+	},
+	type: {
+		type: String,
+		default: true,
+	},
+  emptyDescription:{
+    type: String,
+    default: true,
+  }
+});
 
 /**
  * 获取路由对象的实例。
@@ -45,11 +59,20 @@ const handleRoute = (path: string) => {
 const handleCloseFavorite = (item: any) => {
 	storesTagsViewRoutes.delFavoriteRoutes(item); // 从收藏路由列表中删除指定路由
 };
+
+const showRoutes = computed(() => {
+	if (props.type === 'flow') {
+		return favoriteRoutes.value.filter((item) => item.path.includes('/flow/list/index?flowId'));
+	} else {
+		return favoriteRoutes.value.filter((item) => !item.path.includes('/flow/list/index?flowId'));
+	}
+});
 </script>
 
 <style lang="scss" scoped>
 .shortcutCard {
 	position: relative;
+
 	.shortcutCardClose {
 		position: absolute;
 		top: 0;

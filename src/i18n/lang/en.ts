@@ -165,6 +165,7 @@ export default {
 		fourIsDark: 'Dark Mode',
 		fourIsWartermark: 'Turn on Watermark',
 		fourWartermarkText: 'Watermark Copy',
+		fourIsChat: 'LLaMA Chat',
 		fiveTitle: 'Other Settings',
 		fiveTagsStyle: 'Tagsview Style',
 		fiveAnimation: 'Page Animation',

@@ -15,8 +15,8 @@ import {info} from '/@/api/admin/i18n';
  */
 
 // element plus 自带国际化
-import enLocale from 'element-plus/lib/locale/lang/en';
-import zhcnLocale from 'element-plus/lib/locale/lang/zh-cn';
+import enLocale from 'element-plus/es/locale/lang/en';
+import zhcnLocale from 'element-plus/es/locale/lang/zh-cn';
 
 // 定义变量内容
 const messages = {};
@@ -70,7 +70,7 @@ export const i18n = createI18n({
     messages,
 });
 
-fetchI18n()
+await fetchI18n()
 
 // 远程获取i18n
 async function fetchI18n() {

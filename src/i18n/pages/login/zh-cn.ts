@@ -29,6 +29,7 @@ export default {
 	scan: {
 		text: '打开手机扫一扫，快速登录/注册',
 		wechatApp: '微信扫码体验移动端',
+		appErrorTip: '应用未配置，登录失败'
 	},
 	tenant_guide: {
 		title: '请选择租户，点击此处',

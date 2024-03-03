@@ -61,7 +61,7 @@
         <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.MOBILE)">
           验证码登录
         </a>
-        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
+        <a href="#" v-if="autoRegisterEnable" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
           注册账号
         </a>
       </div>
@@ -74,7 +74,7 @@
 </template>
 
 <script setup lang="ts" name="password">
-import {defineAsyncComponent, defineEmits, reactive, ref} from 'vue';
+import {defineAsyncComponent, reactive, ref} from 'vue';
 import {useUserInfo} from '/@/stores/userInfo';
 import {useI18n} from 'vue-i18n';
 import {generateUUID} from "/@/utils/other";
@@ -87,6 +87,7 @@ const {t} = useI18n();
 const Verify = defineAsyncComponent(() => import('/@/components/Verifition/Verify.vue'));
 
 // 定义变量内容
+const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
 const emit = defineEmits(['signInSuccess','change']); // 声明事件名称
 const loginFormRef = ref(); // 定义LoginForm表单引用
 const loading = ref(false); // 定义是否正在登录中

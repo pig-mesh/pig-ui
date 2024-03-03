@@ -76,6 +76,7 @@ declare interface ThemeConfigState {
 		isInvert: boolean;
 		isIsDark: boolean;
 		isWartermark: boolean;
+		isChat: boolean;
 		wartermarkText: string;
 		quickLinkNum: number;
 		tagsStyle: string;

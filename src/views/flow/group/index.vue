@@ -43,7 +43,7 @@
             <el-table-column prop="name" :label="$t('flow.name')" show-overflow-tooltip>
               <template #default="{ row }">
                 {{ row.name }}
-                <el-tag v-if="row.stop" type="danger">已停用</el-tag>
+                <el-tag v-if="row.stop === '1'" type="danger">已停用</el-tag>
               </template>
             </el-table-column>
             <el-table-column prop="createTime" :label="$t('flow.createTime')" show-overflow-tooltip></el-table-column>

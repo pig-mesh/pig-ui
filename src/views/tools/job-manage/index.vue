@@ -215,15 +215,6 @@
                         <span>{{ $t('job.jobPauseBtn') }}</span>
                       </a>
                       <a
-                          v-auth="'job_sys_job_shutdown_job'"
-                          @click="handleShutDownJob(job)"
-                          v-if="job.jobStatus === '2'"
-                          href="javascript:;"
-                          class="px-2 py-2 text-primary"
-                      >
-                        <span>{{ $t('job.jobPauseBtn') }}</span>
-                      </a>
-                      <a
                           v-auth="'job_sys_job_edit'" @click="handleEditJob(job)"
                           href="javascript:;"
                           class="px-2 py-2 text-primary"

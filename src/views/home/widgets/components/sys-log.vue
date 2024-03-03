@@ -1,5 +1,12 @@
+<script lang="ts">
+export default {
+	title: '系统日志',
+	icon: 'Monitor',
+	description: '系统日志列表',
+};
+</script>
 <template>
-	<el-card class="box-card" style="height: 100%">
+	<el-card class="h-96 box-card">
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.systemLogsTip') }}</span>
@@ -25,7 +32,7 @@ const logState: BasicTableProps = reactive({
 	pageList, // 分页列表数据
 	descs: ['create_time'], // 排序方式
 	pagination: {
-		size: 5, // 每页显示数据量
+		size: 4, // 每页显示数据量
 	},
 });
 

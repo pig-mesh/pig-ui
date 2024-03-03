@@ -1,7 +1,9 @@
 export default {
 	home: {
 		addFavoriteRoutesTip: '当前无数据，请在标签页上右键单击以收藏',
-		quickNavigationToolsTip: '快捷导航栏',
+		addFlowsRoutesTip: '当前无数据，请在流程管理选择以收藏',
+		quickNavigationToolsTip: '常用功能',
+		quickNavigationFlowsTip: '常用流程',
 		systemLogsTip: '系统日志',
 		auditLogsTip: '审计日志',
 		moreTip: '更多',

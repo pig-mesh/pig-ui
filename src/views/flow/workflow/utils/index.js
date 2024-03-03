@@ -89,7 +89,7 @@ All.prototype = {
 		}
 
 		//审批人为空
-		if (nodeConfig.nobody.handler === 'TO_USER' && nodeConfig.nobody.assignedUser.length == 0) {
+		if (nodeConfig.nobody?.handler === 'TO_USER' && nodeConfig.nobody.assignedUser.length === 0) {
 			return false;
 		}
 

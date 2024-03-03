@@ -5,7 +5,7 @@ const { t } = i18n.global;
 
 interface MessageImplements {
 	info(title: string): void;
-	wraning(title: string): void;
+	warning(title: string): void;
 	success(title: string): void;
 	error(title: string): void;
 }
@@ -18,7 +18,7 @@ export function useMessage() {
 		}
 
 		// 警告提示
-		wraning(title: string): void {
+		warning(title: string): void {
 			ElMessage.warning(title);
 		}
 
@@ -44,7 +44,7 @@ export function useMessageBox() {
 		}
 
 		// 警告提示
-		wraning(msg: string): void {
+		warning(msg: string): void {
 			ElMessageBox.alert(msg, t('message.box.title'), { type: 'warning' });
 		}
 

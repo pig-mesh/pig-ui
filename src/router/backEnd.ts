@@ -132,9 +132,10 @@ export function backEndComponent(routes: any) {
 				item.component = () => import('/@/layout/routerView/link.vue');
 			}
 			item.path = '/iframes/' + window.btoa(item.path);
-		} else if (item.path) {
-			// 增加动态参数的判断 如果path 中包含:则说明是动态参数路由
-			item.component = dynamicImport(dynamicViewsModules, item.path.split('/:')[0]);
+		} else if (item.componentPath) { // 支持动态路径  /a/1 ==> /a  ; /b/1 ==> /b
+			item.component = dynamicImport(dynamicViewsModules, item.componentPath);
+		} else {
+			item.component = dynamicImport(dynamicViewsModules, item.path);
 		}
 		item.children && backEndComponent(item.children);
 		if (item.children) {

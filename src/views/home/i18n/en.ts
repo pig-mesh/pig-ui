@@ -1,7 +1,9 @@
 export default {
 	home: {
 		addFavoriteRoutesTip: 'no data , right click on the tab to favorite',
+		addFlowsRoutesTip: 'no data, please select in Process management to save',
 		quickNavigationToolsTip: 'quick navigation bar',
+		quickNavigationFlowsTip: 'quick flow bar',
 		systemLogsTip: 'system logs',
 		auditLogsTip: 'audit logs',
 		moreTip: 'more',

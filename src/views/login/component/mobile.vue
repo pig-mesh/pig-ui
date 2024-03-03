@@ -43,7 +43,7 @@
         <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.PASSWORD)">
           密码登录
         </a>
-        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
+        <a href="#" v-if="autoRegisterEnable" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
           注册账号
         </a>
       </div>
@@ -58,11 +58,13 @@ import {useMessage} from '/@/hooks/message';
 import {useUserInfo} from '/@/stores/userInfo';
 import {rule} from '/@/utils/validate';
 import {useI18n} from 'vue-i18n';
+import {ref} from "vue";
 
 const {t} = useI18n();
 const emit = defineEmits(['signInSuccess','change']);
 
 // 创建一个 ref 对象，并将其初始化为 null
+const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
 const loginFormRef = ref();
 const loading = ref(false);
 

@@ -59,9 +59,9 @@ let emits = defineEmits(['update:childNodeP']);
 let visible = ref(false);
 const addType = (type) => {
 	visible.value = false;
-	if (type != 4 && type != 5) {
+	if (type !== 4 && type !== 5) {
 		var data;
-		if (type == 1) {
+		if (type === 1) {
 			data = {
 				id: other.getNonDuplicateID(),
 				nodeName: '审批人',
@@ -86,11 +86,15 @@ const addType = (type) => {
 					handler: 'TO_PASS',
 					assignedUser: [],
 				},
-
+        //审批人拒绝
+        refuse: {
+          handler: "TO_END",
+          nodeId:''
+        },
 				childNode: props.childNodeP,
 				nodeUserList: [],
 			};
-		} else if (type == 2) {
+		} else if (type === 2) {
 			data = {
 				id: other.getNonDuplicateID(),
 				parentId: props.currentNode.id,
@@ -105,7 +109,7 @@ const addType = (type) => {
 			};
 		}
 		emits('update:childNodeP', data);
-	} else if (type == 4) {
+	} else if (type === 4) {
 		let id = other.getNonDuplicateID();
 		emits('update:childNodeP', {
 			nodeName: '条件分支',
@@ -162,7 +166,7 @@ const addType = (type) => {
 				},
 			],
 		});
-	} else if (type == 5) {
+	} else if (type === 5) {
 		let id = other.getNonDuplicateID();
 		emits('update:childNodeP', {
 			nodeName: '并行分支',

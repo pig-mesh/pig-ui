@@ -37,6 +37,8 @@ import approverDrawer from '../workflow/components/drawer/approverDrawer.vue';
 import copyerDrawer from '../workflow/components/drawer/copyerDrawer.vue';
 import conditionDrawer from '../workflow/components/drawer/conditionDrawer.vue';
 import { useI18n } from 'vue-i18n';
+import {useFlowStore} from "../workflow/stores/flow";
+let store = useFlowStore();
 
 const { t } = useI18n();
 
@@ -87,6 +89,10 @@ const reErr = ({ childNode }) => {
 		childNode = null;
 	}
 };
+
+watch(() => nodeConfig.value, (v) => {
+  store.setStep3(v)
+}, {deep: true})
 const getProcessData = async () => {
 	return nodeConfig.value;
 };
