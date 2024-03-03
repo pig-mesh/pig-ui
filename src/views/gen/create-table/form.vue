@@ -245,12 +245,12 @@ const onAddItem = () => {
     let obj = {
       name: '',
       comment: '',
-      typeName: '',
-      precision: 0,
+      typeName: 'varchar',
+      precision: 255,
       scale: 0,
       defaultValue: null,
-      primary: false,
-      nullable: true
+      primary: -1,
+      nullable: 1
     };
     form.columns.push(obj);
     return
