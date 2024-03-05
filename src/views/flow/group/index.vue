@@ -118,7 +118,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   },
   createdIsNeed: false,
   pageList: handleQueryFlowPage,
-  descs: ['updated'],
+  descs: ['create_time'],
 });
 
 const {getDataList, sizeChangeHandle, currentChangeHandle, tableStyle} = useTable(state);
