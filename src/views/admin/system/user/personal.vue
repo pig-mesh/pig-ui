@@ -107,10 +107,11 @@
 import {useUserInfo} from '/@/stores/userInfo';
 import {editInfo, getObj, password, unbindingUser} from '/@/api/admin/user';
 import {useMessage} from '/@/hooks/message';
-import {rule} from '/@/utils/validate';
+import {rule, validateNull} from '/@/utils/validate';
 import other from '/@/utils/other';
 import {Session} from '/@/utils/storage';
 import {useI18n} from 'vue-i18n';
+import {getLoginAppList} from "/@/api/admin/social";
 
 const { t } = useI18n();
 
@@ -236,20 +237,27 @@ const handleSaveUser = () => {
 	});
 };
 
-const handleClick = (thirdpart: string) => {
-	let redirect_uri, url;
-	redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
+const handleClick = async (thirdpart: string) => {
+  // 获取租户配置的账号信息
+  const {data} = await getLoginAppList()
+  const result = data.find((item: any) => item.type === thirdpart);
+  if (validateNull(result)) {
+    useMessage().error(t('scan.appErrorTip'));
+    return;
+  }
 
-	if (thirdpart === 'cp') {
-    const appid = import.meta.env.VITE_CP_LOGIN_APPID;
-    const agentId = import.meta.env.VITE_CP_LOGIN_AGENTID;
-		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${appid}&agentid=${agentId}&redirect_uri=${redirect_uri}&state=CP-BIND`;
-	} else if (thirdpart === 'dingding') {
-    const clientId = import.meta.env.VITE_DINGDING_APPID;
-		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${clientId}&scope=openid&state=DINGTALK-BIND&prompt=consent`;
-	}
+  let redirect_uri, url;
+  redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
 
-	other.openWindow(url, thirdpart, 540, 540);
+  if (thirdpart === 'WEIXIN_CP') {
+    url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=CP-BIND`;
+  }
+
+  if (thirdpart === 'DINGTALK') {
+    url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=DINGTALK-BIND&prompt=consent`;
+  }
+
+  other.openWindow(url, thirdpart, 540, 540);
 };
 
 const open = () => {
@@ -280,12 +288,12 @@ const initSocialList = () => {
 	socialList.value = [
 		{
 			name: '企业微信',
-			type: 'cp',
+			type: 'WEIXIN_CP',
 			openId: formData.value.wxCpUserid,
 		},
 		{
 			name: '钉钉办公',
-			type: 'dingding',
+			type: 'DINGTALK',
 			openId: formData.value.wxDingUserid,
 		},
 	];
