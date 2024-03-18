@@ -1,49 +1,50 @@
 import request from '/@/utils/request';
 
 export const pageList = (params?: Object) => {
-	return request({
-		url: '/admin/menu/tree',
-		method: 'get',
-		params,
-	});
+    return request({
+        url: '/admin/menu/tree',
+        method: 'get',
+        params,
+    });
 };
 
-export const info = (id: String) => {
-	return request({
-		url: `/admin/menu/${id}`,
-		method: 'get',
-	});
+export const details = (obj: object) => {
+    return request({
+        url: `/admin/menu/details`,
+        method: 'get',
+        params: obj
+    });
 };
 
 export const save = (data: Object) => {
-	return request({
-		url: '/admin/menu',
-		method: 'post',
-		data: data,
-	});
+    return request({
+        url: '/admin/menu',
+        method: 'post',
+        data: data,
+    });
 };
 
 export const putObj = (data: Object) => {
-	return request({
-		url: '/admin/menu',
-		method: 'put',
-		data: data,
-	});
+    return request({
+        url: '/admin/menu',
+        method: 'put',
+        data: data,
+    });
 };
 
 export const addObj = (data: Object) => {
-	return request({
-		url: '/admin/menu',
-		method: 'post',
-		data: data,
-	});
+    return request({
+        url: '/admin/menu',
+        method: 'post',
+        data: data,
+    });
 };
 
 export const delObj = (id: string) => {
-	return request({
-		url: '/admin/menu/' + id,
-		method: 'delete',
-	});
+    return request({
+        url: '/admin/menu/' + id,
+        method: 'delete',
+    });
 };
 
 /**
@@ -51,13 +52,43 @@ export const delObj = (id: string) => {
  * @method getAdminMenu 获取后端动态路由菜单(admin)
  */
 export function useMenuApi() {
-	return {
-		getAdminMenu: (params?: object) => {
-			return request({
-				url: '/admin/menu',
-				method: 'get',
-				params,
-			});
-		},
-	};
+    return {
+        getAdminMenu: (params?: object) => {
+            return request({
+                url: '/admin/menu',
+                method: 'get',
+                params,
+            });
+        },
+    };
+}
+
+export function validatePermission(rule: any, value: any, callback: any, isEdit: boolean) {
+    if (isEdit) {
+        return callback();
+    }
+
+    details({'permission': value}).then((response) => {
+        const result = response.data;
+        if (result !== null) {
+            callback(new Error('标识已经存在'));
+        } else {
+            callback();
+        }
+    });
+}
+
+export function validatePath(rule: any, value: any, callback: any, isEdit: boolean) {
+    if (isEdit) {
+        return callback();
+    }
+
+    details({'path': value}).then((response) => {
+        const result = response.data;
+        if (result !== null) {
+            callback(new Error('路径已经存在'));
+        } else {
+            callback();
+        }
+    });
 }

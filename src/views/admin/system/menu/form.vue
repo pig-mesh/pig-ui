@@ -107,7 +107,7 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import {useI18n} from 'vue-i18n';
-import {info, pageList, putObj, addObj} from '/@/api/admin/menu';
+import {details, pageList, putObj, addObj, validatePermission, validatePath} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
 import {validateNull} from "/@/utils/validate";
 
@@ -146,9 +146,19 @@ const dataRules = reactive({
   menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
   parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
   name: [{required: true, message: '菜单不能为空', trigger: 'blur'}],
-  path: [{required: true, message: '路径不能为空', trigger: 'blur'}],
+  path: [{required: true, message: '路径不能为空', trigger: 'blur'}, {
+    validator: (rule: any, value: any, callback: any) => {
+      validatePath(rule, value, callback, state.ruleForm.menuId !== '');
+    },
+    trigger: 'blur',
+  }],
   icon: [{required: true, message: '图标不能为空', trigger: 'blur'}],
-  permission: [{required: true, message: '权限代码不能为空', trigger: 'blur'}],
+  permission: [{required: true, message: '权限代码不能为空', trigger: 'blur'}, {
+    validator: (rule: any, value: any, callback: any) => {
+      validatePermission(rule, value, callback, state.ruleForm.menuId !== '');
+    },
+    trigger: 'blur',
+  }],
   sortOrder: [{required: true, message: '排序不能为空', trigger: 'blur'}],
   component: [{min: 5, max: 255, message: '组件名称长度必须介于 5 和 255 之间', trigger: 'blur'},
     {
@@ -160,7 +170,7 @@ const dataRules = reactive({
         }
       },
       trigger: 'blur',
-    },],
+    }],
 });
 
 // 打开弹窗
@@ -184,7 +194,7 @@ const openDialog = (type: string, row?: any) => {
 
 // 获取菜单节点的详细信息
 const getMenuDetail = (id: string) => {
-  info(id).then((res) => {
+  details({menuId: id}).then((res) => {
     if (res.data.component) {
       state.ruleForm.param = '1'
     }
