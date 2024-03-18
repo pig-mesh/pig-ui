@@ -171,7 +171,19 @@ const onSubmit = async () => {
 	}
 
 	if (menuTreeRef.value?.getCheckedKeys()) {
-		form.menuId = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()].join(',');
+    let checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()]
+
+    if (!checkMenu.includes('1300')) {
+      useMessage().error('必须分配角色管理功能');
+      return false;
+    }
+
+    if (!checkMenu.includes('1302')) {
+      useMessage().error('必须分配角色管理功能');
+      return false;
+    }
+
+		form.menuId = checkMenu.join(',');
 	}
 
 	try {
