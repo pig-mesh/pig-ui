@@ -29,7 +29,7 @@ export default {
 	</el-card>
 
 	<!-- 消息列表 -->
-	<news-lists ref="listRef" v-if="showList" />
+	<news-lists ref="listRef"/>
 
 	<!-- 消息内容 -->
 	<news-content ref="contentRef" @refresh="getUserMessage" />
