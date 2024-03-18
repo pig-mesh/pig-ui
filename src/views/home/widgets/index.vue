@@ -185,7 +185,8 @@ const setLayout = (layout: Array<number>) => {
 		if (grid.value.copmsList[2]) {
 			grid.value.copmsList[0].push(...grid.value.copmsList[2]);
 		}
-		grid.value.copmsList.splice(1, 2);
+		grid.value.copmsList[1] = [];
+		grid.value.copmsList[2] = [];
 	}
 };
 
