@@ -209,6 +209,8 @@ const backDefaul = () => {
 	widgets.value.style.removeProperty('transform');
 	grid.value = defaultGrid.value;
 	Local.remove(widgetsKey.value);
+  // 重新加载页面
+  window.location.reload();
 };
 
 const close = () => {
