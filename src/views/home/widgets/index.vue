@@ -306,6 +306,7 @@ onMounted(() => {
 
 .customizing .widgets-wrapper {
 	margin-right: -360px;
+  width: 100%;
 }
 
 .customizing .widgets-wrapper .el-col {
