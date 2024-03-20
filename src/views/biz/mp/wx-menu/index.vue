@@ -23,15 +23,15 @@
 										</div>
 										<!-- 以下为二级菜单-->
 										<div v-if="isSubMenuFlag === i" class="submenu">
-											<template v-for="(subItem, k) in item.children">
-												<div v-if="item.children" :key="k" class="subtitle menu_bottom">
+											<template v-for="(subItem, k) in item.sub_button">
+												<div v-if="item.sub_button" :key="k" class="subtitle menu_bottom">
 													<div :class="{ active: isSubMenuActive === i + '' + k }" class="menu_subItem" @click="subMenuClick(subItem, i, k)">
 														{{ subItem.name }}
 													</div>
 												</div>
 											</template>
 											<!-- 二级菜单加号， 当长度 小于 5 才显示二级菜单的加号  -->
-											<div v-if="!item.children || item.children.length < 5" class="menu_bottom menu_addicon" @click="addSubMenu(i, item)">
+											<div v-if="!item.sub_button || item.sub_button.length < 5" class="menu_bottom menu_addicon" @click="addSubMenu(i, item)">
 												<el-icon>
 													<el-icon-plus />
 												</el-icon>
@@ -172,7 +172,7 @@ const isSubMenuFlag = ref(-1);
 const menuList = reactive([
 	{
 		name: '菜单名称',
-		children: [],
+		sub_button: [],
 	},
 ] as any);
 
@@ -246,7 +246,7 @@ const getMenuFun = () => {
 			menuList.length = 0;
 			Object.assign(menuList, {
 				name: '菜单名称',
-				children: [],
+				sub_button: [],
 			});
 		}
 	});
@@ -263,7 +263,7 @@ const menuClick = (i, item) => {
 	showRightFlag.value = true; // 右边菜单
 	tempObj.value = item;
 	tempObj.value.appId = accountId.value;
-	showConfigureContent.value = !(item.children && item.children.length > 0); // 有子菜单，就不显示配置内容
+	showConfigureContent.value = !(item.sub_button && item.sub_button.length > 0); // 有子菜单，就不显示配置内容
 	isActive.value = i;
 	isSubMenuFlag.value = i;
 	isSubMenuActive.value = '-1';
@@ -291,8 +291,8 @@ const subMenuClick = (subItem, index, k) => {
 
 // 添加横向二级菜单；item 表示要操作的父菜单
 const addSubMenu = (i, item) => {
-	if (!item.children || item.children.length <= 0) {
-		item['children'] = [];
+	if (!item.sub_button || item.sub_button.length <= 0) {
+		item['sub_button'] = [];
 		showConfigureContent.value = false;
 	}
 	let addButton = {
@@ -303,14 +303,14 @@ const addSubMenu = (i, item) => {
 			accountId: accountId.value, // 保证组件里，可以使用到对应的公众号
 		},
 	};
-	item.children.push(addButton);
+	item.sub_button.push(addButton);
 };
 
 // 添加横向一级菜单
 const addMenu = () => {
 	const addButton = {
 		name: '菜单名称',
-		children: [],
+		sub_button: [],
 		reply: {
 			// 用于存储回复内容
 			type: 'text',
@@ -327,7 +327,7 @@ const deleteMenu = () => {
 			if (tempSelfObj.grand === '1') {
 				menuList.splice(tempSelfObj.index, 1);
 			} else if (tempSelfObj.grand === '2') {
-				menuList[tempSelfObj.index].children.splice(tempSelfObj.secondIndex, 1);
+				menuList[tempSelfObj.index].sub_button.splice(tempSelfObj.secondIndex, 1);
 			}
 			useMessage().success('删除成功');
 			Object.assign(tempObj, {});
