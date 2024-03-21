@@ -53,7 +53,7 @@ const initSseConnection = (uri, token, tenant) => {
 
 	if (!error.value) {
 		eventSource.value?.addEventListener('message', (message) => {
-			if (eventSource.value?.OPEN) {
+			if (eventSource.value?.OPEN && message.data !== 'pong') {
 				showSseNotification(message.data);
 			}
 		});
