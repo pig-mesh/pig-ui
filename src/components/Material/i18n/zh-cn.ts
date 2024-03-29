@@ -2,6 +2,7 @@ export default {
 	material: {
 		uploadFileTip: '上传',
 		addGroup: '新增分组',
+		editGroup: '修改分组',
 		delGroup: '删除分组',
 		moveBtn: '移动',
 		preview: '预览',

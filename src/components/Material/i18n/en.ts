@@ -2,6 +2,7 @@ export default {
 	material: {
 		uploadFileTip: 'upload',
 		addGroup: 'add group',
+		editGroup: 'edit group',
 		delGroup: 'del group',
 		moveBtn: 'move',
 		preview: 'preview',

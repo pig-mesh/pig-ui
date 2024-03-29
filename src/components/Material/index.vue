@@ -34,7 +34,7 @@
 													teleported
 												>
 													<div>
-														<el-dropdown-item> {{ $t('material.addGroup') }} </el-dropdown-item>
+														<el-dropdown-item> {{ $t('material.editGroup') }} </el-dropdown-item>
 													</div>
 												</popover-input>
 												<div @click="handleDeleteCate(data.id)">
