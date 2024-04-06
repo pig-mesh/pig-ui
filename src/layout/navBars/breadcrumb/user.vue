@@ -166,6 +166,9 @@ const onHandleCommandClick = (path: string) => {
 			},
 		})
 			.then(async () => {
+        // 关闭全部的标签页
+        mittBus.emit('onCurrentContextmenuClick', Object.assign({}, { contextMenuClickId: 3, ...router }));
+        // 调用注销token接口
 				await logout();
 				// 清除缓存/token等
 				Session.clear();
