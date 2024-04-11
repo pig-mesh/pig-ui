@@ -19,6 +19,8 @@
 	</div>
 </template>
 <script lang="ts" setup>
+import other from "/@/utils/other";
+
 let props = defineProps({
 	mode: {
 		type: String,
@@ -49,7 +51,7 @@ const getValidateRule = () => {
 		}
 
 		if (itemProps.radixNum) {
-			if (proxy.$getNumberRadixNum(value) > itemProps.radixNum) {
+			if (other.getNumberRadixNum(value) > itemProps.radixNum) {
 				return callback(new Error('小数位数不能大于' + itemProps.radixNum));
 			}
 		}

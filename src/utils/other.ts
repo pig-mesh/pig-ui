@@ -415,6 +415,17 @@ const other = {
 	validateNull: (value: any) => {
 		return validateNull(value);
 	},
+	getNumberRadixNum: (input: Number) => {
+		return getNumberRadixNum(input);
+	}
+};
+
+export function getNumberRadixNum(input: Number) {
+	let strings = input.toString().split(".");
+	if(strings.length<=1){
+		return 0;
+	}
+	return strings[1].toString().length;
 };
 
 export function getQueryString(url: string, paraName: string) {

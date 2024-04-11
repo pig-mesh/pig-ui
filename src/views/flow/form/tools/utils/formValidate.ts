@@ -1,3 +1,5 @@
+import other from "/@/utils/other";
+
 export function inputValidate(configValue: any, proxy: any) {
 	let minLength = configValue.props.minLength;
 	let maxLength = configValue.props.maxLength;
@@ -79,7 +81,7 @@ export function numberValidate(configValue: any, proxy: any) {
 
 	if (radixNum) {
 		if (min) {
-			let num = proxy.$getNumberRadixNum(min);
+			let num = other.getNumberRadixNum(min);
 			if (num > radixNum) {
 				return {
 					valid: false,
@@ -88,7 +90,7 @@ export function numberValidate(configValue: any, proxy: any) {
 			}
 		}
 		if (max) {
-			let num = proxy.$getNumberRadixNum(max);
+			let num = other.getNumberRadixNum(max);
 			if (num > radixNum) {
 				return {
 					valid: false,
@@ -100,7 +102,7 @@ export function numberValidate(configValue: any, proxy: any) {
 
 	if (defaultValue) {
 		if (radixNum) {
-			let num = proxy.$getNumberRadixNum(defaultValue);
+			let num = other.getNumberRadixNum(defaultValue);
 			if (num > radixNum) {
 				return {
 					valid: false,
