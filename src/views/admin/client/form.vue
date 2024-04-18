@@ -23,7 +23,8 @@
       <el-form-item :label="t('client.refreshTokenValidity')" prop="refreshTokenValidity">
         <el-input-number :placeholder="t('client.inputRefreshTokenValidityTip')" v-model="form.refreshTokenValidity"/>
       </el-form-item>
-      <el-form-item :label="t('client.autoapprove')" prop="autoapprove" v-if="form.authorizedGrantTypes.includes('authorization_code')">
+      <el-form-item :label="t('client.autoapprove')" prop="autoapprove"
+                    v-if="form.authorizedGrantTypes.includes('authorization_code')">
         <el-radio-group v-model="form.autoapprove">
           <el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{
               item.label

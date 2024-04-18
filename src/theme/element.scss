@@ -60,12 +60,11 @@
 }
 
 .el-form-item__content {
-	min-width: var(--el-form-inline-content-width);
 	.el-select {
-		width: 100% !important;
+		min-width: 180px;
 	}
 	.el-date-editor {
-		width: 100% !important;
+      min-width: 180px;
 	}
 }
 
