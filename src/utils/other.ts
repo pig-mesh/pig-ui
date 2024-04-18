@@ -521,15 +521,6 @@ const adaptationUrl = (originUrl?: string) => {
 		return originUrl;
 	}
 
-	// 验证码服务
-	if (originUrl?.startsWith('/code/')) {
-		return `/admin${originUrl}`;
-	}
-
-	// 如果是代码生成服务，不做路径转换
-	if (originUrl?.startsWith('/gen')) {
-		return originUrl;
-	}
 	// 转为 /admin 路由前缀的请求
 	return `/admin/${originUrl?.split('/').splice(2).join('/')}`;
 };
