@@ -59,7 +59,6 @@ const RouteForm = defineAsyncComponent(() => import('./form.vue'));
 const {t} = useI18n();
 const jsonData = ref({});
 const loading = ref(false);
-const show = ref(false);
 const routeFormRef = ref();
 const queryLanguages = ref<QueryLanguageId[]>(['javascript', 'lodash', 'jmespath']);
 
@@ -92,8 +91,6 @@ const getData = async () => {
     }
   }
   jsonData.value = data;
-  // 准备好数据再去渲染jsoneditor 组件，避免个别情况下渲染失败 #I7890E
-  show.value = true;
 }
 
 onMounted(() => {
