@@ -2,7 +2,7 @@ import request from "/@/utils/request";
 
 export const turbo = (content: string) => {
     return request({
-        url: '/admin/chat/msg',
+        url: '/knowledge/chat/msg',
         method: 'post',
         data: {content: content},
     });
