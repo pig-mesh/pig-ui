@@ -130,7 +130,7 @@ const getQr = async () => {
       url.value = res.params; // 直接返回购买 API 返回的二维码链接地址
     } else {
       const tenantId = Session.getTenant();
-      url.value = `${protocol}//${host}/admin/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`; // 返回商品购买的二维码链接地址
+      url.value = `${protocol}//${host}${import.meta.env.VITE_API_URL}${import.meta.env.VITE_IS_MICRO == 'false' ? '/admin' : '/pay'}/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`
     }
   } catch (err) {
     throw new Error('获取支付信息失败');
