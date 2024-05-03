@@ -25,7 +25,7 @@
 
 <script setup lang="ts" name="layoutBreadcrumb">
 import { reactive, computed, onMounted } from 'vue';
-import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router';
+import { onBeforeRouteUpdate, RouteLocation, useRoute, useRouter } from 'vue-router';
 import { Local } from '/@/utils/storage';
 import other from '/@/utils/other';
 import { storeToRefs } from 'pinia';
@@ -48,7 +48,7 @@ const state = reactive<BreadcrumbState>({
 
 // 动态设置经典、横向布局不显示
 const isShowBreadcrumb = computed(() => {
-	initRouteSplit(route.path);
+	initRouteSplit(route);
 	const { layout, isBreadcrumb } = themeConfig.value;
 	if (layout === 'classic' || layout === 'transverse') return false;
 	else return isBreadcrumb ? true : false;
@@ -82,30 +82,33 @@ const getBreadcrumbList = (arr: RouteItems) => {
 		});
 	});
 };
+
 // 当前路由字符串切割成数组，并删除第一项空内容
-const initRouteSplit = (path: string) => {
-	if (!themeConfig.value.isBreadcrumb) return false;
-	state.breadcrumbList = [routesList.value[0]];
-	state.routeSplit = path.split('/');
-	state.routeSplit.shift();
-	state.routeSplitFirst = `/${state.routeSplit[0]}`;
-	state.routeSplitIndex = 1;
-	getBreadcrumbList(routesList.value);
-	state.breadcrumbList.push(route);
-	// 首页或异常页只显示第一个
-	if (route.name === 'router.home' || (route.name === 'staticRoutes.notFound' && state.breadcrumbList.length > 1)) {
-		state.breadcrumbList.splice(0, state.breadcrumbList.length - 1);
-	} else if (state.breadcrumbList.length > 0) {
-		state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
-	}
+const initRouteSplit = (toRoute: RouteLocation) => {
+  let path = toRoute.path;
+  if (!themeConfig.value.isBreadcrumb) return false;
+  state.breadcrumbList = [routesList.value[0]];
+  state.routeSplit = path.split('/');
+  state.routeSplit.shift();
+  state.routeSplitFirst = `/${state.routeSplit[0]}`;
+  state.routeSplitIndex = 1;
+  getBreadcrumbList(routesList.value);
+  state.breadcrumbList.push(route);
+  // 首页或异常页只显示第一个
+  if (toRoute.name === 'router.home' || (toRoute.name === 'staticRoutes.notFound' && state.breadcrumbList.length > 1)) {
+    state.breadcrumbList.splice(0, state.breadcrumbList.length - 1);
+  } else if (state.breadcrumbList.length > 0) {
+    state.breadcrumbList[state.breadcrumbList.length - 1].meta.tagsViewName = other.setTagsViewNameI18n(<RouteToFrom>route);
+  }
 };
+
 // 页面加载时
 onMounted(() => {
-	initRouteSplit(route.path);
+	initRouteSplit(route);
 });
 // 路由更新时
 onBeforeRouteUpdate((to) => {
-	initRouteSplit(to.path);
+	initRouteSplit(to);
 });
 </script>
 
