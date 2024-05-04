@@ -27,6 +27,7 @@
                           @change="changeLoginType"/>
                 <mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess"
                         @change="changeLoginType"/>
+                <expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType"/>
                 <div class="flex items-center justify-center space-x-2 my-5">
                   <span class="h-px w-16 bg-gray-100"></span>
                   <span class="text-gray-300 font-normal">or</span>
@@ -60,6 +61,7 @@ const Password = defineAsyncComponent(() => import('./component/password.vue'));
 const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
 const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
+const Expire = defineAsyncComponent(() => import('./component/expire.vue'));
 const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
 
 // 定义变量内容
@@ -71,10 +73,15 @@ const router = useRouter();
 
 // 登录方式
 const loginType = ref(LoginTypeEnum.PASSWORD)
+// 用户名
+const username = ref('')
 
 // 修改登录类型
-const changeLoginType = (type: LoginTypeEnum) => {
+const changeLoginType = (type: LoginTypeEnum,name?:string) => {
   loginType.value = type
+  if(name){
+    username.value = name
+  }
 }
 
 // 获取布局配置信息

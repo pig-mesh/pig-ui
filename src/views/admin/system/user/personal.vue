@@ -53,7 +53,16 @@
 					<el-row :gutter="20">
 						<el-col :span="24" class="mb20">
 							<el-form-item label="原密码" prop="password">
-								<el-input v-model="passwordFormData.password" placeholder="请输入密码" clearable type="password"></el-input>
+								<el-input v-model="passwordFormData.password"  :type="showPassword ? 'text' : 'password'" placeholder="请输入密码" clearable type="password">
+                  <template #suffix>
+                    <i
+                        class="iconfont el-input__icon login-content-password"
+                        :class="showPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
+                        @click="showPassword = !showPassword"
+                    >
+                    </i>
+                  </template>
+                </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="mb20">
@@ -133,6 +142,7 @@ const formData = ref({
 	phone: ('' as string) || undefined,
 });
 
+const showPassword = ref(false);
 const passwordFormData = reactive({
 	password: '',
 	newpassword1: '',

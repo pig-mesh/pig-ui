@@ -17,6 +17,7 @@ export default {
 		phonePlaceholder4: '请输入手机号',
 		accountBtnText: '登 录',
 		registerBtnText: '注 册',
+		resetBtnText: '重 置',
 		readAccept: '我已仔细阅读并接受',
 		privacyPolicy: '《隐私政策》',
 	},

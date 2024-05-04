@@ -78,7 +78,7 @@ import {defineAsyncComponent, reactive, ref} from 'vue';
 import {useUserInfo} from '/@/stores/userInfo';
 import {useI18n} from 'vue-i18n';
 import {generateUUID} from "/@/utils/other";
-import {LoginTypeEnum} from "/@/api/login";
+import {LoginErrorEnum, LoginTypeEnum} from "/@/api/login";
 
 // 使用国际化插件
 const {t} = useI18n();
@@ -143,6 +143,10 @@ const onSignIn = async () => {
   try {
     await useUserInfo().login(state.ruleForm); // 调用登录方法
     emit('signInSuccess'); // 触发事件
+  } catch (err: any) {
+     if (err?.data === LoginErrorEnum.CREDENTIALS_EXPIRED) {
+       emit('change',LoginTypeEnum.EXPIRE, state.ruleForm.username) // 触发修改密码
+     }
   } finally {
     loading.value = false; // 登录结束
     if (verifyImageEnable.value) {

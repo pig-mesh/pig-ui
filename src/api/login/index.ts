@@ -14,8 +14,15 @@ const FORM_CONTENT_TYPE = 'application/x-www-form-urlencoded';
 export enum LoginTypeEnum {
 	PASSWORD,
 	MOBILE,
-	REGISTER
+	REGISTER,
+	EXPIRE
 }
+
+// 登录错误信息
+export enum LoginErrorEnum {
+	CREDENTIALS_EXPIRED = 'credentials_expired'// 密码过期
+}
+
 
 /**
  * 登录

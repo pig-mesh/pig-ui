@@ -15,6 +15,7 @@ export default {
 		accountPlaceholder3: 'Please enter the verification code',
 		phonePlaceholder4: 'Please enter your phone number',
 		accountBtnText: 'Sign in',
+		resetBtnText: 'Reset',
 		registerBtnText: 'Create account',
 		readAccept: 'I have read and accept',
 		privacyPolicy: 'the Privacy Policy',

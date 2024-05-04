@@ -77,6 +77,7 @@ export default {
 	staticRoutes: {
 		login: 'Login',
 		authredirect: 'Auth Redirect',
+		expire: 'Password Expire',
 		signIn: 'Sign In',
 		notFound: 'Not Found',
 		noPower: 'No Power',

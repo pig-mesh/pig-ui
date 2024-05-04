@@ -102,6 +102,14 @@ export const registerUser = (userInfo: object) => {
 	});
 };
 
+export const resetUserPassword = (userInfo: object) => {
+	return request({
+		url: '/admin/register/password',
+		method: 'post',
+		data: userInfo,
+	});
+};
+
 export function validateUsername(rule: any, value: any, callback: any, isEdit: boolean) {
 	const flag = new RegExp(/^([a-z\d]+?)$/).test(value);
 	if (!flag) {

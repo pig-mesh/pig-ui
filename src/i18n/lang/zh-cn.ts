@@ -70,6 +70,7 @@ export default {
 	staticRoutes: {
 		login: '登录',
 		authredirect: '回调页',
+		expire: '密码过期',
 		signIn: '登录',
 		notFound: '找不到此页面',
 		noPower: '没有权限',
