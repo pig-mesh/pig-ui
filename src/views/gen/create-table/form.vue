@@ -170,6 +170,7 @@ const openDialog = (type: string, id: string, dsName: string) => {
   operType.value = type;
   form.id = ''
   form.dsName = dsName
+  index = 1
   if (type === 'add') {
     title.value = t('common.addBtn');
   } else if (type === 'edit') {
@@ -239,6 +240,7 @@ const getCreateTableData = (id: string) => {
   })
 };
 
+let index = 1;
 const onAddItem = () => {
   let find = form.columns.find(f => f.name === 'id');
   if (find) {
@@ -252,7 +254,9 @@ const onAddItem = () => {
       primary: -1,
       nullable: 1
     };
-    form.columns.push(obj);
+
+    // 从 index为 1 的位置开始添加, 并且新增的字段要依次向后
+    form.columns.splice(index++, 0, obj)
     return
   }
   let id = {
@@ -268,8 +272,8 @@ const onAddItem = () => {
   let create_user = {
     name: 'create_by',
     comment: '创建人',
-    typeName: 'bigint',
-    precision: 20,
+    typeName: 'varchar',
+    precision: 64,
     scale: 0,
     defaultValue: null,
     primary: -1,
@@ -285,6 +289,29 @@ const onAddItem = () => {
     primary: -1,
     nullable: 1
   };
+
+  let update_user = {
+    name: 'update_by',
+    comment: '修改人',
+    typeName: 'varchar',
+    precision: 64,
+    scale: 0,
+    defaultValue: null,
+    primary: -1,
+    nullable: 1
+  };
+
+  let update_time = {
+    name: 'update_time',
+    comment: '修改时间',
+    typeName: 'datetime',
+    precision: 0,
+    scale: 0,
+    defaultValue: null,
+    primary: -1,
+    nullable: 1
+  };
+
   let del_flag = {
     name: 'del_flag',
     comment: '删除标记',
@@ -309,6 +336,8 @@ const onAddItem = () => {
   form.columns.push(id);
   form.columns.push(create_user);
   form.columns.push(create_time);
+  form.columns.push(update_user);
+  form.columns.push(update_time);
   form.columns.push(del_flag);
   form.columns.push(tenant_id);
 }
@@ -329,10 +358,6 @@ const getFieldTypeList = async () => {
 };
 
 const handleDelete = (index: number, row: any) => {
-  if (row.name === 'id' || row.name === 'create_user' || row.name === 'create_time') {
-    useMessage().error("不能删除【主键】、【创建人】、【创建时间】");
-    return
-  }
   form.columns.splice(index, 1)
 }
 
