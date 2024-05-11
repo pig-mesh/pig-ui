@@ -137,10 +137,10 @@
         <div class="p-4">
           <div class="mx-auto">
             <!-- Main -->
-            <div class="grid grid-cols-4">
+            <div class="grid grid-cols-4 gap-x-4 gap-y-6">
               <div
                   v-for="job in state.dataList"
-                  class="w-full max-w-sm mt-2 rounded-[10px] drop-shadow-xl divide-y divide-gray-200 bg-white"
+                  class="w-full max-w-sm mt-2 rounded-lg bg-gray-100"
               >
                 <div aria-label="header" class="flex space-x-4 items-center p-4">
                   <div aria-label="avatar" class="flex mr-auto items-center space-x-4">
