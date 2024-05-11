@@ -13,7 +13,7 @@
 						<div class="form-tips">最多添加5张，建议图片尺寸：750px*340px</div>
 						<draggable class="draggable" v-model="content.data" item-key="index" animation="300">
 							<template v-slot:item="{ element: item, index }">
-								<del-wrap :key="index" @close="handleDelete(index)" class="max-w-[400px]">
+								<del-wrap :key="index" @close="handleDelete(index)" class="max-w-[640px]">
 									<div class="flex items-center w-full p-1 mt-4 cursor-move bg-fill-light">
 										<upload-img v-model:imageUrl="item.image" />
 										<div class="flex-1 ml-3">
