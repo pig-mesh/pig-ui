@@ -62,7 +62,7 @@
 							$t('common.editBtn')
 						}}</el-button>
 
-						<el-button text type="primary" icon="turn-off" v-auth="'sys_role_del'" @click="permessionRef.openDialog(scope.row)">{{
+						<el-button text type="primary" icon="turn-off" v-auth="'sys_role_perm'" @click="permessionRef.openDialog(scope.row)">{{
 							$t('sysrole.permissionTip')
 						}}</el-button>
 

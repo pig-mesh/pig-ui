@@ -5,7 +5,7 @@ export default {
 		inputRoleNameTip: 'input roleName',
 		permissionTip: 'grant',
 		deleteDisabledTip: 'not allowed to delete',
-
+		mustCheckOneTip: 'the assign permissions menu must be selected',
 		roleCode: 'roleCode',
 		roleDesc: 'role description',
 		data_authority: 'data authority',
