@@ -138,7 +138,7 @@
           </div>
         </div>
         <div
-            class="relative flex flex-grow !flex-row flex-col items-center rounded-[10px]  border-[1px] border-gray-200 bg-blue-50 hover:scale-105 hover:shadow-lg bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
+            class="relative flex flex-grow !flex-row items-center rounded-[10px]  border-[1px] border-gray-200 bg-blue-50 hover:scale-105 hover:shadow-lg bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-navy-800 dark:text-white dark:shadow-none">
           <div class="ml-[18px] flex h-[90px] w-auto flex-row items-center">
             <div class="rounded-full bg-lightPrimary p-3 dark:bg-navy-700">
                         <span class="flex items-center text-brand-500 dark:text-white">
@@ -169,7 +169,7 @@
         <el-card class="sm:mr-4 flex-1 !border-none mt-4" shadow="never">
           <div>
             <div class="mb-10 font-semibold">命令统计</div>
-            <div class="flex h-[300px] items-center" ref="commandChartRef"></div>
+            <div class="flex h-[30vh] items-center" ref="commandChartRef"></div>
           </div>
         </el-card>
 
@@ -177,7 +177,7 @@
         <el-card class="flex-1 !border-none mt-4" shadow="never">
           <div>
             <div class="mb-10 font-semibold">内存信息</div>
-            <div class="flex h-[300px] items-center" ref="memoryChartRef"></div>
+            <div class="flex h-[30vh] items-center" ref="memoryChartRef"></div>
           </div>
         </el-card>
       </div>
