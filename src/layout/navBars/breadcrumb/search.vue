@@ -95,6 +95,7 @@ defineExpose({
 .layout-search-dialog {
 	position: relative;
 	:deep(.el-dialog) {
+    width: 560px;
 		.el-dialog__header,
 		.el-dialog__body {
 			display: none;
@@ -107,9 +108,9 @@ defineExpose({
 		}
 	}
 	:deep(.el-autocomplete) {
-		width: 560px;
-		position: absolute;
-		top: 150px;
+    position: absolute;
+    width: 560px;
+		top: 53vh;
 		left: 50%;
 		transform: translateX(-50%);
 	}
