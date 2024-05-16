@@ -25,7 +25,7 @@
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('appuser.role')" prop="role">
-							<el-select v-model="dataForm.role" :placeholder="$t('appuser.inputRoleTip')" class="w100" clearable multiple>
+							<el-select v-model="dataForm.role" :placeholder="$t('appuser.inputRoleTip')" clearable multiple>
 								<el-option v-for="item in roleData" :key="item.roleId" :label="item.roleName" :value="item.roleId" />
 							</el-select>
 						</el-form-item>

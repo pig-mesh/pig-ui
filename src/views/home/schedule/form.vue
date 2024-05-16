@@ -10,7 +10,7 @@
 
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('schedule.type')" prop="type">
-						<el-select v-model="form.type" :placeholder="t('schedule.inputTypeTip')" clearable class="w100" default-first-option>
+						<el-select v-model="form.type" :placeholder="t('schedule.inputTypeTip')" clearable default-first-option>
 							<el-option v-for="item in schedule_type" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>
@@ -18,7 +18,7 @@
 
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('schedule.state')" prop="state">
-						<el-select v-model="form.state" :placeholder="t('schedule.inputStateTip')" clearable class="w100" default-first-option>
+						<el-select v-model="form.state" :placeholder="t('schedule.inputStateTip')" clearable default-first-option>
 							<el-option v-for="item in schedule_status" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>

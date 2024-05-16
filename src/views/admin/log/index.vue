@@ -7,7 +7,7 @@
       <el-row class="ml10 mt-4" v-show="showSearch">
         <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
           <el-form-item :label="$t('syslog.logType')" prop="logType">
-            <el-select :placeholder="$t('syslog.inputLogTypeTip')" class="w100" clearable
+            <el-select :placeholder="$t('syslog.inputLogTypeTip')" clearable
                        v-model="state.queryForm.logType">
               <el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in log_type"/>
             </el-select>

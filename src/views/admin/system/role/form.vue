@@ -17,7 +17,7 @@
 				></el-input>
 			</el-form-item>
 			<el-form-item :label="$t('sysrole.menu_authority')" prop="dsType">
-				<el-select :placeholder="$t('sysrole.please_select')" class="w100" clearable v-model="form.dsType">
+				<el-select :placeholder="$t('sysrole.please_select')" clearable v-model="form.dsType">
 					<el-option :key="item.value" :label="item.label" :value="item.value" v-for="item in dictType" />
 				</el-select>
 			</el-form-item>

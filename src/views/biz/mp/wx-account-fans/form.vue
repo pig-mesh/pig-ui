@@ -29,7 +29,7 @@
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('fans.tagIds')" prop="tagIds">
-						<el-select v-model="form.tagIds" :placeholder="t('fans.inputTagTip')" class="w100" clearable multiple>
+						<el-select v-model="form.tagIds" :placeholder="t('fans.inputTagTip')" clearable multiple>
 							<el-option v-for="item in tagOption" :key="item.tagId" :label="item.tag" :value="item.tagId" />
 						</el-select>
 					</el-form-item>

@@ -5,7 +5,7 @@
 				<el-input v-model="form.groupName" :placeholder="t('group.inputGroupNameTip')" />
 			</el-form-item>
 			<el-form-item :label="$t('group.templateType')" prop="templateId">
-				<el-select v-model="form.templateId" :placeholder="$t('group.selectType')" class="w100" clearable multiple>
+				<el-select v-model="form.templateId" :placeholder="$t('group.selectType')" clearable multiple>
 					<el-option v-for="item in templateData" :key="item.id" :label="item.templateName" :value="item.id" />
 				</el-select>
 			</el-form-item>
