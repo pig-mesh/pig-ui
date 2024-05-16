@@ -71,7 +71,8 @@ interface UploadFileProps {
 	width?: string; // 组件宽度 ==> 非必传（默认为 150px）
 	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
 	iconSize?: number;
-  dir?: string; // 文件目录
+	dir?: string; // 文件目录
+	fileId?: string; //文件id
 }
 
 // 接受父组件参数
@@ -85,7 +86,8 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 	height: '150px',
 	width: '150px',
 	borderRadius: '8px',
-  dir: ''
+  dir: '',
+	fileId: '',
 });
 
 // 生成组件唯一id
@@ -108,6 +110,7 @@ const self_disabled = computed(() => {
  * */
 interface UploadEmits {
 	(e: 'update:imageUrl', value: string): void;
+	(e: 'update:fileId', value: string): void;
 }
 const emit = defineEmits<UploadEmits>();
 const handleHttpUpload = async (options: UploadRequestOptions) => {
@@ -124,6 +127,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 			data: formData,
 		});
 		emit('update:imageUrl', data.url);
+		emit('update:fileId', data.fileId);
 		// 调用 el-form 内部的校验方法（可自动校验）
 		formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
 	} catch (error) {
@@ -136,6 +140,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
  * */
 const deleteImg = () => {
 	emit('update:imageUrl', '');
+	emit('update:fileId', '');
 };
 
 /**
