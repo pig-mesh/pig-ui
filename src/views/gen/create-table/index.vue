@@ -4,14 +4,13 @@
       <el-row v-show="showSearch">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
             <el-form-item label="数据源" prop="name">
-              <el-select @change="getDataList" placeholder="请选择数据源" style="width: 100%" v-model="state.queryForm.dsName">
+              <el-select @change="getDataList" placeholder="请选择数据源" v-model="state.queryForm.dsName">
                 <el-option label="默认数据源" value="master"></el-option>
                 <el-option :key="ds.id" :label="ds.name" :value="ds.name" v-for="ds in datasourceList"> </el-option>
               </el-select>
             </el-form-item>
           <el-form-item :label="$t('createTable.tableName')" prop="tableName">
-            <el-input :placeholder="t('createTable.inputTableNameTip')" v-model="state.queryForm.tableName"
-                      style="max-width: 180px"/>
+            <el-input :placeholder="t('createTable.inputTableNameTip')" v-model="state.queryForm.tableName"/>
           </el-form-item>
           <el-form-item>
             <el-button icon="search" type="primary" @click="getDataList">
