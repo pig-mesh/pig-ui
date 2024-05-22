@@ -16,7 +16,7 @@
 		"@wangeditor/editor": "5.1.23",
 		"@wangeditor/editor-for-vue": "5.1.12",
 		"autoprefixer": "10.4.19",
-		"axios": "1.7.1",
+		"axios": "1.7.2",
 		"china-area-data": "^5.0.1",
 		"codemirror": "5.65.16",
 		"crypto-js": "4.2.0",
