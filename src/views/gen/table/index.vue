@@ -92,7 +92,7 @@ onMounted(() => {
 	list().then((res) => {
 		datasourceList.value = res.data;
 		// 默认去第一个数据源
-		state.queryForm.dsName = datasourceList.value[0].name;
+		state.queryForm.dsName =datasourceList.value.length>0?datasourceList.value[0].name:state.queryForm.dsName;
 		getDataList();
 	});
 });
