@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+    plugins: [
+        require('daisyui'),
+    ],
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     theme: {
         // 扩展 tailwindcss 不建议强制覆盖原有
