@@ -9,28 +9,28 @@
 				</el-col>
 
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('schedule.type')" prop="type">
-						<el-select v-model="form.type" :placeholder="t('schedule.inputTypeTip')" clearable default-first-option>
+					<el-form-item :label="t('schedule.type')" prop="scheduleType">
+						<el-select v-model="form.scheduleType" :placeholder="t('schedule.inputTypeTip')" clearable default-first-option>
 							<el-option v-for="item in schedule_type" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('schedule.state')" prop="state">
-						<el-select v-model="form.state" :placeholder="t('schedule.inputStateTip')" clearable default-first-option>
+					<el-form-item :label="t('schedule.state')" prop="scheduleState">
+						<el-select v-model="form.scheduleState" :placeholder="t('schedule.inputStateTip')" clearable default-first-option>
 							<el-option v-for="item in schedule_status" :key="item.value" :label="item.label" :value="item.value" />
 						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('schedule.date')" prop="date">
-						<el-date-picker type="date" :placeholder="t('schedule.inputDateTip')" v-model="form.date" :value-format="dateStr" />
+					<el-form-item :label="t('schedule.date')" prop="scheduleDate">
+						<el-date-picker type="date" :placeholder="t('schedule.inputDateTip')" v-model="form.scheduleDate" :value-format="dateStr" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('schedule.time')" prop="time">
-						<el-time-picker v-model="form.time" arrow-control :placeholder="t('schedule.inputTimeTip')" :value-format="timeStr" />
+					<el-form-item :label="t('schedule.time')" prop="scheduleTime">
+						<el-time-picker v-model="form.scheduleTime" arrow-control :placeholder="t('schedule.inputTimeTip')" :value-format="timeStr" />
 					</el-form-item>
 				</el-col>
 
@@ -73,21 +73,21 @@ const loading = ref(false);
 const form = reactive({
 	id: '',
 	title: '',
-	type: 'record',
-	state: '0',
+  scheduleType: 'record',
+  scheduleState: '0',
 	content: '',
-	time: '',
-	date: '',
+  scheduleTime: '',
+  scheduleDate: '',
 });
 
 // 定义校验规则
 const dataRules = ref({
 	title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-	type: [{ required: true, message: '日程类型不能为空', trigger: 'blur' }],
-	state: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+  scheduleType: [{ required: true, message: '日程类型不能为空', trigger: 'blur' }],
+  scheduleState: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
 	content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
-	time: [{ required: true, message: '时间不能为空', trigger: 'blur' }],
-	date: [{ required: true, message: '日期不能为空', trigger: 'blur' }],
+  scheduleTime: [{ required: true, message: '时间不能为空', trigger: 'blur' }],
+  scheduleDate: [{ required: true, message: '日期不能为空', trigger: 'blur' }],
 });
 
 /**

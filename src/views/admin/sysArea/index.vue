@@ -4,7 +4,7 @@
       <el-row v-show="showSearch">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item :label="t('area.pid')" prop="adcode">
-            <china-area :placeholder="t('area.inputPidByTip')" v-model="pid" :plus="true" @change="handleChange"/>
+            <china-area :type="3" :placeholder="t('area.inputPidByTip')" v-model="pid" :plus="true" @change="handleChange"/>
           </el-form-item>
           <el-form-item :label="t('area.name')" prop="name">
             <el-input :placeholder="t('area.inputNameByTip')" v-model="state.queryForm.name"/>

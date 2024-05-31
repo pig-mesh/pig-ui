@@ -3,11 +3,11 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row v-show="showSearch">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-					<el-form-item :label="t('schedule.date')" prop="date">
+					<el-form-item :label="t('schedule.date')" prop="scheduleDate">
 						<el-date-picker
 							type="date"
 							:placeholder="t('schedule.inputDateTip')"
-							v-model="state.queryForm.date"
+							v-model="state.queryForm.scheduleDate"
 							:value-format="dateStr"
 						></el-date-picker>
 					</el-form-item>
@@ -53,18 +53,18 @@
 				<el-table-column type="selection" width="40" align="center" />
 				<el-table-column type="index" :label="t('schedule.index')" width="80" />
 				<el-table-column prop="title" :label="t('schedule.title')" show-overflow-tooltip />
-				<el-table-column prop="type" :label="t('schedule.type')" show-overflow-tooltip>
+				<el-table-column prop="scheduleType" :label="t('schedule.type')" show-overflow-tooltip>
 					<template #default="scope">
-						<dict-tag :options="schedule_type" :value="scope.row.type"></dict-tag>
+						<dict-tag :options="schedule_type" :value="scope.row.scheduleType"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="state" :label="t('schedule.state')" show-overflow-tooltip>
+				<el-table-column prop="scheduleState" :label="t('schedule.state')" show-overflow-tooltip>
 					<template #default="scope">
-						<dict-tag :options="schedule_status" :value="scope.row.state"></dict-tag>
+						<dict-tag :options="schedule_status" :value="scope.row.scheduleState"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="date" :label="t('schedule.date')" show-overflow-tooltip />
-				<el-table-column prop="time" :label="t('schedule.time')" show-overflow-tooltip />
+				<el-table-column prop="scheduleDate" :label="t('schedule.date')" show-overflow-tooltip />
+				<el-table-column prop="scheduleTime" :label="t('schedule.time')" show-overflow-tooltip />
 				<el-table-column prop="createBy" :label="t('schedule.createBy')" show-overflow-tooltip />
 				<el-table-column prop="createTime" :label="t('schedule.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
