@@ -98,8 +98,5 @@
 	"repository": {
 		"type": "git",
 		"url": "https://gitee.com/log4j/pig"
-	},
-	"resolutions": {
-		"@swc/core": "1.5.7"
 	}
 }
