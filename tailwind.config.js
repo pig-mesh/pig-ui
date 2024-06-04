@@ -3,28 +3,32 @@ module.exports = {
     plugins: [
         require('daisyui'),
     ],
+    // 其他配置...
+    daisyui: {
+        logs: false,
+    },
     content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
     theme: {
         // 扩展 tailwindcss 不建议强制覆盖原有
         extend: {
-        colors: {
-            primary: {
-                DEFAULT: 'var(--el-color-primary)',
-                'light-3': 'var(--el-color-primary-light-3)',
-                'light-5': 'var(--el-color-primary-light-5)',
-                'light-7': 'var(--el-color-primary-light-7)',
-                'light-8': 'var(--el-color-primary-light-8)',
-                'light-9': 'var(--el-color-primary-light-9)',
-                'dark-2': 'var(--el-color-primary-dark-2)',
-            },
-            br: 'var(--el-border-color)',
-            'br-light': 'var(--el-border-color-light)',
-            'br-extra-light': 'var(--el-border-color-extra-light)',
-            'br-dark': 'var( --el-border-color-dark)',
-            fill: 'var(--el-fill-color)',
-            'fill-light': 'var(--el-fill-color-light)',
-            'fill-lighter': 'var(--el-fill-color-lighter)',
-            mask: 'var(--el-mask-color)',
+            colors: {
+                primary: {
+                    DEFAULT: 'var(--el-color-primary)',
+                    'light-3': 'var(--el-color-primary-light-3)',
+                    'light-5': 'var(--el-color-primary-light-5)',
+                    'light-7': 'var(--el-color-primary-light-7)',
+                    'light-8': 'var(--el-color-primary-light-8)',
+                    'light-9': 'var(--el-color-primary-light-9)',
+                    'dark-2': 'var(--el-color-primary-dark-2)',
+                },
+                br: 'var(--el-border-color)',
+                'br-light': 'var(--el-border-color-light)',
+                'br-extra-light': 'var(--el-border-color-extra-light)',
+                'br-dark': 'var( --el-border-color-dark)',
+                fill: 'var(--el-fill-color)',
+                'fill-light': 'var(--el-fill-color-light)',
+                'fill-lighter': 'var(--el-fill-color-lighter)',
+                mask: 'var(--el-mask-color)',
             },
 
         },
