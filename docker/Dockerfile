@@ -1,4 +1,4 @@
-FROM nginx
+FROM registry.cn-hangzhou.aliyuncs.com/dockerhub_mirror/nginx
 
 COPY ./dist /data
 
