@@ -41,8 +41,8 @@
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
 				<el-table-column :label="t('table.index')" type="index" width="60" />
-				<el-table-column :label="t('table.tableName')" prop="tableName" show-overflow-tooltip />
-				<el-table-column :label="t('table.tableDesc')" prop="tableComment" show-overflow-tooltip />
+				<el-table-column :label="t('table.tableName')" prop="name" show-overflow-tooltip />
+				<el-table-column :label="t('table.tableDesc')" prop="comment" show-overflow-tooltip />
 				<el-table-column :label="t('table.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="250">
 					<template #default="scope">
@@ -99,7 +99,7 @@ onMounted(() => {
 });
 
 const openGen = (row) => {
-	useTableApi(state.queryForm.dsName, row.tableName)
+	useTableApi(state.queryForm.dsName, row.name)
 		.then((res) => {
 			if (validateNull(res.data.fieldList)) {
 				syncTable(row);
@@ -109,7 +109,7 @@ const openGen = (row) => {
 			router.push({
 				path: '/gen/gener/index',
 				query: {
-					tableName: row.tableName,
+					tableName: row.name,
 					dsName: state.queryForm.dsName,
 				},
 			});
@@ -120,7 +120,7 @@ const openDesign = (row) => {
 	router.push({
 		path: '/gen/design/index',
 		query: {
-			tableName: row.tableName,
+			tableName: row.name,
 			dsName: state.queryForm.dsName,
 		},
 	});
@@ -128,7 +128,7 @@ const openDesign = (row) => {
 
 // 同步表数据
 const syncTable = (row) => {
-	useSyncTableApi(state.queryForm.dsName, row.tableName).then(() => {
+	useSyncTableApi(state.queryForm.dsName, row.name).then(() => {
 		useMessage().success(t('common.optSuccessText'));
 	});
 };
