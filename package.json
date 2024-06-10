@@ -38,6 +38,7 @@
 		"sortablejs": "^1.15.0",
 		"splitpanes": "^3.1.5",
 		"tailwindcss": "^3.0.24",
+		"postcss": "8.4.21",
 		"v-calendar": "3.1.2",
 		"vue": "3.4.15",
 		"vue-clipboard3": "^2.0.0",
