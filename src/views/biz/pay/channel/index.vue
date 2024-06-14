@@ -61,7 +61,7 @@
 				<el-table-column :label="t('channel.index')" fixed type="index" width="60" />
 				<el-table-column :label="t('channel.appId')" prop="appId" show-overflow-tooltip width="160" />
 				<el-table-column :label="t('channel.channelName')" prop="channelName" show-overflow-tooltip width="100" />
-				<el-table-column :label="t('channel.mchId')" prop="mchId" show-overflow-tooltip width="120" />
+				<el-table-column :label="t('channel.channelMchId')" prop="channelMchId" show-overflow-tooltip width="120" />
 				<el-table-column :label="t('channel.state')" prop="state" show-overflow-tooltip width="100">
 					<template #default="scope">
 						<dict-tag :options="status_type" :value="scope.row.state"></dict-tag>

@@ -93,35 +93,37 @@ const form = reactive({
 	mchId: '',
 	channelId: '',
 	channelName: '',
-	channelMchId: '',
+	channelMchId: '' as String | undefined,
 	returnUrl: '',
 	notifyUrl: '',
 	state: '0',
 	param: '',
 	remark: '',
-	appId: '',
+	appId: '' as String | undefined,
 });
 
 // 定义校验规则
 const dataRules = ref({
 	appId: [
-		{ required: true, message: 'appId不能为空', trigger: 'blur' },
-		{ validator: rule.letterAndNumber, trigger: 'blur' },
+    { validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: 'appId不能为空', trigger: 'blur' }
 	],
-	channelName: [{ required: true, message: '渠道名称不能为空', trigger: 'blur' }],
+	channelName: [{ required: true, message: '渠道名称不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
 
 	channelMchId: [
-		{ required: true, message: '商户ID不能为空', trigger: 'blur' },
-		{ validator: rule.letterAndNumber, trigger: 'blur' },
+    { validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: '商户ID不能为空', trigger: 'blur' }
 	],
-	state: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+	state: [{ required: true, message: '状态不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
 
+  remark:[{ validator: rule.overLength, trigger: 'blur' }],
 	returnUrl: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '前端回调不能为空', trigger: 'blur' },
 		{ validater: rule.url, trigger: 'blur' },
 	],
 
-	notifyUrl: [{ required: true, message: '后端回调不能为空', trigger: 'blur' }],
+	notifyUrl: [{ required: true, message: '后端回调不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
 	param: [{ required: true, message: '参数配置不能为空', trigger: 'blur' }],
 });
 
@@ -149,6 +151,15 @@ const onSubmit = async () => {
 
 	try {
 		loading.value = true;
+    // 清除占位符，避免提交错误的数据
+    const { appId, channelMchId } = form;
+
+    if (appId?.includes('**')) {
+      form.appId = undefined;
+    }
+    if (channelMchId?.includes('**')) {
+      form.channelMchId = undefined;
+    }
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
