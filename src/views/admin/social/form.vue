@@ -81,13 +81,14 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
 	type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
-	appId: [{ required: true, message: 'appId不能为空', trigger: 'blur' }],
-	remark: [{ required: true, message: '描述不能为空', trigger: 'blur' }],
+	appId: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: 'appId不能为空', trigger: 'blur' }],
+	remark: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '描述不能为空', trigger: 'blur' }],
 	redirectUrl: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '回调地址不能为空', trigger: 'blur' },
 		{ validator: rule.url, trigger: 'blur' },
 	],
-	appSecret: [{ required: true, message: 'appSecret不能为空', trigger: 'blur' }],
+	appSecret: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: 'appSecret不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗

@@ -109,7 +109,7 @@
 import {useI18n} from 'vue-i18n';
 import {details, pageList, putObj, addObj, validatePermission, validatePath} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
-import {validateNull} from "/@/utils/validate";
+import {rule, validateNull} from "/@/utils/validate";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -145,15 +145,15 @@ const state = reactive({
 const dataRules = reactive({
   menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
   parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
-  name: [{required: true, message: '菜单不能为空', trigger: 'blur'}],
-  path: [{required: true, message: '路径不能为空', trigger: 'blur'}, {
+  name: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '菜单不能为空', trigger: 'blur'}],
+  path: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '路径不能为空', trigger: 'blur'}, {
     validator: (rule: any, value: any, callback: any) => {
       validatePath(rule, value, callback, state.ruleForm.menuId !== '');
     },
     trigger: 'blur',
   }],
-  icon: [{required: true, message: '图标不能为空', trigger: 'blur'}],
-  permission: [{required: true, message: '权限代码不能为空', trigger: 'blur'}, {
+  icon: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '图标不能为空', trigger: 'blur'}],
+  permission: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '权限代码不能为空', trigger: 'blur'}, {
     validator: (rule: any, value: any, callback: any) => {
       validatePermission(rule, value, callback, state.ruleForm.menuId !== '');
     },

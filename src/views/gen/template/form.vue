@@ -35,6 +35,7 @@
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/gen/template';
 import { useI18n } from 'vue-i18n';
+import {rule} from "/@/utils/validate";
 
 const CodeEditor = defineAsyncComponent(() => import('/@/components/CodeEditor/index.vue'));
 const emit = defineEmits(['refresh']);
@@ -59,9 +60,9 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
-	templateName: [{ required: true, message: '模板名称不能为空', trigger: 'blur' }],
-	generatorPath: [{ required: true, message: '模板路径不能为空', trigger: 'blur' }],
-	templateDesc: [{ required: true, message: '模板描述不能为空', trigger: 'blur' }],
+	templateName: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '模板名称不能为空', trigger: 'blur' }],
+	generatorPath: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '模板路径不能为空', trigger: 'blur' }],
+	templateDesc: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '模板描述不能为空', trigger: 'blur' }],
 });
 
 // 打开弹窗

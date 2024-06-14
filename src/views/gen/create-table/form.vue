@@ -158,7 +158,7 @@ const dataRules = ref({
     {validator: rule.validatorLowercase, trigger: 'blur'},
     {validator: validateTableName, trigger: 'blur'}
   ],
-  comments: [{required: true, message: '表注释不能为空', trigger: 'blur'}],
+  comments: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '表注释不能为空', trigger: 'blur'}],
   databaseType: [{required: true, message: '数据库类型不能为空', trigger: 'blur'}],
   pkPolicy: [{required: true, message: '主键策略不能为空', trigger: 'blur'}],
   columns: [{required: true, message: '字段信息不能为空', trigger: 'blur'}],

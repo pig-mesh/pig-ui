@@ -75,6 +75,7 @@ import {useMessage} from '/@/hooks/message';
 import {getObj, addObj, putObj} from '/@/api/gen/datasource';
 import {useI18n} from 'vue-i18n';
 import {useDict} from '/@/hooks/dict';
+import {rule} from "/@/utils/validate";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -132,14 +133,14 @@ const dataRules = ref({
     message: 'URL长度必须介于 10 和 255 之间',
     trigger: 'blur'
   },],
-  username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
-  password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+  username: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '用户名不能为空', trigger: 'blur'}],
+  password: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '密码不能为空', trigger: 'blur'}],
   dsType: [{required: true, message: '数据库类型不能为空', trigger: 'blur'}],
   confType: [{required: true, message: '配置类型不能为空', trigger: 'blur'}],
-  dsName: [{required: true, message: '数据库名称不能为空', trigger: 'blur'}],
-  instance: [{required: true, message: '实例不能为空', trigger: 'blur'}],
+  dsName: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '数据库名称不能为空', trigger: 'blur'}],
+  instance: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '实例不能为空', trigger: 'blur'}],
   port: [{required: true, message: '端口不能为空', trigger: 'blur'}],
-  host: [{required: true, message: '主机不能为空', trigger: 'blur'}],
+  host: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '主机不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

@@ -92,6 +92,7 @@
 import { putObj, useTableApi } from '/@/api/gen/table';
 import { list as groupList } from '/@/api/gen/group';
 import { Local } from '/@/utils/storage';
+import {rule} from "/@/utils/validate";
 
 const ChildTableConfig = defineAsyncComponent(() => import('./child.vue'));
 
@@ -155,17 +156,17 @@ const getTable = (dsName: string, tableName: string) => {
 };
 
 const dataRules = ref({
-	tableName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	tableComment: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	className: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	packageName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	author: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	moduleName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	functionName: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	generatorType: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	formLayout: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	backendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
-	frontendPath: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	tableName: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	tableComment: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	className: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	packageName: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	author: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	moduleName: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	functionName: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	generatorType: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	formLayout: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	backendPath: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
+	frontendPath: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 	style: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 });
 

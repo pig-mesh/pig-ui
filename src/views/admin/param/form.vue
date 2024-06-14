@@ -95,6 +95,7 @@ const form = reactive({
 // 定义校验规则
 const dataRules = reactive({
 	publicName: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '名称不能为空', trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
@@ -104,6 +105,7 @@ const dataRules = reactive({
 		},
 	],
 	publicKey: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '参数键不能为空', trigger: 'blur' },
 		{ validator: rule.validatorCapital, trigger: 'blur' },
 		{
@@ -113,7 +115,7 @@ const dataRules = reactive({
 			trigger: 'blur',
 		},
 	],
-	publicValue: [{ required: true, message: '参数值不能为空', trigger: 'blur' }],
+	publicValue: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '参数值不能为空', trigger: 'blur' }],
 	status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
 	publicType: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
 	systemFlag: [{ required: true, message: '类型不能为空', trigger: 'blur' }],

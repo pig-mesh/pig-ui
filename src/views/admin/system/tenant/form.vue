@@ -75,6 +75,7 @@ import { getObj, addObj, putObj, treemenu } from '/@/api/admin/tenant';
 import { useI18n } from 'vue-i18n';
 import other from '/@/utils/other';
 import { CheckboxValueType } from 'element-plus';
+import {rule} from "/@/utils/validate";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -119,6 +120,7 @@ const checkedMenu = ref<any[]>([]);
 // 定义校验规则
 const dataRules = ref({
 	name: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '名称不能为空', trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
@@ -128,6 +130,7 @@ const dataRules = ref({
 		},
 	],
 	code: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '编码不能为空', trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {

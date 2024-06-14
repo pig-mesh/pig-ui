@@ -46,6 +46,7 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
 	name: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: 'name不能为空', trigger: 'blur' },
 		{ validator: rule.noChinese, trigger: 'blur' },
 		{
@@ -56,6 +57,7 @@ const dataRules = ref({
 		},
 	],
 	zhCn: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '中文不能为空', trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
@@ -65,6 +67,7 @@ const dataRules = ref({
 		},
 	],
 	en: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '英文不能为空', trigger: 'blur' },
 		{ validator: rule.letter, trigger: 'blur' },
 		{

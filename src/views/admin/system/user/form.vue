@@ -148,6 +148,7 @@ const dataRules = ref({
 	],
 	// 姓名校验，不能为空、只能是中文
 	name: [
+    { validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: '姓名不能为空', trigger: 'blur' },
 		{ validator: rule.chinese, trigger: 'blur' },
 	],
@@ -165,7 +166,7 @@ const dataRules = ref({
 			trigger: 'blur',
 		},
 	],
-	email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
+	email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },{ validator: rule.overLength, trigger: 'blur' }],
 	lockFlag: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
 });
 

@@ -74,6 +74,7 @@ import {useMessage} from "/@/hooks/message";
 import {getObj, addObj, putObj, validateAdCode} from '/@/api/admin/sysArea'
 import {useDict} from "/@/hooks/dict";
 import {useI18n} from "vue-i18n";
+import {rule} from "/@/utils/validate";
 
 const ChinaArea = defineAsyncComponent(() => import("/@/components/ChinaArea/index.vue"));
 const emit = defineEmits(['refresh']);
@@ -115,6 +116,7 @@ const dataRules = ref({
     {min: 2, max: 20, message: '长度在 3 到 30 个字符', trigger: 'blur'}
   ],
   adcode: [
+    { validator: rule.overLength, trigger: 'blur' },
     {required: true, message: '编码不能为空', trigger: 'blur'},
     {
       validator: (rule: any, value: any, callback: any) => {
