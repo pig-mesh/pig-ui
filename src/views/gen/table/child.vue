@@ -6,7 +6,7 @@
 					<el-form-item prop="childTableName">
 						<template #label> 子表名<tip content="关联表的子表，例如一对多中的存储多信息的表" /> </template>
 						<el-select placeholder="请选择子表" v-model="form.childTableName" filterable @change="getChildTableColumnList">
-							<el-option :key="item.tableName" :label="item.tableName" :value="item.tableName" v-for="item in childTableList"> </el-option>
+							<el-option :key="item" :label="item" :value="item" v-for="item in childTableList"> </el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
@@ -14,7 +14,7 @@
 					<el-form-item prop="mainField">
 						<template #label> 主表字段<tip content="一般为主表的主键字段" /> </template>
 						<el-select placeholder="请选关联字段" v-model="form.mainField" filterable>
-							<el-option :key="item.columnName" :label="item.columnName" :value="item.columnName" v-for="item in mainTableColumnList"> </el-option>
+							<el-option :key="item" :label="item" :value="item" v-for="item in mainTableColumnList"> </el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
@@ -22,7 +22,7 @@
 					<el-form-item prop="childField">
 						<template #label> 子表字段<tip content="子表中对应主表主键的关联字段" /> </template>
 						<el-select placeholder="请选关联字段" v-model="form.childField" filterable>
-							<el-option :key="item.columnName" :label="item.columnName" :value="item.columnName" v-for="item in childTableColumnList"> </el-option>
+							<el-option :key="item" :label="item" :value="item" v-for="item in childTableColumnList"> </el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
