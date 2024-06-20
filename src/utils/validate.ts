@@ -27,7 +27,7 @@ export const rule = {
 	 *  超长
 	 */
 	overLength(rule: any, value: any, callback: any) {
-		if (value.length > 255) {
+		if (value?.length > 255) {
 			callback(new Error('输入内容过长，请重新输入'));
 		} else {
 			callback();
