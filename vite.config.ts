@@ -9,6 +9,9 @@ import viteCompression from 'vite-plugin-compression';
 // @ts-ignore
 import { svgBuilder } from '/@/components/IconSelector/index';
 
+import dns from 'node:dns'
+dns.setDefaultResultOrder('verbatim')
+
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);
 };
