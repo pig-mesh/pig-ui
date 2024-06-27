@@ -129,8 +129,8 @@ const dataRules = ref({
   ],
   url: [{required: true, message: 'jdbcurl不能为空', trigger: 'blur'}, {
     min: 10,
-    max: 255,
-    message: 'URL长度必须介于 10 和 255 之间',
+    max: 500,
+    message: 'URL长度必须介于 10 和 500 字符之间',
     trigger: 'blur'
   },],
   username: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '用户名不能为空', trigger: 'blur'}],
