@@ -33,7 +33,7 @@
         <el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')"/>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.permission')" prop="permission" v-if="state.ruleForm.menuType === '1'">
-        <el-input v-model="state.ruleForm.permission" maxlength="50" :placeholder="$t('sysmenu.inputPermissionTip')"/>
+        <el-input v-model="state.ruleForm.permission" maxlength="30" :placeholder="$t('sysmenu.inputPermissionTip')"/>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.sortOrder')" prop="sortOrder">
         <el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right"/>
