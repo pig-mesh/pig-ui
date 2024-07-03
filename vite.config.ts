@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
+import { terser } from 'rollup-plugin-terser';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
@@ -39,6 +40,16 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			viteCompression({
 				deleteOriginFile: false, // 压缩后删除原来的文件
 			}),
+			// 生产环境移除 console、debugger、注释
+			terser({
+				format: {
+					comments: false, // 移除所有注释
+				},
+				compress: {
+					drop_console: true, // 删除 console
+					drop_debugger: true, // 删除 debugger
+				}
+			})
 		],
 		root: process.cwd(), // 项目根目录
 		resolve: { alias }, // 路径别名配置
