@@ -1,6 +1,6 @@
 <!--文件上传组件-->
 <template>
-  <div class="upload-file">
+  <div class="upload-file w-full">
     <el-upload
         ref="fileUpload"
         v-if="props.type === 'default'"
