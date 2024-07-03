@@ -30,7 +30,8 @@
               </el-table-column>
               <el-table-column prop="name" :label="t('createTable.name')" show-overflow-tooltip>
                 <template #default="scope">
-                  <el-input v-model="scope.row.name" :placeholder="t('createTable.name')"/>
+                  <el-input v-model="scope.row.name" :placeholder="t('createTable.name')"
+                            @blur="suggestedFieldType(scope.row)"/>
                 </template>
               </el-table-column>
               <el-table-column prop="comment" :label="t('createTable.comment')" show-overflow-tooltip>
@@ -158,7 +159,11 @@ const dataRules = ref({
     {validator: rule.validatorLowercase, trigger: 'blur'},
     {validator: validateTableName, trigger: 'blur'}
   ],
-  comments: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '表注释不能为空', trigger: 'blur'}],
+  comments: [{validator: rule.overLength, trigger: 'blur'}, {
+    required: true,
+    message: '表注释不能为空',
+    trigger: 'blur'
+  }],
   databaseType: [{required: true, message: '数据库类型不能为空', trigger: 'blur'}],
   pkPolicy: [{required: true, message: '主键策略不能为空', trigger: 'blur'}],
   columns: [{required: true, message: '字段信息不能为空', trigger: 'blur'}],
@@ -359,6 +364,24 @@ const getFieldTypeList = async () => {
 
 const handleDelete = (index: number, row: any) => {
   form.columns.splice(index, 1)
+}
+
+// 字段建议
+const suggestedFieldType = (row: { name: string, typeName: string, precision: number }) => {
+  // 如果fieldName 包含 time,date  ，则默认为时间类型， 如果包含id ，则默认是 bigint
+  if (row.name.includes('time') || row.name.includes('date')) {
+    row.typeName = 'datetime'
+    row.precision = 0
+  } else if (row.name.includes('id')) {
+    row.typeName = 'bigint'
+    row.precision = 20
+  } else if(row.name.includes('flag') || row.name.includes('status')){
+    row.typeName = 'char'
+    row.precision = 1
+  } else {
+    row.typeName = 'varchar'
+    row.precision = 255
+  }
 }
 
 // 暴露变量
