@@ -1,7 +1,6 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
-import { terser } from 'rollup-plugin-terser';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
@@ -21,6 +20,8 @@ const alias: Record<string, string> = {
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
+	// 判断是否开发环境
+	const isDev = env.ENV === 'development'
 	return {
 		plugins: [
 			vue(), // Vue 插件
@@ -39,16 +40,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			}),
 			viteCompression({
 				deleteOriginFile: false, // 压缩后删除原来的文件
-			}),
-			// 生产环境移除 console、debugger、注释
-			terser({
-				format: {
-					comments: false, // 移除所有注释
-				},
-				compress: {
-					drop_console: true, // 删除 console
-					drop_debugger: true, // 删除 debugger
-				}
 			})
 		],
 		root: process.cwd(), // 项目根目录
@@ -85,6 +76,17 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 		build: {
 			outDir: 'dist', // 打包输出目录
 			chunkSizeWarningLimit: 1500, // 代码分包阈值
+			// 开发使用 esbuild 更快，生产环境打包使用 terser 可以删除更多注释
+			minify: isDev ?  'esbuild' : 'terser',
+			terserOptions: {
+				compress: {
+					drop_console: true, // 删除 console
+					drop_debugger: true, // 删除 debugger
+				},
+				format: {
+					comments: false // 删除所有注释
+				}
+			},
 			rollupOptions: {
 				output: {
 					entryFileNames: `assets/[name].[hash].js`,
