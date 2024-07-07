@@ -31,12 +31,15 @@ export interface BasicTableProps {
 	ascs?: string[];
 	// props属性对象，类型为any
 	props?: any;
+	// 合并行列，类型为函数
+	spanMethod?: Function
 }
 
 /**
  * 表格样式。
  */
 export interface TableStyle {
+	rowStyle: CellStyle<any>;
 	cellStyle: CellStyle<any>;
 	headerCellStyle: CellStyle<any>;
 }
@@ -58,7 +61,7 @@ export interface Pagination {
 }
 
 export function useTable(options?: BasicTableProps) {
-	const defaultOptions: BasicTableProps = {
+	const defaultOptions: { createdIsNeed: boolean; pagination: Pagination; queryForm: {}; loading: boolean; dataListSelections: any[]; ascs: any[]; props: { item: string; totalCount: string }; selectObjs: any[]; descs: any[]; dataListLoading: boolean; dataList: any[]; isPage: boolean } = {
 		// 列表数据是否正在加载中，默认为false
 		dataListLoading: false,
 		// 是否需要自动请求创建接口来获取表格数据，默认为true
@@ -121,7 +124,12 @@ export function useTable(options?: BasicTableProps) {
 			try {
 				// 开始加载数据，设置state.loading为true
 				state.loading = true;
-
+				// 参数排除空字段
+				for (let key in state.queryForm) {
+					if (state.queryForm[key] === "" || state.queryForm[key] === null) {
+						delete state.queryForm[key]
+					}
+				}
 				// 调用state.pageList方法发起分页查询
 				const res = await state.pageList({
 					...state.queryForm,
@@ -133,6 +141,10 @@ export function useTable(options?: BasicTableProps) {
 
 				// 设置表格展示的数据数组
 				state.dataList = state.isPage ? res.data[state.props.item] : res.data;
+				// 处理合并
+				if (state.spanMethod){
+					state.spanMethod()
+				}
 				// 设置分页信息中的总数据条数
 				state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0;
 			} catch (err: any) {
@@ -233,6 +245,7 @@ export function useTable(options?: BasicTableProps) {
 			background: 'var(--el-table-row-hover-bg-color)',
 			color: 'var(--el-text-color-primary)',
 		},
+		rowStyle: { textAlign: 'center' },
 	};
 
 	return {
