@@ -119,7 +119,6 @@ const dataRules = ref({
   remark:[{ validator: rule.overLength, trigger: 'blur' }],
 	returnUrl: [
     { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '前端回调不能为空', trigger: 'blur' },
 		{ validater: rule.url, trigger: 'blur' },
 	],
 
