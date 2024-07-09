@@ -117,6 +117,9 @@
       <el-tab-pane label="表单权限">
         <form-perm :form-perm="approverConfig.formPerms"></form-perm>
       </el-tab-pane>
+      <el-tab-pane label="事件通知">
+        <event-config v-model="approverConfig.eventConfig"/>
+      </el-tab-pane>
     </el-tabs>
   </el-drawer>
 </template>
@@ -125,6 +128,7 @@ import {setTypes} from '../../utils/const'
 import {useStore} from '../../stores/index'
 import {useFlowStore} from '../../stores/flow'
 import FormPerm from './components/formPerm.vue'
+import EventConfig from './components/eventConfig.vue'
 import selectShow from "/@/components/OrgSelector/index.vue";
 import {validateNull} from "/@/utils/validate";
 import other from "/@/utils/other";
@@ -278,7 +282,6 @@ const assignedTypeChangeEvent = (e) => {
 
 const saveApprover = () => {
   approverConfig.value.error = !checkApproval(approverConfig.value);
-
   setApproverConfig({
     value: approverConfig.value,
     flag: true,
