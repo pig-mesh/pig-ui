@@ -28,7 +28,7 @@ const afterSelectUser = (data) => {
 
 var defaultValue = computed({
 	get: () => {
-		return props.orgList;
+		return props.orgList || [];
 	},
 	set: (r) => {
 		emits('update:orgList', r);
