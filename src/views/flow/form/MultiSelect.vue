@@ -1,7 +1,7 @@
 <template>
 	<div>
 
-			<el-select style="width: 100%"
+			<el-select
 					   v-if="mode==='D'"
 					   :disabled="true"
 					   :placeholder="!form?'':form.placeholder"

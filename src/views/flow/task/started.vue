@@ -4,7 +4,7 @@
 			<el-row shadow="hover" v-show="showSearch" class="ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="状态" prop="status">
-						<el-select style="width: 100%" v-model="state.queryForm.status" placeholder="请选择状态">
+						<el-select v-model="state.queryForm.status" placeholder="请选择状态">
 							<el-option :key="1" label="进行中" :value="1" />
 							<el-option :key="2" label="已结束" :value="2" />
 						</el-select>
