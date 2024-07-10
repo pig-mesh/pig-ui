@@ -4,11 +4,12 @@
 	"description": "PIGCLOUD微服务开发平台",
 	"author": "pig4cloud",
 	"license": "Apache-2.0",
+	"type": "module",
 	"scripts": {
 		"dev": "vite --force",
 		"build": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build",
 		"build:docker": "cross-env NODE_OPTIONS=--max-old-space-size=4096 vite build --outDir ./docker/dist/",
-		"lint:eslint": "eslint --fix --ext .js,.ts,.vue ./src",
+		"lint:eslint": "eslint --fix --ext .js,.cjs,.mjs,.ts,.vue ./src",
 		"prettier": "prettier --write ."
 	},
 	"dependencies": {
@@ -47,7 +48,7 @@
 		"@types/sortablejs": "^1.15.0",
 		"@typescript-eslint/eslint-plugin": "^5.53.0",
 		"@typescript-eslint/parser": "^5.53.0",
-		"@vitejs/plugin-vue": "^4.0.0",
+		"@vitejs/plugin-vue": "^5.0.5",
 		"@vue/compiler-sfc": "^3.4.3",
 		"consola": "^3.0.0",
 		"cross-env": "7.0.3",
@@ -59,10 +60,10 @@
 		"terser": "^5.31.1",
 		"typescript": "^5.0.0",
 		"unplugin-auto-import": "^0.17.0",
-		"vite": "^4.3.3",
+		"vite": "^5.3.3",
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-style-import": "^2.0.0",
-		"vite-plugin-top-level-await": "^1.3.0",
+		"vite-plugin-top-level-await": "^1.4.1",
 		"vite-plugin-vue-setup-extend": "^0.4.0",
 		"vue-eslint-parser": "^9.1.0"
 	},
@@ -75,7 +76,7 @@
 		"url": "https://pig4cloud.com"
 	},
 	"engines": {
-		"node": ">=16.0.0",
+		"node": ">=18.0.0",
 		"npm": ">= 8.0.0"
 	},
 	"keywords": [
