@@ -140,7 +140,7 @@ onMounted(() => {
 			store.step1.groupId = data.groupId;
 
 			store.setStep2(JSON.parse(data.formItems));
-			step3NodeConfig.value = JSON.parse(data.process);
+			step3NodeConfig = JSON.parse(data.process);
 		});
 	} else {
 		//新增
@@ -161,7 +161,7 @@ onMounted(() => {
 	}
 });
 
-const step3NodeConfig = ref();
+let step3NodeConfig = reactive({});
 
 var paramGroupId = ref();
 
