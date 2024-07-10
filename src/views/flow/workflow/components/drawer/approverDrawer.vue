@@ -294,7 +294,7 @@ const closeDrawer = () => {
 }
 
 const checkApproval = (nodeConfig) => {
-  if (nodeConfig.assignedType == 1 || nodeConfig.assignedType == 2 || nodeConfig.assignedType == 3) {
+  if (nodeConfig.assignedType == 1  || nodeConfig.assignedType == 3) {
 
 //指定成员
     if (nodeConfig.nodeUserList.length == 0) {
