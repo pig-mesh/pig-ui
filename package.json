@@ -59,7 +59,7 @@
 		"sass": "^1.58.3",
 		"terser": "^5.31.1",
 		"typescript": "^5.0.0",
-		"unplugin-auto-import": "^0.17.0",
+		"unplugin-auto-import": "^0.18.0",
 		"vite": "^5.3.3",
 		"vite-plugin-compression": "^0.5.1",
 		"vite-plugin-style-import": "^2.0.0",
