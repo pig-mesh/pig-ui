@@ -115,7 +115,7 @@ export function validateDictType(rule: any, value: any, callback: any, isEdit: b
 	getObjDetails({ dictType: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('字典类型已经存在'));
+			callback(new Error('字典已经存在'));
 		} else {
 			callback();
 		}

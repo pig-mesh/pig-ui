@@ -36,6 +36,7 @@
       </el-row>
       <el-table :data="state.dataList" v-loading="state.loading" style="width: 100%"
                 :cell-style="tableStyle.cellStyle"
+                border
                 :header-cell-style="tableStyle.headerCellStyle"
                 @selection-change="handleSelectionChange" @sort-change="sortChangeHandle">
         <el-table-column type="selection" width="40" align="center"/>
