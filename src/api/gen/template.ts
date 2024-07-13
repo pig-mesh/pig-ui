@@ -15,6 +15,14 @@ export function list() {
 	});
 }
 
+export function online() {
+	return request({
+		url: '/gen/template/online',
+		method: 'get',
+	});
+}
+
+
 export function addObj(obj?: Object) {
 	return request({
 		url: '/gen/template',
