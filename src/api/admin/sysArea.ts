@@ -48,15 +48,14 @@ export function putObj(obj?: Object) {
   })
 }
 
-export function validateAdCode(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateExist(rule: any, value: any, callback: any, isEdit: boolean) {
   if (isEdit) {
     return callback();
   }
-
-  getObj({ adcode: value }).then((response) => {
+  getObj({ [rule.field] : value }).then((response) => {
     const result = response.data;
     if (result !== null) {
-      callback(new Error('编码已经存在'));
+      callback(new Error('数据已经存在'));
     } else {
       callback();
     }

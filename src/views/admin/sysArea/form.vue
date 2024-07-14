@@ -71,7 +71,7 @@
 
 <script setup lang="ts" name="SysAreaDialog">
 import {useMessage} from "/@/hooks/message";
-import {getObj, addObj, putObj, validateAdCode} from '/@/api/admin/sysArea'
+import {getObj, addObj, putObj, validateExist} from '/@/api/admin/sysArea'
 import {useDict} from "/@/hooks/dict";
 import {useI18n} from "vue-i18n";
 import {rule} from "/@/utils/validate";
@@ -113,14 +113,20 @@ const form = reactive({
 const dataRules = ref({
   name: [
     {required: true, message: '地区名称不能为空', trigger: 'blur'},
-    {min: 2, max: 20, message: '长度在 3 到 30 个字符', trigger: 'blur'}
+    {min: 2, max: 20, message: '长度在 3 到 30 个字符', trigger: 'blur'},
+    {
+      validator: (rule: any, value: any, callback: any) => {
+        validateExist(rule, value, callback, form.id !== '');
+      },
+      trigger: 'blur',
+    },
   ],
   adcode: [
     { validator: rule.overLength, trigger: 'blur' },
     {required: true, message: '编码不能为空', trigger: 'blur'},
     {
       validator: (rule: any, value: any, callback: any) => {
-        validateAdCode(rule, value, callback, form.id !== '');
+        validateExist(rule, value, callback, form.id !== '');
       },
       trigger: 'blur',
     },
