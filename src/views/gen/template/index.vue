@@ -21,10 +21,6 @@
                      v-auth="'codegen_template_add'">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button @click="onlineUpdate" class="ml10" icon="download" type="primary" :disabled="updateDisabled"
-                     v-auth="'codegen_template_add'">
-            在线更新
-          </el-button>
           <el-button
               plain
               :disabled="multiple"
@@ -35,6 +31,10 @@
               v-auth="'codegen_template_del'"
           >
             {{ $t('common.delBtn') }}
+          </el-button>
+          <el-button @click="onlineUpdate" class="ml10" icon="download" plain :disabled="updateDisabled"
+                     v-auth="'codegen_template_add'">
+            更新
           </el-button>
           <right-toolbar
               :export="'codegen_template_export'"
