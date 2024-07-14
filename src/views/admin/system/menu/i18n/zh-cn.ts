@@ -2,6 +2,7 @@ export default {
     sysmenu: {
         index: '#',
         name: '菜单名称',
+        buttonName: '按钮名称',
         sortOrder: '排序',
         path: '路由',
         menuType: '类型',

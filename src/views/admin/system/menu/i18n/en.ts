@@ -2,6 +2,7 @@ export default {
     sysmenu: {
         index: '#',
         name: 'menu name',
+        buttonName: 'button name',
         sortOrder: 'sortOrder',
         path: 'path',
         menuType: 'menuType',

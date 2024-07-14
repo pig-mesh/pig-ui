@@ -6,7 +6,7 @@
       :close-on-click-modal="false"
       draggable
   >
-    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
+    <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="100px" v-loading="loading">
       <el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
         <el-radio-group v-model="state.ruleForm.menuType">
           <el-radio border label="0">菜单</el-radio>
@@ -26,13 +26,20 @@
         >
         </el-tree-select>
       </el-form-item>
-      <el-form-item :label="$t('sysmenu.name')" prop="name">
+      <el-form-item prop="name">
+        <template #label>
+          {{ state.ruleForm.menuType === '0' ? t('sysmenu.name') : t('sysmenu.buttonName') }}
+        </template>
         <el-input v-model="state.ruleForm.name" clearable :placeholder="$t('sysmenu.inputNameTip')"></el-input>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.path')" prop="path" v-if="state.ruleForm.menuType === '0'">
         <el-input v-model="state.ruleForm.path" :placeholder="$t('sysmenu.inputPathTip')"/>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.permission')" prop="permission" v-if="state.ruleForm.menuType === '1'">
+        <template #label>
+          {{ t('sysmenu.permission') }}
+          <tip content="对应后台接口@PreAuthorize注解入参字符串"></tip>
+        </template>
         <el-input v-model="state.ruleForm.permission" maxlength="30" :placeholder="$t('sysmenu.inputPermissionTip')"/>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.sortOrder')" prop="sortOrder">
@@ -107,9 +114,10 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import {useI18n} from 'vue-i18n';
-import {details, pageList, putObj, addObj, validatePermission, validatePath} from '/@/api/admin/menu';
+import {getObj, pageList, putObj, addObj, validateExist} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
 import {rule, validateNull} from "/@/utils/validate";
+import Tip from "/@/components/Tip/index.vue";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -145,17 +153,30 @@ const state = reactive({
 const dataRules = reactive({
   menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
   parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
-  name: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '菜单不能为空', trigger: 'blur'}],
-  path: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '路径不能为空', trigger: 'blur'}, {
+  name: [{validator: rule.overLength, trigger: 'blur'}, {
+    required: true,
+    message: '菜单不能为空',
+    trigger: 'blur'
+  }, {validator: rule.overLength, trigger: 'blur'}, {required: true, message: '权限代码不能为空', trigger: 'blur'}, {
     validator: (rule: any, value: any, callback: any) => {
-      validatePath(rule, value, callback, state.ruleForm.menuId !== '');
+      validateExist(rule, value, callback, state.ruleForm.menuId !== '');
     },
     trigger: 'blur',
   }],
-  icon: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '图标不能为空', trigger: 'blur'}],
-  permission: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '权限代码不能为空', trigger: 'blur'}, {
+  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}, {
     validator: (rule: any, value: any, callback: any) => {
-      validatePermission(rule, value, callback, state.ruleForm.menuId !== '');
+      validateExist(rule, value, callback, state.ruleForm.menuId !== '');
+    },
+    trigger: 'blur',
+  }],
+  icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '图标不能为空', trigger: 'blur'}],
+  permission: [{validator: rule.overLength, trigger: 'blur'}, {
+    required: true,
+    message: '权限代码不能为空',
+    trigger: 'blur'
+  }, {
+    validator: (rule: any, value: any, callback: any) => {
+      validateExist(rule, value, callback, state.ruleForm.menuId !== '');
     },
     trigger: 'blur',
   }],
@@ -194,11 +215,11 @@ const openDialog = (type: string, row?: any) => {
 
 // 获取菜单节点的详细信息
 const getMenuDetail = (id: string) => {
-  details({menuId: id}).then((res) => {
-    if (res.data.component) {
+  getObj({menuId: id}).then((res) => {
+    if (res.data[0].component) {
       state.ruleForm.param = '1'
     }
-    Object.assign(state.ruleForm, res.data);
+    Object.assign(state.ruleForm, res.data[0]);
   });
 };
 

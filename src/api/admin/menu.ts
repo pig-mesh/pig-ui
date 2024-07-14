@@ -8,7 +8,7 @@ export const pageList = (params?: Object) => {
     });
 };
 
-export const details = (obj: object) => {
+export const getObj = (obj: object) => {
     return request({
         url: `/admin/menu/details`,
         method: 'get',
@@ -63,30 +63,14 @@ export function useMenuApi() {
     };
 }
 
-export function validatePermission(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateExist(rule: any, value: any, callback: any, isEdit: boolean) {
     if (isEdit) {
         return callback();
     }
-
-    details({'permission': value}).then((response) => {
+    getObj({ [rule.field] : value }).then((response) => {
         const result = response.data;
-        if (result !== null) {
-            callback(new Error('标识已经存在'));
-        } else {
-            callback();
-        }
-    });
-}
-
-export function validatePath(rule: any, value: any, callback: any, isEdit: boolean) {
-    if (isEdit) {
-        return callback();
-    }
-
-    details({'path': value}).then((response) => {
-        const result = response.data;
-        if (result !== null) {
-            callback(new Error('路径已经存在'));
+        if (result !== null && result.length > 0) {
+            callback(new Error('数据已经存在'));
         } else {
             callback();
         }
