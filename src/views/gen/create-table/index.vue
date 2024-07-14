@@ -3,12 +3,12 @@
     <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-            <el-form-item label="数据源" prop="name">
-              <el-select @change="getDataList" placeholder="请选择数据源" v-model="state.queryForm.dsName">
-                <el-option label="默认数据源" value="master"></el-option>
-                <el-option :key="ds.id" :label="ds.name" :value="ds.name" v-for="ds in datasourceList"> </el-option>
-              </el-select>
-            </el-form-item>
+          <el-form-item label="数据源" prop="name">
+            <el-select @change="getDataList" placeholder="请选择数据源" v-model="state.queryForm.dsName">
+              <el-option label="默认数据源" value="master"></el-option>
+              <el-option :key="ds.id" :label="ds.name" :value="ds.name" v-for="ds in datasourceList"></el-option>
+            </el-select>
+          </el-form-item>
           <el-form-item :label="$t('createTable.tableName')" prop="tableName">
             <el-input :placeholder="t('createTable.inputTableNameTip')" v-model="state.queryForm.tableName"/>
           </el-form-item>
@@ -22,7 +22,8 @@
       </el-row>
       <el-row>
         <div class="mb8" style="width: 100%">
-          <el-button icon="folder-add" type="primary" class="ml10" v-auth="'codegen_table_add'" @click="formDialogRef.openDialog('add',null,state.queryForm.dsName)">
+          <el-button icon="folder-add" type="primary" class="ml10" v-auth="'codegen_table_add'"
+                     @click="formDialogRef.openDialog('add',null,state.queryForm.dsName)">
             {{ $t('common.addBtn') }}
           </el-button>
           <el-button plain :disabled="multiple" v-auth="'codegen_table_add'" icon="Delete" type="primary" class="ml10"
@@ -55,6 +56,10 @@
             <el-button text type="primary" icon="view" @click="formDialogRef.openDialog('view', scope.row.id)">
               {{ $t('common.viewBtn') }}
             </el-button>
+            <el-button icon="FolderOpened" @click="openGen(scope.row)" text type="primary">{{
+                $t('gen.genBtn')
+              }}
+            </el-button>
             <el-button icon="edit-pen" text type="primary" v-auth="'order_createtable_edit'"
                        @click="formDialogRef.openDialog('edit', scope.row.id)">{{ $t('common.editBtn') }}
             </el-button>
@@ -80,6 +85,8 @@ import {useMessage, useMessageBox} from "/@/hooks/message";
 
 import {useI18n} from "vue-i18n";
 import {list} from "/@/api/gen/datasource";
+import {useSyncTableApi, useTableApi} from "/@/api/gen/table";
+import {validateNull} from "/@/utils/validate";
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
@@ -87,6 +94,7 @@ const {t} = useI18n()
 // 定义变量内容
 const formDialogRef = ref()
 const datasourceList = ref();
+const router = useRouter();
 
 // 搜索变量
 const queryRef = ref()
@@ -96,7 +104,8 @@ const selectObjs = ref([]) as any
 const multiple = ref(true)
 
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
+  queryForm: {
+  },
   pageList: fetchList,
   descs: ["create_time"]
 })
@@ -148,12 +157,34 @@ const handleDelete = async (ids: string[]) => {
   }
 };
 
+/**
+ * 打开生成代码页面
+ * @param row
+ */
+const openGen = (row: { tableName: string }) => {
+  useTableApi(state.queryForm.dsName, row.tableName)
+      .then((res) => {
+        if (validateNull(res.data.fieldList)) {
+          useSyncTableApi(state.queryForm.dsName, row.tableName);
+        }
+      })
+      .finally(() => {
+        router.push({
+          path: '/gen/gener/index',
+          query: {
+            tableName: row.tableName,
+            dsName: state.queryForm.dsName,
+          },
+        });
+      });
+};
+
 // 初始化数据
 onMounted(() => {
   list().then((res) => {
     datasourceList.value = res.data;
     // 默认去第一个数据源
-    state.queryForm.dsName = datasourceList.value[0].name;
+    state.queryForm.dsName = datasourceList.value[0]?.name || 'master';
     getDataList();
   });
 });
