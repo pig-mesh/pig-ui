@@ -16,7 +16,11 @@
 				</el-row>
 			</el-col>
 			<el-col :span="12" class="mb20">
-				<el-form-item label="说明" prop="tableComment">
+				<el-form-item prop="tableComment">
+          <template #label>
+            <span>注释</span>
+            <tip content="注释"/>
+          </template>
 					<el-input placeholder="说明" v-model="dataForm.tableComment"></el-input>
 				</el-form-item>
 			</el-col>
@@ -40,14 +44,22 @@
 				</el-form-item>
 			</el-col>
 			<el-col :span="12" class="mb20">
-				<el-form-item label="模块名" prop="moduleName">
+				<el-form-item prop="moduleName">
+          <template #label>
+            <span>模块名</span>
+            <tip content="所属微服务模块名称，对应微服务路由前缀 （单体固定 admin）"/>
+          </template>
 					<el-input placeholder="模块名" v-model="dataForm.moduleName"></el-input>
 				</el-form-item>
 			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="12" class="mb20">
-				<el-form-item label="功能名" prop="functionName">
+				<el-form-item prop="functionName">
+          <template #label>
+            <span>功能名</span>
+            <tip content="对应生成的Controller @RequestMapping 请求路径"/>
+          </template>
 					<el-input placeholder="功能名" v-model="dataForm.functionName"></el-input>
 				</el-form-item>
 			</el-col>
@@ -77,10 +89,18 @@
 				</el-form-item>
 			</el-col>
 			<el-col :span="24" class="mb20">
-				<el-form-item label="后端生成路径" prop="backendPath" v-if="dataForm.generatorType === '1'">
+				<el-form-item prop="backendPath" v-if="dataForm.generatorType === '1'">
+          <template #label>
+            <span>后端生成路径</span>
+            <tip content="后端模块biz所在文件全路径比如：D:\data\pigx\pigx-upms\pigx-upms-biz"/>
+          </template>
 					<el-input placeholder="后端生成路径" v-model="dataForm.backendPath"></el-input>
 				</el-form-item>
-				<el-form-item label="前端生成路径" prop="frontendPath" v-if="dataForm.generatorType === '1'">
+				<el-form-item prop="frontendPath" v-if="dataForm.generatorType === '1'">
+          <template #label>
+            <span>前端生成路径</span>
+            <tip content="前端所在文件全路径比如：D:\data\pigx-ui"/>
+          </template>
 					<el-input placeholder="前端生成路径" v-model="dataForm.frontendPath"></el-input>
 				</el-form-item>
 			</el-col>
