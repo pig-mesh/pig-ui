@@ -202,6 +202,7 @@ const queryTypeList = reactive([
 ]);
 
 const formValidatorList = reactive([
+  {label: '去重', value: 'duplicate'},
   {label: '数字', value: 'number'},
   {label: '字母', value: 'letter'},
   {label: '字母和数字', value: 'letterAndNumber'},
