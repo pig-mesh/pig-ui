@@ -55,7 +55,8 @@
             <dict-tag :options="yes_no_type" :value="scope.row.areaStatus"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="areaSort" :label="t('area.areaSort')" width="100" sortable="custom" show-overflow-tooltip/>
+        <el-table-column prop="areaSort" :label="t('area.areaSort')" width="100" sortable="custom"
+                         show-overflow-tooltip/>
         <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button icon="edit-pen" text type="primary" v-auth="'sys_sysArea_edit'"
@@ -82,7 +83,8 @@ import {delObjs, fetchList} from "/@/api/admin/sysArea";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {useDict} from '/@/hooks/dict';
 import {useI18n} from "vue-i18n";
-const { t } = useI18n();
+
+const {t} = useI18n();
 
 // 省市区查询组件
 const ChinaArea = defineAsyncComponent(() => import("/@/components/ChinaArea/index.vue"));
@@ -110,8 +112,9 @@ const pid = ref()
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     adcode: '',
-    name:''
+    name: ''
   },
+  ascs: ['adcode'],
   pageList: fetchList
 })
 
