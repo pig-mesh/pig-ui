@@ -26,6 +26,7 @@ export default {
 	},
 	dictItem: {
 		index: '#',
+		name: 'dict item',
 		importsysDictItemTip: 'import SysDictItem',
 		id: 'id',
 		dictId: 'dictId',

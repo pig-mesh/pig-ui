@@ -29,6 +29,7 @@ export default {
 	},
 	dictItem: {
 		index: '#',
+		name: '字典项',
 		importsysDictItemTip: '导入字典项',
 		id: '编号',
 		dictId: ' dictId',

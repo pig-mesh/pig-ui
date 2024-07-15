@@ -21,6 +21,13 @@ export const validateNull = (val: any) => {
 };
 
 export const rule = {
+	overLength(rule: any, value: any, callback: any) {
+		if (value?.length > 255) {
+			callback(new Error('输入内容过长，请重新输入'));
+		} else {
+			callback();
+		}
+	},
 	/**
 	 * 校验 请输入中文、英文、数字包括下划线
 	 * 名称校验
