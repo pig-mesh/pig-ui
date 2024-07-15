@@ -16,7 +16,7 @@
         <el-input :placeholder="$t('sysdict.inputDescriptionTip')" clearable v-model="dataForm.description"></el-input>
       </el-form-item>
       <el-col :span="24" class="mb20">
-        <el-form-item :label="t('createTable.columnInfo')" prop="columns">
+        <el-form-item :label="t('dictItem.name')" prop="columns">
           <el-table :data="dataForm.columns" border style="width: 100%" max-height="500">
             <el-table-column type="index" :label="t('createTable.index')" width="50">
               <template #header>
