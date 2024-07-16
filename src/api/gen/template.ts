@@ -22,6 +22,12 @@ export function online() {
 	});
 }
 
+export function checkVersion() {
+	return request({
+		url: '/gen/template/checkVersion',
+		method: 'get',
+	});
+}
 
 export function addObj(obj?: Object) {
 	return request({

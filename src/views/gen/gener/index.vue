@@ -47,19 +47,24 @@ const dsName = ref();
 const editTableRef = ref();
 const generatorType = ref();
 
+// 跳转
 const go = async (activeNum: number) => {
-	if (active.value === activeNum) return;
-	active.value = activeNum;
-
-	if (activeNum === 0) {
-		await editTableRef.value.submitHandle();
-	} else if (activeNum === 1) {
-		const dataform = await generatorRef.value.submitHandle();
-		tableId.value = dataform.id;
-		generatorType.value = dataform.generatorType;
-	}
+  try {
+    if (activeNum === 0) {
+      await editTableRef.value.submitHandle();
+    } else if (activeNum === 1) {
+      const dataform = await generatorRef.value.submitHandle();
+      tableId.value = dataform.id;
+      generatorType.value = dataform.generatorType;
+    }
+    if (active.value === activeNum) return;
+    active.value = activeNum;
+  } catch (e) {
+    console.error(e);
+  }
 };
 
+// 预览代码
 const preview = async () => {
 	await editTableRef.value.submitHandle();
 	previewDialogRef.value.openDialog(tableId.value);
