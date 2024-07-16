@@ -102,7 +102,7 @@ const form = reactive({
   confType: 0,
   dsName: '',
   instance: '',
-  port: 3306,
+  port: 0,
   host: '',
 });
 
