@@ -83,8 +83,8 @@
 			<el-col :span="12" class="mb20">
 				<el-form-item label="生成方式" prop="generatorType">
 					<el-radio-group v-model="dataForm.generatorType">
-						<el-radio border label="1">自定义路径</el-radio>
-						<el-radio border label="0">ZIP 压缩包</el-radio>
+						<el-radio border value="1">自定义路径</el-radio>
+						<el-radio border value="0">ZIP 压缩包</el-radio>
 					</el-radio-group>
 				</el-form-item>
 			</el-col>

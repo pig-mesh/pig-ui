@@ -6,7 +6,7 @@
                      placeholder="暂无数据">
         <el-table-column label="主键" prop="primaryPk" width="80" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.primaryPk" true-label="1" false-label="0" disabled></el-checkbox>
+            <el-checkbox v-model="row.primaryPk" true-value="1" false-value="0" disabled></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="字段名" prop="fieldName" show-overflow-tooltip></el-table-column>
@@ -55,19 +55,19 @@
         <el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
         <el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.gridItem" true-label="1" false-label="0"
+            <el-checkbox v-model="row.gridItem" true-value="1" false-value="0"
                          :disabled="row.primaryPk === '1'"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="是否排序" prop="gridSort" width="100" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.gridSort" true-label="1" false-label="0"
+            <el-checkbox v-model="row.gridSort" true-value="1" false-value="0"
                          :disabled="row.primaryPk === '1'"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="查询显示" prop="gridSort" width="100" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.queryItem" true-label="1" false-label="0"
+            <el-checkbox v-model="row.queryItem" true-value="1" false-value="0"
                          :disabled="row.primaryPk === '1'"></el-checkbox>
           </template>
         </el-table-column>
@@ -100,13 +100,13 @@
         </el-table-column>
         <el-table-column label="是否显示" prop="formItem" width="100" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.formItem" true-label="1" false-label="0"
+            <el-checkbox v-model="row.formItem" true-value="1" false-value="0"
                          :disabled="row.primaryPk === '1'"></el-checkbox>
           </template>
         </el-table-column>
         <el-table-column label="表单必填" prop="formRequired" width="100" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-checkbox v-model="row.formRequired" true-label="1" false-label="0"
+            <el-checkbox v-model="row.formRequired" true-value="1" false-value="0"
                          :disabled="row.primaryPk === '1'"></el-checkbox>
           </template>
         </el-table-column>

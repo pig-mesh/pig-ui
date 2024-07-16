@@ -9,8 +9,8 @@
     <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="100px" v-loading="loading">
       <el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
         <el-radio-group v-model="state.ruleForm.menuType">
-          <el-radio border label="0">菜单</el-radio>
-          <el-radio border label="1">按钮</el-radio>
+          <el-radio border value="0">菜单</el-radio>
+          <el-radio border value="1">按钮</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
@@ -55,8 +55,8 @@
               <tip content="组件保留状态，避免重新渲染"/>
             </template>
             <el-radio-group v-model="state.ruleForm.keepAlive">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border value="0">否</el-radio>
+              <el-radio border value="1">是</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -66,8 +66,8 @@
               <tip content="左侧菜单树是否显示"/>
             </template>
             <el-radio-group v-model="state.ruleForm.visible">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border value="0">否</el-radio>
+              <el-radio border value="1">是</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -79,8 +79,8 @@
               <tip content="多个路径指向同一个组件"/>
             </template>
             <el-radio-group v-model="state.ruleForm.param">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border value="0">否</el-radio>
+              <el-radio border value="1">是</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -91,8 +91,8 @@
               <tip content="iframe嵌套还是打开独立的Tab"/>
             </template>
             <el-radio-group v-model="state.ruleForm.embedded">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border value="0">否</el-radio>
+              <el-radio border value="1">是</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
