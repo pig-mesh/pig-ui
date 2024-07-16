@@ -157,18 +157,13 @@ const dataRules = reactive({
     required: true,
     message: '菜单不能为空',
     trigger: 'blur'
-  }, {validator: rule.overLength, trigger: 'blur'}, {required: true, message: '权限代码不能为空', trigger: 'blur'}, {
+  }, {
     validator: (rule: any, value: any, callback: any) => {
-      validateExist(rule, value, callback, state.ruleForm.menuId !== '');
+      validateExist(rule, value, callback, state.ruleForm.menuId !== '' || state.ruleForm.menuType === '1');
     },
     trigger: 'blur',
   }],
-  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}, {
-    validator: (rule: any, value: any, callback: any) => {
-      validateExist(rule, value, callback, state.ruleForm.menuId !== '');
-    },
-    trigger: 'blur',
-  }],
+  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}],
   icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '图标不能为空', trigger: 'blur'}],
   permission: [{validator: rule.overLength, trigger: 'blur'}, {
     required: true,
