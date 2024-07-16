@@ -16,11 +16,7 @@
         </el-row>
       </el-col>
       <el-col :span="12" class="mb20">
-        <el-form-item prop="tableComment">
-          <template #label>
-            <span>注释</span>
-            <tip content="注释"/>
-          </template>
+        <el-form-item label="注释" prop="tableComment">
           <el-input placeholder="说明" v-model="dataForm.tableComment"></el-input>
         </el-form-item>
       </el-col>
@@ -74,6 +70,40 @@
     </el-row>
     <el-row>
       <el-col :span="12" class="mb20">
+        <el-form-item prop="syncMenuId">
+          <template #label>
+            所属菜单
+            <tip :content="`生成的 【${dataForm.tableComment}管理】菜单挂载在哪个目录下 `"/>
+          </template>
+          <el-tree-select
+              filterable
+              v-model="dataForm.syncMenuId"
+              :data="menuData"
+              :render-after-expand="false"
+              :props="{ value: 'id', label: 'name', children: 'children' }"
+              class="w100"
+              clearable
+              check-strictly
+              :placeholder="$t('sysmenu.inputParentIdTip')"
+          >
+          </el-tree-select>
+        </el-form-item>
+      </el-col>
+      <el-col :span="12" class="mb20">
+        <el-form-item prop="syncRoute">
+          <template #label>
+            同步路由
+            <tip :content="`微服务架构下会自动创建一条【/${dataForm.moduleName}】的网关路由，存在则跳过`"/>
+          </template>
+          <el-radio-group v-model="dataForm.syncRoute" :disabled="isMicro === 'false'">
+            <el-radio border label="0">手动添加</el-radio>
+            <el-radio border label="1">自动创建</el-radio>
+          </el-radio-group>
+        </el-form-item>
+      </el-col>
+    </el-row>
+    <el-row>
+      <el-col :span="12" class="mb20">
         <el-form-item label="表单布局" prop="formLayout">
           <el-radio-group v-model="dataForm.formLayout">
             <el-radio border :label="1">一列</el-radio>
@@ -117,6 +147,8 @@ import {rule} from "/@/utils/validate";
 import {useMessage, useMessageBox} from "/@/hooks/message";
 import {checkVersion, online} from "/@/api/gen/template";
 import mittBus from "/@/utils/mitt";
+import {pageList} from "/@/api/admin/menu";
+import Tip from "/@/components/Tip/index.vue";
 
 const ChildTableConfig = defineAsyncComponent(() => import('./child.vue'));
 
@@ -129,6 +161,7 @@ const props = defineProps({
   },
 });
 
+const isMicro = import.meta.env.VITE_IS_MICRO;
 const emit = defineEmits(['refreshDataList']);
 const route = useRoute();
 const visible = ref(false);
@@ -155,6 +188,8 @@ const dataForm = reactive({
   dsName: '' as string,
   style: '', //  默认风格 element-plus
   childTableName: '',
+  syncRoute: '1',
+  syncMenuId: '',
 });
 
 const groupDataList = ref([]);
@@ -163,7 +198,6 @@ const getTable = (dsName: string, tableName: string) => {
   useTableApi(dsName, tableName)
       .then((res) => {
         Object.assign(dataForm, res.data);
-        console.log(dataForm);
         let list = res.data.groupList;
         dataForm.style = list[0]?.id;
 
@@ -203,7 +237,7 @@ const dataRules = ref({
     trigger: 'blur'
   }],
   author: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '必填项不能为空', trigger: 'blur'}],
-  moduleName: [{validator: rule.overLength, trigger: 'blur'}, {
+  moduleName: [{validator: rule.overLength, trigger: 'blur'},{validator: rule.letter, trigger: 'blur'}, {
     required: true,
     message: '必填项不能为空',
     trigger: 'blur'
@@ -291,6 +325,21 @@ const checkTemplateVersion = async () => {
   }
 };
 
+// 从后端获取菜单信息（含层级）
+const menuData = reactive([] as any[])
+const getAllMenuData = () => {
+  pageList({
+    type: '0',
+  }).then((res) => {
+    let menu = {
+      id: '-1',
+      name: '根菜单',
+      children: [],
+    };
+    menu.children = res.data;
+    menuData.push(menu);
+  });
+};
 
 watch(
     () => childForm,
@@ -313,6 +362,11 @@ onMounted(() => {
   getTable(dataForm.dsName, dataForm.tableName);
   genGroupList();
   checkTemplateVersion()
+  getAllMenuData()
+
+  if (isMicro === 'false') {
+    dataForm.syncRoute = '0'
+  }
 });
 
 defineExpose({
