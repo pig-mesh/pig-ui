@@ -67,12 +67,32 @@ export function validateExist(rule: any, value: any, callback: any, isEdit: bool
     if (isEdit) {
         return callback();
     }
-    getObj({ [rule.field] : value }).then((response) => {
+    getObj({[rule.field]: value}).then((response) => {
         const result = response.data;
         if (result !== null && result.length > 0) {
             callback(new Error('数据已经存在'));
         } else {
             callback();
         }
+    });
+}
+
+export function validateSplice(rule: any, value: any, callback: any, parentId: string, isEdit: boolean) {
+    if (isEdit) {
+        return callback();
+    }
+    getObj({menuId: parentId}).then((response) => {
+        const result = response.data[0];
+        if (result === undefined) {
+            return callback();
+        }
+
+        if (value.includes("http")){
+            return callback();
+        }
+
+        const parentPath = result.path;
+        //校验新增的路径 必须符合拼接 一级 /a  二级 /a/b 三级 /a/b/c
+        value.includes(parentPath) ? callback() : callback(new Error('路径错误，应符合层级标准。 一级/a | 二级/a/b | 三级/a/b/c'));
     });
 }

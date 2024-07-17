@@ -114,7 +114,7 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import {useI18n} from 'vue-i18n';
-import {getObj, pageList, putObj, addObj, validateExist} from '/@/api/admin/menu';
+import {getObj, pageList, putObj, addObj, validateExist, validateSplice} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
 import {rule, validateNull} from "/@/utils/validate";
 import Tip from "/@/components/Tip/index.vue";
@@ -163,7 +163,13 @@ const dataRules = reactive({
     },
     trigger: 'blur',
   }],
-  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}],
+  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}, {
+    // 校验新增的路径 必须符合拼接 一级 /a  二级 /a/b 三级 /a/b/c
+    validator: (rule: any, value: any, callback: any) => {
+      validateSplice(rule, value, callback, state.ruleForm.parentId,state.ruleForm.menuId !== '');
+    },
+    trigger: 'blur',
+  }],
   icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '图标不能为空', trigger: 'blur'}],
   permission: [{validator: rule.overLength, trigger: 'blur'}, {
     required: true,
