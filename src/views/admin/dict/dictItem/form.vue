@@ -1,5 +1,5 @@
 <template>
-	<el-dialog v-model="visible" destroy-on-close :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
+	<el-dialog v-model="visible"  :title="dataForm.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
 		<el-form ref="dicDialogFormRef" :model="dataForm" label-width="90px" :rules="dataRules" v-loading="loading">
 			<el-form-item :label="$t('dictItem.dictType')" prop="dictType">
 				<el-input v-model="dataForm.dictType" clearable disabled :placeholder="$t('dictItem.inputDictTypeTip')"></el-input>
@@ -57,6 +57,7 @@ const dataForm = reactive({
 });
 
 const dataRules = reactive({
+  dictType: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '请点选左侧字典项', trigger: 'blur' }],
 	value: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '数据值不能为空', trigger: 'blur' }],
 	label: [
     { validator: rule.overLength, trigger: 'blur' },
