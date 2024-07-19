@@ -40,9 +40,9 @@ const props = defineProps({
   },
   tagType: {
     type: String,
-    default: '',
+    default: 'primary',
     validator: (value: string) => {
-      return ['', 'success', 'info', 'warning', 'danger'].includes(value);
+      return ['primary', 'success', 'info', 'warning', 'danger'].includes(value);
     }
   }
 });
@@ -59,6 +59,10 @@ const handleClose = (tag: string) => {
   tags.value.splice(tags.value.indexOf(tag), 1);
   emits('update:modelValue', tags.value);
 };
+
+watch(() => props.modelValue, (val) => {
+  tags.value = val;
+});
 
 const showInput = () => {
   inputVisible.value = true;
