@@ -1,4 +1,3 @@
-import ElementIcons from '/@/components/SvgIcon/svgicon';
 import Pagination from '/@/components/Pagination/index.vue';
 import RightToolbar from '/@/components/RightToolbar/index.vue';
 import DictTag from '/@/components/DictTag/index.vue';
@@ -9,9 +8,11 @@ import DelWrap from '/@/components/DelWrap/index.vue';
 import Editor from '/@/components/Editor/index.vue';
 import Tip from '/@/components/Tip/index.vue';
 import TagList from '/@/components/TagList/index.vue';
+import SvgIcon from '/@/components/SvgIcon/index.vue';
 
 // 第三方组件
 import ElementPlus from 'element-plus';
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css';
 import {Pane, Splitpanes} from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
@@ -31,9 +32,6 @@ import other from "/@/utils/other";
 
 export default {
     install(app: App) {
-        // 全局注册ELEMENT图标
-        other.elSvg(app);
-        app.component('ElementIcons', ElementIcons);
         app.component('DictTag', DictTag);
         app.component('Pagination', Pagination);
         app.component('RightToolbar', RightToolbar);
@@ -44,6 +42,14 @@ export default {
         app.component('Tip', Tip);
         app.component('DelWrap', DelWrap);
         app.component('TagList', TagList);
+        app.component('SvgIcon', SvgIcon);
+
+        // 导入全部的elmenet-plus的图标
+        for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+            app.component(key, component)
+            // 兼容性
+            app.component(`ele-${key}`, component)
+        }
         // 导入布局插件
         app.component('Splitpanes', Splitpanes);
         app.component('Pane', Pane);
