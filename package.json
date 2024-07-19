@@ -90,5 +90,8 @@
 	"repository": {
 		"type": "git",
 		"url": "https://gitee.com/log4j/pig-ui"
+	},
+	"resolutions": {
+		"@swc/core": "~1.6.13"
 	}
 }
