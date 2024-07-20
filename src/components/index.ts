@@ -28,7 +28,6 @@ import 'vue3-tree-org/lib/vue3-tree-org.css';
 
 // 导入声明
 import {App} from "vue";
-import other from "/@/utils/other";
 
 export default {
     install(app: App) {
