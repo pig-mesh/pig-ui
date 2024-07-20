@@ -159,6 +159,21 @@ export const rule = {
 		validateFn('url', rule, value, callback, 'URL格式有误');
 	},
 
+	/* json 格式 */
+	json(rule, value, callback) {
+		if (validateNull(value) || value.length <= 0) {
+			callback();
+			return;
+		}
+
+		try {
+			JSON.parse(value);
+			callback();
+		} catch (error) {
+			callback(new Error('json 格式有误'));
+		}
+	},
+
 	regExp(rule, value, callback) {
 		if (validateNull(value) || value.length <= 0) {
 			callback();
