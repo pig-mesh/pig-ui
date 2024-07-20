@@ -41,6 +41,9 @@
                 </el-icon>
                 高级属性
               </template>
+              <el-form-item label="允许跨域" prop="cors">
+                <el-switch v-model="formData.cors" :active-value="true" :inactive-value="false"></el-switch>
+              </el-form-item>
               <el-form-item label="超时时间" prop="timeout">
                 <el-input type="number" clearable v-model="formData.timeout">
                   <template #suffix>毫秒</template>
@@ -122,7 +125,8 @@ const formData = ref({
   serviceName: '',
   timeout: 30000,
   burstCapacity: 100000,
-  replenishRate: 10000
+  replenishRate: 10000,
+  cors: false,
 });
 // 初始化数据
 const demoData = reactive({
@@ -166,7 +170,6 @@ const dataRules = ref({
 });
 
 // 监听 formData 的变化并同步更新 jsonData
-
 watch(formData, (val) => {
   jsonData.value = {
     routeId: val.routeId,
@@ -174,7 +177,17 @@ watch(formData, (val) => {
     sortOrder: val.sortOrder,
     predicates: [{args: {_genkey_0: `/${val.path}/**`}, name: 'Path'}],
     uri: `lb://${val.serviceName}`,
-    metadata: {"response-timeout": val.timeout},
+    metadata: {
+      "response-timeout": val.timeout,
+      ...(val.cors ? {
+        cors: {
+          "allowedOrigins": "*",
+          "allowedMethods": "*",
+          "allowedHeaders": "*",
+          "allowedCredentials": true
+        }
+      } : {})
+    },
     filters: [
       {
         "name": "RequestRateLimiter", "args": {
@@ -214,6 +227,10 @@ const handleJsonChange = (val: any) => {
 
   // 提取metadata中的timeout字段
   formData.value.timeout = val.metadata['response-timeout'];
+
+  // 检查 metadata 中是否有 cors 配置，并设置 formData.cors
+  formData.value.cors = !!val.metadata['cors'];
+
   jsonData.value = val;
 }
 
