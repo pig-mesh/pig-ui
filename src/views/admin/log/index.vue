@@ -122,10 +122,12 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
     logType: '',
     createTime: '',
+    serviceId: '',
   },
   selectObjs: [],
   pageList: pageList,
   descs: ['create_time'],
+  createdIsNeed: false,
 });
 
 //  table hook
@@ -171,6 +173,17 @@ const handleDelete = async (ids: string[]) => {
     useMessage().error(err.msg);
   }
 };
+
+// onMounted 通过路由参数给  serviceId 赋值
+const route = useRoute();
+onMounted(() => {
+  const {serviceId} = route.query;
+  if (serviceId) {
+    state.queryForm.serviceId = serviceId;
+    console.log('serviceId', serviceId);
+  }
+  getDataList()
+});
 </script>
 
 <style lang="scss" scoped>
