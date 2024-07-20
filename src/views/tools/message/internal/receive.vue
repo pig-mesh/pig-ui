@@ -27,7 +27,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts" name="newsList">
+<script setup lang="ts" name="reviceDialog">
 import {BasicTableProps, useTable} from '/@/hooks/table';
 import {fetchUserMessageReadList} from '/@/api/admin/message';
 

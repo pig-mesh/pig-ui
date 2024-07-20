@@ -74,3 +74,27 @@ export function putObj(obj?: Object) {
   })
 }
 
+export function sendSms(params?: object) {
+  return request({
+    url: '/admin/sysMessage/send/sms',
+    method: 'post',
+    data: params
+  })
+}
+
+export function sendEmail(params?: object) {
+  return request({
+    url: '/admin/sysMessage/send/email',
+    method: 'post',
+    data: params
+  })
+}
+
+
+export function sendHook(params?: object) {
+  return request({
+    url: '/admin/sysMessage/send/webhook',
+    method: 'post',
+    data: params
+  })
+}

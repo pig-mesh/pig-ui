@@ -83,10 +83,11 @@ export const loginBySocial = (state: string, code: string) => {
 	});
 };
 
-export const sendMobileCode = (mobile: any) => {
+export const sendMobileCode = (mobile: string) => {
 	return request({
-		url: '/admin/mobile/' + mobile,
+		url: '/admin/sysMessage/send/smsCode',
 		method: 'get',
+		params: { mobile }
 	});
 };
 

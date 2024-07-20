@@ -1,182 +1,71 @@
 <template>
   <div class="layout-padding">
     <div class="layout-padding-auto layout-padding-view">
-      <el-row v-show="showSearch">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item label="标题" prop="title">
-            <el-input placeholder="请输入标题" v-model="state.queryForm.title"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button icon="search" type="primary" @click="getDataList">
-              查询
-            </el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
-          </el-form-item>
-        </el-form>
-      </el-row>
-      <el-row>
-        <div class="mb8" style="width: 100%">
-          <el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
-                     v-auth="'sys_message_add'">
-            新 增
-          </el-button>
-          <el-button plain :disabled="multiple" icon="Delete" type="primary"
-                     v-auth="'sys_message_del'" @click="handleDelete(selectObjs)">
-            删除
-          </el-button>
-          <right-toolbar v-model:showSearch="showSearch" :export="'admin_sysMessage_export'"
-                         @exportExcel="exportExcel" class="ml10 mr20" style="float: right;"
-                         @queryTable="getDataList"></right-toolbar>
-        </div>
-      </el-row>
-      <el-table :data="state.dataList" v-loading="state.loading" border
-                :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle"
-                @selection-change="selectionChangHandle"
-                @sort-change="sortChangeHandle">
-        <el-table-column type="selection" width="40" align="center"/>
-        <el-table-column type="index" label="#" width="40"/>
-        <el-table-column prop="category" label="分类" show-overflow-tooltip width="100">
-          <template #default="scope">
-            <dict-tag :options="message_type" :value="scope.row.category"></dict-tag>
+      <el-tabs v-model="activeName" @tab-click="handleClick">
+        <el-tab-pane lazy label="短信" name="sms">
+          <template #label>
+            <div class="ml-8">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                   stroke="currentColor" class="size-4">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M10.5 1.5H8.25A2.25 2.25 0 0 0 6 3.75v16.5a2.25 2.25 0 0 0 2.25 2.25h7.5A2.25 2.25 0 0 0 18 20.25V3.75a2.25 2.25 0 0 0-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"/>
+              </svg>
+              短信
+            </div>
           </template>
-        </el-table-column>
-        <el-table-column prop="title" label="标题" show-overflow-tooltip/>
-        <el-table-column prop="allFlag" label="全部通知" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="yes_no_type" :value="scope.row.allFlag"></dict-tag>
+          <sms-config/>
+        </el-tab-pane>
+        <el-tab-pane lazy label="邮件" name="third">
+          <template #label>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25"/>
+            </svg>
+            邮件
           </template>
-        </el-table-column>
-        <el-table-column prop="sendFlag" label="已发送" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="yes_no_type" :value="scope.row.sendFlag"></dict-tag>
+          <email-config/>
+        </el-tab-pane>
+        <el-tab-pane lazy label="Hook" name="hook">
+          <template #label>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418"/>
+            </svg>
+            Hook
           </template>
-        </el-table-column>
-        <el-table-column prop="sort" label="排序" show-overflow-tooltip/>
-        <el-table-column label="操作" width="300">
-          <template #default="scope">
-            <el-button icon="view" text type="primary" @click="contentRef.openDialog(scope.row)">详情
-            </el-button>
-            <el-button icon="BellFilled" text type="primary" v-auth="'sys_message_edit'"
-                       v-if="scope.row.sendFlag !== '1'"
-                       @click="handleSend(scope.row.id)">群发
-            </el-button>
-            <el-button icon="edit-pen" text type="primary" v-auth="'sys_message_edit'"
-                       v-if="scope.row.sendFlag === '0'"
-                       @click="formDialogRef.openDialog(scope.row.id)">编辑
-            </el-button>
-            <el-button icon="delete" text type="primary" v-auth="'sys_message_del'"
-                       @click="handleDelete([scope.row.id])">删除
-            </el-button>
-            <el-button icon="List" text type="primary" v-auth="'sys_message_edit'"
-                       v-if="scope.row.sendFlag === '1'"
-                       @click="receiveRef.openDialog(scope.row.id)">接收情况
-            </el-button>
+          <hook-config/>
+        </el-tab-pane>
+        <el-tab-pane lazy label="站内信" name="internal">
+          <template #label>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                 stroke="currentColor" class="size-4">
+              <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"/>
+            </svg>
+            站内信
           </template>
-        </el-table-column>
-      </el-table>
-      <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"/>
+          <internal-config/>
+        </el-tab-pane>
+      </el-tabs>
     </div>
-
-    <!-- 编辑、新增  -->
-    <form-dialog ref="formDialogRef" @refresh="getDataList(false)"/>
-
-    <!-- 消息内容 -->
-    <news-content ref="contentRef"/>
-
-    <!-- 接收列表 -->
-    <receive ref="receiveRef"/>
   </div>
 </template>
 
 <script setup lang="ts" name="systemSysMessage">
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {delObjs, fetchList, sendObj} from "/@/api/admin/message";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useDict} from '/@/hooks/dict';
 
 // 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const Receive = defineAsyncComponent(() => import('./receive.vue'));
-const NewsContent = defineAsyncComponent(() => import('/@/views/home/news/content.vue'));
-// 定义查询字典
-const {message_type, yes_no_type} = useDict('message_type', 'yes_no_type')
-// 定义变量内容
-const formDialogRef = ref()
-// 搜索变量
-const queryRef = ref()
-const receiveRef = ref()
-const contentRef = ref()
-const showSearch = ref(true)
-// 多选变量
-const selectObjs = ref([]) as any
-const multiple = ref(true)
+import {TabsPaneContext} from "element-plus";
 
-const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
-  pageList: fetchList
-})
+const InternalConfig = defineAsyncComponent(() => import('./internal/index.vue'));
+const SmsConfig = defineAsyncComponent(() => import('./sms/index.vue'));
+const EmailConfig = defineAsyncComponent(() => import('./email/index.vue'));
+const HookConfig = defineAsyncComponent(() => import('./webhook/index.vue'));
 
-//  table hook
-const {
-  getDataList,
-  currentChangeHandle,
-  sizeChangeHandle,
-  sortChangeHandle,
-  downBlobFile,
-  tableStyle
-} = useTable(state)
+const activeName = ref('sms')
 
-// 清空搜索条件
-const resetQuery = () => {
-  // 清空搜索条件
-  queryRef.value?.resetFields()
-  // 清空多选
-  selectObjs.value = []
-  getDataList()
+const handleClick = (tab: TabsPaneContext, event: Event) => {
+  console.log(tab, event)
 }
-
-// 导出excel
-const exportExcel = () => {
-  downBlobFile('/admin/sysMessage/export', Object.assign(state.queryForm, {ids: selectObjs}), 'sysMessage.xlsx')
-}
-
-// 多选事件
-const selectionChangHandle = (objs: { id: string }[]) => {
-  selectObjs.value = objs.map(({id}) => id);
-  multiple.value = !objs.length;
-};
-
-// 删除操作
-const handleDelete = async (ids: string[]) => {
-  try {
-    await useMessageBox().confirm('此操作将永久删除');
-  } catch {
-    return;
-  }
-
-  try {
-    await delObjs(ids);
-    getDataList();
-    useMessage().success('删除成功');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
-};
-
-// 推送给目标用户
-const handleSend = async (id: string) => {
-  try {
-    await useMessageBox().confirm('此操作将消息推送给目标用户');
-  } catch {
-    return;
-  }
-
-  try {
-    await sendObj({id: id});
-    getDataList();
-    useMessage().success('推送成功');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
-};
 </script>

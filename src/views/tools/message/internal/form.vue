@@ -115,7 +115,7 @@ const openDialog = (id: string) => {
   // 获取sysMessage信息
   if (id) {
     form.id = id
-    getsysMessageData(id)
+    getSysMessageData(id)
   }
 };
 
@@ -140,7 +140,7 @@ const onSubmit = async () => {
 
 
 // 初始化表单数据
-const getsysMessageData = (id: string) => {
+const getSysMessageData = (id: string) => {
   // 获取数据
   loading.value = true
   getObj(id).then((res: any) => {
