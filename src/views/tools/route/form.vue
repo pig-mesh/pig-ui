@@ -2,6 +2,14 @@
   <el-drawer title="路由配置" size="40%" v-model="visible">
     <el-tabs v-model="activeName">
       <el-tab-pane label="基础模式" name="first">
+        <template #label>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M6 13.5V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m12-3V3.75m0 9.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 3.75V16.5m-6-9V3.75m0 3.75a1.5 1.5 0 0 1 0 3m0-3a1.5 1.5 0 0 0 0 3m0 9.75V10.5"/>
+          </svg>
+          基础模式
+        </template>
         <el-form :model="formData" :rules="dataRules" label-width="100px" ref="dataFormRef" v-loading="loading">
           <el-form-item label="路由ID" prop="routeId">
             <el-input clearable v-model="formData.routeId"></el-input>
@@ -65,6 +73,14 @@
         </el-form>
       </el-tab-pane>
       <el-tab-pane label="编码模式" name="second">
+        <template #label>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+               stroke="currentColor" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round"
+                  d="m6.75 7.5 3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0 0 21 18V6a2.25 2.25 0 0 0-2.25-2.25H5.25A2.25 2.25 0 0 0 3 6v12a2.25 2.25 0 0 0 2.25 2.25Z"/>
+          </svg>
+          编码模式
+        </template>
         <json-editor
             ref="jsonEditorRef"
             v-model="jsonData"
@@ -80,9 +96,10 @@
 </template>
 
 <script lang="ts" name="routeForm" setup>
+// @ts-ignore
 import JsonEditor from '@axolo/json-editor-vue'
 
-import {addObj, fetchList,validateExist} from '/@/api/admin/route';
+import {addObj, fetchList, validateExist} from '/@/api/admin/route';
 import {useI18n} from 'vue-i18n';
 import {useMessage} from '/@/hooks/message';
 import {rule} from "/@/utils/validate";
