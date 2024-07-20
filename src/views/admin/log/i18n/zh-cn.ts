@@ -17,5 +17,6 @@ export default {
         inputLogTypeTip: '请选择类型',
         inputStartPlaceholderTip: '开始时间',
         inputEndPlaceholderTip: '结束时间',
+        result: '结果',
     },
 };

@@ -17,5 +17,6 @@ export default {
         inputLogTypeTip: 'select logType',
         inputStartPlaceholderTip: 'Start Time',
         inputEndPlaceholderTip: 'End TIme',
+        result: 'result'
     },
 };
