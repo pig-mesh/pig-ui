@@ -72,7 +72,7 @@
           </p>
         </div>
         <div class="mt-4 flex" v-if="data.exception">
-          <span class="text-green-400">{{ $t('syslog.exception') }}: </span>
+          <span class="text-green-400">{{ data.logType === '0' ? $t('syslog.result') : $t('syslog.exception') }}: </span>
           <p class="flex-1 typing items-center pl-2 whitespace-normal overflow-hidden break-all">
             {{ data.exception }}
             <br>
