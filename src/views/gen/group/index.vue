@@ -56,7 +56,7 @@
 				<el-table-column :label="t('group.groupName')" prop="groupName" show-overflow-tooltip />
 				<el-table-column :label="t('group.groupDesc')" prop="groupDesc" show-overflow-tooltip />
 				<el-table-column :label="t('group.createTime')" prop="createTime" show-overflow-tooltip />
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
 						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_group_edit'"
 							>{{ $t('common.editBtn') }}
