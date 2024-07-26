@@ -52,7 +52,7 @@
                 {{ row.rangeShow && row.rangeShow.length > 0 ? row.rangeShow : $t('flow.allUser') }}
               </template>
             </el-table-column>
-            <el-table-column :label="$t('common.action')" width="200">
+            <el-table-column :label="$t('common.action')" width="300">
               <template #default="{ row }">
                 <el-tooltip effect="dark" content="收藏至首页导航" placement="top" v-if="showFavorite(row)">
                   <el-button text @click="toIndex(row)" :icon="Star" circle/>
@@ -63,8 +63,7 @@
                 <el-tooltip effect="dark" content="复制" placement="top">
                   <el-button text @click="toCopyFlow(row)" :icon="DocumentCopy" circle/>
                 </el-tooltip>
-
-                <el-tooltip v-if="!row.stop" effect="dark" content="停用" placement="top">
+                <el-tooltip v-if="row.stop === '0'" effect="dark" content="停用" placement="top">
                   <el-button @click="showDisableConfirm(row)" text :icon="Hide" circle/>
                 </el-tooltip>
 
