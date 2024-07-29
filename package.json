@@ -27,7 +27,7 @@
 		"js-cookie": "3.0.5",
 		"mitt": "3.0.1",
 		"nprogress": "0.2.0",
-		"pinia": "2.1.7",
+		"pinia": "2.2.0",
 		"postcss": "8.4.40",
 		"qs": "6.12.3",
 		"screenfull": "6.0.2",
