@@ -37,7 +37,7 @@
 		"tailwindcss": "3.4.7",
 		"vue": "3.4.35",
 		"vue-clipboard3": "2.0.0",
-		"vue-echarts": "6.7.3",
+		"vue-echarts": "7.0.1",
 		"vue-i18n": "9.13.1",
 		"vue-router": "4.4.2",
 		"vuedraggable": "4.1.0"
