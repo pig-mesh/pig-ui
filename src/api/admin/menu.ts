@@ -92,6 +92,12 @@ export function validateSplice(rule: any, value: any, callback: any, parentId: s
         }
 
         const parentPath = result.path;
+
+        // 如果路径中包含 超过 三个 / 或以上， 则跳过检测
+        if (value.split('/').length > 3) {
+            return callback();
+        }
+
         //校验新增的路径 必须符合拼接 一级 /a  二级 /a/b 三级 /a/b/c
         value.includes(parentPath) ? callback() : callback(new Error('路径错误，应符合层级标准。 一级/a | 二级/a/b | 三级/a/b/c'));
     });
