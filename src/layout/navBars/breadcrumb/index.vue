@@ -68,17 +68,32 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 };
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
-	const currentPathSplit = path.split('/');
-	let currentData: MittMenu = { children: [] };
-	filterRoutesFun(routesList.value).map((v: RouteItem, k: number) => {
-		if (v.path === `/${currentPathSplit[1]}`) {
-			v['k'] = k;
-			currentData['item'] = { ...v };
-			currentData['children'] = [{ ...v }];
-			if (v.children) currentData['children'] = v.children;
-		}
-	});
-	return currentData;
+  let currentData: MittMenu = { children: [] };
+  const route = searchParent(routesList.value, path as string) as any;
+  filterRoutesFun(routesList.value).map((v: RouteItem, k: number) => {
+    if (v.path === route!.path) {
+      v['k'] = k;
+      currentData['item'] = { ...v };
+      currentData['children'] = [{ ...v }];
+      if (v.children) currentData['children'] = v.children;
+    }
+  });
+  return currentData;
+};
+// 使用递归查询对应的父级路由
+const searchParent = (routesList: any, path: string) => {
+  let route = undefined;
+  routesList.forEach((item) => {
+    if (item.path === path) {
+      route = item;
+      return;
+    }
+    if (item.children && searchParent(item.children, path)) {
+      route = item;
+      return;
+    }
+  });
+  return route;
 };
 // 页面加载时
 onMounted(() => {
