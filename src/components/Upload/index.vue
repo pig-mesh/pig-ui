@@ -179,7 +179,6 @@ function handleUploadSuccess(res: any, file: any) {
 const uploadedSuccessfully = () => {
   if (number.value > 0 && uploadList.value.length === number.value) {
     fileList.value = fileList.value.filter((f) => f.url !== undefined).concat(uploadList.value);
-    uploadList.value = [];
     number.value = 0;
     emit('change', listToString(fileList.value), fileList.value);
     emit('update:modelValue', listToString(fileList.value));
@@ -224,17 +223,7 @@ watch(
     () => props.modelValue,
     (val) => {
       if (val) {
-        let temp = 1;
-        // 首先将值转为数组
-        const list = Array.isArray(val) ? val : props?.modelValue?.split(',');
-        // 然后将数组转为对象数组
-        fileList.value = list.map((item) => {
-          if (typeof item === 'string') {
-            item = {name: item, url: item};
-          }
-          item.uid = item.uid || new Date().getTime() + temp++;
-          return item;
-        });
+        fileList.value = uploadList.value
       } else {
         fileList.value = [];
         return [];
