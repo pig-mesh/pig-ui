@@ -1,5 +1,4 @@
-import {nextTick, defineAsyncComponent} from 'vue';
-import type {App} from 'vue';
+import {nextTick} from 'vue';
 import router from '/@/router/index';
 import pinia from '/@/stores/index';
 import {storeToRefs} from 'pinia';
@@ -9,7 +8,6 @@ import {Local} from '/@/utils/storage';
 import {verifyUrl} from '/@/utils/toolsValidate';
 import request from '/@/utils/request';
 import {useMessage} from '/@/hooks/message';
-// @ts-ignore
 import * as CryptoJS from 'crypto-js';
 import {sm4} from 'sm-crypto'
 import {validateNull} from './validate';
