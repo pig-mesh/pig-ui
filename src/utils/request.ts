@@ -1,4 +1,4 @@
-import axios, {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import axios, {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
@@ -25,7 +25,8 @@ const service: AxiosInstance = axios.create({
  * @param config AxiosRequestConfig对象，包含请求配置信息
  */
 service.interceptors.request.use(
-	(config: AxiosRequestConfig) => {
+
+	(config: InternalAxiosRequestConfig) => {
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
@@ -64,10 +65,6 @@ service.interceptors.request.use(
  * @returns 如果响应成功，则返回响应的data属性；否则，抛出错误或者执行其他操作
  */
 const handleResponse = (response: AxiosResponse<any>) => {
-	if (response.data.code === 1) {
-		throw response.data;
-	}
-
 	// 针对密文返回解密
 	if (response.data.encryption) {
 		const originData = JSON.parse(other.decryption(response.data.encryption, import.meta.env.VITE_PWD_ENC_KEY));
@@ -93,6 +90,15 @@ service.interceptors.response.use(handleResponse, (error) => {
 			.then(() => {
 				Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/'; // 去登录页
+				return;
+			});
+	}
+
+	if (status === 426) {
+		useMessageBox()
+			.confirm('租户状态已过期，请联系管理员')
+			.then(() => {
+				Session.clear(); // 清除浏览器全部临时缓存
 				return;
 			});
 	}
