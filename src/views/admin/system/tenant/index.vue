@@ -104,6 +104,9 @@
                         v-auth="'sys_systenant_del'"
                     >{{ $t('common.delBtn') }}
                     </el-button>
+                    <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+                      {{ $t('common.refreshCacheBtn') }}
+                    </el-button>
                   </div>
                 </div>
               </div>
@@ -135,7 +138,7 @@
 
 <script lang="ts" name="systemTenant" setup>
 import {BasicTableProps, useTable} from '/@/hooks/table';
-import {delObj, fetchPage} from '/@/api/admin/tenant';
+import {delObj, fetchPage,fetchList} from '/@/api/admin/tenant';
 import {useMessage, useMessageBox} from '/@/hooks/message';
 import {useI18n} from 'vue-i18n';
 import {useDict} from '/@/hooks/dict';
@@ -178,21 +181,12 @@ const resetQuery = () => {
   getDataList();
 };
 
-// 是否可以多选
-const handleSelectable = (row: any) => {
-  return row.id !== '1';
-};
 
 // 导出excel
 const exportExcel = () => {
   downBlobFile('/admin/tenant/export', Object.assign(state.queryForm, {ids: selectObjs}), 'tenant.xlsx');
 };
 
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
-  selectObjs.value = objs.map(({id}) => id);
-  multiple.value = !objs.length;
-};
 
 // 删除操作
 const handleDelete = async (ids: string[]) => {
@@ -208,6 +202,15 @@ const handleDelete = async (ids: string[]) => {
     useMessage().success(t('common.delSuccessText'));
   } catch (err: any) {
     useMessage().error(err.msg);
+  } finally {
+    handleRefreshCache();
   }
+};
+
+//刷新缓存
+const handleRefreshCache = () => {
+  fetchList().then(() => {
+    useMessage().success('同步成功');
+  });
 };
 </script>
