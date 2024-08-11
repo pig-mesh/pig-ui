@@ -71,7 +71,7 @@
 import { validateTenantCode, validateTenantName } from '/@/api/admin/tenant';
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { getObj, addObj, putObj, treemenu } from '/@/api/admin/tenant';
+import { getObj, addObj, putObj, treemenu,fetchList } from '/@/api/admin/tenant';
 import { useI18n } from 'vue-i18n';
 import other from '/@/utils/other';
 import { CheckboxValueType } from 'element-plus';
@@ -198,6 +198,7 @@ const onSubmit = async () => {
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	} finally {
+    await fetchList()
 		loading.value = false;
 	}
 };
