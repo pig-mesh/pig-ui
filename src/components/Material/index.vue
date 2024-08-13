@@ -252,7 +252,7 @@
     <preview v-model="showPreview" :url="previewUrl" :type="type" :fileName="fileName"/>
   </div>
 
-  <el-dialog :title="$t('material.uploadFileTip')" v-model="visibleUpload" :close-on-click-modal="false" draggable>
+  <el-dialog :title="$t('material.uploadFileTip')" v-model="visibleUpload" :destroy-on-close="true" draggable>
     <upload-file @change="refresh" v-if="props.type === 'image'" :data="{ groupId: cateId, type: typeValue }"
                  :fileType="['png', 'jpg', 'jpeg']"/>
 
