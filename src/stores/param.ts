@@ -5,9 +5,9 @@ import {defineStore} from 'pinia';
  * @function
  * @returns {DictionaryStore} - 返回创建的字典存储对象
  */
-export const dict = defineStore('dict', {
+export const param = defineStore('param', {
     state: () => ({
-        dict: [] as any[],
+        param: [] as any[],
     }),
     actions: {
         /**
@@ -16,12 +16,12 @@ export const dict = defineStore('dict', {
          * @param {string} key - 需要获取的键
          * @returns {Object|null} - 返回指定键对应的值，如果找不到则返回 null
          */
-        getDict(key: String) {
+        getParam(key: String) {
             try {
-                const item = this.dict.find((item) => item.key === key);
-                return item ? item.value : null;
+                const item = this.param.find((item) => item.key === key);
+                return item ? item.value : undefined;
             } catch (e) {
-                return null;
+                return undefined;
             }
         },
 
@@ -31,11 +31,11 @@ export const dict = defineStore('dict', {
          * @param {string} key - 需要设置的键
          * @param {Object} value - 需要设置的值
          */
-        setDict(key: String, value: Object) {
+        setParam(key: String, value: Object) {
             if (!key || typeof key !== 'string') {
                 return;
             }
-            this.dict.push({key, value});
+            this.param.push({key, value});
         },
 
         /**
@@ -44,11 +44,11 @@ export const dict = defineStore('dict', {
          * @param {string} key - 需要删除的键
          * @returns {boolean} - 返回删除操作是否成功
          */
-        removeDict(key: String) {
+        removeParam(key: String) {
             try {
-                const index = this.dict.findIndex((item) => item.key === key);
+                const index = this.param.findIndex((item) => item.key === key);
                 if (index !== -1) {
-                    this.dict.splice(index, 1);
+                    this.param.splice(index, 1);
                     return true;
                 }
             } catch (e) {
