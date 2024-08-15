@@ -21,6 +21,10 @@
             {{ $t('common.addBtn') }}
           </el-button>
 
+          <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+            {{ $t('common.refreshCacheBtn') }}
+          </el-button>
+
           <el-button
               plain
               :disabled="multiple"
@@ -33,9 +37,7 @@
             {{ $t('common.delBtn') }}
           </el-button>
 
-          <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
-            {{ $t('common.refreshCacheBtn') }}
-          </el-button>
+
 
           <right-toolbar
               :export="'sys_systenant_export'"
