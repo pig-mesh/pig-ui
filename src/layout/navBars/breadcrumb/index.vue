@@ -8,8 +8,8 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbIndex">
-import { useRoutesList } from '/@/stores/routesList';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import {useRoutesList} from '/@/stores/routesList';
+import {useThemeConfig} from '/@/stores/themeConfig';
 import mittBus from '/@/utils/mitt';
 
 // 引入组件
@@ -68,18 +68,23 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 };
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
-	const currentPathSplit = path.split('/');
-	let currentData: MittMenu = { children: [] };
-	filterRoutesFun(routesList.value).map((v: RouteItem, k: number) => {
-		if (v.path === `/${currentPathSplit[1]}`) {
-			v['k'] = k;
-			currentData['item'] = { ...v };
-			currentData['children'] = [{ ...v }];
-			if (v.children) currentData['children'] = v.children;
-		}
-	});
-	return currentData;
+  return searchRoot(routesList.value, path);
 };
+
+// 使用递归查询对应的根级路由
+const searchRoot = (routesList: any, path: string) => {
+  for (let i = 0; i < routesList.length; i++) {
+    let item = routesList[i];
+    if (item.path === path) {
+      return item;
+    }
+    if (item.children && searchRoot(item.children, path)) {
+      return item;
+    }
+  }
+  return;
+};
+
 // 页面加载时
 onMounted(() => {
 	setFilterRoutes();
