@@ -33,6 +33,10 @@
             {{ $t('common.delBtn') }}
           </el-button>
 
+          <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
+            {{ $t('common.refreshCacheBtn') }}
+          </el-button>
+
           <right-toolbar
               :export="'sys_systenant_export'"
               @exportExcel="exportExcel"
@@ -103,9 +107,6 @@
                         type="primary"
                         v-auth="'sys_systenant_del'"
                     >{{ $t('common.delBtn') }}
-                    </el-button>
-                    <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
-                      {{ $t('common.refreshCacheBtn') }}
                     </el-button>
                   </div>
                 </div>
