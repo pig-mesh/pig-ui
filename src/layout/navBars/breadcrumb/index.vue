@@ -56,45 +56,46 @@ const delClassicChildren = <T extends ChilType>(arr: T[]): T[] => {
 	});
 	return arr;
 };
+
 // 路由过滤递归函数
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
-	return arr
-		.filter((item: T) => !item.meta?.isHide)
-		.map((item: T) => {
-			item = Object.assign({}, item);
-			if (item.children) item.children = filterRoutesFun(item.children);
-			return item;
-		});
+  return arr.reduce<T[]>((acc, item) => {
+    if (!item.meta?.isHide) {
+      const newItem = { ...item };
+      if (newItem.children) newItem.children = filterRoutesFun(newItem.children);
+      acc.push(newItem);
+    }
+    return acc;
+  }, []);
 };
+
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
   let currentData: MittMenu = { children: [] };
-  const route = searchParent(routesList.value, path as string) as any;
-  filterRoutesFun(routesList.value).map((v: RouteItem, k: number) => {
-    if (v.path === route!.path) {
-      v['k'] = k;
-      currentData['item'] = { ...v };
-      currentData['children'] = [{ ...v }];
-      if (v.children) currentData['children'] = v.children;
+  const route = searchParent(routesList.value, path as string);
+  if (route) {
+    const filteredRoutes = filterRoutesFun(routesList.value);
+    const matchedRoute = filteredRoutes.find(v => v.path === route.path);
+    if (matchedRoute) {
+      currentData['item'] = { ...matchedRoute };
+      currentData['children'] = matchedRoute.children || [];
     }
-  });
+  }
   return currentData;
 };
+
 // 使用递归查询对应的父级路由
 const searchParent = (routesList: any, path: string) => {
-  let route = undefined;
-  routesList.forEach((item) => {
-    if (item.path === path) {
-      route = item;
-      return;
+  for (const item of routesList) {
+    if (item.path === path) return item;
+    if (item.children) {
+      const parent = searchParent(item.children, path);
+      if (parent) return item;
     }
-    if (item.children && searchParent(item.children, path)) {
-      route = item;
-      return;
-    }
-  });
-  return route;
+  }
+  return undefined;
 };
+
 // 页面加载时
 onMounted(() => {
 	setFilterRoutes();
