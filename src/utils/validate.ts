@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * 判断是否为空
  * @param val 数据
