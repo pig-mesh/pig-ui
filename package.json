@@ -38,7 +38,7 @@
 		"vue": "3.4.37",
 		"vue-clipboard3": "2.0.0",
 		"vue-echarts": "6.7.3",
-		"vue-i18n": "9.13.1",
+		"vue-i18n": "9.14.0",
 		"vue-router": "4.4.3",
 		"vuedraggable": "4.1.0"
 	},
