@@ -1,10 +1,10 @@
 <template>
-	<div class="layout-navbars-breadcrumb-index">
-		<Logo v-if="setIsShowLogo" />
-		<Breadcrumb />
-		<Horizontal :menuList="state.menuList" v-if="isLayoutTransverse" />
-		<User />
-	</div>
+  <div class="layout-navbars-breadcrumb-index">
+    <Logo v-if="setIsShowLogo" />
+    <Breadcrumb />
+    <Horizontal :menuList="state.menuList" v-if="isLayoutTransverse" />
+    <User />
+  </div>
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbIndex">
@@ -25,80 +25,96 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 const { routesList } = storeToRefs(stores);
 const route = useRoute();
 const state = reactive({
-	menuList: [] as RouteItems,
+  menuList: [] as RouteItems,
 });
 
 // 设置 logo 显示/隐藏
 const setIsShowLogo = computed(() => {
-	let { isShowLogo, layout } = themeConfig.value;
-	return (isShowLogo && layout === 'classic') || (isShowLogo && layout === 'transverse');
+  let { isShowLogo, layout } = themeConfig.value;
+  return (isShowLogo && layout === 'classic') || (isShowLogo && layout === 'transverse');
 });
 // 设置是否显示横向导航菜单
 const isLayoutTransverse = computed(() => {
-	let { layout, isClassicSplitMenu } = themeConfig.value;
-	return layout === 'transverse' || (isClassicSplitMenu && layout === 'classic');
+  let { layout, isClassicSplitMenu } = themeConfig.value;
+  return layout === 'transverse' || (isClassicSplitMenu && layout === 'classic');
 });
 // 设置/过滤路由（非静态路由/是否显示在菜单中）
 const setFilterRoutes = () => {
-	let { layout, isClassicSplitMenu } = themeConfig.value;
-	if (layout === 'classic' && isClassicSplitMenu) {
-		state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
-		const resData = setSendClassicChildren(route.path);
-		mittBus.emit('setSendClassicChildren', resData);
-	} else {
-		state.menuList = filterRoutesFun(routesList.value);
-	}
+  let { layout, isClassicSplitMenu } = themeConfig.value;
+  if (layout === 'classic' && isClassicSplitMenu) {
+    state.menuList = delClassicChildren(filterRoutesFun(routesList.value));
+    const resData = setSendClassicChildren(route.path);
+    mittBus.emit('setSendClassicChildren', resData);
+  } else {
+    state.menuList = filterRoutesFun(routesList.value);
+  }
 };
 // 设置了分割菜单时，删除底下 children
 const delClassicChildren = <T extends ChilType>(arr: T[]): T[] => {
-	arr.map((v: T) => {
-		if (v.children) delete v.children;
-	});
-	return arr;
+  arr.map((v: T) => {
+    if (v.children) delete v.children;
+  });
+  return arr;
 };
+
 // 路由过滤递归函数
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
-	return arr
-		.filter((item: T) => !item.meta?.isHide)
-		.map((item: T) => {
-			item = Object.assign({}, item);
-			if (item.children) item.children = filterRoutesFun(item.children);
-			return item;
-		});
+  return arr.reduce<T[]>((acc, item) => {
+    if (!item.meta?.isHide) {
+      const newItem = { ...item };
+      if (newItem.children) newItem.children = filterRoutesFun(newItem.children);
+      acc.push(newItem);
+    }
+    return acc;
+  }, []);
 };
+
 // 传送当前子级数据到菜单中
 const setSendClassicChildren = (path: string) => {
-	const currentPathSplit = path.split('/');
-	let currentData: MittMenu = { children: [] };
-	filterRoutesFun(routesList.value).map((v: RouteItem, k: number) => {
-		if (v.path === `/${currentPathSplit[1]}`) {
-			v['k'] = k;
-			currentData['item'] = { ...v };
-			currentData['children'] = [{ ...v }];
-			if (v.children) currentData['children'] = v.children;
-		}
-	});
-	return currentData;
+  let currentData: MittMenu = { children: [] };
+  const route = searchParent(routesList.value, path as string);
+  if (route) {
+    const filteredRoutes = filterRoutesFun(routesList.value);
+    const matchedRoute = filteredRoutes.find(v => v.path === route.path);
+    if (matchedRoute) {
+      currentData['item'] = { ...matchedRoute };
+      currentData['children'] = matchedRoute.children || [];
+    }
+  }
+  return currentData;
 };
+
+// 使用递归查询对应的父级路由
+const searchParent = (routesList: any, path: string) => {
+  for (const item of routesList) {
+    if (item.path === path) return item;
+    if (item.children) {
+      const parent = searchParent(item.children, path);
+      if (parent) return item;
+    }
+  }
+  return undefined;
+};
+
 // 页面加载时
 onMounted(() => {
-	setFilterRoutes();
-	mittBus.on('getBreadcrumbIndexSetFilterRoutes', () => {
-		setFilterRoutes();
-	});
+  setFilterRoutes();
+  mittBus.on('getBreadcrumbIndexSetFilterRoutes', () => {
+    setFilterRoutes();
+  });
 });
 // 页面卸载时
 onUnmounted(() => {
-	mittBus.off('getBreadcrumbIndexSetFilterRoutes', () => {});
+  mittBus.off('getBreadcrumbIndexSetFilterRoutes', () => {});
 });
 </script>
 
 <style scoped lang="scss">
 .layout-navbars-breadcrumb-index {
-	height: 50px;
-	display: flex;
-	align-items: center;
-	background: var(--next-bg-topBar);
-	border-bottom: 1px solid var(--next-border-color-light);
+  height: 50px;
+  display: flex;
+  align-items: center;
+  background: var(--next-bg-topBar);
+  border-bottom: 1px solid var(--next-border-color-light);
 }
 </style>
