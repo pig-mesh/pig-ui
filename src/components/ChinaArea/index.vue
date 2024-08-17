@@ -82,7 +82,7 @@ const selectedOptions = computed({
 
 // 处理change事件的函数
 const handleChange = (value: String[]) => {
-  emit('change', value.join(','));
+  emit('change', value?.join(','));
 };
 
 // 初始化数据
