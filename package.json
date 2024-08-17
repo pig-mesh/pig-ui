@@ -16,7 +16,7 @@
 		"@element-plus/icons-vue": "2.3.1",
 		"@wangeditor/editor": "5.1.23",
 		"@wangeditor/editor-for-vue": "5.1.12",
-		"autoprefixer": "10.4.19",
+		"autoprefixer": "10.4.20",
 		"axios": "1.7.4",
 		"china-area-data": "^5.0.1",
 		"codemirror": "5.65.17",
