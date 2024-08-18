@@ -21,7 +21,7 @@
       </el-col>
       <el-col :span="1"></el-col>
       <el-col :span="8">
-        <el-button v-waves  @click="handleSendCode" :loading="msg.msgKey">
+        <el-button v-waves @click="handleSendCode" :loading="msg.msgKey">
           <span class="font-semibold text-xs text-gray-500">
           {{
               msg.msgText
@@ -32,7 +32,7 @@
     </el-form-item>
 
     <el-form-item class="login-animation3 mt-4">
-      <el-button type="primary"  class="login-content-submit rounded-lg" v-waves @click="handleLogin"
+      <el-button type="primary" class="login-content-submit rounded-lg" v-waves @click="handleLogin"
                  :loading="loading">
         <span class="tracking-wide font-semibold">{{ $t('mobile.btnText') }}</span>
       </el-button>
@@ -43,7 +43,8 @@
         <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.PASSWORD)">
           密码登录
         </a>
-        <a href="#" v-if="autoRegisterEnable" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.REGISTER)">
+        <a href="#" v-if="autoRegisterEnable" class="ml-2 text-primary hover:text-blue-600"
+           @click="emit('change',LoginTypeEnum.REGISTER)">
           注册账号
         </a>
       </div>
@@ -61,7 +62,7 @@ import {useI18n} from 'vue-i18n';
 import {ref} from "vue";
 
 const {t} = useI18n();
-const emit = defineEmits(['signInSuccess','change']);
+const emit = defineEmits(['signInSuccess', 'change']);
 
 // 创建一个 ref 对象，并将其初始化为 null
 const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
@@ -94,12 +95,12 @@ const handleSendCode = async () => {
   });
   if (!valid) return;
 
-  const response = await sendMobileCode(loginForm.mobile);
-  if (response.data) {
+  const {msg, data} = await sendMobileCode(loginForm.mobile);
+  if (data !== false) {
     useMessage().success('验证码发送成功');
     timeCacl();
   } else {
-    useMessage().error(response.msg);
+    useMessage().error(msg);
   }
 };
 
