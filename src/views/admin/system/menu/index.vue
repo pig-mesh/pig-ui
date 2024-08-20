@@ -19,7 +19,6 @@
 					<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<!-- <el-button @click="handleExpand"> {{ $t('common.expandBtn') }} </el-button> -->
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml10"
@@ -107,7 +106,6 @@ const tableRef = ref();
 const menuDialogRef = ref();
 const showSearch = ref(true);
 const queryRef = ref();
-const isExpand = ref(false);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
@@ -148,21 +146,6 @@ const deleteMenuDisabled = (row: any) => {
 	return (row.children || []).length > 0;
 };
 
-// 展开折叠树
-const handleExpand = async () => {
-	isExpand.value = !isExpand.value;
-	const dataList = await pageList();
-	toggleExpand(dataList.data, isExpand.value);
-};
-
-const toggleExpand = (children: any[], unfold = true) => {
-	for (const key in children) {
-		tableRef.value?.toggleRowExpansion(children[key], unfold);
-		if (children[key].children) {
-			toggleExpand(children[key].children!, unfold);
-		}
-	}
-};
 
 // 搜索事件
 const query = () => {
