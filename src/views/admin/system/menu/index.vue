@@ -19,7 +19,7 @@
 					<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }} </el-button>
+					<!-- <el-button @click="handleExpand"> {{ $t('common.expandBtn') }} </el-button> -->
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml10"
@@ -30,7 +30,9 @@
 			</el-row>
 			<el-table
 				ref="tableRef"
-				:data="state.dataList"
+				:data="tableList"
+				lazy
+				:load="load"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 				row-key="path"
 				style="width: 100%"
@@ -109,12 +111,28 @@ const isExpand = ref(false);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
+		parentId: -1,
 		menuName: '',
 	},
 	isPage: false,
 });
 
 const { getDataList, tableStyle } = useTable(state);
+
+// 根据类型判断是否有子节点
+const  setHasChildren = (arr:any[]) => {  
+	arr.forEach(item => {  
+		// 添加 hasChildren 属性  
+		item.hasChildren = item.menuType !== '1';
+	});  
+}
+const tableList = computed(() => {
+	const list = state.dataList; 
+	if (Array.isArray(list)) {  
+			setHasChildren(list);  
+	}  
+	return list;  
+})
 
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type?: string, row?: any) => {
@@ -158,6 +176,19 @@ const resetQuery = () => {
 	state.dataList = [];
 	getDataList();
 };
+
+const load = (row:any,treeNode: unknown,resolve: (date:any[]) => void) => {
+	const param = {
+		parentId: row.id,
+	}
+	pageList(param).then(res => {
+		const childrenList = res.data
+		if (Array.isArray(childrenList)) {  
+			setHasChildren(childrenList);  
+		}
+		resolve(childrenList)
+	})
+}
 
 // 删除操作
 const handleDelete = async (row: any) => {
