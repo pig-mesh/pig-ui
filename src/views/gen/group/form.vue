@@ -27,6 +27,7 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/gen/group';
 import { useI18n } from 'vue-i18n';
 import { list as templateList } from '/@/api/gen/template';
+import {rule} from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
@@ -49,7 +50,7 @@ const form = reactive({
 
 // 定义校验规则
 const dataRules = ref({
-	groupName: [{ required: true, message: '分组名称不能为空', trigger: 'blur' }],
+	groupName: [{validator: rule.overLength, trigger: 'blur'},{ required: true, message: '分组名称不能为空', trigger: 'blur' }],
 	templateId: [{ required: true, message: '模板不能为空', trigger: 'blur' }],
 });
 

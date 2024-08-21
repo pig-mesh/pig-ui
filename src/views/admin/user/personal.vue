@@ -131,9 +131,9 @@ const ruleForm = reactive({
     {required: true, message: '手机号不能为空', trigger: 'blur'},
     {validator: rule.validatePhone, trigger: 'blur'},
   ],
-  nickname: [{required: true, message: '昵称不能为空', trigger: 'blur'}],
-  email: [{required: true, message: '邮箱不能为空', trigger: 'blur'}],
-  name: [{required: true, message: '姓名不能为空', trigger: 'blur'}],
+  nickname: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '昵称不能为空', trigger: 'blur'}],
+  email: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '邮箱不能为空', trigger: 'blur'}],
+  name: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '姓名不能为空', trigger: 'blur'}],
 });
 const validatorPassword2 = (rule: any, value: any, callback: any) => {
   if (value !== passwordFormData.newpassword1) {
@@ -151,7 +151,7 @@ const validatorScore = (rule: any, value: any, callback: any) => {
 };
 
 const passwordRuleForm = reactive({
-  password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+  password: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '密码不能为空', trigger: 'blur'}],
   newpassword1: [
     {
       min: 6,

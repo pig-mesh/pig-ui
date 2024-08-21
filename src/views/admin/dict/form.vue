@@ -60,6 +60,7 @@ const dataForm = reactive({
 
 const dataRules = reactive({
   dictType: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '类型不能为空', trigger: 'blur'},
     {validator: rule.validatorNameCn, trigger: 'blur'},
     {
@@ -70,7 +71,7 @@ const dataRules = reactive({
     },
   ],
   systemFlag: [{required: true, message: '字典类型不能为空', trigger: 'blur'}],
-  description: [{required: true, message: '描述不能为空', trigger: 'blur'}],
+  description: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '描述不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗
