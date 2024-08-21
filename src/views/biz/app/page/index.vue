@@ -42,25 +42,22 @@ const generatePageData = (widgetNames: string[]) => {
 const menus: Record<
 	string,
 	{
-		id: number;
+    pageType: number;
 		name: string;
 		pageData: any[];
 	}
 > = reactive({
 	[pagesTypeEnum.HOME]: {
-		id: 1,
 		pageType: 1,
 		name: '首页装修',
 		pageData: generatePageData(['search', 'banner', 'nav', 'news']),
 	},
 	[pagesTypeEnum.USER]: {
-		id: 2,
 		pageType: 2,
 		name: '个人中心',
 		pageData: generatePageData(['user-info', 'my-service', 'user-banner']),
 	},
 	[pagesTypeEnum.SERVICE]: {
-		id: 3,
 		pageType: 3,
 		name: '客服设置',
 		pageData: generatePageData(['customer-service']),
@@ -78,7 +75,7 @@ const getSelectWidget = computed(() => {
 
 const getData = async () => {
 	const { data } = await getObj(activeMenu.value);
-	menus[String(data.id)].pageData = JSON.parse(data.pageData);
+	menus[String(data.pageType)].pageData = JSON.parse(data.pageData);
 };
 
 const setData = async () => {
