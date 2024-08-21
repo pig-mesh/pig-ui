@@ -72,7 +72,7 @@
 import {useI18n} from 'vue-i18n';
 import {info, pageList, putObj, addObj} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
-
+import {rule} from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const {t} = useI18n();
@@ -106,11 +106,11 @@ const state = reactive({
 const dataRules = reactive({
   menType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
   parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
-  name: [{required: true, message: '菜单不能为空', trigger: 'blur'}],
-  path: [{required: true, message: '路径不能为空', trigger: 'blur'}],
+  name: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '菜单不能为空', trigger: 'blur'}],
+  path: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '路径不能为空', trigger: 'blur'}],
   icon: [{required: true, message: '图标不能为空', trigger: 'blur'}],
-  permission: [{required: true, message: '权限代码不能为空', trigger: 'blur'}],
-  sortOrder: [{required: true, message: '排序不能为空', trigger: 'blur'}],
+  permission: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '权限代码不能为空', trigger: 'blur'}],
+  sortOrder: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '排序不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

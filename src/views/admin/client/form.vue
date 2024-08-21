@@ -100,6 +100,7 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
   clientId: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '编号不能为空', trigger: 'blur'},
     {validator: rule.validatorLowercase, trigger: 'blur'},
     {
@@ -110,21 +111,24 @@ const dataRules = ref({
     },
   ],
   clientSecret: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '密钥不能为空', trigger: 'blur'},
     {validator: rule.validatorLower, trigger: 'blur'},
   ],
-  scope: [{required: true, message: '域不能为空', trigger: 'blur'}],
+  scope: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '域不能为空', trigger: 'blur'}],
   authorizedGrantTypes: [{required: true, message: '授权模式不能为空', trigger: 'blur'}],
   accessTokenValidity: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '令牌时效不能为空', trigger: 'blur'},
     {type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur'},
   ],
   refreshTokenValidity: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '刷新时效不能为空', trigger: 'blur'},
     {type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur'},
   ],
   autoapprove: [{required: true, message: '自动放行不能为空', trigger: 'blur'}],
-  webServerRedirectUri: [{required: true, message: '回调地址不能为空', trigger: 'blur'}],
+  webServerRedirectUri: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '回调地址不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

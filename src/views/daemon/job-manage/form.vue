@@ -84,7 +84,7 @@ import {useDict} from '/@/hooks/dict';
 import {useMessage} from '/@/hooks/message';
 import {addObj, getObj, putObj} from '/@/api/daemon/job';
 import {useI18n} from 'vue-i18n';
-
+import {rule} from '/@/utils/validate';
 const emit = defineEmits(['refresh']);
 const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'));
 
@@ -122,14 +122,14 @@ const popoverVis = (bol: boolean) => {
 const popoverVisible = ref(false);
 // 定义校验规则
 const dataRules = reactive({
-  jobName: [{required: true, message: '任务名称不能为空', trigger: 'blur'}],
-  jobGroup: [{required: true, message: '任务组名不能为空', trigger: 'blur'}],
+  jobName: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '任务名称不能为空', trigger: 'blur'}],
+  jobGroup: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '任务组名不能为空', trigger: 'blur'}],
   jobType: [{required: true, message: '任务类型不能为空', trigger: 'blur'}],
   cronExpression: [{required: true, message: 'cron不能为空', trigger: 'blur'}],
   misfirePolicy: [{required: true, message: '策略不能为空', trigger: 'blur'}],
-  executePath: [{required: true, message: '执行路径不能为空', trigger: 'blur'}],
-  className: [{required: true, message: '执行文件不能为空', trigger: 'blur'}],
-  methodName: [{required: true, message: '执行方法不能为空', trigger: 'blur'}],
+  executePath: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行路径不能为空', trigger: 'blur'}],
+  className: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行文件不能为空', trigger: 'blur'}],
+  methodName: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行方法不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

@@ -63,7 +63,7 @@ import {reactive, ref, defineEmits} from 'vue';
 import {useUserInfo} from '/@/stores/userInfo';
 import {useI18n} from 'vue-i18n';
 import {generateUUID} from "/@/utils/other";
-
+import {rule} from '/@/utils/validate';
 // 使用国际化插件
 const {t} = useI18n();
 
@@ -83,9 +83,9 @@ const state = reactive({
 });
 
 const loginRules = reactive({
-  username: [{required: true, trigger: 'blur', message: t('password.accountPlaceholder1')}], // 用户名校验规则
-  password: [{required: true, trigger: 'blur', message: t('password.accountPlaceholder2')}], // 密码校验规则
-  code: [{required: true, trigger: 'blur', message: t('password.accountPlaceholder3')}], // 验证码校验规则
+  username: [{validator: rule.overLength, trigger: 'blur'},{required: true, trigger: 'blur', message: t('password.accountPlaceholder1')}], // 用户名校验规则
+  password: [{validator: rule.overLength, trigger: 'blur'},{required: true, trigger: 'blur', message: t('password.accountPlaceholder2')}], // 密码校验规则
+  code: [{validator: rule.overLength, trigger: 'blur'},{required: true, trigger: 'blur', message: t('password.accountPlaceholder3')}], // 验证码校验规则
 });
 
 // 是否开启验证码
