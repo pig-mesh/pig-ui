@@ -118,18 +118,18 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList, tableStyle } = useTable(state);
 
 // 根据类型判断是否有子节点
-const  setHasChildren = (arr:any[]) => {  
-	arr.forEach(item => {  
-		// 添加 hasChildren 属性  
+const  setHasChildren = (arr:any[]) => {
+	arr.forEach(item => {
+		// 添加 hasChildren 属性
 		item.hasChildren = item.menuType !== '1';
-	});  
+	});
 }
 const tableList = computed(() => {
-	const list = state.dataList; 
-	if (Array.isArray(list)) {  
-			setHasChildren(list);  
-	}  
-	return list;  
+	const list = state.dataList;
+	if (Array.isArray(list)) {
+			setHasChildren(list);
+	}
+	return list;
 })
 
 // 打开新增菜单弹窗
@@ -150,6 +150,7 @@ const deleteMenuDisabled = (row: any) => {
 // 搜索事件
 const query = () => {
 	state.dataList = [];
+  state.queryForm.parentId = undefined
 	getDataList();
 };
 
@@ -166,8 +167,8 @@ const load = (row:any,treeNode: unknown,resolve: (date:any[]) => void) => {
 	}
 	pageList(param).then(res => {
 		const childrenList = res.data
-		if (Array.isArray(childrenList)) {  
-			setHasChildren(childrenList);  
+		if (Array.isArray(childrenList)) {
+			setHasChildren(childrenList);
 		}
 		resolve(childrenList)
 	})
