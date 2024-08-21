@@ -104,7 +104,7 @@ const state = reactive({
 
 // 表单校验规则
 const dataRules = reactive({
-  menType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
+  menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
   parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
   name: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '菜单不能为空', trigger: 'blur'}],
   path: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '路径不能为空', trigger: 'blur'}],
