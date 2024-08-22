@@ -40,7 +40,7 @@ const emit = defineEmits(['refresh']);
 const dataFormRef = ref();
 const visible = ref(false)
 const loading = ref(false)
-const matchResult = ref()
+const matchResult = ref('')
 
 // 提交表单数据
 const form = reactive({
@@ -98,18 +98,22 @@ const onSubmit = async () => {
     // 要处理的字符串
     matchResult.value = data;
     // 遍历关键词数组，并进行替换
-    data.forEach((word: string) => {
-      let regex = new RegExp(word, 'g');
-      matchResult.value = matchResult.value.replace(regex, `
+    matchResult.value = matchResult.value.map((item: string) => {
+      let modifiedItem = item;
+      data.forEach((word: string) => {
+        let regex = new RegExp(word, 'g');
+        modifiedItem = modifiedItem.replace(regex, `
 <div class="tooltip tooltip-open tooltip-bottom" data-tip="触发敏感词">
   <a class="link link-error" @click="$emit('click-child','${word}')">${word}</a>
 </div>
-`
-      );
+    `);
+      });
+      return modifiedItem;
     });
     useMessage().success('操作成功');
     emit('refresh');
   } catch (err: any) {
+    debugger
     useMessage().error(err.msg);
   } finally {
     loading.value = false;
