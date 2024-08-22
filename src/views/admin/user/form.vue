@@ -171,6 +171,7 @@ const dataRules = ref({
 	],
 	email: [{validator: rule.overLength, trigger: 'blur'},{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }],
 	lockFlag: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+  nickname: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗

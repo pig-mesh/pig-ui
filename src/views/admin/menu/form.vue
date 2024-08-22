@@ -111,6 +111,7 @@ const dataRules = reactive({
   icon: [{required: true, message: '图标不能为空', trigger: 'blur'}],
   permission: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '权限代码不能为空', trigger: 'blur'}],
   sortOrder: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '排序不能为空', trigger: 'blur'}],
+  enName: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗

@@ -125,11 +125,12 @@ const dataRules = reactive({
   jobName: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '任务名称不能为空', trigger: 'blur'}],
   jobGroup: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '任务组名不能为空', trigger: 'blur'}],
   jobType: [{required: true, message: '任务类型不能为空', trigger: 'blur'}],
-  cronExpression: [{required: true, message: 'cron不能为空', trigger: 'blur'}],
+  cronExpression: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: 'cron不能为空', trigger: 'blur'}],
   misfirePolicy: [{required: true, message: '策略不能为空', trigger: 'blur'}],
   executePath: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行路径不能为空', trigger: 'blur'}],
   className: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行文件不能为空', trigger: 'blur'}],
   methodName: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '执行方法不能为空', trigger: 'blur'}],
+  methodParamsValue: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗
