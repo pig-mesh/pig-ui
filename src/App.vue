@@ -16,6 +16,12 @@ import { Local, Session } from '/@/utils/storage';
 import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
 
+provide('onWartermarkChange', () => {
+	if (settingRef.value) {
+		settingRef.value.onWartermarkChange();
+	}
+});
+
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
 const Setings = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/setings.vue'));

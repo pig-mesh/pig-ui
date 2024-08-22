@@ -46,6 +46,7 @@ const Password = defineAsyncComponent(() => import('./component/password.vue'));
 const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 
+const onWartermarkChange = inject<() => void>('onWartermarkChange');
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
@@ -71,6 +72,8 @@ const signInSuccess = async () => {
 		useMessage().wraning('抱歉，您没有登录权限');
 		Session.clear();
 	} else {
+		// 重新加载水印
+		onWartermarkChange && onWartermarkChange()
 		// 初始化登录成功时间问候语
 		let currentTimeInfo = formatAxis(new Date());
 		if (route.query?.redirect) {
