@@ -95,7 +95,7 @@
             同步路由
             <tip :content="`微服务架构下会自动创建一条【/${dataForm.moduleName}】的网关路由，存在则跳过`"/>
           </template>
-          <el-radio-group v-model="dataForm.syncRoute" :disabled="isMicro === 'false'">
+          <el-radio-group v-model="dataForm.syncRoute" >
             <el-radio border label="0">手动添加</el-radio>
             <el-radio border label="1">自动创建</el-radio>
           </el-radio-group>
@@ -188,7 +188,7 @@ const dataForm = reactive({
   dsName: '' as string,
   style: '', //  默认风格 element-plus
   childTableName: '',
-  syncRoute: '1',
+  syncRoute: '0',
   syncMenuId: '',
 });
 
@@ -209,6 +209,10 @@ const getTable = (dsName: string, tableName: string) => {
           dataForm.frontendPath = frontendPath;
           dataForm.backendPath = backendPath;
         }
+      }).then(() => {
+          if (isMicro === 'false') {
+            dataForm.syncRoute = '0'
+          }
       })
       .finally(() => {
         loading.value = false;
@@ -237,7 +241,7 @@ const dataRules = ref({
     trigger: 'blur'
   }],
   author: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '必填项不能为空', trigger: 'blur'}],
-  moduleName: [{validator: rule.overLength, trigger: 'blur'},{validator: rule.letter, trigger: 'blur'}, {
+  moduleName: [{validator: rule.overLength, trigger: 'blur'}, {validator: rule.letter, trigger: 'blur'}, {
     required: true,
     message: '必填项不能为空',
     trigger: 'blur'
@@ -359,14 +363,10 @@ onMounted(() => {
   dataForm.tableName = String(props.tableName);
   dataForm.dsName = String(props.dsName);
 
-  getTable(dataForm.dsName, dataForm.tableName);
+  getTable(dataForm.dsName, dataForm.tableName)
   genGroupList();
   checkTemplateVersion()
   getAllMenuData()
-
-  if (isMicro === 'false') {
-    dataForm.syncRoute = '0'
-  }
 });
 
 defineExpose({

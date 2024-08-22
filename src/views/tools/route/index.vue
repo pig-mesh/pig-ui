@@ -71,9 +71,10 @@ const refresh = async () => {
 const deleteRoute = (id: string) => {
   deleteObj(id).then(async res => {
     await refreshObj();
-    await getData();
     useMessage().success(t('common.optSuccessText'));
-  })
+  }).finally(() => {
+     getData();
+  });
 }
 
 const getData = async () => {
