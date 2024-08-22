@@ -129,6 +129,7 @@ const dataRules = ref({
   ],
   autoapprove: [{required: true, message: '自动放行不能为空', trigger: 'blur'}],
   webServerRedirectUri: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '回调地址不能为空', trigger: 'blur'}],
+  authorities: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗

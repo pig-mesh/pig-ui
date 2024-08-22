@@ -55,6 +55,7 @@ const dataRules = ref({
 		},
 	],
 	attrType: [{validator: rule.overLength, trigger: 'blur'},{ required: true, message: '属性类型不能为空', trigger: 'blur' }],
+  packageName: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗

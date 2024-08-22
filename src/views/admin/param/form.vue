@@ -105,6 +105,7 @@ const dataRules = reactive({
   status: [{required: true, message: '状态不能为空', trigger: 'blur'}],
   publicType: [{required: true, message: '类型不能为空', trigger: 'blur'}],
   systemFlag: [{required: true, message: '类型不能为空', trigger: 'blur'}],
+  validateCode: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗
