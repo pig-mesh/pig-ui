@@ -40,13 +40,13 @@ import { formatAxis } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
+import mittBus from '/@/utils/mitt';
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
 const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 
-const onWartermarkChange = inject<() => void>('onWartermarkChange');
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
@@ -73,7 +73,7 @@ const signInSuccess = async () => {
 		Session.clear();
 	} else {
 		// 重新加载水印
-		onWartermarkChange && onWartermarkChange()
+		mittBus.emit('updateWartermark');
 		// 初始化登录成功时间问候语
 		let currentTimeInfo = formatAxis(new Date());
 		if (route.query?.redirect) {

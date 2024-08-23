@@ -16,12 +16,6 @@ import { Local, Session } from '/@/utils/storage';
 import mittBus from '/@/utils/mitt';
 import setIntroduction from '/@/utils/setIconfont';
 
-provide('onWartermarkChange', () => {
-	if (settingRef.value) {
-		settingRef.value.onWartermarkChange();
-	}
-});
-
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
 const Setings = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/setings.vue'));
@@ -64,6 +58,10 @@ onMounted(() => {
 		mittBus.on('openSetingsDrawer', () => {
 			settingRef.value.openDrawer();
 		});
+		// 监听登录成功后重新加载水印
+		mittBus.on('updateWartermark', () => {
+			settingRef.value.onWartermarkChange();
+		});
 		// 获取缓存中的布局配置
 		if (Local.get('themeConfig')) {
 			storesThemeConfig.setThemeConfig({ themeConfig: Local.get('themeConfig') });
@@ -75,9 +73,10 @@ onMounted(() => {
 		}
 	});
 });
-// 页面销毁时，关闭监听布局配置/i18n监听
+// 页面销毁时，关闭监听布局配置/i18n监听/更新水印
 onUnmounted(() => {
 	mittBus.off('openSetingsDrawer', () => {});
+	mittBus.off('updateWartermark', () => {});
 });
 // 监听路由的变化，设置网站标题
 watch(
