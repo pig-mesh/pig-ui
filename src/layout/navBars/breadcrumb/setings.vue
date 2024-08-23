@@ -678,6 +678,7 @@ onUnmounted(() => {
 // 暴露变量
 defineExpose({
 	openDrawer,
+	onWartermarkChange,
 });
 </script>
 
