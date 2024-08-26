@@ -653,6 +653,10 @@ onMounted(() => {
 			initLayoutChangeFun();
 			state.isMobile = other.isMobile();
 		});
+		// 监听登录成功后重新加载水印
+		mittBus.on('updateWartermark', () => {
+			onWartermarkChange();
+		});
 		setTimeout(() => {
 			// 默认样式
 			onColorPickerChange();
@@ -673,12 +677,12 @@ onMounted(() => {
 });
 onUnmounted(() => {
 	mittBus.off('layoutMobileResize', () => {});
+	mittBus.off('updateWartermark', () => {});	
 });
 
 // 暴露变量
 defineExpose({
 	openDrawer,
-	onWartermarkChange,
 });
 </script>
 
