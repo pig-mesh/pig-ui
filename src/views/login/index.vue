@@ -40,7 +40,6 @@ import { formatAxis } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
-import mittBus from '/@/utils/mitt';
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
@@ -72,8 +71,6 @@ const signInSuccess = async () => {
 		useMessage().wraning('抱歉，您没有登录权限');
 		Session.clear();
 	} else {
-		// 重新加载水印
-		mittBus.emit('updateWartermark');
 		// 初始化登录成功时间问候语
 		let currentTimeInfo = formatAxis(new Date());
 		if (route.query?.redirect) {
