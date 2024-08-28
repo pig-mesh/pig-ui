@@ -335,6 +335,11 @@ const selectRouteId = ref()
 const openDialog = async (id?: string) => {
   selectRouteId.value = id;
   visible.value = true;
+  // 重置表单数据
+  nextTick(() => {
+    dataFormRef.value?.resetFields();
+  });
+
   if (id) {
     await getData(id).then((data) => {
       jsonData.value = data;
