@@ -95,13 +95,18 @@ const handleSendCode = async () => {
   });
   if (!valid) return;
 
-  const {msg, data} = await sendMobileCode(loginForm.mobile);
-  if (data !== false) {
-    useMessage().success('验证码发送成功');
-    timeCacl();
-  } else {
-    useMessage().error(msg);
+  try {
+    const {msg, data} = await sendMobileCode(loginForm.mobile);
+    if (data !== false) {
+      useMessage().success('验证码发送成功');
+      timeCacl();
+    } else {
+      useMessage().error(msg);
+    }
+  } catch (e) {
+    useMessage().error(e.data || e.msg);
   }
+
 };
 
 /**
