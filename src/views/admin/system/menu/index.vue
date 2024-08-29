@@ -89,7 +89,7 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<MenuDialog @refresh="getDataList()" ref="menuDialogRef" />
+		<MenuDialog @refresh="query()" ref="menuDialogRef" />
 	</div>
 </template>
 
