@@ -236,9 +236,13 @@ const initResize = () => {
 // 页面加载时
 onMounted(() => {
 	initFontIconData(initFontIconName());
-	initResize();
+  window.addEventListener('resize', getInputWidth);
 	getInputWidth();
 });
+onUnmounted(() => {
+  // 移除监听
+  window.removeEventListener("resize", getInputWidth);
+})
 // 监听双向绑定 modelValue 的变化
 watch(
 	() => props.modelValue,
