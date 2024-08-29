@@ -65,6 +65,10 @@ service.interceptors.request.use(
  * @returns 如果响应成功，则返回响应的data属性；否则，抛出错误或者执行其他操作
  */
 const handleResponse = (response: AxiosResponse<any>) => {
+	if (response.data.code === 1) {
+		throw response.data;
+	}
+
 	// 针对密文返回解密
 	if (response.data.encryption) {
 		const originData = JSON.parse(other.decryption(response.data.encryption, import.meta.env.VITE_PWD_ENC_KEY));
