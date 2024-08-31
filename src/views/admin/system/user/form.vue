@@ -106,6 +106,13 @@ const roleData = ref<any[]>([]);
 const postData = ref<any[]>([]);
 const loading = ref(false);
 
+const props = defineProps({
+  deptId: {
+    type: String,
+    default: '',
+  }
+});
+
 const dataForm = reactive({
 	userId: '',
 	username: '',
@@ -255,9 +262,9 @@ const getDeptData = () => {
 	// 获取部门数据
 	deptTree().then((res) => {
 		deptData.value = res.data;
-		// 默认选择第一个
+		// 默认选择在树中选中的部门
     if (!dataForm.userId) {
-      dataForm.deptId = res.data[0].id;
+      dataForm.deptId = props.deptId;
     }
 	});
 };

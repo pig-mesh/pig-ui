@@ -133,7 +133,7 @@
 			</pane>
 		</splitpanes>
 
-		<user-form ref="userDialogRef" @refresh="getDataList(false)" />
+		<user-form ref="userDialogRef" @refresh="getDataList(false)" :deptId="state.queryForm.deptId" />
 
 		<upload-excel
 			ref="excelUploadRef"
