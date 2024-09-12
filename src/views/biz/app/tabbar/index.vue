@@ -1,23 +1,23 @@
 <template>
-	<div class="layout-padding decoration-tabbar min-w-[800px]">
-		<el-card shadow="never" class="!border-none flex-1" :body-style="{ height: '100%' }">
+	<div class="layout-padding decoration-tabbar min-w-[800px] h-full">
+		<el-card shadow="never" class="!border-none flex-1 h-full dark:bg-gray-800" :body-style="{ height: '100%' }">
 			<div class="flex items-start h-full">
 				<div class="pages-preview mx-[30px]">
-					<div class="flex tabbar">
+					<div class="flex tabbar dark:bg-gray-700">
 						<div class="flex flex-col items-center justify-center flex-1 tabbar-item" v-for="(item, index) in tabbar.list" :key="index">
 							<img class="w-[22px] h-[22px]" :src="item.unselected.includes('http') ? item.unselected: baseURL + item.unselected" alt="" />
-							<div class="leading-3 text-[12px] mt-[4px]">{{ item.name }}</div>
+							<div class="leading-3 text-[12px] mt-[4px] dark:text-gray-300">{{ item.name }}</div>
 						</div>
 					</div>
 				</div>
-				<div class="flex-1">
-					<div class="title flex items-center before:w-[3px] before:h-[14px] before:block before:bg-primary before:mr-2">
+				<div class="flex-1 overflow-y-auto">
+					<div class="title flex items-center before:w-[3px] before:h-[14px] before:block before:bg-primary before:mr-2 dark:text-gray-200">
 						底部导航设置
-						<span class="form-tips ml-[10px] !mt-0"> 至少添加2个导航，最多添加5个导航 </span>
+						<span class="form-tips ml-[10px] !mt-0 dark:text-gray-400"> 至少添加2个导航，最多添加5个导航 </span>
 					</div>
 					<el-form label-width="70px">
 						<div class="mb-[18px]">
-							<el-scrollbar style="height: 520px">
+							<el-scrollbar class="h-[calc(100vh-300px)]">
 								<draggable class="draggable" v-model="tabbar.list" animation="300" draggable=".draggable" itemKey="index" :move="onMove">
 									<template v-slot:item="{ element, index }">
 										<del-wrap @close="handleDelete(index)" class="max-w-[400px]" :class="{ draggable: index != 0 }">
@@ -119,21 +119,24 @@ const setData = async () => {
 	useMessage().success('保存成功');
 };
 getData();
+
+// Add this to handle baseURL
+const baseURL = import.meta.env.VITE_APP_BASE_API || '';
 </script>
 <style lang="scss" scoped>
 .decoration-tabbar {
-	min-height: calc(100vh - var(--navbar-height) - 80px);
+	height: calc(100vh - var(--navbar-height) - 80px);
 	@apply flex flex-col;
 	.pages-preview {
-		background-color: #f7f7f7;
+		@apply bg-gray-100 dark:bg-gray-700;
 		width: 360px;
 		height: 600px;
-		color: #333;
+		@apply text-gray-800 dark:text-gray-200;
 		position: relative;
 		.tabbar {
 			position: absolute;
 			height: 50px;
-			background-color: #fff;
+			@apply bg-white dark:bg-gray-600;
 			bottom: 0;
 			width: 100%;
 			border: 2px solid var(--el-color-primary);
