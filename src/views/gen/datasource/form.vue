@@ -125,6 +125,7 @@ const validateDsName = (_rule, value, callback) => {
 const dataRules = ref({
   name: [
     {required: true, message: '别名不能为空', trigger: 'blur'},
+    {validator: rule.overLength, trigger: 'blur'},
     {validator: validateDsName, trigger: 'blur'},
   ],
   url: [{required: true, message: 'jdbcurl不能为空', trigger: 'blur'}, {
@@ -139,7 +140,7 @@ const dataRules = ref({
   confType: [{required: true, message: '配置类型不能为空', trigger: 'blur'}],
   dsName: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '数据库名称不能为空', trigger: 'blur'}],
   instance: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '实例不能为空', trigger: 'blur'}],
-  port: [{required: true, message: '端口不能为空', trigger: 'blur'}],
+  port: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '端口不能为空', trigger: 'blur'}],
   host: [{ validator: rule.overLength, trigger: 'blur' },{required: true, message: '主机不能为空', trigger: 'blur'}],
 });
 

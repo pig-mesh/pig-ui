@@ -37,7 +37,7 @@
 import {useI18n} from 'vue-i18n';
 import {getObj, deptTree, addObj, putObj} from '/@/api/admin/dept';
 import {useMessage} from '/@/hooks/message';
-
+import {rule} from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const {t} = useI18n();
@@ -55,8 +55,8 @@ const loading = ref(false);
 
 const dataRules = ref({
   parentId: [{required: true, message: '上级部门不能为空', trigger: 'blur'}],
-  name: [{required: true, message: '部门名称不能为空', trigger: 'blur'}],
-  sortOrder: [{required: true, message: '排序不能为空', trigger: 'blur'}],
+  name: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '部门名称不能为空', trigger: 'blur'}],
+  sortOrder: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '排序不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

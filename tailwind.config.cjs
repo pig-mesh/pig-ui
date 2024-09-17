@@ -116,4 +116,5 @@ module.exports = {
 			10: '40px',
 		},
 	},
+	darkMode: 'class', // 启用基于 class 的暗模式
 };

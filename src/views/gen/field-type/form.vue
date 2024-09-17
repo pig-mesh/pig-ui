@@ -24,6 +24,7 @@
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj, validateColumnType } from '/@/api/gen/fieldtype';
 import { useI18n } from 'vue-i18n';
+import {rule} from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
@@ -46,13 +47,15 @@ const form = reactive({
 const dataRules = ref({
 	columnType: [
 		{ required: true, message: '字段类型不能为空', trigger: 'blur' },
+		{validator: rule.overLength, trigger: 'blur'},
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateColumnType(rule, value, callback, form.id !== '');
 			},
 		},
 	],
-	attrType: [{ required: true, message: '属性类型不能为空', trigger: 'blur' }],
+	attrType: [{validator: rule.overLength, trigger: 'blur'},{ required: true, message: '属性类型不能为空', trigger: 'blur' }],
+  packageName: [{validator: rule.overLength, trigger: 'blur'}],
 });
 
 // 打开弹窗

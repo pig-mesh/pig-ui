@@ -11,6 +11,7 @@
  * @method openShareTagsView 布局设置弹窗，开启 TagsView 共用
  * @method onTagsViewRefreshRouterView tagsview 刷新界面
  * @method onCurrentContextmenuClick tagsview 右键菜单每项点击时
+ * @method updateWartermark 更新水印显示内容
  */
 declare type MittType<T = any> = {
 	openSetingsDrawer?: string;
@@ -23,6 +24,7 @@ declare type MittType<T = any> = {
 	openShareTagsView?: string;
 	onTagsViewRefreshRouterView?: T;
 	onCurrentContextmenuClick?: T;
+	updateWartermark?: T;
 };
 
 // mitt 参数类型定义

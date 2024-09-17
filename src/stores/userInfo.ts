@@ -3,6 +3,7 @@ import { Session } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
 import other from '/@/utils/other';
 import { useMessage } from '/@/hooks/message';
+import mittBus from '/@/utils/mitt';
 
 /**
  * @function useUserInfo
@@ -130,6 +131,8 @@ export const useUserInfo = defineStore('userInfo', {
 					authBtnList: res.data.permissions,
 				};
 				this.userInfos = userInfo;
+				// 重新加载水印
+				mittBus.emit('updateWartermark');
 			});
 		},
 	},

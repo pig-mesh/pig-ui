@@ -28,7 +28,7 @@
 import {useMessage} from '/@/hooks/message';
 import {getObj, addObj, putObj, validatePostCode, validatePostName} from '/@/api/admin/post';
 import {useI18n} from 'vue-i18n';
-
+import {rule} from '/@/utils/validate';
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 
@@ -56,6 +56,7 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
   postCode: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '岗位编码不能为空', trigger: 'blur'},
     {
       validator: (rule: any, value: any, callback: any) => {
@@ -65,6 +66,7 @@ const dataRules = ref({
     },
   ],
   postName: [
+    {validator: rule.overLength, trigger: 'blur'},
     {required: true, message: '岗位名称不能为空', trigger: 'blur'},
     {
       validator: (rule: any, value: any, callback: any) => {
@@ -73,8 +75,8 @@ const dataRules = ref({
       trigger: 'blur',
     },
   ],
-  postSort: [{required: true, message: '岗位排序不能为空', trigger: 'blur'}],
-  remark: [{required: true, message: '岗位描述不能为空', trigger: 'blur'}],
+  postSort: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '岗位排序不能为空', trigger: 'blur'}],
+  remark: [{validator: rule.overLength, trigger: 'blur'},{required: true, message: '岗位描述不能为空', trigger: 'blur'}],
 });
 
 // 打开弹窗

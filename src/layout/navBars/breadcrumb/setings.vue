@@ -553,8 +553,14 @@ const onAddFilterChange = (attr: string) => {
 // 4、界面显示 --> 深色模式
 const onAddDarkChange = () => {
 	const body = document.documentElement as HTMLElement;
-	if (getThemeConfig.value.isIsDark) body.setAttribute('data-theme', 'dark');
-	else body.setAttribute('data-theme', '');
+	if (getThemeConfig.value.isIsDark) {
+    body.setAttribute('data-theme', 'dark');
+    // body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
+    body.classList.add('dark');
+  } else {
+    body.classList.remove('dark');
+    body.setAttribute('data-theme', '');
+  }
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {
@@ -653,6 +659,10 @@ onMounted(() => {
 			initLayoutChangeFun();
 			state.isMobile = other.isMobile();
 		});
+		// 监听登录成功后重新加载水印
+		mittBus.on('updateWartermark', () => {
+			onWartermarkChange();
+		});
 		setTimeout(() => {
 			// 默认样式
 			onColorPickerChange();
@@ -673,6 +683,7 @@ onMounted(() => {
 });
 onUnmounted(() => {
 	mittBus.off('layoutMobileResize', () => {});
+	mittBus.off('updateWartermark', () => {});	
 });
 
 // 暴露变量
