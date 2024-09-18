@@ -23,13 +23,6 @@ export const deleteObj = (routeId?: string) => {
     });
 };
 
-export const refreshObj = () => {
-    return request({
-        url: '/actuator/gateway/refresh',
-        method: 'post',
-    });
-};
-
 export function validateExist(rule: any, value: any, callback: any, isEdit: boolean) {
     if (isEdit) {
         return callback();

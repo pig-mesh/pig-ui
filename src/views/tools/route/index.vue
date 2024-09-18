@@ -6,9 +6,6 @@
           <el-button icon="folder-add" type="primary" class="ml10" @click="routeFormRef.openDialog()">
             {{ $t('common.addBtn') }}
           </el-button>
-          <el-button plain icon="Refresh" type="primary" class="ml10" @click="refresh">
-            {{ $t('common.refreshCacheBtn') }}
-          </el-button>
         </div>
       </el-row>
       <el-scrollbar class="mt-2">
@@ -49,7 +46,7 @@
 </template>
 
 <script lang="ts" name="routeConfig" setup>
-import {deleteObj, fetchList, refreshObj} from '/@/api/admin/route';
+import {deleteObj, fetchList} from '/@/api/admin/route';
 import type {QueryLanguageId} from 'vue3-ts-jsoneditor';
 import {useMessage} from '/@/hooks/message';
 import {useI18n} from 'vue-i18n';
@@ -63,14 +60,8 @@ const routeFormRef = ref();
 const queryLanguages = ref<QueryLanguageId[]>(['javascript', 'lodash', 'jmespath']);
 
 
-const refresh = async () => {
-  await refreshObj();
-  useMessage().success(t('common.optSuccessText'));
-}
-
 const deleteRoute = (id: string) => {
   deleteObj(id).then(async res => {
-    await refreshObj();
     useMessage().success(t('common.optSuccessText'));
   }).finally(() => {
      getData();
