@@ -1,6 +1,6 @@
 {
 	"name": "pig-ui",
-	"version": "3.8.0",
+	"version": "3.8.1",
 	"description": "PIGCLOUD微服务开发平台",
 	"author": "pig4cloud",
 	"license": "Apache-2.0",
@@ -34,8 +34,8 @@
 		"sm-crypto": "0.3.13",
 		"sortablejs": "1.15.3",
 		"splitpanes": "3.1.5",
-		"tailwindcss": "3.4.11",
-		"vue": "3.5.6",
+		"tailwindcss": "3.4.12",
+		"vue": "3.5.8",
 		"vue-clipboard3": "2.0.0",
 		"vue-echarts": "7.0.3",
 		"vue-i18n": "9.14.0",
