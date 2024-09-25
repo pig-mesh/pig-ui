@@ -55,7 +55,7 @@
 											v-model="item.nodeName"
 										/>
 										<span v-else class="editable-title" @click="clickEvent(index)">{{ item.nodeName }}</span>
-										<span class="priority-title" @click="openConfigDrawer(item.priorityLevel)">优先级{{ item.priorityLevel }}</span>
+										<span class="priority-title">优先级{{ item.priorityLevel }}</span>
 										<i class="anticon anticon-close close" @click="delTerm(index)"></i>
 									</div>
 									<div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1" @click="arrTransfer(index)">&gt;</div>
