@@ -1,6 +1,6 @@
 <!--文件上传组件-->
 <template>
-  <div class="upload-file w-full">
+  <div class="w-full upload-file">
     <el-upload
         ref="fileUpload"
         v-if="props.type === 'default'"
@@ -15,6 +15,7 @@
         :data="formData"
         :auto-upload="autoUpload"
         :on-success="handleUploadSuccess"
+        :on-exceed="handleExceed"
         class="upload-file-uploader"
         drag
         multiple
@@ -50,6 +51,7 @@
         :on-remove="handleRemove"
         :data="formData"
         :on-success="handleUploadSuccess"
+        :on-exceed="handleExceed"
         class="upload-file-uploader"
         multiple
     >
@@ -63,6 +65,7 @@ import {useMessage} from '/@/hooks/message';
 import {Session} from '/@/utils/storage';
 import other from '/@/utils/other';
 import {useI18n} from 'vue-i18n';
+import {UploadFile, UploadFiles} from 'element-plus';
 
 const props = defineProps({
   modelValue: [String, Array],
@@ -98,11 +101,11 @@ const props = defineProps({
   },
   data: {
     type: Object,
-    default: {}
+    default: {},
   },
   dir: {
     type: String,
-    default: ''
+    default: '',
   },
   autoUpload: {
     type: Boolean,
@@ -112,9 +115,11 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue', 'change']);
 
-const number = ref(0);
+// 文件列表
 const fileList = ref([]) as any;
+// 已上传文件列表
 const uploadList = ref([]) as any;
+// 文件上传组件引用
 const fileUpload = ref();
 const {t} = useI18n();
 
@@ -133,6 +138,12 @@ const formData = computed(() => {
 
 // 上传前校检格式和大小
 const handleBeforeUpload = (file: File) => {
+  // 检查是否超过最大上传数量
+  if (fileList.value.length > props.limit) {
+    useMessage().warning(`${t('excel.uploadLimit')} ${props.limit} ${t('excel.files')}`);
+    return false;
+  }
+
   // 校检文件类型
   if (props.fileType.length) {
     const fileName = file.name.split('.');
@@ -151,44 +162,43 @@ const handleBeforeUpload = (file: File) => {
       return false;
     }
   }
-  number.value++;
   return true;
 };
 
-// 上传成功回调
-function handleUploadSuccess(res: any, file: any) {
+// 修改 handleUploadSuccess 函数
+function handleUploadSuccess(res: any, file: UploadFile, uploadFiles: UploadFiles) {
+  uploadList.value.push({
+    name: file.name,
+    url: res.data.url,
+    fileUrl: res.data.fileName,
+    fileSize: file.size,
+    fileName: file.name,
+    fileType: file.raw?.type,
+  });
+  // 多文件上传时，判断是否全部上传成功
+  const allSuccess = uploadFiles.every((item) => item.status == 'success')
+  if (!allSuccess) {
+    return
+  }
+
   if (res.code === 0) {
-    uploadList.value.push({
-      name: file.name,
-      url: res.data.url,
-      fileUrl: res.data.fileName,
-      fileSize: file.size,
-      fileName: file.name,
-      fileType: file.raw.type
-    });
     uploadedSuccessfully();
   } else {
-    number.value--;
     useMessage().error(res.msg);
     fileUpload.value.handleRemove(file);
     uploadedSuccessfully();
   }
 }
 
-// 上传结束处理
+// 修改 uploadedSuccessfully 函数
 const uploadedSuccessfully = () => {
-  if (number.value > 0 && uploadList.value.length === number.value) {
-    fileList.value = fileList.value.filter((f) => f.url !== undefined).concat(uploadList.value);
-    number.value = 0;
-    emit('change', listToString(fileList.value), fileList.value);
-    emit('update:modelValue', listToString(fileList.value));
-  }
+  fileList.value = uploadList.value;
+  emit('change', listToString(fileList.value), fileList.value);
+  emit('update:modelValue', listToString(fileList.value));
 };
 
-const handleRemove = (file: any) => {
-  fileList.value = fileList.value.filter((f) => !(f === file.url));
-  emit('change', listToString(fileList.value));
-  emit('update:modelValue', listToString(fileList.value));
+const handleRemove = (file: UploadFile, uploadFiles: UploadFiles) => {
+  uploadedSuccessfully()
 };
 
 const handlePreview = (file: any) => {
@@ -223,7 +233,7 @@ watch(
     () => props.modelValue,
     (val) => {
       if (val) {
-        fileList.value = uploadList.value
+        fileList.value = uploadList.value;
       } else {
         fileList.value = [];
         return [];
@@ -234,6 +244,11 @@ watch(
 
 const submit = () => {
   fileUpload.value.submit();
+};
+
+// 添加 handleExceed 函数
+const handleExceed = (files: File[]) => {
+  useMessage().warning(`${t('excel.uploadLimit')} ${props.limit} ${t('excel.files')}`);
 };
 
 defineExpose({

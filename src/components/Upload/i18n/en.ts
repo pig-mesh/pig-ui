@@ -13,5 +13,7 @@ export default {
 		file: 'file',
 		sizeErrorText: 'file size error, max ',
 		typeErrorText: 'file type error, upload ',
+		uploadLimit: 'Upload limit exceeded. Maximum',
+		files: 'files allowed',
 	},
 };

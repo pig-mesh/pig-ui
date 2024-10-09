@@ -13,5 +13,7 @@ export default {
 		file: '的文件',
 		sizeErrorText: '文件大小不超过',
 		typeErrorText: '文件类型错误，请上传 ',
+		uploadLimit: '上传文件数量超出限制，最多允许上传',
+		files: '个文件',
 	},
 };
