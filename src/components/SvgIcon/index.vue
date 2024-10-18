@@ -6,7 +6,7 @@
 		<img :src="getIconName" :style="setIconSvgInsStyle" />
 	</div>
 	<svg v-else-if="isShowLocalSvg" class="svg-icon icon" :style="setIconImgOutStyle">
-		<use :href="`#${getIconName}`" />
+		<use :href="`#${getIconName}`" :fill="color"/>
 	</svg>
 	<i v-else :class="getIconName" :style="setIconSvgStyle" />
 </template>
@@ -27,8 +27,8 @@ const props = defineProps({
 	},
 	// svg 颜色
 	color: {
-		type: String,
-	},
+		type: String
+  },
 });
 
 // 在线链接、本地引入地址前缀
