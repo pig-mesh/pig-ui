@@ -1,6 +1,6 @@
 <template>
   <el-drawer v-model="visible" :title="$t('personal.name')" size="40%">
-    <el-tabs style="height: 200px" class="demo-tabs">
+    <el-tabs class="demo-tabs">
       <el-tab-pane label="基本信息" v-loading="loading">
         <el-form :model="formData" :rules="ruleForm" label-width="100px" class="mt30" ref="formdataRef">
           <el-row :gutter="20">
