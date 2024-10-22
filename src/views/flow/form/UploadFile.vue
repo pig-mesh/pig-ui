@@ -23,9 +23,9 @@ let props = defineProps({
 });
 
 const getValidateRule = () => {
-	var item = props.form;
+  const item = props.form;
 
-	var checkConfig = (rule: any, value: any, callback: any) => {
+  var checkConfig = (rule: any, value: any, callback: any) => {
 		if (item.required) {
 			if (value.length == 0) {
 				return callback(new Error('请上传' + item.name));

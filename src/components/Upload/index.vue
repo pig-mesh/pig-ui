@@ -233,7 +233,12 @@ watch(
     () => props.modelValue,
     (val) => {
       if (val) {
-        fileList.value = uploadList.value;
+        fileList.value = val.split(',').map((url: string) => {
+          return {
+            url: url,
+            name: url.split('fileName=')[1],
+          };
+        });
       } else {
         fileList.value = [];
         return [];
