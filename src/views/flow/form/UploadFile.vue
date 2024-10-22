@@ -39,10 +39,9 @@ const getValidateRule = () => {
 			return callback(new Error('上传数量不能小于' + item.props.min));
 		}
 		if (item.props.suffixArray && item.props.suffixArray.length > 0) {
-			for (var it of value) {
-				let name = it.name;
-				var suffix = name.substring(name.lastIndexOf('.') + 1);
-				if (item.props.suffixArray.indexOf(suffix) < 0) {
+			for (const name of value.split(',')) {
+        const suffix = name.substring(name.lastIndexOf('.') + 1);
+        if (item.props.suffixArray.indexOf(suffix) < 0) {
 					return callback(new Error('文件只支持' + item.props.suffixArray + '格式'));
 				}
 			}
