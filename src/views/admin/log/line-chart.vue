@@ -74,8 +74,8 @@ const option = reactive(
 onMounted(() => {
   getSum().then(res => {
     option.xAxis.data = res.data.map(item => formatPast(new Date(item.createTime), 'mm-dd'))
-    option.series[0].data = res.data.map(item => item["0"])
-    option.series[1].data = res.data.map(item => item["9"])
+    option.series[0].data = res.data.map(item => item["0"] || 0)
+    option.series[1].data = res.data.map(item => item["9"] || 0)
   })
 })
 </script>
