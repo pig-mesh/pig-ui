@@ -7,7 +7,7 @@
 						<el-input v-model="state.queryForm.nickname" style="max-width: 180px" :placeholder="$t('fans.inputNicknameTip')" />
 					</el-form-item>
 					<el-form-item :label="$t('fans.wxAccountName')" prop="wxAccountAppid">
-						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable class="w100">
+						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable>
 							<el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
 						</el-select>
 					</el-form-item>
