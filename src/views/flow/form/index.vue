@@ -68,6 +68,10 @@
 						</div>
 					</template>
 					<el-form label-width="120px" label-position="top">
+						<el-form-item required label="字段ID">
+							<el-input v-model="currentForm.id" maxlength="50" />
+						</el-form-item>
+
 						<el-form-item required :label="$t('flow.title')">
 							<el-input v-model="currentForm.name" maxlength="10" />
 						</el-form-item>
@@ -190,7 +194,15 @@ const validate = (f) => {
 	if (formList.length == 0) {
 		err.push('表单不能为空');
 	}
+
+	console.log(formList);
+
 	for (let form of formList) {
+		const count = formList.filter((item) => item.id === form.id).length;
+		if (count > 1) {
+			err.push(`发现字段ID重复: ${form.id}`);
+		}
+
 		const formValidateDictElement = formValidateDict[form.type];
 		if (formValidateDictElement) {
 			const result = formValidateDictElement(form, proxy);
