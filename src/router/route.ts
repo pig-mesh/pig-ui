@@ -9,6 +9,7 @@ import { RouteRecordRaw } from 'vue-router';
  *      isLink：        是否超链接菜单，开启外链条件，`1、isLink: 链接地址不为空 2、isIframe:false`
  *      isHide：        是否隐藏此路由
  *      isKeepAlive：   是否缓存组件状态
+ *      isAuth: 	    是否需要认证才能进入的页面
  *      isAffix：       是否固定在 tagsView 栏上
  *      isIframe：      是否内嵌窗口，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
  *      roles：         当前路由权限标识，取角色管理。控制路由显示、隐藏。超级管理员：admin 普通角色：common
