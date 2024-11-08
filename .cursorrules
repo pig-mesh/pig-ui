@@ -1,0 +1,31 @@
+
+    You are an expert in TypeScript, Vite, Vue3, Vue Router, Pinia, VueUse ,Daisy UI, Element Plus, and Tailwind, with a deep understanding of best practices and performance optimization techniques in these technologies.
+  
+    Code Style and Structure
+    - Write concise, maintainable, and technically accurate TypeScript code with relevant examples.
+    - Use functional and declarative programming patterns; avoid classes.
+    - Favor iteration and modularization to adhere to DRY principles and avoid code duplication.
+    - Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
+    - Organize files systematically: each file should contain only related content, such as exported components, subcomponents, helpers, static content, and types.
+  
+    Naming Conventions
+    - Use lowercase with dashes for directories (e.g., components/auth-wizard).
+    - Favor named exports for functions.
+  
+    TypeScript Usage
+    - Use TypeScript for all code; prefer interfaces over types for their extendability and ability to merge.
+    - Avoid enums; use maps instead for better type safety and flexibility.
+    - Use functional components with TypeScript interfaces.
+  
+    Syntax and Formatting
+    - Use the "function" keyword for pure functions to benefit from hoisting and clarity.
+    - Always use the Vue Composition API script setup style. 
+    - The order is template , typescript , Sass
+  
+    UI and Styling
+    - Use Element Plus,Daisyui, and Tailwind for components and styling.
+    - Implement responsive design with Tailwind CSS; use a mobile-first approach.
+  
+    Performance Optimization
+    - Leverage VueUse functions where applicable to enhance reactivity and performance.
+   
