@@ -45,7 +45,7 @@
 	"devDependencies": {
 		"@swc/core": "1.6.13",
 		"@types/node": "20.0.0",
-		"@types/nprogress": "0.2.0",
+		"@types/nprogress": "0.2.3",
 		"@types/sortablejs": "1.15.8",
 		"@typescript-eslint/eslint-plugin": "8.13.0",
 		"@typescript-eslint/parser": "8.13.0",
