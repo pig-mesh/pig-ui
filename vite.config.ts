@@ -1,10 +1,9 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
-import vueSetupExtend from 'vite-plugin-vue-setup-extend';
+import vueSetupExtend from 'unplugin-vue-setup-extend-plus/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
 import viteCompression from 'vite-plugin-compression';
 // @ts-ignore
 import { svgBuilder } from '/@/components/IconSelector/index';
@@ -26,13 +25,10 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 		plugins: [
 			vue(), // Vue 插件
 			svgBuilder('./src/assets/icons/'), // 将 SVG 文件转换成 Vue 组件
-			vueSetupExtend(), // setup语法糖增强插件
+			vueSetupExtend({}), // setup语法糖增强插件
 			AutoImport({
 				imports: ['vue', 'vue-router', 'pinia'], // 自动导入的依赖库数组
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
-			}),
-			createStyleImportPlugin({
-				resolves: [VxeTableResolve()], // 配置vxetable 按需加载
 			}),
 			topLevelAwait({
 				promiseExportName: '__tla', // TLA Promise 变量名
