@@ -4,7 +4,7 @@
       <!-- 顶部折线图-->
       <log-line-chart/>
 
-      <el-row class="ml10 mt-4" v-show="showSearch">
+      <el-row class="mt-4 ml10" v-show="showSearch">
         <el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
           <el-form-item :label="$t('syslog.logType')" prop="logType">
             <el-select :placeholder="$t('syslog.inputLogTypeTip')" clearable
@@ -46,6 +46,7 @@
         </div>
       </el-row>
       <el-table
+          ref="tableRef"
           :data="state.dataList"
           @selection-change="handleSelectionChange"
           @sort-change="sortChangeHandle"
@@ -117,6 +118,7 @@ const showSearch = ref(true);
 const selectObjs = ref([]) as any;
 // 是否可以多选
 const multiple = ref(true);
+let tableRef = ref(null);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {
@@ -134,11 +136,19 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const {
   downBlobFile,
   getDataList,
-  currentChangeHandle,
+  currentChangeHandle: baseCurrentChangeHandle,
   sortChangeHandle,
   sizeChangeHandle,
   tableStyle
 } = useTable(state);
+
+// 分页事件
+const currentChangeHandle = (page: number) => {
+  // Reset table scroll position to top
+  tableRef.value?.setScrollTop(0);
+  // Call the original handler
+  baseCurrentChangeHandle(page);
+};
 
 // 清空搜索条件
 const resetQuery = () => {
@@ -180,9 +190,8 @@ onMounted(() => {
   const {serviceId} = route.query;
   if (serviceId) {
     state.queryForm.serviceId = serviceId;
-    console.log('serviceId', serviceId);
   }
-  getDataList()
+  getDataList();
 });
 </script>
 
