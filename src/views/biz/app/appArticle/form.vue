@@ -57,7 +57,7 @@
               <el-col :span="12">
                 <el-form-item label="作者" prop="author">
                   <div class="w-80">
-                    <el-input class="w-40" v-model="form.author" placeholder="请输入作者名称"/>
+                    <el-input v-model="form.author" placeholder="请输入作者名称"/>
                   </div>
                 </el-form-item>
               </el-col>
