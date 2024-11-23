@@ -118,6 +118,10 @@ const dictType = ref([
 		label: '处理完成',
 		value: '2',
 	},
+  {
+    label: '退款成功',
+    value: '5',
+  },
 ]);
 
 //  table hook
