@@ -15,12 +15,12 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('tenant.startTime')" prop="startTime">
-						<el-date-picker v-model="form.startTime" type="date" :placeholder="t('tenant.inputstartTimeTip')" :value-format="dateTimeStr" />
+						<el-date-picker class="!w-full" v-model="form.startTime" type="date" :placeholder="t('tenant.inputstartTimeTip')" :value-format="dateTimeStr" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('tenant.endTime')" prop="endTime">
-						<el-date-picker v-model="form.endTime" type="date" :placeholder="t('tenant.inputendTimeTip')" :value-format="dateTimeStr" />
+						<el-date-picker class="!w-full" v-model="form.endTime" type="date" :placeholder="t('tenant.inputendTimeTip')" :value-format="dateTimeStr" />
 					</el-form-item>
 				</el-col>
 				<el-col :span="12" class="mb20">
