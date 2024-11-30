@@ -1,153 +1,194 @@
 <template>
-  <el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm"
-           @keyup.enter="handleLogin">
-    <el-form-item class="login-animation1" prop="mobile">
-      <el-input text :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable autocomplete="off">
-        <template #prefix>
-          <i class="iconfont icon-dianhua el-input__icon"></i>
-        </template>
-      </el-input>
-    </el-form-item>
-    <el-form-item class="login-animation2" prop="code">
-      <el-col :span="15">
-        <el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="loginForm.code" clearable
-                  autocomplete="off">
-          <template #prefix>
-            <el-icon class="el-input__icon">
-              <ele-Position/>
-            </el-icon>
-          </template>
-        </el-input>
-      </el-col>
-      <el-col :span="1"></el-col>
-      <el-col :span="8">
-        <el-button v-waves @click="handleSendCode" :loading="msg.msgKey">
-          <span class="font-semibold text-xs text-gray-500">
-          {{
-              msg.msgText
-            }}
-            </span>
-        </el-button>
-      </el-col>
-    </el-form-item>
+	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm" @keyup.enter="handleLogin">
+		<el-form-item class="login-animation1" prop="mobile">
+			<el-input
+				text
+				:placeholder="$t('mobile.placeholder1')"
+				v-model="loginForm.mobile"
+				clearable
+				class="h-11 dark:bg-slate-700 dark:text-slate-200"
+				autocomplete="off"
+			>
+				<template #prefix>
+					<i class="iconfont icon-dianhua el-input__icon dark:text-slate-400"></i>
+				</template>
+			</el-input>
+		</el-form-item>
+		<el-form-item class="login-animation2" prop="code">
+			<el-col :span="16">
+				<el-input
+					text
+					maxlength="4"
+					:placeholder="$t('mobile.placeholder2')"
+					v-model="loginForm.code"
+					clearable
+					class="h-11 dark:bg-slate-700 dark:text-slate-200"
+					autocomplete="off"
+				>
+					<template #prefix>
+						<el-icon class="el-input__icon dark:text-slate-400">
+							<ele-Position />
+						</el-icon>
+					</template>
+				</el-input>
+			</el-col>
+			<el-col :span="8">
+				<el-button
+					v-waves
+					@click="handleSendCode"
+					:loading="msg.msgKey"
+					:disabled="msg.msgKey"
+					class="w-full h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
+				>
+					<span class="text-xs font-semibold">{{ msg.msgText }}</span>
+				</el-button>
+			</el-col>
+		</el-form-item>
 
-    <el-form-item class="login-animation3 mt-4">
-      <el-button type="primary" class="login-content-submit rounded-lg" v-waves @click="handleLogin"
-                 :loading="loading">
-        <span class="tracking-wide font-semibold">{{ $t('mobile.btnText') }}</span>
-      </el-button>
-    </el-form-item>
+		<el-form-item class="mt-4 login-animation4">
+			<el-button
+				type="primary"
+				class="w-full h-11 text-sm font-semibold tracking-wide rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn"
+				v-waves
+				@click="handleLogin"
+				:loading="loading"
+			>
+				{{ $t('mobile.signIn') }}
+			</el-button>
+		</el-form-item>
 
-    <div class="relative flex items-center justify-between">
-      <div class="text-sm ml-auto">
-        <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.PASSWORD)">
-          密码登录
-        </a>
-        <a href="#" v-if="autoRegisterEnable" class="ml-2 text-primary hover:text-blue-600"
-           @click="emit('change',LoginTypeEnum.REGISTER)">
-          注册账号
-        </a>
-      </div>
-    </div>
+		<div class="relative flex items-center justify-between">
+			<div class="ml-auto text-sm">
+				<a
+					href="#"
+					class="text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300"
+					@click="emit('change', LoginTypeEnum.PASSWORD)"
+				>
+					{{ $t('mobile.backToLogin') }}
+				</a>
+				<a
+					href="#"
+					v-if="autoRegisterEnable"
+					class="ml-2 text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300"
+					@click="emit('change', LoginTypeEnum.REGISTER)"
+				>
+					{{ $t('mobile.createAccount') }}
+				</a>
+			</div>
+		</div>
 
-  </el-form>
+		<div class="mt-8 text-xs leading-normal text-slate-400 login-animation4">
+			{{ $t('browserMsgText') }}
+		</div>
+	</el-form>
 </template>
 
 <script setup lang="ts" name="loginMobile">
-import {LoginTypeEnum, sendMobileCode} from '/@/api/login';
-import {useMessage} from '/@/hooks/message';
-import {useUserInfo} from '/@/stores/userInfo';
-import {rule} from '/@/utils/validate';
-import {useI18n} from 'vue-i18n';
-import {ref} from "vue";
+import { LoginTypeEnum, sendMobileCode } from '/@/api/login';
+import { useMessage } from '/@/hooks/message';
+import { useUserInfo } from '/@/stores/userInfo';
+import { rule } from '/@/utils/validate';
+import { useI18n } from 'vue-i18n';
+import { ref } from 'vue';
+import type { FormInstance } from 'element-plus';
 
-const {t} = useI18n();
+const { t } = useI18n();
 const emit = defineEmits(['signInSuccess', 'change']);
 
 // 创建一个 ref 对象，并将其初始化为 null
 const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
-const loginFormRef = ref();
+const loginFormRef = ref<FormInstance | null>(null);
 const loading = ref(false);
 
 // 定义响应式对象
 const loginForm = reactive({
-  mobile: '',
-  code: '',
+	mobile: '',
+	code: '',
 });
 
 // 定义校验规则
 const loginRules = reactive({
-  mobile: [{required: true, trigger: 'blur', validator: rule.validatePhone}],
-  code: [
-    {
-      required: true,
-      trigger: 'blur',
-      message: t('mobile.codeText'),
-    },
-  ],
+	mobile: [
+		{ required: true, message: t('mobile.mobileRequired'), trigger: 'blur' },
+		{ validator: rule.validatePhone, trigger: 'blur' },
+	],
+	code: [
+		{ required: true, message: t('mobile.codeRequired'), trigger: 'blur' },
+		{ min: 4, max: 4, message: t('mobile.codeLength'), trigger: 'blur' },
+	],
 });
 
 /**
  * 处理发送验证码事件。
  */
 const handleSendCode = async () => {
-  const valid = await loginFormRef.value.validateField('mobile').catch(() => {
-  });
-  if (!valid) return;
+	if (!loginFormRef.value) return;
 
-  try {
-    const {msg, data} = await sendMobileCode(loginForm.mobile);
-    if (data !== false) {
-      useMessage().success('验证码发送成功');
-      timeCacl();
-    } else {
-      useMessage().error(msg);
-    }
-  } catch (e) {
-    useMessage().error(e.data || e.msg);
-  }
+	try {
+		await loginFormRef.value.validateField('mobile');
 
+		const { msg, data } = await sendMobileCode(loginForm.mobile);
+		if (data !== false) {
+			useMessage().success(t('mobile.sendSuccess'));
+
+			timeCacl();
+		} else {
+			useMessage().error(msg);
+		}
+	} catch (error: any) {
+		if (error.message) {
+			useMessage().error(error.message);
+		} else {
+			useMessage().error(error.data || error.msg || t('mobile.sendFailed'));
+		}
+	}
 };
 
 /**
  * 处理登录事件。
  */
 const handleLogin = async () => {
-  const valid = await loginFormRef.value.validate().catch(() => {
-  });
-  if (!valid) return;
+	if (!loginFormRef.value) return;
 
-  try {
-    loading.value = true;
-    await useUserInfo().loginByMobile(loginForm);
-    emit('signInSuccess');
-  } finally {
-    loading.value = false;
-  }
+	try {
+		await loginFormRef.value.validate();
+		loading.value = true;
+		await useUserInfo().loginByMobile(loginForm);
+		useMessage().success(t('mobile.loginSuccess'));
+		emit('signInSuccess');
+	} finally {
+		loading.value = false;
+	}
 };
 
 // 定义响应式对象
 const msg = reactive({
-  msgText: t('mobile.codeText'),
-  msgTime: 60,
-  msgKey: false,
+	msgText: t('mobile.codeText'),
+	msgTime: 60,
+	msgKey: false,
 });
 
 /**
  * 计算并更新倒计时。
  */
 const timeCacl = () => {
-  msg.msgText = `${msg.msgTime}秒后重发`;
-  msg.msgKey = true;
-  const time = setInterval(() => {
-    msg.msgTime--;
-    msg.msgText = `${msg.msgTime}秒后重发`;
-    if (msg.msgTime === 0) {
-      msg.msgTime = 60;
-      msg.msgText = t('mobile.codeText');
-      msg.msgKey = false;
-      clearInterval(time);
-    }
-  }, 1000);
+	msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
+	msg.msgKey = true;
+	const time = setInterval(() => {
+		msg.msgTime--;
+		msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
+		if (msg.msgTime === 0) {
+			msg.msgTime = 60;
+			msg.msgText = t('mobile.codeText');
+			msg.msgKey = false;
+			clearInterval(time);
+		}
+	}, 1000);
 };
 </script>
+
+<style scoped>
+.shadow-btn {
+	box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb), 0.2);
+}
+</style>

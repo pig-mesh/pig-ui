@@ -14,8 +14,8 @@ export default {
 				<div class="absolute inset-0 rounded-full shadow-inner"></div>
 			</div>
 			<div class="ml-8">
-				<h2 class="text-lg font-bold text-gray-800">{{ userData.name }}</h2>
-				<p class="text-gray-600">{{ userData.deptName }} | {{ userData.postName }}</p>
+				<h2 class="text-lg font-bold dark:text-gray-100">{{ userData.name }}</h2>
+				<p class="text-gray-600 dark:text-gray-400">{{ userData.deptName }} | {{ userData.postName }}</p>
 			</div>
 		</div>
 	</el-card>
@@ -24,8 +24,14 @@ export default {
 <script setup lang="ts" name="currentUser">
 import { useUserInfo } from '/@/stores/userInfo';
 import { getObj } from '/@/api/admin/user';
+import { getCurrentInstance } from 'vue';
 
-const { proxy } = getCurrentInstance();
+const instance = getCurrentInstance();
+const proxy = instance?.proxy;
+
+if (!proxy) {
+	throw new Error('Failed to get component instance');
+}
 
 const userData = ref({
 	postName: '',

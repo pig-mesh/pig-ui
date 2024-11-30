@@ -1,6 +1,6 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown v-if="i18nEnabled" :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
+		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
 			<div class="layout-navbars-breadcrumb-user-icon">
 				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'" :title="$t('user.title1')"></i>
 			</div>
@@ -105,12 +105,10 @@ interface State {
 	disabledSize: string;
 }
 
-// 环境变量控制
-const i18nEnabled = import.meta.env.VITE_I18N_ENABLE !== 'false';
-
-// 语言切换状态
-const state = reactive({
-	disabledI18n: i18nEnabled ? Local.get('themeConfig')?.globalI18n || 'zh-cn' : 'zh-cn',
+const state = reactive<State>({
+	isScreenfull: false,
+	disabledI18n: 'zh-cn',
+	disabledSize: 'large',
 });
 
 // 是否开启websocket
@@ -225,8 +223,9 @@ const getIsDot = () => {
 };
 // 页面加载时
 onMounted(() => {
-	if (i18nEnabled && Local.get('themeConfig')) {
-		state.disabledI18n = Local.get('themeConfig').globalI18n;
+	if (Local.get('themeConfig')) {
+		initI18nOrSize('globalComponentSize', 'disabledSize');
+		initI18nOrSize('globalI18n', 'disabledI18n');
 	}
 
 	getIsDot();

@@ -1,15 +1,31 @@
 <template>
-	<div id="tenant" v-if="!autoTenantEnable">
-		<el-dropdown trigger="click" placement="bottom-end" @command="handleCommand">
-			<el-button circle>
-				<SvgIcon name="local-tenant" />
-			</el-button>
+	<div v-if="!autoTenantEnable">
+		<el-dropdown trigger="click" placement="bottom" @command="handleCommand">
+			<div
+				class="flex items-center justify-center w-48 px-3 py-2 mx-auto space-x-2 text-sm text-gray-600 transition-colors duration-200 rounded-lg cursor-pointer dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
+			>
+				<el-icon>
+					<ele-OfficeBuilding class="text-gray-400 dark:text-slate-400" />
+				</el-icon>
+				<span class="font-medium dark:text-slate-300">{{ getCurrentTenantName }}</span>
+				<el-icon>
+					<ele-ArrowDown class="text-gray-400 dark:text-slate-400" />
+				</el-icon>
+			</div>
 			<template #dropdown>
-				<el-dropdown-menu>
-					<el-dropdown-item v-for="item in tenantList" :key="item.id" :command="item">
-						{{ item.name }}
-						<el-icon class="ml8" v-if="selectBgFlag(item.id)">
-							<Check />
+				<el-dropdown-menu class="!p-2 !min-w-[12rem] dark:!bg-slate-800 dark:!border-slate-700">
+					<el-dropdown-item
+						v-for="item in tenantList"
+						:key="item.id"
+						:command="item"
+						class="!flex !items-center !space-x-2 !rounded !px-3 !text-gray-700 dark:!text-slate-300 hover:!bg-gray-100 dark:hover:!bg-slate-700"
+					>
+						<el-icon>
+							<ele-OfficeBuilding class="text-gray-400 dark:text-slate-400" />
+						</el-icon>
+						<span class="font-medium dark:text-slate-300">{{ item.name }}</span>
+						<el-icon v-if="item.id === tenant" class="ml-auto text-blue-500">
+							<ele-Check />
 						</el-icon>
 					</el-dropdown-item>
 				</el-dropdown-menu>
@@ -19,8 +35,6 @@
 </template>
 
 <script setup lang="ts" name="tenant">
-import 'driver.js/dist/driver.min.css';
-import Driver from 'driver.js';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import Cookies from 'js-cookie';
@@ -57,7 +71,7 @@ const getTenantList = async () => {
 		const response = await fetchList();
 		tenantList.value = response.data;
 	} catch (error) {
-		useMessage().error('获取租户列表失败');
+		useMessage().error(t('tenant.loadError'));
 	}
 };
 
@@ -79,36 +93,6 @@ const handleCommand = (tenant: Tenant) => {
 	window.location.reload();
 };
 
-// 新用户引导
-const guide = () => {
-	const steps = [
-		{
-			element: '#tenant',
-			popover: {
-				title: t('tenant_guide.title'),
-				description: t('tenant_guide.description'),
-				position: 'left',
-			},
-		},
-	];
-
-	const driver = new Driver({
-		allowClose: false,
-		doneBtnText: '结束',
-		closeBtnText: '关闭',
-		nextBtnText: '下一步',
-		prevBtnText: '上一步',
-	});
-	driver.defineSteps(steps);
-	if (!Local.get('tenant-guide')) {
-		driver.start();
-		Local.set('tenant-guide', true);
-	}
-};
-
-// 选中租户的高亮显示
-const selectBgFlag = (id: string) => (id === Session.getTenant() ? 'Check' : '');
-
 // 初始化租户配置
 const initTenantConfig = () => {
 	const stores = useThemeConfig(pinia);
@@ -121,9 +105,9 @@ const initTenantConfig = () => {
 		// 设置页脚作者
 		themeConfig.value.footerAuthor = currentTenant.footer || import.meta.env.VITE_FOOTER_TITLE;
 		// 设置背景
-		themeConfig.value.background = currentTenant.background;
+		themeConfig.value.background = currentTenant.background || '';
 		// 设置小程序二维码
-		themeConfig.value.miniQr = currentTenant.miniQr;
+		themeConfig.value.miniQr = currentTenant.miniQr || '';
 	}
 
 	Session.set('tenantId', tenant.value);
@@ -139,12 +123,15 @@ onMounted(async () => {
 	// 如果启用了自动租户选择，则执行自动匹配
 	if (autoTenantEnable.value) {
 		handleAutoTenant();
-	} else {
-	  // 如果没开启自动匹配，在下一个tick执行新用户引导
-	  nextTick(guide);
 	}
 
 	// 初始化租户配置
 	initTenantConfig();
+});
+
+// 获取当前租户名称
+const getCurrentTenantName = computed(() => {
+	const current = tenantList.value.find(item => item.id === tenant.value);
+	return current?.name || t('tenant.select');
 });
 </script>

@@ -1,42 +1,60 @@
 <template>
-	<div class="select-none">
-		<div class="tenant">
-			<!--  租户选择 -->
-			<tenant />
-		</div>
-		<div class="mini_qr">
-			<!-- 扫码体验移动端 -->
-			<img class="dark:filter dark:brightness-[0.8]" :src="!themeConfig.miniQr ? miniQr : baseURL + themeConfig.miniQr" />
-			<p class="dark:text-gray-300">{{ t('scan.wechatApp') }}</p>
-		</div>
-		<img :src="bg" class="wave dark:opacity-60" />
-		<div class="absolute flex-c right-5 top-3"></div>
-		<div class="login-container">
-			<div class="img">
-				<img class="dark:filter dark:brightness-[0.8] dark:invert" :src="!themeConfig.background ? illustration : baseURL + themeConfig.background" />
-			</div>
-			<div class="login-box">
-				<div class="login-form">
-					<div class="my-3 text-6xl font-semibold dark:text-white">{{ getThemeConfig.globalTitle }}</div>
-					<div class="flex self-center justify-center">
-						<div class="p-12 mx-auto rounded-3xl w-96 bg-white dark:bg-[var(--el-bg-color)]">
-							<div class="space-y-0">
-								<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
-								<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
-								<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
-								<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
-								<div class="flex items-center justify-center my-5 space-x-2">
-									<span class="w-16 h-px bg-gray-100 dark:bg-gray-600"></span>
-									<span class="font-normal text-gray-300 dark:text-gray-500">or</span>
-									<span class="w-16 h-px bg-gray-100 dark:bg-gray-600"></span>
-								</div>
-								<social @signInSuccess="signInSuccess" />
-							</div>
+	<div class="flex items-center justify-center min-h-screen px-5 py-5 bg-gray-100 dark:bg-slate-900 min-w-screen">
+		<!-- 右上角控制组件 -->
+		<Control />
+
+		<div
+			class="w-full overflow-hidden bg-white border border-gray-200 shadow-lg dark:bg-slate-800 rounded-3xl dark:border-slate-700"
+			style="max-width: 1000px"
+		>
+			<div class="w-full md:flex">
+				<!-- 左侧插图区域 -->
+				<div
+					class="hidden w-[55%] bg-gradient-to-br from-blue-400 via-blue-300 to-blue-200 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900/95 md:flex md:items-center md:justify-center"
+				>
+					<img
+						class="w-[85%] h-auto max-h-[650px] object-contain opacity-100 dark:opacity-75 transition-opacity duration-300 hover:opacity-90"
+						:src="!themeConfig.background ? illustration : baseURL + themeConfig.background"
+						alt="Login illustration"
+					/>
+				</div>
+
+				<!-- 右侧登录表单区域 -->
+				<div class="w-full px-5 py-12 md:w-[45%] md:px-12">
+					<div class="mb-12 text-center">
+						<h1 class="text-4xl font-bold text-gray-900 dark:text-white tracking-wide font-['Inter']">{{ getThemeConfig.globalTitle }}</h1>
+						<!-- 租户选择 -->
+						<div class="mt-6">
+							<tenant class="shadow-sm" />
 						</div>
+					</div>
+
+					<div class="w-full px-5">
+						<!-- 登录表单组件 -->
+						<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
+						<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
+						<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
+						<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
+
+						<!-- 分割线 -->
+						<div class="flex items-center justify-center my-6 space-x-3">
+							<span class="w-20 h-[1.5px] bg-gray-200 dark:bg-slate-600"></span>
+							<span class="text-gray-600 dark:text-slate-400">{{ $t('divider.or') }}</span>
+							<span class="w-20 h-[1.5px] bg-gray-200 dark:bg-slate-600"></span>
+						</div>
+
+						<!-- 社交登录 -->
+						<social @signInSuccess="signInSuccess" />
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<!-- 小程序二维码 -->
+		<Qrcode />
+
+		<!-- Footer 组件 -->
+		<Footer />
 	</div>
 </template>
 
@@ -44,12 +62,10 @@
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
 import illustration from '/@/assets/login/login_bg.svg';
-import bg from '/@/assets/login/bg.png';
-import miniQr from '/@/assets/login/mini_qr.png';
 import { useI18n } from 'vue-i18n';
 import { formatAxis } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
-import { Session } from '/@/utils/storage';
+import { Session, Local } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { LoginTypeEnum } from '/@/api/login';
 
@@ -60,6 +76,9 @@ const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 const Expire = defineAsyncComponent(() => import('./component/expire.vue'));
 const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
+const Control = defineAsyncComponent(() => import('./component/control.vue'));
+const Qrcode = defineAsyncComponent(() => import('./component/qrcode.vue'));
+const Footer = defineAsyncComponent(() => import('./component/footer.vue'));
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
@@ -111,7 +130,7 @@ const signInSuccess = async () => {
 	}
 };
 
-// 页面加载时
+// 页面加载时初始化语言
 onMounted(() => {
 	NextLoading.done();
 });

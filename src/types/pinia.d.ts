@@ -74,7 +74,7 @@ declare interface ThemeConfigState {
 		isFooter: boolean;
 		isGrayscale: boolean;
 		isInvert: boolean;
-		isIsDark: boolean;
+		isDark: boolean;
 		isWartermark: boolean;
 		isChat: boolean;
 		wartermarkText: string;

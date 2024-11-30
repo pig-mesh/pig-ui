@@ -74,28 +74,7 @@
 .select-none {
 	user-select: none;
 }
-.tenant {
-	position: absolute;
-	top: 0.75rem;
-	right: 1.25rem;
-	z-index: 9;
-}
-.mini_qr {
-	position: fixed;
-	right: 2rem;
-	bottom: 1rem;
-	padding: 36px;
-	z-index: 1000;
-	img {
-		width: 120px;
-	}
-	p {
-		margin-top: 20px;
-		text-align: center;
-		color: var(--el-text-color-placeholder);
-		font-size: 12px;
-	}
-}
+
 .wave {
 	position: fixed;
 	width: 100%;
@@ -190,5 +169,28 @@
 
 	.login-box {
 		justify-content: center;
+	}
+}
+
+/* 增强过渡动画效果 */
+.transition-all {
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 优化阴影效果 */
+.shadow-lg {
+	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式下的阴影效果 */
+:deep(.dark) .shadow-lg {
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* 添加hover效果 */
+.bg-white {
+	transition: transform 0.3s ease;
+	&:hover {
+		transform: translateY(-2px);
 	}
 }

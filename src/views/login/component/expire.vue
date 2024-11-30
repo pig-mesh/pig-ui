@@ -12,7 +12,7 @@
       </el-input>
     </el-form-item>
     <el-form-item class="login-animation1" prop="password">
-      <el-input text placeholder="请输入原密码" v-model="passwordFormData.password" clearable
+      <el-input text :placeholder="$t('expire.oldPassword')" v-model="passwordFormData.password" clearable
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="off">
         <template #prefix>
@@ -32,7 +32,7 @@
     </el-form-item>
     <el-form-item class="login-animation2" prop="newpassword1">
       <strength-meter
-          placeholder="请输入新密码"
+          :placeholder="$t('expire.newPassword')"
           v-model="passwordFormData.newpassword1"
           autocomplete="off"
           :maxLength="20"
@@ -49,7 +49,7 @@
 
     <el-form-item class="login-animation2" prop="newpassword2">
       <strength-meter
-          placeholder="请确认新密码"
+          :placeholder="$t('expire.confirmPassword')"
           v-model="passwordFormData.newpassword2"
           autocomplete="off"
           :maxLength="20"
@@ -65,9 +65,14 @@
     </el-form-item>
 
     <el-form-item class="login-animation4">
-      <el-button type="primary" class="login-content-submit rounded-lg" v-waves @click="handleResetPassword"
-                 :loading="loading">
-        <span class="tracking-wide font-semibold">{{ $t('password.resetBtnText') }}</span>
+      <el-button 
+        type="primary" 
+        class="rounded-lg login-content-submit" 
+        v-waves 
+        @click="handleResetPassword"
+        :loading="loading"
+      >
+        <span class="font-semibold tracking-wide">{{ $t('password.resetBtnText') }}</span>
       </el-button>
     </el-form-item>
 
@@ -79,6 +84,7 @@ import {resetUserPassword} from '/@/api/admin/user';
 import {useMessage} from '/@/hooks/message';
 import {useI18n} from 'vue-i18n';
 import {LoginTypeEnum} from "/@/api/login";
+import type { FormInstance } from 'element-plus';
 
 // 注册生命周期事件
 const emit = defineEmits(['afterSuccess', 'change']);
@@ -90,7 +96,7 @@ const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthM
 const {t} = useI18n();
 
 // 表单引用
-const dataFormRef = ref();
+const dataFormRef = ref<FormInstance | null>(null);
 
 // 加载中状态
 const loading = ref(false);
@@ -113,14 +119,14 @@ const passwordFormData = reactive({
 
 const validatorPassword2 = (rule: any, value: any, callback: any) => {
   if (value !== passwordFormData.newpassword1) {
-    callback(new Error(t('personal.passwordRule')));
+    callback(new Error(t('expire.passwordRule')));
   } else {
     callback();
   }
 };
 const validatorScore = (rule: any, value: any, callback: any) => {
-  if (score.value <= 1) {
-    callback(new Error(t('personal.passwordScore')));
+  if (Number(score.value) <= 1) {
+    callback(new Error(t('expire.passwordScore')));
   } else {
     callback();
   }
@@ -128,12 +134,12 @@ const validatorScore = (rule: any, value: any, callback: any) => {
 
 // 表单验证规则
 const dataRules = reactive({
-  password: [{required: true, message: '密码不能为空', trigger: 'blur'}],
+  password: [{required: true, message: t('expire.oldPassword'), trigger: 'blur'}],
   newpassword1: [
     {
       min: 6,
       max: 20,
-      message: '用户密码长度必须介于 6 和 20 之间',
+      message: t('register.passwordLength'),
       trigger: 'blur',
     },
     {validator: validatorScore, trigger: 'blur'},
@@ -142,7 +148,7 @@ const dataRules = reactive({
     {
       min: 6,
       max: 20,
-      message: '用户密码长度必须介于 6 和 20 之间',
+      message: t('register.passwordLength'),
       trigger: 'blur',
     },
     {validator: validatorPassword2, trigger: 'blur'},
@@ -150,7 +156,7 @@ const dataRules = reactive({
 });
 
 // 处理密码强度得分变化事件
-const handlePassScore = (e) => {
+const handlePassScore = (e: string) => {
   score.value = e;
 };
 
@@ -159,25 +165,20 @@ const handlePassScore = (e) => {
  * @description 重置密码
  */
 const handleResetPassword = async () => {
+  if (!dataFormRef.value) return false;
+  
   // 验证表单是否符合规则
-  const valid = await dataFormRef.value.validate().catch(() => {
-  });
+  const valid = await dataFormRef.value.validate().catch(() => {});
   if (!valid) return false;
 
   try {
-    // 开始加载
     loading.value = true;
-    // 调用注册API
     await resetUserPassword(passwordFormData);
-    // 注册成功提示
     useMessage().success(t('common.optSuccessText'));
-    // 触发注册成功后的钩子函数
     emit('change', LoginTypeEnum.PASSWORD);
   } catch (err: any) {
-    // 提示错误信息
     useMessage().error(err.msg);
   } finally {
-    // 结束加载状态
     loading.value = false;
   }
 };

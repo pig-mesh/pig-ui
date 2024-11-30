@@ -85,7 +85,7 @@
 						<el-color-picker v-model="getThemeConfig.primary" @change="onColorPickerChange"> </el-color-picker>
 					</div>
 				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt15" v-if="darkModeEnabled">
+				<div class="layout-breadcrumb-seting-bar-flex mt15">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsDark') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-switch v-model="getThemeConfig.isDark" size="small" @change="onAddDarkChange"></el-switch>
@@ -557,17 +557,15 @@ const onAddFilterChange = (attr: string) => {
 };
 // 4、界面显示 --> 深色模式
 const onAddDarkChange = () => {
-	if (!darkModeEnabled) return;
-	
 	const body = document.documentElement as HTMLElement;
 	if (getThemeConfig.value.isDark) {
 		body.setAttribute('data-theme', 'dark');
+		// body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
 		body.classList.add('dark');
 	} else {
 		body.classList.remove('dark');
 		body.setAttribute('data-theme', '');
 	}
-	setLocalThemeConfig();
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {
@@ -659,11 +657,6 @@ const initSetStyle = () => {
 	// 2、菜单 / 顶栏 --> 分栏菜单背景渐变
 	onColumnsMenuBarGradualChange();
 };
-
-// 环境变量控制
-const darkModeEnabled = import.meta.env.VITE_DARK_MODE_ENABLE !== 'false'
-
-// 页面加载时初始化主题
 onMounted(() => {
 	nextTick(() => {
 		// 判断当前布局是否不相同，不相同则初始化当前布局的样式，防止监听窗口大小改变时，布局配置logo、菜单背景等部分布局失效问题
@@ -684,9 +677,7 @@ onMounted(() => {
 			// 色弱模式
 			if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
 			// 深色模式
-			if (darkModeEnabled && getThemeConfig.value.isDark) {
-				onAddDarkChange();
-			}
+			if (getThemeConfig.value.isDark) onAddDarkChange();
 			// 开启水印
 			onWartermarkChange();
 			// 语言国际化

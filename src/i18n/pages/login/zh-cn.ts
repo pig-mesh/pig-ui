@@ -20,17 +20,35 @@ export default {
 		resetBtnText: '重 置',
 		readAccept: '我已仔细阅读并接受',
 		privacyPolicy: '《隐私政策》',
+		oldPassword: '请输入原密码',
+		newPassword: '请输入新密码',
+		confirmPassword: '请确认新密码',
+		backToLogin: '返回登录',
+		mobileLogin: '验证码登录',
+		createAccount: '注册账号',
 	},
 	mobile: {
 		placeholder1: '请输入手机号',
 		placeholder2: '请输入验证码',
 		codeText: '获取验证码',
 		btnText: '登 录',
+		mobileLogin: '验证码登录',
+		backToLogin: '返回登录',
+		createAccount: '注册账号',
+		sendSuccess: '验证码发送功',
+		seconds: '秒后重发',
+		mobileRequired: '请输入手机号码',
+		codeRequired: '请输入验证码',
+		codeLength: '验证码必须是4位数字',
+		sendFailed: '发送验证码失败',
+		loginSuccess: '登录成功',
+		loginFailed: '登录失败',
+		signIn: '登 录'
 	},
 	scan: {
 		text: '打开手机扫一扫，快速登录/注册',
 		wechatApp: '微信扫码体验移动端',
-		appErrorTip: '应用未配置，登录失败'
+		appErrorTip: '应用未配置，登录失败',
 	},
 	tenant_guide: {
 		title: '请选择租户，点击此处',
@@ -38,4 +56,35 @@ export default {
 	},
 	signInText: '欢迎回来！',
 	browserMsgText: '* 温馨提示：建议使用谷歌、Microsoft Edge，版本 80 及以上浏览器，360浏览器请使用极速模式',
+	expire: {
+		oldPassword: '请输入原密码',
+		newPassword: '请输入新密码',
+		confirmPassword: '请确认新密码',
+		passwordRule: '两次输入的密码不一致',
+		passwordScore: '密码强度太低',
+		resetSuccess: '密码重置成功',
+	},
+	tenant: {
+		select: '选择租户',
+		loadError: '获取租户列表失败',
+	},
+	verify: {
+		imageCode: '请输入验证码',
+	},
+	register: {
+		usernameEmpty: '用户名不能为空',
+		usernameLength: '用户名称长度必须介于 5 和 20 之间',
+		phoneEmpty: '手机号不能为空',
+		passwordEmpty: '密码不能为空',
+		passwordLength: '用户密码长度必须介于 6 和 20 之间',
+		passwordStrength: '密码强度太低',
+		termsRequired: '请阅读并同意条款',
+	},
+	divider: {
+		or: '或',
+	},
+	socialLogin: {
+		wechatWork: '企微',
+		dingtalk: '钉钉',
+	},
 };
