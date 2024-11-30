@@ -9,74 +9,74 @@
 			@close="onDrawerClose"
 		>
 			<el-scrollbar class="layout-breadcrumb-seting-bar">
-        <!-- 布局切换 -->
-        <el-divider content-position="left">{{ $t('layout.sixTitle') }}</el-divider>
-        <div class="layout-drawer-content-flex">
-          <!-- defaults 布局 -->
-          <div class="layout-drawer-content-item" @click="onSetLayout('defaults')">
-            <section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'defaults' }">
-              <aside class="el-aside" style="width: 20px"></aside>
-              <section class="el-container is-vertical">
-                <header class="el-header" style="height: 10px"></header>
-                <main class="el-main"></main>
-              </section>
-            </section>
-            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'defaults' }">
-              <div class="layout-tips-box">
-                <p class="layout-tips-txt">{{ $t('layout.sixDefaults') }}</p>
-              </div>
-            </div>
-          </div>
-          <!-- classic 布局 -->
-          <div class="layout-drawer-content-item" @click="onSetLayout('classic')">
-            <section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'classic' }">
-              <header class="el-header" style="height: 10px"></header>
-              <section class="el-container">
-                <aside class="el-aside" style="width: 20px"></aside>
-                <section class="el-container is-vertical">
-                  <main class="el-main"></main>
-                </section>
-              </section>
-            </section>
-            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'classic' }">
-              <div class="layout-tips-box">
-                <p class="layout-tips-txt">{{ $t('layout.sixClassic') }}</p>
-              </div>
-            </div>
-          </div>
-          <!-- transverse 布局 -->
-          <div class="layout-drawer-content-item" @click="onSetLayout('transverse')">
-            <section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'transverse' }">
-              <header class="el-header" style="height: 10px"></header>
-              <section class="el-container">
-                <section class="el-container is-vertical">
-                  <main class="el-main"></main>
-                </section>
-              </section>
-            </section>
-            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'transverse' }">
-              <div class="layout-tips-box">
-                <p class="layout-tips-txt">{{ $t('layout.sixTransverse') }}</p>
-              </div>
-            </div>
-          </div>
-          <!-- columns 布局 -->
-          <div class="layout-drawer-content-item" @click="onSetLayout('columns')">
-            <section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }">
-              <aside class="el-aside-dark" style="width: 10px"></aside>
-              <aside class="el-aside" style="width: 20px"></aside>
-              <section class="el-container is-vertical">
-                <header class="el-header" style="height: 10px"></header>
-                <main class="el-main"></main>
-              </section>
-            </section>
-            <div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
-              <div class="layout-tips-box">
-                <p class="layout-tips-txt">{{ $t('layout.sixColumns') }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+				<!-- 布局切换 -->
+				<el-divider content-position="left">{{ $t('layout.sixTitle') }}</el-divider>
+				<div class="layout-drawer-content-flex">
+					<!-- defaults 布局 -->
+					<div class="layout-drawer-content-item" @click="onSetLayout('defaults')">
+						<section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'defaults' }">
+							<aside class="el-aside" style="width: 20px"></aside>
+							<section class="el-container is-vertical">
+								<header class="el-header" style="height: 10px"></header>
+								<main class="el-main"></main>
+							</section>
+						</section>
+						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'defaults' }">
+							<div class="layout-tips-box">
+								<p class="layout-tips-txt">{{ $t('layout.sixDefaults') }}</p>
+							</div>
+						</div>
+					</div>
+					<!-- classic 布局 -->
+					<div class="layout-drawer-content-item" @click="onSetLayout('classic')">
+						<section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'classic' }">
+							<header class="el-header" style="height: 10px"></header>
+							<section class="el-container">
+								<aside class="el-aside" style="width: 20px"></aside>
+								<section class="el-container is-vertical">
+									<main class="el-main"></main>
+								</section>
+							</section>
+						</section>
+						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'classic' }">
+							<div class="layout-tips-box">
+								<p class="layout-tips-txt">{{ $t('layout.sixClassic') }}</p>
+							</div>
+						</div>
+					</div>
+					<!-- transverse 布局 -->
+					<div class="layout-drawer-content-item" @click="onSetLayout('transverse')">
+						<section class="el-container is-vertical el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'transverse' }">
+							<header class="el-header" style="height: 10px"></header>
+							<section class="el-container">
+								<section class="el-container is-vertical">
+									<main class="el-main"></main>
+								</section>
+							</section>
+						</section>
+						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'transverse' }">
+							<div class="layout-tips-box">
+								<p class="layout-tips-txt">{{ $t('layout.sixTransverse') }}</p>
+							</div>
+						</div>
+					</div>
+					<!-- columns 布局 -->
+					<div class="layout-drawer-content-item" @click="onSetLayout('columns')">
+						<section class="el-container el-circular" :class="{ 'drawer-layout-active': getThemeConfig.layout === 'columns' }">
+							<aside class="el-aside-dark" style="width: 10px"></aside>
+							<aside class="el-aside" style="width: 20px"></aside>
+							<section class="el-container is-vertical">
+								<header class="el-header" style="height: 10px"></header>
+								<main class="el-main"></main>
+							</section>
+						</section>
+						<div class="layout-tips-warp" :class="{ 'layout-tips-warp-active': getThemeConfig.layout === 'columns' }">
+							<div class="layout-tips-box">
+								<p class="layout-tips-txt">{{ $t('layout.sixColumns') }}</p>
+							</div>
+						</div>
+					</div>
+				</div>
 				<!-- 全局主题 -->
 				<el-divider content-position="left">{{ $t('layout.oneTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex">
@@ -85,10 +85,10 @@
 						<el-color-picker v-model="getThemeConfig.primary" @change="onColorPickerChange"> </el-color-picker>
 					</div>
 				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt15">
+				<div class="layout-breadcrumb-seting-bar-flex mt15" v-if="darkModeEnabled">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsDark') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-switch v-model="getThemeConfig.isIsDark" size="small" @change="onAddDarkChange"></el-switch>
+						<el-switch v-model="getThemeConfig.isDark" size="small" @change="onAddDarkChange"></el-switch>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -349,12 +349,12 @@
 						<el-switch v-model="getThemeConfig.isWartermark" size="small" @change="onWartermarkChange"></el-switch>
 					</div>
 				</div>
-        <div class="layout-breadcrumb-seting-bar-flex mt15">
-          <div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsChat') }}</div>
-          <div class="layout-breadcrumb-seting-bar-flex-value">
-            <el-switch v-model="getThemeConfig.isChat" size="small" @change="onChatChange"></el-switch>
-          </div>
-        </div>
+				<div class="layout-breadcrumb-seting-bar-flex mt15">
+					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsChat') }}</div>
+					<div class="layout-breadcrumb-seting-bar-flex-value">
+						<el-switch v-model="getThemeConfig.isChat" size="small" @change="onChatChange"></el-switch>
+					</div>
+				</div>
 				<!-- 其它设置 -->
 				<el-divider content-position="left">{{ $t('layout.fiveTitle') }}</el-divider>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -428,18 +428,18 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbSeting">
-import {computed, nextTick, onMounted, onUnmounted, reactive} from 'vue';
-import {ElMessage} from 'element-plus';
-import {useI18n} from 'vue-i18n';
-import {storeToRefs} from 'pinia';
-import {useThemeConfig} from '/@/stores/themeConfig';
-import {useChangeColor} from '/@/utils/theme';
-import {Local} from '/@/utils/storage';
+import { computed, nextTick, onMounted, onUnmounted, reactive } from 'vue';
+import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
+import { useThemeConfig } from '/@/stores/themeConfig';
+import { useChangeColor } from '/@/utils/theme';
+import { Local } from '/@/utils/storage';
 import Watermark from '/@/utils/wartermark';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import {useUserInfo} from '/@/stores/userInfo';
+import { useUserInfo } from '/@/stores/userInfo';
 
 // 定义变量内容
 const { locale } = useI18n();
@@ -557,15 +557,17 @@ const onAddFilterChange = (attr: string) => {
 };
 // 4、界面显示 --> 深色模式
 const onAddDarkChange = () => {
+	if (!darkModeEnabled) return;
+	
 	const body = document.documentElement as HTMLElement;
-	if (getThemeConfig.value.isIsDark) {
-    body.setAttribute('data-theme', 'dark');
-    // body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
-    body.classList.add('dark');
-  } else {
-    body.classList.remove('dark');
-    body.setAttribute('data-theme', '');
-  }
+	if (getThemeConfig.value.isDark) {
+		body.setAttribute('data-theme', 'dark');
+		body.classList.add('dark');
+	} else {
+		body.classList.remove('dark');
+		body.setAttribute('data-theme', '');
+	}
+	setLocalThemeConfig();
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {
@@ -576,7 +578,7 @@ const onWartermarkChange = () => {
 
 // 4、界面显示 --> 开启AI助手
 const onChatChange = () => {
-  setLocalThemeConfig();
+	setLocalThemeConfig();
 };
 
 // 5、布局切换
@@ -657,6 +659,11 @@ const initSetStyle = () => {
 	// 2、菜单 / 顶栏 --> 分栏菜单背景渐变
 	onColumnsMenuBarGradualChange();
 };
+
+// 环境变量控制
+const darkModeEnabled = import.meta.env.VITE_DARK_MODE_ENABLE !== 'false'
+
+// 页面加载时初始化主题
 onMounted(() => {
 	nextTick(() => {
 		// 判断当前布局是否不相同，不相同则初始化当前布局的样式，防止监听窗口大小改变时，布局配置logo、菜单背景等部分布局失效问题
@@ -677,7 +684,9 @@ onMounted(() => {
 			// 色弱模式
 			if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
 			// 深色模式
-			if (getThemeConfig.value.isIsDark) onAddDarkChange();
+			if (darkModeEnabled && getThemeConfig.value.isDark) {
+				onAddDarkChange();
+			}
 			// 开启水印
 			onWartermarkChange();
 			// 语言国际化
