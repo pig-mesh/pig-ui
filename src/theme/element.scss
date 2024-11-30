@@ -62,7 +62,11 @@
 // https://github.com/element-plus/element-plus/pull/15352
 .el-form--inline {
 	.el-form-item {
-		& > .el-input, .el-cascader, .el-select, .el-date-editor, .el-autocomplete {
+		& > .el-input,
+		.el-cascader,
+		.el-select,
+		.el-date-editor,
+		.el-autocomplete {
 			width: 240px;
 		}
 	}
@@ -82,8 +86,59 @@
 ------------------------------- */
 .el-message {
 	min-width: unset !important;
-	padding: 15px !important;
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.02);
+	padding: 12px 20px !important;
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.08);
+	border-width: 1px;
+	border-style: solid;
+	border-radius: 4px;
+
+	.el-message__content {
+		font-size: 14px;
+		line-height: 1.4;
+		color: var(--el-text-color-regular);
+	}
+
+	.el-message__icon {
+		margin-right: 8px;
+		font-size: 16px;
+		vertical-align: middle;
+	}
+
+	// 成功类型
+	&.el-message--success {
+		background-color: #f0f9eb;
+		border-color: #67c23a;
+		.el-message__content {
+			color: #67c23a;
+		}
+	}
+
+	// 警告类型
+	&.el-message--warning {
+		background-color: #fdf6ec;
+		border-color: #e6a23c;
+		.el-message__content {
+			color: #e6a23c;
+		}
+	}
+
+	// 错误类型
+	&.el-message--error {
+		background-color: #fef0f0;
+		border-color: #f56c6c;
+		.el-message__content {
+			color: #f56c6c;
+		}
+	}
+
+	// 信息类型
+	&.el-message--info {
+		background-color: #f4f4f5;
+		border-color: #909399;
+		.el-message__content {
+			color: #909399;
+		}
+	}
 }
 
 /* NavMenu 导航菜单
@@ -154,26 +209,25 @@
 	text-decoration: none;
 }
 
-
 // 横向菜单（经典、横向）布局
 .el-menu.el-menu--horizontal {
 	border-bottom: none !important;
 	width: 100% !important;
 
-    // 横向布局默认选中的字体颜色同步为左侧菜单颜色（默认黑色）
-    .el-sub-menu.is-active .el-sub-menu__title {
-      color: var(--next-bg-menuBarColor) !important;
-    }
+	// 横向布局默认选中的字体颜色同步为左侧菜单颜色（默认黑色）
+	.el-sub-menu.is-active .el-sub-menu__title {
+		color: var(--next-bg-menuBarColor) !important;
+	}
 
-    // 经典布局，当选中状态的时候字体颜色同步为左侧菜单颜色（默认黑色）
+	// 经典布局，当选中状态的时候字体颜色同步为左侧菜单颜色（默认黑色）
 	.el-menu-item,
 	.el-sub-menu__title {
 		height: 50px !important;
 		color: var(--next-bg-topBarColor) !important;
-        &:hover,
-        &.is-active {
-          color: var(--next-bg-menuBarColor) !important;
-        }
+		&:hover,
+		&.is-active {
+			color: var(--next-bg-menuBarColor) !important;
+		}
 	}
 
 	.el-menu-item:not(.is-active):hover,
@@ -273,7 +327,6 @@
 	z-index: 4;
 }
 
-/*防止页面切换时，滚动条高度不变的问题（滚动条高度非滚动条滚动高度）*/
 .el-scrollbar__wrap {
 	max-height: 100%;
 }

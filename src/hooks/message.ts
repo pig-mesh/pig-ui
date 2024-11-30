@@ -3,6 +3,12 @@ import { i18n } from '../i18n';
 
 const { t } = i18n.global;
 
+const defaultOptions = {
+	duration: 3000, // 显示时间为3秒
+	showClose: true, // 显示关闭按钮
+	offset: 20, // 消息距离顶部的偏移量
+};
+
 interface MessageImplements {
 	info(title: string): void;
 	warning(title: string): void;
@@ -14,22 +20,39 @@ export function useMessage() {
 	class MessageClass implements MessageImplements {
 		// 普通提示
 		info(title: string): void {
-			ElMessage.info(title);
+			ElMessage({
+				...defaultOptions,
+				message: title,
+				type: 'info',
+			});
 		}
 
 		// 警告提示
 		warning(title: string): void {
-			ElMessage.warning(title);
+			ElMessage({
+				...defaultOptions,
+				message: title,
+				type: 'warning',
+			});
 		}
 
 		// 成功提示
 		success(title: string): void {
-			ElMessage.success(title);
+			ElMessage({
+				...defaultOptions,
+				message: title,
+				type: 'success',
+			});
 		}
 
 		// 错误提示
 		error(title: string): void {
-			ElMessage.error(title);
+			ElMessage({
+				...defaultOptions,
+				message: title,
+				type: 'error',
+				duration: 2000, // 错误提示显示时间延长到5秒
+			});
 		}
 	}
 
