@@ -1,8 +1,8 @@
 <template>
-	<div v-show="showBox" :class="mode == 'pop' ? 'mask' : ''">
-		<div :class="mode == 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }">
+	<div v-show="showBox" :class="mode == 'pop' ? 'mask' : ''" @click="handleMaskClick">
+		<div :class="mode == 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }" @click.stop>
 			<div v-if="mode == 'pop'" class="verifybox-top">
-				请完成安全验证
+				{{ t('verify.complete') }}
 				<span class="verifybox-close" @click="closeBox">
 					<i class="iconfont icon-close"></i>
 				</span>
@@ -34,6 +34,7 @@
  * @description 分发验证码使用
  * */
 import { computed, ref, toRefs, watchEffect, defineAsyncComponent } from 'vue';
+import { useI18n } from 'vue-i18n';
 const VerifySlide = defineAsyncComponent(() => import('/@/components/Verifition/Verify/VerifySlide.vue'));
 const VerifyPoints = defineAsyncComponent(() => import('/@/components/Verifition/Verify/VerifyPoints.vue'));
 
@@ -81,6 +82,7 @@ export default {
 		},
 	},
 	setup(props) {
+		const { t } = useI18n();
 		const { captchaType, mode } = toRefs(props);
 		const clickShow = ref(false);
 		const verifyType = ref(undefined);
@@ -125,7 +127,15 @@ export default {
 					break;
 			}
 		});
+
+		const handleMaskClick = (e) => {
+			if (e.target.classList.contains('mask')) {
+				closeBox();
+			}
+		};
+
 		return {
+			t,
 			clickShow,
 			verifyType,
 			componentType,
@@ -133,13 +143,14 @@ export default {
 			showBox,
 			closeBox,
 			show,
+			handleMaskClick,
 		};
 	},
 };
 </script>
 <style>
 .verifybox {
-	position: relative;
+	position: fixed;
 	box-sizing: border-box;
 	border-radius: 2px;
 	border: 1px solid #e4e7eb;
@@ -148,6 +159,11 @@ export default {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
+	margin: auto;
+	height: 280px;
+	overflow: hidden;
+	min-width: 320px;
+	z-index: 1002;
 }
 
 .verifybox-top {
@@ -164,6 +180,8 @@ export default {
 .verifybox-bottom {
 	padding: 15px;
 	box-sizing: border-box;
+	height: calc(100% - 50px);
+	overflow: hidden;
 }
 
 .verifybox-close {
@@ -183,9 +201,8 @@ export default {
 	z-index: 1001;
 	width: 100%;
 	height: 100vh;
-	background: rgba(0, 0, 0, 0.3);
-	/* display: none; */
-	transition: all 0.5s;
+	background: transparent;
+	pointer-events: auto;
 }
 
 .verify-tips {
@@ -206,16 +223,6 @@ export default {
 .err-bg {
 	background-color: rgba(217, 83, 79, 0.5);
 	filter: progid:DXImageTransform.Microsoft.gradient(startcolorstr=#7fD9534F, endcolorstr=#7fD9534F);
-}
-
-.tips-enter,
-.tips-leave-to {
-	bottom: -30px;
-}
-
-.tips-enter-active,
-.tips-leave-active {
-	transition: bottom 0.5s;
 }
 
 /* ---------------------------- */
@@ -291,6 +298,7 @@ export default {
 	box-sizing: content-box;
 	box-shadow: 0 0 2px #888888;
 	-webkit-border-radius: 1px;
+	transition: none;
 }
 
 .verify-bar-area .verify-move-block:hover {
@@ -308,6 +316,7 @@ export default {
 	-moz-box-sizing: content-box;
 	box-sizing: content-box;
 	border: 1px solid #ddd;
+	transition: none;
 }
 
 .verify-img-panel {
@@ -452,18 +461,6 @@ html.dark {
 		background: rgba(255, 255, 255, 0.1);
 		border: 1px solid rgba(255, 255, 255, 0.2);
 		box-shadow: 0 0 8px rgba(255, 255, 255, 0.1);
-		backdrop-filter: blur(4px);
-		border-radius: 4px;
-
-		&:hover {
-			background: rgba(255, 255, 255, 0.2);
-			border-color: rgba(255, 255, 255, 0.3);
-			box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
-		}
-
-		&:after {
-			opacity: 0.9;
-		}
 	}
 
 	.verify-bar-area .verify-left-bar {
@@ -493,7 +490,7 @@ html.dark {
 	}
 
 	.mask {
-		background: rgba(0, 0, 0, 0.7);
+		background: transparent;
 	}
 }
 

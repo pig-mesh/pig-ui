@@ -1,7 +1,7 @@
 <template>
 	<div style="position: relative">
 		<div v-if="type === '2'" :style="{ height: parseInt(setSize.imgHeight) + vSpace + 'px' }" class="verify-img-out">
-			<div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel">
+			<div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel modern-shadow">
 				<img :src="'data:image/png;base64,' + backImgBase" alt="" style="width: 100%; height: 100%; display: block" />
 				<div v-show="showRefresh" class="verify-refresh" @click="refresh"><i class="iconfont icon-refresh"></i></div>
 				<transition name="tips">
@@ -10,7 +10,7 @@
 			</div>
 		</div>
 		<!-- 公共部分 -->
-		<div :style="{ width: setSize.imgWidth, height: barSize.height, 'line-height': barSize.height }" class="verify-bar-area">
+		<div :style="{ width: setSize.imgWidth, height: barSize.height, 'line-height': barSize.height }" class="verify-bar-area modern-bar">
 			<span class="verify-msg" v-text="text"></span>
 			<div
 				:style="{
@@ -65,6 +65,8 @@ import { aesEncrypt } from '../utils/ase';
 import { resetSize } from '../utils/util';
 import { reqCheck, reqGet } from '../api/index';
 import { computed, getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+
 export default {
 	name: 'VerifySlide',
 	props: {
@@ -87,6 +89,7 @@ export default {
 		explain: {
 			type: String,
 			default: '向右滑动完成验证',
+			/** @deprecated 使用 i18n 国际化替代 */
 		},
 		imgSize: {
 			type: Object,
@@ -117,7 +120,8 @@ export default {
 		},
 	},
 	setup(props) {
-		const { mode, captchaType, type, blockSize, explain } = toRefs(props);
+		const { t } = useI18n();
+		const { mode, captchaType, type, blockSize } = toRefs(props);
 		const { proxy } = getCurrentInstance();
 		let secretKey = ref(''), //后端返回的ase加密秘钥
 			passFlag = ref(''), //是否通过的标识
@@ -157,7 +161,7 @@ export default {
 		});
 
 		function init() {
-			text.value = explain.value;
+			text.value = t('verify.slide.explain');
 			getPictrue();
 			nextTick(() => {
 				let { imgHeight, imgWidth, barHeight, barWidth } = resetSize(proxy);
@@ -296,7 +300,8 @@ export default {
 							}, 1500);
 						}
 						passFlag.value = true;
-						tipWords.value = `${((endMovetime.value - startMoveTime.value) / 1000).toFixed(2)}s验证成功`;
+						const time = ((endMovetime.value - startMoveTime.value) / 1000).toFixed(2);
+						tipWords.value = t('verify.slide.time', { time });
 						var captchaVerification = secretKey.value
 							? aesEncrypt(
 									backToken.value +
@@ -324,7 +329,7 @@ export default {
 							refresh();
 						}, 1000);
 						proxy.$parent.$emit('error', proxy);
-						tipWords.value = '验证失败';
+						tipWords.value = t('verify.slide.fail');
 						setTimeout(() => {
 							tipWords.value = '';
 						}, 1000);
@@ -354,7 +359,7 @@ export default {
 			setTimeout(() => {
 				transitionWidth.value = '';
 				transitionLeft.value = '';
-				text.value = explain.value;
+				text.value = t('verify.slide.explain');
 			}, 300);
 		};
 
@@ -406,7 +411,106 @@ export default {
 			barArea,
 			refresh,
 			start,
+			t,
 		};
 	},
 };
 </script>
+
+<style>
+/* 现代化阴影效果 */
+.modern-shadow {
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+	border-radius: 8px;
+	overflow: hidden;
+	border: none;
+}
+
+/* 现代化滑动条样式 */
+.modern-bar {
+	border-radius: 20px !important;
+	background: #f7f9fc !important;
+	border: 1px solid #edf2f7 !important;
+}
+
+.modern-bar:hover {
+	border-color: #e2e8f0 !important;
+	background: #f1f5f9 !important;
+}
+
+.verify-bar-area {
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+
+.verify-bar-area .verify-move-block {
+	border-radius: 50% !important;
+	background: linear-gradient(145deg, #ffffff, #f5f7fa) !important;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+.verify-bar-area .verify-move-block:hover {
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+.verify-bar-area .verify-left-bar {
+	border-radius: 0 20px 20px 0 !important;
+	background: linear-gradient(90deg, #60a5fa20, #60a5fa40) !important;
+	border: none !important;
+}
+
+.verify-img-panel .verify-refresh {
+	background: rgba(255, 255, 255, 0.9);
+	backdrop-filter: blur(4px);
+	border-radius: 50%;
+	width: 32px !important;
+	height: 32px !important;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	margin: 8px;
+}
+
+.verify-img-panel .verify-refresh:hover {
+	background: rgba(255, 255, 255, 1);
+}
+
+.verify-tips {
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	border-radius: 4px;
+	padding: 4px 12px;
+	font-size: 14px;
+	font-weight: 500;
+}
+
+.suc-bg {
+	background: rgba(34, 197, 94, 0.9) !important;
+}
+
+.err-bg {
+	background: rgba(239, 68, 68, 0.9) !important;
+}
+
+/* 暗黑模式适配 */
+html.dark {
+	.modern-bar {
+		background: rgba(30, 41, 59, 0.5) !important;
+		border-color: rgba(51, 65, 85, 0.5) !important;
+	}
+
+	.verify-move-block {
+		background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+		border: 1px solid rgba(255, 255, 255, 0.1) !important;
+	}
+
+	.verify-left-bar {
+		background: linear-gradient(90deg, rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.2)) !important;
+	}
+
+	.verify-refresh {
+		background: rgba(30, 41, 59, 0.9) !important;
+	}
+}
+</style>
