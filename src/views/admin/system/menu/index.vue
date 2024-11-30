@@ -118,19 +118,19 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList, tableStyle } = useTable(state);
 
 // 根据类型判断是否有子节点
-const  setHasChildren = (arr:any[]) => {
-	arr.forEach(item => {
+const setHasChildren = (arr: any[]) => {
+	arr.forEach((item) => {
 		// 添加 hasChildren 属性
 		item.hasChildren = item.menuType !== '1';
 	});
-}
+};
 const tableList = computed(() => {
 	const list = state.dataList;
 	if (Array.isArray(list)) {
-			setHasChildren(list);
+		setHasChildren(list);
 	}
 	return list;
-})
+});
 
 // 打开新增菜单弹窗
 const onOpenAddMenu = (type?: string, row?: any) => {
@@ -146,11 +146,10 @@ const deleteMenuDisabled = (row: any) => {
 	return (row.children || []).length > 0;
 };
 
-
 // 搜索事件
 const query = () => {
 	state.dataList = [];
-  state.queryForm.parentId = undefined
+	state.queryForm.parentId = undefined;
 	getDataList();
 };
 
@@ -161,18 +160,18 @@ const resetQuery = () => {
 	getDataList();
 };
 
-const load = (row:any,treeNode: unknown,resolve: (date:any[]) => void) => {
+const load = (row: any, treeNode: unknown, resolve: (date: any[]) => void) => {
 	const param = {
 		parentId: row.id,
-	}
-	pageList(param).then(res => {
-		const childrenList = res.data
+	};
+	pageList(param).then((res) => {
+		const childrenList = res.data;
 		if (Array.isArray(childrenList)) {
 			setHasChildren(childrenList);
 		}
-		resolve(childrenList)
-	})
-}
+		resolve(childrenList);
+	});
+};
 
 // 删除操作
 const handleDelete = async (row: any) => {

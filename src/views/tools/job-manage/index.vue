@@ -140,44 +140,40 @@
             <div class="grid grid-cols-4 gap-x-4 gap-y-6">
               <div
                   v-for="job in state.dataList"
-                  class="w-full max-w-sm mt-2 rounded-lg bg-gray-100"
+                  :key="job.jobId"
+                  class="w-full max-w-sm mt-2 bg-gray-100 dark:bg-[#1d1e1f] rounded-lg border dark:border-[#303030]"
               >
-                <div aria-label="header" class="flex space-x-4 items-center p-4">
-                  <div aria-label="avatar" class="flex mr-auto items-center space-x-4">
-                    <div class="space-y-2 flex flex-col flex-1">
-                      <div class="text-lg font-bold text-navy-700 dark:text-white">
+                <div aria-label="header" class="flex items-center p-4 space-x-4">
+                  <div aria-label="avatar" class="flex items-center mr-auto space-x-4">
+                    <div class="flex flex-col flex-1 space-y-2">
+                      <div class="text-lg font-bold text-gray-900 dark:text-gray-100">
                         {{ job.jobName }}
                       </div>
-                      <p class="font-normal text-base leading-tight text-gray-500 truncate">
-                        {{ job.jobGroup }} / {{ job_type.find(item => item.value === job.jobType).label }}
+                      <p class="text-base font-normal text-gray-500 truncate dark:text-gray-400">
+                        {{ job.jobGroup }} / {{ job_type.find((item: any) => item.value === job.jobType)?.label }}
                       </p>
                     </div>
                   </div>
                 </div>
                 <div aria-label="navigation" class="py-2">
                   <nav class="grid gap-1">
-                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
-                         hover:bg-gray-100 rounded-md">
+                    <div class="flex items-center w-full px-4 py-1 space-x-3 leading-6 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-[#303030] rounded-md">
                       <span class="font-medium">{{ $t('job.jobStatus') }}:</span>
-                      <span>{{ job_status.find(item => item.value === job.jobStatus).label }}</span>
+                      <span>{{ job_status.find((item: any) => item.value === job.jobStatus)?.label }}</span>
                     </div>
-                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
-                         hover:bg-gray-100 rounded-md">
+                    <div class="flex items-center w-full px-4 py-1 space-x-3 leading-6 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-[#303030] rounded-md">
                       <span class="font-medium">{{ $t('job.cronExpression') }}:</span>
                       <span>{{ job.cronExpression }}</span>
                     </div>
-                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
-                         hover:bg-gray-100 rounded-md">
+                    <div class="flex items-center w-full px-4 py-1 space-x-3 leading-6 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-[#303030] rounded-md">
                       <span class="font-medium">{{ $t('job.previousTime') }}:</span>
                       <span>{{ job.previousTime }}</span>
                     </div>
-                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
-                         hover:bg-gray-100 rounded-md">
+                    <div class="flex items-center w-full px-4 py-1 space-x-3 leading-6 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-[#303030] rounded-md">
                       <span class="font-medium">{{ $t('job.nextTime') }}:</span>
                       <span>{{ job.nextTime }}</span>
                     </div>
-                    <div class="flex items-center leading-6 space-x-3 py-1 px-4 w-full  text-gray-600 focus:outline-none
-                         hover:bg-gray-100 rounded-md">
+                    <div class="flex items-center w-full px-4 py-1 space-x-3 leading-6 text-gray-600 dark:text-gray-300 hover:bg-white dark:hover:bg-[#303030] rounded-md">
                       <span class="font-medium">{{ $t('job.jobExecuteStatus') }}:</span>
                       <span>
                           <el-icon v-if="job.jobExecuteStatus === '1'"><CircleCloseFilled/></el-icon>
@@ -186,13 +182,13 @@
                     </div>
                   </nav>
                 </div>
-                <div aria-label="footer" class="pt-2">
-                  <div class="flex items-center justify-center  min-w-full">
+                <div aria-label="footer" class="pt-2 border-t dark:border-[#303030]">
+                  <div class="flex items-center justify-center min-w-full">
                     <nav class="flex">
                       <a
                           @click="handleJobLog(job)"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span>{{ $t('job.jobLogBtn') }}</span>
                       </a>
@@ -201,7 +197,7 @@
                           @click="handleStartJob(job)"
                           v-if="job.jobStatus !== '2'"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span>{{ $t('job.jobStartBtn') }}</span>
                       </a>
@@ -210,21 +206,21 @@
                           @click="handleShutDownJob(job)"
                           v-if="job.jobStatus === '2'"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span>{{ $t('job.jobPauseBtn') }}</span>
                       </a>
                       <a
                           v-auth="'job_sys_job_edit'" @click="handleEditJob(job)"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span> {{ $t('common.editBtn') }}</span>
                       </a>
                       <a
                           v-auth="'job_sys_job_start_job'" @click="handleRunJob(job)"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span>{{ $t('job.jobRunBtn') }}</span>
                       </a>
@@ -233,7 +229,7 @@
                           v-auth="'job_sys_job_del'" @click="handleDelete(job)" type="primary"
                           v-if="job.jobStatus !== '2'"
                           href="javascript:;"
-                          class="px-2 py-2 text-primary"
+                          class="px-2 py-2 text-primary hover:text-primary-400 dark:text-primary-300"
                       >
                         <span>{{ $t('common.delBtn') }}</span>
                       </a>

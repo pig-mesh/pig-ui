@@ -11,12 +11,12 @@
 			<pane>
 				<div class="layout-padding-auto layout-padding-view">
 					<el-scrollbar>
-						<div v-loading="loading" class="public-account-management clearfix">
+						<div v-loading="loading" class="clearfix public-account-management">
 							<div class="left">
 								<div class="weixin-hd">
 									<div class="weixin-title">{{ name }}</div>
 								</div>
-								<div class="weixin-menu menu_main clearfix">
+								<div class="clearfix weixin-menu menu_main">
 									<div v-for="(item, i) of menuList" :key="i" class="menu_bottom">
 										<div :class="{ active: isActive === i }" class="menu_item el-icon-s-fold" @click="menuClick(i, item)">
 											{{ item.name }}
@@ -45,9 +45,25 @@
 										</el-icon>
 									</div>
 								</div>
-								<div class="save_div">
-									<el-button class="save_btn" type="success" size="small" @click="handleSave">保存并发布菜单</el-button>
-									<el-button class="save_btn" type="danger" size="small" @click="handleDelete">清空菜单</el-button>
+								<div class="flex items-center justify-center gap-4 mt-4 mb-6 save_div">
+									<el-button 
+										class="save_btn !px-6 !h-9 hover:scale-105 transition-transform" 
+										type="primary" 
+										size="small"
+										@click="handleSave"
+									>
+										<el-icon class="mr-1"><Check /></el-icon>
+										保存发布
+									</el-button>
+									<el-button 
+										class="save_btn !px-6 !h-9 hover:scale-105 transition-transform" 
+										type="warning" 
+										size="small"
+										@click="handleDelete"
+									>
+										<el-icon class="mr-1"><Delete /></el-icon>
+										清空菜单
+									</el-button>
 								</div>
 							</div>
 
