@@ -71,7 +71,7 @@ const getTenantList = async () => {
 		const response = await fetchList();
 		tenantList.value = response.data;
 	} catch (error) {
-		useMessage().error(t('tenant.loadError'));
+		useMessage().error(t('tenantSelect.loadError'));
 	}
 };
 
@@ -132,6 +132,6 @@ onMounted(async () => {
 // 获取当前租户名称
 const getCurrentTenantName = computed(() => {
 	const current = tenantList.value.find(item => item.id === tenant.value);
-	return current?.name || t('tenant.select');
+	return current?.name || t('tenantSelect.select');
 });
 </script>

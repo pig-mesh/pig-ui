@@ -50,10 +50,6 @@ export default {
 		appErrorTip: 'The login fails because the application is not configured',
 	},
 	signInText: 'Welcome back!',
-	tenant_guide: {
-		title: 'Please select a tenant by clicking here',
-		description: 'You only need to select a tenant once for future use',
-	},
 	browserMsgText:
 		'Tip: For best results, we recommend using Google Chrome, Microsoft Edge (version 80 or higher), or the 360 browser with speed mode enabled.',
 	expire: {
@@ -64,8 +60,8 @@ export default {
 		passwordScore: 'Password strength is too low',
 		resetSuccess: 'Password reset successfully',
 	},
-	tenant: {
-		select: 'Select tenant',
+	tenantSelect: {
+		select: 'Select Tenant',
 		loadError: 'Failed to get tenant list',
 	},
 	verify: {
@@ -84,7 +80,7 @@ export default {
 		or: 'or',
 	},
 	socialLogin: {
-		wechatWork: 'Enterprise WeChat',
+		wechatWork: 'WeCom',
 		dingtalk: 'DingTalk',
 	},
 };
