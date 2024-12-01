@@ -285,18 +285,88 @@
 		.el-dialog {
 			margin: 0 auto !important;
 			position: absolute;
+			border-radius: 8px;
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+			overflow: hidden;
+
+			.el-dialog__header {
+				margin: 0;
+				padding: 16px 20px;
+
+				.el-dialog__title {
+					font-size: 16px;
+					font-weight: 600;
+					color: var(--el-text-color-primary);
+				}
+
+				.el-dialog__headerbtn {
+					top: 20px;
+					right: 20px;
+
+					.el-dialog__close {
+						font-size: 18px;
+						transition: all 0.3s ease;
+
+						&:hover {
+							transform: rotate(90deg);
+							color: var(--el-color-primary);
+						}
+					}
+				}
+			}
 
 			.el-dialog__body {
 				padding: 20px !important;
+				max-height: calc(90vh - 120px) !important;
+				overflow-y: auto;
+				overflow-x: hidden;
+				color: var(--el-text-color-regular);
+			}
+
+			.el-dialog__footer {
+				padding: 12px 20px;
+
+				.el-button {
+					padding: 8px 20px;
+					min-width: 80px;
+				}
 			}
 		}
 	}
 }
 
-.el-dialog__body {
-	max-height: calc(90vh - 80px) !important;
-	overflow-y: auto;
-	overflow-x: hidden;
+.el-dialog {
+	--el-transition-duration: 0.3s;
+
+	&.dialog-fade-enter-active {
+		animation: dialog-fade-in var(--el-transition-duration);
+	}
+
+	&.dialog-fade-leave-active {
+		animation: dialog-fade-out var(--el-transition-duration);
+	}
+}
+
+@keyframes dialog-fade-in {
+	0% {
+		transform: translate3d(0, -30px, 0);
+		opacity: 0;
+	}
+	100% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+}
+
+@keyframes dialog-fade-out {
+	0% {
+		transform: translate3d(0, 0, 0);
+		opacity: 1;
+	}
+	100% {
+		transform: translate3d(0, -30px, 0);
+		opacity: 0;
+	}
 }
 
 /* Card 卡片
