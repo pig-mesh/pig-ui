@@ -7,7 +7,13 @@
 						<el-input placeholder="请输入流程名称" v-model="state.queryForm.processName" />
 					</el-form-item>
 					<el-form-item label="发起时间" prop="taskTime">
-						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="state.queryForm.taskTime" is-range range-separator="To" />
+						<el-date-picker
+							type="datetimerange"
+							value-format="YYYY-MM-DD HH:mm:ss"
+							v-model="state.queryForm.taskTime"
+							is-range
+							range-separator="To"
+						/>
 					</el-form-item>
 					<el-form-item>
 						<el-button icon="search" type="primary" @click="getDataList">
@@ -51,8 +57,7 @@
 				</el-table-column>
 			</el-table>
 
-      <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
-                  v-bind="state.pagination"></pagination>
+			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 
 			<!--			右侧抽屉-->
 			<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
@@ -80,8 +85,9 @@
 				</template>
 				<template #footer>
 					<div style="flex: auto">
-						<el-button size="large" type="danger" @click="refuseTask">拒绝</el-button>
-						<el-button size="large" type="primary" @click="submitTask">提交</el-button>
+						<el-button size="large" type="danger" icon="Close" @click="refuseTask">拒绝</el-button>
+						<el-button size="large" type="primary" icon="Check" @click="submitTask">提交</el-button>
+						<el-button size="large" type="info" icon="Share" @click="transferTask">转办</el-button>
 					</div>
 				</template>
 			</el-drawer>
@@ -91,6 +97,9 @@
 
 			<!--拒绝审核处理-->
 			<refuse-handle @taskSubmitEvent="taskSubmitEvent" ref="refuseHandler"></refuse-handle>
+
+			<!--转办处理-->
+			<transfer-handle @taskSubmitEvent="taskSubmitEvent" ref="transferHandler"></transfer-handle>
 		</div>
 	</div>
 </template>
@@ -98,11 +107,11 @@
 import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import AgreeHandle from './handler/agree.vue';
 import RefuseHandle from './handler/refuse.vue';
+import TransferHandle from './handler/transfer.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import other from '/@/utils/other';
 import { queryMineTask, queryTask } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-
 
 const rightDrawerVisible = ref(false);
 const showSearch = ref(true);
@@ -111,17 +120,14 @@ const queryRef = ref();
 
 const currentData = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
-  pageList: queryMineTask,
-  queryForm: {
-    processName: '',
-    taskTime: undefined,
-  },
+	pageList: queryMineTask,
+	queryForm: {
+		processName: '',
+		taskTime: undefined,
+	},
 });
 
-const { tableStyle ,getDataList, currentChangeHandle,
-  sortChangeHandle,
-  sizeChangeHandle, } = useTable(state);
-
+const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
 /**
  * 点击开始处理
@@ -157,16 +163,17 @@ const deleteLayoutOneItem = (id, index) => {
 
 const agreeHandler = ref();
 const refuseHandler = ref();
+const transferHandler = ref();
 
 // 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
-  getDataList();
+	getDataList();
 };
 
 const taskSubmitEvent = () => {
 	rightDrawerVisible.value = false;
-  getDataList();
+	getDataList();
 };
 
 /**
@@ -181,14 +188,22 @@ const submitTask = () => {
 const refuseTask = () => {
 	refuseHandler.value.handle(currentData.value, currentOpenFlowForm.value);
 };
+
+/**
+ * 转办任务
+ */
+const transferTask = () => {
+	transferHandler.value.handle(currentData.value, currentOpenFlowForm.value);
+};
+
 onMounted(() => {
-	getDataList()
+	getDataList();
 });
 
 const formValue = computed(() => {
-  const obj = {};
+	const obj = {};
 
-  for (var item of currentOpenFlowForm.value) {
+	for (var item of currentOpenFlowForm.value) {
 		obj[item.id] = item.props.value;
 	}
 	return obj;

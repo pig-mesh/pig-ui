@@ -1,10 +1,10 @@
 import request from '/@/utils/request';
 
 // 查询用户首页数据看板
-export function queryTaskData(){
+export function queryTaskData() {
 	return request({
 		url: '/task/task/queryTaskData',
-		method: 'get'
+		method: 'get',
 	});
 }
 
@@ -86,11 +86,19 @@ export function queryTask(taskId: string, view: boolean) {
 	});
 }
 
-
 // 完成任务
 export function completeTask(param: Object) {
 	return request({
 		url: '/task/task/completeTask',
+		method: 'post',
+		data: param,
+	});
+}
+
+// 完成任务
+export function transferTask(param: Object) {
+	return request({
+		url: '/task/task/setAssignee',
 		method: 'post',
 		data: param,
 	});
