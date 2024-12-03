@@ -425,4 +425,32 @@
 			}
 		}
 	}
+
+	// Add TagsView dark mode styles
+	.layout-navbars-tagsview {
+		.layout-navbars-tagsview-ul {
+			.tags-style-five-svg {
+				// Update mask color for dark mode
+				-webkit-mask-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNzAiIGhlaWdodD0iNzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgZmlsbD0ibm9uZSI+CgogPGc+CiAgPHRpdGxlPkxheWVyIDE8L3RpdGxlPgogIDxwYXRoIHRyYW5zZm9ybT0icm90YXRlKC0wLjEzMzUwNiA1MC4xMTkyIDUwKSIgaWQ9InN2Z18xIiBkPSJtMTAwLjExOTE5LDEwMGMtNTUuMjI4LDAgLTEwMCwtNDQuNzcyIC0xMDAsLTEwMGwwLDEwMGwxMDAsMHoiIG9wYWNpdHk9InVuZGVmaW5lZCIgc3Ryb2tlPSJudWxsIiBmaWxsPSIjMjAyZTNhIi8+CiAgPC9nPgo8L3N2Zz4=');
+				background-color: var(--next-color-hover);
+			}
+
+			.layout-navbars-tagsview-ul-li {
+				&:hover {
+					background-color: var(--next-color-hover) !important;
+					color: var(--next-color-white) !important;
+				}
+
+				&.is-active {
+					background-color: var(--next-color-hover) !important;
+					color: #1d9bf0 !important; // Twitter blue
+					border-color: transparent !important;
+
+					&:hover {
+						background-color: var(--next-color-hover) !important;
+					}
+				}
+			}
+		}
+	}
 }
