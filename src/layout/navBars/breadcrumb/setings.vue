@@ -82,7 +82,7 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">primary</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.primary" @change="onColorPickerChange"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.primary" @change="onColorPickerChange" :disabled="getThemeConfig.isDark"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt15">
@@ -107,13 +107,13 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBar" @change="onBgColorPickerChange('topBar')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBar" @change="onBgColorPickerChange('topBar')" :disabled="getThemeConfig.isDark"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBarColor" @change="onBgColorPickerChange('topBarColor')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBarColor" @change="onBgColorPickerChange('topBarColor')" :disabled="getThemeConfig.isDark"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt10">
@@ -128,19 +128,19 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBar" @change="onBgColorPickerChange('menuBar')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBar" @change="onBgColorPickerChange('menuBar')" :disabled="getThemeConfig.isDark"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBarColor" @change="onBgColorPickerChange('menuBarColor')"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBarColor" @change="onBgColorPickerChange('menuBarColor')" :disabled="getThemeConfig.isDark"> </el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarActiveColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBarActiveColor" show-alpha @change="onBgColorPickerChange('menuBarActiveColor')" />
+						<el-color-picker v-model="getThemeConfig.menuBarActiveColor" show-alpha @change="onBgColorPickerChange('menuBarActiveColor')" :disabled="getThemeConfig.isDark"/>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt14">
@@ -160,7 +160,7 @@
 						<el-color-picker
 							v-model="getThemeConfig.columnsMenuBar"
 							@change="onBgColorPickerChange('columnsMenuBar')"
-							:disabled="getThemeConfig.layout !== 'columns'"
+							:disabled="getThemeConfig.isDark || getThemeConfig.layout !== 'columns'"
 						>
 						</el-color-picker>
 					</div>
@@ -171,7 +171,7 @@
 						<el-color-picker
 							v-model="getThemeConfig.columnsMenuBarColor"
 							@change="onBgColorPickerChange('columnsMenuBarColor')"
-							:disabled="getThemeConfig.layout !== 'columns'"
+							:disabled="getThemeConfig.isDark || getThemeConfig.layout !== 'columns'"
 						>
 						</el-color-picker>
 					</div>
@@ -183,7 +183,7 @@
 							v-model="getThemeConfig.isColumnsMenuBarColorGradual"
 							size="small"
 							@change="onColumnsMenuBarGradualChange"
-							:disabled="getThemeConfig.layout !== 'columns'"
+							:disabled="getThemeConfig.isDark || getThemeConfig.layout !== 'columns'"
 						></el-switch>
 					</div>
 				</div>
@@ -194,7 +194,7 @@
 							v-model="getThemeConfig.isColumnsMenuHoverPreload"
 							size="small"
 							@change="onColumnsMenuHoverPreloadChange"
-							:disabled="getThemeConfig.layout !== 'columns'"
+							:disabled="getThemeConfig.isDark || getThemeConfig.layout !== 'columns'"
 						></el-switch>
 					</div>
 				</div>
