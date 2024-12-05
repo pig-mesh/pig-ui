@@ -140,6 +140,7 @@ import other from '/@/utils/other';
 import {Session} from '/@/utils/storage';
 import {useI18n} from 'vue-i18n';
 import {getLoginAppList} from "/@/api/admin/social";
+import { SocialLoginEnum } from '/@/api/login';
 
 const { t } = useI18n();
 
@@ -266,27 +267,59 @@ const handleSaveUser = () => {
 	});
 };
 
-const handleClick = async (thirdpart: string) => {
-  // 获取租户配置的账号信息
-  const {data} = await getLoginAppList()
-  const result = data.find((item: any) => item.type === thirdpart);
-  if (validateNull(result)) {
-    useMessage().error(t('scan.appErrorTip'));
-    return;
-  }
+const socialList = ref([] as any);
 
-  let redirect_uri, url;
-  redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
+const initSocialList = () => {
+	socialList.value = [
+		{
+			name: '企业微信',
+			type: SocialLoginEnum.WEIXIN_CP,
+			openId: formData.value.wxCpUserid,
+		},
+		{
+			name: '钉钉办公',
+			type: SocialLoginEnum.DINGTALK,
+			openId: formData.value.wxDingUserid,
+		},
+	];
+};
 
-  if (thirdpart === 'WEIXIN_CP') {
-    url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=CP-BIND`;
-  }
+const handleClick = async (thirdpart: SocialLoginEnum) => {
+	// 获取租户配置的账号信息
+	const { data } = await getLoginAppList();
+	const result = data.find((item: any) => item.type === thirdpart);
+	if (validateNull(result)) {
+		useMessage().error(t('scan.appErrorTip'));
+		return;
+	}
 
-  if (thirdpart === 'DINGTALK') {
-    url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=DINGTALK-BIND&prompt=consent`;
-  }
+	let redirect_uri, url;
+	redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
 
-  other.openWindow(url, thirdpart, 540, 540);
+	if (thirdpart === SocialLoginEnum.WEIXIN_CP) {
+		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=${SocialLoginEnum.WEIXIN_CP}-BIND`;
+	}
+
+	if (thirdpart === SocialLoginEnum.DINGTALK) {
+		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-BIND&prompt=consent`;
+	}
+
+	if (url) {
+		other.openWindow(url, thirdpart, 540, 540);
+	}
+};
+
+const unbinding = (type: SocialLoginEnum) => {
+	unbindingUser(type)
+		.then(() => {
+			useMessage().success('解绑成功');
+		})
+		.catch((err) => {
+			useMessage().error(err.msg);
+		})
+		.finally(() => {
+			initUserInfo(formData.value.userId);
+		});
 };
 
 const open = () => {
@@ -309,35 +342,6 @@ const initUserInfo = (userId: any) => {
 		})
 		.finally(() => {
 			loading.value = false;
-		});
-};
-const socialList = ref([] as any);
-
-const initSocialList = () => {
-	socialList.value = [
-		{
-			name: '企业微信',
-			type: 'WEIXIN_CP',
-			openId: formData.value.wxCpUserid,
-		},
-		{
-			name: '钉钉办公',
-			type: 'DINGTALK',
-			openId: formData.value.wxDingUserid,
-		},
-	];
-};
-
-const unbinding = (type: string) => {
-	unbindingUser(type)
-		.then(() => {
-			useMessage().success('解绑成功');
-		})
-		.catch((err) => {
-			useMessage().error(err.msg);
-		})
-		.finally(() => {
-			initUserInfo(formData.value.userId);
 		});
 };
 

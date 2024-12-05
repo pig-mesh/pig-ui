@@ -1,7 +1,7 @@
 <template>
 	<div class="relative flex justify-center w-full gap-5">
 		<div
-			@click="handleClick('WEIXIN_CP')"
+			@click="handleClick(SocialLoginEnum.WEIXIN_CP)"
 			class="flex items-center justify-center w-full p-3 mb-6 text-sm font-medium tracking-wide text-gray-500 transition duration-500 ease-in border border-gray-300 rounded-lg cursor-pointer md:mb-0 hover:bg-blue-100"
 		>
 			<svg
@@ -42,7 +42,7 @@
 			<span>{{ $t('socialLogin.wechatWork') }}</span>
 		</div>
 		<div
-			@click="handleClick('DINGTALK')"
+			@click="handleClick(SocialLoginEnum.DINGTALK)"
 			class="flex items-center justify-center w-full p-3 mb-6 text-sm font-medium tracking-wide text-gray-500 transition duration-500 ease-in border border-gray-300 rounded-lg cursor-pointer md:mb-0 hover:bg-blue-100"
 		>
 			<svg
@@ -72,6 +72,7 @@ import { getLoginAppList } from '/@/api/admin/social';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { validateNull } from '/@/utils/validate';
+import { SocialLoginEnum } from '/@/api/login';
 
 // 使用i18n
 const { t } = useI18n();
@@ -94,9 +95,9 @@ const timer = ref();
 
 /**
  * 点击按钮触发事件的回调函数，用于打开第三方登录授权页面。
- * @param thirdpart - 第三方平台名称。
+ * @param thirdpart - 第三方平台类型
  */
-const handleClick = async (thirdpart: string) => {
+const handleClick = async (thirdpart: SocialLoginEnum) => {
 	// 获取租户配置的账号信息
 	const { data } = await getLoginAppList();
 	const result = data.find((item: any) => item.type === thirdpart);
@@ -110,13 +111,13 @@ const handleClick = async (thirdpart: string) => {
 	const redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
 
 	// 企业微信登录
-	if (thirdpart === 'WEIXIN_CP') {
-		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=CP-LOGIN`;
+	if (thirdpart === SocialLoginEnum.WEIXIN_CP) {
+		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=${SocialLoginEnum.WEIXIN_CP}-LOGIN`;
 	}
 
 	// 钉钉登录
-	if (thirdpart === 'DINGTALK') {
-		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=DINGTALK-LOGIN&prompt=consent`;
+	if (thirdpart === SocialLoginEnum.DINGTALK) {
+		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-LOGIN&prompt=consent`;
 	}
 
 	// 打开授权窗口并存储实例
