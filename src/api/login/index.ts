@@ -27,67 +27,18 @@ export enum LoginErrorEnum {
  * 社交登录方式枚举
  */
 export enum SocialLoginEnum {
-	PWD = 'PWD',      // 账号密码登录
 	SMS = 'SMS',      // 验证码登录
+	DINGTALK = 'DINGTALK', // 钉钉
+	WEIXIN_CP = 'WEIXIN_CP', // 企业微信
 	APP_SMS = 'APP-SMS', // APP验证码登录
 	QQ = 'QQ',        // QQ登录
 	WECHAT = 'WX',    // 微信登录
 	MINI_APP = 'MINI', // 微信小程序
 	GITEE = 'GITEE',  // 码云登录
 	OSC = 'OSC',      // 开源中国登录
-	DINGTALK = 'DINGTALK', // 钉钉
-	WEIXIN_CP = 'WEIXIN_CP', // 企业微信
 	CAS = 'CAS'       // CAS 登录
 }
 
-/**
- * 社交登录类型映射
- */
-export const SocialLoginMap = {
-	PWD: 'PWD',
-	SMS: 'SMS',
-	APP_SMS: 'APP-SMS',
-	QQ: 'QQ',
-	WECHAT: 'WX',
-	MINI_APP: 'MINI',
-	GITEE: 'GITEE',
-	OSC: 'OSC',
-	DINGTALK: 'DINGTALK',
-	WEIXIN_CP: 'WEIXIN_CP',
-	CAS: 'CAS'
-} as const;
-
-export type SocialLoginType = typeof SocialLoginMap[keyof typeof SocialLoginMap];
-
-export interface SocialLoginInfo {
-	code: SocialLoginType;
-	desc: string;
-}
-
-/**
- * 社交登录类型列表
- */
-export const SocialLoginList: SocialLoginInfo[] = [
-	{ code: SocialLoginMap.PWD, desc: '账号密码登录' },
-	{ code: SocialLoginMap.SMS, desc: '验证码登录' },
-	{ code: SocialLoginMap.APP_SMS, desc: 'APP验证码登录' },
-	{ code: SocialLoginMap.QQ, desc: 'QQ登录' },
-	{ code: SocialLoginMap.WECHAT, desc: '微信登录' },
-	{ code: SocialLoginMap.MINI_APP, desc: '微信小程序' },
-	{ code: SocialLoginMap.GITEE, desc: '码云登录' },
-	{ code: SocialLoginMap.OSC, desc: '开源中国登录' },
-	{ code: SocialLoginMap.DINGTALK, desc: '钉钉' },
-	{ code: SocialLoginMap.WEIXIN_CP, desc: '企业微信' },
-	{ code: SocialLoginMap.CAS, desc: 'CAS 登录' }
-];
-
-/**
- * 获取社交登录类型描述
- * @param code 社交登录类型代码
- */
-export function getSocialLoginDesc(code: SocialLoginType): string {
-	return SocialLoginList.find(item => item.code === code)?.desc || '';
-}
 
 /**
  * 登录
