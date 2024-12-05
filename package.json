@@ -35,7 +35,6 @@
 		"lodash": "^4.17.21",
 		"mitt": "^3.0.0",
 		"nprogress": "^0.2.0",
-		"pigx-ui": "file:",
 		"pinia": "2.0.32",
 		"postcss": "8.4.40",
 		"qrcode": "1.5.1",
