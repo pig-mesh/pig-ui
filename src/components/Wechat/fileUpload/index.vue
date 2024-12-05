@@ -22,7 +22,7 @@
 import { Session } from '/@/utils/storage';
 import { useMessage } from '/@/hooks/message';
 
-const actionUrl = ref('/admin/wx-material/materialFileUpload');
+const actionUrl = ref('/api/mp/wx-material/materialFileUpload');
 
 const fileUpload = ref();
 
