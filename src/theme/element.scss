@@ -236,6 +236,17 @@
 	}
 }
 
+// 添加弹出子菜单容器的样式
+.el-menu--horizontal.el-menu--popup-container {
+	.el-menu.el-menu--popup {
+		.el-menu-item,
+		.el-sub-menu__title {
+			height: 56px !important;
+			line-height: 56px !important;
+		}
+	}
+}
+
 /* Tabs 标签页
 ------------------------------- */
 .el-tabs__nav-wrap::after {
