@@ -2,9 +2,9 @@
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
 			<div
-				class="mx-auto overflow-hidden duration-300 transform bg-white rounded-lg shadow-md mt-11 w-100 dark:bg-slate-800/60 hover:scale-105 hover:shadow-xl dark:shadow-slate-700/30"
+				class="overflow-hidden mx-auto mt-11 bg-white rounded-lg shadow-md duration-300 transform w-100 dark:bg-slate-800/60 hover:scale-105 hover:shadow-xl dark:shadow-slate-700/30"
 			>
-				<div class="flex items-center justify-center p-4 dark:bg-slate-800/80">
+				<div class="flex justify-center items-center p-4 dark:bg-slate-800/80">
 					<svg
 						t="1697991137004"
 						class="icon"
@@ -24,24 +24,18 @@
 					<h1 class="ml-4 text-lg font-medium text-gray-700 sm:text-2xl dark:text-gray-100">支付宝扫一扫</h1>
 				</div>
 
-				<div class="flex items-center justify-center p-6 bg-white dark:bg-slate-800/40">
-					<div class="p-4 bg-white rounded-lg shadow-lg dark:bg-slate-700/30 
-								border-2 border-primary/10 hover:border-primary/30 
-								transition-all duration-300">
+				<div class="flex justify-center items-center p-6 bg-white dark:bg-slate-800/40">
+					<div
+						class="p-4 bg-white rounded-lg border-2 shadow-lg transition-all duration-300 dark:bg-slate-700/30 border-primary/10 hover:border-primary/30"
+					>
 						<vue-qrcode
-							class="object-cover object-center w-full h-full max-w-[280px] max-h-[280px] 
-								 dark:invert rounded-lg transition-all duration-300
-								 hover:scale-[1.02]"
+							class="object-cover object-center w-full h-full max-w-[280px] max-h-[280px] dark:invert rounded-lg transition-all duration-300 hover:scale-[1.02]"
 							:value="url"
 							:options="{
 								width: 280,
 								height: 280,
 								margin: 2,
 								scale: 1,
-								color: {
-									dark: '#0D90FC',
-									light: '#ffffff'
-								}
 							}"
 						/>
 					</div>
