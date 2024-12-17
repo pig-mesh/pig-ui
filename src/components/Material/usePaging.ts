@@ -18,7 +18,7 @@ export function usePaging(options: Options) {
 	const paramsInit: Record<any, any> = Object.assign({}, toRaw(params));
 	// 分页数据
 	const pager = reactive({
-		page,
+		current: page,
 		size,
 		loading: firstLoading,
 		count: 0,
@@ -34,7 +34,7 @@ export function usePaging(options: Options) {
 			requestParams = beforeRequest(params);
 		}
 		return fetchFun({
-			current: pager.page,
+			current: pager.current,
 			size: pager.size,
 			...requestParams,
 		})
@@ -57,7 +57,7 @@ export function usePaging(options: Options) {
 	};
 	// 重置为第一页
 	const resetPage = () => {
-		pager.page = 1;
+		pager.current = 1;
 		getLists();
 	};
 	// 重置参数

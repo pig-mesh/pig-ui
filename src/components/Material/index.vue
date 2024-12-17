@@ -224,7 +224,7 @@
         </div>
       </div>
       <div>
-        <pagination v-bind="pager" @change="getFileList" layout="total, prev, pager, next, jumper"/>
+        <pagination v-bind="pager" @current-change="currentChangeHandle" layout="total, prev, pager, next, jumper"/>
       </div>
     </div>
     <div class="material__right" v-if="mode == 'picker'">
@@ -358,6 +358,17 @@ const {
 const getData = async () => {
   await getCateLists();
   treeRef.value?.setCurrentKey(cateId.value);
+  getFileList();
+};
+
+/**
+ * 当前页码改变事件处理函数
+ * @param val 新的页码
+ */
+const currentChangeHandle = (val: number) => {
+  // 修改state.pagination中的current属性
+  pager.current = val;
+  // 再次发起查询操作
   getFileList();
 };
 
