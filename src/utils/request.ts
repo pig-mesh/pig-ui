@@ -1,8 +1,16 @@
-import axios, {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
+import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
+
+// 常用header
+export enum CommonHeaderEnum {
+	'TENANT_ID' = 'TENANT-ID',
+	'ENC_FLAG' = 'Enc-Flag',
+	'AUTHORIZATION' = 'Authorization',
+	'VERSION' = 'VERSION',
+}
 
 /**
  * 创建并配置一个 Axios 实例对象
@@ -10,11 +18,11 @@ import other from './other';
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_API_URL,
 	timeout: 50000, // 全局超时时间
-    paramsSerializer: {
-        serialize: (params: any) => {
-            return qs.stringify(params, {arrayFormat: 'repeat'});
-        }
-    }
+	paramsSerializer: {
+		serialize: (params: any) => {
+			return qs.stringify(params, { arrayFormat: 'repeat' });
+		},
+	},
 });
 
 /**
@@ -25,7 +33,6 @@ const service: AxiosInstance = axios.create({
  * @param config AxiosRequestConfig对象，包含请求配置信息
  */
 service.interceptors.request.use(
-
 	(config: InternalAxiosRequestConfig) => {
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
@@ -37,6 +44,12 @@ service.interceptors.request.use(
 		const tenantId = Session.getTenant();
 		if (tenantId) {
 			config.headers![CommonHeaderEnum.TENANT_ID] = tenantId;
+		}
+
+		// 增加 gray_version 请求头
+		const version = import.meta.env.VITE_GRAY_VERSION;
+		if (version) {
+			config.headers![CommonHeaderEnum.VERSION] = version;
 		}
 
 		// 请求报文加密
@@ -80,12 +93,12 @@ const handleResponse = (response: AxiosResponse<any>) => {
 };
 
 /**
- * 添加 Axios 的响应拦截器，用于全局响应结果处理
+ * 添加 Axios 的响应拦截器，用于全局响���结果处理
  */
 service.interceptors.response.use(handleResponse, (error) => {
 	const status = Number(error.response.status) || 200;
 	if (status === 423) {
-		return Promise.reject({msg:'"演示环境，仅供预览"'});
+		return Promise.reject({ msg: '"演示环境，仅供预览"' });
 	}
 
 	if (status === 424) {
@@ -108,13 +121,6 @@ service.interceptors.response.use(handleResponse, (error) => {
 	}
 	return Promise.reject(error.response.data);
 });
-
-// 常用header
-export enum CommonHeaderEnum {
-	'TENANT_ID' = 'TENANT-ID',
-	'ENC_FLAG' = 'Enc-Flag',
-	'AUTHORIZATION' = 'Authorization',
-}
 
 // 导出 axios 实例
 export default service;
