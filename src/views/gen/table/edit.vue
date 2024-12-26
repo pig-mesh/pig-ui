@@ -112,7 +112,7 @@
         </el-table-column>
         <el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
           <template #default="{ row }">
-            <el-select v-model="row.formValidator" placeholder="请选择表单效验" :disabled="row.primaryPk === '1'">
+            <el-select v-model="row.formValidator" placeholder="请选择表单效验" :disabled="row.primaryPk === '1'" clearable>
               <el-option v-for="item in formValidatorList" :key="item.value" :label="item.label" :value="item.value"/>
             </el-select>
           </template>
