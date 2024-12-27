@@ -53,7 +53,6 @@ let props = defineProps({
 		default: () => ({}),
 	},
 });
-const { proxy } = getCurrentInstance();
 
 let emits = defineEmits(['update:childNodeP']);
 let visible = ref(false);
@@ -86,11 +85,11 @@ const addType = (type) => {
 					handler: 'TO_PASS',
 					assignedUser: [],
 				},
-        //审批人拒绝
-        refuse: {
-          handler: "TO_END",
-          nodeId:''
-        },
+				//审批人拒绝
+				refuse: {
+					handler: 'TO_END',
+					nodeId: '',
+				},
 				childNode: props.childNodeP,
 				nodeUserList: [],
 			};
@@ -245,21 +244,31 @@ const addType = (type) => {
 	box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 	width: 30px;
 	height: 30px;
+	min-width: 30px;
+	min-height: 30px;
 	background: #3296fa;
 	border-radius: 50%;
 	position: relative;
 	border: none;
-	line-height: 30px;
+	padding: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
 	transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
 .add-node-btn .btn .iconfont {
 	color: #fff;
 	font-size: 16px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
 }
 
 .add-node-btn .btn:hover {
-	transform: scale(1.3);
+	transform: scale3d(1.3, 1.3, 1);
 	box-shadow: 0 13px 27px 0 rgba(0, 0, 0, 0.1);
 }
 
