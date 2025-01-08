@@ -6,7 +6,7 @@ import { directive } from '/@/directive';
 import Components from '/@/components';
 import { i18n } from '/@/i18n';
 import { properties } from '/@/utils/globalProperties';
-import { initAntiDebug } from '/@/utils/anti-debug';
+import { initAntiDebug } from './utils/antiDebug';
 
 // Initialize anti-debug protection
 initAntiDebug();
