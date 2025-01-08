@@ -90,7 +90,7 @@
 		<!-- 导入角色 -->
 		<upload-excel
 			ref="excelUploadRef"
-			:title="$t('sysuser.importUserTip')"
+			:title="$t('sysrole.importRoleTip')"
 			url="/admin/role/import"
 			temp-url="/admin/sys-file/local/file/role.xlsx"
 			@refreshDataList="getDataList"

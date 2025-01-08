@@ -14,6 +14,7 @@ export default {
 		please_enter_the_role_Code: '请输入角色标识',
 		please_enter_the_role_description: '请输入角色描述',
 		menu_authority: '数据权限',
-		please_select: 'please select',
+		please_select: '请选择',
+		importRoleTip:  '导入角色'
 	},
 };
