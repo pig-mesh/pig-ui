@@ -20,8 +20,9 @@ export function addFlow(data: any) {
  */
 export function getFlowDetail(flowId: string) {
 	return request({
-		url: '/task/process/getDetail?flowId=' + flowId,
+		url: '/task/process/getDetail',
 		method: 'get',
+		params: {flowId},
 	});
 }
 

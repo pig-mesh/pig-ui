@@ -81,8 +81,9 @@ export function queryMineEndTask(param) {
  */
 export function queryTask(taskId: string, view: boolean) {
 	return request({
-		url: '/task/task/queryTask?taskId=' + taskId + '&view=' + view,
+		url: '/task/task/queryTask',
 		method: 'get',
+		params: {taskId, view},
 	});
 }
 
