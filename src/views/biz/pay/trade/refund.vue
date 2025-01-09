@@ -136,6 +136,7 @@ const onSubmit = async () => {
 			refundAmount: form.amount,
 			remark: form.remark,
 			channelId: form.channelId,
+      channelMchId: form.channelMchId,
 		});
 
 		useMessage().success(t('common.optSuccessText')); // 如果退款成功，则显示成功提示信息

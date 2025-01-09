@@ -59,6 +59,7 @@ export const login = (data: any) => {
 			skipToken: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
+			"Enc-Flag": "false",
 		},
 	});
 };

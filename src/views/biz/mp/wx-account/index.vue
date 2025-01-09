@@ -191,7 +191,7 @@ const dialogFormVisible = ref(false);
 const wxurl = ref();
 const access = (row: any) => {
 	dialogFormVisible.value = true;
-	let url = '/mp/' + row.appid + '/portal';
+	let url = '/mp/wx-portal/' + row.appid;
 	wxurl.value = row.url + proxy.baseURL + other.adaptationUrl(url);
 };
 

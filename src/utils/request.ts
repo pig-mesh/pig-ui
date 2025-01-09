@@ -3,6 +3,7 @@ import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
+import { wrapEncryption, encryptRequestParams, decrypt } from './apiCrypto';
 
 // 常用header
 export enum CommonHeaderEnum {
@@ -52,12 +53,15 @@ service.interceptors.request.use(
 			config.headers![CommonHeaderEnum.VERSION] = version;
 		}
 
-		// 请求报文加密
-		if (config.headers![CommonHeaderEnum.ENC_FLAG]) {
-			const enc = other.encryption(JSON.stringify(config.data), import.meta.env.VITE_PWD_ENC_KEY);
-			config.data = {
-				encryption: enc,
-			};
+		// 请求报文加密 ，如果请求头中不包含 ENC_FLAG ： false 则加密
+		console.log(config.data)
+		if (config.data && !config.headers![CommonHeaderEnum.ENC_FLAG]) {
+			config.data = wrapEncryption(config.data);
+		}
+
+		// 如果是 GET ，加密 config.param 的每一个参数，并URLencode
+		if (config.method === 'get' && config.params) {
+			config.params = encryptRequestParams(config.params);
 		}
 
 		// 自动适配单体和微服务架构不同的URL
@@ -84,8 +88,7 @@ const handleResponse = (response: AxiosResponse<any>) => {
 
 	// 针对密文返回解密
 	if (response.data.encryption) {
-		const originData = JSON.parse(other.decryption(response.data.encryption, import.meta.env.VITE_PWD_ENC_KEY));
-		response.data = originData;
+		response.data = decrypt(response.data.encryption);
 		return response.data;
 	}
 
@@ -93,7 +96,7 @@ const handleResponse = (response: AxiosResponse<any>) => {
 };
 
 /**
- * 添加 Axios 的响应拦截器，用于全局响���结果处理
+ * 添加 Axios 的响应拦截器，用于全局响应结果处理
  */
 service.interceptors.response.use(handleResponse, (error) => {
 	const status = Number(error.response.status) || 200;
@@ -119,6 +122,12 @@ service.interceptors.response.use(handleResponse, (error) => {
 				return;
 			});
 	}
+
+	// 针对密文返回解密
+	if (error.response?.data?.encryption) {
+		error.response.data = decrypt(error.response?.data.encryption);
+	}
+
 	return Promise.reject(error.response.data);
 });
 

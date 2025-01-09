@@ -1,5 +1,6 @@
 import request from '/@/utils/request';
 import axios from 'axios';
+import { decrypt } from '/@/utils/apiCrypto';
 
 export function fetchList(query?: Object) {
 	return request({
@@ -60,7 +61,12 @@ export function refreshCache() {
  * @returns
  */
 export function info() {
-	return axios.get(import.meta.env.VITE_API_URL + '/admin/i18n/info');
+	return axios.get(import.meta.env.VITE_API_URL + '/admin/i18n/info').then((response) => {
+		if (response.data.encryption) {
+			response.data = decrypt(response.data.encryption);
+		}
+		return response;
+	});
 }
 
 export function validateName(rule: any, value: any, callback: any, isEdit: boolean) {

@@ -120,6 +120,7 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 			method: 'post',
 			headers: {
 				'Content-Type': 'multipart/form-data',
+				'Enc-Flag': 'false',
 			},
 			data: formData,
 		});
