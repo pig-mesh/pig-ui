@@ -4,13 +4,13 @@
 			<div class="flex items-start h-full">
 				<div class="pages-preview mx-[30px]">
 					<div class="flex tabbar dark:bg-gray-700">
-						<div class="flex flex-col items-center justify-center flex-1 tabbar-item" v-for="(item, index) in tabbar.list" :key="index">
+						<div class="flex flex-col flex-1 justify-center items-center tabbar-item" v-for="(item, index) in tabbar.list" :key="index">
 							<img class="w-[22px] h-[22px]" :src="item.unselected.includes('http') ? item.unselected: baseURL + item.unselected" alt="" />
 							<div class="leading-3 text-[12px] mt-[4px] dark:text-gray-300">{{ item.name }}</div>
 						</div>
 					</div>
 				</div>
-				<div class="flex-1 overflow-y-auto">
+				<div class="overflow-y-auto flex-1">
 					<div class="title flex items-center before:w-[3px] before:h-[14px] before:block before:bg-primary before:mr-2 dark:text-gray-200">
 						底部导航设置
 						<span class="form-tips ml-[10px] !mt-0 dark:text-gray-400"> 至少添加2个导航，最多添加5个导航 </span>
@@ -21,7 +21,7 @@
 								<draggable class="draggable" v-model="tabbar.list" animation="300" draggable=".draggable" itemKey="index" :move="onMove">
 									<template v-slot:item="{ element, index }">
 										<del-wrap @close="handleDelete(index)" class="max-w-[400px]" :class="{ draggable: index != 0 }">
-											<div class="w-full p-4 mt-4 bg-fill-light">
+											<div class="p-4 mt-4 w-full bg-fill-light">
 												<el-form-item label="导航图标">
 													<upload-img v-model:imageUrl="element.unselected" height="60px" width="60px" />
 													<upload-img v-model:imageUrl="element.selected" height="60px" width="60px" class="ml-2" />
@@ -105,13 +105,14 @@ const getData = async () => {
 	tabbar.list = data;
 };
 const setData = async () => {
-	const data = toRaw(tabbar.list).map((item) => {
+	const data = toRaw(tabbar.list).map((item, index) => {
 		return {
 			id: item.id,
 			name: item.name,
 			selected: item.selected,
 			unselected: item.unselected,
 			link: JSON.stringify(item.link), // 将link转为字符串
+      sortOrder: index,
 		};
 	});
 	await putObj(data);
