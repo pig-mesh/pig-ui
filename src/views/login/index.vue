@@ -3,7 +3,7 @@
 		<img :src="bg" class="wave" />
 		<div class="flex-c absolute right-5 top-3">
 			<div id="translate"><!-- 这里是语种切换的select，不需要时直接删掉这个div即可。这里最好是动态的，因为不同的翻译通道支持的语种的种类是不一样的，这个下周一我来优化动态赋予切换语种这个 --></div>
-			<el-select v-model="language" @change="handleLanguageChange" class="ignore">
+			<el-select v-model="language" @change="handleLanguageChange">
 				<el-option label="简体中文" value="chinese_simplified" />
 				<el-option label="日语" value="japanese" />
 				<el-option label="韩语" value="korean" />
