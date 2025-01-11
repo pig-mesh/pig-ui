@@ -52,9 +52,17 @@ onBeforeMount(() => {
 	setIntroduction.jsCdn();
 });
 
-import translate from 'i18n-jsautotranslate'
+import translate from 'i18n-jsautotranslate';
 // 页面加载时
 onMounted(() => {
+	// 初始化 translate
+	translate.language.setLocal('chinese_simplified');
+	translate.service.use('client.edge');
+	translate.language.translateLanguagesRange = ['chinese_simplified'];
+	translate.language.setUrlParamControl();
+	translate.listener.start();
+	translate.execute();
+
 	nextTick(() => {
 		// 监听布局配'置弹窗点击打开
 		mittBus.on('openSetingsDrawer', () => {
