@@ -51,6 +51,8 @@ onBeforeMount(() => {
 	// 设置批量第三方 js
 	setIntroduction.jsCdn();
 });
+
+import translate from 'i18n-jsautotranslate'
 // 页面加载时
 onMounted(() => {
 	nextTick(() => {

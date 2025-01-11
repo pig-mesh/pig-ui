@@ -1,7 +1,13 @@
 <template>
 	<div class="select-none">
 		<img :src="bg" class="wave" />
-		<div class="flex-c absolute right-5 top-3"></div>
+		<div class="flex-c absolute right-5 top-3">
+			<el-select v-model="language" @change="handleLanguageChange">
+				<el-option label="简体中文" value="chinese_simplified" />
+				<el-option label="日语" value="japanese" />
+				<el-option label="韩语" value="korean" />
+			</el-select>
+		</div>
 		<div class="login-container">
 			<div class="img">
 				<img :src="illustration" />
@@ -49,7 +55,7 @@ const Register = defineAsyncComponent(() => import('./component/register.vue'));
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
@@ -63,6 +69,17 @@ const tabsActiveName = ref('account');
 const getThemeConfig = computed(() => {
 	return themeConfig.value;
 });
+
+// 添加语言相关变量和方法
+const language = ref(locale.value);
+
+// 语言切换处理函数
+import translate from 'i18n-jsautotranslate';
+const handleLanguageChange = (val: string) => {
+	locale.value = val;
+	// 如果使用了 i18n-jsautotranslate，也可以调用它的方法
+	translate.changeLanguage(val);
+};
 
 // 登录成功后的跳转处理事件
 const signInSuccess = async () => {
@@ -94,3 +111,9 @@ onMounted(() => {
 	NextLoading.done();
 });
 </script>
+
+<style scoped>
+.el-select {
+	width: 120px;
+}
+</style>
