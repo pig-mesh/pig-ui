@@ -2,12 +2,9 @@
 	<div class="select-none">
 		<img :src="bg" class="wave" />
 		<div class="flex-c absolute right-5 top-3">
-			<div id="translate"><!-- 这里是语种切换的select，不需要时直接删掉这个div即可。这里最好是动态的，因为不同的翻译通道支持的语种的种类是不一样的，这个下周一我来优化动态赋予切换语种这个 --></div>
-			<el-select v-model="language" @change="handleLanguageChange">
-				<el-option label="简体中文" value="chinese_simplified" />
-				<el-option label="日语" value="japanese" />
-				<el-option label="韩语" value="korean" />
-			</el-select>
+			<el-select popper-class="ignore" v-model="language" value-key="id" @change="handleLanguageChange" >
+				<el-option v-for="item in languageList" :key="item.id" :label="item.name" :value="item.id" />
+		  	</el-select>
 		</div>
 		<div class="login-container">
 			<div class="img">
@@ -71,14 +68,22 @@ const getThemeConfig = computed(() => {
 	return themeConfig.value;
 });
 
-// 添加语言相关变量和方法
-const language = ref(locale.value);
-
 // 语言切换处理函数开始
 import translate from 'i18n-jsautotranslate'
+// 添加语言相关变量和方法
+let language = ref(translate.language.getCurrent());
+let languageList = ref(translate.service.edge.language.json);
 window.translate = translate; //方便审核元素用控制台调试
-translate.service.use('client.edge'); //翻译通道
+translate.service.use('client.edge'); //翻译通道,具体参考： https://translate.zvo.cn/4081.html
 translate.whole.enableAll(); //整体翻译
+//设置 select 切换语言的按钮
+translate.selectLanguageTag.customUI = function(loadLanguageList){
+	//后续如果设置使用 translate.service 通道时下面是异步加载需要放开的
+	//languageList = loadLanguageList;
+	//if(translate.to != null && typeof(translate.to) != 'undefined' && translate.to.length > 0){
+	//	language = translate.to;
+	//}
+}
 //自定义术语
 //原本i18n的 login 
 translate.nomenclature.append('chinese_simplified','english',`
