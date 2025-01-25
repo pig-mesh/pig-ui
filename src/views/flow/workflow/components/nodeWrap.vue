@@ -201,7 +201,7 @@ watch(
 			if (nodeConfig.assignedType == 8) {
 				//表单人员
 				let formUserId = nodeConfig.formUserId;
-				let length = val.filter((res) => res.id === formUserId).length;
+				let length = val.filter((res) => res.field === formUserId).length;
 				if (length == 0) {
 					nodeConfig.formUserId = '';
 					nodeConfig.formUserName = '';
@@ -219,7 +219,7 @@ watch(
 				}
 				for (var item1 of node.conditionList) {
 					for (var item2 of item1.conditionList) {
-						let length = val.filter((res) => res.id === item2.key).length;
+						let length = val.filter((res) => res.field === item2.key).length;
 						if (length == 0) {
 							item2.key = '';
 							item2.expression = '';

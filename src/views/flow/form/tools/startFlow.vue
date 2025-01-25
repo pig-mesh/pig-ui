@@ -4,43 +4,51 @@
 			<el-row>
 				<el-col :span="12">
 					<el-form label-position="top">
-						<form-render
-							@addLayoutOneItem="addLayoutOneItem"
-							ref="formRenderRef"
-							@deleteLayoutOneItem="deleteLayoutOneItem"
-							:form-list="currentOpenFlowForm"
-						></form-render>
+						<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
 					</el-form>
 
 					<div class="flex justify-center mt-4">
 						<el-button @click="dialogTableVisible = false">取消</el-button>
-						<el-button type="primary" @click="submitProcess"> 提交 </el-button>
+						<el-button type="primary" @click="submitProcess"> 提交</el-button>
 					</div>
 				</el-col>
 				<el-col :span="12">
-					<flow-node-format
-						:formData="formValue"
-						:selectUserNodeId="selectUserNodeId"
-						:flow-id="currentOpenFlow.flowId"
-						ref="flowNodeFormatRef"
-					></flow-node-format>
+					<flow-node-format :selectUserNodeId="selectUserNodeId" :flow-id="currentOpenFlow.flowId" ref="flowNodeFormatRef"></flow-node-format>
 				</el-col>
 			</el-row>
 		</el-dialog>
 	</div>
 </template>
 <script setup lang="ts">
-import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import { FormVO } from '/@/api/flow/form/types';
 import { getFlowDetail, startFlow } from '/@/api/flow/flow';
-import other from '/@/utils/other';
 import { ElMessage } from 'element-plus';
+import FcDesigner from 'form-create-designer';
+import { Api, Rule } from '@form-create/element-ui';
+import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
+import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+import { da } from 'element-plus/es/locale';
+
+// 定义接口
+interface FlowData {
+	flowId: string;
+	[key: string]: any;
+}
+
+interface FormDataType {
+	[key: string]: any;
+}
+
+// Api 类型
+const fApi = ref<Api>();
+const formData = ref<FormDataType>({});
+
+// 类型是 Rule Array
+const rule = ref<Rule>([]);
 
 const dialogTableVisible = ref<Boolean>(false);
-const currentOpenFlowForm = ref<FormVO[]>([]);
-const currentOpenFlow = ref<FormVO[]>([]);
-const formRenderRef = ref();
+const currentOpenFlow = ref<FlowData>();
+
 const submitProcess = () => {
 	let validate = flowNodeFormatRef.value.validate();
 	if (!validate) {
@@ -48,48 +56,30 @@ const submitProcess = () => {
 		return;
 	}
 
-	let param = flowNodeFormatRef.value.formatSelectNodeUser();
+	let param: Record<string, any> = flowNodeFormatRef.value.formatSelectNodeUser();
 
-	currentOpenFlowForm.value.forEach((res) => (param[res.id] = res.props.value));
-
-	{
-		for (var item of currentOpenFlowForm.value) {
-			param[item.id] = item.props.value;
-			if (item.type === 'Layout') {
-				let subList = item.props.value;
-
-				var d = [];
-				for (var array of subList) {
-					var v = {};
-
-					for (var subItem of array) {
-						let value = subItem.props.value;
-						v[subItem.id] = value;
-					}
-					d.push(v);
-				}
-				param[item.id] = d;
-			}
-		}
+	// 将 formData 这个map 的所有值 push 到 param 里面
+	for (const key in formData.value) {
+		param[key] = formData.value[key];
 	}
 
-	var data = {
-		flowId: currentOpenFlow.value.flowId,
+	const data = {
+		flowId: currentOpenFlow.value?.flowId,
 		paramMap: param,
 	};
-	formRenderRef.value.validate(function (valid) {
-		if (valid) {
-			startFlow(data).then((res) => {
+
+	if (fApi.value) {
+		fApi.value.submit().then(() => {
+			startFlow(data).then(() => {
 				ElMessage.success('提交成功');
 				dialogTableVisible.value = false;
 			});
-		}
-	});
+		});
+	}
 };
 
-const handle = (row) => {
+const handle = (row: FlowData) => {
 	currentOpenFlow.value = row;
-
 	startProcess(row);
 };
 
@@ -97,61 +87,20 @@ defineExpose({ handle });
 
 const selectUserNodeId = ref<String[]>([]);
 
-const startProcess = (f) => {
+const startProcess = (f: FlowData) => {
 	getFlowDetail(f.flowId).then((res) => {
 		const { data } = res;
+		const { formItems, formPerms = {} } = data;
 
-		const { formItems } = data;
+		// 解析表单项
+		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
+		// 处理表单权限
+		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
 
-		let formIteamJsonArray = JSON.parse(formItems);
-
-		for (var fi of formIteamJsonArray) {
-			if (fi.type === 'Layout') {
-				var arr = [];
-				let value = fi.props.value;
-				arr.push(value);
-				fi.props.value = arr;
-				fi.props.oriForm = other.deepClone(value);
-			}
-		}
-
-		currentOpenFlowForm.value = formIteamJsonArray;
-
+		rule.value = itemsWithPerms;
 		selectUserNodeId.value = data.selectUserNodeId;
-
 		dialogTableVisible.value = true;
 	});
-};
-
-const formValue = computed(() => {
-	var obj = {};
-
-	for (var item of currentOpenFlowForm.value) {
-		obj[item.id] = item.props.value;
-	}
-	return obj;
-});
-
-//明细的添加一个
-const addLayoutOneItem = (id) => {
-	for (var item of currentOpenFlowForm.value) {
-		if (item.id !== id) {
-			continue;
-		}
-		let value = item.props.value;
-		let oriForm = item.props.oriForm;
-		value.push(other.deepClone(oriForm));
-		item.props.value = value;
-	}
-};
-const deleteLayoutOneItem = (id, index) => {
-	for (var item of currentOpenFlowForm.value) {
-		if (item.id !== id) {
-			continue;
-		}
-
-		item.props.value.splice(index, 1);
-	}
 };
 
 const flowNodeFormatRef = ref();

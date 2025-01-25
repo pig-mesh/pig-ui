@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useFlowStore } from '/@/views/flow/workflow/stores/flow';
 
-defineProps({
+const props = defineProps({
 	formPerm: {
 		type: Object,
 		default: () => {},
@@ -12,12 +12,34 @@ defineProps({
 		default: () => [],
 	},
 });
+
+interface FormItem {
+	field: string;
+	title?: string;
+	required?: boolean;
+	children?: FormItem[];
+	[key: string]: any;
+}
+
 let flowStore = useFlowStore();
 
-const step2FormList = computed(() => {
-	let step2 = flowStore.step2;
+function flattenFormItems(items: FormItem[]): FormItem[] {
+	const flattened: FormItem[] = [];
 
-	return step2;
+	items.forEach((item) => {
+		if (item.children) {
+			flattened.push(...flattenFormItems(item.children));
+		} else if (item.field && item.title) {
+			flattened.push(item);
+		}
+	});
+
+	return flattened;
+}
+
+const step2FormList = computed(() => {
+	const step2 = flowStore.step2;
+	return flattenFormItems(step2);
 });
 </script>
 
@@ -33,14 +55,14 @@ const step2FormList = computed(() => {
 		<div v-if="step2FormList.length == 0">
 			<el-empty description="暂无表单" />
 		</div>
-		<div v-for="item in step2FormList" :key="item.id">
+		<div v-for="item in step2FormList" :key="item.name">
 			<div style="display: flex; flex-direction: row">
 				<div class="f1">
-					<span>{{ item.name }}</span>
+					<span>{{ item.title }}123</span>
 					<span v-if="item.required" style="color: #c75450"> * </span>
 				</div>
 
-				<el-radio-group v-model="formPerm[item.id]" size="large">
+				<el-radio-group v-model="formPerm[item.field]" size="large">
 					<div class="f2">
 						<el-radio size="large" label="R"><span></span></el-radio>
 					</div>
@@ -51,28 +73,6 @@ const step2FormList = computed(() => {
 						<el-radio size="large" label="H"><span></span></el-radio>
 					</div>
 				</el-radio-group>
-			</div>
-			<div v-if="item.type === 'Layout'">
-				<div v-for="item1 in item.props.value" :key="item1.id">
-					<div style="display: flex; flex-direction: row">
-						<div class="f1">
-							<span> {{ '\u00A0\u00A0\u00A0\u00A0-' + item1.name }}</span>
-							<span v-if="item1.required" style="color: #c75450"> * </span>
-						</div>
-
-						<el-radio-group v-model="formPerm[item1.id]" size="large">
-							<div class="f2">
-								<el-radio size="large" label="R"><span></span></el-radio>
-							</div>
-							<div class="f3">
-								<el-radio :disabled="!(hideKey.length == 0 || hideKey.indexOf('E') < 0)" size="large" label="E"><span></span> </el-radio>
-							</div>
-							<div class="f4">
-								<el-radio size="large" label="H"><span></span></el-radio>
-							</div>
-						</el-radio-group>
-					</div>
-				</div>
 			</div>
 		</div>
 	</div>

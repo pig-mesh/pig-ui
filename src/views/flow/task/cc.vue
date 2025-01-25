@@ -4,7 +4,13 @@
 			<el-row shadow="hover" v-show="showSearch" class="ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="发起时间" prop="taskTime">
-						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="state.queryForm.taskTime" is-range range-separator="To" />
+						<el-date-picker
+							type="datetimerange"
+							value-format="YYYY-MM-DD HH:mm:ss"
+							v-model="state.queryForm.taskTime"
+							is-range
+							range-separator="To"
+						/>
 					</el-form-item>
 					<el-form-item>
 						<el-button icon="search" type="primary" @click="getDataList">
@@ -49,21 +55,19 @@
 				</el-table-column>
 			</el-table>
 
-      <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
-                  v-bind="state.pagination"></pagination>
+			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 		</div>
 		<!--			右侧抽屉-->
-		<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
+		<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
 			<template #header>
 				<h3>{{ currentData?.processName }}</h3>
 			</template>
 			<template #default>
 				<el-card class="box-card">
-					<form-render ref="formRenderRef" :form-list="currentOpenFlowForm"></form-render>
+					<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
 				</el-card>
 				<flow-node-format
 					:disableSelect="true"
-					:formData="formValue"
 					:processInstanceId="currentData.processInstanceId"
 					:flow-id="currentData.flowId"
 					ref="flowNodeFormatRef"
@@ -74,12 +78,19 @@
 </template>
 
 <script setup lang="ts">
-import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
+import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 
-import {queryMineCC, queryMineCCDetail} from '/@/api/flow/task';
+import { queryMineCC, queryMineCCDetail } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 
+import FcDesigner from 'form-create-designer';
+import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+
+const rule = ref([]);
+const fApi = ref();
+const formData = ref({});
+const currentData = ref();
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   pageList: queryMineCC,
@@ -97,7 +108,7 @@ const rightDrawerVisible = ref(false);
 const loading = ref(false);
 const showSearch = ref(true);
 const queryRef = ref();
-const currentData = ref();
+
 /**
  * 点击开始处理
  * @param row
@@ -106,7 +117,15 @@ const deal = (row) => {
 	currentData.value = row;
 
 	queryMineCCDetail({ id: row.id }).then((res) => {
-		currentOpenFlowForm.value = res.data.formItems;
+		const { formItems, formPerms, formData: responseFormData } = res.data;
+
+		// 解析表单项并处理权限
+		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
+		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
+
+		rule.value = itemsWithPerms;
+		formData.value = FcDesigner.formCreate.parseJson(responseFormData);
+		currentOpenFlowForm.value = formItems;
 		rightDrawerVisible.value = true;
 	});
 };
@@ -120,13 +139,5 @@ const resetQuery = () => {
 
 onMounted(() => {
 	getDataList();
-});
-
-const formValue = computed(() => {
-  const obj = {};
-  for (const item of currentOpenFlowForm.value) {
-		obj[item.id] = item.props.value;
-	}
-	return obj;
 });
 </script>

@@ -60,22 +60,16 @@
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 
 			<!--			右侧抽屉-->
-			<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
+			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
 				<template #header>
 					<h3>{{ currentData?.processName }}</h3>
 				</template>
 				<template #default>
 					<el-card class="box-card">
-						<form-render
-							@addLayoutOneItem="addLayoutOneItem"
-							@deleteLayoutOneItem="deleteLayoutOneItem"
-							ref="formRenderRef"
-							:form-list="currentOpenFlowForm"
-						></form-render>
+						<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
 					</el-card>
 					<flow-node-format
 						:disableSelect="true"
-						:formData="formValue"
 						:task-id="currentData.taskId"
 						:processInstanceId="currentData.processInstanceId"
 						:flow-id="currentData.flowId"
@@ -104,19 +98,30 @@
 	</div>
 </template>
 <script setup lang="ts">
-import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import AgreeHandle from './handler/agree.vue';
 import RefuseHandle from './handler/refuse.vue';
 import TransferHandle from './handler/transfer.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import other from '/@/utils/other';
 import { queryMineTask, queryTask } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
+import FcDesigner from 'form-create-designer';
+import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 
 const rightDrawerVisible = ref(false);
 const showSearch = ref(true);
 const loading = ref(false);
 const queryRef = ref();
+
+const fApi = ref();
+const formData = ref({});
+
+// Define the FormItem interface if not already defined
+interface FormItem {
+	// Define the properties of FormItem based on your data structure
+}
+
+const rule = ref<FormItem[]>([]);
 
 const currentData = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -136,30 +141,21 @@ const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTa
 const deal = (row: any) => {
 	currentData.value = row;
 	queryTask(row.taskId, false).then((res) => {
-		currentOpenFlowForm.value = res.data.formItems;
+		const { formItems, formPerms, formData: responseFormData } = res.data;
+
+		// 解析表单项
+		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
+
+		// 递归处理所有表单项的权限
+		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
+
+		rule.value = itemsWithPerms;
+		formData.value = responseFormData;
+		currentOpenFlowForm.value = formItems;
 		rightDrawerVisible.value = true;
 	});
 };
 const currentOpenFlowForm = ref();
-const addLayoutOneItem = (id: Number) => {
-	for (const item of currentOpenFlowForm.value) {
-		if (item.id !== id) {
-			continue;
-		}
-		let value = item.props.value;
-		let oriForm = item.props.oriForm;
-		value.push(other.deepClone(oriForm));
-		item.props.value = value;
-	}
-};
-const deleteLayoutOneItem = (id, index) => {
-	for (const item of currentOpenFlowForm.value) {
-		if (item.id !== id) {
-			continue;
-		}
-		item.props.value.splice(index, 1);
-	}
-};
 
 const agreeHandler = ref();
 const refuseHandler = ref();
@@ -198,14 +194,5 @@ const transferTask = () => {
 
 onMounted(() => {
 	getDataList();
-});
-
-const formValue = computed(() => {
-	const obj = {};
-
-	for (var item of currentOpenFlowForm.value) {
-		obj[item.id] = item.props.value;
-	}
-	return obj;
 });
 </script>

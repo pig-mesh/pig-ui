@@ -1,61 +1,59 @@
 <template>
-  <el-drawer
-      v-model="visible"
-      :append-to-body="true"
-      title="审批人设置"
-      :show-close="false"
-      :size="550"
-      :before-close="saveApprover"
-      @open="openEvent"
-  >
-    <el-tabs type="border-card">
-      <el-tab-pane label="设置审批人">
-        <el-radio-group v-model="approverConfig.assignedType" class="ml-4" @change="assignedTypeChangeEvent">
-          <el-row>
-            <el-col v-for="{ value, label } in setTypes" :key="value" :span="8">
-              <el-radio :label="value">{{ label }}</el-radio>
-            </el-col>
-          </el-row>
-        </el-radio-group>
+	<el-drawer
+		v-model="visible"
+		:append-to-body="true"
+		title="审批人设置"
+		:show-close="false"
+		:size="550"
+		:before-close="saveApprover"
+		@open="openEvent"
+	>
+		<el-tabs type="border-card">
+			<el-tab-pane label="设置审批人">
+				<el-radio-group v-model="approverConfig.assignedType" class="ml-4" @change="assignedTypeChangeEvent">
+					<el-row>
+						<el-col v-for="{ value, label } in setTypes" :key="value" :span="8">
+							<el-radio :label="value">{{ label }}</el-radio>
+						</el-col>
+					</el-row>
+				</el-radio-group>
 
-        <el-divider/>
-        <template v-if="approverConfig.assignedType === 2">
-          <h4>选择部门</h4>
-          <select-show v-model:orgList="approverConfig.nodeUserList" type="dept"></select-show>
-        </template>
-        <template v-if="approverConfig.assignedType === 3">
-          <h4>选择角色</h4>
+				<el-divider />
+				<template v-if="approverConfig.assignedType === 2">
+					<h4>选择部门</h4>
+					<select-show v-model:orgList="approverConfig.nodeUserList" type="dept"></select-show>
+				</template>
+				<template v-if="approverConfig.assignedType === 3">
+					<h4>选择角色</h4>
 
-          <select-show v-model:orgList="approverConfig.nodeUserList" type="role" :multiple="true"></select-show>
-        </template>
-        <template v-if="approverConfig.assignedType === 1">
-          <h4>选择成员</h4>
+					<select-show v-model:orgList="approverConfig.nodeUserList" type="role" :multiple="true"></select-show>
+				</template>
+				<template v-if="approverConfig.assignedType === 1">
+					<h4>选择成员</h4>
 
-          <select-show v-model:orgList="approverConfig.nodeUserList" type="user" :multiple="true"></select-show>
-        </template>
-        <template v-if="approverConfig.assignedType === 8">
-          <h4>人员控件</h4>
-          <el-select v-model="approverConfig.formUserId" clearable class="m-2" placeholder="请选择审批表单"
-                     size="large">
-            <el-option v-for="item in step2FormUserList" :key="item.id" :label="item.name" :value="item.id"/>
-          </el-select>
-        </template>
-        <template v-if="approverConfig.assignedType === 7">
-          <h4>审批终点</h4>
-          <span style="margin-right: 5px; font-size: 14px">到第</span>
-          <el-input-number v-model="approverConfig.deptLeaderLevel" :step="1" :min="1" :max="20" step-strictly
-                           size="small"/>
-          <span style="margin-left: 5px; font-size: 14px">级部门主管终止</span>
-        </template>
-        <template v-if="approverConfig.assignedType === 4">
-          <h4>选择方式</h4>
-          <el-radio-group v-model="approverConfig.multiple" class="ml-4">
-            <el-radio :label="false" size="large">单选</el-radio>
-            <el-radio :label="true" size="large">多选</el-radio>
-          </el-radio-group>
-        </template>
-        <template
-            v-if="
+					<select-show v-model:orgList="approverConfig.nodeUserList" type="user" :multiple="true"></select-show>
+				</template>
+				<template v-if="approverConfig.assignedType === 8">
+					<h4>人员控件</h4>
+					<el-select v-model="approverConfig.formUserId" clearable class="m-2" placeholder="请选择审批表单" size="large">
+						<el-option v-for="item in step2FormUserList" :key="item.field" :label="item.title" :value="item.field" />
+					</el-select>
+				</template>
+				<template v-if="approverConfig.assignedType === 7">
+					<h4>审批终点</h4>
+					<span style="margin-right: 5px; font-size: 14px">到第</span>
+					<el-input-number v-model="approverConfig.deptLeaderLevel" :step="1" :min="1" :max="20" step-strictly size="small" />
+					<span style="margin-left: 5px; font-size: 14px">级部门主管终止</span>
+				</template>
+				<template v-if="approverConfig.assignedType === 4">
+					<h4>选择方式</h4>
+					<el-radio-group v-model="approverConfig.multiple" class="ml-4">
+						<el-radio :label="false" size="large">单选</el-radio>
+						<el-radio :label="true" size="large">多选</el-radio>
+					</el-radio-group>
+				</template>
+				<template
+					v-if="
 						((approverConfig.multiple === true && approverConfig.assignedType === 4) ||
 							(approverConfig.assignedType === 1 && approverConfig.nodeUserList.length > 1) ||
 							approverConfig.assignedType === 2 ||
@@ -64,260 +62,251 @@
 							(approverConfig.assignedType === 8 && isMultiUserForm(approverConfig.formUserId))) &&
 						approverConfig.assignedType !== 5
 					"
-        >
-          <h4>多人审批时采用的审批方式</h4>
-          <el-radio-group v-model="approverConfig.multipleMode" class="ml-4">
-            <p style="display: block; width: 100%">
-              <el-radio :label="1" size="large">会签(需要所有审批人同意)</el-radio>
-            </p>
-            <p style="display: block; width: 100%">
-              <el-radio :label="2" size="large">或签(一名审批人同意即可)</el-radio>
-            </p>
-            <p style="display: block; width: 100%">
-              <el-radio :label="3" size="large">依次审批(按顺序依次审批)</el-radio>
-            </p>
-          </el-radio-group>
-        </template>
-        <el-divider/>
+				>
+					<h4>多人审批时采用的审批方式</h4>
+					<el-radio-group v-model="approverConfig.multipleMode" class="ml-4">
+						<p style="display: block; width: 100%">
+							<el-radio :label="1" size="large">会签(需要所有审批人同意)</el-radio>
+						</p>
+						<p style="display: block; width: 100%">
+							<el-radio :label="2" size="large">或签(一名审批人同意即可)</el-radio>
+						</p>
+						<p style="display: block; width: 100%">
+							<el-radio :label="3" size="large">依次审批(按顺序依次审批)</el-radio>
+						</p>
+					</el-radio-group>
+				</template>
+				<el-divider />
 
-        <h4>审批人为空时</h4>
-        <el-radio-group v-model="approverConfig.nobody.handler" class="ml-4">
-          <el-radio label="TO_PASS" size="large">自动通过</el-radio>
-          <el-radio label="TO_REFUSE" size="large">自动拒绝</el-radio>
-          <el-radio label="TO_END" size="large">自动结束</el-radio>
-          <el-radio label="TO_ADMIN" size="large">转交给管理员</el-radio>
-          <el-radio label="TO_USER" size="large">指定人员</el-radio>
-        </el-radio-group>
-        <select-show
-            v-if="approverConfig?.nobody.handler === 'TO_USER'"
-            v-model:orgList="approverConfig.nobody.assignedUser"
-            type="user"
-            :multiple="false"
-        ></select-show>
+				<h4>审批人为空时</h4>
+				<el-radio-group v-model="approverConfig.nobody.handler" class="ml-4">
+					<el-radio label="TO_PASS" size="large">自动通过</el-radio>
+					<el-radio label="TO_REFUSE" size="large">自动拒绝</el-radio>
+					<el-radio label="TO_END" size="large">自动结束</el-radio>
+					<el-radio label="TO_ADMIN" size="large">转交给管理员</el-radio>
+					<el-radio label="TO_USER" size="large">指定人员</el-radio>
+				</el-radio-group>
+				<select-show
+					v-if="approverConfig?.nobody.handler === 'TO_USER'"
+					v-model:orgList="approverConfig.nobody.assignedUser"
+					type="user"
+					:multiple="false"
+				></select-show>
 
-        <el-divider/>
+				<el-divider />
 
-        <template v-if="approverConfig.refuse?.handler">
-          <h4>审批被拒绝</h4>
-          <el-radio-group v-model="approverConfig.refuse.handler" class="ml-4">
-            <el-radio label="TO_END" size="large">直接结束流程</el-radio>
-            <el-radio label="TO_NODE" size="large" v-if="rejectNodeList.length > 0">驳回到指定节点</el-radio>
-          </el-radio-group>
-          <el-select v-if="approverConfig.refuse.handler==='TO_NODE' && rejectNodeList.length > 0" v-model="approverConfig.refuse.nodeId"
-                     placeholder="驳回节点"  class="w-1/2 mb-2">
-            <el-option
-                v-for="item in rejectNodeList"
-                :key="item.id"
-                :label="item.name"
-                :value="item.id"
-            />
-          </el-select>
-        </template>
-      </el-tab-pane>
-      <el-tab-pane label="表单权限">
-        <form-perm :form-perm="approverConfig.formPerms"></form-perm>
-      </el-tab-pane>
-      <el-tab-pane label="事件通知">
-        <event-config v-model="approverConfig.eventConfig"/>
-      </el-tab-pane>
-    </el-tabs>
-  </el-drawer>
+				<template v-if="approverConfig.refuse?.handler">
+					<h4>审批被拒绝</h4>
+					<el-radio-group v-model="approverConfig.refuse.handler" class="ml-4">
+						<el-radio label="TO_END" size="large">直接结束流程</el-radio>
+						<el-radio label="TO_NODE" size="large" v-if="rejectNodeList.length > 0">驳回到指定节点</el-radio>
+					</el-radio-group>
+					<el-select
+						v-if="approverConfig.refuse.handler === 'TO_NODE' && rejectNodeList.length > 0"
+						v-model="approverConfig.refuse.nodeId"
+						placeholder="驳回节点"
+						class="mb-2 w-1/2"
+					>
+						<el-option v-for="item in rejectNodeList" :key="item.id" :label="item.name" :value="item.id" />
+					</el-select>
+				</template>
+			</el-tab-pane>
+			<el-tab-pane label="表单权限">
+				<form-perm :form-perm="approverConfig.formPerms"></form-perm>
+			</el-tab-pane>
+			<el-tab-pane label="事件通知">
+				<event-config v-model="approverConfig.eventConfig" />
+			</el-tab-pane>
+		</el-tabs>
+	</el-drawer>
 </template>
-<script setup type="ts">
-import {setTypes} from '../../utils/const'
-import {useStore} from '../../stores/index'
-import {useFlowStore} from '../../stores/flow'
-import FormPerm from './components/formPerm.vue'
-import EventConfig from './components/eventConfig.vue'
-import selectShow from "/@/components/OrgSelector/index.vue";
-import {validateNull} from "/@/utils/validate";
-import other from "/@/utils/other";
+<script setup lang="ts">
+import { setTypes } from '../../utils/const';
+import { useStore } from '../../stores/index';
+import { useFlowStore } from '../../stores/flow';
+import FormPerm from './components/formPerm.vue';
+import EventConfig from './components/eventConfig.vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
+import { validateNull } from '/@/utils/validate';
+import other from '/@/utils/other';
+import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 
 let flowStore = useFlowStore();
 
+const processFormPermissions = () => {
+	const formItems = step2FormList.value;
+	const processedItems = processFormItemsWithPerms(formItems, approverConfig.value.formPerms || {});
+	return processedItems;
+};
 
-//驳回节点列表
+// 驳回节点列表
 const rejectNodeList = computed(() => {
-  let values = []
-  const excType = [1]
-  const arr = {};
-  const obj = {};
+	let values = [];
+	const excType = [1];
+	const arr = {};
+	const obj = {};
 
-  produceSerialNodeList(undefined, flowStore.step3, arr, obj, true)
+	produceSerialNodeList(undefined, flowStore.step3, arr, obj, true);
 
-  const k = arr[approverConfig.value.id];
+	const k = arr[approverConfig.value.id];
 
-  if (k == undefined) {
-    return []
-  }
+	if (k == undefined) {
+		return [];
+	}
 
-  for (const item of k) {
-    const type = obj[item].type;
-    if (excType.indexOf(type) > -1 && obj[item].id != approverConfig.value.id) {
-      values.push({id: obj[item].id, name: obj[item].nodeName})
-    }
-  }
-  return values
+	for (const item of k) {
+		const type = obj[item].type;
+		if (excType.indexOf(type) > -1 && obj[item].id != approverConfig.value.id) {
+			values.push({ id: obj[item].id, name: obj[item].nodeName });
+		}
+	}
+	return values;
 });
 
 function produceSerialNodeList(parentId, process, nodeArr, nodeObj, noBranch) {
-  if (validateNull(process?.id)) {
-    return;
-  }
-  const nodeId = process.id;
-  nodeObj[nodeId] = process;
+	if (validateNull(process?.id)) {
+		return;
+	}
+	const nodeId = process.id;
+	nodeObj[nodeId] = process;
 
-  if (validateNull(parentId)) {
-    const arr = [];
-    arr.push(nodeId)
-    nodeArr[nodeId] = arr;
-  } else {
-    const p = nodeArr[parentId];
-    let parentType = nodeObj[parentId].type;
+	if (validateNull(parentId)) {
+		const arr = [];
+		arr.push(nodeId);
+		nodeArr[nodeId] = arr;
+	} else {
+		const p = nodeArr[parentId];
+		let parentType = nodeObj[parentId].type;
 
-    if ((parentType == 5 || parentType == 8) && !noBranch) {
-      nodeArr[nodeId] = [];
-    } else {
-      const arr1 = other.deepClone(p);
-      arr1.push(nodeId)
-      nodeArr[nodeId] = arr1;
-    }
-  }
+		if ((parentType == 5 || parentType == 8) && !noBranch) {
+			nodeArr[nodeId] = [];
+		} else {
+			const arr1 = other.deepClone(p);
+			arr1.push(nodeId);
+			nodeArr[nodeId] = arr1;
+		}
+	}
 
-  const type = process.type;
-  const children = process.childNode;
+	const type = process.type;
+	const children = process.childNode;
 
-  if (type === 5 || type === 8 || type === 4) {
-    const branchs = process.conditionNodes;
-    for (const item of branchs) {
-      produceSerialNodeList(nodeId, item, nodeArr, nodeObj, false)
-    }
+	if (type === 5 || type === 8 || type === 4) {
+		const branchs = process.conditionNodes;
+		for (const item of branchs) {
+			produceSerialNodeList(nodeId, item, nodeArr, nodeObj, false);
+		}
 
-    if (!validateNull(children?.id)) {
-      produceSerialNodeList(nodeId, children, nodeArr, nodeObj, true)
-    }
-
-  } else {
-    if (!validateNull(children?.id)) {
-      produceSerialNodeList(nodeId, children, nodeArr, nodeObj, true)
-    }
-  }
+		if (!validateNull(children?.id)) {
+			produceSerialNodeList(nodeId, children, nodeArr, nodeObj, true);
+		}
+	} else {
+		if (!validateNull(children?.id)) {
+			produceSerialNodeList(nodeId, children, nodeArr, nodeObj, true);
+		}
+	}
 }
 
 const step2FormList = computed(() => {
-  return flowStore.step2;
-})
+	return flowStore.step2;
+});
 
 const step2FormUserList = computed(() => {
-  return step2FormList.value.filter(res => res.type === 'SelectUser');
-})
+	return step2FormList.value.filter((res) => res.type === 'OrgSelector' && res.props?.type === 'user');
+});
 
 const openEvent = () => {
-  let value = step2FormList.value;
-  var arr = {};
-  let formPerms = approverConfig.value.formPerms;
+	let value = step2FormList.value;
+	let formPerms = approverConfig.value.formPerms || {};
 
-  for (var item of value) {
-    arr[item.id] = "R"
-    if (item.type === 'Layout') {
-      arr[item.id] = "E"
-    }
-    if (formPerms[item.id]) {
-      arr[item.id] = formPerms[item.id]
-    }
-    if (item.type === 'Layout') {
-      let value1 = item.props.value;
-      for (var it of value1) {
-        arr[it.id] = "R"
-        if (formPerms[it.id]) {
-          arr[it.id] = formPerms[it.id]
-        }
-      }
-    }
-  }
-  approverConfig.value.formPerms = arr;
-}
+	// 初始化默认权限
+	for (const item of value) {
+		if (!formPerms[item.field]) {
+			formPerms[item.field] = 'R';
+		}
+	}
 
+	approverConfig.value.formPerms = formPerms;
 
-let approverConfig = ref({})
+	// 处理表单项权限
+	const processedFormItems = processFormPermissions();
+	// 这里可以进一步使用处理后的表单项
+};
 
+let approverConfig = ref({});
 
-let store = useStore()
-let {setApproverConfig, setApprover} = store
-let approverConfigData = computed(() => store.approverConfigData)
-let approverDrawer = computed(() => store.approverDrawer)
+let store = useStore();
+let { setApproverConfig, setApprover } = store;
+let approverConfigData = computed(() => store.approverConfigData);
+let approverDrawer = computed(() => store.approverDrawer);
 let visible = computed({
-  get() {
-    return approverDrawer.value
-  },
-  set() {
-    closeDrawer()
-  }
-})
+	get() {
+		return approverDrawer.value;
+	},
+	set() {
+		closeDrawer();
+	},
+});
 watch(approverConfigData, (val) => {
-  approverConfig.value = val.value
-})
+	approverConfig.value = val.value;
+});
 //用户表单是否是多选
 const isMultiUserForm = (id) => {
-  if (!(id)) {
-    return false
-  }
-  let t = step2FormUserList.value.filter(res => res.id === id)[0].props.multi;
-  return t;
-}
+	if (!id) {
+		return false;
+	}
+	return step2FormUserList.value.filter((res) => res.id === id)[0]?.props.multiple;
+};
 //监听用户选择表单值变化
-watch(() => approverConfig.value.formUserId, (val) => {
-  if (val) {
-    approverConfig.value.formUserName = step2FormUserList.value.filter(res => res.id === val)[0].name
-
-  }
-
-
-})
+watch(
+	() => approverConfig.value.formUserId,
+	(val) => {
+		if (val) {
+			approverConfig.value.formUserName = step2FormUserList.value.filter((res) => res.field === val)[0].field;
+		}
+	}
+);
 
 //审批人类型变化
-const assignedTypeChangeEvent = (e) => {
-  approverConfig.value.nodeUserList = [];
-}
+const assignedTypeChangeEvent = () => {
+	approverConfig.value.nodeUserList = [];
+};
 
 const saveApprover = () => {
-  approverConfig.value.error = !checkApproval(approverConfig.value);
-  setApproverConfig({
-    value: approverConfig.value,
-    flag: true,
-    id: approverConfigData.value.id
-  })
-  closeDrawer()
-}
+	approverConfig.value.error = !checkApproval(approverConfig.value);
+	setApproverConfig({
+		value: approverConfig.value,
+		flag: true,
+		id: approverConfigData.value.id,
+	});
+	closeDrawer();
+};
 const closeDrawer = () => {
-  setApprover(false)
-}
+	setApprover(false);
+};
 
 const checkApproval = (nodeConfig) => {
-  if (nodeConfig.assignedType == 1  || nodeConfig.assignedType == 3) {
+	if (nodeConfig.assignedType == 1 || nodeConfig.assignedType == 3) {
+		//指定成员
+		if (nodeConfig.nodeUserList.length == 0) {
+			return false;
+		}
+	} else if (nodeConfig.assignedType == 8 && nodeConfig.formUserId.length == 0) {
+		//表单
+		return false;
+	}
 
-//指定成员
-    if (nodeConfig.nodeUserList.length == 0) {
-      return false;
+	//审批人为空
+	if (nodeConfig?.nobody?.handler === 'TO_USER' && nodeConfig.nobody.assignedUser.length === 0) {
+		return false;
+	}
+	//操作权限
+	let operList = nodeConfig.operList;
+	let length = operList?.filter((res) => res.checked).length;
+	if (length == 0) {
+		return false;
+	}
 
-    }
-  } else if (nodeConfig.assignedType == 8 && nodeConfig.formUserId.length == 0) {
-//表单
-    return false;
-  }
-
-//审批人为空
-  if (nodeConfig?.nobody?.handler === 'TO_USER' && nodeConfig.nobody.assignedUser.length === 0) {
-    return false;
-  }
-//操作权限
-  let operList = nodeConfig.operList;
-  let length = operList?.filter(res => res.checked).length;
-  if (length == 0) {
-    return false;
-  }
-
-  return true;
-}
+	return true;
+};
 </script>
 <style scoped></style>

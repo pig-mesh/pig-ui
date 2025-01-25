@@ -35,6 +35,9 @@ const service: AxiosInstance = axios.create({
  */
 service.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
+
+		config.headers['VERSION'] = 'A' // 目标版本
+
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
@@ -54,7 +57,6 @@ service.interceptors.request.use(
 		}
 
 		// 请求报文加密 ，如果请求头中不包含 ENC_FLAG ： false 则加密
-		console.log(config.data)
 		if (config.data && !config.headers![CommonHeaderEnum.ENC_FLAG]) {
 			config.data = wrapEncryption(config.data);
 		}

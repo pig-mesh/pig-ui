@@ -113,7 +113,6 @@ const zoomSize = (type) => {
 };
 const validate = (f) => {
   tipList.value = [];
-
   if (nodeConfig.value.childNode == undefined || nodeConfig.value.childNode.id === undefined) {
     tipList.value = ['请完善流程节点'];
   }

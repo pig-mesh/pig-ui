@@ -4,7 +4,7 @@
 			<el-card class="box-card" style="padding-right: 10%; padding-left: 10%">
 				<el-form ref="ruleForm" :model="form" :rules="rules" label-position="top" status-icon label-width="120px" @submit.prevent>
 					<el-form-item :label="$t('flow.logo')" prop="logo">
-						<upload-img v-model:imageUrl="form.logo"  height="100px" width="100px">
+						<upload-img v-model:imageUrl="form.logo" height="100px" width="100px">
 							<template #empty>
 								<el-icon>
 									<Avatar />
@@ -34,12 +34,12 @@
 </template>
 
 <script lang="ts" setup>
-import type {FormRules} from 'element-plus';
+import type { FormRules } from 'element-plus';
 import selectShow from '/@/components/OrgSelector/index.vue';
-import {queryGroupList} from '/@/api/flow/group';
-import {useRoute} from 'vue-router';
-import {useFlowStore} from '../workflow/stores/flow';
-import {GroupVO} from '/@/api/flow/group/types';
+import { queryGroupList } from '/@/api/flow/group';
+import { useRoute } from 'vue-router';
+import { useFlowStore } from '../workflow/stores/flow';
+import { GroupVO } from '/@/api/flow/group/types';
 
 const { proxy } = getCurrentInstance();
 
@@ -81,7 +81,7 @@ const rules = reactive<FormRules>({
 			trigger: 'change',
 		},
 	],
-  adminList: [
+	adminList: [
 		{
 			required: true,
 			message: '请选择管理员',
@@ -91,10 +91,10 @@ const rules = reactive<FormRules>({
 });
 
 let props = defineProps({
-  groupId: {
-    type: Number,
-    default: undefined,
-  },
+	groupId: {
+		type: Number,
+		default: undefined,
+	},
 });
 
 const route = useRoute();
@@ -109,7 +109,7 @@ onMounted(() => {
 watch(
 	() => props.groupId,
 	(val) => {
-		if (!!val) {
+		if (val) {
 			form.value.groupId = parseInt(val);
 		}
 	}

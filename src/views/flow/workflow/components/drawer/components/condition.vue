@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { useFlowStore } from '../../../stores/flow';
-import { getCurrentInstance } from 'vue';
+import {useFlowStore} from '../../../stores/flow';
+import {getCurrentInstance} from 'vue';
+import selectShow from '/@/components/OrgSelector/index.vue';
+import other from '/@/utils/other';
 
 let flowStore = useFlowStore();
 
 
 const step2FormList = computed(() => {
-  let step2 = flowStore.step2;
-
-  return step2;
+  return flowStore.step2;
 })
 
 
@@ -31,6 +31,7 @@ const formList = computed(() => {
 
   $deepCopy.push({
     id: 'root',
+    field: 'root',
     name: '发起人',
     type: "SelectUser",
     typeName: "用户"
@@ -50,7 +51,14 @@ let props = defineProps({
 const formIdObj = computed(() => {
   var obj = {}
   for (var item of formList.value) {
-    obj[item.id] = item;
+    if (item.props) {
+      if (item.props.type === 'user') {
+        item.type = 'SelectUser'
+      } else if (item.props.type === 'dept') {
+        item.type = 'SelectDept'
+      }
+    }
+    obj[item.field] = item;
   }
   return obj
 })
@@ -98,7 +106,7 @@ let expression = ref(
         }
       ],
 
-      "Input": [
+      "input": [
         {
           key: "==",
           name: "等于"
@@ -114,7 +122,7 @@ let expression = ref(
         }
       ],
 
-      "Textarea": [
+      "textarea": [
         {
           key: "==",
           name: "等于"
@@ -129,7 +137,7 @@ let expression = ref(
           name: "不包含"
         }
       ],
-      "Number": [
+      "inputNumber": [
         {
           key: "==",
           name: "等于"
@@ -150,7 +158,7 @@ let expression = ref(
           name: "小于等于"
         }
       ],
-      "Date": [
+      "datePicker": [
         {
           key: "==",
           name: "等于"
@@ -171,83 +179,8 @@ let expression = ref(
           name: "小于等于"
         }
       ],
-      "DateTime": [
-        {
-          key: "==",
-          name: "等于"
-        }, {
-          key: "!=",
-          name: "不等于"
-        }, {
-          key: ">",
-          name: "大于"
-        }, {
-          key: ">=",
-          name: "大于等于"
-        }, {
-          key: "<",
-          name: "小于"
-        }, {
-          key: "<=",
-          name: "小于等于"
-        }
-      ],
-      "Time": [
-        {
-          key: "==",
-          name: "等于"
-        }, {
-          key: "!=",
-          name: "不等于"
-        }, {
-          key: ">",
-          name: "大于"
-        }, {
-          key: ">=",
-          name: "大于等于"
-        }, {
-          key: "<",
-          name: "小于"
-        }, {
-          key: "<=",
-          name: "小于等于"
-        }
-      ],
-      "Money": [
-        {
-          key: "==",
-          name: "等于"
-        }, {
-          key: "!=",
-          name: "不等于"
-        }, {
-          key: ">",
-          name: "大于"
-        }, {
-          key: ">=",
-          name: "大于等于"
-        }, {
-          key: "<",
-          name: "小于"
-        }, {
-          key: "<=",
-          name: "小于等于"
-        }
-      ],
-      "SingleSelect": [
-        {
-          key: "in",
-          name: "属于"
-        }, {
-          key: "notin",
-          name: "不属于"
-        }
-      ]
     }
 )
-
-import selectShow from '/@/components/OrgSelector/index.vue';
-import other from '/@/utils/other';
 </script>
 
 <template>
@@ -255,9 +188,9 @@ import other from '/@/utils/other';
     <el-select v-model="condition.key" placeholder="选择表单" style="width: 100%;">
       <el-option
           v-for="f in formList"
-          :key="f.id"
-          :label="f.name"
-          :value="f.id"
+          :key="f.field"
+          :label="f.title || f.name"
+          :value="f.field"
       />
     </el-select>
 
@@ -271,14 +204,14 @@ import other from '/@/utils/other';
       />
     </el-select>
 
-    <el-input v-model="condition.value" v-if="formIdObj[condition.key]?.type==='Input'||
-formIdObj[condition.key]?.type==='Textarea'
+    <el-input v-model="condition.value" v-if="formIdObj[condition.key]?.type==='input'||
+formIdObj[condition.key]?.type==='textarea'
 " style="margin-top: 20px;" placeholder="条件值"></el-input>
 
 
     <el-input-number v-model="condition.value"
                      v-if="formIdObj[condition.key]?.type==='Money'||
-formIdObj[condition.key]?.type==='Number'
+formIdObj[condition.key]?.type==='inputNumber'
 "
                      placeholder="条件值"
                      style="width: 100%;margin-top: 20px"
@@ -292,34 +225,7 @@ formIdObj[condition.key]?.type==='Number'
         class="formDate"
 
         v-model="condition.value"
-        v-if="formIdObj[condition.key]?.type==='Date'
-"
-        placeholder="条件值"
-        style="width: 100%;margin-top: 20px"
-
-    />
-    <el-time-picker
-        arrow-control
-        value-format="HH:mm:ss"
-
-
-        class="formDate"
-
-        v-model="condition.value"
-        v-if="formIdObj[condition.key]?.type==='Time'
-"
-        placeholder="条件值"
-        style="width: 100%;margin-top: 20px"
-
-    />
-
-    <el-date-picker
-        value-format="YYYY-MM-DD HH:mm:ss"
-        type="datetime"
-        class="formDate"
-
-        v-model="condition.value"
-        v-if="formIdObj[condition.key]?.type==='DateTime'
+        v-if="formIdObj[condition.key]?.type==='datePicker'
 "
         placeholder="条件值"
         style="width: 100%;margin-top: 20px"
@@ -344,14 +250,12 @@ formIdObj[condition.key]?.type==='Number'
     </el-select>
     <div style="margin-top: 20px">
       <select-show v-if="formIdObj[condition.key]?.type==='SelectUser'
-" v-model:orgList="condition.value" type="org" :multiple="true"></select-show>
+" v-model:orgList="condition.value" type="user" :multiple="true"></select-show>
     </div>
     <div style="margin-top: 20px">
-
       <select-show v-if="formIdObj[condition.key]?.type==='SelectDept'
 " v-model:orgList="condition.value" type="dept" :multiple="true"></select-show>
     </div>
-
   </div>
 </template>
 

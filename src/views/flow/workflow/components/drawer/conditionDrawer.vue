@@ -35,7 +35,6 @@
 						<el-button text @click="deleteCondition(index, index1)" v-if="item.conditionList.length > 1" icon="Delete"></el-button>
 					</div>
 				</div>
-
 				<condition :condition="item1"></condition>
 			</div>
 			<el-button dark type="success" style="margin-top: 20px" @click="addOneCondition(item, index)">添加条件</el-button>
@@ -44,9 +43,11 @@
 	</el-drawer>
 </template>
 <script setup>
-import { ref, watch, computed, getCurrentInstance } from 'vue';
+import {computed, getCurrentInstance, ref, watch} from 'vue';
 import $func from '../../utils/index';
-import { useStore } from '../../stores/index';
+import {useStore} from '../../stores/index';
+import Condition from './components/condition.vue';
+import {useFlowStore} from '../../stores/flow';
 
 let conditionsConfig = ref({
 	conditionNodes: [],
@@ -92,15 +93,10 @@ const addOneCondition = (item, index) => {
 	item.conditionList = conditionList;
 };
 
-import Condition from './components/condition.vue';
-import { useFlowStore } from '../../stores/flow';
-
 let flowStore = useFlowStore();
 
 const step2FormList = computed(() => {
-	let step2 = flowStore.step2;
-
-	return step2;
+  return flowStore.step2;
 });
 
 const openEvent = () => {};
@@ -114,18 +110,21 @@ watch(conditionsConfig1, (val) => {
 			let conditionList = group.conditionList;
 			for (var con of conditionList) {
 				let key = con.key;
-				if (key === 'root') {
+        if (key === 'root') {
 					con.keyType = 'SelectUser';
 				} else {
-					let ele = step2FormList.value.filter((res) => res.id === key);
-					if (ele.length > 0) {
-						con.keyType = ele[0].type;
-					}
+					let ele = step2FormList.value.filter((res) => res.field === key);
+					if (ele.length > 0 && ele[0]?.props?.type === 'user') {
+						con.keyType = 'SelectUser';
+					}else if (ele.length > 0 && ele[0]?.props?.type === 'dept') {
+            con.keyType = 'SelectDept';
+          } else if (ele.length > 0) {
+            con.keyType = ele[0].type;
+          }
 				}
 			}
 		}
 	}
-
 	conditionsConfig.value = val.value;
 	PriorityLevel.value = val.priorityLevel;
 	conditionConfig.value = val.priorityLevel ? conditionsConfig.value.conditionNodes[val.priorityLevel - 1] : { nodeUserList: [], conditionList: [] };

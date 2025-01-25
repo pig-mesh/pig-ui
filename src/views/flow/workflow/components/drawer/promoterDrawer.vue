@@ -23,8 +23,8 @@
 </template>
 <script setup>
 import selectShow from '/@/components/OrgSelector/index.vue';
-import { useFlowStore } from '../../stores/flow';
-import { useStore } from '../../stores/index';
+import {useFlowStore} from '../../stores/flow';
+import {useStore} from '../../stores/index';
 import FormPerm from './components/formPerm.vue';
 
 let store = useStore();
@@ -37,9 +37,7 @@ watch(starterConfigData, (val) => {
 	starterConfig.value = val.value;
 });
 const step2FormList = computed(() => {
-	let step2 = flowStore.step2;
-
-	return step2;
+  return flowStore.step2;
 });
 
 const openEvent = () => {
@@ -47,17 +45,17 @@ const openEvent = () => {
 	var arr = {};
 	let formPerms = starterConfig.value.formPerms;
 	for (var item of value) {
-		arr[item.id] = 'E';
+		arr[item.field] = 'E';
 
-		if (formPerms[item.id]) {
-			arr[item.id] = formPerms[item.id];
+		if (formPerms[item.field]) {
+			arr[item.field] = formPerms[item.field];
 		}
 		if (item.type === 'Layout') {
 			let value1 = item.props.value;
 			for (var it of value1) {
-				arr[it.id] = 'E';
-				if (formPerms[it.id]) {
-					arr[it.id] = formPerms[it.id];
+				arr[it.field] = 'E';
+				if (formPerms[it.field]) {
+					arr[it.field] = formPerms[it.field];
 				}
 			}
 		}

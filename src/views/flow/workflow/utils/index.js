@@ -1,17 +1,16 @@
-function All() {}
+function All() {
+}
 
-import { useFlowStore } from '../stores/flow';
+import {useFlowStore} from '../stores/flow';
 
 let flowStore = useFlowStore();
 const step2FormList = computed(() => {
-	let step2 = flowStore.step2;
-
-	return step2;
+	return flowStore.step2;
 });
 const formIdObj = computed(() => {
 	var obj = {};
 	for (var item of step2FormList.value) {
-		obj[item.id] = item;
+		obj[item.field] = item;
 	}
 	obj['root'] = {
 		name: '发起人',
@@ -155,10 +154,10 @@ All.prototype = {
 					}
 
 					let valueElement = formIdObj.value[key];
-					var name = valueElement.name;
+					var name = valueElement.title || valueElement.name;
 
 					var valueShow = value;
-					if (valueElement.type === 'SelectUser' || valueElement.type === 'SelectDept') {
+					if (valueElement.type === 'SelectUser' || valueElement.type === 'SelectDept' || valueElement.type === 'OrgSelector') {
 						valueShow = value.map((res) => res.name).join(',');
 					} else if (valueElement.type === 'SingleSelect') {
 						valueShow =  value.map(res=>res.value).join(",")

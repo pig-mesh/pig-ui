@@ -24,22 +24,6 @@ const submit = async () => {
   if (!currentData.value || !currentOpenFlowForm.value) return
 
   const formData: Record<string, any> = {}
-  
-  for (const item of currentOpenFlowForm.value) {
-    formData[item.id] = item.props.value
-
-    if (item.type === 'Layout') {
-      const subList = item.props.value as FlowFormItem[][]
-      const processedData = subList.map(array => 
-        array.reduce((acc, subItem) => ({
-          ...acc,
-          [subItem.id]: subItem.props.value
-        }), {})
-      )
-      formData[item.id] = processedData
-    }
-  }
-
   formData[`${currentData.value.nodeId}_approve_condition`] = true
 
   const param: TaskSubmitParam = {
@@ -78,7 +62,7 @@ const submit = async () => {
           show-word-limit
           class="w-full transition-all duration-300 focus:ring-2 focus:ring-primary"
         />
-        
+
         <div class="flex justify-end pt-4 space-x-3">
           <el-button
             @click="dialogVisible = false"

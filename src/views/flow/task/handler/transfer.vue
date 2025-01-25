@@ -62,22 +62,6 @@ const submit = async () => {
 	try {
 		const formData: Record<string, any> = {};
 
-		for (const item of currentOpenFlowForm.value) {
-			formData[item.id] = item.props.value;
-
-			if (item.type === 'Layout') {
-				const subList = item.props.value as Array<FlowFormItem[]>;
-				const d = subList.map((array) => {
-					const v: Record<string, any> = {};
-					for (const subItem of array) {
-						v[subItem.id] = subItem.props.value;
-					}
-					return v;
-				});
-				formData[item.id] = d;
-			}
-		}
-
 		formData[`${currentData.value.nodeId}_approve_condition`] = true;
 
 		const param = {
@@ -85,7 +69,7 @@ const submit = async () => {
 			taskId: currentData.value.taskId,
 			targetUserIdList: userList.value.map((user) => user.id),
 			taskLocalParamMap: {
-				approveDesc: submitDesc.value.trim(),
+				approveDesc: '转办事由：' + submitDesc.value.trim(),
 			},
 		};
 

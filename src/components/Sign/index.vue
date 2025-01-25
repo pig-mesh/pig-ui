@@ -1,284 +1,295 @@
 <template>
-	<canvas
-		id="canvas"
-		@mousedown="mouseDown"
-		@mousemove="mouseMove"
-		@mouseup="mouseUp"
-		@touchstart="touchStart"
-		@touchmove="touchMove"
-		@touchend="touchEnd"
-	></canvas>
+	<div class="sign-wrapper">
+		<div v-show="!modelValue" class="sign-container">
+			<canvas
+				ref="canvasRef"
+				@mousedown="handleMouseDown"
+				@mousemove="handleMouseMove"
+				@mouseup="handleMouseUp"
+				@touchstart="handleTouchStart"
+				@touchmove="handleTouchMove"
+				@touchend="handleTouchEnd"
+			></canvas>
+		</div>
+		<div v-if="!props.disabled && !modelValue" class="sign-controls">
+			<el-space>
+				<el-button type="primary" @click="handleGenerate">
+					<el-icon><Check /></el-icon>
+					确认签名
+				</el-button>
+				<el-button @click="handleReset">
+					<el-icon><Refresh /></el-icon>
+					清空
+				</el-button>
+				<div>
+					<el-color-picker v-model="currentLineColor" size="small" />
+				</div>
+			</el-space>
+		</div>
+		<div v-if="modelValue" class="flex flex-col items-center sign-preview">
+			<el-image :src="modelValue" fit="contain" />
+			<div class="mt-2">
+				<el-button @click="handleReset">
+					<el-icon><Refresh /></el-icon>
+					重新签名
+				</el-button>
+			</div>
+		</div>
+	</div>
 </template>
 
 <script lang="ts" setup>
-const props = defineProps({
-	width: {
-		type: Number,
-		default: 800,
-	},
-	height: {
-		type: Number,
-		default: 300,
-	},
-	lineWidth: {
-		type: Number,
-		default: 4,
-	},
-	lineColor: {
-		type: String,
-		default: '#000000',
-	},
-	bgColor: {
-		type: String,
-		default: '',
-	},
-	isCrop: {
-		type: Boolean,
-		default: false,
-	},
-	isClearBgColor: {
-		type: Boolean,
-		default: true,
-	},
-});
-let canvas: any = null; //document.getElementById('canvas')
-let hasDrew = false;
-let resultImg = '';
-let points: any = [];
-let canvasTxt: any = null;
-let startX = 0;
-let startY = 0;
-let isDrawing = false;
-let sratio: any = 1;
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { Check, Refresh } from '@element-plus/icons-vue';
+import { ElMessage } from 'element-plus';
+import type { Point } from './types';
 
-onBeforeMount(() => {
-	window.addEventListener('resize', resizeHandler);
-});
-onUnmounted(() => {
-	window.removeEventListener('resize', resizeHandler);
+interface Props {
+	width?: number;
+	height?: number;
+	lineWidth?: number;
+	lineColor?: string;
+	bgColor?: string;
+	isCrop?: boolean;
+	isClearBgColor?: boolean;
+	modelValue?: string;
+	disabled?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+	width: 300,
+	height: 150,
+	lineWidth: 2,
+	lineColor: '#000000',
+	bgColor: '',
+	isCrop: false,
+	isClearBgColor: true,
+	modelValue: '',
+	disabled: false,
 });
 
-onMounted(() => {
-	//   const canvas = this.$refs.canvas
-	canvas = document.getElementById('canvas');
-	canvas.height = props.height;
+const emit = defineEmits(['update:modelValue']);
+
+const canvasRef = ref<HTMLCanvasElement | null>(null);
+const ctx = ref<CanvasRenderingContext2D | null>(null);
+const isDrawing = ref(false);
+const hasDrew = ref(false);
+const currentLineColor = ref(props.lineColor);
+const points = ref<Point[]>([]);
+const startPoint = ref<Point>({ x: 0, y: 0 });
+const scaleRatio = ref(1);
+
+const backgroundColor = computed(() => props.bgColor || 'rgba(255, 255, 255, 0)');
+
+function initCanvas(): void {
+	const canvas = canvasRef.value;
+	if (!canvas) return;
+
+	const container = canvas.parentElement;
+	if (!container) return;
+
+	// Set fixed dimensions
 	canvas.width = props.width;
-	canvas.style.background = myBg.value;
-	resizeHandler();
-	// 在画板以外松开鼠标后冻结画笔
-	document.onmouseup = () => {
-		isDrawing = false;
-	};
-});
+	canvas.height = props.height;
 
-const ratio: any = computed(() => {
-	return props.height / props.width;
-});
+	// Set display dimensions
+	canvas.style.width = `${props.width}px`;
+	canvas.style.height = `${props.height}px`;
+	canvas.style.background = backgroundColor.value;
 
-const stageInfo: any = computed(() => {
-	return canvas.getBoundingClientRect();
-});
-const myBg = computed(() => {
-	return props.bgColor ? props.bgColor : 'rgba(255, 255, 255, 0)';
-});
+	ctx.value = canvas.getContext('2d');
+	if (ctx.value) {
+		ctx.value.strokeStyle = currentLineColor.value;
+		ctx.value.lineWidth = props.lineWidth;
+		ctx.value.lineCap = 'round';
+		ctx.value.lineJoin = 'round';
+	}
+}
 
-watch(myBg, (newVal) => {
-	console.log('bg change', newVal);
-	canvas.style.background = newVal;
-});
+function handleResize(): void {
+	const canvas = canvasRef.value;
+	if (!canvas || !ctx.value) return;
 
-const resizeHandler = () => {
-	canvas.style.width = props.width + 'px';
-	const realw = parseFloat(window.getComputedStyle(canvas).width);
-	canvas.style.height = ratio.value * realw + 'px';
-	canvasTxt = canvas.getContext('2d');
-	canvasTxt.scale(1 * sratio, 1 * sratio);
-	sratio = realw / props.width;
-	canvasTxt.scale(1 / sratio, 1 / sratio);
-};
-// pc
-const mouseDown = (e) => {
-	e = e || event;
+	// Keep the same dimensions
+	canvas.width = props.width;
+	canvas.height = props.height;
+
+	ctx.value = canvas.getContext('2d');
+	if (!ctx.value) return;
+
+	ctx.value.strokeStyle = currentLineColor.value;
+	ctx.value.lineWidth = props.lineWidth;
+	ctx.value.lineCap = 'round';
+	ctx.value.lineJoin = 'round';
+}
+
+function drawPoint(point: Point): void {
+	if (!ctx.value) return;
+
+	ctx.value.beginPath();
+	ctx.value.moveTo(startPoint.value.x, startPoint.value.y);
+	ctx.value.lineTo(point.x, point.y);
+	ctx.value.strokeStyle = currentLineColor.value;
+	ctx.value.lineWidth = props.lineWidth * scaleRatio.value;
+	ctx.value.lineCap = 'round';
+	ctx.value.lineJoin = 'round';
+	ctx.value.stroke();
+	ctx.value.closePath();
+
+	startPoint.value = point;
+	points.value.push(point);
+}
+
+// Event handlers
+function handleMouseDown(e: MouseEvent): void {
+	if (props.disabled) return;
+
 	e.preventDefault();
-	isDrawing = true;
-	hasDrew = true;
-	let obj = {
+	isDrawing.value = true;
+	hasDrew.value = true;
+
+	const point = {
 		x: e.offsetX,
 		y: e.offsetY,
 	};
-	drawStart(obj);
-};
-const mouseMove = (e) => {
-	e = e || event;
+	startPoint.value = point;
+	points.value.push(point);
+}
+
+function handleMouseMove(e: MouseEvent): void {
+	if (!isDrawing.value || props.disabled) return;
+
 	e.preventDefault();
-	if (isDrawing) {
-		let obj = {
-			x: e.offsetX,
-			y: e.offsetY,
-		};
-		drawMove(obj);
-	}
-};
-const mouseUp = (e) => {
-	e = e || event;
-	e.preventDefault();
-	let obj = {
+	drawPoint({
 		x: e.offsetX,
 		y: e.offsetY,
+	});
+}
+
+function handleMouseUp(e: MouseEvent): void {
+	if (props.disabled) return;
+
+	e.preventDefault();
+	isDrawing.value = false;
+	points.value.push({ x: -1, y: -1 }); // Mark end of stroke
+}
+
+// Touch events
+function handleTouchStart(e: TouchEvent): void {
+	if (props.disabled || !canvasRef.value) return;
+
+	e.preventDefault();
+	hasDrew.value = true;
+
+	const touch = e.touches[0];
+	const rect = canvasRef.value.getBoundingClientRect();
+	const point = {
+		x: touch.clientX - rect.left,
+		y: touch.clientY - rect.top,
 	};
-	drawEnd(obj);
-	isDrawing = false;
-};
-// mobile
-const touchStart = (e) => {
-	e = e || event;
+
+	startPoint.value = point;
+	points.value.push(point);
+}
+
+function handleTouchMove(e: TouchEvent): void {
+	if (props.disabled || !canvasRef.value) return;
+
 	e.preventDefault();
-	hasDrew = true;
-	if (e.touches.length === 1) {
-		let obj = {
-			x: e.targetTouches[0].clientX - canvas.getBoundingClientRect().left,
-			y: e.targetTouches[0].clientY - canvas.getBoundingClientRect().top,
-		};
-		drawStart(obj);
-	}
-};
-const touchMove = (e) => {
-	e = e || event;
+	const touch = e.touches[0];
+	const rect = canvasRef.value.getBoundingClientRect();
+
+	drawPoint({
+		x: touch.clientX - rect.left,
+		y: touch.clientY - rect.top,
+	});
+}
+
+function handleTouchEnd(e: TouchEvent): void {
+	if (props.disabled) return;
+
 	e.preventDefault();
-	if (e.touches.length === 1) {
-		let obj = {
-			x: e.targetTouches[0].clientX - canvas.getBoundingClientRect().left,
-			y: e.targetTouches[0].clientY - canvas.getBoundingClientRect().top,
-		};
-		drawMove(obj);
+	points.value.push({ x: -1, y: -1 }); // Mark end of stroke
+}
+
+// Actions
+async function handleGenerate(): Promise<void> {
+	try {
+		const result = await generate();
+		emit('update:modelValue', result);
+	} catch (error) {
+		ElMessage.warning('请先进行签名');
 	}
-};
-const touchEnd = (e) => {
-	e = e || event;
-	e.preventDefault();
-	if (e.touches.length === 1) {
-		let obj = {
-			x: e.targetTouches[0].clientX - canvas.getBoundingClientRect().left,
-			y: e.targetTouches[0].clientY - canvas.getBoundingClientRect().top,
-		};
-		drawEnd(obj);
-	}
-};
-// 绘制
-const drawStart = (obj) => {
-	startX = obj.x;
-	startY = obj.y;
-	canvasTxt.beginPath();
-	canvasTxt.moveTo(startX, startY);
-	canvasTxt.lineTo(obj.x, obj.y);
-	canvasTxt.lineCap = 'round';
-	canvasTxt.lineJoin = 'round';
-	canvasTxt.lineWidth = props.lineWidth * sratio;
-	canvasTxt.stroke();
-	canvasTxt.closePath();
-	points.push(obj);
-};
-const drawMove = (obj) => {
-	canvasTxt.beginPath();
-	canvasTxt.moveTo(startX, startY);
-	canvasTxt.lineTo(obj.x, obj.y);
-	canvasTxt.strokeStyle = props.lineColor;
-	canvasTxt.lineWidth = props.lineWidth * sratio;
-	canvasTxt.lineCap = 'round';
-	canvasTxt.lineJoin = 'round';
-	canvasTxt.stroke();
-	canvasTxt.closePath();
-	startY = obj.y;
-	startX = obj.x;
-	points.push(obj);
-};
-const drawEnd = (obj) => {
-	canvasTxt.beginPath();
-	canvasTxt.moveTo(startX, startY);
-	canvasTxt.lineCap = 'round';
-	canvasTxt.lineJoin = 'round';
-	canvasTxt.stroke();
-	canvasTxt.closePath();
-	points.push(obj);
-	points.push({ x: -1, y: -1 });
-};
-// 操作
-const generate = () => {
-	const pm = new Promise((resolve, reject) => {
-		if (!hasDrew) {
-			reject(`Warning: Not Signned!`);
+}
+
+function handleReset(): void {
+	reset();
+	emit('update:modelValue', '');
+}
+
+function generate(): Promise<string> {
+	return new Promise((resolve, reject) => {
+		if (!hasDrew.value || !canvasRef.value || !ctx.value) {
+			reject('请先进行签名');
 			return;
 		}
-		var resImgData = canvasTxt.getImageData(0, 0, canvas.width, canvas.height);
-		canvasTxt.globalCompositeOperation = 'destination-over';
-		canvasTxt.fillStyle = myBg.value;
-		canvasTxt.fillRect(0, 0, canvas.width, canvas.height);
-		resultImg = canvas.toDataURL();
-		var resultImg = resultImg;
-		canvasTxt.clearRect(0, 0, canvas.width, canvas.height);
-		canvasTxt.putImageData(resImgData, 0, 0);
-		canvasTxt.globalCompositeOperation = 'source-over';
-		if (props.isCrop) {
-			const crop_area = getCropArea(resImgData.data);
-			var crop_canvas: any = document.createElement('canvas');
-			const crop_ctx: any = crop_canvas.getContext('2d');
-			crop_canvas.width = crop_area[2] - crop_area[0];
-			crop_canvas.height = crop_area[3] - crop_area[1];
-			const crop_imgData = canvasTxt.getImageData(...crop_area);
-			crop_ctx.globalCompositeOperation = 'destination-over';
-			crop_ctx.putImageData(crop_imgData, 0, 0);
-			crop_ctx.fillStyle = myBg.value;
-			crop_ctx.fillRect(0, 0, crop_canvas.width, crop_canvas.height);
-			resultImg = crop_canvas.toDataURL();
-			crop_canvas = null;
-		}
-		resolve(resultImg);
-	});
-	return pm;
-};
 
-const emits = defineEmits(['update:bgColor']);
-const reset = () => {
-	canvasTxt.clearRect(0, 0, canvas.width, canvas.height);
+		const canvas = canvasRef.value;
+		const context = ctx.value;
+
+		// Save current drawing
+		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+
+		// Add background
+		context.globalCompositeOperation = 'destination-over';
+		context.fillStyle = backgroundColor.value;
+		context.fillRect(0, 0, canvas.width, canvas.height);
+
+		// Get result
+		const result = canvas.toDataURL();
+
+		// Restore original drawing
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		context.putImageData(imageData, 0, 0);
+		context.globalCompositeOperation = 'source-over';
+
+		resolve(result);
+	});
+}
+
+function reset(): void {
+	if (!ctx.value || !canvasRef.value) return;
+
+	ctx.value.clearRect(0, 0, canvasRef.value.width, canvasRef.value.height);
+	points.value = [];
+	hasDrew.value = false;
+
 	if (props.isClearBgColor) {
-		// this.$emit('update:bgColor', '')
-		emits('update:bgColor', '');
-		canvas.style.background = 'rgba(255, 255, 255, 0)';
+		canvasRef.value.style.background = 'rgba(255, 255, 255, 0)';
 	}
-	points = [];
-	hasDrew = false;
-	resultImg = '';
-};
-const getCropArea = (imgData) => {
-	var topX = canvas.width;
-	var btmX = 0;
-	var topY = canvas.height;
-	var btnY = 0;
-	for (var i = 0; i < canvas.width; i++) {
-		for (var j = 0; j < canvas.height; j++) {
-			var pos = (i + canvas.width * j) * 4;
-			if (imgData[pos] > 0 || imgData[pos + 1] > 0 || imgData[pos + 2] || imgData[pos + 3] > 0) {
-				btnY = Math.max(j, btnY);
-				btmX = Math.max(i, btmX);
-				topY = Math.min(j, topY);
-				topX = Math.min(i, topX);
-			}
+}
+
+// Lifecycle
+onMounted(() => {
+	initCanvas();
+	window.addEventListener('resize', handleResize);
+	document.addEventListener('mouseup', () => (isDrawing.value = false));
+});
+
+onBeforeUnmount(() => {
+	window.removeEventListener('resize', handleResize);
+	document.removeEventListener('mouseup', () => (isDrawing.value = false));
+});
+
+// Watch
+watch(
+	() => backgroundColor.value,
+	(newVal) => {
+		if (canvasRef.value) {
+			canvasRef.value.style.background = newVal;
 		}
 	}
-	topX++;
-	btmX++;
-	topY++;
-	btnY++;
-	const data = [topX, topY, btmX, btnY];
-	return data;
-};
+);
 
 defineExpose({ reset, generate });
 </script>
-
-<style scoped>
-canvas {
-	max-width: 100%;
-	display: block;
-}
-</style>

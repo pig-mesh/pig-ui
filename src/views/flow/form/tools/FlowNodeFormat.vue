@@ -1,96 +1,113 @@
 <script setup lang="ts">
 import selectShow from '/@/components/OrgSelector/index.vue';
 
-let props = defineProps({
-	nodeUser: {
-		type: Object,
-		dafault: () => {},
-	},
-	row: {
-		type: Array,
-		dafault: () => [],
-	},
-	disableSelect: {
-		type: Boolean,
-		default: false,
-	},
-});
-const { proxy } = getCurrentInstance();
+interface UserVo {
+	id: string;
+	name: string;
+	showTime: string | null;
+	avatar: string | null;
+	approveDesc: string | null;
+	operType: string | null;
+	status: number | null;
+}
+
+interface FlowNode {
+	id: string;
+	userVoList: UserVo[] | null;
+	placeholder: string | null;
+	status: number;
+	name: string;
+	type: number;
+	selectUser: boolean | null;
+	multiple: boolean | null;
+	children: FlowNode[] | null;
+	branch: FlowNode[];
+}
+
+const props = defineProps<{
+	nodeUser: Record<string, any>;
+	row: FlowNode[];
+	disableSelect: boolean;
+}>();
+
+// Create a map to store active tabs for each node
+const activeTabsMap = ref<Map<string, string>>(new Map());
+
+// Function to get/set active tab
+function getNodeActiveTab(node: FlowNode): string {
+	if (!activeTabsMap.value.has(node.id)) {
+		// Initialize with computed default value
+		const activeIndex = node.branch.findIndex((branch) => branch.children?.some((child) => child.status !== 0));
+		activeTabsMap.value.set(node.id, activeIndex >= 0 ? String(activeIndex) : '0');
+	}
+	return activeTabsMap.value.get(node.id) || '0';
+}
+
+// Add function to get branch label
+function getBranchLabel(node: FlowNode, index: number): string {
+	return node.placeholder || `分支${index + 1}`;
+}
 
 import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 </script>
 
 <template>
-	<div style="padding: 10px">
+	<div class="p-3">
 		<el-timeline :reverse="false">
 			<el-timeline-item
 				v-for="(node, index) in row"
 				:key="index"
 				size="large"
-				:color="node.status != 2 ? (node.status == 1 ? 'pink' : 'green') : 'blue'"
+				:color="node.status != 2 ? (node.status == 1 ? 'var(--el-color-warning)' : 'var(--el-color-success)') : 'var(--el-color-primary)'"
 				:icon="node.status == 2 ? Check : node.status == 1 ? Plus : Refresh"
 			>
-				<template v-if="node.selectUser && (!nodeUser[node.id] || nodeUser[node.id]?.length == 0)">
-					<p style="color: red">
-						{{ node.name }}
-						<template v-if="node.placeholder && node.placeholder.length > 0">[{{ node.placeholder }}]</template>
-					</p>
-				</template>
-				<template v-else>
-					<p>
-						{{ node.name }}
-						<template v-if="node.placeholder && node.placeholder.length > 0">[{{ node.placeholder }}]</template>
-					</p>
-				</template>
-				<!--					渲染用户头像列表-->
-				<div v-if="node.userVoList && node.userVoList.length > 0" style="display: flex; flex-direction: row; flex-wrap: wrap">
-					<div
-						class="box-card"
-						v-for="(item1, index1) in node.userVoList"
-						:key="index1"
-						style="margin-bottom: 10px; border: 0px solid red; width: 40px; text-align: center"
-					>
-						<div class="node-show">
-							<div style="overflow: hidden">
-								<div class="d1">
-									<div>
-										<upload-img v-model:image-url="item1.avatar" width="30px" height="30px"></upload-img>
-									</div>
-									<div style="font-size: 8px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; text-align: center">
-										{{ item1.name }}
-									</div>
-								</div>
-							</div>
+				<!-- Node Title Section -->
+				<div :class="['text-sm font-medium mb-3', { 'text-red-500': node.selectUser && (!nodeUser[node.id] || nodeUser[node.id]?.length == 0) }]">
+					{{ node.name }}
+					<span v-if="node.placeholder" class="ml-1 text-gray-500">[{{ node.placeholder }}]</span>
+				</div>
+
+				<!-- User Avatar List Section -->
+				<div v-if="node.userVoList?.length" class="flex flex-wrap gap-2 mb-3">
+					<div v-for="(item1, index1) in node.userVoList" :key="index1" class="w-10 text-center">
+						<div class="flex flex-col items-center">
+							<upload-img v-model:image-url="item1.avatar" width="30px" height="30px"></upload-img>
+							<div class="mt-1 w-full text-xs truncate">{{ item1.name }}</div>
 						</div>
 					</div>
 				</div>
-				<!--					渲染审批评论-->
-				<template v-for="(item1, index1) in node.userVoList" :key="index1">
-					<template v-if="item1.approveDesc?.length > 0">
-						<div style="display: flex; flex-direction: row">
-							<div style="width: 40px; text-align: center">
+
+				<!-- Comments Section -->
+				<div v-for="(item1, index1) in node.userVoList" :key="'comment-' + index1">
+					<div v-if="item1.approveDesc" class="mb-3">
+						<div class="flex gap-2 items-center mb-2">
+							<div class="w-10 text-center">
 								<upload-img v-model:image-url="item1.avatar" disabled width="30px" height="30px"></upload-img>
 							</div>
-							<div style="height: 40px; line-height: 40px; font-size: 10px">
-								{{ item1.name }}
+							<div class="text-xs">
+								<span class="font-medium">{{ item1.name }}</span>
+								<span class="ml-1 text-gray-500">(添加了评论) {{ item1.showTime }}</span>
 							</div>
-							<div style="height: 40px; line-height: 40px; font-size: 10px">(添加了评论) {{ item1.showTime }}</div>
 						</div>
-						<div class="box-card" style="margin-bottom: 10px; padding: 5px; background-color: var(--el-fill-color-light)">
-							{{ item1.approveDesc }}
-						</div>
-					</template>
-				</template>
+						<div class="p-3 text-sm bg-gray-50 rounded">{{ item1.approveDesc }}</div>
+					</div>
+				</div>
 
-				<!--					选择用户-->
-				<template v-if="node.selectUser">
+				<!-- User Selection Section -->
+				<div v-if="node.selectUser">
 					<select-show :disabled="disableSelect" v-model:orgList="nodeUser[node.id]" type="user" :multiple="node.multiple"></select-show>
-				</template>
+				</div>
 
-				<el-tabs v-if="node.branch.length > 0" type="border-card">
-					<el-tab-pane v-for="(node1, index1) in node.branch" :label="'分支' + (index1 + 1)" :name="index1 + ''" :key="index1">
-						<template v-if="node1.placeholder && node1.placeholder.length > 0">[{{ node1.placeholder }}]</template>
-						<div style="padding: 0px 5px">
+				<!-- Branch Tabs Section -->
+				<el-tabs
+					v-if="node.branch.length > 0"
+					type="border-card"
+					:model-value="getNodeActiveTab(node)"
+					@update:model-value="(val) => activeTabsMap.set(node.id, val)"
+					class="mt-4"
+				>
+					<el-tab-pane v-for="(node1, index1) in node.branch" :label="getBranchLabel(node1, index1)" :name="String(index1)" :key="index1">
+						<div class="p-2">
 							<flow-node-format :node-user="nodeUser" :disableSelect="disableSelect" :row="node1.children"></flow-node-format>
 						</div>
 					</el-tab-pane>
@@ -99,3 +116,10 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 		</el-timeline>
 	</div>
 </template>
+
+<style lang="scss" scoped>
+/* Only keep styles that can't be achieved with Tailwind */
+:deep(.el-tabs__header) {
+	@apply mb-3;
+}
+</style>

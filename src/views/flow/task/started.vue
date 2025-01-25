@@ -10,7 +10,13 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item label="发起时间" prop="taskTime">
-						<el-date-picker type="datetimerange" value-format="YYYY-MM-DD HH:mm:ss" v-model="state.queryForm.taskTime" is-range range-separator="To" />
+						<el-date-picker
+							type="datetimerange"
+							value-format="YYYY-MM-DD HH:mm:ss"
+							v-model="state.queryForm.taskTime"
+							is-range
+							range-separator="To"
+						/>
 					</el-form-item>
 					<el-form-item>
 						<el-button icon="search" type="primary" @click="getDataList">
@@ -58,25 +64,22 @@
 						<el-button :disabled="scope.row.status != 1" type="primary" size="small" link icon="VideoPause" @click="stop(scope.row)">
 							终止流程
 						</el-button>
-
 					</template>
 				</el-table-column>
 			</el-table>
 
-      <pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle"
-                  v-bind="state.pagination"></pagination>
+			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 			<!--			右侧抽屉-->
-			<el-drawer v-model="rightDrawerVisible" direction="rtl" size="400px">
+			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
 				<template #header>
 					<h3>{{ currentData?.name }}</h3>
 				</template>
 				<template #default>
 					<el-card class="box-card">
-						<form-render ref="formRenderRef" :form-list="currentOpenFlowForm"></form-render>
+						<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
 					</el-card>
 					<flow-node-format
 						:disableSelect="true"
-						:formData="formValue"
 						:processInstanceId="currentData.processInstanceId"
 						:flow-id="currentData.flowId"
 						ref="flowNodeFormatRef"
@@ -87,11 +90,18 @@
 	</div>
 </template>
 <script setup lang="ts">
-import FormRender from '/@/views/flow/form/render/FormRender.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import {queryMineStarted, stopProcessInstance} from '/@/api/flow/task';
+import { queryMineStarted, stopProcessInstance } from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
 import { BasicTableProps, useTable } from '/@/hooks/table';
+
+import FcDesigner from 'form-create-designer';
+import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
+
+const rule = ref([]);
+const fApi = ref();
+const formData = ref({});
 
 const rightDrawerVisible = ref(false);
 
@@ -99,16 +109,14 @@ const loading = ref(false);
 const showSearch = ref(true);
 const queryRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
-  pageList: queryMineStarted,
-  queryForm: {
-    taskTime: undefined,
-    status: 1,
-  },
+	pageList: queryMineStarted,
+	queryForm: {
+		taskTime: undefined,
+		status: 1,
+	},
 });
 
-const { tableStyle ,getDataList, currentChangeHandle,
-  sortChangeHandle,
-  sizeChangeHandle, } = useTable(state);
+const { tableStyle, getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
 function stop(row) {
 	stopProcessInstance({
 		processInstanceId: row.processInstanceId,
@@ -127,7 +135,15 @@ const deal = (row) => {
 	detail({
 		processInstanceId: row.processInstanceId,
 	}).then((res) => {
-		currentOpenFlowForm.value = res.data.formItems;
+		const { formItems, formPerms, formData: responseFormData } = res.data;
+
+		// 解析表单项并处理权限
+		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
+		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
+
+		rule.value = itemsWithPerms;
+		formData.value = FcDesigner.formCreate.parseJson(responseFormData);
+		currentOpenFlowForm.value = formItems;
 		rightDrawerVisible.value = true;
 	});
 };
@@ -141,13 +157,5 @@ const resetQuery = () => {
 
 onMounted(() => {
 	getDataList();
-});
-
-const formValue = computed(() => {
-  const obj = {};
-  for (const item of currentOpenFlowForm.value) {
-		obj[item.id] = item.props.value;
-	}
-	return obj;
 });
 </script>

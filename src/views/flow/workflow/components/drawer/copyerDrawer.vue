@@ -11,7 +11,7 @@
 	>
 		<el-tabs type="border-card">
 			<el-tab-pane label="设置抄送人">
-				<select-show v-model:orgList="copyerConfig.nodeUserList" type="org" :multiple="true"></select-show>
+				<select-show v-model:orgList="copyerConfig.nodeUserList" type="user" :multiple="true"></select-show>
 			</el-tab-pane>
 			<el-tab-pane label="表单权限">
 				<form-perm :hide-key="['E']" :form-perm="copyerConfig.formPerms"></form-perm>
@@ -23,20 +23,17 @@
 import selectShow from '/@/components/OrgSelector/index.vue';
 
 import $func from '../../utils/index';
-import { useStore } from '../../stores/index';
-import { ref, watch, computed } from 'vue';
-let copyerConfig = ref({});
-
-import { useFlowStore } from '../../stores/flow';
-import { ElTable } from 'element-plus';
-let flowStore = useFlowStore();
-
+import {useStore} from '../../stores/index';
+import {computed, ref, watch} from 'vue';
+import {useFlowStore} from '../../stores/flow';
 import FormPerm from './components/formPerm.vue';
 
-const step2FormList = computed(() => {
-	let step2 = flowStore.step2;
+let copyerConfig = ref({});
 
-	return step2;
+let flowStore = useFlowStore();
+
+const step2FormList = computed(() => {
+  return flowStore.step2;
 });
 
 let store = useStore();
@@ -61,21 +58,9 @@ const openEvent = () => {
 	let formPerms = copyerConfig.value.formPerms;
 
 	for (var item of value) {
-		arr[item.id] = 'R';
-		// if (item.type === 'Layout') {
-		//   arr[item.id] = "R"
-		// }
-		if (formPerms[item.id]) {
-			arr[item.id] = formPerms[item.id];
-		}
-		if (item.type === 'Layout') {
-			let value1 = item.props.value;
-			for (var it of value1) {
-				arr[it.id] = 'R';
-				if (formPerms[it.id]) {
-					arr[it.id] = formPerms[it.id];
-				}
-			}
+		arr[item.field] = 'R';
+		if (formPerms[item.field]) {
+			arr[item.field] = formPerms[item.field];
 		}
 	}
 	copyerConfig.value.formPerms = arr;

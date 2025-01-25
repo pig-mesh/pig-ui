@@ -12,13 +12,14 @@
 			:on-error="handleUploadError"
 			:on-remove="handleRemove"
 			:on-preview="handlePreview"
-      :on-exceed="handleExceed"
+			:on-exceed="handleExceed"
 			:data="formData"
 			:auto-upload="autoUpload"
 			:on-success="handleUploadSuccess"
 			class="upload-file-uploader"
 			drag
 			multiple
+			:disabled="disabled"
 		>
 			<i class="el-icon-upload"></i>
 			<div class="el-upload__text">
@@ -49,11 +50,12 @@
 			:auto-upload="autoUpload"
 			:on-error="handleUploadError"
 			:on-remove="handleRemove"
-      :on-exceed="handleExceed"
-      :data="formData"
+			:on-exceed="handleExceed"
+			:data="formData"
 			:on-success="handleUploadSuccess"
 			class="upload-file-uploader"
 			multiple
+			:disabled="disabled"
 		>
 			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 		</el-upload>
@@ -110,6 +112,10 @@ const props = defineProps({
 		type: Boolean,
 		default: true,
 	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
 });
 
 const emit = defineEmits(['update:modelValue', 'change']);
@@ -135,7 +141,7 @@ const formData = computed(() => {
 
 // 上传前校检格式和大小
 const handleBeforeUpload = (file: File) => {
-  // 校检文件类型
+	// 校检文件类型
 	if (props.fileType.length) {
 		const fileName = file.name.split('.');
 		const fileExt = fileName[fileName.length - 1];
@@ -200,7 +206,7 @@ const handlePreview = (file: any) => {
 
 // 添加 handleExceed 函数
 const handleExceed = (files: File[]) => {
-  useMessage().warning(`${t('excel.uploadLimit')} ${props.limit} ${t('excel.files')}`);
+	useMessage().warning(`${t('excel.uploadLimit')} ${props.limit} ${t('excel.files')}`);
 };
 
 /**

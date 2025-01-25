@@ -23,29 +23,8 @@ defineExpose({ handle });
 const emit = defineEmits(['taskSubmitEvent']);
 
 const submit = () => {
-	let value = currentOpenFlowForm.value;
-
-	var formData = {};
-	for (var item of value) {
-		formData[item.id] = item.props.value;
-
-		if (item.type === 'Layout') {
-			let subList = item.props.value;
-
-			var d = [];
-			for (var array of subList) {
-				var v = {};
-
-				for (var subItem of array) {
-          v[subItem.id] = subItem.props.value;
-				}
-				d.push(v);
-			}
-			formData[item.id] = d;
-		}
-	}
-
-	formData[currentData.value.nodeId + '_approve_condition'] = false;
+  const formData: Record<string, any> = {};
+  formData[`${currentData.value.nodeId}_approve_condition`] = false;
 
   const param = {
     paramMap: formData,
