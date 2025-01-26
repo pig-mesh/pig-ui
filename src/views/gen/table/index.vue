@@ -53,10 +53,6 @@
                 $t('gen.genBtn')
               }}
             </el-button>
-            <el-button icon="MagicStick" @click="openDesign(scope.row)" text type="primary">{{
-                $t('gen.designBtn')
-              }}
-            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -122,16 +118,6 @@ const openGen = (row) => {
           },
         });
       });
-};
-
-const openDesign = (row) => {
-  router.push({
-    path: '/gen/design/index',
-    query: {
-      tableName: row.name,
-      dsName: state.queryForm.dsName,
-    },
-  });
 };
 
 // 同步表数据
