@@ -27,7 +27,6 @@ import FcDesigner from 'form-create-designer';
 import { Api, Rule } from '@form-create/element-ui';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
-import { da } from 'element-plus/es/locale';
 
 // 定义接口
 interface FlowData {
