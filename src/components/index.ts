@@ -22,9 +22,7 @@ import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 // 日历组件
 import { setupCalendar } from 'v-calendar';
-// @ts-ignore 引入VForm3库
-import VForm3 from 'form-designer-plus'; //
-import 'form-designer-plus/dist/designer.style.css'; //引入VForm3样式
+
 // 部门树组件
 import vue3TreeOrg from 'vue3-tree-org';
 import 'vue3-tree-org/lib/vue3-tree-org.css';
@@ -64,7 +62,6 @@ export default {
 		app.component('Pane', Pane);
 		app.use(ElementPlus); // ELEMENT 组件
 		app.use(setupCalendar, {}); // 日历组件
-		app.use(VForm3); // 表单设计
 		app.use(vue3TreeOrg); // 组织架构组件
 		app.use(FcDesigner);
 		app.use(FcDesigner.formCreate);
