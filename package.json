@@ -105,5 +105,8 @@
 	"repository": {
 		"type": "git",
 		"url": "https://gitee.com/log4j/pig"
+	},
+	"overrides": {
+		"@swc/core": "1.6.13"
 	}
 }
