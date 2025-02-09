@@ -1,5 +1,5 @@
 {
-	"name": "pigx-ui",
+	"name": "pigx-ai-ui",
 	"version": "5.7.0",
 	"description": "PIGCLOUD微服务开发平台",
 	"author": "pig4cloud",
@@ -20,7 +20,7 @@
 		"@wangeditor/editor": "5.1.23",
 		"@wangeditor/editor-for-vue": "5.1.12",
 		"@form-create/element-ui": "3.2.16",
-		"form-create-designer": "3.2.10",
+		"form-create-designer": "3.2.10-oem",
 		"autoprefixer": "^10.4.7",
 		"axios": "^1.3.3",
 		"codemirror": "5.65.5",
