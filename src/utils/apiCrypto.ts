@@ -44,6 +44,8 @@ export function decrypt(encryptedData: string): any {
  * @returns 加密并URL编码后的参数对象
  */
 export function encryptRequestParams(params: Record<string, any>): Record<string, string> {
+	if (!ENCRYPTION_ENABLED) return params;
+	
 	const encryptedParams: Record<string, string> = {};
 	for (const [paramKey, value] of Object.entries(params)) {
 		if (value != null) {
