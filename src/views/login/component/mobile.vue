@@ -15,14 +15,14 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2" prop="code">
-			<el-col :span="16">
+			<div class="flex gap-2">
 				<el-input
 					text
 					maxlength="4"
 					:placeholder="$t('mobile.placeholder2')"
 					v-model="loginForm.code"
 					clearable
-					class="h-11 dark:bg-slate-700 dark:text-slate-200"
+					class="flex-1 h-11 dark:bg-slate-700 dark:text-slate-200"
 					autocomplete="off"
 				>
 					<template #prefix>
@@ -31,18 +31,16 @@
 						</el-icon>
 					</template>
 				</el-input>
-			</el-col>
-			<el-col :span="8">
 				<el-button
 					v-waves
 					@click="handleSendCode"
 					:loading="msg.msgKey"
 					:disabled="msg.msgKey"
-					class="w-full h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
+					class="w-24 h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
 				>
 					<span class="text-xs font-semibold">{{ msg.msgText }}</span>
 				</el-button>
-			</el-col>
+			</div>
 		</el-form-item>
 
 		<el-form-item class="mt-4 login-animation4">
@@ -57,7 +55,7 @@
 			</el-button>
 		</el-form-item>
 
-		<div class="relative flex items-center justify-between">
+		<div class="flex relative justify-between items-center">
 			<div class="ml-auto text-sm">
 				<a
 					href="#"
