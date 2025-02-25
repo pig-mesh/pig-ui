@@ -1,5 +1,5 @@
-import type { FormRule, DragRule } from './types';
-import other, {generateUUID} from "/@/utils/other";
+import type { DragRule } from 'form-create-designer';
+import other from "/@/utils/other";
 
 // Create a map of rule creators
 const ruleCreators: Record<string, () => DragRule> = {
@@ -47,12 +47,12 @@ const ruleCreators: Record<string, () => DragRule> = {
 		menu: 'biz',
 		icon: 'icon-group',
 		label: '部门',
-		name: 'selectDept',
+		name: 'SelectDept',
 		mask: true,
 		rule() {
 			return {
 				type: 'OrgSelector',
-				field: 'selectDept' +  other.getNonDuplicateID(),
+				field: 'SelectDept' +  other.getNonDuplicateID(),
 				title: '部门',
 				$required: true,
 				props: {
@@ -351,4 +351,4 @@ const ruleCreators: Record<string, () => DragRule> = {
 };
 
 // Export all rules as an array
-export const rules: FormRule[] = Object.values(ruleCreators).map((creator) => creator());
+export const rules: any[] = Object.values(ruleCreators).map((creator) => creator());

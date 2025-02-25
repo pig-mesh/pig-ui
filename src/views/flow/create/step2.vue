@@ -99,3 +99,22 @@ onMounted(() => {
 // 暴露验证方法给父组件
 defineExpose({ validate });
 </script>
+
+<style lang="scss">
+  .fc-form-row {
+    // 选中效果
+    ._fd-drag-tool.active {
+      outline: 2px solid #2e73ff !important;
+    }
+    // 栅格线条
+    ._fd-drag-tool {
+      outline: 1px dashed var(--fc-tool-border-color)!important;
+    }
+  }
+  // 设置事件样式
+  ._fd-event-l {
+    .el-menu-item {
+      line-height: 1em!important;
+    }
+  }
+</style>

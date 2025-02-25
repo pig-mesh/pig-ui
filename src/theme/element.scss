@@ -464,3 +464,13 @@ svg {
 	display: inline;
 	vertical-align: baseline;
 }
+
+// 覆盖默认样式宽度
+.el-date-editor.el-input, .el-date-editor.el-input__wrapper {
+	width: 100%;
+}
+
+// 表单设计器元素布局增加间距
+.fc-form-row .fc-form-col {
+	margin-bottom: 18px;
+}
