@@ -63,6 +63,7 @@ export default {
 		jobType2MethodName: '方法名称',
 		jobType3ExecutePath: '请求地址',
 		jobType4ExecutePath: 'Jar包路径',
+		singleParam: '只支持单个参数',
 	},
 	log: {
 		index: '#',

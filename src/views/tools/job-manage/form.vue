@@ -22,7 +22,7 @@
 				</el-col>
 
 				<el-col :span="12" class="mb20" v-if="['1'].includes(form.jobType)">
-					<el-form-item :label="t('job.className')" prop="className">
+					<el-form-item :label="t('job.jobType1ClassName')" prop="className">
 						<el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
 					</el-form-item>
 				</el-col>
@@ -48,7 +48,8 @@
 				</el-col>
 
 				<el-col :span="12" class="mb20">
-					<el-form-item :label="t('job.methodParamsValue')" prop="methodParamsValue">
+					<el-form-item prop="methodParamsValue">
+						<template #label> {{ t('job.methodParamsValue') }} <tip :content="t('job.singleParam')" /></template>
 						<el-input v-model="form.methodParamsValue" :placeholder="t('job.inputmethodParamsValueTip')" />
 					</el-form-item>
 				</el-col>
@@ -86,7 +87,7 @@
 // 定义子组件向父组件传值/事件
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/daemon/job';
+import { addObj, getObj, putObj, validateJob } from '/@/api/daemon/job';
 import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['refresh']);
@@ -132,8 +133,32 @@ const dataRules = reactive({
 	cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
 	misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
 	executePath: [{ required: true, message: '执行路径不能为空', trigger: 'blur' }],
-	className: [{ required: true, message: '执行文件不能为空', trigger: 'blur' }],
-	methodName: [{ required: true, message: '执行方法不能为空', trigger: 'blur' }],
+	className: [
+		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateJob(rule, value, callback, form);
+			},
+			trigger: 'blur',
+		},
+	],
+	methodName: [
+		{ required: true, message: '方法不能为空', trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateJob(rule, value, callback, form);
+			},
+			trigger: 'blur',
+		},
+	],
+	methodParamsValue: [
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateJob(rule, value, callback, form);
+			},
+			trigger: 'blur',
+		},
+	],
 });
 
 // 打开弹窗

@@ -58,3 +58,17 @@ export function shutDownJobRa(jobId: string) {
 		method: 'post',
 	});
 }
+
+export function validateJob(rule: any, value: any, callback: any, form: any) {
+	request({
+		url: '/job/sys-job/validate',
+		method: 'get',
+		params: Object.assign(form, { field: rule.field }),
+	}).then(({ data }) => {
+		if (data) {
+			callback(new Error(data));
+		} else {
+			callback();
+		}
+	});
+}

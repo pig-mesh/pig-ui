@@ -62,6 +62,7 @@ export default {
 		jobType2MethodName: 'Method Name',
 		jobType3ExecutePath: 'Request Address',
 		jobType4ExecutePath: 'Jar Path',
+		singleParam: 'Only single parameter is supported',
 	},
 	log: {
 		index: '#',
