@@ -21,21 +21,29 @@
 					</el-form-item>
 				</el-col>
 
-				<el-col :span="12" class="mb20" v-if="['3', '4'].includes(form.jobType)">
-					<el-form-item :label="t('job.executePath')" prop="executePath">
-						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
-					</el-form-item>
-				</el-col>
-
-				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
+				<el-col :span="12" class="mb20" v-if="['1'].includes(form.jobType)">
 					<el-form-item :label="t('job.className')" prop="className">
 						<el-input v-model="form.className" :placeholder="t('job.inputclassNameTip')" />
 					</el-form-item>
 				</el-col>
-
+				<el-col :span="12" class="mb20" v-if="['2'].includes(form.jobType)">
+					<el-form-item :label="t('job.jobType2ClassName')" prop="className">
+						<el-input v-model="form.className" :placeholder="t('job.inputBeanNameTip')" />
+					</el-form-item>
+				</el-col>
 				<el-col :span="12" class="mb20" v-if="['1', '2'].includes(form.jobType)">
-					<el-form-item :label="t('job.methodName')" prop="methodName">
+					<el-form-item :label="t('job.jobType1MethodName')" prop="methodName">
 						<el-input v-model="form.methodName" :placeholder="t('job.inputmethodNameTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20" v-if="['3'].includes(form.jobType)">
+					<el-form-item :label="t('job.jobType3ExecutePath')" prop="executePath">
+						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20" v-if="['4'].includes(form.jobType)">
+					<el-form-item :label="t('job.jobType4ExecutePath')" prop="executePath">
+						<el-input v-model="form.executePath" :placeholder="t('job.inputexecutePathTip')" />
 					</el-form-item>
 				</el-col>
 
