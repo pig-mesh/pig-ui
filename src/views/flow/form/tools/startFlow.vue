@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<el-dialog v-model="dialogTableVisible" title="发起流程" width="800px" destroy-on-close>
+		<el-dialog v-model="dialogTableVisible" title="发起流程" width="800px" destroy-on-close @closed="handleDialogClosed">
 			<el-row>
 				<el-col :span="12">
 					<el-form label-position="top">
@@ -103,4 +103,13 @@ const startProcess = (f: FlowData) => {
 };
 
 const flowNodeFormatRef = ref();
+
+const handleDialogClosed = () => {
+	formData.value = {};
+	if (fApi.value) {
+		fApi.value.resetFields();
+	}
+	// Reset other related data
+	currentOpenFlow.value = undefined;
+};
 </script>
