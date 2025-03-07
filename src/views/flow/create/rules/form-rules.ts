@@ -1,5 +1,6 @@
 import type { DragRule } from 'form-create-designer';
-import other from "/@/utils/other";
+import other from '/@/utils/other';
+import dayjs from 'dayjs';
 
 // Create a map of rule creators
 const ruleCreators: Record<string, () => DragRule> = {
@@ -12,7 +13,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		rule() {
 			return {
 				type: 'OrgSelector',
-				field: 'SelectUser' +  other.getNonDuplicateID(),
+				field: 'SelectUser' + other.getNonDuplicateID(),
 				title: '人员',
 				$required: true,
 				props: {
@@ -52,7 +53,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		rule() {
 			return {
 				type: 'OrgSelector',
-				field: 'SelectDept' +  other.getNonDuplicateID(),
+				field: 'SelectDept' + other.getNonDuplicateID(),
 				title: '部门',
 				$required: true,
 				props: {
@@ -73,7 +74,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 					title: '禁用',
 					field: 'disabled',
 					value: false,
-				}
+				},
 			];
 		},
 	}),
@@ -81,7 +82,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		menu: 'biz',
 		icon: 'icon-folder',
 		label: '上传',
-		name: 'UploadFile'+  other.getNonDuplicateID(),
+		name: 'UploadFile' + other.getNonDuplicateID(),
 		mask: true,
 		rule() {
 			return {
@@ -182,14 +183,14 @@ const ruleCreators: Record<string, () => DragRule> = {
 	chinaArea: () => ({
 		menu: 'biz',
 		icon: 'icon-subform',
-		label: '地区选择',
+		label: '地区',
 		name: 'ChinaArea',
 		mask: true,
 		rule() {
 			return {
 				type: 'ChinaArea',
-				field: 'ChinaArea' +  other.getNonDuplicateID(),
-				title: '地区选择',
+				field: 'ChinaArea' + other.getNonDuplicateID(),
+				title: '地区',
 				$required: true,
 				props: {},
 			};
@@ -236,7 +237,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		rule() {
 			return {
 				type: 'Sign',
-				field: 'Sign'+ other.getNonDuplicateID(),
+				field: 'Sign' + other.getNonDuplicateID(),
 				title: '签名',
 				$required: true,
 				props: {},
@@ -304,7 +305,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 	dictSelect: () => ({
 		menu: 'biz',
 		icon: 'icon-select',
-		label: '字典选择',
+		label: '字典',
 		name: 'DictSelect' + other.getNonDuplicateID(),
 		mask: true,
 		rule() {
@@ -344,6 +345,40 @@ const ruleCreators: Record<string, () => DragRule> = {
 					title: '禁用',
 					field: 'disabled',
 					value: false,
+				},
+			];
+		},
+	}),
+
+	sequence: () => ({
+		menu: 'biz',
+		icon: 'icon-number',
+		label: '流水号',
+		name: 'Sequence',
+		mask: true,
+		rule() {
+			const currentDate = dayjs().format('YYYYMMDD');
+			const sequenceNumber = '00001';
+
+			return {
+				type: 'Input',
+				field: 'Sequence' + other.getNonDuplicateID(),
+				title: '流水号',
+				$required: true,
+				props: {
+					disabled: true,
+					type: 'Sequence',
+					placeholder: currentDate + sequenceNumber,
+				},
+			};
+		},
+		props() {
+			return [
+				{
+					type: 'switch',
+					title: '禁用',
+					field: 'disabled',
+					value: true,
 				},
 			];
 		},
