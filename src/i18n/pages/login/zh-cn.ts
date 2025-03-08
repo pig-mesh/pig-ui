@@ -26,6 +26,7 @@ export default {
 		backToLogin: '返回登录',
 		mobileLogin: '验证码登录',
 		createAccount: '注册账号',
+		imageCodeTip: '请输入验证码',
 	},
 	mobile: {
 		placeholder1: '请输入手机号',
@@ -43,7 +44,7 @@ export default {
 		sendFailed: '发送验证码失败',
 		loginSuccess: '登录成功',
 		loginFailed: '登录失败',
-		signIn: '登 录'
+		signIn: '登 录',
 	},
 	scan: {
 		text: '打开手机扫一扫，快速登录/注册',
@@ -63,9 +64,6 @@ export default {
 	tenantSelect: {
 		select: '选择租户',
 		loadError: '获取租户列表失败',
-	},
-	verify: {
-		imageCode: '请输入验证码',
 	},
 	register: {
 		usernameEmpty: '用户名不能为空',

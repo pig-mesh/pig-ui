@@ -60,7 +60,7 @@
 			</el-button>
 		</el-form-item>
 
-		<div class="relative flex items-center justify-between">
+		<div class="flex relative justify-between items-center">
 			<div class="ml-auto text-sm">
 				<a href="#" class="text-blue-500" @click="emit('change', LoginTypeEnum.MOBILE)">
 					{{ $t('password.mobileLogin') }}
@@ -115,7 +115,7 @@ const state = reactive({
 const loginRules = reactive({
 	username: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder1') }], // 用户名校验规则
 	password: [{ required: true, trigger: 'blur', message: t('password.accountPlaceholder2') }], // 密码校验规则
-	code: [{ required: true, trigger: 'blur', message: t('verify.imageCode') }],
+	code: [{ required: true, trigger: 'blur', message: t('password.imageCodeTip') }],
 });
 
 const verifyref = ref<InstanceType<typeof Verify>>(null); // 定义verify组件引用

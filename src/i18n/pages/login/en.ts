@@ -25,6 +25,7 @@ export default {
 		backToLogin: 'Back to login',
 		mobileLogin: 'Mobile Login',
 		createAccount: 'Create Account',
+		imageCodeTip: 'Please enter code',
 	},
 	mobile: {
 		placeholder1: 'Please enter your mobile number',
