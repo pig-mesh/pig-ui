@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" label-width="100px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('channel.appId')" prop="appId">
@@ -49,14 +49,18 @@
 				</el-col>
 
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('channel.remark')" prop="remark">
-						<el-input :placeholder="t('channel.inputRemarkTip')" :rows="2" type="textarea" v-model="form.remark" />
+					<el-form-item :label="t('channel.param')" prop="param">
+						<template #label
+							>{{ t('channel.param') }}
+							<tip content="参考支付渠道文档配置json格式" />
+						</template>
+						<json-editor ref="jsonEditorRef" v-model="form.param" />
 					</el-form-item>
 				</el-col>
 
 				<el-col :span="24" class="mb20">
-					<el-form-item :label="t('channel.param')" prop="param">
-						<el-input :placeholder="t('channel.inputParamTip')" :rows="4" type="textarea" v-model="form.param" />
+					<el-form-item :label="t('channel.remark')" prop="remark">
+						<el-input :placeholder="t('channel.inputRemarkTip')" :rows="2" type="textarea" v-model="form.remark" />
 					</el-form-item>
 				</el-col>
 			</el-row>
@@ -77,6 +81,8 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/pay/channel';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
+// @ts-ignore
+import JsonEditor from '@axolo/json-editor-vue';
 
 const emit = defineEmits(['refresh']);
 
@@ -105,25 +111,37 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
 	appId: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: 'appId不能为空', trigger: 'blur' }
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: 'appId不能为空', trigger: 'blur' },
 	],
-	channelName: [{ required: true, message: '渠道名称不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
+	channelName: [
+		{ required: true, message: '渠道名称不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
 
 	channelMchId: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '商户ID不能为空', trigger: 'blur' }
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: '商户ID不能为空', trigger: 'blur' },
 	],
-	state: [{ required: true, message: '状态不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
+	state: [
+		{ required: true, message: '状态不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
 
-  remark:[{ validator: rule.overLength, trigger: 'blur' }],
+	remark: [{ validator: rule.overLength, trigger: 'blur' }],
 	returnUrl: [
-    { validator: rule.overLength, trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
 		{ validater: rule.url, trigger: 'blur' },
 	],
 
-	notifyUrl: [{ required: true, message: '后端回调不能为空', trigger: 'blur' },{ validator: rule.overLength, trigger: 'blur' }],
-	param: [{ required: true, message: '参数配置不能为空', trigger: 'blur' }],
+	notifyUrl: [
+		{ required: true, message: '后端回调不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
+	param: [
+		{ required: true, message: '参数配置不能为空', trigger: 'blur' },
+		{ validator: rule.json, trigger: 'blur' },
+	],
 });
 
 // 打开弹窗
@@ -150,15 +168,16 @@ const onSubmit = async () => {
 
 	try {
 		loading.value = true;
-    // 清除占位符，避免提交错误的数据
-    const { appId, channelMchId } = form;
+		// 清除占位符，避免提交错误的数据
+		const { appId, channelMchId } = form;
 
-    if (appId?.includes('**')) {
-      form.appId = undefined;
-    }
-    if (channelMchId?.includes('**')) {
-      form.channelMchId = undefined;
-    }
+		if (appId?.includes('**')) {
+			form.appId = undefined;
+		}
+		if (channelMchId?.includes('**')) {
+			form.channelMchId = undefined;
+		}
+
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
