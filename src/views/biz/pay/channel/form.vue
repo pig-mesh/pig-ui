@@ -103,7 +103,7 @@ const form = reactive({
 	returnUrl: '',
 	notifyUrl: '',
 	state: '0',
-	param: '',
+	param: '' as String | undefined,
 	remark: '',
 	appId: '' as String | undefined,
 });
@@ -169,13 +169,17 @@ const onSubmit = async () => {
 	try {
 		loading.value = true;
 		// 清除占位符，避免提交错误的数据
-		const { appId, channelMchId } = form;
+		const { appId, channelMchId, param } = form;
 
 		if (appId?.includes('**')) {
 			form.appId = undefined;
 		}
 		if (channelMchId?.includes('**')) {
 			form.channelMchId = undefined;
+		}
+
+		if (param?.includes('**')) {
+			form.param = undefined;
 		}
 
 		form.id ? await putObj(form) : await addObj(form);
