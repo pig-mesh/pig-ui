@@ -1,7 +1,6 @@
 import type { DragRule } from 'form-create-designer';
 import other from '/@/utils/other';
-import dayjs from 'dayjs';
-
+import { dayjs } from 'element-plus';
 // Create a map of rule creators
 const ruleCreators: Record<string, () => DragRule> = {
 	selectUser: () => ({
