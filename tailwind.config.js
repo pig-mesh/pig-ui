@@ -28,15 +28,15 @@ module.exports = {
 				'fill-lighter': 'var(--el-fill-color-lighter)',
 				mask: 'var(--el-mask-color)',
 			},
+			boxShadow: {
+				DEFAULT: 'var(--el-box-shadow)',
+				light: 'var(--el-box-shadow-light)',
+				lighter: 'var(--el-box-shadow-lighter)',
+				dark: 'var(--el-box-shadow-dark)',
+			},
 		},
 		fontFamily: {
 			sans: ['PingFang SC', 'Arial', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
-		},
-		boxShadow: {
-			DEFAULT: 'var(--el-box-shadow)',
-			light: 'var(--el-box-shadow-light)',
-			lighter: 'var(--el-box-shadow-lighter)',
-			dark: 'var(--el-box-shadow-dark)',
 		},
 		svg: {
 			display: 'inline',
