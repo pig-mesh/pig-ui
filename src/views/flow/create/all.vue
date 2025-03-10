@@ -49,7 +49,7 @@
 					<!-- Success Result -->
 					<el-result v-if="validateFlowStep === 3" icon="success" :title="$t('flow.checkSuccess')" :sub-title="$t('flow.checkSubSuccess')">
 						<template #extra>
-							<el-button type="primary" @click="submitFlow">{{ $t('flow.submit') }}</el-button>
+							<el-button type="primary" :loading="isSubmitting" @click="submitFlow">{{ $t('flow.submit') }}</el-button>
 						</template>
 					</el-result>
 
@@ -103,6 +103,7 @@ const activeStep = ref(0);
 const validateFlowStep = ref(0);
 const validateDialogShow = ref(false);
 const validatingShow = ref(false);
+const isSubmitting = ref(false);
 
 const gotoEdit = () => {
 	activeStep.value = validateFlowStep.value;
@@ -220,21 +221,33 @@ const checkStep3 = () => {
 const router = useRouter();
 
 const submitFlow = () => {
-	step3Ref.value.getProcessData().then((res) => {
-		let step1 = store.step1;
-		let step2 = store.step2;
+	if (isSubmitting.value) return;
+	isSubmitting.value = true;
 
-		let flow = other.deepClone(step1);
-		flow.formItems = JSON.stringify(step2);
-		flow.process = JSON.stringify(res);
-		flow.adminList = JSON.stringify(step1.adminList);
+	step3Ref.value
+		.getProcessData()
+		.then((processData: any) => {
+			let step1 = store.step1;
+			let step2 = store.step2;
 
-		addFlow(flow).then((res) => {
-			validateDialogShow.value = false;
-			store.$reset();
-			router.push('/flow/list/index');
+			let flow = other.deepClone(step1);
+			flow.formItems = JSON.stringify(step2);
+			flow.process = JSON.stringify(processData);
+			flow.adminList = JSON.stringify(step1.adminList);
+
+			addFlow(flow)
+				.then(() => {
+					validateDialogShow.value = false;
+					store.$reset();
+					router.push('/flow/list/index');
+				})
+				.catch(() => {
+					isSubmitting.value = false;
+				});
+		})
+		.catch(() => {
+			isSubmitting.value = false;
 		});
-	});
 };
 
 // Add steps data
