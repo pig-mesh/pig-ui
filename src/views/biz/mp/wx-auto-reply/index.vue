@@ -29,8 +29,8 @@
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button link icon="el-icon-edit" @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button link icon="el-icon-delete" @click="handleDel(scope.row)">删除 </el-button>
+										<el-button link icon="edit" @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button link icon="delete" @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -59,8 +59,8 @@
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button icon="el-icon-edit" link @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button icon="el-icon-delete" link @click="handleDel(scope.row)">删除 </el-button>
+										<el-button icon="edit" link @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button icon="delete" link @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -99,8 +99,8 @@
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button icon="el-icon-edit" link @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button icon="el-icon-delete" link @click="handleDel(scope.row)">删除 </el-button>
+										<el-button icon="edit" link @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button icon="delete" link @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>

@@ -17,8 +17,8 @@
 							<div class="news-content-title">{{ news.title }}</div>
 						</div>
 						<div v-if="articlesAdd.length > 1" class="child">
-							<el-button icon="el-icon-top" @click="downNews(index)">下移</el-button>
-							<el-button v-if="operateMaterial == 'add'" icon="el-icon-delete" @click="minusNews(index)">删除 </el-button>
+							<el-button icon="top" @click="downNews(index)">下移</el-button>
+							<el-button v-if="operateMaterial == 'add'" icon="delete" @click="minusNews(index)">删除 </el-button>
 						</div>
 					</div>
 					<div v-if="index > 0" class="news-main-item father" :class="{ activeAddNews: isActiveAddNews === index }" @click="activeNews(index)">
@@ -29,9 +29,9 @@
 							</div>
 						</div>
 						<div class="child">
-							<el-button v-if="articlesAdd.length > index + 1" icon="el-icon-sort-down" @click="downNews(index)">下移 </el-button>
-							<el-button icon="el-icon-sort-up" @click="upNews(index)">上移</el-button>
-							<el-button v-if="operateMaterial == 'add'" icon="el-icon-delete" @click="minusNews(index)">删除 </el-button>
+							<el-button v-if="articlesAdd.length > index + 1" icon="sort-down" @click="downNews(index)">下移 </el-button>
+							<el-button icon="sort-up" @click="upNews(index)">上移</el-button>
+							<el-button v-if="operateMaterial == 'add'" icon="delete" @click="minusNews(index)">删除 </el-button>
 						</div>
 					</div>
 				</div>

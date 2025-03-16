@@ -12,7 +12,7 @@
 				<div class="layout-padding-auto layout-padding-view">
 					<el-tabs v-model="materialType" @tab-click="handleClick">
 						<el-tab-pane name="image" label="image">
-							<template #label><i class="el-icon-picture"></i> 图片</template>
+							<template #label><i class="picture"></i> 图片</template>
 							<div class="add_but">
 								<wx-file-upload
 									@success="getDataList"
@@ -27,7 +27,7 @@
 										<div class="item-name">{{ item.name }}</div>
 									</a>
 									<el-row class="ope-row">
-										<el-button type="danger" icon="el-icon-delete" circle @click="delMaterial(item)"></el-button>
+										<el-button type="danger" icon="delete" circle @click="delMaterial(item)"></el-button>
 									</el-row>
 								</div>
 							</div>
@@ -37,7 +37,7 @@
 							<pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
 						</el-tab-pane>
 						<el-tab-pane name="voice" label="voice">
-							<template #label><i class="el-icon-microphone"></i> 语音</template>
+							<template #label><i class="microphone"></i> 语音</template>
 							<div class="add_but">
 								<wx-file-upload @success="getDataList" :uploadData="uploadData" :type="['mp3', 'wma', 'wav', 'amr']"></wx-file-upload>
 							</div>
@@ -47,15 +47,15 @@
 								<el-table-column prop="updateTime" label="更新时间"> </el-table-column>
 								<el-table-column fixed="right" label="操作">
 									<template v-slot="scope">
-										<el-button type="text" icon="el-icon-download" plain @click="handleDown(scope.row)">下载 </el-button>
-										<el-button type="text" icon="el-icon-delete" plain @click="delMaterial(scope.row)">删除 </el-button>
+										<el-button type="text" icon="download" plain @click="handleDown(scope.row)">下载 </el-button>
+										<el-button type="text" icon="delete" plain @click="delMaterial(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
 							<pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
 						</el-tab-pane>
 						<el-tab-pane name="video" label="video">
-							<template #label><i class="el-icon-video-play"></i> 视频</template>
+							<template #label><i class="video-play"></i> 视频</template>
 							<div class="add_but">
 								<el-button type="primary" @click="handleAddVideo">新建</el-button>
 							</div>
@@ -99,15 +99,15 @@
 								<el-table-column prop="updateTime" label="更新时间"> </el-table-column>
 								<el-table-column fixed="right" label="操作">
 									<template v-slot="scope">
-										<el-button type="text" icon="el-icon-view" @click="handleInfo(scope.row)">查看 </el-button>
-										<el-button type="text" icon="el-icon-delete" @click="delMaterial(scope.row)">删除 </el-button>
+										<el-button type="text" icon="view" @click="handleInfo(scope.row)">查看 </el-button>
+										<el-button type="text" icon="delete" @click="delMaterial(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
 							<pagination v-bind="state.pagination" @size-change="sizeChangeHandle" @current-change="currentChangeHandle" />
 						</el-tab-pane>
 						<el-tab-pane name="news" label="news">
-							<template #label><i class="el-icon-news"></i> 图文</template>
+							<template #label><i class="news"></i> 图文</template>
 							<div class="add_but">
 								<el-button type="primary" @click="handleAddNews">新 增</el-button>
 							</div>
@@ -116,8 +116,8 @@
 								<div v-for="item in state.dataList" :key="item.id" class="waterfall-item">
 									<wx-news :obj-data="item.content.newsItem"></wx-news>
 									<el-row class="ope-row">
-										<el-button type="primary" icon="el-icon-edit" circle @click="handleEditNews(item)"></el-button>
-										<el-button type="danger" icon="el-icon-delete" circle @click="delMaterial(item)"></el-button>
+										<el-button type="primary" icon="edit" circle @click="handleEditNews(item)"></el-button>
+										<el-button type="danger" icon="delete" circle @click="delMaterial(item)"></el-button>
 									</el-row>
 								</div>
 							</div>
@@ -133,10 +133,10 @@
 </template>
 
 <script setup lang="ts" name="wx-material">
-import {fetchAccountList} from '/@/api/mp/wx-account';
-import {useMessage, useMessageBox} from '/@/hooks/message';
-import {BasicTableProps, useTable} from '/@/hooks/table';
-import {delObj, getMaterialOther, getMaterialVideo, getPage} from '/@/api/mp/wx-material';
+import { fetchAccountList } from '/@/api/mp/wx-account';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { delObj, getMaterialOther, getMaterialVideo, getPage } from '/@/api/mp/wx-material';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 const NewsForm = defineAsyncComponent(() => import('./components/news-form.vue'));
@@ -298,10 +298,10 @@ const handleInfo = (row) => {
 
 // 默认选择第一个公众号
 onMounted(async () => {
-  const { data } = await deptData.queryList();
-  if (data?.length > 0) {
-    handleNodeClick(data[0]);
-  }
+	const { data } = await deptData.queryList();
+	if (data?.length > 0) {
+		handleNodeClick(data[0]);
+	}
 });
 </script>
 
