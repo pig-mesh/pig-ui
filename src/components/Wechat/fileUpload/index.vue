@@ -1,7 +1,7 @@
 <template>
 	<el-upload
 		ref="fileUpload"
-		:action="actionUrl"
+		:action="baseUrl + other.adaptationUrl(actionUrl)"
 		:headers="headers"
 		multiple
 		:limit="1"
@@ -21,8 +21,11 @@
 <script setup lang="ts" name="wx-file-upload">
 import { Session } from '/@/utils/storage';
 import { useMessage } from '/@/hooks/message';
+const baseUrl = import.meta.env.VITE_API_URL || '';
+import other from '/@/utils/other';
 
-const actionUrl = ref('/api/mp/wx-material/materialFileUpload');
+// 根据是否是微服务，判断上传地址
+const actionUrl = ref(`/mp/wx-material/materialFileUpload`);
 
 const fileUpload = ref();
 
