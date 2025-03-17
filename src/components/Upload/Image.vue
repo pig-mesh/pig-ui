@@ -12,7 +12,7 @@
 			:on-success="uploadSuccess"
 			:on-error="uploadError"
 			:drag="drag"
-			:accept="fileType.join(',')"
+			:accept="acceptType"
 		>
 			<template v-if="imageUrl">
 				<!-- 如果返回的是OSS 地址则不需要增加 baseURL -->
@@ -60,18 +60,22 @@ import type { UploadProps, UploadRequestOptions } from 'element-plus';
 import { generateUUID } from '/@/utils/other';
 import request from '/@/utils/request';
 
+// 定义图片MIME类型
+type ImageMimeType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' | 'image/svg+xml' | string;
+
 interface UploadFileProps {
 	imageUrl?: string; // 图片地址 ==> 必传
 	uploadFileUrl?: string; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
 	drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
 	disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
 	fileSize?: number; // 图片大小限制 ==> 非必传（默认为 5M）
-	fileType?: File.ImageMimeType[]; // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
+	fileType?: ImageMimeType[]; // 图片类型限制 ==> 非必传（默认为 ["image/jpeg", "image/png", "image/gif"]）
 	height?: string; // 组件高度 ==> 非必传（默认为 150px）
 	width?: string; // 组件宽度 ==> 非必传（默认为 150px）
 	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
 	iconSize?: number;
-  dir?: string; // 文件目录
+	dir?: string; // 文件目录
+	baseURL?: string; // 基础URL
 }
 
 // 接受父组件参数
@@ -85,7 +89,13 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 	height: '150px',
 	width: '150px',
 	borderRadius: '8px',
-  dir: ''
+	dir: '',
+	baseURL: '',
+});
+
+// 计算accept属性值
+const acceptType = computed(() => {
+	return props.fileType.join(',');
 });
 
 // 生成组件唯一id
@@ -153,7 +163,7 @@ const editImg = () => {
  * */
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile) => {
 	const imgSize = rawFile.size / 1024 / 1024 < props.fileSize;
-	const imgType = props.fileType.includes(rawFile.type as File.ImageMimeType);
+	const imgType = props.fileType.includes(rawFile.type as ImageMimeType);
 	if (!imgType)
 		ElNotification({
 			title: '温馨提示',

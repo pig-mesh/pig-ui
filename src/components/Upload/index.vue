@@ -38,6 +38,7 @@
 			:data="formData"
 			:auto-upload="autoUpload"
 			:on-success="handleUploadSuccess"
+			:accept="fileAccept"
 			class="upload-file-uploader"
 			drag
 			multiple
@@ -75,6 +76,7 @@
 			:on-exceed="handleExceed"
 			:data="formData"
 			:on-success="handleUploadSuccess"
+			:accept="fileAccept"
 			class="upload-file-uploader"
 			multiple
 		>
@@ -114,6 +116,21 @@ const getFileName = (file: any): string => {
 	}
 	return file.url ? file.url.split('/').pop() : 'File';
 };
+
+// 根据文件类型生成accept属性值
+const fileAccept = computed(() => {
+	if (!props.fileType || props.fileType.length === 0) return '';
+
+	let acceptValues: string[] = [];
+
+	for (const ext of props.fileType) {
+		if (typeof ext === 'string') {
+			acceptValues.push(`.${ext}`);
+		}
+	}
+
+	return acceptValues.join(',');
+});
 
 interface FileItem {
 	name?: string;
@@ -230,8 +247,8 @@ function handleUploadSuccess(res: any, file: any) {
 	if (res.code === 0) {
 		uploadList.value.push({
 			name: file.name,
-			url: res.data.url,
-			fileUrl: res.data.fileName,
+			url: res.data?.url,
+			fileUrl: res.data?.fileName,
 			fileSize: file.size,
 			fileName: file.name,
 			fileType: file.raw.type,
