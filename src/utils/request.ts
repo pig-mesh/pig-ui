@@ -36,8 +36,6 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use(
 	(config: InternalAxiosRequestConfig) => {
 
-		config.headers['VERSION'] = 'A' // 目标版本
-
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
