@@ -75,7 +75,6 @@ interface UploadFileProps {
 	borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
 	iconSize?: number;
 	dir?: string; // 文件目录
-	baseURL?: string; // 基础URL
 }
 
 // 接受父组件参数
@@ -89,8 +88,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 	height: '150px',
 	width: '150px',
 	borderRadius: '8px',
-	dir: '',
-	baseURL: '',
+	dir: ''
 });
 
 // 计算accept属性值
