@@ -1,0 +1,11 @@
+---
+description: Best practices for Vue 3 applications
+globs: *.vue
+alwaysApply: false
+---
+- Use Vue3 Composition API for better code organization and reusability
+- Components should be automatically split into multiple small components that are easy to maintain
+- Implement proper reactivity with `ref` and `reactive`
+- Use `<script setup>` for concise component logic
+- Leverage Vue's built-in directives like `v-model` for form handling
+- Implement proper error handling with `try/catch` in component setup

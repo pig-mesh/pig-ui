@@ -1,0 +1,8 @@
+---
+description: Best practices for using VueUse composables
+globs: *.ts,*.vue
+alwaysApply: false
+---
+- Use VueUse composables to enhance reactivity and performance
+- Consider reusing existing utility classes including vueuse to avoid duplication of code
+- The current tool package is in `src/utils/*.ts`

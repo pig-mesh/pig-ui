@@ -1,0 +1,9 @@
+---
+description: Best practices for Tailwind CSS
+globs: *.vue
+alwaysApply: false
+---
+- Implement responsive design with Tailwind's responsive modifiers
+- All colors and themes should be consistent with the overall UI element-plus. Please refer to `src/theme/element.scss`
+- Customize Tailwind's default theme using `tailwind.config.js`
+- Use `@apply` directive for component-level styling

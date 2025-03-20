@@ -1,0 +1,9 @@
+---
+description: Best practices for using Element Plus components
+globs: *.vue
+alwaysApply: false
+---
+- Use Element Plus components for rich UI functionality
+- Implement proper form validation with Element Plus forms
+- Customize Element Plus themes using SCSS variables
+- Utilize Element Plus's built-in internationalization support

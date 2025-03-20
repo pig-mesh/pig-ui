@@ -1,0 +1,10 @@
+---
+description: TypeScript coding standards and type safety guidelines
+globs: *.vue,*.ts
+alwaysApply: false
+---
+- Use strict null checks for better type safety
+- Prefer interfaces over types for object shapes
+- Use type guards and assertions for runtime type checking
+- Implement proper type inference for cleaner code
+- Use enums for a set of named constants

@@ -1,0 +1,9 @@
+---
+description: Best practices for Vue Router 4 configuration and usage
+globs: src/router/*.ts
+alwaysApply: false
+---
+- Use named routes for better maintainability
+- Implement route-level code-splitting for performance
+- Use navigation guards for route protection and redirection
+- Leverage route meta fields for additional route information
