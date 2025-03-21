@@ -110,11 +110,7 @@ const baseUrl = import.meta.env.VITE_API_URL || '';
 
 // 获取文件名
 const getFileName = (file: any): string => {
-	if (file.name) return file.name;
-	if (file.url && file.url.includes('fileName=')) {
-		return file.url.split('fileName=')[1];
-	}
-	return file.url ? file.url.split('/').pop() : 'File';
+	return file.url ? other.getQueryString(file.url, 'fileName') || other.getQueryString(file.url, 'originalFileName') : 'File';
 };
 
 // 根据文件类型生成accept属性值
@@ -247,7 +243,7 @@ function handleUploadSuccess(res: any, file: any) {
 	if (res.code === 0) {
 		uploadList.value.push({
 			name: file.name,
-			url: res.data?.url,
+			url: `${res.data?.url}&originalFileName=${file.name}`,
 			fileUrl: res.data?.fileName,
 			fileSize: file.size,
 			fileName: file.name,
@@ -322,7 +318,7 @@ watch(
 			// 然后将数组转为对象数组
 			fileList.value = list.map((item: any) => {
 				if (typeof item === 'string') {
-					item = { name: item.split('fileName=')[1], url: item };
+					item = { name: other.getQueryString(item, 'originalFileName') || other.getQueryString(item, 'fileName'), url: item };
 				}
 				item.uid = item.uid || new Date().getTime() + temp++;
 				return item as FileItem;
