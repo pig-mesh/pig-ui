@@ -1,4 +1,5 @@
 import vue from '@vitejs/plugin-vue';
+import vueDevTools from 'vite-plugin-vue-devtools';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'unplugin-vue-setup-extend-plus/vite';
@@ -24,6 +25,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 	return {
 		plugins: [
 			vue(), // Vue 插件
+			vueDevTools(), // Vue Devtools 插件
 			svgBuilder('./src/assets/icons/'), // 将 SVG 文件转换成 Vue 组件
 			vueSetupExtend({}), // setup语法糖增强插件
 			AutoImport({
