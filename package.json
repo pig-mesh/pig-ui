@@ -43,7 +43,7 @@
 		"vuedraggable": "4.1.0"
 	},
 	"devDependencies": {
-		"@swc/core": "1.6.13",
+		"@swc/core": "1.11.13",
 		"@types/node": "20.0.0",
 		"@types/nprogress": "0.2.3",
 		"@types/sortablejs": "1.15.8",
