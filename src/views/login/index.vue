@@ -35,6 +35,7 @@
 						<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
 						<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
 						<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
+            <forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType"/>
 
 						<!-- 分割线 -->
 						<div class="flex items-center justify-center my-6 space-x-3">
@@ -75,6 +76,7 @@ const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
 const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 const Expire = defineAsyncComponent(() => import('./component/expire.vue'));
+const Forget = defineAsyncComponent(() => import('./component/forget.vue'));
 const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
 const Control = defineAsyncComponent(() => import('./component/control.vue'));
 const Qrcode = defineAsyncComponent(() => import('./component/qrcode.vue'));
