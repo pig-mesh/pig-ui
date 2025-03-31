@@ -137,7 +137,7 @@ export function formatAxis(param: Date): string {
 }
 
 // 日期格式化
-export function parseTime(time, pattern) {
+export function parseTime(time, pattern?: string) {
 	if (arguments.length === 0 || !time) {
 		return null;
 	}
@@ -183,7 +183,7 @@ export function parseTime(time, pattern) {
 }
 
 // 日期格式化
-export function parseDate(time, pattern) {
+export function parseDate(time, pattern?) {
 	if (arguments.length === 0 || !time) {
 		return null;
 	}
