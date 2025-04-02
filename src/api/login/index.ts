@@ -16,6 +16,7 @@ export enum LoginTypeEnum {
 	MOBILE,
 	REGISTER,
 	EXPIRE,
+	FORGET
 }
 
 // 登录错误信息
