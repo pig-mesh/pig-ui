@@ -56,5 +56,8 @@ export default {
 		inputRemarksTip: 'input remarks',
 		inputDelFlagTip: 'input delFlag',
 		inputTenantIdTip: 'input tenantId',
+		emptyItemsError: 'dict items cannot be empty',
+		labelRequired: 'label cannot be empty',
+		valueRequired: 'value cannot be empty',
 	},
 };

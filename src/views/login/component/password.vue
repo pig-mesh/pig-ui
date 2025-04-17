@@ -108,7 +108,7 @@ const state = reactive({
 	isShowPassword: false, // 是否显示密码
 	ruleForm: {
 		// 表单数据
-		username: 'admin', // 用户名
+		username: 'aitest', // 用户名
 		password: '123456', // 密码
 		code: '', // 验证码
 		randomStr: 'blockPuzzle', // 验证码随机数

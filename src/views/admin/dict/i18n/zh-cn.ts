@@ -59,5 +59,8 @@ export default {
 		inputRemarksTip: '请输入备注',
 		inputDelFlagTip: '请输入 delFlag',
 		inputTenantIdTip: '请输入所属租户',
+		emptyItemsError: '字典项不能为空',
+		labelRequired: '标签名不能为空',
+		valueRequired: '数据值不能为空',
 	},
 };
