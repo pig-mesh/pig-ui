@@ -68,7 +68,7 @@ const getThemeConfig = computed(() => {
 const signInSuccess = async () => {
 	const isNoPower = await initBackEndControlRoutes();
 	if (isNoPower) {
-		useMessage().wraning('抱歉，您没有登录权限');
+		useMessage().warning('抱歉，您没有登录权限');
 		Session.clear();
 	} else {
 		// 初始化登录成功时间问候语
