@@ -176,24 +176,18 @@ export function useTable(options?: BasicTableProps) {
 	// 排序触发事件
 	const sortChangeHandle = (column: any) => {
 		const prop = other.toUnderline(column.prop);
+
+		// First remove the property from both arrays to avoid duplicates
+		state.ascs = state.ascs?.filter((item) => item !== prop) || [];
+		state.descs = state.descs?.filter((item) => item !== prop) || [];
+
+		// Then add to the appropriate array based on sort direction
 		if (column.order === 'descending') {
 			state.descs?.push(prop);
-			if (state.ascs!.includes(prop)) {
-				state.ascs?.splice(state.ascs.indexOf(prop), 1);
-			}
 		} else if (column.order === 'ascending') {
 			state.ascs?.push(prop);
-			if (state.descs!.includes(prop)) {
-				state.descs?.splice(state.descs.indexOf(prop), 1);
-			}
-		} else {
-			if (state.ascs!.includes(prop)) {
-				state.ascs?.splice(state.ascs.indexOf(prop), 1);
-			}
-			if (state.descs!.includes(prop)) {
-				state.descs?.splice(state.descs.indexOf(prop), 1);
-			}
 		}
+
 		query();
 	};
 
