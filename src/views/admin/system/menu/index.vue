@@ -164,13 +164,18 @@ const load = (row: any, treeNode: unknown, resolve: (date: any[]) => void) => {
 	const param = {
 		parentId: row.id,
 	};
-	pageList(param).then((res) => {
-		const childrenList = res.data;
-		if (Array.isArray(childrenList)) {
-			setHasChildren(childrenList);
-		}
-		resolve(childrenList);
-	});
+	pageList(param)
+		.then((res) => {
+			const childrenList = res.data || [];
+			if (Array.isArray(childrenList)) {
+				setHasChildren(childrenList);
+			}
+			resolve(childrenList);
+		})
+		.catch(() => {
+			// Handle API error by resolving with empty array
+			resolve([]);
+		});
 };
 
 // 删除操作
