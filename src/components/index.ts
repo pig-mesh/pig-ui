@@ -5,6 +5,7 @@ import DictSelect from '/@/components/DictTag/Select.vue';
 import UploadExcel from '/@/components/Upload/Excel.vue';
 import UploadFile from '/@/components/Upload/index.vue';
 import UploadImg from '/@/components/Upload/Image.vue';
+import UploadImgPlus from '/@/components/Upload/ImagePlus.vue';
 import DelWrap from '/@/components/DelWrap/index.vue';
 import Editor from '/@/components/Editor/index.vue';
 import Tip from '/@/components/Tip/index.vue';
@@ -42,6 +43,7 @@ export default {
 		app.component('uploadExcel', UploadExcel);
 		app.component('UploadFile', UploadFile);
 		app.component('UploadImg', UploadImg);
+		app.component('UploadImgPlus', UploadImgPlus);
 		app.component('Editor', Editor);
 		app.component('Tip', Tip);
 		app.component('DelWrap', DelWrap);

@@ -1,10 +1,11 @@
+<!-- 单图图片上传组件, 推荐使用 ImagePlus 组件，后续将删除本组件-->
 <template>
 	<div class="upload-box">
 		<el-upload
 			action="#"
 			:id="uuid"
 			:class="['upload', self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
-			:multiple="false"
+			list-type="picture-card"
 			:disabled="self_disabled"
 			:show-file-list="false"
 			:http-request="handleHttpUpload"
@@ -14,9 +15,12 @@
 			:drag="drag"
 			:accept="acceptType"
 		>
-			<template v-if="imageUrl">
+			<template v-if="imageUrl || modelValue">
 				<!-- 如果返回的是OSS 地址则不需要增加 baseURL -->
-				<img :src="imageUrl.includes('http') ? imageUrl : baseURL + imageUrl" class="upload-image" />
+				<img
+					:src="(imageUrl || modelValue || '').includes('http') ? imageUrl || modelValue : baseURL + (imageUrl || modelValue)"
+					class="upload-image"
+				/>
 				<div class="upload-handle" @click.stop>
 					<div class="handle-icon" @click="editImg" v-if="!self_disabled">
 						<el-icon :size="props.iconSize"><Edit /></el-icon>
@@ -48,13 +52,13 @@
 			:teleported="true"
 			v-if="imgViewVisible"
 			@close="imgViewVisible = false"
-			:url-list="[imageUrl.includes('http') ? imageUrl : baseURL + imageUrl]"
+			:url-list="[_imageUrl.includes('http') ? _imageUrl : baseURL + _imageUrl]"
 		/>
 	</div>
 </template>
 
 <script setup lang="ts" name="UploadImg">
-import { ref, computed, inject } from 'vue';
+import { ref, computed, inject, watch } from 'vue';
 import { ElNotification, formContextKey, formItemContextKey } from 'element-plus';
 import type { UploadProps, UploadRequestOptions } from 'element-plus';
 import { generateUUID } from '/@/utils/other';
@@ -65,6 +69,7 @@ type ImageMimeType = 'image/jpeg' | 'image/png' | 'image/gif' | 'image/webp' | '
 
 interface UploadFileProps {
 	imageUrl?: string; // 图片地址 ==> 必传
+	modelValue?: string; // 图片地址 (v-model)
 	uploadFileUrl?: string; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
 	drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
 	disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
@@ -80,6 +85,7 @@ interface UploadFileProps {
 // 接受父组件参数
 const props = withDefaults(defineProps<UploadFileProps>(), {
 	imageUrl: '',
+	modelValue: '',
 	uploadFileUrl: '/admin/sys-file/upload',
 	drag: true,
 	disabled: false,
@@ -88,7 +94,7 @@ const props = withDefaults(defineProps<UploadFileProps>(), {
 	height: '150px',
 	width: '150px',
 	borderRadius: '8px',
-	dir: ''
+	dir: '',
 });
 
 // 计算accept属性值
@@ -105,6 +111,28 @@ const imgViewVisible = ref(false);
 const formContext = inject(formContextKey, void 0);
 // 获取 el-form-item 组件上下文
 const formItemContext = inject(formItemContextKey, void 0);
+// 本地 image url
+const _imageUrl = ref(props.imageUrl || props.modelValue);
+
+// 监听 props 变化
+watch(
+	() => props.imageUrl,
+	(val) => {
+		if (val !== _imageUrl.value) {
+			_imageUrl.value = val || '';
+		}
+	}
+);
+
+watch(
+	() => props.modelValue,
+	(val) => {
+		if (val !== _imageUrl.value) {
+			_imageUrl.value = val || '';
+		}
+	}
+);
+
 // 判断是否禁用上传和删除
 const self_disabled = computed(() => {
 	return props.disabled || formContext?.disabled;
@@ -116,6 +144,7 @@ const self_disabled = computed(() => {
  * */
 interface UploadEmits {
 	(e: 'update:imageUrl', value: string): void;
+	(e: 'update:modelValue', value: string): void;
 }
 const emit = defineEmits<UploadEmits>();
 const handleHttpUpload = async (options: UploadRequestOptions) => {
@@ -133,6 +162,8 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 			data: formData,
 		});
 		emit('update:imageUrl', data.url);
+		emit('update:modelValue', data.url);
+		_imageUrl.value = data.url;
 		// 调用 el-form 内部的校验方法（可自动校验）
 		formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
 	} catch (error) {
@@ -145,6 +176,8 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
  * */
 const deleteImg = () => {
 	emit('update:imageUrl', '');
+	emit('update:modelValue', '');
+	_imageUrl.value = '';
 };
 
 /**

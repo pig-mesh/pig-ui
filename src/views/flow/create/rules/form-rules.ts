@@ -179,6 +179,84 @@ const ruleCreators: Record<string, () => DragRule> = {
 			];
 		},
 	}),
+	uploadImgPlus: () => ({
+		menu: 'biz',
+		icon: 'icon-image',
+		label: '图片',
+		name: 'UploadImage' + other.getNonDuplicateID(),
+		mask: true,
+		rule() {
+			return {
+				type: 'UploadImgPlus',
+				field: 'UploadImgPlus',
+				title: '图片上传',
+				$required: true,
+				props: {},
+			};
+		},
+		props() {
+			return [
+				{
+					type: 'input',
+					title: '上传地址',
+					field: 'action',
+					value: '/admin/sys-file/upload',
+				},
+				{
+					type: 'number',
+					title: '图片数量限制',
+					field: 'limit',
+					value: 5,
+					props: {
+						min: 1,
+						max: 100,
+					},
+				},
+				{
+					type: 'number',
+					title: '大小限制(MB)',
+					field: 'fileSize',
+					value: 5,
+					props: {
+						min: 1,
+						max: 500,
+					},
+				},
+				{
+					type: 'select',
+					title: '文件类型',
+					field: 'fileType',
+					value: ['png', 'jpg', 'jpeg'],
+					props: {
+						multiple: true,
+					},
+					options: [
+						{ label: 'PNG', value: 'png' },
+						{ label: 'JPG', value: 'jpg' },
+						{ label: 'JPEG', value: 'jpeg' },
+					],
+				},
+				{
+					type: 'switch',
+					title: '显示提示',
+					field: 'isShowTip',
+					value: true,
+				},
+				{
+					type: 'switch',
+					title: '拖动排序',
+					field: 'drag',
+					value: true,
+				},
+				{
+					type: 'switch',
+					title: '禁用',
+					field: 'disabled',
+					value: false,
+				},
+			];
+		},
+	}),
 	chinaArea: () => ({
 		menu: 'biz',
 		icon: 'icon-subform',
