@@ -5,34 +5,34 @@
 				<el-row :gutter="20">
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.username')" prop="username">
-							<el-input :disabled="dataForm.userId !== ''" placeholder="请输入用户名" v-model="dataForm.username"></el-input>
+							<el-input :disabled="dataForm.userId !== ''" :placeholder="$t('sysuser.inputUsernameTip')" v-model="dataForm.username"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.password')" prop="password">
-							<el-input clearable placeholder="请输入密码" type="password" v-model="dataForm.password"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputPasswordTip')" type="password" v-model="dataForm.password"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.name')" prop="name">
-							<el-input clearable placeholder="请输入姓名" v-model="dataForm.name"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputNameTip')" v-model="dataForm.name"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.phone')" prop="phone">
-							<el-input clearable placeholder="请输入手机号" v-model="dataForm.phone"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputPhoneTip')" v-model="dataForm.phone"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.role')" prop="role">
-							<el-select clearable multiple placeholder="请选择角色" v-model="dataForm.role">
+							<el-select clearable multiple :placeholder="$t('sysuser.selectRole')" v-model="dataForm.role">
 								<el-option :key="item.roleId" :label="item.roleName" :value="item.roleId" v-for="item in roleData" />
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.post')" prop="post">
-							<el-select clearable multiple placeholder="请选择岗位" v-model="dataForm.post">
+							<el-select clearable multiple :placeholder="$t('sysuser.selectPost')" v-model="dataForm.post">
 								<el-option :key="item.postId" :label="item.postName" :value="item.postId" v-for="item in postData" />
 							</el-select>
 						</el-form-item>
@@ -45,7 +45,7 @@
 								check-strictly
 								class="w100"
 								clearable
-								placeholder="请选择所属部门"
+								:placeholder="$t('sysuser.selectDept')"
 								v-model="dataForm.deptId"
 							>
 							</el-tree-select>
@@ -54,12 +54,12 @@
 
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.email')" prop="email">
-							<el-input clearable placeholder="请输入邮箱" v-model="dataForm.email"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputEmailTip')" v-model="dataForm.email"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.nickname')" prop="nickname">
-							<el-input clearable placeholder="请输入昵称" v-model="dataForm.nickname"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputNicknameTip')" v-model="dataForm.nickname"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
@@ -107,10 +107,10 @@ const postData = ref<any[]>([]);
 const loading = ref(false);
 
 const props = defineProps({
-  deptId: {
-    type: String,
-    default: '',
-  }
+	deptId: {
+		type: String,
+		default: '',
+	},
 });
 
 const dataForm = reactive({
@@ -135,8 +135,8 @@ const dataForm = reactive({
 const dataRules = ref({
 	// 用户名校验，不能为空 、长度 5-20、不能和已有数据重复
 	username: [
-		{ required: true, message: '用户名不能为空', trigger: 'blur' },
-		{ min: 5, max: 20, message: '用户名称长度必须介于 5 和 20 之间', trigger: 'blur' },
+		{ required: true, message: t('sysuser.usernameRequired'), trigger: 'blur' },
+		{ min: 5, max: 20, message: t('sysuser.usernameLength'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateUsername(rule, value, callback, dataForm.userId !== '');
@@ -145,26 +145,26 @@ const dataRules = ref({
 		},
 	],
 	password: [
-		{ required: true, message: '密码不能为空', trigger: 'blur' },
+		{ required: true, message: t('sysuser.passwordRequired'), trigger: 'blur' },
 		{
 			min: 6,
 			max: 20,
-			message: '用户密码长度必须介于 5 和 20 之间',
+			message: t('sysuser.passwordLength'),
 			trigger: 'blur',
 		},
 	],
 	// 姓名校验，不能为空、只能是中文
 	name: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '姓名不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('sysuser.nameRequired'), trigger: 'blur' },
 		{ validator: rule.chinese, trigger: 'blur' },
 	],
-	deptId: [{ required: true, message: '部门不能为空', trigger: 'blur' }],
-	role: [{ required: true, message: '角色不能为空', trigger: 'blur' }],
-	post: [{ required: true, message: '岗位不能为空', trigger: 'blur' }],
+	deptId: [{ required: true, message: t('sysuser.deptRequired'), trigger: 'blur' }],
+	role: [{ required: true, message: t('sysuser.roleRequired'), trigger: 'blur' }],
+	post: [{ required: true, message: t('sysuser.postRequired'), trigger: 'blur' }],
 	// 手机号校验，不能为空、新增的时不能重复校验
 	phone: [
-		{ required: true, message: '手机号不能为空', trigger: 'blur' },
+		{ required: true, message: t('sysuser.phoneRequired'), trigger: 'blur' },
 		{ validator: rule.validatePhone, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
@@ -173,8 +173,11 @@ const dataRules = ref({
 			trigger: 'blur',
 		},
 	],
-	email: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] },{ validator: rule.overLength, trigger: 'blur' }],
-	lockFlag: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
+	email: [
+		{ type: 'email', message: t('sysuser.emailFormat'), trigger: ['blur', 'change'] },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
+	lockFlag: [{ required: true, message: t('sysuser.statusRequired'), trigger: 'blur' }],
 });
 
 // 打开弹窗
@@ -245,10 +248,10 @@ const getUserData = async (id: string) => {
 		const { data } = await getObj(id);
 		Object.assign(dataForm, data);
 		if (data.roleList) {
-			dataForm.role = data.roleList.map((item) => item.roleId);
+			dataForm.role = data.roleList.map((item: { roleId: string }) => item.roleId);
 		}
 		if (data.postList) {
-			dataForm.post = data.postList.map((item) => item.postId);
+			dataForm.post = data.postList.map((item: { postId: string }) => item.postId);
 		}
 	} catch (err: any) {
 		useMessage().error(err.msg);
@@ -263,9 +266,9 @@ const getDeptData = () => {
 	deptTree().then((res) => {
 		deptData.value = res.data;
 		// 默认选择在树中选中的部门
-    if (!dataForm.userId) {
-      dataForm.deptId = props.deptId;
-    }
+		if (!dataForm.userId) {
+			dataForm.deptId = props.deptId;
+		}
 	});
 };
 
@@ -274,9 +277,9 @@ const getPostData = () => {
 	postList().then((res) => {
 		postData.value = res.data;
 		// 默认选择第一个
-    if (!dataForm.userId) {
-      dataForm.post = [res.data[0].postId];
-    }
+		if (!dataForm.userId) {
+			dataForm.post = [res.data[0].postId];
+		}
 	});
 };
 // 角色数据
@@ -284,9 +287,9 @@ const getRoleData = () => {
 	roleList().then((res) => {
 		roleData.value = res.data;
 		// 默认选择第一个
-    if (!dataForm.userId) {
-      dataForm.role = [res.data[0].roleId];
-    }
+		if (!dataForm.userId) {
+			dataForm.role = [res.data[0].roleId];
+		}
 	});
 };
 

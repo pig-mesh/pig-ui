@@ -15,6 +15,9 @@ export default {
 		please_enter_the_role_description: '请输入角色描述',
 		menu_authority: '数据权限',
 		please_select: '请选择',
-		importRoleTip:  '导入角色'
+		importRoleTip: '导入角色',
+		assignPermission: '分配权限',
+		update: '更新',
+		cancel: '取 消',
 	},
 };
