@@ -1,9 +1,9 @@
 <template>
-	<div class="fixed top-0 right-0 z-10 flex items-center p-5 space-x-2">
+	<div class="flex fixed top-0 right-0 z-10 items-center p-5 space-x-2">
 		<!-- 语言切换 -->
 		<el-dropdown v-if="isI18nEnabled" trigger="click" @command="onLanguageChange">
 			<div
-				class="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700 backdrop-blur-sm"
+				class="flex justify-center items-center w-9 h-9 rounded-lg backdrop-blur-sm transition-colors cursor-pointer bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 			>
 				<i
 					class="text-lg text-gray-600 dark:text-slate-300 iconfont"
@@ -21,7 +21,7 @@
 		<!-- 主题切换 -->
 		<el-tooltip v-if="isDarkModeEnabled" :content="getThemeConfig.isDark ? '切换亮色模式' : '切换暗色模式'" placement="bottom">
 			<div
-				class="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700 backdrop-blur-sm"
+				class="flex justify-center items-center w-9 h-9 rounded-lg backdrop-blur-sm transition-colors cursor-pointer bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 				@click="onThemeClick"
 			>
 				<el-icon :size="18" class="text-gray-600 dark:text-slate-300">
@@ -38,6 +38,7 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { useI18n } from 'vue-i18n';
 import { Local } from '/@/utils/storage';
 import other from '/@/utils/other';
+import { useDark } from '@vueuse/core';
 
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
@@ -64,23 +65,31 @@ const onLanguageChange = (lang: string) => {
 };
 
 // 主题切换
+const isDark = useDark();
 const onThemeClick = () => {
 	if (!isDarkModeEnabled) return; // 如果未启用暗黑模式，直接返回
-	
+
 	const body = document.documentElement as HTMLElement;
 	themeConfig.value.isDark = !themeConfig.value.isDark;
 
 	if (themeConfig.value.isDark) {
 		body.setAttribute('data-theme', 'dark');
 		body.classList.add('dark');
+		isDark.value = true;
 	} else {
 		body.classList.remove('dark');
 		body.setAttribute('data-theme', '');
+		isDark.value = false;
 	}
 
 	// 保存主题配置
 	Local.remove('themeConfig');
 	Local.set('themeConfig', themeConfig.value);
+};
+
+// 初始化暗黑模式
+const initDark = () => {
+	isDark.value = themeConfig.value.isDark;
 };
 
 // 获取布局配置信息
@@ -91,11 +100,11 @@ const getThemeConfig = computed(() => {
 // 在 script setup 中添加
 const initLanguage = () => {
 	if (!isI18nEnabled) return; // 如果未启用多语言，直接返回
-	
+
 	if (Local.get('themeConfig')) {
 		state.disabledI18n = Local.get('themeConfig').globalI18n;
 		// 确保 i18n locale 与存储的语言保持一致
-		
+
 		locale.value = state.disabledI18n;
 	} else {
 		// 如果没有存储的主题配置，设置默认语言
@@ -112,6 +121,7 @@ const initLanguage = () => {
 // 修改 onMounted 钩子
 onMounted(() => {
 	initLanguage();
+	initDark();
 });
 </script>
 
