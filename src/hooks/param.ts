@@ -1,35 +1,27 @@
-import {param} from '/@/stores/param';
-import {getValue} from '/@/api/admin/param';
+import { param } from '/@/stores/param';
+import { getValue } from '/@/api/admin/param';
+import { ref } from 'vue';
 
 /**
  * 获取参数数据
  * @function
- * @param {string} args - 参数类型
- * @returns {Object} - 返回参数数据
+ * @param {string} paramType - 参数类型
+ * @returns {object} - 返回参数数据引用对象
  */
-export function useParam(...args: any): string {
-    let res = '';
+export function useParam(paramType: string) {
+	const paramValue = ref('');
 
-    for (const paramType of args) {
-        const params = param().getParam(paramType);
-        if (params) {
-            res = params;
-        } else {
-            // 这里使用同步的获取值方法
-            let data = '';
-            const fetchData = async () => {
-                const result = await getValue(paramType);
-                data = result.data;
-            };
+	const cachedParams = param().getParam(paramType);
+	if (cachedParams) {
+		paramValue.value = cachedParams;
+	} else {
+		getValue(paramType).then(({ data }) => {
+			if (data) {
+				paramValue.value = data;
+				param().setParam(paramType, data);
+			}
+		});
+	}
 
-            fetchData().then(() => {
-                if (data) {
-                    res = data;
-                    param().setParam(paramType, data);
-                }
-            })
-        }
-    }
-
-    return res;
+	return paramValue;
 }
