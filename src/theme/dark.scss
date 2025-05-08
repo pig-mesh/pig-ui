@@ -79,10 +79,11 @@
 
 	// Button 按钮
 	.el-button {
+		transition: opacity 0.3s, border-color 0.3s;
+
 		&:not(.is-disabled):hover {
 			border-color: var(--next-border-color) !important;
 			opacity: 0.9;
-			transition: opacity 0.3s;
 		}
 	}
 	.el-button--primary,
