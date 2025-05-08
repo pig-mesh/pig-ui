@@ -78,7 +78,7 @@ const onThemeClick = () => {
 		isDark.value = true;
 	} else {
 		body.classList.remove('dark');
-		body.setAttribute('data-theme', '');
+		body.setAttribute('data-theme', 'light');
 		isDark.value = false;
 	}
 

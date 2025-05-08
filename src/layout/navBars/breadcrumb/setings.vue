@@ -107,13 +107,15 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBar" @change="onBgColorPickerChange('topBar')" :disabled="getThemeConfig.isDark"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBar" @change="onBgColorPickerChange('topBar')" :disabled="getThemeConfig.isDark">
+						</el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoTopBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.topBarColor" @change="onBgColorPickerChange('topBarColor')" :disabled="getThemeConfig.isDark"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.topBarColor" @change="onBgColorPickerChange('topBarColor')" :disabled="getThemeConfig.isDark">
+						</el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt10">
@@ -128,19 +130,26 @@
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBar') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBar" @change="onBgColorPickerChange('menuBar')" :disabled="getThemeConfig.isDark"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBar" @change="onBgColorPickerChange('menuBar')" :disabled="getThemeConfig.isDark">
+						</el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBarColor" @change="onBgColorPickerChange('menuBarColor')" :disabled="getThemeConfig.isDark"> </el-color-picker>
+						<el-color-picker v-model="getThemeConfig.menuBarColor" @change="onBgColorPickerChange('menuBarColor')" :disabled="getThemeConfig.isDark">
+						</el-color-picker>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.twoMenuBarActiveColor') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-color-picker v-model="getThemeConfig.menuBarActiveColor" show-alpha @change="onBgColorPickerChange('menuBarActiveColor')" :disabled="getThemeConfig.isDark"/>
+						<el-color-picker
+							v-model="getThemeConfig.menuBarActiveColor"
+							show-alpha
+							@change="onBgColorPickerChange('menuBarActiveColor')"
+							:disabled="getThemeConfig.isDark"
+						/>
 					</div>
 				</div>
 				<div class="layout-breadcrumb-seting-bar-flex mt14">
@@ -440,6 +449,7 @@ import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { useUserInfo } from '/@/stores/userInfo';
+import { useDark } from '@vueuse/core';
 
 // 定义变量内容
 const { locale } = useI18n();
@@ -556,15 +566,18 @@ const onAddFilterChange = (attr: string) => {
 	setLocalThemeConfig();
 };
 // 4、界面显示 --> 深色模式
+const isDark = useDark();
 const onAddDarkChange = () => {
 	const body = document.documentElement as HTMLElement;
 	if (getThemeConfig.value.isDark) {
 		body.setAttribute('data-theme', 'dark');
 		// body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
 		body.classList.add('dark');
+		isDark.value = true;
 	} else {
 		body.classList.remove('dark');
-		body.setAttribute('data-theme', '');
+		body.setAttribute('data-theme', 'light');
+		isDark.value = false;
 	}
 };
 // 4、界面显示 --> 开启水印
@@ -676,8 +689,8 @@ onMounted(() => {
 			if (getThemeConfig.value.isGrayscale) onAddFilterChange('grayscale');
 			// 色弱模式
 			if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
-			// 深色模式
-			if (getThemeConfig.value.isDark) onAddDarkChange();
+			// 深色模式判断
+			onAddDarkChange();
 			// 开启水印
 			onWartermarkChange();
 			// 语言国际化
