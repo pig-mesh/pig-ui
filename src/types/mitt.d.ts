@@ -1,7 +1,7 @@
 /**
  * mitt 事件类型定义
  *
- * @method openSetingsDrawer 打开布局设置弹窗
+ * @method openSettingsDrawer 打开布局设置弹窗
  * @method restoreDefault 分栏布局，鼠标移入、移出数据显示
  * @method setSendColumnsChildren 分栏布局，鼠标移入、移出菜单数据传入到 navMenu 下的菜单中
  * @method setSendClassicChildren 经典布局，开启切割菜单时，菜单数据传入到 navMenu 下的菜单中
@@ -13,7 +13,7 @@
  * @method onCurrentContextmenuClick tagsview 右键菜单每项点击时
  */
 declare type MittType<T = any> = {
-	openSetingsDrawer?: string;
+	openSettingsDrawer?: string;
 	restoreDefault?: string;
 	setSendColumnsChildren: T;
 	setSendClassicChildren: T;

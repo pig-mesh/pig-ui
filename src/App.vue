@@ -2,7 +2,7 @@
 	<el-config-provider :size="getGlobalComponentSize" :locale="getGlobalI18n">
 		<router-view v-show="setLockScreen" />
 		<LockScreen v-if="themeConfig.isLockScreen" />
-		<Setings ref="settingsRef" v-show="themeConfig.lockScreenTime > 1" />
+		<Settings ref="settingsRef" v-show="themeConfig.lockScreenTime > 1" />
 		<CloseFull v-if="!themeConfig.isLockScreen" />
 	</el-config-provider>
 </template>
@@ -18,7 +18,7 @@ import setIntroduction from '/@/utils/setIconfont';
 
 // 引入组件
 const LockScreen = defineAsyncComponent(() => import('/@/layout/lockScreen/index.vue'));
-const Setings = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/setings.vue'));
+const Settings = defineAsyncComponent(() => import('./layout/navBars/breadcrumb/settings.vue'));
 const CloseFull = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/closeFull.vue'));
 
 // 定义变量内容
@@ -55,7 +55,7 @@ onBeforeMount(() => {
 onMounted(() => {
 	nextTick(() => {
 		// 监听布局配'置弹窗点击打开
-		mittBus.on('openSetingsDrawer', () => {
+		mittBus.on('openSettingsDrawer', () => {
 			settingsRef.value.openDrawer();
 		});
 		// 获取缓存中的布局配置
@@ -71,7 +71,7 @@ onMounted(() => {
 });
 // 页面销毁时，关闭监听布局配置/i18n监听
 onUnmounted(() => {
-	mittBus.off('openSetingsDrawer', () => {});
+	mittBus.off('openSettingsDrawer', () => {});
 });
 // 监听路由的变化，设置网站标题
 watch(
