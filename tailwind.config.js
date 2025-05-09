@@ -4,6 +4,14 @@ module.exports = {
 	// 其他配置...
 	daisyui: {
 		logs: false,
+		themes: [
+			{
+				light: {
+					...require('daisyui/src/theming/themes')['light'],
+					primary: '#2E5CF6',
+				},
+			},
+		],
 	},
 	content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
