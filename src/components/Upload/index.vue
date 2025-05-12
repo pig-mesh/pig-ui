@@ -264,15 +264,15 @@ const uploadedSuccessfully = () => {
 		fileList.value = fileList.value.filter((f) => f.url !== undefined).concat(uploadList.value);
 		uploadList.value = [];
 		number.value = 0;
-		emit('change', listToString(fileList.value), fileList.value);
 		emit('update:modelValue', listToString(fileList.value));
+		emit('change', listToString(fileList.value), fileList.value);
 	}
 };
 
-const handleRemove = (file: { url: string }) => {
-	fileList.value = fileList.value.filter((f) => f.url !== file.url);
-	emit('change', listToString(fileList.value));
+const handleRemove = (file: { name: string }) => {
+	fileList.value = fileList.value.filter((f) => f.name !== file.name);
 	emit('update:modelValue', listToString(fileList.value));
+	emit('change', listToString(fileList.value));
 };
 
 const handlePreview = (file: any) => {
