@@ -13,11 +13,13 @@ export default {
 				<el-button link class="button" text @click="handleRoutr">{{ $t('home.moreTip') }}</el-button>
 			</div>
 		</template>
-		<el-timeline v-if="logState.dataList.length > 0">
-			<el-timeline-item v-for="(item, index) in logState.dataList" :key="index" :timestamp="item.createTime">
-				{{ item.title }} - {{ item.remoteAddr }}
+		<el-timeline v-if="logState.dataList && logState.dataList.length > 0">
+			<el-timeline-item v-for="(item, index) in logState.dataList" :key="index">
+				<div>{{ item.title }} - {{ item.remoteAddr }}</div>
+				<div style="font-size: 0.8rem; color: #909399">{{ item.createTime }}</div>
 			</el-timeline-item>
 		</el-timeline>
+		<el-empty v-else :description="$t('common.noDataText')" />
 	</el-card>
 </template>
 
@@ -29,6 +31,7 @@ const router = useRouter();
 
 // 创建基本表格参数对象
 const logState: BasicTableProps = reactive({
+	dataList: [], // Explicitly initialize dataList
 	pageList, // 分页列表数据
 	descs: ['create_time'], // 排序方式
 	pagination: {

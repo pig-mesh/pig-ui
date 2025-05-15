@@ -7,15 +7,15 @@ export default {
 </script>
 
 <template>
-	<el-card class="flex items-center justify-center h-[191px]">
-		<div class="flex items-center justify-center">
+	<el-card class="user-card h-[191px] hover:shadow-lg transition-shadow duration-300 ease-in-out">
+		<div class="flex justify-center items-center p-4 h-full">
 			<div class="relative">
-				<img class="object-cover w-16 h-16 rounded-full" :src="userData.avatar" alt="Avatar" />
+				<img class="object-cover w-20 h-20 rounded-full shadow-md" :src="userData.avatar" alt="Avatar" />
 				<div class="absolute inset-0 rounded-full shadow-inner"></div>
 			</div>
-			<div class="ml-8">
-				<h2 class="text-lg font-bold dark:text-gray-100">{{ userData.name }}</h2>
-				<p class="text-gray-600 dark:text-gray-400">{{ userData.deptName }} | {{ userData.postName }}</p>
+			<div class="ml-6">
+				<h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100">{{ userData.name }}</h2>
+				<p class="mt-1 text-xs text-gray-500 dark:text-gray-400">{{ userData.deptName }} | {{ userData.postName }}</p>
 			</div>
 		</div>
 	</el-card>
@@ -69,10 +69,9 @@ const initUserInfo = async (userId: any): Promise<void> => {
 </script>
 
 <style scoped>
-.info {
-	margin-left: 8px;
+.user-card {
 	display: flex;
-	flex-direction: column;
+	align-items: center;
 	justify-content: center;
 }
 </style>

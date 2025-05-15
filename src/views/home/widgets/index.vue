@@ -13,11 +13,11 @@
 				</div>
 				<div class="widgets" ref="widgets">
 					<div class="widgets-wrapper">
-						<div v-if="nowCompsList.length <= 0" class="no-widgets">
-							<el-empty description="没有部件啦" :image-size="280"></el-empty>
+						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
+							<el-empty description='您的仪表盘是空的！点击右上角的"自定义"按钮添加小组件吧。' :image-size="200"></el-empty>
 						</div>
-						<el-row :gutter="2">
-							<el-col :gutter="2" v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
+						<el-row :gutter="0">
+							<el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
 								<draggable
 									v-model="grid.copmsList[index]"
 									animation="200"
@@ -31,15 +31,15 @@
 								>
 									<template #item="{ element }">
 										<div class="widgets-item">
-											<component :is="allComps[element]"></component>
+											<component :is="allComps[element as keyof typeof allComps]"></component>
 											<div v-if="customizing" class="customize-overlay">
 												<el-button class="close" type="danger" plain icon="Close" size="small" @click="remove(element)"></el-button>
-												<label>
-													<el-icon>
-														<component :is="allComps[element].icon" />
+												<label v-if="allComps[element as keyof typeof allComps]">
+													<el-icon v-if="allComps[element as keyof typeof allComps].icon">
+														<component :is="allComps[element as keyof typeof allComps].icon" />
 													</el-icon>
-													{{ allComps[element].title }}</label
-												>
+													{{ allComps[element as keyof typeof allComps].title }}
+												</label>
 											</div>
 										</div>
 									</template>
@@ -58,7 +58,7 @@
 						</div>
 					</el-header>
 					<el-header style="height: auto">
-						<div class="selectLayout">
+						<div class="p-3 selectLayout">
 							<div class="selectLayout-item item01" :class="{ active: grid.layout.join(',') === '12,6,6' }" @click="setLayout([12, 6, 6])">
 								<el-row :gutter="2">
 									<el-col :span="7"><span></span></el-col>
@@ -84,8 +84,8 @@
 					</el-header>
 					<el-main class="nopadding">
 						<div class="widgets-list">
-							<div v-if="myCompsList.length <= 0" class="widgets-list-nodata">
-								<el-empty description="没有部件啦" :image-size="60"></el-empty>
+							<div v-if="myCompsList.length <= 0" class="p-5 text-center widgets-list-nodata">
+								<el-empty description="所有可用小组件都已添加。" :image-size="100"></el-empty>
 							</div>
 							<div v-for="item in myCompsList" :key="item.title" class="widgets-list-item">
 								<div class="item-logo">
@@ -117,14 +117,30 @@ import draggable from 'vuedraggable';
 import allComps from './components/index';
 import { Local } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
+import type { Component } from 'vue';
 
-// 默认布局设置
+interface WidgetComponent {
+	title: string;
+	icon: Component | string; // Can be a component or an icon name string
+	description: string;
+	[key: string]: any; // Allow other props
+}
+
+interface WidgetListItem {
+	key: string;
+	title: string;
+	icon: Component | string;
+	description: string;
+	disabled?: boolean;
+}
+
+// Default layout settings
 const defaultGrid = ref({
 	layout: [7, 7, 10],
 	copmsList: [
 		['current-user', 'flow-data', 'audit-log', 'sys-log-line'],
 		['news', 'sys-log', 'demo-chart1'],
-		['calendar', 'favorite-menu','favorite-flow', 'demo-chart2'],
+		['calendar', 'favorite-menu', 'favorite-flow', 'demo-chart2'],
 	],
 });
 const customizing = ref(false);
@@ -133,14 +149,14 @@ const widgetsKey = ref('widgets');
 const grid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
 
 const allCompsList = computed(() => {
-	const list = [];
-	for (const [key, { title, icon, description }] of Object.entries(allComps)) {
-		list.push({ key, title, icon, description });
+	const list: WidgetListItem[] = [];
+	for (const [key, compDetails] of Object.entries(allComps as Record<string, WidgetComponent>)) {
+		list.push({ key, title: compDetails.title, icon: compDetails.icon, description: compDetails.description });
 	}
 
 	const myCopmsList = grid.value.copmsList.flat();
-	list.forEach((comp) => {
-		const existingItem = myCopmsList.find((item) => item === comp.key);
+	list.forEach((comp: WidgetListItem) => {
+		const existingItem = myCopmsList.find((item: string) => item === comp.key);
 		comp.disabled = !!existingItem;
 	});
 
@@ -148,7 +164,7 @@ const allCompsList = computed(() => {
 });
 
 const myCompsList = computed(() => {
-	// 支持列表
+	// Support list
 	const myGrid = [
 		'calendar',
 		'current-user',
@@ -162,7 +178,7 @@ const myCompsList = computed(() => {
 		'demo-chart1',
 		'demo-chart2',
 	];
-	return allCompsList.value.filter((item) => !item.disabled && myGrid.includes(item.key));
+	return allCompsList.value.filter((item: WidgetListItem) => !item.disabled && myGrid.includes(item.key));
 });
 
 const nowCompsList = computed(() => grid.value.copmsList.flat());
@@ -190,12 +206,12 @@ const setLayout = (layout: Array<number>) => {
 	}
 };
 
-const push = (item: any) => {
+const push = (item: WidgetListItem) => {
 	grid.value.copmsList[0].push(item.key);
 };
 
-const remove = (item: any) => {
-	grid.value.copmsList = grid.value.copmsList.map((obj) => obj.filter((o) => o !== item));
+const remove = (itemKey: string) => {
+	grid.value.copmsList = grid.value.copmsList.map((obj: string[]) => obj.filter((o: string) => o !== itemKey));
 };
 
 const save = () => {
@@ -209,8 +225,8 @@ const backDefaul = () => {
 	widgets.value.style.removeProperty('transform');
 	grid.value = defaultGrid.value;
 	Local.remove(widgetsKey.value);
-  // 重新加载页面
-  window.location.reload();
+	// 重新加载页面
+	window.location.reload();
 };
 
 const close = () => {
@@ -229,10 +245,9 @@ onMounted(() => {
 <style scoped lang="scss">
 .custom_btn {
 	position: absolute;
-	top: 7px;
-	right: 5px;
+	top: 10px;
+	right: 10px;
 	z-index: 9;
-	color: white;
 }
 
 .widgets-home {
@@ -252,8 +267,11 @@ onMounted(() => {
 .widgets-aside {
 	width: 360px;
 	background: #fff;
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-	position: relative;
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+	border-radius: 8px;
+	margin-bottom: 5px;
+	min-height: 100px; /* Ensure a minimum height for better drag experience */
+	position: relative; /* Needed for customize-overlay positioning */
 	overflow: auto;
 }
 
@@ -302,15 +320,16 @@ onMounted(() => {
 
 .draggable-box {
 	height: 100%;
+	width: 100%;
 }
 
 .customizing .widgets-wrapper {
 	margin-right: -360px;
-  width: 100%;
+	width: 100%;
 }
 
 .customizing .widgets-wrapper .el-col {
-	padding-bottom: 15px;
+	padding-bottom: 10px;
 }
 
 .customizing .widgets-wrapper .draggable-box {
@@ -323,8 +342,23 @@ onMounted(() => {
 }
 
 .widgets-item {
-	position: relative;
-	margin-bottom: 2px;
+	background: var(--el-bg-color-overlay);
+	border: 1px solid var(--el-border-color-light);
+	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
+	border-radius: 8px;
+	margin-bottom: 0px; /* Reduced for tighter vertical spacing */
+	min-height: 100px; /* Ensure a minimum height for better drag experience */
+	position: relative; /* Needed for customize-overlay positioning */
+}
+
+.widgets-item > :deep(div) {
+	border-radius: 8px; /* Ensure component content also has rounded corners if it fills the card */
+}
+
+/* Ensure components inside widgets-item are not creating extra margins or borders if not needed */
+.widgets-item > :deep(.el-card) {
+	border: none !important;
+	box-shadow: none !important;
 }
 
 .customize-overlay {
