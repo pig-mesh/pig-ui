@@ -20,8 +20,8 @@
 				</div>
 
 				<!-- 右侧登录表单区域 -->
-				<div class="w-full px-5 py-12 md:w-[45%] md:px-12">
-					<div class="mb-12 text-center">
+				<div class="w-full px-5 py-16 md:w-[45%] md:px-12">
+					<div class="mb-16 text-center">
 						<h1 class="text-4xl font-bold text-gray-900 dark:text-white tracking-wide font-['Inter']">{{ getThemeConfig.globalTitle }}</h1>
 						<!-- 租户选择 -->
 						<div class="mt-6">
@@ -66,7 +66,7 @@ import illustration from '/@/assets/login/login_bg.svg';
 import { useI18n } from 'vue-i18n';
 import { formatAxis } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
-import { Session, Local } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { LoginTypeEnum } from '/@/api/login';
 
