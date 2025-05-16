@@ -89,7 +89,7 @@ export function sendEmail(params?: object) {
 
 export function sendHook(params?: object) {
 	return request({
-		url: '/admin/sysMessage/send/webhook',
+		url: '/admin/sysMessage/send/hook',
 		method: 'post',
 		data: params,
 	});
