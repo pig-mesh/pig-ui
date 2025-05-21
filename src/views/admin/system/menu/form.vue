@@ -129,6 +129,7 @@ const IconSelector = defineAsyncComponent(() => import('/@/components/IconSelect
 const visible = ref(false);
 const loading = ref(false);
 const menuDialogFormRef = ref();
+const originalName = ref(''); // To store the original menu name for comparison during edits
 // 定义需要的数据
 const state = reactive({
   ruleForm: {
@@ -159,7 +160,18 @@ const dataRules = reactive({
     trigger: 'blur'
   }, {
     validator: (rule: any, value: any, callback: any) => {
-      validateExist(rule, value, callback, state.ruleForm.menuId !== '' || state.ruleForm.menuType === '1');
+      // 如果是按钮类型菜单，跳过名称唯一性校验
+      if (state.ruleForm.menuType === '1') {
+        callback();
+        return;
+      }
+      // 如果是编辑状态且菜单名称未改变，跳过校验
+      if (state.ruleForm.menuId !== '' && value === originalName.value) {
+        callback();
+        return;
+      }
+      // 其他情况下，验证菜单名称唯一性
+      validateExist(rule, value, callback, false);
     },
     trigger: 'blur',
   }],
@@ -193,6 +205,7 @@ const dataRules = reactive({
 const openDialog = (type: string, row?: any) => {
   state.ruleForm.menuId = '';
   visible.value = true;
+  originalName.value = ''; // Reset the original name
 
   nextTick(() => {
     menuDialogFormRef.value?.resetFields();
@@ -214,6 +227,7 @@ const getMenuDetail = (id: string) => {
     if (res.data[0].component) {
       state.ruleForm.param = '1'
     }
+    originalName.value = res.data[0].name; // Store the original name
     Object.assign(state.ruleForm, res.data[0]);
   });
 };
