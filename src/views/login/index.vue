@@ -24,7 +24,7 @@
 					<div class="mb-16 text-center">
 						<h1 class="text-4xl font-bold text-gray-900 dark:text-white tracking-wide font-['Inter']">{{ getThemeConfig.globalTitle }}</h1>
 						<!-- 租户选择 -->
-						<div class="mt-6">
+						<div class="mt-6" v-if="tenantEnable">
 							<tenant class="shadow-sm" />
 						</div>
 					</div>
@@ -88,6 +88,9 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+
+// 是否启用租户下拉框显示
+const tenantEnable = ref(import.meta.env.VITE_TENANT_ENABLE !== 'false');
 
 // 登录方式
 const loginType = ref(LoginTypeEnum.PASSWORD);
