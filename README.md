@@ -1,5 +1,11 @@
-# pig-ui
-
+<p align="center">
+ <img src="https://img.shields.io/badge/Pig-3.8-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Spring%20Cloud-2024-blue.svg" alt="Coverage Status">
+ <img src="https://img.shields.io/badge/Spring%20Boot-3.4-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Vue-3.4-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
+ <img src="https://gitcode.com/pig-mesh/pig/star/badge.svg"/>
+</p>
 ## 概述
 
 **pig-ui** 是一个为 PIGCLOUD 微服务开发平台开发的前端项目。它利用了现代 Web 技术，包括 Vue.js 3、Element Plus 和 Vite，提供了一个健壮且高效的开发环境。
@@ -19,37 +25,16 @@
 - **Node.js**: 版本 18.0.0。
 - **npm**: 版本 8.0.0 或更高。
 
-### 安装
-1. 克隆仓库：
+### 使用文档
 
-```bash
-git clone https://gitee.com/log4j/pig-ui.git
-cd pig-ui
-```
+PIG 提供了详尽的部署文档 👉 [wiki.pig4cloud.com](https://wiki.pig4cloud.com)，涵盖开发环境配置、服务端启动、前端运行等关键步骤。
 
-2. 安装依赖：
+重要的事情说三遍：
 
-```bash
-npm install  --registry=https://registry.npmmirror.com
-```
+- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
 
-### 开发
-
-```bash
-npm run dev
-```
-
-### 构建
-
-为生产环境构建项目：
-```bash
-npm run build
-```
-
-为 Docker 构建项目：
-```bash
-npm run build:docker
-```
 
 ## 浏览器支持
 
