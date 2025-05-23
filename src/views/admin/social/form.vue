@@ -110,15 +110,21 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
-
-	// 隐藏敏感信息
-	form.appSecret = form.appSecret?.includes('******') ? undefined : form.appSecret;
-	form.appId = form.appId?.includes('******') ? undefined : form.appId;
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
 
 	try {
-		loading.value = true;
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
+		// 隐藏敏感信息
+		form.appSecret = form.appSecret?.includes('******') ? undefined : form.appSecret;
+		form.appId = form.appId?.includes('******') ? undefined : form.appId;
+
 		if (form.id) {
 			await putObj(form);
 			useMessage().success(t('common.editSuccessText'));

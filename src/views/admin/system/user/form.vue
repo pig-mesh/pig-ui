@@ -205,10 +205,17 @@ const openDialog = async (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
-
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
+	
 	try {
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
 		const { userId, phone, password } = dataForm;
 
 		if (userId) {
@@ -216,13 +223,11 @@ const onSubmit = async () => {
 			if (phone?.includes('*')) dataForm.phone = undefined;
 			if (password?.includes('******')) dataForm.password = undefined;
 
-			loading.value = true;
 			await putObj(dataForm);
 			useMessage().success(t('common.editSuccessText'));
 			visible.value = false; // 关闭弹窗
 			emit('refresh');
 		} else {
-			loading.value = true;
 			await addObj(dataForm);
 			useMessage().success(t('common.addSuccessText'));
 			visible.value = false; // 关闭弹窗

@@ -154,17 +154,23 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
+
 	if (form.dsType === 1) {
 		form.dsScope = deptTreeRef.value.getCheckedKeys().join(',');
 	} else {
 		form.dsScope = '';
 	}
 
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
-
 	try {
-		loading.value = true;
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
 		form.roleId ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.roleId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;

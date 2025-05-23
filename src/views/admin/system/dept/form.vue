@@ -81,11 +81,17 @@ const openDialog = (type: string, id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await deptDialogFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
 
 	try {
-		loading.value = true;
+		const valid = await deptDialogFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
 		dataForm.deptId ? await putObj(dataForm) : await addObj(dataForm);
 		useMessage().success(t(dataForm.deptId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;

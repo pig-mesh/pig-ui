@@ -98,11 +98,17 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
 
 	try {
-		loading.value = true;
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
 		form.postId ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.postId ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;

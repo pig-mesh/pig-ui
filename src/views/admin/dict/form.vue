@@ -85,11 +85,17 @@ const openDialog = (id: string) => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dicDialogFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
 
 	try {
-		loading.value = true;
+		const valid = await dicDialogFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
 		const result = dataForm.id ? await putObj(dataForm) : await addObj(dataForm);
 		useMessage().success(t(dataForm.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;

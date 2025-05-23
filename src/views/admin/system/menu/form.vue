@@ -250,12 +250,18 @@ const getAllMenuData = () => {
 
 // 保存数据
 const onSubmit = async () => {
-  const valid = await menuDialogFormRef.value.validate().catch(() => {
-  });
-  if (!valid) return false;
-
+  // 立即设置 loading，防止重复点击
+  if (loading.value) return;
+  loading.value = true;
+  
   try {
-    loading.value = true;
+    const valid = await menuDialogFormRef.value.validate().catch(() => {
+    });
+    if (!valid) {
+      loading.value = false;
+      return false;
+    }
+
     state.ruleForm.menuId ? await putObj(state.ruleForm) : await addObj(state.ruleForm);
     useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;

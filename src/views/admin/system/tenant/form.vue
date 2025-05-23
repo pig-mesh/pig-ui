@@ -165,32 +165,41 @@ const openDialog = (id: string): void => {
 
 // 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
-
-	if (menuTreeRef.value?.getCheckedKeys().length === 0) {
-		useMessage().error('请选择租户套餐菜单');
-		return false;
-	}
-
-	if (menuTreeRef.value?.getCheckedKeys()) {
-    let checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()]
-
-    if (!checkMenu.includes('1300')) {
-      useMessage().error('必须分配角色管理功能');
-      return false;
-    }
-
-    if (!checkMenu.includes('1302')) {
-      useMessage().error('必须分配角色管理功能');
-      return false;
-    }
-
-		form.menuId = checkMenu.join(',');
-	}
+	// 立即设置 loading，防止重复点击
+	if (loading.value) return;
+	loading.value = true;
 
 	try {
-		loading.value = true;
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return false;
+		}
+
+		if (menuTreeRef.value?.getCheckedKeys().length === 0) {
+			useMessage().error('请选择租户套餐菜单');
+			loading.value = false;
+			return false;
+		}
+
+		if (menuTreeRef.value?.getCheckedKeys()) {
+			let checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()]
+
+			if (!checkMenu.includes('1300')) {
+				useMessage().error('必须分配角色管理功能');
+				loading.value = false;
+				return false;
+			}
+
+			if (!checkMenu.includes('1302')) {
+				useMessage().error('必须分配角色管理功能');
+				loading.value = false;
+				return false;
+			}
+
+			form.menuId = checkMenu.join(',');
+		}
+
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
 		visible.value = false;
@@ -198,7 +207,7 @@ const onSubmit = async () => {
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	} finally {
-    await fetchList()
+		await fetchList()
 		loading.value = false;
 	}
 };
