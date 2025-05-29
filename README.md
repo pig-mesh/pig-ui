@@ -6,6 +6,7 @@
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
  <img src="https://gitcode.com/pig-mesh/pig/star/badge.svg"/>
 </p>
+
 ## 概述
 
 **pig-ui** 是一个为 PIGCLOUD 微服务开发平台开发的前端项目。它利用了现代 Web 技术，包括 Vue.js 3、Element Plus 和 Vite，提供了一个健壮且高效的开发环境。
