@@ -89,7 +89,9 @@ const getAllTable = (dsName: string) => {
 // 获取对应表的所有字段
 const getAllField = (dsName: string, tableName: string) => {
 	useListTableColumnApi(dsName, tableName).then((res) => {
-		mainTableColumnList.value = res.data;
+		mainTableColumnList.value = res.data.map((item: any) => {
+			return item.name;
+		});
 	});
 };
 
@@ -97,7 +99,9 @@ const getAllField = (dsName: string, tableName: string) => {
 const getChildTableColumnList = (val: string) => {
 	form.childField = '';
 	useListTableColumnApi(currentDsName.value, val).then((res) => {
-		childTableColumnList.value = res.data;
+		childTableColumnList.value = res.data.map((item: any) => {
+			return item.name;
+		});
 	});
 };
 
