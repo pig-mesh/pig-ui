@@ -11,6 +11,8 @@
 				background: 'var(--el-table-row-hover-bg-color)',
 				color: 'var(--el-text-color-primary)',
 			}"
+			style="width: 100%"
+			:table-layout="'auto'"
 		>
 			<el-table-column type="index" width="50" fixed="left">
 				<template #header>
@@ -180,31 +182,6 @@ export default {
 <style scoped>
 .form-table {
 	width: 100%;
-}
-
-.form-table .form-table-handle {
-	text-align: center;
-}
-
-.form-table .form-table-handle span {
-	display: inline-block;
-}
-
-.form-table .form-table-handle button {
-	display: none;
-}
-
-.form-table .hover-row .form-table-handle-delete span {
-	display: none;
-}
-
-.form-table .hover-row .form-table-handle-delete button {
-	display: inline-block;
-}
-
-.form-table .move {
-	text-align: center;
-	font-size: 14px;
-	margin-top: 3px;
+	overflow-x: auto;
 }
 </style>
