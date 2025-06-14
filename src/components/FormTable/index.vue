@@ -14,7 +14,7 @@
 		>
 			<el-table-column type="index" width="50" fixed="left">
 				<template #header>
-					<el-button v-if="!hideAdd" type="primary" icon="el-icon-plus" size="small" circle @click="rowAdd"></el-button>
+					<el-button v-if="!hideAdd" type="primary" icon="Plus" size="small" circle @click="rowAdd"></el-button>
 					<el-tooltip v-else content="序号" placement="top"> # </el-tooltip>
 				</template>
 				<template #default="scope">
@@ -23,7 +23,7 @@
 						<el-button
 							v-if="!hideDelete"
 							type="danger"
-							icon="el-icon-delete"
+							icon="Delete"
 							size="small"
 							plain
 							circle
