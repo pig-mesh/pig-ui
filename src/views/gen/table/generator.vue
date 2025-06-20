@@ -39,7 +39,7 @@
 				<el-form-item prop="moduleName">
 					<template #label>
 						<span>模块名</span>
-						<tip content="所属微服务模块名称，对应微服务路由前缀 （单体固定 admin）" />
+						<tip content="所属微服务模块名称，对应微服务路由前缀" />
 					</template>
 					<el-input placeholder="模块名" v-model="dataForm.moduleName"></el-input>
 				</el-form-item>
