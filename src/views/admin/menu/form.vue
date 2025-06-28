@@ -4,8 +4,8 @@
     <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
       <el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
         <el-radio-group v-model="state.ruleForm.menuType">
-          <el-radio border label="0">菜单</el-radio>
-          <el-radio border label="1">按钮</el-radio>
+          <el-radio border value="0">菜单</el-radio>
+          <el-radio border value="1">按钮</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
@@ -42,20 +42,20 @@
       <el-form-item :label="$t('sysmenu.embedded')" prop="embedded"
                     v-if="state.ruleForm.menuType === '0' && state.ruleForm.path?.startsWith('http')">
         <el-radio-group v-model="state.ruleForm.embedded">
-          <el-radio border label="0">否</el-radio>
-          <el-radio border label="1">是</el-radio>
+          <el-radio border value="0">否</el-radio>
+          <el-radio border value="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.keepAlive')" prop="keepAlive" v-if="state.ruleForm.menuType === '0'">
         <el-radio-group v-model="state.ruleForm.keepAlive">
-          <el-radio border label="0">否</el-radio>
-          <el-radio border label="1">是</el-radio>
+          <el-radio border value="0">否</el-radio>
+          <el-radio border value="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.visible')" prop="visible" v-if="state.ruleForm.menuType === '0'">
         <el-radio-group v-model="state.ruleForm.visible">
-          <el-radio border label="0">否</el-radio>
-          <el-radio border label="1">是</el-radio>
+          <el-radio border value="0">否</el-radio>
+          <el-radio border value="1">是</el-radio>
         </el-radio-group>
       </el-form-item>
     </el-form>

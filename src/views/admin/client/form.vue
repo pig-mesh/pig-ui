@@ -26,7 +26,7 @@
       <el-form-item :label="t('client.autoapprove')" prop="autoapprove"
                     v-if="form.authorizedGrantTypes.includes('authorization_code')">
         <el-radio-group v-model="form.autoapprove">
-          <el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{
+          <el-radio :key="index" :value="item.value" border v-for="(item, index) in common_status">{{
               item.label
             }}
           </el-radio>

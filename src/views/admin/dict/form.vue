@@ -4,7 +4,7 @@
       <el-form :model="dataForm" :rules="dataRules" label-width="90px" ref="dicDialogFormRef" v-loading="loading">
         <el-form-item :label="$t('sysdict.systemFlag')" prop="systemFlag">
           <el-radio-group v-model="dataForm.systemFlag">
-            <el-radio border :key="index" :label="item.value" v-for="(item, index) in dict_type">
+            <el-radio border :key="index" :value="item.value" v-for="(item, index) in dict_type">
               {{ item.label }}
             </el-radio>
           </el-radio-group>

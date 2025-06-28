@@ -28,7 +28,7 @@
         <el-col :span="12" class="mb20">
           <el-form-item :label="t('datasourceconf.confType')" prop="confType">
             <el-radio-group v-model="form.confType">
-              <el-radio :label="Number(item.value)" v-for="(item, index) in ds_config_type" border :key="index">
+              <el-radio :value="Number(item.value)" v-for="(item, index) in ds_config_type" border :key="index">
                 {{ item.label }}
               </el-radio>
             </el-radio-group>

@@ -65,7 +65,7 @@
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.lockFlag')" prop="lockFlag">
 							<el-radio-group v-model="dataForm.lockFlag">
-								<el-radio :key="index" :label="item.value" border v-for="(item, index) in lock_flag">{{ item.label }} </el-radio>
+								<el-radio :key="index" :value="item.value" border v-for="(item, index) in lock_flag">{{ item.label }} </el-radio>
 							</el-radio-group>
 						</el-form-item>
 					</el-col>
