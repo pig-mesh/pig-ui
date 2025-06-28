@@ -14,8 +14,9 @@
 	},
 	"dependencies": {
 		"@element-plus/icons-vue": "2.3.1",
-		"@wangeditor/editor": "5.1.23",
-		"@wangeditor/editor-for-vue": "5.1.12",
+		"@vueuse/core": "10.4.1",
+		"@wangeditor-next/editor": "5.6.34",
+		"@wangeditor-next/editor-for-vue": "5.1.14",
 		"autoprefixer": "10.4.20",
 		"axios": "1.7.9",
 		"china-area-data": "^5.0.1",
@@ -40,8 +41,7 @@
 		"vue-echarts": "7.0.3",
 		"vue-i18n": "9.14.2",
 		"vue-router": "4.4.5",
-		"vuedraggable": "4.1.0",
-		"@vueuse/core": "10.4.1"
+		"vuedraggable": "4.1.0"
 	},
 	"devDependencies": {
 		"@swc/core": "1.6.13",
@@ -63,7 +63,7 @@
 		"terser": "5.36.0",
 		"typescript": "5.6.3",
 		"unplugin-auto-import": "0.18.6",
-		"unplugin-vue-setup-extend-plus": "1.0.1",
+		"unplugin-vue-setup-extend": "^0.3.5",
 		"vite": "5.4.11",
 		"vite-plugin-compression": "0.5.1",
 		"vite-plugin-top-level-await": "1.4.4",

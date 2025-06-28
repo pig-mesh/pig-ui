@@ -1,7 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
-import vueSetupExtend from 'unplugin-vue-setup-extend-plus/vite';
+import VueSetupExtend from 'unplugin-vue-setup-extend/vite';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import viteCompression from 'vite-plugin-compression';
@@ -25,7 +25,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 		plugins: [
 			vue(), // Vue 插件
 			svgBuilder('./src/assets/icons/'), // 将 SVG 文件转换成 Vue 组件
-			vueSetupExtend({}), // setup语法糖增强插件
+			VueSetupExtend({}), // setup语法糖增强插件
 			AutoImport({
 				imports: ['vue', 'vue-router', 'pinia'], // 自动导入的依赖库数组
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
