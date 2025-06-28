@@ -125,9 +125,9 @@ export const useUserInfo = defineStore('userInfo', {
 		async setUserInfos() {
 			await getUserInfo().then((res) => {
 				const userInfo: any = {
-					user: res.data.sysUser,
+					user: res.data,
 					time: new Date().getTime(),
-					roles: res.data.roles,
+					roles: res.data.roleList,
 					authBtnList: res.data.permissions,
 				};
 				this.userInfos = userInfo;
