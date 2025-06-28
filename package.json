@@ -40,7 +40,8 @@
 		"vue-echarts": "7.0.3",
 		"vue-i18n": "9.14.2",
 		"vue-router": "4.4.5",
-		"vuedraggable": "4.1.0"
+		"vuedraggable": "4.1.0",
+		"@vueuse/core": "10.4.1"
 	},
 	"devDependencies": {
 		"@swc/core": "1.6.13",
