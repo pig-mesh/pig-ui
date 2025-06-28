@@ -25,7 +25,7 @@ const logState: BasicTableProps = reactive({
 	pageList, // 分页列表数据
 	descs: ['create_time'], // 排序方式
 	pagination: {
-		size: 3, // 每页显示数据量
+		size: 4, // 每页显示数据量
 	},
 });
 
