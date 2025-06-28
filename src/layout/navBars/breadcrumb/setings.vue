@@ -434,6 +434,7 @@ import Watermark from '/@/utils/wartermark';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
+import { useDark } from '@vueuse/core';
 import { useUserInfo } from '/@/stores/userInfo';
 
 // 定义变量内容
@@ -551,16 +552,19 @@ const onAddFilterChange = (attr: string) => {
 	setLocalThemeConfig();
 };
 // 4、界面显示 --> 深色模式
+const isDark = useDark();
 const onAddDarkChange = () => {
 	const body = document.documentElement as HTMLElement;
 	if (getThemeConfig.value.isIsDark) {
-    body.setAttribute('data-theme', 'dark');
-    // body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
-    body.classList.add('dark');
-  } else {
-    body.classList.remove('dark');
-    body.setAttribute('data-theme', '');
-  }
+		body.setAttribute('data-theme', 'dark');
+		// body 再增加一个 dark : true 的class ,用于tailwindcss 判断是否是深色
+		body.classList.add('dark');
+		isDark.value = true;
+	} else {
+		body.classList.remove('dark');
+		body.setAttribute('data-theme', 'light');
+		isDark.value = false;
+	}
 };
 // 4、界面显示 --> 开启水印
 const onWartermarkChange = () => {

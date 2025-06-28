@@ -2,46 +2,36 @@
 module.exports = {
 	content: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
 	theme: {
-		colors: {
-			white: 'var(--color-white)',
-			primary: {
-				DEFAULT: 'var(--el-color-primary)',
-				'light-3': 'var(--el-color-primary-light-3)',
-				'light-5': 'var(--el-color-primary-light-5)',
-				'light-7': 'var(--el-color-primary-light-7)',
-				'light-8': 'var(--el-color-primary-light-8)',
-				'light-9': 'var(--el-color-primary-light-9)',
-				'dark-2': 'var(--el-color-primary-dark-2)',
+		// 扩展 tailwindcss 不建议强制覆盖原有
+		extend: {
+			colors: {
+				primary: {
+					DEFAULT: 'var(--el-color-primary)',
+					'light-3': 'var(--el-color-primary-light-3)',
+					'light-5': 'var(--el-color-primary-light-5)',
+					'light-7': 'var(--el-color-primary-light-7)',
+					'light-8': 'var(--el-color-primary-light-8)',
+					'light-9': 'var(--el-color-primary-light-9)',
+					'dark-2': 'var(--el-color-primary-dark-2)',
+				},
+				br: 'var(--el-border-color)',
+				'br-light': 'var(--el-border-color-light)',
+				'br-extra-light': 'var(--el-border-color-extra-light)',
+				'br-dark': 'var( --el-border-color-dark)',
+				fill: 'var(--el-fill-color)',
+				'fill-light': 'var(--el-fill-color-light)',
+				'fill-lighter': 'var(--el-fill-color-lighter)',
+				mask: 'var(--el-mask-color)',
 			},
-			success: 'var(--el-color-success)',
-			warning: 'var(--el-color-warning)',
-			danger: 'var(--el-color-danger)',
-			error: 'var(--el-color-error)',
-			info: 'var(--el-color-info)',
-			body: 'var(--el-bg-color)',
-			page: 'var(--el-bg-color-page)',
-			'tx-primary': 'var(--el-text-color-primary)',
-			'tx-regular': 'var(--el-text-color-regular)',
-			'tx-secondary': 'var(--el-text-color-secondary)',
-			'tx-placeholder': 'var(--el-text-color-placeholder)',
-			'tx-disabled': 'var(--el-text-color-disabled)',
-			br: 'var(--el-border-color)',
-			'br-light': 'var(--el-border-color-light)',
-			'br-extra-light': 'var(--el-border-color-extra-light)',
-			'br-dark': 'var( --el-border-color-dark)',
-			fill: 'var(--el-fill-color)',
-			'fill-light': 'var(--el-fill-color-light)',
-			'fill-lighter': 'var(--el-fill-color-lighter)',
-			mask: 'var(--el-mask-color)',
+			boxShadow: {
+				DEFAULT: 'var(--el-box-shadow)',
+				light: 'var(--el-box-shadow-light)',
+				lighter: 'var(--el-box-shadow-lighter)',
+				dark: 'var(--el-box-shadow-dark)',
+			},
 		},
 		fontFamily: {
 			sans: ['PingFang SC', 'Arial', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
-		},
-		boxShadow: {
-			DEFAULT: 'var(--el-box-shadow)',
-			light: 'var(--el-box-shadow-light)',
-			lighter: 'var(--el-box-shadow-lighter)',
-			dark: 'var(--el-box-shadow-dark)',
 		},
 		svg: {
 			display: 'inline',
@@ -116,5 +106,5 @@ module.exports = {
 			10: '40px',
 		},
 	},
-	darkMode: 'class', // 启用基于 class 的暗模式
+	darkMode: 'class', // or 'media' if you prefer system settings
 };
