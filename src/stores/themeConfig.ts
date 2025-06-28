@@ -143,7 +143,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'default'
 			globalComponentSize: 'default',
 			// footer 页面作者
-			footerAuthor: '©2024 pig4cloud.com',
+			footerAuthor: '©2025 PIGCLOUD',
 		},
 	}),
 	actions: {
