@@ -1,6 +1,6 @@
 {
 	"name": "pig-ui",
-	"version": "3.8.3",
+	"version": "3.9.0",
 	"description": "PIGCLOUD微服务开发平台",
 	"author": "pig4cloud",
 	"license": "Apache-2.0",
@@ -66,7 +66,6 @@
 		"vite": "5.4.11",
 		"vite-plugin-compression": "0.5.1",
 		"vite-plugin-top-level-await": "1.4.4",
-		"vite-plugin-vue-devtools": "7.7.2",
 		"vue-eslint-parser": "9.4.3"
 	},
 	"browserslist": [
