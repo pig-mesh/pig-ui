@@ -56,13 +56,11 @@ const form = reactive({
   roleName: '',
   roleCode: '',
   roleDesc: '',
-  dsScope: '',
 });
 
 // 页面对应元数据
 const dataForm = reactive({
   deptData: [],
-  checkedDsScope: [],
   deptProps: {
     children: 'children',
     label: 'name',
@@ -138,11 +136,6 @@ const getRoleData = (id: string) => {
   // 获取部门数据
   getObj(id).then((res: any) => {
     Object.assign(form, res.data);
-    if (res.data.dsScope) {
-      dataForm.checkedDsScope = res.data.dsScope.split(',');
-    } else {
-      dataForm.checkedDsScope = [];
-    }
   });
 };
 
