@@ -13,11 +13,11 @@
 </template>
 
 <script setup lang="ts" name="wngEditor">
-import '@wangeditor/editor/dist/css/style.css';
+import '@wangeditor-next/editor/dist/css/style.css';
 import { reactive, shallowRef, watch, onBeforeUnmount, CSSProperties } from 'vue';
 // @ts-ignore
-import { IDomEditor } from '@wangeditor/editor';
-import { Toolbar, Editor } from '@wangeditor/editor-for-vue';
+import { IDomEditor } from '@wangeditor-next/editor';
+import { Toolbar, Editor } from '@wangeditor-next/editor-for-vue';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
 const { proxy } = getCurrentInstance();
