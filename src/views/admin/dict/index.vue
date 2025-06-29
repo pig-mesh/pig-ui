@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<splitpanes>
-			<pane class="ml10">
+			<pane class="ml-1">
 				<splitpanes>
 					<pane size="30">
 						<div class="layout-padding-auto layout-padding-view">
