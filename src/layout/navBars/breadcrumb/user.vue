@@ -56,6 +56,9 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
+					<el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
+						{{ $t('user.dropdown3') }}
+					</el-dropdown-item>
 					<el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
@@ -64,6 +67,12 @@
 		<Search ref="searchRef" />
 		<global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
 		<personal-drawer ref="personalDrawerRef"></personal-drawer>
+		<tenant-selector 
+			ref="tenantSelectorRef" 
+			:tenant-list="tenantList" 
+			:loading="tenantLoading"
+			@change="onTenantChange"
+		></tenant-selector>
 	</div>
 </template>
 
@@ -80,12 +89,25 @@ import { Local, Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { useMsg } from '/@/stores/msg';
 import { fetchUserMessageList } from '/@/api/admin/message';
+import { getPersonalTenant } from '/@/api/admin/tenant';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
+const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
+
+// 定义租户接口
+interface Tenant {
+	id: string;
+	name: string;
+	tenantDomain?: string;
+	websiteName?: string;
+	footer?: string;
+	background?: string;
+	miniQr?: string;
+}
 
 // 定义变量内容
 const { locale, t } = useI18n();
@@ -97,6 +119,24 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
+const tenantSelectorRef = ref();
+
+// 租户列表状态
+const tenantList = ref<Tenant[]>([]);
+const tenantLoading = ref(false);
+
+// 计算属性：是否应该显示租户选项
+const shouldShowTenantOption = computed(() => {
+	return tenantList.value.length > 1;
+});
+
+// 计算属性：当前租户显示名称
+const currentTenantName = computed(() => {
+	if (tenantList.value.length <= 1) return null;
+	const currentTenantId = Session.getTenant();
+	const currentTenant = tenantList.value.find(tenant => tenant.id === currentTenantId);
+	return currentTenant?.name || null;
+});
 
 interface State {
 	[key: string]: boolean | string;
@@ -180,6 +220,11 @@ const onHandleCommandClick = (path: string) => {
 	} else if (path === 'personal') {
 		// 打开个人页面
 		personalDrawerRef.value.open();
+	} else if (path === 'tenant') {
+		// 只有在租户数量大于1时才打开租户选择器
+		if (shouldShowTenantOption.value) {
+			tenantSelectorRef.value.open();
+		}
 	} else {
 		router.push(path);
 	}
@@ -221,6 +266,27 @@ const getIsDot = () => {
 		isDot.value = res.data.total !== 0;
 	});
 };
+
+// 获取租户列表
+const loadTenantList = async () => {
+	try {
+		tenantLoading.value = true;
+		const response = await getPersonalTenant();
+		tenantList.value = response.data || [];
+	} catch (error) {
+		console.error('加载租户列表失败:', error);
+		tenantList.value = [];
+	} finally {
+		tenantLoading.value = false;
+	}
+};
+
+// 处理租户切换后的回调
+const onTenantChange = (tenant: Tenant) => {
+	// 重新加载租户列表以确保数据同步
+	loadTenantList();
+};
+
 // 页面加载时
 onMounted(() => {
 	if (Local.get('themeConfig')) {
@@ -229,6 +295,9 @@ onMounted(() => {
 	}
 
 	getIsDot();
+	
+	// 加载租户列表
+	loadTenantList();
 });
 </script>
 

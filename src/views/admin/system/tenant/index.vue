@@ -80,7 +80,7 @@
 									</div>
 								</div>
 								<p class="my-3 text-sm font-normal text-gray-500 dark:text-gray-400">
-									状态： {{ status_type.find((item: { value: string }) => item.value === tenant.status)?.label }}
+									状态： {{ status_type.find((item: any) => item.value === tenant.status)?.label }}
 								</p>
 								<p class="my-3 text-sm font-normal text-gray-500 dark:text-gray-400">
 									有效期： {{ parseDate(tenant.startTime) }} - {{ parseDate(tenant.endTime) }}
@@ -106,6 +106,15 @@
 										<span class="dark:text-gray-300">{{ tenant.tenantDomain }}</span>
 									</div>
 									<div class="flex items-center">
+										<el-button
+											class="!p-0"
+											icon="User"
+											v-auth="'sys_systenant_del'"
+											@click="userListRef.openDrawer(tenant.id)"
+											text
+											type="primary"
+											>{{ $t('tenant.userListBtn') }}
+										</el-button>
 										<el-button
 											class="!p-0"
 											icon="HomeFilled"
@@ -148,8 +157,11 @@
 		<!-- 编辑、新增  -->
 		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
 
-		<!-- 编辑、新增  -->
+		<!-- 个性化设置  -->
 		<individuation ref="individuationRef" />
+
+		<!-- 用户列表抽屉 -->
+		<user-list ref="userListRef" />
 
 		<!-- 导入excel -->
 		<upload-excel
@@ -172,13 +184,14 @@ import { useDict } from '/@/hooks/dict';
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const Individuation = defineAsyncComponent(() => import('./individuation.vue'));
+const UserList = defineAsyncComponent(() => import('./userList.vue'));
 const { t } = useI18n();
 
 // 定义变量内容
 const formDialogRef = ref();
 const individuationRef = ref();
+const userListRef = ref();
 const excelUploadRef = ref();
-const tenantMenuRef = ref();
 // 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
@@ -199,7 +212,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 //  table hook
-const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
 
 // 清空搜索条件
 const resetQuery = () => {

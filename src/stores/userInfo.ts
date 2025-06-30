@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
-import { Session } from '/@/utils/storage';
-import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi } from '/@/api/login/index';
+import { Local, Session } from '/@/utils/storage';
+import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
+import Cookies from 'js-cookie';
 
 /**
  * @function useUserInfo
@@ -15,6 +16,8 @@ export const useUserInfo = defineStore('userInfo', {
 			time: 0,
 			roles: [],
 			authBtnList: [],
+			tenantId: '',
+			tenantName: '',
 		},
 	}),
 
@@ -52,7 +55,7 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @param {Object} data - 登录数据
 		 * @returns {Promise<Object>}
 		 */
-		async loginByMobile(data) {
+		async loginByMobile(data: { mobile: string; code: string }) {
 			return new Promise((resolve, reject) => {
 				loginByMobile(data.mobile, data.code)
 					.then((res) => {
@@ -72,11 +75,11 @@ export const useUserInfo = defineStore('userInfo', {
 		 * 社交账号登录方法
 		 * @function loginBySocial
 		 * @async
-		 * @param {string} state - 状态
+		 * @param {SocialLoginEnum} state - 状态
 		 * @param {string} code - 代码
 		 * @returns {Promise<Object>}
 		 */
-		async loginBySocial(state, code) {
+		async loginBySocial(state: SocialLoginEnum, code: string) {
 			return new Promise((resolve, reject) => {
 				loginBySocial(state, code)
 					.then((res) => {
@@ -123,13 +126,31 @@ export const useUserInfo = defineStore('userInfo', {
 		async setUserInfos() {
 			await getUserInfo().then((res) => {
 				const userInfo: any = {
-					user: res.data.sysUser,
+					user: res.data,
 					time: new Date().getTime(),
-					roles: res.data.roles,
+					roles: res.data.roleList,
 					authBtnList: res.data.permissions,
+					tenantId: res.data.tenantId,
+					tenantName: res.data.tenantName || ''
 				};
 				this.userInfos = userInfo;
+
+				//设置租户
+				Session.set('tenantId', res.data.tenantId);
+				Local.set('tenantId', res.data.tenantId);
+				Cookies.set('tenantId', res.data.tenantId);
 			});
+		},
+
+		/**
+		 * 更新租户信息方法
+		 * @function updateTenantInfo
+		 * @param {string} tenantId - 租户ID
+		 * @param {string} tenantName - 租户名称
+		 */
+		updateTenantInfo(tenantId: string, tenantName: string) {
+			this.userInfos.tenantId = tenantId;
+			this.userInfos.tenantName = tenantName;
 		},
 	},
 });

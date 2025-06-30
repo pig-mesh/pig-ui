@@ -16,6 +16,14 @@ export function fetchList(query?: object) {
 	});
 }
 
+// 获取个人租户信息
+export function getPersonalTenant() {
+	return request({
+		url: '/admin/tenant/user-tenant',
+		method: 'get',
+	});
+}
+
 export function addObj(obj?: Object) {
 	return request({
 		url: '/admin/tenant',
@@ -89,5 +97,50 @@ export function treemenu() {
 	return request({
 		url: '/admin/tenant/tree/menu',
 		method: 'get',
+	});
+}
+
+// 获取租户用户列表（分页）
+export function fetchUserPage(query?: Object) {
+	return request({
+		url: '/admin/tenant/user-tenant/page',
+		method: 'get',
+		params: query,
+	});
+}
+
+// 从租户中移除用户
+export function removeUsersFromTenant(data: { tenantId: string; userIds: string[] }) {
+	return request({
+		url: '/admin/tenant/remove-users',
+		method: 'delete',
+		data,
+	});
+}
+
+// 邀请用户到租户
+export function inviteUserToTenant(data: { tenantId: string; userIds: string[]; roleId: string; postId?: string; deptId?: string }) {
+	return request({
+		url: '/admin/tenant/user-tenant',
+		method: 'post',
+		data,
+	});
+}
+
+// 获取可邀请的用户列表
+export function getAvailableUsers(params: { tenantId?: string; username?: string }) {
+	return request({
+		url: '/admin/tenant/list-users',
+		method: 'get',
+		params,
+	});
+}
+
+// 获取租户角色列表
+export function getTenantOrg(params?: { tenantId?: string }) {
+	return request({
+		url: '/admin/tenant/list-org',
+		method: 'get',
+		params,
 	});
 }

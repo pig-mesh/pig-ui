@@ -95,6 +95,8 @@ export default {
 		dropdownSmall: 'Small',
 		dropdown1: 'Home Page',
 		dropdown2: 'Personal Center',
+		dropdown3: 'Tenant Switch',
+		dropdown4: 'Current Tenant',
 		dropdown5: 'Log Out',
 		searchPlaceholder: 'Menu Search: Supports Chinese and Routing Path',
 		newTitle: 'Notice',
@@ -190,5 +192,30 @@ export default {
 		btnOne: 'Cruel Refusal',
 		btnTwo: 'Update Now',
 		btnTwoLoading: 'Updating',
+	},
+	tenantSelector: {
+		title: 'Switch Tenant',
+		searchPlaceholder: 'Search tenant name, domain or website',
+		noData: 'No tenant data available',
+		current: 'Current',
+		selected: 'Selected',
+		loadError: 'Failed to load tenant list',
+		selectTip: 'Please select a tenant to switch',
+		sameError: 'Already in this tenant, no need to switch',
+		confirmTitle: 'Switch Tenant Confirmation',
+		confirmMessage: 'Are you sure to switch to tenant "{name}"? The page will refresh after switching.',
+		switchSuccess: 'Tenant switched successfully, refreshing page...',
+		switchError: 'Failed to switch tenant, please try again'
+	},
+	common: {
+		cancel: 'Cancel',
+		confirm: 'Confirm',
+		confirmButtonText: 'Confirm',
+		cancelButtonText: 'Cancel'
+	},
+	message: {
+		box: {
+			title: 'Tips'
+		}
 	},
 };

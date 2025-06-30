@@ -258,6 +258,10 @@ const getUserData = async (id: string) => {
 		if (data.postList) {
 			dataForm.post = data.postList.map((item: { postId: string }) => item.postId);
 		}
+    if (data.deptList){
+      dataForm.deptId = data.deptList.map((item: { deptId: string }) => item.deptId)[0];
+    }
+		
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	} finally {
