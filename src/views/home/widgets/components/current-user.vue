@@ -74,7 +74,6 @@ export default {
 								<OfficeBuilding />
 							</el-icon>
 							<span class="font-medium">{{ userData.tenantName }}</span>
-							<span class="font-medium">--》 权限{{ userInfos.authBtnList.length }}</span>
 						</div>
 					</div>
 				</div>
