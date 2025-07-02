@@ -190,13 +190,7 @@ const switchTenant = async (tenant: Tenant) => {
 		// 调用后台API进行租户切换
 		await switchPersonalTenant(tenant.id);
 		
-		// 保存租户信息到本地
-		Session.set('tenantId', tenant.id);
-		Local.set('tenantId', tenant.id);
-		Cookies.set('tenantId', tenant.id);
-		
 		// 更新用户信息中的租户信息
-
 		userInfoStore.updateTenantInfo(tenant.id, tenant.name);
 		
 		// 更新主题配置

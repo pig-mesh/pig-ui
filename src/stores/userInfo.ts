@@ -136,9 +136,7 @@ export const useUserInfo = defineStore('userInfo', {
 				this.userInfos = userInfo;
 
 				//设置租户
-				Session.set('tenantId', res.data.tenantId);
-				Local.set('tenantId', res.data.tenantId);
-				Cookies.set('tenantId', res.data.tenantId);
+				this.updateTenantInfo(res.data.tenantId, res.data.tenantName);
 			});
 		},
 
@@ -151,6 +149,11 @@ export const useUserInfo = defineStore('userInfo', {
 		updateTenantInfo(tenantId: string, tenantName: string) {
 			this.userInfos.tenantId = tenantId;
 			this.userInfos.tenantName = tenantName;
+
+				// 保存租户信息到本地
+				Session.set('tenantId', tenantId);
+				Local.set('tenantId', tenantId);
+				Cookies.set('tenantId', tenantId);
 		},
 	},
 });
