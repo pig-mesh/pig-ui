@@ -31,7 +31,7 @@ const init = () => {
 <style lang="scss" scoped>
 .iframe {
 	width: 100%;
-	height: 80vh;
+	height: 100vh;
 	border: 0;
 	overflow: hidden;
 	box-sizing: border-box;
