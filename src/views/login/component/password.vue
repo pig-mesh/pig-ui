@@ -107,8 +107,9 @@ const onSignIn = async () => {
   try {
     await useUserInfo().login(state.ruleForm); // 调用登录方法
     emit('signInSuccess'); // 触发事件
-  } finally {
+  } catch (error) {
     getVerifyCode()
+  } finally {
     loading.value = false; // 登录结束
   }
 };
