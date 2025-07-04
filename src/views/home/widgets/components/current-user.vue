@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-	<el-card class="user-card h-[240px] hover:shadow-xl transition-all duration-300 ease-in-out border-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-900">
+	<el-card class="box-card">
 		<div class="flex items-center justify-center p-6 h-full relative overflow-hidden">
 			
 			<!-- 主内容区域 - 水平垂直居中 -->
@@ -17,11 +17,11 @@ export default {
 				<div class="avatar-container relative flex-shrink-0 mr-24">
 					<div class="relative">
 						<img 
-							class="object-cover w-24 h-24 rounded-full shadow-lg ring-4 ring-white dark:ring-gray-700" 
+							class="object-cover w-24 h-24 rounded-full shadow-lg ring-4 ring-white " 
 							:src="baseURL + userData.avatar" 
 							alt="Avatar" 
 						/>
-						<div class="status-indicator absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 dark:bg-green-400 rounded-full border-3 border-white dark:border-gray-800 flex items-center justify-center shadow-sm">
+						<div class="status-indicator absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center shadow-sm">
 							<div class="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
 						</div>
 					</div>
@@ -32,9 +32,9 @@ export default {
 					<!-- 真实姓名 -->
 					<div class="name-section">
 						<div class="flex items-center mb-1">
-							<h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-								{{ userData.name || userData.username }}
-							</h2>
+													<h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
+							{{ userData.name || userData.username }}
+						</h2>
 						</div>
 						<!-- 用户名 -->
 						<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
@@ -46,7 +46,7 @@ export default {
 					<div class="dept-section" v-if="userData.deptName || userData.postName">
 						<div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
 							<span class="font-medium">{{ userData.deptName }}</span>
-							<span class="mx-2 text-gray-400" v-if="userData.deptName && userData.postName">·</span>
+							<span class="mx-2 text-gray-400 dark:text-gray-500" v-if="userData.deptName && userData.postName">·</span>
 							<span class="text-gray-500 dark:text-gray-400">{{ userData.postName }}</span>
 						</div>
 					</div>
@@ -70,7 +70,7 @@ export default {
 					<!-- 租户信息 -->
 					<div class="tenant-section" v-if="userData.tenantName">
 						<div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-							<el-icon class="mr-2 text-blue-500 dark:text-green-400" size="16">
+							<el-icon class="mr-2 text-blue-500 dark:text-blue-400" size="16">
 								<OfficeBuilding />
 							</el-icon>
 							<span class="font-medium">{{ userData.tenantName }}</span>
@@ -80,7 +80,7 @@ export default {
 			</div>
 			
 			<!-- 装饰背景 -->
-			<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-purple-100/20 dark:from-blue-900/10 dark:to-purple-900/10 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
+			<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-purple-100/20 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
 		</div>
 	</el-card>
 </template>
@@ -191,12 +191,7 @@ watch(
 		}
 	}
 	
-	// 深色模式优化
-	:deep(.dark) {
-		.el-tag {
-			border: 1px solid rgba(59, 130, 246, 0.2);
-		}
-	}
+
 }
 
 // 脉冲动画
