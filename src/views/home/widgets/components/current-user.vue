@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-	<el-card class="box-card">
+	<el-card class="user-card">
 		<div class="flex items-center justify-center p-6 h-full relative overflow-hidden">
 			
 			<!-- 主内容区域 - 水平垂直居中 -->
