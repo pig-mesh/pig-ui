@@ -144,3 +144,12 @@ export function getTenantOrg(params?: { tenantId?: string }) {
 		params,
 	});
 }
+
+// 切换个人租户
+export function switchPersonalTenant(tenantId: string) {
+	return request({
+		url: '/admin/tenant/personal/update',
+		method: 'put',
+		data: { tenantId },
+	});
+}

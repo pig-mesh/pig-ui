@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { Local, Session } from '/@/utils/storage';
+import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
 import Cookies from 'js-cookie';
@@ -107,8 +107,8 @@ export const useUserInfo = defineStore('userInfo', {
 				refreshTokenApi(refreshToken)
 					.then((res) => {
 						// 存储token 信息
-						Session.set('token', res.access_token);
-						Session.set('refresh_token', res.refresh_token);
+						Session.set(STORAGE_KEYS.TOKEN, res.access_token);
+						Session.set(STORAGE_KEYS.REFRESH_TOKEN, res.refresh_token);
 						resolve(res);
 					})
 					.catch((err) => {
@@ -151,9 +151,9 @@ export const useUserInfo = defineStore('userInfo', {
 			this.userInfos.tenantName = tenantName;
 
 				// 保存租户信息到本地
-				Session.set('tenantId', tenantId);
-				Local.set('tenantId', tenantId);
-				Cookies.set('tenantId', tenantId);
+				Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
+				Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
+				Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
 		},
 	},
 });

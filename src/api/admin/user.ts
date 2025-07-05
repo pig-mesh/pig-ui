@@ -72,15 +72,6 @@ export function password(obj: Object) {
 }
 
 
-// 切换个人租户
-export function switchPersonalTenant(tenantId: string) {
-	return request({
-		url: '/admin/user/personal/tenant',
-		method: 'put',
-		data: { tenantId },
-	});
-}
-
 export function unbindingUser(type) {
 	return request({
 		url: '/admin/user/unbinding',

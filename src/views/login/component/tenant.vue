@@ -39,7 +39,7 @@ import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import Cookies from 'js-cookie';
 import { fetchList } from '/@/api/admin/tenant';
-import { Local, Session } from '/@/utils/storage';
+import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import pinia from '/@/stores';
 import { validateNull } from '/@/utils/validate';
@@ -87,9 +87,9 @@ const handleAutoTenant = () => {
 
 // 处理租户选择
 const handleCommand = (tenant: Tenant) => {
-	Session.set('tenantId', tenant.id);
-	Local.set('tenantId', tenant.id);
-	Cookies.set('tenantId', tenant.id);
+	Session.set(STORAGE_KEYS.TENANT_ID, tenant.id);
+	Local.set(STORAGE_KEYS.TENANT_ID, tenant.id);
+	Cookies.set(STORAGE_KEYS.TENANT_ID, tenant.id);
 	window.location.reload();
 };
 

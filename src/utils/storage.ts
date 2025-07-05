@@ -1,5 +1,12 @@
 import Cookies from 'js-cookie';
 
+// 存储键常量
+export const STORAGE_KEYS = {
+	TOKEN: 'token',
+	REFRESH_TOKEN: 'refresh_token', 
+	TENANT_ID: 'tenantId',
+} as const;
+
 /**
  * window.localStorage 浏览器永久缓存
  * @method set 设置永久缓存
@@ -42,35 +49,35 @@ export const Local = {
 export const Session = {
 	// 设置临时缓存
 	set(key: string, val: any) {
-		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') {
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) {
 			Cookies.set(key, val);
 		}
 		window.sessionStorage.setItem(key, JSON.stringify(val));
 	},
 	// 获取临时缓存
 	get(key: string) {
-		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') return Cookies.get(key);
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) return Cookies.get(key);
 		let json = <string>window.sessionStorage.getItem(key);
 		return JSON.parse(json);
 	},
 	// 移除临时缓存
 	remove(key: string) {
-		if (key === 'token' || key === 'refresh_token' || key === 'tenantId') return Cookies.remove(key);
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) return Cookies.remove(key);
 		window.sessionStorage.removeItem(key);
 	},
 	// 移除全部临时缓存
 	clear() {
-		Cookies.remove('token');
-		Cookies.remove('refresh_token');
-		Cookies.remove('tenantId');
+		Cookies.remove(STORAGE_KEYS.TOKEN);
+		Cookies.remove(STORAGE_KEYS.REFRESH_TOKEN);
+		Cookies.remove(STORAGE_KEYS.TENANT_ID);
 		window.sessionStorage.clear();
 	},
 	// 获取当前存储的 token
 	getToken() {
-		return this.get('token');
+		return this.get(STORAGE_KEYS.TOKEN);
 	},
 	// 获取当前的租户
 	getTenant() {
-		return Local.get('tenantId') ? Local.get('tenantId') : 1;
+		return Local.get(STORAGE_KEYS.TENANT_ID) ? Local.get(STORAGE_KEYS.TENANT_ID) : 1;
 	},
 };

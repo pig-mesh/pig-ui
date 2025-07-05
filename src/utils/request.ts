@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { Session } from '/@/utils/storage';
+import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
@@ -119,6 +119,8 @@ service.interceptors.response.use(handleResponse, (error) => {
 			.confirm('租户状态已过期，请联系管理员')
 			.then(() => {
 				Session.clear(); // 清除浏览器全部临时缓存
+				Local.remove(STORAGE_KEYS.TENANT_ID);
+				window.location.href = '/'; // 去登录页
 				return;
 			});
 	}

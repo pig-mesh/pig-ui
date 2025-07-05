@@ -81,9 +81,8 @@
 
 <script setup lang="ts" name="TenantSelector">
 import { useI18n } from 'vue-i18n';
-import Cookies from 'js-cookie';
-import { switchPersonalTenant } from '/@/api/admin/user';
-import { Local, Session } from '/@/utils/storage';
+import { switchPersonalTenant } from '/@/api/admin/tenant';
+import { Session } from '/@/utils/storage';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useUserInfo } from '/@/stores/userInfo';
 import { storeToRefs } from 'pinia';
