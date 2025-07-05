@@ -55,6 +55,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			host: '0.0.0.0', // 服务器地址
 			port: env.VITE_PORT as unknown as number, // 服务器端口号
 			open: env.VITE_OPEN === 'true', // 是否自动打开浏览器
+			allowedHosts: true, // 允许所有域名和IP访问
 			hmr: true, // 启用热更新
 			proxy: {
 				'/api': {
