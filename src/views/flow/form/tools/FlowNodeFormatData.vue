@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormat.vue';
 import { formatStartNodeShow } from '/@/api/flow/task';
-import { defineExpose, onMounted, ref, watch } from 'vue';
 
 let props = defineProps({
 	flowId: {

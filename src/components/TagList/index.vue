@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import {ref, nextTick, defineProps, defineEmits} from 'vue';
 import {ElInput} from 'element-plus';
 
 const props = defineProps({

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineExpose} from 'vue';
+// defineExpose 是编译器宏，不需要导入
 import {completeTask} from '/@/api/flow/task';
 
 const dialogVisible = ref(false);
