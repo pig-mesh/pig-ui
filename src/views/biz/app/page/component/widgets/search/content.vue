@@ -1,6 +1,6 @@
 <template>
-	<div class="search">
-		<div class="search-con flex items-center px-[15px]">
+	<div class="bg-white dark:bg-[#17202a] py-[7px] px-3">
+		<div class="flex items-center px-[15px] h-9 rounded-full bg-gray-100 dark:bg-[#202e3a] text-gray-500 dark:text-[#536471]">
 			<el-icon><Search /></el-icon>
 			<span class="ml-[5px]">请输入关键词搜索</span>
 		</div>
@@ -9,15 +9,5 @@
 <script lang="ts" setup></script>
 
 <style lang="scss" scoped>
-.search {
-	background-color: #fff;
-	padding: 7px 12px;
-	.search-con {
-		height: 100%;
-		height: 36px;
-		border-radius: 36px;
-		background: #f4f4f4;
-		color: #999999;
-	}
-}
+// All styles now handled by Tailwind classes
 </style>

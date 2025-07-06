@@ -1,21 +1,39 @@
 <template>
 	<div class="news">
-		<div class="flex items-center news-title mx-[10px] my-[15px] text-[17px] font-medium">最新资讯</div>
-		<div v-for="item in newsList" :key="item.id" class="news-card flex bg-white px-[10px] py-[16px] text-[#333] border-[#f2f2f2] border-b">
-			<div class="mr-[10px]" v-if="item.image">
-				<img :src="item.image.includes('http') ? item.image : baseURL + item.image" class="w-[120px] h-[90px]" />
+		<!-- 标题部分 - 使用 Tailwind 实现左侧蓝色条 -->
+		<div class="flex items-center mx-2.5 my-4 text-lg font-medium relative">
+			<div class="w-1 h-4 bg-blue-500 mr-1.5"></div>
+			最新资讯
+		</div>
+		
+		<!-- 新闻列表 -->
+		<div v-for="item in newsList" :key="item.id" class="flex bg-white px-2.5 py-4 text-gray-800 border-b border-gray-100">
+			<!-- 图片部分 -->
+			<div class="mr-2.5 flex-shrink-0" v-if="item.image">
+				<img 
+					:src="item.image.includes('http') ? item.image : baseURL + item.image" 
+					class="w-32 h-24 object-cover rounded-md" 
+				/>
 			</div>
-			<div class="flex flex-col justify-between flex-1">
-				<div class="text-[15px] font-medium line-clamp-2">{{ item.title }}</div>
-				<div class="line-clamp-1 text-sm mt-[8px]">
+			
+			<!-- 内容部分 -->
+			<div class="flex flex-col justify-between flex-1 min-w-0">
+				<!-- 标题 -->
+				<div class="text-base font-medium line-clamp-2 leading-tight">
+					{{ item.title }}
+				</div>
+				
+				<!-- 简介 -->
+				<div class="line-clamp-1 text-sm mt-2 text-gray-600">
 					{{ item.intro }}
 				</div>
 
-				<div class="text-[#999] text-xs w-full flex justify-between mt-[8px]">
+				<!-- 底部信息 -->
+				<div class="text-gray-400 text-xs w-full flex justify-between items-center mt-2">
 					<div>{{ item.createTime }}</div>
 					<div class="flex items-center">
-						<el-icon><View /></el-icon>
-						<div class="ml-[5px]">{{ item.visit }}</div>
+						<el-icon class="mr-1"><View /></el-icon>
+						<div>{{ item.visit }}</div>
 					</div>
 				</div>
 			</div>
@@ -47,16 +65,5 @@ getData();
 </script>
 
 <style lang="scss" scoped>
-.news {
-	.news-title {
-		&::before {
-			content: '';
-			width: 4px;
-			height: 17px;
-			display: block;
-			margin-right: 5px;
-			background: #4173ff;
-		}
-	}
-}
+/* 移除了所有 SCSS 样式，全部使用 Tailwind CSS 内联样式 */
 </style>

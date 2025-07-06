@@ -1,5 +1,5 @@
 <template>
-	<div class="shadow mx-[30px] pages-preview">
+	<div class="shadow mx-[30px] bg-[#f8f8f8] w-[360px] h-[585px] text-[#333] dark:bg-[var(--next-color-disabled)] dark:text-[var(--next-color-white)]">
 		<div
 			v-for="(widget, index) in pageData"
 			:key="widget.id"
@@ -12,8 +12,8 @@
 			<div
 				class="absolute w-full h-full z-[100] border-dashed"
 				:class="{
-					select: index == modelValue,
-					'border-[#dcdfe6] border-2': !widget?.disabled,
+					'border-primary border-solid': index == modelValue,
+					'border-[#dcdfe6] border-2 dark:border-[var(--next-border-color)]': !widget?.disabled && index != modelValue,
 				}"
 			></div>
 			<slot>
@@ -48,14 +48,4 @@ const handleClick = (widget: any, index: number) => {
 };
 </script>
 
-<style lang="scss" scoped>
-.pages-preview {
-	background-color: #f8f8f8;
-	width: 360px;
-	height: 585px;
-	color: #333;
-	.select {
-		@apply border-primary border-solid;
-	}
-}
-</style>
+

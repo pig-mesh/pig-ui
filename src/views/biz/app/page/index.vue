@@ -1,8 +1,8 @@
 <template>
-	<div class="layout-padding decoration-pages min-w-[1100px]">
+	<div class="layout-padding min-w-[1100px] min-h-[calc(100vh-var(--navbar-height)-80px)] flex flex-col">
 		<el-card shadow="never" class="!border-none flex-1 flex" :body-style="{ flex: 1 }">
 			<div class="flex items-start h-full">
-				<Menu v-model="activeMenu" :menus="menus" />
+				<Menu v-model="activeMenu" :menus="menus" class="!w-[15%]" />
 				<preview v-model="selectWidgetIndex" :pageData="getPageData">
 					<template #footer>
 						<div class="flex justify-center mt-4">
@@ -97,13 +97,4 @@ watch(
 	}
 );
 </script>
-<style lang="scss" scoped>
-.decoration-pages {
-	min-height: calc(100vh - var(--navbar-height) - 80px);
-	@apply flex flex-col;
-}
 
-.el-menu {
-	width: 15% !important;
-}
-</style>
