@@ -31,7 +31,15 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('tenant.status')" prop="status">
 						<el-radio-group v-model="form.status">
-							<el-radio :label="item.value" v-for="(item, index) in status_type" border :key="index">{{ item.label }} </el-radio>
+							<el-radio 
+								:label="item.value" 
+								v-for="(item, index) in status_type" 
+								border 
+								:key="index"
+								:disabled="item.value === '9' && form.id === '1'"
+							>
+								{{ item.label }} 
+							</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
@@ -216,7 +224,7 @@ const onSubmit = async () => {
  * 初始化表格数据。
  * @param {string} id - 部门 ID。
  */
-const getTenantData = async (id) => {
+const getTenantData = async (id: string) => {
 	const res = await getObj(id);
 	Object.assign(form, res.data);
 };
