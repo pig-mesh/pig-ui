@@ -136,6 +136,25 @@ export function formatAxis(param: Date): string {
 	else return '夜里好';
 }
 
+/**
+ * 时间问候语（国际化版本）
+ * @param param 当前时间，new Date() 格式
+ * @param t 国际化函数
+ * @description param 调用 `formatAxisI18n(new Date(), t)` 输出 `Good morning`
+ * @returns 返回拼接后的时间字符串
+ */
+export function formatAxisI18n(param: Date, t: (key: string) => string): string {
+	let hour: number = new Date(param).getHours();
+	if (hour < 6) return t('timeGreeting.dawn');
+	else if (hour < 9) return t('timeGreeting.morning');
+	else if (hour < 12) return t('timeGreeting.forenoon');
+	else if (hour < 14) return t('timeGreeting.noon');
+	else if (hour < 17) return t('timeGreeting.afternoon');
+	else if (hour < 19) return t('timeGreeting.evening');
+	else if (hour < 22) return t('timeGreeting.night');
+	else return t('timeGreeting.lateNight');
+}
+
 // 日期格式化
 export function parseTime(time, pattern?: string) {
 	if (arguments.length === 0 || !time) {

@@ -65,8 +65,8 @@
 				<a href="#" class="text-blue-500" @click="emit('change', LoginTypeEnum.MOBILE)">
 					{{ $t('password.mobileLogin') }}
 				</a>
-        <a href="#" class="text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.FORGET)">
-          找回密码
+        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.FORGET)">
+           {{ $t('password.forgetPassword') }}
         </a>
 				<a href="#" v-if="autoRegisterEnable" class="ml-2 text-blue-500" @click="emit('change', LoginTypeEnum.REGISTER)">
 					{{ $t('password.createAccount') }}

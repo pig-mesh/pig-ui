@@ -64,7 +64,7 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
 import illustration from '/@/assets/login/login_bg.svg';
 import { useI18n } from 'vue-i18n';
-import { formatAxis } from '/@/utils/formatTime';
+import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
@@ -118,7 +118,7 @@ const signInSuccess = async () => {
 		Session.clear();
 	} else {
 		// 初始化登录成功时间问候语
-		let currentTimeInfo = formatAxis(new Date());
+		let currentTimeInfo = formatAxisI18n(new Date(), t);
 		if (route.query?.redirect) {
 			router.push({
 				path: <string>route.query?.redirect,

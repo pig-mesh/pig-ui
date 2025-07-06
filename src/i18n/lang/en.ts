@@ -1,4 +1,14 @@
 export default {
+	timeGreeting: {
+		dawn: 'Good early morning',
+		morning: 'Good morning',
+		forenoon: 'Good forenoon',
+		noon: 'Good noon',
+		afternoon: 'Good afternoon',
+		evening: 'Good evening',
+		night: 'Good night',
+		lateNight: 'Good late night',
+	},
 	router: {
 		home: 'Home',
 		system: 'System',

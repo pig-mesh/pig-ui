@@ -1,5 +1,15 @@
 // 定义内容
 export default {
+	timeGreeting: {
+		dawn: '凌晨好',
+		morning: '早上好',
+		forenoon: '上午好',
+		noon: '中午好',
+		afternoon: '下午好',
+		evening: '傍晚好',
+		night: '晚上好',
+		lateNight: '夜里好',
+	},
 	router: {
 		home: '首页',
 		system: '系统设置',

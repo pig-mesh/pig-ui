@@ -27,6 +27,7 @@ export default {
 		mobileLogin: '验证码登录',
 		createAccount: '注册账号',
 		imageCodeTip: '请输入验证码',
+		forgetPassword: '找回密码',
 	},
 	mobile: {
 		placeholder1: '请输入手机号',
@@ -36,7 +37,7 @@ export default {
 		mobileLogin: '验证码登录',
 		backToLogin: '返回登录',
 		createAccount: '注册账号',
-		sendSuccess: '验证码发送功',
+		sendSuccess: '验证码发送成功',
 		seconds: '秒后重发',
 		mobileRequired: '请输入手机号码',
 		codeRequired: '请输入验证码',
@@ -45,6 +46,14 @@ export default {
 		loginSuccess: '登录成功',
 		loginFailed: '登录失败',
 		signIn: '登 录',
+	},
+	forget: {
+		newPasswordPlaceholder: '请输入新密码',
+		confirmPasswordPlaceholder: '请确认新密码',
+		passwordEmpty: '密码不能为空',
+		passwordLength: '用户密码长度必须介于 6 和 20 之间',
+		passwordRule: '两次输入的密码不一致',
+		passwordScore: '密码强度太低',
 	},
 	scan: {
 		text: '打开手机扫一扫，快速登录/注册',

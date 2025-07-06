@@ -26,6 +26,7 @@ export default {
 		mobileLogin: 'Mobile Login',
 		createAccount: 'Create Account',
 		imageCodeTip: 'Please enter code',
+		forgetPassword: 'Forgot Password',
 	},
 	mobile: {
 		placeholder1: 'Please enter your mobile number',
@@ -44,6 +45,14 @@ export default {
 		loginSuccess: 'Login successful',
 		loginFailed: 'Login failed',
 		signIn: 'Sign In',
+	},
+	forget: {
+		newPasswordPlaceholder: 'Please enter new password',
+		confirmPasswordPlaceholder: 'Please confirm new password',
+		passwordEmpty: 'Password cannot be empty',
+		passwordLength: 'Password length must be between 6 and 20 characters',
+		passwordRule: 'The two passwords do not match',
+		passwordScore: 'Password strength is too low',
 	},
 	scan: {
 		text: 'Use your mobile device to scan and quickly log in or create an account',

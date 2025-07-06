@@ -86,7 +86,7 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local, Session } from '/@/utils/storage';
-import { formatAxis } from '/@/utils/formatTime';
+import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMsg } from '/@/stores/msg';
 import { fetchUserMessageList } from '/@/api/admin/message';
 import { getPersonalTenant } from '/@/api/admin/tenant';
@@ -256,7 +256,7 @@ const initI18nOrSize = (value: string, attr: string) => {
 
 // 获取到消息
 const rollback = (msg: string) => {
-	useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxis(new Date()) });
+			useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxisI18n(new Date(), t) });
 };
 
 // 获取是否显示未读
