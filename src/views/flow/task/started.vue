@@ -54,6 +54,7 @@
 				<el-table-column label="状态" prop="taskCreateTime" width="200">
 					<template #default="scope">
 						<el-tag v-if="scope.row.status == 1">进行中</el-tag>
+						<el-tag v-else-if="scope.row?.finishReason == '9'" type="danger">终止</el-tag>
 						<el-tag v-else-if="scope.row?.finishReason == '1'" type="success">通过</el-tag>
 						<el-tag v-else-if="scope.row?.finishReason == '0'" type="danger">拒绝</el-tag>
 						<el-tag v-else>已结束</el-tag>
@@ -100,6 +101,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import FcDesigner from 'form-create-designer';
 import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
+import { useMessage } from '/@/hooks/message';
 
 const rule = ref([]);
 const fApi = ref();
@@ -123,6 +125,7 @@ function stop(row) {
 	stopProcessInstance({
 		processInstanceId: row.processInstanceId,
 	}).then((res) => {
+		useMessage().success('流程终止成功');
 		getDataList();
 	});
 }
