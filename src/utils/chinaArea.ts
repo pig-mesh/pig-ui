@@ -1,4 +1,3 @@
-import REGION_DATA from 'china-area-data';
 
 interface ProvinceData {
 	value: string;
@@ -6,18 +5,31 @@ interface ProvinceData {
 	children?: Array<ProvinceData>;
 }
 
+// Define types for the lookup objects
+interface CodeToTextType {
+	[key: string]: string;
+}
+
+interface TextToCodeType {
+	[key: string]: any;
+}
+
+// Import REGION_DATA from china-area-data package
+// @ts-ignore - china-area-data doesn't have TypeScript declarations
+import { REGION_DATA } from 'china-area-data';
+
 // code转汉字大对象,例：CodeToText['110000']输出北京市
-const CodeToText = {};
+const CodeToText: CodeToTextType = {};
 // 汉字转code大对象,例：TextToCode['北京市']['市辖区']['朝阳区'].code输出110105
-const TextToCode = {};
+const TextToCode: TextToCodeType = {};
 // 省份对象
 const provinceObject = REGION_DATA['86'];
-// 省市区三级联动数据（不带“全部”选项）
+// 省市区三级联动数据（不带"全部"选项）
 const regionData: {
 	value: string; // 省份code值
 	label: any;
 }[] = [];
-// 省市二级联动数据（不带“全部”选项）
+// 省市二级联动数据（不带"全部"选项）
 let provinceAndCityData = [] as any;
 
 const ALL_TEXT = '*';
@@ -97,7 +109,7 @@ regionData.forEach((item: ProvinceData) => {
 	}
 });
 
-// 添加“全部”选项
+// 添加"全部"选项
 const provinceAndCityDataPlus = cloneDeep(provinceAndCityData);
 provinceAndCityDataPlus.unshift({
 	value: '',
@@ -182,7 +194,7 @@ function convertTextToCode(provinceText: string, cityText: string, regionText?: 
  * @return {T} 拷贝后的对象
  */
 function cloneDeep<T>(source: T): T {
-	if (typeof source !== 'object') {
+	if (typeof source !== 'object' || source === null) {
 		return source;
 	}
 
@@ -199,7 +211,7 @@ function cloneDeep<T>(source: T): T {
 	}
 
 	if (source instanceof Object) {
-		const cloneObj = {};
+		const cloneObj: any = {};
 		for (const key in source) {
 			if (source.hasOwnProperty(key)) {
 				cloneObj[key] = cloneDeep(source[key]);
@@ -207,5 +219,7 @@ function cloneDeep<T>(source: T): T {
 		}
 		return cloneObj as any;
 	}
+
+	return source;
 }
 export { provinceAndCityData, regionData, provinceAndCityDataPlus, regionDataPlus, CodeToText, TextToCode, convertTextToCode };
