@@ -6,7 +6,7 @@
           <el-row :gutter="20">
             <el-col :span="24" class="mb20">
               <el-form-item prop="avatar">
-                <ImageUpload v-model:imageUrl="formData.avatar" borderRadius="50%">
+                <ImageUpload v-model="formData.avatar" borderRadius="50%">
                   <template #empty>
                     <el-icon>
                       <Avatar/>
