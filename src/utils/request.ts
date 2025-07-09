@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
@@ -25,7 +25,7 @@ const service: AxiosInstance = axios.create({
  * @param config AxiosRequestConfig对象，包含请求配置信息
  */
 service.interceptors.request.use(
-	(config: AxiosRequestConfig) => {
+	(config: InternalAxiosRequestConfig) => {
 		// 统一增加Authorization请求头, skipToken 跳过增加token
 		const token = Session.getToken();
 		if (token && !config.headers?.skipToken) {
