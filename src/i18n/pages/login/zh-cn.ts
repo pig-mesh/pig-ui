@@ -15,6 +15,7 @@ export default {
 		accountPlaceholder2: '请输入密码',
 		accountPlaceholder3: '请输入验证码',
 		phonePlaceholder4: '请输入手机号',
+		tenantPlaceholder: '请选择租户',
 		accountBtnText: '登 录',
 		registerBtnText: '注 册',
 		resetBtnText: '重 置',
@@ -75,6 +76,8 @@ export default {
 		loadError: '获取租户列表失败',
 	},
 	register: {
+		tenantEmpty: '请选择租户',
+		tenantLoadError: '获取租户列表失败',
 		usernameEmpty: '用户名不能为空',
 		usernameLength: '用户名称长度必须介于 5 和 20 之间',
 		phoneEmpty: '手机号不能为空',

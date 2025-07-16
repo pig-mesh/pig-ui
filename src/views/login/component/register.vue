@@ -1,5 +1,28 @@
 <template>
 	<el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="state.ruleForm">
+		<!-- 租户下拉选择 -->
+		<el-form-item class="login-animation1" prop="tenantId">
+			<el-select 
+				v-model="state.ruleForm.tenantId" 
+				:placeholder="$t('password.tenantPlaceholder')"
+				clearable
+				class="w-full dark:bg-slate-700 dark:text-slate-200"
+				:loading="tenantLoading"
+			>
+				<template #prefix>
+					<el-icon class="el-input__icon dark:text-slate-400">
+						<ele-OfficeBuilding />
+					</el-icon>
+				</template>
+				<el-option 
+					v-for="item in tenantList" 
+					:key="item.id" 
+					:label="item.name" 
+					:value="item.id" 
+				/>
+			</el-select>
+		</el-form-item>
+		<!-- 用户名 -->
 		<el-form-item class="login-animation1" prop="username">
 			<el-input
 				text
@@ -49,7 +72,7 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item>
+		<el-form-item prop="checked">
 			<el-checkbox v-model="state.ruleForm.checked" class="dark:text-slate-400">
 				<span class="text-gray-400 dark:text-slate-400">{{ $t('password.readAccept') }}</span>
 			</el-checkbox>
@@ -80,6 +103,7 @@
 
 <script setup lang="ts" name="register">
 import { registerUser, validatePhone, validateUsername } from '/@/api/admin/user';
+import { fetchList } from '/@/api/admin/tenant';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { LoginTypeEnum } from '/@/api/login';
@@ -99,11 +123,16 @@ const dataFormRef = ref<FormInstance | null>(null);
 
 // 加载中状态
 const loading = ref(false);
+const tenantLoading = ref(false);
 
 // 密码强度得分
 const score = ref('0');
 
+// 租户列表
+const tenantList = ref<{ id: string; name: string }[]>([]);
+
 interface RuleForm {
+	tenantId: string;
 	username: string;
 	password: string;
 	phone: string;
@@ -116,6 +145,7 @@ const state = reactive({
 	isShowPassword: false,
 	// 表单内容
 	ruleForm: {
+		tenantId: '', // 租户ID
 		username: '', // 用户名
 		password: '', // 密码
 		phone: '', // 手机号
@@ -131,6 +161,9 @@ type ValidateRule = {
 
 // 表单验证规则
 const dataRules = reactive({
+	tenantId: [
+		{ required: true, message: t('register.tenantEmpty'), trigger: 'change' },
+	],
 	username: [
 		{ required: true, message: t('register.usernameEmpty'), trigger: 'blur' },
 		{
@@ -174,8 +207,38 @@ const dataRules = reactive({
 			trigger: 'blur',
 		},
 	],
-	checked: [{ required: true, message: t('register.termsRequired'), trigger: 'blur' }],
+	checked: [
+		{ required: true, message: t('register.termsRequired'), trigger: 'change' },
+		{
+			validator: (_rule: ValidateRule, value: boolean, callback: ValidateCallback) => {
+				if (!value) {
+					callback(t('register.termsRequired'));
+				} else {
+					callback();
+				}
+			},
+			trigger: ['change', 'blur'],
+		}
+	],
 });
+
+// 获取租户列表
+const getTenantList = async () => {
+	try {
+		tenantLoading.value = true;
+		const response = await fetchList();
+		tenantList.value = response.data || [];
+		
+		// 默认选中第一个租户
+		if (tenantList.value.length > 0 && !state.ruleForm.tenantId) {
+			state.ruleForm.tenantId = tenantList.value[0].id;
+		}
+	} catch (error) {
+		useMessage().error(t('register.tenantLoadError'));
+	} finally {
+		tenantLoading.value = false;
+	}
+};
 
 // 处理密码强度得分变化事件
 const handlePassScore = (e: string) => {
@@ -193,6 +256,12 @@ const handleRegister = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
+	// 额外检查用户是否同意条款
+	if (!state.ruleForm.checked) {
+		useMessage().error(t('register.termsRequired'));
+		return false;
+	}
+
 	try {
 		loading.value = true;
 		await registerUser(state.ruleForm);
@@ -204,4 +273,9 @@ const handleRegister = async () => {
 		loading.value = false;
 	}
 };
+
+// 组件挂载时获取租户列表
+onMounted(() => {
+	getTenantList();
+});
 </script>
