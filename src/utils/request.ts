@@ -42,9 +42,9 @@ service.interceptors.request.use(
 			config.headers![CommonHeaderEnum.AUTHORIZATION] = `Bearer ${token}`;
 		}
 
-		// 统一增加TENANT-ID请求头
+		// 统一增加TENANT-ID请求头, skipTenant 跳过增加租户ID
 		const tenantId = Session.getTenant();
-		if (tenantId) {
+		if (tenantId && !config.headers?.skipTenant) {
 			config.headers![CommonHeaderEnum.TENANT_ID] = tenantId;
 		}
 

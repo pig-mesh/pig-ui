@@ -58,6 +58,7 @@ export const login = (data: any) => {
 		data: { password: encPassword },
 		headers: {
 			skipToken: true,
+			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 			"Enc-Flag": "false",
@@ -75,6 +76,7 @@ export const loginByMobile = (mobile: any, code: any) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
+			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -93,6 +95,7 @@ export const loginBySocial = (state: SocialLoginEnum, code: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
+			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -119,6 +122,7 @@ export const refreshTokenApi = (refresh_token: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
+			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -137,6 +141,7 @@ export const checkToken = (refreshTime: number, refreshLock: boolean) => {
 		url: '/auth/token/check_token',
 		headers: {
 			skipToken: true,
+			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
