@@ -82,7 +82,9 @@ const openDialog = (row: any) => {
 // 获取当前数据下的所有表
 const getAllTable = (dsName: string) => {
 	useListTableApi(dsName).then((res) => {
-		childTableList.value = res.data;
+		childTableList.value = res.data.map((item: any) => {
+			return item.name;
+		});
 	});
 };
 
