@@ -14,6 +14,7 @@ export default {
 		accountPlaceholder2: 'Password',
 		accountPlaceholder3: 'Please enter the verification code',
 		phonePlaceholder4: 'Please enter your phone number',
+		tenantPlaceholder: 'Please select tenant',
 		accountBtnText: 'Sign in',
 		resetBtnText: 'Reset',
 		registerBtnText: 'Create account',
@@ -78,6 +79,8 @@ export default {
 		imageCode: 'Please enter verification code',
 	},
 	register: {
+		tenantEmpty: 'Please select a tenant',
+		tenantLoadError: 'Failed to load tenant list',
 		usernameEmpty: 'Username cannot be empty',
 		usernameLength: 'Username length must be between 5 and 20 characters',
 		phoneEmpty: 'Phone number cannot be empty',
