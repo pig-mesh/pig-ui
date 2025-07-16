@@ -139,8 +139,9 @@ export function validateUsername(rule: any, value: any, callback: any, isEdit: b
 	});
 }
 
-export function validatePhone(rule: any, value: any, callback: any, isEdit: boolean) {
-	if (isEdit) {
+export function validatePhone(rule: any, value: any, callback: any, isEdit: boolean, originalPhone?: string) {
+	// 如果是编辑状态且手机号未改变，跳过校验
+	if (isEdit && originalPhone && value === originalPhone) {
 		return callback();
 	}
 	getDetails({ phone: value }).then((response) => {

@@ -105,6 +105,7 @@ const deptData = ref<any[]>([]);
 const roleData = ref<any[]>([]);
 const postData = ref<any[]>([]);
 const loading = ref(false);
+const originalPhone = ref(''); // 存储原始手机号用于编辑时的校验
 
 const props = defineProps({
 	deptId: {
@@ -168,7 +169,7 @@ const dataRules = ref({
 		{ validator: rule.validatePhone, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validatePhone(rule, value, callback, dataForm.userId !== '');
+				validatePhone(rule, value, callback, dataForm.userId !== '', originalPhone.value);
 			},
 			trigger: 'blur',
 		},
@@ -184,6 +185,7 @@ const dataRules = ref({
 const openDialog = async (id: string) => {
 	visible.value = true;
 	dataForm.userId = '';
+	originalPhone.value = ''; // 重置原始手机号
 
 	// 重置表单数据
 	nextTick(() => {
@@ -252,6 +254,7 @@ const getUserData = async (id: string) => {
 		loading.value = true;
 		const { data } = await getObj(id);
 		Object.assign(dataForm, data);
+		originalPhone.value = data.phone; // 保存原始手机号
 		if (data.roleList) {
 			dataForm.role = data.roleList.map((item: { roleId: string }) => item.roleId);
 		}
