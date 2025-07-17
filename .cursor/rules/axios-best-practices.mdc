@@ -1,0 +1,8 @@
+---
+description: Best practices for Axios HTTP requests
+globs: *.ts,*.vue
+alwaysApply: false
+---
+- Refer to `src/api/admin/audit.ts` as a template to make an API call with the same effect
+- The API method must be called using the synchronous syntax await, and then the result is deconstructed
+- All axios call logic needs to be placed in `src/api`

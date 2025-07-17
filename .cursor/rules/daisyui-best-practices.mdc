@@ -1,0 +1,10 @@
+---
+description: Best practices for Daisy UI
+globs: *.vue
+alwaysApply: false
+---
+- Use Daisy UI classes for consistent theming
+- All colors and themes should be consistent with the overall UI element-plus. Please refer to `src/theme/element.scss`
+- Implement Daisy UI buttons and form controls for UI consistency
+- Customize themes using Daisy UI's theme system
+- Ensure responsive design with Daisy UI's responsive classes

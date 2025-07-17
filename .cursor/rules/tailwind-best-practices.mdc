@@ -1,0 +1,33 @@
+---
+description: Best practices for Tailwind CSS
+globs: *.vue
+alwaysApply: false
+---
+- Implement responsive design with Tailwind's responsive modifiers
+- All colors and themes should be consistent with the overall UI element-plus. Please refer to `src/theme/element.scss`
+- Customize Tailwind's default theme using `tailwind.config.js`
+- Use `@apply` directive for component-level styling
+
+## Dark Mode Guidelines
+- **Color Variables**: Use CSS custom properties defined in `src/theme/dark.scss` for dark mode colors
+- **Primary Colors**: 
+  - Background: `--next-bg-main` (#17202a) - Twitter standard dark background
+  - Text: `--next-color-white` (#f7f9f9) - Primary text color
+  - Accent: `#1d9bf0` - Twitter blue for active states and links
+- **Component Colors**:
+  - Disabled background: `--next-color-disabled` (#202e3a)
+  - Hover states: `--next-color-hover` (#1e2732) or `--next-color-hover-rgba` (rgba(239, 243, 244, 0.1))
+  - Borders: `--next-border-color` (#38444d) or `--next-border-black` (#2f3336)
+- **Text Colors**:
+  - Regular text: `--next-text-color-regular` (#8b98a5)
+  - Placeholder text: `--next-text-color-placeholder` (#536471)
+- **Consistency Rules**:
+  - Always use `[data-theme='dark']` selector for dark mode styles
+  - Maintain Twitter-inspired color scheme consistency
+  - Use semi-transparent overlays for hover effects: `rgba(29, 155, 240, 0.1)` for primary, `rgba(239, 243, 244, 0.1)` for neutral
+- **Component Specific**:
+  - Cards: Background `--next-color-disabled` with `--next-border-color` borders
+  - Buttons: Use defined CSS variables, avoid hardcoded colors
+  - Forms: Input background `#273340`, border `#38444d`, focus with Twitter blue accent
+  - Tables: Header background `#1c2732`, hover `--next-color-hover`
+- **Avoid**: Hardcoded hex colors in dark mode, use CSS variables for maintainability

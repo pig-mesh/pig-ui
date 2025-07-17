@@ -1,0 +1,10 @@
+---
+description: Best practices for Vue I18n internationalization
+globs: *.vue,*.ts
+alwaysApply: false
+---
+- Use Vue I18n for managing translations
+- Use `const { t } = useI18n()` in Vue components to use t('area.areaType') as a placeholder
+- The global I18N translation files are in `src/i18n`
+- The Chinese and English I18N file names use 'zh-cn.ts' and' en.ts' and save them in the 'i18n' folder in the current directory
+- The key values in the language file are named by the hump

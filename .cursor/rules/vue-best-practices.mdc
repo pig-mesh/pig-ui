@@ -1,0 +1,10 @@
+---
+description: Best practices for Vue 3 applications
+globs: *.vue
+alwaysApply: false
+---
+- Use Vue3 Composition API for better code organization and reusability
+- Components should be automatically split into multiple small components that are easy to maintain
+- parseTime/parseDate/baseURL are global properties and can be used directly
+- Leverage Vue's built-in directives like `v-model` for form handling
+- Implement proper error handling with `try/catch` in component setup

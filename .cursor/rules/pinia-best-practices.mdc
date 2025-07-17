@@ -1,0 +1,9 @@
+---
+description: Best practices for state management with Pinia
+globs: src/stores/*.ts
+alwaysApply: false
+---
+- Use Pinia stores for global state management
+- Implement getters for computed state
+- Use actions for side effects and asynchronous operations
+- Utilize `defineStore` with `id` for better store organization
