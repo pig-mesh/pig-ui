@@ -22,6 +22,7 @@
 	--next-color-seting-main: #e9eef3;
 	--next-color-seting-aside: #d3dce6;
 	--next-color-seting-header: #b3c0d1;
+	--next-text-color: #333333;
 }
 
 html,
@@ -39,6 +40,7 @@ body,
 	font-size: 14px;
 	overflow: hidden;
 	position: relative;
+	color: var(--next-text-color);
 }
 
 /* 主布局样式
@@ -47,7 +49,7 @@ body,
 	width: 100%;
 	height: 100%;
 	.layout-pd {
-		padding: 5px 5px 5px 5px !important;
+		padding: 5px !important;
 	}
 	.layout-flex {
 		display: flex;
