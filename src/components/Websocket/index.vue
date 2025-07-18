@@ -32,10 +32,6 @@ const token = computed(() => {
 	return Session.getToken();
 });
 
-const tenant = computed(() => {
-	return Session.getTenant();
-});
-
 onMounted(() => {
 	initWebSocket();
 });
@@ -50,7 +46,9 @@ const initWebSocket = () => {
 	let host = window.location.host;
 	//  baseURL
 	let baseURL = import.meta.env.VITE_API_URL;
-	let wsUri = `ws://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${token.value}&TENANT-ID=${tenant.value}`;
+	// 自动判断协议：如果当前页面是 https，则使用 wss，否则使用 ws
+	let protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+	let wsUri = `${protocol}//${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${token.value}`;
 	// 建立连接
 	state.webSocket = new WebSocket(wsUri);
 	// 连接成功
