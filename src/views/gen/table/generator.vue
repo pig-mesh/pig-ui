@@ -2,39 +2,66 @@
 	<el-form :model="dataForm" :rules="dataRules" label-width="120px" ref="dataFormRef" v-loading="loading">
 		<el-row>
 			<el-col :span="12" class="mb20">
+				<el-form-item label="代码风格" prop="style">
+					<el-select v-model="dataForm.style">
+						<el-option :key="index" :label="item.groupName" :value="item.id" v-for="(item, index) in groupDataList"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-col>
+			<el-col :span="12" class="mb20">
 				<el-form-item label="表名" prop="tableName">
 					<div style="display: flex; width: 100%">
 						<el-input disabled placeholder="表名" :value="tableNameStr" style="flex-grow: 1; margin-right: 10px"></el-input>
-						<el-button plain icon="Search" @click="childTableRef.openDialog(dataForm)"> 子表</el-button>
+						<el-button 
+							v-if="showChildTableButton" 
+							plain 
+							icon="Search" 
+							@click="childTableRef.openDialog(dataForm)" 
+							style="margin-right: 10px"
+						> 
+							子表
+						</el-button>
+						<el-button 
+							v-if="showTreeTableButton" 
+							plain 
+							icon="Connection" 
+							@click="treeTableRef.openDialog(dataForm)"
+						> 
+							树表
+						</el-button>
 						<!-- 配置子表 -->
-						<child-table-config v-model="childForm" ref="childTableRef" />
+						<child-table-config v-if="showChildTableButton" v-model="childForm" ref="childTableRef" />
+						<!-- 配置树表 -->
+						<tree-table-config v-if="showTreeTableButton" v-model="treeForm" ref="treeTableRef" />
 					</div>
 				</el-form-item>
 			</el-col>
+		</el-row>
+		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item label="注释" prop="tableComment">
 					<el-input placeholder="说明" v-model="dataForm.tableComment"></el-input>
 				</el-form-item>
 			</el-col>
-		</el-row>
-		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item label="类名" prop="className">
 					<el-input placeholder="类名" v-model="dataForm.className"></el-input>
 				</el-form-item>
 			</el-col>
+		</el-row>
+		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item label="作者" prop="author">
 					<el-input placeholder="默认作者" v-model="dataForm.author"></el-input>
 				</el-form-item>
 			</el-col>
-		</el-row>
-		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item label="项目包名" prop="packageName">
 					<el-input placeholder="项目包名" v-model="dataForm.packageName"></el-input>
 				</el-form-item>
 			</el-col>
+		</el-row>
+		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item prop="moduleName">
 					<template #label>
@@ -44,8 +71,6 @@
 					<el-input placeholder="模块名" v-model="dataForm.moduleName"></el-input>
 				</el-form-item>
 			</el-col>
-		</el-row>
-		<el-row>
 			<el-col :span="12" class="mb20">
 				<el-form-item prop="functionName">
 					<template #label>
@@ -53,13 +78,6 @@
 						<tip content="对应生成的Controller @RequestMapping 请求路径" />
 					</template>
 					<el-input placeholder="功能名" v-model="dataForm.functionName"></el-input>
-				</el-form-item>
-			</el-col>
-			<el-col :span="12" class="mb20">
-				<el-form-item label="代码风格" prop="style">
-					<el-select v-model="dataForm.style">
-						<el-option :key="index" :label="item.groupName" :value="item.id" v-for="(item, index) in groupDataList"></el-option>
-					</el-select>
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -146,6 +164,7 @@ import { pageList } from '/@/api/admin/menu';
 import Tip from '/@/components/Tip/index.vue';
 
 const ChildTableConfig = defineAsyncComponent(() => import('./child.vue'));
+const TreeTableConfig = defineAsyncComponent(() => import('./tree.vue'));
 
 const props = defineProps({
 	tableName: {
@@ -164,6 +183,8 @@ const loading = ref(false);
 const dataFormRef = ref();
 const childTableRef = ref();
 const childForm = ref();
+const treeTableRef = ref();
+const treeForm = ref();
 const tableNameStr = ref('');
 const dataForm = reactive({
 	id: '',
@@ -185,9 +206,28 @@ const dataForm = reactive({
 	childTableName: '',
 	syncRoute: '0',
 	syncMenuId: '',
+	parentField: '',
+	nameField: '',
 });
 
-const groupDataList = ref([]);
+const groupDataList = ref<Array<{ id: string; groupName: string }>>([]);
+
+// 计算当前选择的模板类型
+const currentTemplateType = computed(() => {
+	if (!dataForm.style) return '';
+	const selectedGroup = groupDataList.value.find(group => group.id === dataForm.style);
+	return selectedGroup?.groupName || '';
+});
+
+// 判断是否显示子表按钮
+const showChildTableButton = computed(() => {
+	return currentTemplateType.value.includes('主子表');
+});
+
+// 判断是否显示树表按钮
+const showTreeTableButton = computed(() => {
+	return currentTemplateType.value.includes('树形表');
+});
 const getTable = (dsName: string, tableName: string) => {
 	loading.value = true;
 	useTableApi(dsName, tableName)
@@ -311,7 +351,17 @@ const submitHandle = async () => {
 		if (!valid) return false;
 
 		loading.value = true;
-		await putObj(Object.assign(dataForm, childForm.value));
+		
+		// 根据模板类型决定提交哪些配置数据
+		const submitData = { ...dataForm };
+		if (showChildTableButton.value && childForm.value) {
+			Object.assign(submitData, childForm.value);
+		}
+		if (showTreeTableButton.value && treeForm.value) {
+			Object.assign(submitData, treeForm.value);
+		}
+		
+		await putObj(submitData);
 		visible.value = false;
 		emit('refreshDataList');
 		return dataForm;
@@ -378,10 +428,22 @@ const getAllMenuData = () => {
 };
 
 watch(
-	() => childForm,
+	() => [childForm, treeForm, currentTemplateType],
 	() => {
 		const { childTableName } = childForm.value || {};
-		tableNameStr.value = childTableName ? `${props.tableName} + ${childTableName}` : props.tableName;
+		const { parentField, nameField } = treeForm.value || {};
+		
+		let nameStr = props.tableName || '';
+		
+		// 只有当对应的按钮显示时才显示相关信息
+		if (showChildTableButton.value && childTableName) {
+			nameStr += ` + ${childTableName}`;
+		}
+		if (showTreeTableButton.value && parentField && nameField) {
+			nameStr += ` (树表: ${parentField}/${nameField})`;
+		}
+		
+		tableNameStr.value = nameStr;
 	},
 	{ deep: true, immediate: true }
 );
