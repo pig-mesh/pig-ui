@@ -60,15 +60,30 @@
 			</el-button>
 		</el-form-item>
 
-		<div class="flex relative justify-between items-center">
-			<div class="ml-auto text-sm">
-				<a href="#" class="text-blue-500" @click="emit('change', LoginTypeEnum.MOBILE)">
+		<div class="relative flex items-center justify-end mt-6">
+			<div class="flex flex-wrap items-center gap-4 text-sm">
+				<a 
+					href="#" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change', LoginTypeEnum.MOBILE)"
+				>
 					{{ $t('password.mobileLogin') }}
 				</a>
-        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.FORGET)">
-           {{ $t('password.forgetPassword') }}
-        </a>
-				<a href="#" v-if="autoRegisterEnable" class="ml-2 text-blue-500" @click="emit('change', LoginTypeEnum.REGISTER)">
+				<span class="text-gray-300">|</span>
+				<a 
+					href="#" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change',LoginTypeEnum.FORGET)"
+				>
+					{{ $t('password.forgetPassword') }}
+				</a>
+				<span v-if="autoRegisterEnable" class="text-gray-300">|</span>
+				<a 
+					href="#" 
+					v-if="autoRegisterEnable" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change', LoginTypeEnum.REGISTER)"
+				>
 					{{ $t('password.createAccount') }}
 				</a>
 			</div>
