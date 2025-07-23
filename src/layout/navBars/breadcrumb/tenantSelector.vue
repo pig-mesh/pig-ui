@@ -82,7 +82,7 @@
 <script setup lang="ts" name="TenantSelector">
 import { useI18n } from 'vue-i18n';
 import { switchPersonalTenant } from '/@/api/admin/tenant';
-import { Session } from '/@/utils/storage';
+import { Local, Session } from '/@/utils/storage';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useUserInfo } from '/@/stores/userInfo';
 import { storeToRefs } from 'pinia';
@@ -204,7 +204,10 @@ const switchTenant = async (tenant: Tenant) => {
 		themeConfig.value.background = tenant.background || '';
 		// 设置小程序二维码
 		themeConfig.value.miniQr = tenant.miniQr || '';
-		
+
+		Local.remove('themeConfig');
+		Local.set('themeConfig', themeConfig.value);
+
 		// 触发变更事件
 		emit('change', tenant);
 		
