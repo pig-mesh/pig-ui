@@ -406,7 +406,7 @@ export function getNumberRadixNum(input: Number) {
         return 0;
     }
     return strings[1].toString().length;
-};
+}
 
 export function getQueryString(url: string, paraName: string) {
     const arrObj = url.split('?');
