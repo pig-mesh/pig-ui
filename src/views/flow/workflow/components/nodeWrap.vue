@@ -219,7 +219,7 @@ watch(
 				}
 				for (var item1 of node.conditionList) {
 					for (var item2 of item1.conditionList) {
-						let length = val.filter((res) => res.field === item2.key).length;
+						let length = val.filter((res) => (res.field === item2.key || item2.key === 'root')).length;
 						if (length == 0) {
 							item2.key = '';
 							item2.expression = '';
