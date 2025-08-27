@@ -284,6 +284,7 @@
 ------------------------------- */
 .el-overlay {
 	overflow: hidden;
+	z-index: 1000 !important;
 
 	.el-overlay-dialog {
 		display: flex;
