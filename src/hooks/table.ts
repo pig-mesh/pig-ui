@@ -132,9 +132,15 @@ export function useTable(options?: BasicTableProps) {
 				});
 
 				// 设置表格展示的数据数组
-				state.dataList = state.isPage ? res.data[state.props.item] : res.data;
-				// 设置分页信息中的总数据条数
-				state.pagination!.total = state.isPage ? res.data[state.props.totalCount] : 0;
+				if (res.data) {
+					state.dataList = state.isPage ? res.data[state.props.item] || [] : res.data;
+					// 设置分页信息中的总数据条数
+					state.pagination!.total = state.isPage ? res.data[state.props.totalCount] || 0 : 0;
+				} else {
+					// 如果 res.data 为 null，设置默认值
+					state.dataList = [];
+					state.pagination!.total = 0;
+				}
 			} catch (err: any) {
 				// 捕获异常并显示错误提示
 				if (err?.data?.msg) {
