@@ -188,22 +188,6 @@ const dataRules = reactive({
     required: true,
     message: t('sysmenu.nameRequired'),
     trigger: 'blur'
-  }, {
-    validator: (rule: any, value: any, callback: any) => {
-      // 如果是按钮类型菜单，跳过名称唯一性校验
-      if (state.ruleForm.menuType === '1') {
-        callback();
-        return;
-      }
-      // 如果是编辑状态且菜单名称未改变，跳过校验
-      if (state.ruleForm.menuId !== '' && value === originalName.value) {
-        callback();
-        return;
-      }
-      // 其他情况下，验证菜单名称唯一性
-      validateExist(rule, value, callback, false);
-    },
-    trigger: 'blur',
   }],
   path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: t('sysmenu.pathRequired'), trigger: 'blur'}],
   icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: t('sysmenu.iconRequired'), trigger: 'blur'}],

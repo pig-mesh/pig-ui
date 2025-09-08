@@ -141,6 +141,8 @@ export function backEndComponent(routes: any) {
 		if (item.children) {
 			item.redirect = item.children[0].path;
 		}
+		// 设置 name (使用ID，避免 name 重复造成 404)
+		item.name = item.id || item.name;
 		return item;
 	});
 }
