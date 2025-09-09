@@ -18,7 +18,7 @@
 					<template #default="{ item }">
 						<div>
 							<SvgIcon :name="item.meta.icon" class="mr5" />
-							{{ $t(item.name) }}
+							{{ $t(item.meta?.title || item.name) }}
 						</div>
 					</template>
 				</el-autocomplete>
@@ -66,7 +66,8 @@ const menuSearch = (queryString: string, cb: Function) => {
 // 菜单搜索过滤
 const createFilter = (queryString: string) => {
 	return (restaurant: RouteItem) => {
-		return restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 || t(restaurant!.name!).indexOf(queryString.toLowerCase()) > -1;
+		const title = restaurant.meta?.title || restaurant.name
+		return restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 || t(title as string).indexOf(queryString.toLowerCase()) > -1;
 	};
 };
 // 初始化菜单数据
