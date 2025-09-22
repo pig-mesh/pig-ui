@@ -23,7 +23,7 @@
 						v-model:showSearch="showSearch"
 						class="ml10"
 						style="float: right; margin-right: 20px"
-						@queryTable="getDataList"
+						@queryTable="resetQuery"
 					></right-toolbar>
 				</div>
 			</el-row>
@@ -33,7 +33,7 @@
 				lazy
 				:load="load"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-				row-key="path"
+				row-key="id"
 				style="width: 100%"
 				v-loading="state.loading"
 				border
@@ -89,11 +89,12 @@
 				</el-table-column>
 			</el-table>
 		</div>
-		<MenuDialog @refresh="query()" ref="menuDialogRef" />
+		<MenuDialog @refresh="handleRefresh" ref="menuDialogRef" />
 	</div>
 </template>
 
 <script lang="ts" name="systemMenu" setup>
+import { onMounted, nextTick } from 'vue';
 import { delObj, pageList } from '/@/api/admin/menu';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -109,11 +110,14 @@ const queryRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: pageList, // H
 	queryForm: {
-		parentId: -1,
+		parentId: '-1',
 		menuName: '',
 	},
 	isPage: false,
 });
+
+// 用于记录已展开的树节点信息，实现懒加载数据刷新
+const treeNodeMap = new Map();
 
 const { getDataList, tableStyle } = useTable(state);
 
@@ -149,7 +153,7 @@ const deleteMenuDisabled = (row: any) => {
 // 搜索事件
 const query = () => {
 	state.dataList = [];
-	state.queryForm.parentId = undefined;
+	state.queryForm.parentId = state.queryForm.menuName ? undefined : '-1';
 	getDataList();
 };
 
@@ -157,6 +161,7 @@ const query = () => {
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	state.dataList = [];
+	state.queryForm.parentId = '-1';
 	getDataList();
 };
 
@@ -164,6 +169,10 @@ const load = (row: any, treeNode: unknown, resolve: (date: any[]) => void) => {
 	const param = {
 		parentId: row.id,
 	};
+	
+	// 在节点展开加载数据时记录treeNode节点，用于后续刷新
+	treeNodeMap.set(row.id, { row, treeNode, resolve });
+	
 	pageList(param)
 		.then((res) => {
 			const childrenList = res.data || [];
@@ -178,6 +187,57 @@ const load = (row: any, treeNode: unknown, resolve: (date: any[]) => void) => {
 		});
 };
 
+// 刷新指定父节点的子数据
+const refreshTreeNode = (parentId: any) => {
+	if (treeNodeMap.has(parentId)) {
+		const { row, treeNode, resolve } = treeNodeMap.get(parentId);
+		if (row && treeNode && resolve) {
+			// 清空子节点数据和状态
+			if (treeNode && treeNode.childNodes) {
+				treeNode.childNodes.splice(0);
+			}
+			if (row.children) {
+				row.children.splice(0);
+			}
+			
+			// 重置节点加载状态
+			if (treeNode) {
+				treeNode.loaded = false;
+				treeNode.loading = false;
+				treeNode.expanded = true; // 保持展开状态
+			}
+			
+			// 清理Element Plus内部的懒加载缓存
+			if (tableRef.value && tableRef.value.store) {
+				const store = tableRef.value.store;
+				// 清除懒加载节点映射
+				if (store.states && store.states.lazyTreeNodeMap) {
+					delete store.states.lazyTreeNodeMap.value[row.id];
+				}
+				// 清除树节点映射
+				if (store.states && store.states.treeData) {
+					const treeData = store.states.treeData.value;
+					if (treeData[row.id]) {
+						delete treeData[row.id].children;
+					}
+				}
+			}
+			
+			// 延时重新加载，确保UI更新
+			nextTick(() => {
+				load(row, treeNode, resolve);
+			});
+			
+			// 强制刷新表格显示（备用方案）
+			nextTick(() => {
+				if (tableRef.value && tableRef.value.$forceUpdate) {
+					tableRef.value.$forceUpdate();
+				}
+			});
+		}
+	}
+};
+
 // 删除操作
 const handleDelete = async (row: any) => {
 	try {
@@ -188,10 +248,69 @@ const handleDelete = async (row: any) => {
 
 	try {
 		await delObj(row.id);
-		getDataList();
+
+		// 如果删除的是子节点，则刷新其父节点的子数据
+		if (row.parentId && row.parentId !== '-1') {
+			refreshTreeNode(row.parentId);
+		} else {
+			// 如果删除的是根节点，则刷新整个表格
+			getDataList();
+		}
+		
 		useMessage().success(t('common.delSuccessText'));
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	}
 };
+
+// 处理新增/编辑后的刷新回调
+const handleRefresh = (refreshInfo?: any) => {
+	if (!refreshInfo) {
+		// 如果没有传递刷新信息，则刷新整个表格
+		getDataList();
+		return;
+	}
+
+	if (refreshInfo.isEdit) {
+		// 编辑操作：需要考虑父节点是否发生变化
+		const originalParentId = refreshInfo.originalParentId;
+		const currentParentId = refreshInfo.currentParentId;
+		
+		if (originalParentId !== currentParentId) {
+			// 父节点发生变化，需要刷新两个父节点
+			if (originalParentId && originalParentId !== '-1') {
+				refreshTreeNode(originalParentId);
+			}
+			if (currentParentId && currentParentId !== '-1') {
+				refreshTreeNode(currentParentId);
+			}
+			// 如果移动到根节点或从根节点移出，刷新整个表格
+			if (originalParentId === '-1' || currentParentId === '-1') {
+				getDataList();
+			}
+		} else {
+			// 父节点未变化，只刷新当前父节点
+			if (currentParentId && currentParentId !== '-1') {
+				refreshTreeNode(currentParentId);
+			} else {
+				// 根节点编辑，刷新整个表格
+				getDataList();
+			}
+		}
+	} else {
+		// 新增操作：只需要刷新父节点
+		const parentId = refreshInfo.parentId;
+		if (parentId && parentId !== '-1') {
+			refreshTreeNode(parentId);
+		} else {
+			// 新增根节点，刷新整个表格
+			getDataList();
+		}
+	}
+};
+
+// 页面加载时获取数据
+onMounted(() => {
+	getDataList();
+});
 </script>

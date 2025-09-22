@@ -150,6 +150,13 @@ const state = reactive({
   parentData: [] as any[], // 上级菜单数据
 });
 
+// 存储操作相关信息，用于精确刷新
+const operationInfo = reactive({
+  isEdit: false,
+  originalParentId: '',
+  currentParentId: '',
+});
+
 // 表单校验规则
 const dataRules = reactive({
   menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
@@ -207,6 +214,11 @@ const openDialog = (type: string, row?: any) => {
   visible.value = true;
   originalName.value = ''; // Reset the original name
 
+  // 重置操作信息
+  operationInfo.isEdit = type === 'edit';
+  operationInfo.originalParentId = '';
+  operationInfo.currentParentId = row?.id || '-1';
+
   nextTick(() => {
     menuDialogFormRef.value?.resetFields();
     state.ruleForm.parentId = row?.id || '-1';
@@ -224,10 +236,14 @@ const openDialog = (type: string, row?: any) => {
 // 获取菜单节点的详细信息
 const getMenuDetail = (id: string) => {
   getObj({menuId: id}).then((res) => {
-    if (res.data[0].component) {
+    if (res.data[0]?.component) {
       state.ruleForm.param = '1'
     }
     originalName.value = res.data[0].name; // Store the original name
+    
+    // 记录编辑前的父节点ID
+    operationInfo.originalParentId = res.data[0].parentId;
+    
     Object.assign(state.ruleForm, res.data[0]);
   });
 };
@@ -265,7 +281,26 @@ const onSubmit = async () => {
     state.ruleForm.menuId ? await putObj(state.ruleForm) : await addObj(state.ruleForm);
     useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
-    emit('refresh');
+    
+    // 根据操作类型传递不同的刷新信息
+    if (operationInfo.isEdit) {
+      // 编辑操作：需要刷新原父节点和新父节点（如果父节点发生变化）
+      const refreshInfo = {
+        isEdit: true,
+        originalParentId: operationInfo.originalParentId,
+        currentParentId: state.ruleForm.parentId,
+        menuData: { ...state.ruleForm }
+      };
+      emit('refresh', refreshInfo);
+    } else {
+      // 新增操作：只需要刷新父节点
+      const refreshInfo = {
+        isEdit: false,
+        parentId: state.ruleForm.parentId,
+        menuData: { ...state.ruleForm }
+      };
+      emit('refresh', refreshInfo);
+    }
   } catch (err: any) {
     useMessage().error(err.msg);
   } finally {
