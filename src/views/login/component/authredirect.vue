@@ -1,56 +1,84 @@
 <script setup lang="ts" name="authredirect">
 import request from '/@/utils/request';
-import other from '/@/utils/other';
-import {validateNull} from '/@/utils/validate';
-import {Session} from '/@/utils/storage';
-import {useUserInfo} from '/@/stores/userInfo';
-import {useMessageBox} from '/@/hooks/message';
+import { Session } from '/@/utils/storage';
+import { useUserInfo } from '/@/stores/userInfo';
+import { useMessageBox } from '/@/hooks/message';
+import { useUrlSearchParams } from '@vueuse/core';
+import { SocialLoginEnum } from '/@/api/login';
+
+// 使用 VueUse 获取 URL 参数
+const params = useUrlSearchParams('hash');
 
 /**
- * 加载完成后执行的函数，用于处理授权回调。
+ * 获取授权码，支持多种参数名
+ */
+const getAuthCode = (): string => {
+	return (params.code || params.ticket || params.authCode) as string;
+};
+
+/**
+ * 解析登录状态参数
+ */
+const parseState = (stateParam: string) => {
+	const [state, type] = stateParam.split('-');
+	return { state, type };
+};
+
+/**
+ * 使用 VueUse 向父窗口发送消息
+ */
+const notifyParentWindow = (message: Record<string, any>) => {
+	if (window.opener && !window.opener.closed) {
+		window.opener.postMessage(message, window.location.origin);
+	}
+};
+
+/**
+ * 绑定社交账号
+ */
+const bindSocialAccount = async (state: string, code: string) => {
+		await request({
+			url: '/admin/social/bind',
+			method: 'post',
+			params: { state, code },
+		});
+
+		await useMessageBox().confirm('社交账号绑定成功');
+		window.close();
+};
+
+/**
+ * 处理社交登录
+ */
+const handleSocialLogin = async (state: string, code: string) => {
+	Session.clear();
+	await useUserInfo().loginBySocial(state as SocialLoginEnum, code);
+
+	// 通知父窗口登录成功
+	notifyParentWindow({ type: 'social-login-success' });
+
+	// 延迟关闭窗口，确保消息已发送
+	setTimeout(() => window.close(), 100);
+};
+
+/**
+ * 主处理函数
  */
 onMounted(async () => {
-	// 获取 URL 参数，获取 code 参数，获取不到则换成 ticket
-	const url = window.location.href.replace('#/authredirect', '').replaceAll('/', '');
-	let code = other.getQueryString(url, 'code');
-	if (validateNull(code)) {
-		code = other.getQueryString(url, 'ticket');
+	const code = getAuthCode();
+	const stateParam = params.state as string;
+
+	if (!code || !stateParam) {
+		console.error('Missing required parameters: code or state');
+		return;
 	}
 
-	if (validateNull(code)) {
-		code = other.getQueryString(url, 'authCode');
-	}
+	const { state, type } = parseState(stateParam);
 
-	// 分割登录参数
-	let state = other.getQueryString(url, 'state');
-	let type = state.split('-')[1];
-	state = state.split('-')[0];
-	// 发送登录请求，如果 type 为 LOGIN，则为登录操作，否则为绑定操作
 	if (type === 'LOGIN') {
-		Session.clear();
-		await useUserInfo().loginBySocial(state, code);
-		window.close();
+		await handleSocialLogin(state, code);
 	} else {
-		bind(state, code);
+		await bindSocialAccount(state, code);
 	}
 });
-
-/**
- * 绑定社交账号。
- * @param state - 登录参数
- * @param code - 授权码
- */
-const bind = (state: string, code: string) => {
-	request({
-		url: '/admin/social/bind',
-		method: 'post',
-		params: { state, code },
-	}).then(() => {
-		useMessageBox()
-			.confirm('社交账号绑定成功')
-			.then(() => {
-				window.close();
-			});
-	});
-};
 </script>
