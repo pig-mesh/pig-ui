@@ -54,22 +54,33 @@
 
 <script lang="ts" name="systemDept" setup>
 import { downBlobFile } from '/@/utils/other';
-import { useI18n } from 'vue-i18n';
 
 const TreeView = defineAsyncComponent(() => import('./tree-view.vue'));
 const TableView = defineAsyncComponent(() => import('./table-view.vue'));
 
-const { t } = useI18n();
-
-// 默认树视图展示
+/** 是否默认使用树形视图（true=树形，false=表格） */
 const defaultTreeViewRef = ref(true);
+
+/** 树形视图组件引用 */
 const treeViewRef = ref();
+
+/** 表格视图组件引用 */
 const tableViewRef = ref();
+
+/** Excel上传组件引用 */
 const excelUploadRef = ref();
+
+/** 是否显示搜索区域 */
 const showSearch = ref(true);
-const isExpand = ref(false);
+
+/** 查询表单引用 */
 const queryRef = ref();
 
+/**
+ * 组件状态
+ * @property {Object} queryForm - 查询表单
+ * @property {string} queryForm.deptName - 部门名称
+ */
 const state = reactive({
 	queryForm: {
 		deptName: '',
@@ -78,6 +89,7 @@ const state = reactive({
 
 /**
  * 过滤节点
+ * @description 根据当前视图类型（树形/表格）调用对应的过滤方法
  */
 const filter = () => {
 	if (defaultTreeViewRef.value) {
@@ -88,15 +100,25 @@ const filter = () => {
 	}
 };
 
+/**
+ * 新增部门
+ * @description 表格视图下调用新增方法
+ */
 const handleAdd = () => {
 	tableViewRef.value.handleAdd();
 };
+
+/**
+ * 切换视图模式
+ * @description 在树形视图和表格视图之间切换
+ */
 const handleView = () => {
 	defaultTreeViewRef.value = !defaultTreeViewRef.value;
 };
 
 /**
  * 处理展开/折叠树
+ * @description 根据当前视图类型调用对应的展开/折叠方法
  */
 const handleExpand = () => {
 	if (defaultTreeViewRef.value) {
@@ -107,12 +129,16 @@ const handleExpand = () => {
 };
 
 /**
- * 导出Excel
+ * 导出部门数据为Excel文件
  */
 const exportExcel = () => {
 	downBlobFile('/admin/dept/export', state.queryForm, 'dept.xlsx');
 };
 
+/**
+ * 获取数据列表
+ * @description 根据当前视图类型调用对应的数据获取方法
+ */
 const getDataList = () => {
 	if (defaultTreeViewRef.value) {
 		treeViewRef.value.getOrgData();
@@ -123,6 +149,7 @@ const getDataList = () => {
 
 /**
  * 重置查询条件
+ * @description 清空表单字段并重新加载数据
  */
 const resetQuery = () => {
 	queryRef.value.resetFields();

@@ -80,19 +80,18 @@ const dataRules = ref({
 });
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
 	visible.value = true;
 	form.postId = '';
 
 	// 重置表单数据
-	nextTick(() => {
-		dataFormRef.value?.resetFields();
-	});
+	await nextTick();
+	dataFormRef.value?.resetFields();
 
-	// 获取Post信息
+	// 获取岗位信息
 	if (id) {
 		form.postId = id;
-		getPostData(id);
+		await getPostData(id);
 	}
 };
 
@@ -120,12 +119,14 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化表格数据
-const getPostData = (id: string) => {
-	// 获取部门数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+// 初始化岗位数据
+const getPostData = async (id: string) => {
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg || '获取岗位数据失败');
+	}
 };
 
 // 暴露变量

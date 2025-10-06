@@ -119,10 +119,12 @@ export const forgetUserPassword = (userInfo: object) => {
 	});
 };
 
-export function validateUsername(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateUsername(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
 	const flag = new RegExp(/^([a-z\d]+?)$/).test(value);
 	if (!flag) {
-		callback(new Error('用户名支持小写英文、数字'));
+		const errorMsg = t ? t('validation.usernameFormat') : '用户名支持小写英文、数字';
+		callback(new Error(errorMsg));
+		return;
 	}
 
 	if (isEdit) {
@@ -132,14 +134,15 @@ export function validateUsername(rule: any, value: any, callback: any, isEdit: b
 	getDetails({ username: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('用户名已经存在'));
+			const errorMsg = t ? t('validation.usernameExists') : '用户名已经存在';
+			callback(new Error(errorMsg));
 		} else {
 			callback();
 		}
 	});
 }
 
-export function validatePhone(rule: any, value: any, callback: any, isEdit: boolean, originalPhone?: string) {
+export function validatePhone(rule: any, value: any, callback: any, isEdit: boolean, originalPhone?: string, t?: any) {
 	// 如果是编辑状态且手机号未改变，跳过校验
 	if (isEdit && originalPhone && value === originalPhone) {
 		return callback();
@@ -147,7 +150,8 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
 	getDetails({ phone: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('手机号已经存在'));
+			const errorMsg = t ? t('validation.phoneExists') : '手机号已经存在';
+			callback(new Error(errorMsg));
 		} else {
 			callback();
 		}

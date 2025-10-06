@@ -33,53 +33,81 @@
 import { useI18n } from 'vue-i18n';
 import { getObj, deptTree, addObj, putObj } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
-import {rule} from "/@/utils/validate";
+import { rule } from '/@/utils/validate';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
-// 定义变量内容
+
+/** 表单引用 */
 const deptDialogFormRef = ref();
+
+/**
+ * 部门表单数据
+ * @property {string} parentId - 父部门ID（'0'表示根部门）
+ * @property {string} deptId - 部门ID（编辑时有值）
+ * @property {string} name - 部门名称
+ * @property {number} sortOrder - 排序号（默认9999）
+ */
 const dataForm = reactive({
 	parentId: '',
 	deptId: '',
 	name: '',
 	sortOrder: 9999,
 });
+
+/** 父部门树数据 */
 const parentData = ref<any[]>([]);
+
+/** 弹窗显示状态 */
 const visible = ref(false);
+
+/** 加载状态 */
 const loading = ref(false);
 
-const dataRules = ref({
-	parentId: [{ required: true, message: '上级部门不能为空', trigger: 'blur' }],
-	name: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '部门名称不能为空', trigger: 'blur' }],
-	sortOrder: [{ required: true, message: '排序不能为空', trigger: 'blur' }],
+/** 表单验证规则 */
+const dataRules = reactive({
+	parentId: [{ required: true, message: t('sysdept.parentIdRequired'), trigger: 'blur' }],
+	name: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('sysdept.nameRequired'), trigger: 'blur' },
+	],
+	sortOrder: [{ required: true, message: t('sysdept.sortOrderRequired'), trigger: 'blur' }],
 });
 
-// 打开弹窗
-const openDialog = (type: string, id: string) => {
+/**
+ * 打开部门表单弹窗
+ * @param {string} type - 操作类型（'add'=新增，'edit'=编辑）
+ * @param {string} id - 部门ID或父部门ID
+ *
+ * 业务逻辑:
+ * 1. 新增模式：id为父部门ID，创建子部门
+ * 2. 编辑模式：id为当前部门ID，加载部门详情
+ */
+const openDialog = async (type: string, id: string) => {
 	visible.value = true;
 	dataForm.deptId = '';
 
-	nextTick(() => {
-		deptDialogFormRef.value?.resetFields();
-		dataForm.parentId = id;
-	});
+	await nextTick();
+	deptDialogFormRef.value?.resetFields();
+	dataForm.parentId = id;
 
 	if (type === 'edit') {
-		getObj(id)
-			.then((res) => {
-				Object.assign(dataForm, res.data);
-			})
-			.catch((err) => {
-				useMessage().error(err.msg);
-			});
+		try {
+			const { data } = await getObj(id);
+			Object.assign(dataForm, data);
+		} catch (err: any) {
+			useMessage().error(err.msg);
+		}
 	}
 
-	getDeptData();
+	await getDeptData();
 };
 
-// 提交
+/**
+ * 提交部门表单
+ * @description 新增或编辑部门信息
+ */
 const onSubmit = async () => {
 	// 立即设置 loading，防止重复点击
 	if (loading.value) return;
@@ -103,18 +131,24 @@ const onSubmit = async () => {
 	}
 };
 
-// 从后端获取菜单信息
+/**
+ * 获取部门树数据
+ * @description 用于父部门选择，包含根节点
+ */
 const getDeptData = async () => {
-	deptTree().then((res) => {
+	try {
+		const { data } = await deptTree();
 		parentData.value = [];
 		const dept = {
 			id: '0',
-			name: '根部门',
+			name: t('sysdept.rootDept'),
 			children: [] as any[],
 		};
-		dept.children = res.data;
+		dept.children = data;
 		parentData.value.push(dept);
-	});
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 暴露变量

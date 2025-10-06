@@ -35,30 +35,45 @@ const DeptForm = defineAsyncComponent(() => import('./form.vue'));
 
 const { t } = useI18n();
 
-// 定义org组件key-value定义
+/** 组织树组件属性映射配置 */
 const props = reactive({ id: 'id', pid: 'parentId', label: 'name', expand: 'expand', children: 'children' });
+
+/** 组织树数据 */
 const data = reactive({});
 
-// 定义org组件右键定义
+/** 右键菜单定义 */
 const defineMenus = reactive([
 	{ name: t('sysdept.addNodeText'), command: 'add' },
 	{ name: t('sysdept.editNodeText'), command: 'edit' },
 	{ name: t('sysdept.delNodeText'), command: 'delete' },
 ]);
 
+/** 是否允许克隆节点拖拽 */
 const cloneNodeDrag = ref(true);
+
+/** 是否可折叠 */
 const collapsable = ref(false);
-const expandLevel = ref(2); //默认展开层级
+
+/** 默认展开层级（2层） */
+const expandLevel = ref(2);
+
+/** 是否水平布局 */
 const horizontal = ref(false);
+
+/** 是否只展开一个节点 */
 const onlyOneNode = ref(false);
+
+/** 组织树组件引用 */
 const treeOrgRef = ref();
+
+/** 部门表单组件引用 */
 const deptDialogRef = ref();
 
-// 添加主题配置
+// 主题配置
 const themeConfig = useThemeConfig();
 const { themeConfig: theme } = storeToRefs(themeConfig);
 
-// 添加 style 定义
+/** 节点标签样式（支持暗黑模式） */
 const style = computed(() => ({
 	background: theme.value.isDark ? 'var(--el-bg-color-overlay)' : 'var(--el-bg-color-page)',
 	color: theme.value.isDark ? 'var(--el-text-color-primary)' : '#5e6d82',
@@ -66,6 +81,7 @@ const style = computed(() => ({
 
 /**
  * 过滤节点
+ * @param {string} deptName - 部门名称
  */
 const filter = (deptName: string) => {
 	treeOrgRef.value.filter(deptName);
@@ -73,28 +89,28 @@ const filter = (deptName: string) => {
 
 /**
  * 节点过滤方法
- * @param {string} value 过滤条件
- * @param {object} data 节点数据
- * @returns {boolean} 返回过滤结果
+ * @param {string} value - 过滤条件
+ * @param {Object} data - 节点数据
+ * @returns {boolean} 是否匹配过滤条件
  */
-const filterNodeMethod = (value, data) => {
+const filterNodeMethod = (value: string, data: any): boolean => {
 	if (!value) return true;
 	return data.label.indexOf(value) !== -1;
 };
 
 /**
- * 处理展开/折叠树
+ * 切换展开/折叠状态
  */
 const handleExpand = async () => {
 	collapsable.value = !collapsable.value;
 };
 
 /**
- * 检查节点是否是根租户节点
- * @param {object} node 节点对象
- * @returns {boolean} 如果节点是根租户节点，返回true；否则返回false
+ * 检查节点是否可操作
+ * @param {Object} node - 节点对象
+ * @returns {boolean} 根租户节点（id='0'）不可编辑删除
  */
-const checkNode = (node) => {
+const checkNode = (node: any): boolean => {
 	if (node?.id === '0') {
 		useMessage().error(t('sysdept.tenantNodeErrorText'));
 		return false;
@@ -103,8 +119,9 @@ const checkNode = (node) => {
 };
 
 /**
- * 当用户左键点击节点，模拟触发组件的右键事件
- * @param e
+ * 节点点击事件处理
+ * @param {MouseEvent} e - 鼠标事件对象
+ * @description 左键点击时模拟右键菜单事件
  */
 const onNodeClick = (e: any) => {
 	const { clientX, clientY } = e;
@@ -122,17 +139,17 @@ const onNodeClick = (e: any) => {
 
 /**
  * 添加部门
- * @param {object} node 节点对象
+ * @param {Object} node - 节点对象
  */
-const addNode = (node) => {
+const addNode = (node: any) => {
 	deptDialogRef.value.openDialog('add', node?.id);
 };
 
 /**
  * 编辑部门
- * @param {object} node 节点对象
+ * @param {Object} node - 节点对象
  */
-const editNode = (node) => {
+const editNode = (node: any) => {
 	if (!checkNode(node)) {
 		return;
 	}
@@ -141,9 +158,9 @@ const editNode = (node) => {
 
 /**
  * 删除部门
- * @param {object} node 节点对象
+ * @param {Object} node - 节点对象
  */
-const delNode = async (node) => {
+const delNode = async (node: any) => {
 	if (!checkNode(node)) {
 		return;
 	}
@@ -164,15 +181,19 @@ const delNode = async (node) => {
 };
 
 /**
- * 查询部门数据
+ * 获取组织架构数据
+ * @description 查询租户信息作为根节点，加载部门树作为子节点
  */
 const getOrgData = async () => {
-	// 查询当前租户信息
-	const tenant = await getObj(Session.getTenant());
-	deptTree().then((res) => {
-		Object.assign(data, { id: '0', name: tenant.data.name });
-		data.children = res.data;
-	});
+	try {
+		// 查询当前租户信息
+		const { data: tenantData } = await getObj(Session.getTenant());
+		const { data: deptData } = await deptTree();
+		Object.assign(data, { id: '0', name: tenantData.name });
+		data.children = deptData;
+	} catch (err: any) {
+		useMessage().error(err.msg || t('common.getDataFailed'));
+	}
 };
 
 onMounted(() => {
