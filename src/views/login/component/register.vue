@@ -174,7 +174,7 @@ const dataRules = reactive({
 		},
 		{
 			validator: (rule: ValidateRule, value: string, callback: ValidateCallback) => {
-				validateUsername(rule, value, callback, false);
+				validateUsername(rule, value, callback, false, t);
 			},
 			trigger: 'blur',
 		},
@@ -183,7 +183,7 @@ const dataRules = reactive({
 		{ required: true, message: t('register.phoneEmpty'), trigger: 'blur' },
 		{
 			validator: (rule: ValidateRule, value: string, callback: ValidateCallback) => {
-				validatePhone(rule, value, callback, false);
+				validatePhone(rule, value, callback, false, undefined, t);
 			},
 			trigger: 'blur',
 		},

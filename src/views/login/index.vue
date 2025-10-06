@@ -121,8 +121,7 @@ const signInSuccess = async () => {
 		let currentTimeInfo = formatAxisI18n(new Date(), t);
 		if (route.query?.redirect) {
 			router.push({
-				path: <string>route.query?.redirect,
-				query: Object.keys(<string>route.query?.params).length > 0 ? JSON.parse(<string>route.query?.params) : '',
+				path: <string>route.query?.redirect
 			});
 		} else {
 			router.push('/');
