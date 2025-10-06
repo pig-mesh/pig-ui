@@ -9,8 +9,8 @@
     <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="100px" v-loading="loading">
       <el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
         <el-radio-group v-model="state.ruleForm.menuType">
-          <el-radio border label="0">菜单</el-radio>
-          <el-radio border label="1">按钮</el-radio>
+          <el-radio border label="0">{{ $t('sysmenu.menuTypeMenu') }}</el-radio>
+          <el-radio border label="1">{{ $t('sysmenu.menuTypeButton') }}</el-radio>
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.parentId')" prop="parentId">
@@ -55,8 +55,8 @@
               <tip content="组件保留状态，避免重新渲染"/>
             </template>
             <el-radio-group v-model="state.ruleForm.keepAlive">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border label="0">{{ $t('sysmenu.noOption') }}</el-radio>
+              <el-radio border label="1">{{ $t('sysmenu.yesOption') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -66,8 +66,8 @@
               <tip content="左侧菜单树是否显示"/>
             </template>
             <el-radio-group v-model="state.ruleForm.visible">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border label="0">{{ $t('sysmenu.noOption') }}</el-radio>
+              <el-radio border label="1">{{ $t('sysmenu.yesOption') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -79,8 +79,8 @@
               <tip content="多个路径指向同一个组件"/>
             </template>
             <el-radio-group v-model="state.ruleForm.param">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border label="0">{{ $t('sysmenu.noOption') }}</el-radio>
+              <el-radio border label="1">{{ $t('sysmenu.yesOption') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -91,8 +91,8 @@
               <tip content="iframe嵌套还是打开独立的Tab"/>
             </template>
             <el-radio-group v-model="state.ruleForm.embedded">
-              <el-radio border label="0">否</el-radio>
-              <el-radio border label="1">是</el-radio>
+              <el-radio border label="0">{{ $t('sysmenu.noOption') }}</el-radio>
+              <el-radio border label="1">{{ $t('sysmenu.yesOption') }}</el-radio>
             </el-radio-group>
           </el-form-item>
         </el-col>
@@ -129,8 +129,25 @@ const IconSelector = defineAsyncComponent(() => import('/@/components/IconSelect
 const visible = ref(false);
 const loading = ref(false);
 const menuDialogFormRef = ref();
-const originalName = ref(''); // To store the original menu name for comparison during edits
-// 定义需要的数据
+
+/**
+ * 组件状态
+ * @property {Object} ruleForm - 菜单表单数据
+ * @property {string} ruleForm.menuId - 菜单ID（编辑时有值）
+ * @property {string} ruleForm.name - 菜单名称或按钮名称
+ * @property {string} ruleForm.permission - 权限标识（按钮类型必填）
+ * @property {string} ruleForm.parentId - 父节点ID，'-1' 表示根节点
+ * @property {string} ruleForm.icon - 菜单图标
+ * @property {string} ruleForm.path - 菜单路径
+ * @property {string} ruleForm.param - 是否路径参数（'0'-否，'1'-是）
+ * @property {string} ruleForm.component - 组件路径
+ * @property {number} ruleForm.sortOrder - 排序号
+ * @property {string} ruleForm.menuType - 菜单类型（'0'-菜单，'1'-按钮）
+ * @property {string} ruleForm.keepAlive - 是否缓存（'0'-否，'1'-是）
+ * @property {string} ruleForm.visible - 是否可见（'0'-否，'1'-是）
+ * @property {string} ruleForm.embedded - 是否内嵌（'0'-否，'1'-是）
+ * @property {Array} parentData - 上级菜单树形数据
+ */
 const state = reactive({
   ruleForm: {
     menuId: '',
@@ -147,10 +164,16 @@ const state = reactive({
     visible: '1',
     embedded: '0',
   },
-  parentData: [] as any[], // 上级菜单数据
+  parentData: [] as any[],
 });
 
-// 存储操作相关信息，用于精确刷新
+/**
+ * 操作信息
+ * @description 用于跟踪编辑操作的父节点变化，实现精确刷新
+ * @property {boolean} isEdit - 是否为编辑操作
+ * @property {string} originalParentId - 编辑前的父节点ID
+ * @property {string} currentParentId - 当前选择的父节点ID
+ */
 const operationInfo = reactive({
   isEdit: false,
   originalParentId: '',
@@ -159,11 +182,11 @@ const operationInfo = reactive({
 
 // 表单校验规则
 const dataRules = reactive({
-  menuType: [{required: true, message: '菜单类型不能为空', trigger: 'blur'}],
-  parentId: [{required: true, message: '上级菜单不能为空', trigger: 'blur'}],
+  menuType: [{required: true, message: t('sysmenu.menuTypeRequired'), trigger: 'blur'}],
+  parentId: [{required: true, message: t('sysmenu.parentIdRequired'), trigger: 'blur'}],
   name: [{validator: rule.overLength, trigger: 'blur'}, {
     required: true,
-    message: '菜单不能为空',
+    message: t('sysmenu.nameRequired'),
     trigger: 'blur'
   }, {
     validator: (rule: any, value: any, callback: any) => {
@@ -182,11 +205,11 @@ const dataRules = reactive({
     },
     trigger: 'blur',
   }],
-  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '路径不能为空', trigger: 'blur'}],
-  icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '图标不能为空', trigger: 'blur'}],
+  path: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: t('sysmenu.pathRequired'), trigger: 'blur'}],
+  icon: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: t('sysmenu.iconRequired'), trigger: 'blur'}],
   permission: [{validator: rule.overLength, trigger: 'blur'}, {
     required: true,
-    message: '权限代码不能为空',
+    message: t('sysmenu.permissionRequired'),
     trigger: 'blur'
   }, {
     validator: (rule: any, value: any, callback: any) => {
@@ -194,12 +217,12 @@ const dataRules = reactive({
     },
     trigger: 'blur',
   }],
-  sortOrder: [{required: true, message: '排序不能为空', trigger: 'blur'}],
-  component: [{min: 5, max: 255, message: '组件名称长度必须介于 5 和 255 之间', trigger: 'blur'},
+  sortOrder: [{required: true, message: t('sysmenu.sortOrderRequired'), trigger: 'blur'}],
+  component: [{min: 5, max: 255, message: t('sysmenu.componentLengthInvalid'), trigger: 'blur'},
     {
       validator: (rule: any, value: any, callback: any) => {
         if (state.ruleForm.menuType === '0' && state.ruleForm.param === '1' && validateNull(state.ruleForm.component)) {
-          callback(new Error('请输入组件名称'));
+          callback(new Error(t('sysmenu.componentRequired')));
         } else {
           return callback();
         }
@@ -208,20 +231,28 @@ const dataRules = reactive({
     }],
 });
 
-// 打开弹窗
+/**
+ * 打开菜单编辑弹窗
+ * @description 根据操作类型（新增/编辑）初始化表单和操作信息
+ * @param {string} type - 操作类型（'add'-新增，'edit'-编辑）
+ * @param {any} [row] - 当前行数据（新增时作为父节点，编辑时为要编辑的数据）
+ */
 const openDialog = (type: string, row?: any) => {
   state.ruleForm.menuId = '';
   visible.value = true;
-  originalName.value = ''; // Reset the original name
 
   // 重置操作信息
   operationInfo.isEdit = type === 'edit';
   operationInfo.originalParentId = '';
-  operationInfo.currentParentId = row?.id || '-1';
+  operationInfo.currentParentId = ''; // 新增时为空，编辑时会在 getMenuDetail 中赋值
 
   nextTick(() => {
     menuDialogFormRef.value?.resetFields();
-    state.ruleForm.parentId = row?.id || '-1';
+    // 新增时设置默认父节点
+    if (type !== 'edit') {
+      state.ruleForm.parentId = row?.id || '-1';
+      operationInfo.currentParentId = row?.id || '-1';
+    }
   });
 
   if (row?.id && type === 'edit') {
@@ -233,43 +264,54 @@ const openDialog = (type: string, row?: any) => {
   getAllMenuData();
 };
 
-// 获取菜单节点的详细信息
-const getMenuDetail = (id: string) => {
-  getObj({menuId: id}).then((res) => {
-    if (res.data[0]?.component) {
-      state.ruleForm.param = '1'
-    }
-    originalName.value = res.data[0].name; // Store the original name
-    
-    // 记录编辑前的父节点ID
-    operationInfo.originalParentId = res.data[0].parentId;
-    
-    Object.assign(state.ruleForm, res.data[0]);
-  });
+/**
+ * 获取菜单节点的详细信息
+ * @description 编辑时调用，加载菜单详情并初始化表单
+ * @param {string} id - 菜单ID
+ */
+const getMenuDetail = async (id: string) => {
+  const { data } = await getObj({menuId: id});
+  const menuDetail = data[0];
+
+  if (menuDetail?.component) {
+    state.ruleForm.param = '1'
+  }
+
+  // 记录编辑前的父节点ID和当前父节点ID
+  operationInfo.originalParentId = menuDetail.parentId;
+  operationInfo.currentParentId = menuDetail.parentId;
+
+  Object.assign(state.ruleForm, menuDetail);
 };
 
-// 从后端获取菜单信息（含层级）
-const getAllMenuData = () => {
+/**
+ * 获取上级菜单树形数据
+ * @description 加载所有菜单类型（type='0'）的数据，用于父节点选择
+ */
+const getAllMenuData = async () => {
   state.parentData = [];
-  pageList({
+  const { data } = await pageList({
     type: '0',
-  }).then((res) => {
-    let menu = {
-      id: '-1',
-      name: '根菜单',
-      children: [],
-    };
-    menu.children = res.data;
-    state.parentData.push(menu);
   });
+
+  let menu = {
+    id: '-1',
+    name: t('sysmenu.rootMenu'),
+    children: data,
+  };
+  state.parentData.push(menu);
 };
 
-// 保存数据
+/**
+ * 提交表单数据
+ * @description 验证并提交新增/编辑表单，成功后通知父组件刷新
+ * @fires refresh - 提交成功后触发，携带刷新信息
+ */
 const onSubmit = async () => {
   // 立即设置 loading，防止重复点击
   if (loading.value) return;
   loading.value = true;
-  
+
   try {
     const valid = await menuDialogFormRef.value.validate().catch(() => {
     });
@@ -281,23 +323,21 @@ const onSubmit = async () => {
     state.ruleForm.menuId ? await putObj(state.ruleForm) : await addObj(state.ruleForm);
     useMessage().success(t(state.ruleForm.menuId ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
-    
+
     // 根据操作类型传递不同的刷新信息
     if (operationInfo.isEdit) {
       // 编辑操作：需要刷新原父节点和新父节点（如果父节点发生变化）
       const refreshInfo = {
         isEdit: true,
         originalParentId: operationInfo.originalParentId,
-        currentParentId: state.ruleForm.parentId,
-        menuData: { ...state.ruleForm }
+        currentParentId: state.ruleForm.parentId
       };
       emit('refresh', refreshInfo);
     } else {
       // 新增操作：只需要刷新父节点
       const refreshInfo = {
         isEdit: false,
-        parentId: state.ruleForm.parentId,
-        menuData: { ...state.ruleForm }
+        parentId: state.ruleForm.parentId
       };
       emit('refresh', refreshInfo);
     }
