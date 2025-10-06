@@ -89,7 +89,7 @@ import { deptTree } from '/@/api/admin/dept';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
-import { rule } from '/@/utils/validate';
+import { rule, clearMaskedFields } from '/@/utils/validate';
 
 const { t } = useI18n();
 
@@ -114,6 +114,20 @@ const props = defineProps({
 	},
 });
 
+/**
+ * 用户表单数据
+ * @property {string} userId - 用户ID（编辑时有值）
+ * @property {string} username - 用户名（5-20位，创建后不可修改）
+ * @property {string|undefined} password - 密码（6-20位，编辑时为脱敏值）
+ * @property {string} lockFlag - 锁定标志（'0'-正常，'9'-锁定）
+ * @property {string|undefined} phone - 手机号
+ * @property {string} deptId - 部门ID
+ * @property {string[]} post - 岗位ID列表
+ * @property {string[]} role - 角色ID列表
+ * @property {string} name - 姓名
+ * @property {string} nickname - 昵称
+ * @property {string} email - 邮箱
+ */
 const dataForm = reactive({
 	userId: '',
 	username: '',
@@ -181,7 +195,10 @@ const dataRules = ref({
 	lockFlag: [{ required: true, message: t('sysuser.statusRequired'), trigger: 'blur' }],
 });
 
-// 打开弹窗
+/**
+ * 打开用户表单弹窗
+ * @param {string} id - 用户ID，如果为空则为新增模式，否则为编辑模式
+ */
 const openDialog = async (id: string) => {
 	visible.value = true;
 	dataForm.userId = '';
@@ -205,12 +222,15 @@ const openDialog = async (id: string) => {
 	getRoleData();
 };
 
-// 提交
+/**
+ * 提交用户表单
+ * @description 新增或编辑用户信息
+ */
 const onSubmit = async () => {
 	// 立即设置 loading，防止重复点击
 	if (loading.value) return;
 	loading.value = true;
-	
+
 	try {
 		const valid = await dataFormRef.value.validate().catch(() => {});
 		if (!valid) {
@@ -218,12 +238,11 @@ const onSubmit = async () => {
 			return false;
 		}
 
-		const { userId, phone, password } = dataForm;
+		const { userId } = dataForm;
 
 		if (userId) {
-			// 清除占位符，避免提交错误的数据
-			if (phone?.includes('*')) dataForm.phone = undefined;
-			if (password?.includes('******')) dataForm.password = undefined;
+			// 清除脱敏占位符，避免提交错误的数据
+			clearMaskedFields(dataForm, ['phone', 'password']);
 
 			await putObj(dataForm);
 			useMessage().success(t('common.editSuccessText'));
@@ -272,37 +291,43 @@ const getUserData = async (id: string) => {
 	}
 };
 
-// 初始化部门数据
-const getDeptData = () => {
-	// 获取部门数据
-	deptTree().then((res) => {
-		deptData.value = res.data;
-		// 默认选择在树中选中的部门
-		if (!dataForm.userId) {
-			dataForm.deptId = props.deptId;
-		}
-	});
+/**
+ * 获取部门树数据
+ * @description 加载部门树，新增时默认选择父组件传递的部门ID
+ */
+const getDeptData = async () => {
+	const { data } = await deptTree();
+	deptData.value = data;
+	// 默认选择在树中选中的部门
+	if (!dataForm.userId) {
+		dataForm.deptId = props.deptId;
+	}
 };
 
-// 岗位数据
-const getPostData = () => {
-	postList().then((res) => {
-		postData.value = res.data;
-		// 默认选择第一个
-		if (!dataForm.userId) {
-			dataForm.post = [res.data[0].postId];
-		}
-	});
+/**
+ * 获取岗位列表
+ * @description 加载所有岗位，新增时默认选择第一个
+ */
+const getPostData = async () => {
+	const { data } = await postList();
+	postData.value = data;
+	// 默认选择第一个
+	if (!dataForm.userId) {
+		dataForm.post = [data[0].postId];
+	}
 };
-// 角色数据
-const getRoleData = () => {
-	roleList().then((res) => {
-		roleData.value = res.data;
-		// 默认选择第一个
-		if (!dataForm.userId) {
-			dataForm.role = [res.data[0].roleId];
-		}
-	});
+
+/**
+ * 获取角色列表
+ * @description 加载所有角色，新增时默认选择第一个
+ */
+const getRoleData = async () => {
+	const { data } = await roleList();
+	roleData.value = data;
+	// 默认选择第一个
+	if (!dataForm.userId) {
+		dataForm.role = [data[0].roleId];
+	}
 };
 
 // 暴露变量
