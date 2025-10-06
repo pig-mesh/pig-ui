@@ -232,3 +232,68 @@ const validateFn = (validatorName, rule, value, callback, defaultErrorMsg) => {
   }
 };
 
+/**
+ * 脱敏占位符常量
+ */
+export const MASK_PATTERNS = {
+	PASSWORD: '******', // 密码占位符
+	PHONE: '*', // 手机号脱敏标识
+	DEFAULT: '*', // 默认脱敏字符
+} as const;
+
+/**
+ * 检测字符串是否为脱敏占位符
+ * @param value 需要检测的值
+ * @param maskChar 脱敏字符，默认为 '*'
+ * @returns 是否为脱敏数据
+ * @example
+ * isMaskedValue('138****1234') // true
+ * isMaskedValue('******') // true
+ * isMaskedValue('13812341234') // false
+ */
+export const isMaskedValue = (value: string | undefined, maskChar: string = '*'): boolean => {
+	if (!value || typeof value !== 'string') {
+		return false;
+	}
+	return value.includes(maskChar);
+};
+
+/**
+ * 清除单个脱敏字段
+ * 如果字段值包含脱敏字符，则返回 undefined，否则返回原值
+ * @param value 字段值
+ * @param maskChar 脱敏字符，默认为 '*'
+ * @returns 清理后的值（脱敏则返回 undefined）
+ * @example
+ * clearMaskedField('138****1234') // undefined
+ * clearMaskedField('13812341234') // '13812341234'
+ */
+export const clearMaskedField = (value: string | undefined, maskChar: string = '*'): string | undefined => {
+	return isMaskedValue(value, maskChar) ? undefined : value;
+};
+
+/**
+ * 批量清除对象中的脱敏字段
+ * 遍历指定字段，如果包含脱敏字符则设置为 undefined
+ * @param obj 需要清理的对象
+ * @param fields 需要清理的字段列表
+ * @param maskChar 脱敏字符，默认为 '*'
+ * @returns 清理后的对象（会修改原对象）
+ * @mutates obj - 此函数会直接修改传入的对象，不会创建新对象
+ * @example
+ * const user = { phone: '138****1234', password: '******', name: 'John' };
+ * clearMaskedFields(user, ['phone', 'password']);
+ * // user = { phone: undefined, password: undefined, name: 'John' }
+ */
+export const clearMaskedFields = <T extends Record<string, any>>(
+	obj: T,
+	fields: (keyof T)[],
+	maskChar: string = '*'
+): T => {
+	fields.forEach((field) => {
+		if (obj[field] !== undefined && isMaskedValue(obj[field], maskChar)) {
+			obj[field] = undefined;
+		}
+	});
+	return obj;
+};

@@ -93,4 +93,9 @@ export default {
 		wechatWork: '企微',
 		dingtalk: '钉钉',
 	},
+	validation: {
+		usernameFormat: '用户名支持小写英文、数字',
+		usernameExists: '用户名已经存在',
+		phoneExists: '手机号已经存在',
+	},
 };

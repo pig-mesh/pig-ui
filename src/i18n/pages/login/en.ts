@@ -96,4 +96,9 @@ export default {
 		wechatWork: 'WeCom',
 		dingtalk: 'DingTalk',
 	},
+	validation: {
+		usernameFormat: 'Username supports lowercase letters and numbers only',
+		usernameExists: 'Username already exists',
+		phoneExists: 'Phone number already exists',
+	},
 };
