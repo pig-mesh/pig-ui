@@ -48,7 +48,7 @@
 import { rule } from '/@/utils/validate';
 import { deptTree } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj, validateRoleCode, validateRoleName } from '/@/api/admin/role';
+import { addObj, getObj, putObj, getObjDetails } from '/@/api/admin/role';
 import { useI18n } from 'vue-i18n';
 
 // 定义子组件向父组件传值/事件
@@ -62,7 +62,15 @@ const deptTreeRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 提交表单数据
+/**
+ * 角色表单数据
+ * @property {string} roleId - 角色ID（编辑时有值）
+ * @property {string} roleName - 角色名称（3-20位）
+ * @property {string} roleCode - 角色标识（3-20位大写字母，创建后不可修改）
+ * @property {string} roleDesc - 角色描述
+ * @property {number} dsType - 数据权限类型（0-全部，1-自定义，2-本级及子级，3-本级，4-仅本人）
+ * @property {string} dsScope - 数据权限范围（部门ID列表，逗号分隔）
+ */
 const form = reactive({
 	roleId: '',
 	roleName: '',
@@ -72,7 +80,12 @@ const form = reactive({
 	dsScope: '',
 });
 
-// 页面对应元数据
+/**
+ * 部门树相关数据
+ * @property {Array} deptData - 部门树数据
+ * @property {Array} checkedDsScope - 已选中的数据权限范围（部门ID列表）
+ * @property {Object} deptProps - 树形组件配置
+ */
 const dataForm = reactive({
 	deptData: [],
 	checkedDsScope: [],
@@ -83,81 +96,127 @@ const dataForm = reactive({
 	},
 });
 
+/**
+ * 角色名称唯一性验证器
+ * @description 新增时验证角色名称是否已存在
+ */
+const validateRoleName = async (rule: any, value: any, callback: any) => {
+	if (!value) {
+		return callback();
+	}
+
+	if (form.roleId) {
+		return callback();
+	}
+
+	try {
+		const { data } = await getObjDetails({ roleName: value });
+		if (data !== null) {
+			callback(new Error(t('sysrole.roleNameExists')));
+		} else {
+			callback();
+		}
+	} catch (error) {
+		callback();
+	}
+};
+
+/**
+ * 角色标识唯一性验证器
+ * @description 新增时验证角色标识是否已存在
+ */
+const validateRoleCode = async (rule: any, value: any, callback: any) => {
+	if (!value) {
+		return callback();
+	}
+
+	if (form.roleId) {
+		return callback();
+	}
+
+	try {
+		const { data } = await getObjDetails({ roleCode: value });
+		if (data !== null) {
+			callback(new Error(t('sysrole.roleCodeExists')));
+		} else {
+			callback();
+		}
+	} catch (error) {
+		callback();
+	}
+};
+
 // 定义校验规则
-const dataRules = ref({
+const dataRules = computed(() => ({
 	roleName: [
-		{ required: true, message: '角色名称不能为空', trigger: 'blur' },
-		{ min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
-		{
-			validator: (rule: any, value: any, callback: any) => {
-				validateRoleName(rule, value, callback, form.roleId !== '');
-			},
-			trigger: 'blur',
-		},
+		{ required: true, message: t('sysrole.roleNameRequired'), trigger: 'blur' },
+		{ min: 3, max: 20, message: t('sysrole.roleNameLength'), trigger: 'blur' },
+		{ validator: validateRoleName, trigger: 'blur' },
 	],
 	roleCode: [
-		{ required: true, message: '角色标识不能为空', trigger: 'blur' },
-		{ min: 3, max: 20, message: '长度在 3 到 20 个字符', trigger: 'blur' },
+		{ required: true, message: t('sysrole.roleCodeRequired'), trigger: 'blur' },
+		{ min: 3, max: 20, message: t('sysrole.roleCodeLength'), trigger: 'blur' },
 		{ validator: rule.validatorCapital, trigger: 'blur' },
-		{
-			validator: (rule: any, value: any, callback: any) => {
-				validateRoleCode(rule, value, callback, form.roleId !== '');
-			},
-			trigger: 'blur',
-		},
+		{ validator: validateRoleCode, trigger: 'blur' },
 	],
 	roleDesc: [{ validator: rule.overLength, trigger: 'blur' }],
-	dsType: [{ required: true, message: '请选择数据权限类型', trigger: 'blur' }],
-	menu_authority: [{ required: true, message: '数据权限不能为空', trigger: 'blur' }],
-});
+	dsType: [{ required: true, message: t('sysrole.dsTypeRequired'), trigger: 'blur' }],
+	menu_authority: [{ required: true, message: t('sysrole.menuAuthorityRequired'), trigger: 'blur' }],
+}));
 
-const dictType = ref([
+const dictType = computed(() => [
 	{
-		label: '全部',
+		label: t('sysrole.dsType.all'),
 		value: 0,
 	},
 	{
-		label: '自定义',
+		label: t('sysrole.dsType.custom'),
 		value: 1,
 	},
 	{
-		label: '本级及子级',
+		label: t('sysrole.dsType.currentAndChildren'),
 		value: 2,
 	},
 	{
-		label: '本级',
+		label: t('sysrole.dsType.current'),
 		value: 3,
 	},
 	{
-		label: '本人',
+		label: t('sysrole.dsType.self'),
 		value: 4,
 	},
 ]);
 
-// 打开弹窗
-const openDialog = (id: string) => {
+/**
+ * 打开角色表单弹窗
+ * @param {string} id - 角色ID，如果为空则为新增模式，否则为编辑模式
+ */
+const openDialog = async (id: string) => {
 	visible.value = true;
 	form.roleId = '';
 
-	nextTick(() => {
-		dataFormRef.value.resetFields();
-	});
+	await nextTick();
+	dataFormRef.value?.resetFields();
 
 	// 获取角色信息
 	if (id) {
 		form.roleId = id;
-		getRoleData(id);
+		await getRoleData(id);
 	}
 
-	getDeptData();
+	await getDeptData();
 };
 
-// 提交
+/**
+ * 提交角色表单
+ * @description 新增或编辑角色信息，处理数据权限范围
+ */
 const onSubmit = async () => {
 	// 立即设置 loading，防止重复点击
 	if (loading.value) return;
 	loading.value = true;
 
+	// 自定义数据权限时，获取选中的部门ID
 	if (form.dsType === 1) {
 		form.dsScope = deptTreeRef.value.getCheckedKeys().join(',');
 	} else {
@@ -182,24 +241,31 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化角色数据
-const getRoleData = (id: string) => {
-	// 获取部门数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-		if (res.data.dsScope) {
-			dataForm.checkedDsScope = res.data.dsScope.split(',');
-		} else {
-			dataForm.checkedDsScope = [];
-		}
-	});
+/**
+ * 获取角色详细数据
+ * @param {string} id - 角色ID
+ */
+const getRoleData = async (id: string) => {
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+		dataForm.checkedDsScope = data.dsScope ? data.dsScope.split(',') : [];
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysrole.fetchRoleDataError'));
+	}
 };
 
-// 获取菜单结构数据
-const getDeptData = () => {
-	deptTree().then((res: any) => {
-		dataForm.deptData = res.data;
-	});
+/**
+ * 获取部门树数据
+ * @description 用于数据权限范围选择
+ */
+const getDeptData = async () => {
+	try {
+		const { data } = await deptTree();
+		dataForm.deptData = data;
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysrole.fetchDeptDataError'));
+	}
 };
 
 // 暴露变量
