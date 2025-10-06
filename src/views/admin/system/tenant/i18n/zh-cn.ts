@@ -39,11 +39,48 @@ export default {
         inputupdateTimeTip: '请输入更新时间',
         inputmenuIdTip: '请选择租户套餐',
         inputUsernameTip: '请输入用户名',
+        inputEmailTip: '请输入邮箱',
+        inputPhoneTip: '请输入手机号',
         selectUserTip: '请搜索并选择用户',
         selectRoleTip: '请选择一个角色',
         selectPostTip: '请选择岗位',
         selectDeptTip: '请选择部门',
         deleteDisabledTip: '基础租户不允许删除',
+
+        // 新增翻译
+        statusLabel: '状态',
+        validityPeriodLabel: '有效期',
+        syncCacheSuccess: '同步成功',
+        syncCacheFailed: '同步失败',
+
+        // form 表单相关
+        nameRequired: '名称不能为空',
+        codeRequired: '编码不能为空',
+        startTimeRequired: '开始时间不能为空',
+        endTimeRequired: '结束时间不能为空',
+        statusRequired: 'status不能为空',
+        selectMenuRequired: '请选择租户套餐菜单',
+        roleManagementRequired: '必须分配角色管理功能',
+
+        // userList 用户列表相关
+        usernameLabel: '用户名',
+        nameLabel: '姓名',
+        emailLabel: '邮箱',
+        phoneLabel: '手机号',
+        batchRemoveBtn: '批量移除',
+        selectedUsers: '已选择 {count} 个用户',
+        removeBtn: '移除',
+        normalStatus: '正常',
+        lockedStatus: '锁定',
+        removeConfirm: '确定要从租户中移除用户 "{name}" 吗？',
+        batchRemoveConfirm: '确定要从租户中移除选中的 {count} 个用户吗？',
+        removeSuccess: '用户移除成功',
+        removeFailed: '移除失败',
+        selectUserWarning: '请选择要移除的用户',
+        searchUserFailed: '搜索用户失败',
+        getRoleListFailed: '获取角色列表失败',
+        inviteUserFailed: '邀请用户失败',
+        systemAdminCannotRemove: '系统管理员不能移除',
     },
     tenantmenu: {
         name: '套餐',
@@ -63,5 +100,9 @@ export default {
         inputLogoTip: '请输入网站Logo',
         inputFooterAuthorTip: '请输入页脚信息',
         inputBackgroundTip: '请输入登录页背景图',
+
+        // 新增提示信息
+        footerTip: '浏览器底部版权信息、备案信息',
+        miniQrTip: '登录页右下角显示的移动端二维码',
     }
 };

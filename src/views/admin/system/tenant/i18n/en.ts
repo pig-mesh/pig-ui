@@ -39,16 +39,70 @@ export default {
 		inputupdateTimeTip: 'Please enter update time',
 		inputmenuIdTip: 'Please select tenant package',
 		inputUsernameTip: 'Please enter username',
+		inputEmailTip: 'Please enter email',
+		inputPhoneTip: 'Please enter phone',
 		selectUserTip: 'Please search and select user',
 		selectRoleTip: 'Please select a role',
 		selectPostTip: 'Please select a post',
 		selectDeptTip: 'Please select a department',
 		deleteDisabledTip: 'Basic tenant cannot be deleted',
+
+		// New translations
+		statusLabel: 'Status',
+		validityPeriodLabel: 'Validity Period',
+		syncCacheSuccess: 'Sync successful',
+		syncCacheFailed: 'Sync failed',
+
+		// Form related
+		nameRequired: 'Name is required',
+		codeRequired: 'Code is required',
+		startTimeRequired: 'Start time is required',
+		endTimeRequired: 'End time is required',
+		statusRequired: 'Status is required',
+		selectMenuRequired: 'Please select tenant package menu',
+		roleManagementRequired: 'Role management permission is required',
+
+		// User list related
+		usernameLabel: 'Username',
+		nameLabel: 'Name',
+		emailLabel: 'Email',
+		phoneLabel: 'Phone',
+		batchRemoveBtn: 'Batch Remove',
+		selectedUsers: '{count} users selected',
+		removeBtn: 'Remove',
+		normalStatus: 'Normal',
+		lockedStatus: 'Locked',
+		removeConfirm: 'Are you sure to remove user "{name}" from tenant?',
+		batchRemoveConfirm: 'Are you sure to remove {count} selected users from tenant?',
+		removeSuccess: 'User removed successfully',
+		removeFailed: 'Remove failed',
+		selectUserWarning: 'Please select users to remove',
+		searchUserFailed: 'Search user failed',
+		getRoleListFailed: 'Get role list failed',
+		inviteUserFailed: 'Invite user failed',
+		systemAdminCannotRemove: 'System admin cannot be removed',
 	},
 	tenantmenu: {
-		name: 'tenantmenu',
+		name: 'Package',
 		index: '#',
-		status: 'status',
-		createTime: 'createTime',
+		status: 'Status',
+		createTime: 'Create Time',
 	},
+
+	individuation: {
+		websiteName: 'Website Name',
+		miniQr: 'Mobile QR Code',
+		logo: 'Website Icon',
+		footerAuthor: 'Footer Info',
+		background: 'Login Background',
+		inputIndividuationNameTip: 'Please enter website name',
+		inputMiniQrTip: 'Please enter website icon',
+		inputLogoTip: 'Please enter website logo',
+		inputFooterAuthorTip: 'Please enter footer info',
+		inputBackgroundTip: 'Please enter login background',
+
+		// New tip messages
+		footerTip: 'Browser footer copyright and filing information',
+		miniQrTip: 'Mobile QR code displayed at the bottom right of login page',
+	}
 };
