@@ -11,16 +11,19 @@ PIGX UI Pro is a Vue 3 enterprise admin platform built on top of the PIGCLOUD mi
 ## Common Commands
 
 ```bash
+# Add dependencies
+pnpm add <package-name>   # 添加新依赖包
 # Development
-npm run dev              # Start dev server at localhost:8888
+pnpm install            # 安装依赖
+pnpm dev                 # 启动本地开发服务 (默认端口 localhost:8888)
 
 # Build
-npm run build            # Production build with max heap 8GB
-npm run build:docker     # Build for Docker deployment
+pnpm build               # 生产环境构建 (最大堆内存 8GB)
+pnpm build:docker        # 构建用于 Docker 部署的版本
 
 # Code Quality
-npm run lint:eslint      # Lint and fix JS/TS/Vue files
-npm run prettier         # Format all files
+pnpm lint:eslint         # 使用 ESLint 检查并自动修复 JS/TS/Vue 代码
+pnpm prettier            # 使用 Prettier 格式化所有文件
 ```
 
 ## Development Workflow

@@ -1,0 +1,22 @@
+export default {
+	cache: {
+		title: '缓存监控',
+		redisVersion: 'Redis版本',
+		clientCount: '客户端数',
+		uptime: '运行时间(天)',
+		usedMemory: '使用内存',
+		aofEnabled: 'AOF是否开启',
+		rdbSuccess: 'RDB是否成功',
+		commandStats: '命令统计',
+		memoryInfo: '内存信息',
+		memoryConsumption: '内存消耗',
+		enabled: '开启',
+		disabled: '关闭',
+		success: '成功',
+		failed: '失败',
+		dbSize: '数据库大小',
+		connectedClients: '已连接客户端',
+		uptimeInDays: '运行天数',
+		usedMemoryHuman: '已用内存',
+	},
+};
