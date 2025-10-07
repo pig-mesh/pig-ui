@@ -97,7 +97,11 @@ const loginType = ref(LoginTypeEnum.PASSWORD);
 // 用户名
 const username = ref('');
 
-// 修改登录类型
+/**
+ * 切换登录类型
+ * @param type - 登录类型枚举值
+ * @param name - 用户名（可选）
+ */
 const changeLoginType = (type: LoginTypeEnum, name?: string) => {
 	loginType.value = type;
 	if (name) {

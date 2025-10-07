@@ -3,7 +3,7 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row>
 				<div class="mt-4" style="width: 100%">
-					<el-button icon="folder-add" type="primary" class="ml10" @click="routeFormRef.openDialog()">
+					<el-button icon="folder-add" type="primary" class="ml10" @click="handleAdd">
 						{{ $t('common.addBtn') }}
 					</el-button>
 				</div>
@@ -12,10 +12,10 @@
 				<div class="flex flex-col">
 					<div class="grid grid-cols-1 gap-4 mt-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 						<div
-							v-for="item in jsonData"
+							v-for="item in routeList"
 							:key="item.routeId"
 							class="relative flex items-start p-4 shadow-lg rounded-xl bg-gray-100 dark:bg-[#1d1e1f] hover:bg-white dark:hover:bg-[#303030] hover:scale-105 hover:shadow-lg transition-all duration-200"
-							@click="routeFormRef.openDialog(item.routeId)"
+							@click="handleEdit(item.routeId)"
 						>
 							<div class="flex items-center justify-center w-12 h-12 border border-blue-100 rounded-full bg-blue-50">
 								<svg
@@ -45,7 +45,7 @@
 								<h2 class="font-semibold">{{ item.routeName }}</h2>
 								<p class="mt-2 text-sm text-gray-500">{{ item.routeId }}</p>
 							</div>
-							<div class="absolute top-0 right-0 flex items-center justify-center w-12 h-12" @click.stop="deleteRoute(item.routeId)">
+							<div class="absolute top-0 right-0 flex items-center justify-center w-12 h-12" @click.stop="handleDelete(item.routeId)">
 								<el-icon>
 									<Delete />
 								</el-icon>
@@ -54,52 +54,91 @@
 					</div>
 				</div>
 			</el-scrollbar>
-			<route-form ref="routeFormRef" @refresh="getData" />
+			<route-form ref="routeFormRef" @refresh="getRouteList" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" name="routeConfig" setup>
 import { deleteObj, fetchList } from '/@/api/admin/route';
-import type { QueryLanguageId } from 'vue3-ts-jsoneditor';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 
 const RouteForm = defineAsyncComponent(() => import('./form.vue'));
 
 const { t } = useI18n();
-const jsonData = ref<any[]>([]);
+
+/**
+ * 路由列表数据
+ */
+const routeList = ref<any[]>([]);
+
+/**
+ * 路由表单引用
+ */
 const routeFormRef = ref();
 
-const deleteRoute = (id: string) => {
-	deleteObj(id)
-		.then(() => {
-			useMessage().success(t('common.optSuccessText'));
-		})
-		.finally(() => {
-			getData();
-		});
+/**
+ * 删除路由配置
+ * @param {string} id - 路由ID
+ */
+const handleDelete = async (id: string) => {
+	try {
+		await deleteObj(id);
+		useMessage().success(t('common.optSuccessText'));
+	} catch (error) {
+		console.error('Delete route failed:', error);
+	} finally {
+		await getRouteList();
+	}
 };
 
-const getData = async () => {
-	const { data } = await fetchList();
+/**
+ * 获取路由列表数据
+ * @description 从API获取路由列表并解析JSON字段
+ */
+const getRouteList = async () => {
+	try {
+		const { data } = await fetchList();
 
-	for (let i = 0; i < data.length; i++) {
-		const route = data[i];
-		if (route.predicates) {
-			const predicates = route.predicates;
-			route.predicates = JSON.parse(predicates);
-		}
-		if (route.filters) {
-			const filters = route.filters;
-			route.filters = JSON.parse(filters);
-		}
+		// 解析每个路由的 predicates 和 filters 字段
+		const parsedRoutes = data.map((route: any) => {
+			const parsedRoute = { ...route };
+
+			if (route.predicates) {
+				parsedRoute.predicates = JSON.parse(route.predicates);
+			}
+
+			if (route.filters) {
+				parsedRoute.filters = JSON.parse(route.filters);
+			}
+
+			return parsedRoute;
+		});
+
+		routeList.value = parsedRoutes;
+	} catch (error) {
+		console.error('Fetch route list failed:', error);
 	}
-	jsonData.value = data;
+};
+
+/**
+ * 打开新增路由对话框
+ */
+const handleAdd = () => {
+	routeFormRef.value?.openDialog();
+};
+
+/**
+ * 打开编辑路由对话框
+ * @param {string} id - 路由ID
+ */
+const handleEdit = (id: string) => {
+	routeFormRef.value?.openDialog(id);
 };
 
 onMounted(() => {
-	getData();
+	getRouteList();
 });
 </script>
 

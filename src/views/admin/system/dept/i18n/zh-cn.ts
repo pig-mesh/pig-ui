@@ -9,7 +9,7 @@ export default {
         rootDept: '根部门',
         inputdeptNameTip: '请输入部门名称',
         inputnameTip: '请输入部门名称',
-        inputLeaderIdTip: '请输入部门领导',
+        inputLeaderIdTip: '请输入部门负责人',
         inputparentIdTip: '请选择上级部门',
         inputsortOrderTip: '请输入排序',
         importTip: '导入部门',

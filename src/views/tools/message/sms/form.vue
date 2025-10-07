@@ -1,227 +1,278 @@
 <template>
-  <el-dialog :title="form.id ? '编辑' : '新增'" v-model="visible"
-             :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
-      <el-form-item label="业务名称" prop="configName">
-        <el-input v-model="form.configName" placeholder="请输入业务名称"/>
-      </el-form-item>
-      <el-form-item label="业务编码" prop="configKey">
-        <template #label>业务编码
-          <tip content="代码中通过业务编码发送"/>
-        </template>
-        <el-input v-model="form.configKey" placeholder="请输入业务编码"/>
-      </el-form-item>
-      <el-form-item label="云厂商" prop="configValue.supplier">
-        <el-select v-model="form.configValue.supplier" placeholder="请选择云厂商">
-          <el-option v-for="item in supplierList" :key="item.value" :label="item.label" :value="item.value"/>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="AK" prop="configValue.accessKeyId">
-        <el-input v-model="form.configValue.accessKeyId" placeholder="请输入accessKey"/>
-      </el-form-item>
-      <el-form-item label="SK" prop="configValue.accessKeySecret">
-        <el-input v-model="form.configValue.accessKeySecret" placeholder="请输入accessKeySecret"/>
-      </el-form-item>
-      <el-form-item label="签名" prop="configValue.signature">
-        <el-input v-model="form.configValue.signature" placeholder="请输入模板签名"/>
-      </el-form-item>
-      <el-form-item label="模板ID" prop="configValue.templateId">
-        <el-input v-model="form.configValue.templateId" placeholder="请输入模板ID"/>
-      </el-form-item>
-      <el-form-item label="启用状态" prop="configStatus">
-        <el-radio-group v-model="form.configStatus">
-          <el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
-              item.label
-            }}
-          </el-radio>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item prop="configValue.extParams">
-        <template #label>扩展参数
-          <tip content="参考 sms4j 文档配置json格式"/>
-        </template>
-        <json-editor
-            ref="jsonEditorRef"
-            v-model="form.configValue.extParams"
-        />
-      </el-form-item>
-    </el-form>
-    <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="onSubmit" :disabled="loading">确认</el-button>
-        </span>
-    </template>
-  </el-dialog>
+	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
+			<el-form-item :label="t('sms.configName')" prop="configName">
+				<el-input v-model="form.configName" :placeholder="t('sms.inputConfigNameTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.configKey')" prop="configKey">
+				<template #label
+					>{{ t('sms.configKey') }}
+					<tip :content="t('sms.configKeyTip')" />
+				</template>
+				<el-input v-model="form.configKey" :placeholder="t('sms.inputConfigKeyTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.supplier')" prop="configValue.supplier">
+				<el-select v-model="form.configValue.supplier" :placeholder="t('sms.inputSupplierTip')">
+					<el-option v-for="item in supplierList" :key="item.value" :label="item.label" :value="item.value" />
+				</el-select>
+			</el-form-item>
+			<el-form-item :label="t('sms.accessKeyId')" prop="configValue.accessKeyId">
+				<el-input v-model="form.configValue.accessKeyId" :placeholder="t('sms.inputAccessKeyIdTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.accessKeySecret')" prop="configValue.accessKeySecret">
+				<el-input v-model="form.configValue.accessKeySecret" :placeholder="t('sms.inputAccessKeySecretTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.signature')" prop="configValue.signature">
+				<el-input v-model="form.configValue.signature" :placeholder="t('sms.inputSignatureTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.templateId')" prop="configValue.templateId">
+				<el-input v-model="form.configValue.templateId" :placeholder="t('sms.inputTemplateIdTip')" />
+			</el-form-item>
+			<el-form-item :label="t('sms.configStatus')" prop="configStatus">
+				<el-radio-group v-model="form.configStatus">
+					<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{ item.label }} </el-radio>
+				</el-radio-group>
+			</el-form-item>
+			<el-form-item prop="configValue.extParams">
+				<template #label
+					>{{ t('sms.extParams') }}
+					<tip :content="t('sms.extParamsTip')" />
+				</template>
+				<json-editor ref="jsonEditorRef" v-model="form.configValue.extParams" />
+			</el-form-item>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script setup lang="ts" name="SysMessageSmsDialog">
 // @ts-ignore
-import JsonEditor from '@axolo/json-editor-vue'
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from "/@/hooks/message";
-import {addObj, getObj, putObj, validateExist} from '/@/api/admin/config'
-import {rule} from "/@/utils/validate";
+import JsonEditor from '@axolo/json-editor-vue';
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { addObj, getObj, putObj, validateExist } from '/@/api/admin/config';
+import { rule, clearMaskedField } from '/@/utils/validate';
+import { useI18n } from 'vue-i18n';
 
+/**
+ * 事件发射器
+ */
 const emit = defineEmits(['refresh']);
 
-// 定义变量内容
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
+
+/**
+ * 表单引用
+ */
 const dataFormRef = ref();
-const visible = ref(false)
-const loading = ref(false)
-// 定义字典
-const {yes_no_type} = useDict('yes_no_type')
 
-// 云厂商
-const supplierList = ref([{
-  value: 'alibaba',
-  label: '阿里云'
-}, {
-  value: 'cloopen',
-  label: '容联云'
-}, {
-  value: 'ctyun',
-  label: '天翼云'
-}, {
-  value: 'emay',
-  label: '亿美软通'
-}, {
-  value: 'huawei',
-  label: '华为云短信'
-}, {
-  value: 'netease',
-  label: '网易云信'
-}, {
-  value: 'tencent',
-  label: '腾讯云短信'
-}, {
-  value: 'unisms',
-  label: '合一短信'
-}, {
-  value: 'yunpian',
-  label: '云片短信'
-}, {
-  value: 'zhutong',
-  label: '助通短信'
-}, {
-  value: 'dingzhong',
-  label: '鼎众短信'
-}, {
-  value: 'yunpian',
-  label: '联麓短信'
-}, {
-  value: 'qiniu',
-  label: '七牛云短信'
-}])
+/**
+ * 对话框显示状态
+ */
+const visible = ref(false);
 
-// 提交表单数据
+/**
+ * 加载状态
+ */
+const loading = ref(false);
+
+/**
+ * 是否/否 字典
+ */
+const { yes_no_type } = useDict('yes_no_type');
+
+/**
+ * 短信平台供应商列表
+ */
+const supplierList = computed(() => [
+	{
+		value: 'alibaba',
+		label: t('sms.alibaba'),
+	},
+	{
+		value: 'tencent',
+		label: t('sms.tencent'),
+	},
+	{
+		value: 'huawei',
+		label: t('sms.huawei'),
+	},
+	{
+		value: 'jdcloud',
+		label: t('sms.jdcloud'),
+	},
+	{
+		value: 'cloopen',
+		label: t('sms.cloopen'),
+	},
+	{
+		value: 'emay',
+		label: t('sms.emay'),
+	},
+	{
+		value: 'ctyun',
+		label: t('sms.ctyun'),
+	},
+	{
+		value: 'netease',
+		label: t('sms.netease'),
+	},
+	{
+		value: 'yunpian',
+		label: t('sms.yunpian'),
+	},
+	{
+		value: 'unisms',
+		label: t('sms.unisms'),
+	},
+	{
+		value: 'zhutong',
+		label: t('sms.zhutong'),
+	},
+	{
+		value: 'dingxin',
+		label: t('sms.dingxin'),
+	},
+	{
+		value: 'chuanglan',
+		label: t('sms.chuanglan'),
+	},
+]);
+
+/**
+ * 表单数据
+ */
 const form = reactive({
-  configType: 'sms',
-  id: '',
-  configKey: '',
-  configName: '',
-  configValue: {
-    supplier: '',
-    accessKeyId: '',
-    accessKeySecret: '' || undefined,
-    signature: '',
-    templateId: '',
-    extParams: ''
-  },
-  configStatus: '1',
+	/** 配置类型 */
+	configType: 'sms',
+	/** 配置ID */
+	id: '',
+	/** 业务编码 */
+	configKey: '',
+	/** 业务名称 */
+	configName: '',
+	/** 配置值 */
+	configValue: {
+		/** 短信平台供应商 */
+		supplier: '',
+		/** AccessKeyId */
+		accessKeyId: '',
+		/** AccessKeySecret */
+		accessKeySecret: '' || undefined,
+		/** 短信签名 */
+		signature: '',
+		/** 短信模板ID */
+		templateId: '',
+		/** 扩展参数 */
+		extParams: '',
+	},
+	/** 启用状态 */
+	configStatus: '1',
 });
 
-// 定义校验规则
-const dataRules = ref({
-  configName: [
-    {required: true, message: '业务名称不能为空', trigger: 'blur'}, {validator: rule.overLength, trigger: 'blur'},
-  ],
-  configKey: [
-    {required: true, message: '业务编码不能为空', trigger: 'blur'},
-    {validator: rule.validatorCapital, trigger: 'blur'},
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        validateExist(rule, value, callback, form.id !== '');
-      },
-      trigger: 'blur',
-    },
-  ],
-  'configValue.supplier': [
-    {required: true, message: '厂商不能为空', trigger: 'blur'}
-  ],
-  'configValue.accessKeyId': [
-    {required: true, message: 'AK 不能为空', trigger: 'blur'}
-  ],
-  'configValue.accessKeySecret': [
-    {required: true, message: 'SK 不能为空', trigger: 'blur'}
-  ],
-  'configValue.signature': [
-    {required: true, message: '签名不能为空', trigger: 'blur'}
-  ],
-  'configValue.templateId': [
-    {required: true, message: '模板不能为空', trigger: 'blur'}
-  ],
-  'configValue.extParams': [
-    {validator: rule.json, trigger: 'blur'}
-  ]
-})
+/**
+ * 表单验证规则
+ */
+const dataRules = computed(() => ({
+	configName: [
+		{ required: true, message: t('sms.configNameRequired'), trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
+	configKey: [
+		{ required: true, message: t('sms.configKeyRequired'), trigger: 'blur' },
+		{ validator: rule.validatorCapital, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateExist(rule, value, callback, form.id !== '');
+			},
+			trigger: 'blur',
+		},
+	],
+	'configValue.supplier': [{ required: true, message: t('sms.supplierRequired'), trigger: 'blur' }],
+	'configValue.accessKeyId': [{ required: true, message: t('sms.accessKeyIdRequired'), trigger: 'blur' }],
+	'configValue.accessKeySecret': [{ required: true, message: t('sms.accessKeySecretRequired'), trigger: 'blur' }],
+	'configValue.signature': [{ required: true, message: t('sms.signatureRequired'), trigger: 'blur' }],
+	'configValue.templateId': [{ required: true, message: t('sms.templateIdRequired'), trigger: 'blur' }],
+	'configValue.extParams': [{ validator: rule.json, trigger: 'blur' }],
+}));
 
-// 打开弹窗
-const openDialog = (id: string) => {
-  visible.value = true
-  form.id = ''
+/**
+ * 打开对话框
+ * @param id - 配置ID，为空时为新增模式
+ */
+const openDialog = async (id: string): Promise<void> => {
+	visible.value = true;
+	form.id = '';
 
-  // 重置表单数据
-  nextTick(() => {
-    dataFormRef.value?.resetFields();
-  });
+	// 重置表单数据
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
-  // 获取sysMessage信息
-  if (id) {
-    form.id = id
-    getConfigData(id)
-  }
+	// 获取配置详情
+	if (id) {
+		form.id = id;
+		await getConfigData(id);
+	}
 };
 
-// 提交
-const onSubmit = async () => {
-  const valid = await dataFormRef.value.validate().catch(() => {
-  });
-  if (!valid) return false;
+/**
+ * 提交表单
+ */
+const onSubmit = async (): Promise<void> => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return;
 
-  try {
-    loading.value = true;
-    if (form.configValue.accessKeySecret?.includes('******')) {
-      form.configValue.accessKeySecret = undefined
-    }
-    form.configValue = JSON.stringify(form.configValue) as any
-    form.id ? await putObj(form) : await addObj(form);
-    useMessage().success(form.id ? '修改成功' : '添加成功');
-    visible.value = false;
-    emit('refresh');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  } finally {
-    loading.value = false;
-  }
+	try {
+		loading.value = true;
+		// 清除脱敏字段（编辑时不提交星号占位符）
+		const configValue = { ...form.configValue };
+		configValue.accessKeySecret = clearMaskedField(configValue.accessKeySecret);
+
+		const payload = { ...form, configValue: JSON.stringify(configValue) as any };
+		form.id ? await putObj(payload) : await addObj(payload);
+		useMessage().success(form.id ? t('common.editSuccessText') : t('common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-
-// 初始化表单数据
-const getConfigData = (id: string) => {
-  // 获取数据
-  loading.value = true
-  getObj({id}).then((res: any) => {
-    Object.assign(form, res.data[0])
-    form.configValue = JSON.parse(res.data[0].configValue)
-    form.configValue.accessKeySecret = '******' as any
-  }).finally(() => {
-    loading.value = false
-  })
+/**
+ * 获取配置详情数据
+ * @param id - 配置ID
+ */
+const getConfigData = async (id: string): Promise<void> => {
+	loading.value = true;
+	try {
+		const { data } = await getObj({ id });
+		Object.assign(form, data[0]);
+		form.configValue = JSON.parse(data[0].configValue);
+		form.configValue.accessKeySecret = '******' as any;
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
-  openDialog, supplierList
+	openDialog,
+	supplierList,
 });
 </script>
+

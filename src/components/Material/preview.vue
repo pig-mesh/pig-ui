@@ -4,7 +4,7 @@
       <el-image-viewer v-if="previewLists.length" :url-list="previewLists" hide-on-click-modal @close="handleClose"/>
     </div>
     <div v-if="type == 'video'">
-      <el-dialog v-model="visible" width="740px" :title="$t('material.preview')" :before-close="handleClose">
+      <el-dialog v-model="visible" width="740px" :title="t('material.preview')" :before-close="handleClose">
         <video-player ref="playerRef" :src="url" width="100%" height="450px"/>
       </el-dialog>
     </div>
@@ -13,16 +13,18 @@
         <iframe
             :src="src"
             width="100%" height="100%" frameborder="0" class="h-screen" v-if="src"></iframe>
-        <span v-else>未配置预览服务器，请参考文档配置</span>
+        <span v-else>{{ t('material.noPreviewServer') }}</span>
       </el-drawer>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import {Base64} from 'js-base64';
-import {validateNull} from "/@/utils/validate";
+import { Base64 } from 'js-base64';
+import { validateNull } from '/@/utils/validate';
+import { useI18n } from 'vue-i18n';
 
+const { t } = useI18n();
 const VideoPlayer = defineAsyncComponent(() => import('/@/components/VideoPlayer/index.vue'));
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <template>
 	<div class="material-select">
-		<popup ref="popupRef" width="830px" custom-class="body-padding" :title="`选择${tipsText}`" @confirm="handleConfirm" @close="handleClose">
+		<popup ref="popupRef" width="830px" custom-class="body-padding" :title="tipsText" @confirm="handleConfirm" @close="handleClose">
 			<template v-if="!hiddenUpload" #trigger>
 				<div class="clearfix material-select__trigger" @click.stop>
 					<draggable class="draggable" v-model="fileList" animation="300" item-key="id">
@@ -17,9 +17,9 @@
 									<file-item :uri="element" :file-size="size" :type="type"></file-item>
 								</del-wrap>
 								<div class="text-xs text-center operation-btns">
-									<span>{{ $t('material.edit') }}</span>
+									<span>{{ t('material.edit') }}</span>
 									|
-									<span @click.stop="handlePreview(element)">{{ $t('material.view') }}</span>
+									<span @click.stop="handlePreview(element)">{{ t('material.view') }}</span>
 								</div>
 							</div>
 						</template>
@@ -43,7 +43,7 @@
 								}"
 							>
 								<el-icon><Plus /></el-icon>
-								<span>{{ $t('material.add') }}</span>
+								<span>{{ t('material.add') }}</span>
 							</div>
 						</slot>
 					</div>
@@ -66,6 +66,8 @@ import FileItem from './file.vue';
 import Material from './index.vue';
 import Preview from './preview.vue';
 import { useThrottleFn } from '@vueuse/shared';
+import { useI18n } from 'vue-i18n';
+
 export default defineComponent({
 	components: {
 		Popup,
@@ -122,6 +124,7 @@ export default defineComponent({
 
 	emits: ['change', 'update:modelValue'],
 	setup(props, { emit }) {
+		const { t } = useI18n();
 		const popupRef = ref<InstanceType<typeof Popup>>();
 		const materialRef = ref<InstanceType<typeof Material>>();
 		const previewUrl = ref('');
@@ -134,11 +137,11 @@ export default defineComponent({
 		const tipsText = computed(() => {
 			switch (props.type) {
 				case 'image':
-					return '图片';
+					return t('material.selectImage');
 				case 'video':
-					return '视频';
+					return t('material.selectVideo');
 				case 'file':
-					return '文件';
+					return t('material.selectFile');
 				default:
 					return '';
 			}

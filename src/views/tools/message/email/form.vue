@@ -1,212 +1,258 @@
 <template>
-  <el-dialog :title="form.id ? '编辑' : '新增'" v-model="visible"
-             :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
-      <el-form-item label="业务名称" prop="configName">
-        <el-input v-model="form.configName" placeholder="请输入业务名称"/>
-      </el-form-item>
-      <el-form-item label="业务编码" prop="configKey">
-        <template #label>业务编码
-          <tip content="代码中通过业务编码发送"/>
-        </template>
-        <el-input v-model="form.configKey" placeholder="请输入业务编码"/>
-      </el-form-item>
+	<el-dialog
+		:title="form.id ? $t('common.editBtn') : $t('common.addBtn')"
+		v-model="visible"
+		:close-on-click-modal="false"
+		draggable
+	>
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
+			<el-form-item :label="t('email.configName')" prop="configName">
+				<el-input v-model="form.configName" :placeholder="t('email.inputConfigNameTip')" />
+			</el-form-item>
+			<el-form-item :label="t('email.configKey')" prop="configKey">
+				<template #label
+					>{{ t('email.configKey') }}
+					<tip :content="t('email.configKeyTip')" />
+				</template>
+				<el-input v-model="form.configKey" :placeholder="t('email.inputConfigKeyTip')" />
+			</el-form-item>
 
-      <el-form-item label="服务地址" prop="configValue.smtpServer">
-        <el-input v-model="form.configValue.smtpServer" placeholder="请输入服务地址"/>
-      </el-form-item>
+			<el-form-item :label="t('email.smtpServer')" prop="configValue.smtpServer">
+				<el-input v-model="form.configValue.smtpServer" :placeholder="t('email.inputSmtpServerTip')" />
+			</el-form-item>
 
-      <el-row>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="服务端口" prop="configValue.port">
-            <el-input-number v-model="form.configValue.port" placeholder="请输入端口"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="开启SSL" prop="configValue.isSSL">
-            <el-radio-group v-model="form.configValue.isSSL">
-              <el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
-                  item.label
-                }}
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
+			<el-row>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.port')" prop="configValue.port">
+						<el-input-number v-model="form.configValue.port" :placeholder="t('email.inputPortTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.isSSL')" prop="configValue.isSSL">
+						<el-radio-group v-model="form.configValue.isSSL">
+							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+								item.label
+							}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+			</el-row>
 
-      <el-row>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="用户名" prop="configValue.username">
-            <el-input v-model="form.configValue.username" placeholder="请输入用户名"/>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="密码" prop="configValue.password">
-            <el-input v-model="form.configValue.password" placeholder="请输入密码（授权码）"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
+			<el-row>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.username')" prop="configValue.username">
+						<el-input v-model="form.configValue.username" :placeholder="t('email.inputUsernameTip')" />
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.password')" prop="configValue.password">
+						<el-input v-model="form.configValue.password" :placeholder="t('email.inputPasswordTip')" />
+					</el-form-item>
+				</el-col>
+			</el-row>
 
-      <el-row>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="开启认证" prop="configValue.isAuth">
-            <el-radio-group v-model="form.configValue.isAuth">
-              <el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
-                  item.label
-                }}
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-        <el-col :span="12" class="mb20">
-          <el-form-item label="启用状态" prop="configStatus">
-            <el-radio-group v-model="form.configStatus">
-              <el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
-                  item.label
-                }}
-              </el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-col>
-      </el-row>
+			<el-row>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.isAuth')" prop="configValue.isAuth">
+						<el-radio-group v-model="form.configValue.isAuth">
+							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+								item.label
+							}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+				<el-col :span="12" class="mb20">
+					<el-form-item :label="t('email.configStatus')" prop="configStatus">
+						<el-radio-group v-model="form.configStatus">
+							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+								item.label
+							}}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+				</el-col>
+			</el-row>
 
-      <el-row>
-        <el-col :span="24" class="mb20">
-          <el-form-item prop="content">
-            <template #label>邮件模板
-              <tip content="邮件模板 使用 ${key} 占位符，如果模板为空，则直接推送body"/>
-            </template>
-            <editor v-model:get-html="form.configValue.html" placeholder="请输入HTML内容"/>
-          </el-form-item>
-        </el-col>
-      </el-row>
-
-
-    </el-form>
-    <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="onSubmit" :disabled="loading">确认</el-button>
-        </span>
-    </template>
-  </el-dialog>
+			<el-row>
+				<el-col :span="24" class="mb20">
+					<el-form-item prop="content">
+						<template #label
+							>{{ t('email.html') }}
+							<tip :content="t('email.htmlTip')" />
+						</template>
+						<editor v-model:get-html="form.configValue.html" :placeholder="t('email.inputHtmlTip')" />
+					</el-form-item>
+				</el-col>
+			</el-row>
+		</el-form>
+		<template #footer>
+			<span class="dialog-footer">
+				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>
 
 <script setup lang="ts" name="SysMessageEmailDialog">
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from "/@/hooks/message";
-import {addObj, getObj, putObj, validateExist} from '/@/api/admin/config'
-import {rule} from "/@/utils/validate";
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { addObj, getObj, putObj, validateExist } from '/@/api/admin/config';
+import { rule, clearMaskedField } from '/@/utils/validate';
+import { useI18n } from 'vue-i18n';
 
+/**
+ * 定义组件事件
+ */
 const emit = defineEmits(['refresh']);
 
-// 定义变量内容
-const dataFormRef = ref();
-const visible = ref(false)
-const loading = ref(false)
-// 定义字典
-const {yes_no_type} = useDict('yes_no_type')
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
 
-// 提交表单数据
+/**
+ * 表单引用
+ */
+const dataFormRef = ref();
+
+/**
+ * 对话框显示状态
+ */
+const visible = ref(false);
+
+/**
+ * 加载状态
+ */
+const loading = ref(false);
+
+/**
+ * 是否/否 字典
+ */
+const { yes_no_type } = useDict('yes_no_type');
+
+/**
+ * 表单数据
+ */
 const form = reactive({
-  configType: 'email',
-  id: '',
-  configKey: '',
-  configName: '',
-  configValue: {
-    port: 456,
-    smtpServer: '',
-    username: '',
-    password: '' || undefined,
-    isSSL: '1',
-    isAuth: '1',
-    html: '',
-  },
-  configStatus: '1',
+	/** 配置类型 */
+	configType: 'email',
+	/** 配置ID */
+	id: '',
+	/** 业务编码 */
+	configKey: '',
+	/** 业务名称 */
+	configName: '',
+	/** 配置值 */
+	configValue: {
+		/** 服务端口 */
+		port: 456,
+		/** SMTP服务地址 */
+		smtpServer: '',
+		/** 用户名 */
+		username: '',
+		/** 密码（授权码） */
+		password: ('' as string) || undefined,
+		/** 是否开启SSL */
+		isSSL: '1',
+		/** 是否开启认证 */
+		isAuth: '1',
+		/** 邮件HTML模板 */
+		html: '',
+	},
+	/** 启用状态 */
+	configStatus: '1',
 });
 
-// 定义校验规则
+/**
+ * 表单验证规则
+ */
 const dataRules = ref({
-  configName: [
-    {required: true, message: '业务名称不能为空', trigger: 'blur'}, {validator: rule.overLength, trigger: 'blur'},
-  ],
-  configKey: [
-    {required: true, message: '业务编码不能为空', trigger: 'blur'},
-    {validator: rule.validatorCapital, trigger: 'blur'},
-    {
-      validator: (rule: any, value: any, callback: any) => {
-        validateExist(rule, value, callback, form.id !== '');
-      },
-      trigger: 'blur',
-    },
-  ],
-  'configValue.smtpServer': [
-    {required: true, message: 'smtp server 不能为空', trigger: 'blur'}
-  ],
-  'configValue.port': [
-    {required: true, message: '端口不能为空', trigger: 'blur'}
-  ],
-  'configValue.username': [
-    {required: true, message: '用户不能为空', trigger: 'blur'}
-  ],
-})
+	configName: [
+		{ required: true, message: t('email.configNameRequired'), trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+	],
+	configKey: [
+		{ required: true, message: t('email.configKeyRequired'), trigger: 'blur' },
+		{ validator: rule.validatorCapital, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateExist(rule, value, callback, form.id !== '');
+			},
+			trigger: 'blur',
+		},
+	],
+	'configValue.smtpServer': [{ required: true, message: t('email.smtpServerRequired'), trigger: 'blur' }],
+	'configValue.port': [{ required: true, message: t('email.portRequired'), trigger: 'blur' }],
+	'configValue.username': [{ required: true, message: t('email.usernameRequired'), trigger: 'blur' }],
+});
 
-// 打开弹窗
-const openDialog = (id: string) => {
-  visible.value = true
-  form.id = ''
+/**
+ * 打开对话框
+ * @param id - 配置ID，为空时为新增模式
+ */
+const openDialog = async (id: string): Promise<void> => {
+	visible.value = true;
+	form.id = '';
 
-  // 重置表单数据
-  nextTick(() => {
-    dataFormRef.value?.resetFields();
-  });
+	// 重置表单数据
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
-  // 获取sysMessage信息
-  if (id) {
-    form.id = id
-    getConfigData(id)
-  }
+	// 获取配置详情
+	if (id) {
+		form.id = id;
+		await getConfigData(id);
+	}
 };
 
-// 提交
-const onSubmit = async () => {
-  const valid = await dataFormRef.value.validate().catch(() => {
-  });
-  if (!valid) return false;
+/**
+ * 提交表单
+ */
+const onSubmit = async (): Promise<void> => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return;
 
-  try {
-    loading.value = true;
-    if (form.configValue.password?.includes('******')) {
-      form.configValue.password = undefined
-    }
-    form.configValue = JSON.stringify(form.configValue) as any
-    form.id ? await putObj(form) : await addObj(form);
-    useMessage().success(form.id ? '修改成功' : '添加成功');
-    visible.value = false;
-    emit('refresh');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  } finally {
-    loading.value = false;
-  }
+	try {
+		loading.value = true;
+		// 清除脱敏字段（编辑时不提交星号占位符）
+		const configValue = { ...form.configValue };
+		configValue.password = clearMaskedField(configValue.password);
+
+		const payload = { ...form, configValue: JSON.stringify(configValue) as any };
+		form.id ? await putObj(payload) : await addObj(payload);
+		useMessage().success(form.id ? t('common.editSuccessText') : t('common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-
-// 初始化表单数据
-const getConfigData = (id: string) => {
-  // 获取数据
-  loading.value = true
-  getObj({id}).then((res: any) => {
-    Object.assign(form, res.data[0])
-    form.configValue = JSON.parse(res.data[0].configValue)
-    form.configValue.password = '******' as any
-  }).finally(() => {
-    loading.value = false
-  })
+/**
+ * 获取配置详情数据
+ * @param id - 配置ID
+ */
+const getConfigData = async (id: string): Promise<void> => {
+	loading.value = true;
+	try {
+		const { data } = await getObj({ id });
+		Object.assign(form, data[0]);
+		form.configValue = JSON.parse(data[0].configValue);
+		form.configValue.password = '******' as any;
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
-  openDialog
+	openDialog,
 });
 </script>

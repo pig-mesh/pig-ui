@@ -84,17 +84,29 @@
 </template>
 
 <script setup lang="ts" name="log-detail">
+/**
+ * 对话框显示状态
+ */
 const visible = ref(false);
 
+/**
+ * 日志详情数据
+ */
 const data = reactive({} as any);
 
-const openDialog = (row: any) => {
-  visible.value = true;
-  Object.assign(data, row);
+/**
+ * 打开日志详情对话框
+ * @param row - 日志行数据
+ */
+const openDialog = (row: any): void => {
+	visible.value = true;
+	Object.assign(data, row);
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
-  openDialog,
+	openDialog,
 });
 </script>

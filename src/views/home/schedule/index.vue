@@ -89,54 +89,100 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import DictTag from '/@/components/DictTag/index.vue';
+
+/**
+ * 日程类型和状态字典
+ */
 const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_status');
+
+/**
+ * 定义组件事件
+ */
 const emit = defineEmits(['refresh']);
+
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+
+/**
+ * 国际化工具
+ */
 const { t } = useI18n();
-// 定义变量内容
+
+/**
+ * 表单对话框引用
+ */
 const formDialogRef = ref();
+
+/**
+ * 抽屉显示状态
+ */
 const visible = ref(false);
 
-// 搜索变量
+/**
+ * 查询表单引用
+ */
 const queryRef = ref();
+
+/**
+ * 是否显示搜索区域
+ */
 const showSearch = ref(true);
-// 多选变量
-const selectObjs = ref([]) as any;
+
+/**
+ * 多选的日程ID数组
+ */
+const selectObjs = ref<string[]>([]);
+
+/**
+ * 是否禁用批量删除按钮（无选中项时禁用）
+ */
 const multiple = ref(true);
 
-//  table hook
+/**
+ * 表格状态配置
+ */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	createdIsNeed: false,
 	pageList: fetchList,
 });
 
+/**
+ * 表格相关钩子函数
+ */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
-const resetQuery = () => {
-	// 清空搜索条件
+/**
+ * 清空搜索条件并重新查询
+ */
+const resetQuery = (): void => {
 	queryRef.value?.resetFields();
 	state.queryForm.date = '';
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-// 导出excel
-const exportExcel = () => {
+/**
+ * 导出Excel文件
+ */
+const exportExcel = (): void => {
 	downBlobFile('/job/schedule/export', state.queryForm, 'schedule.xlsx');
 };
 
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
+/**
+ * 表格多选事件处理
+ * @param objs - 选中的行对象数组
+ */
+const handleSelectionChange = (objs: { id: string }[]): void => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
-const handleDelete = async (ids: string[]) => {
+/**
+ * 删除日程
+ * @param ids - 要删除的日程ID数组
+ */
+const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
 	} catch {
@@ -152,18 +198,26 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 
-//关闭日程刷新首页日程数据
-const handleClose = () => {
+/**
+ * 关闭抽屉时刷新首页日程数据
+ */
+const handleClose = (): void => {
 	emit('refresh');
 };
 
-const open = (row: any) => {
+/**
+ * 打开日程管理抽屉
+ * @param row - 包含日期信息的行数据
+ */
+const open = (row: any): void => {
 	state.queryForm.date = row.date;
 	getDataList();
 	visible.value = true;
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
 	open,
 });

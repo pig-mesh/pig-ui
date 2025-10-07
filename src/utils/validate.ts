@@ -2,6 +2,7 @@
 /**
  * 判断是否为空
  * @param val 数据
+ * @returns 是否为空值
  */
 export const validateNull = (val: any) => {
 	if (typeof val === 'boolean') {
@@ -21,78 +22,106 @@ export const validateNull = (val: any) => {
 	return false;
 };
 
+/**
+ * 获取错误消息（支持国际化）
+ * @param key - i18n key
+ * @param defaultMsg - 默认消息
+ * @param t - i18n 翻译函数
+ * @returns 错误消息
+ */
+const getErrorMsg = (key: string, defaultMsg: string, t?: any): string => {
+	return t ? t(`validate.${key}`) : defaultMsg;
+};
+
 export const rule = {
 	/**
 	 * 校验用户输入的长度避免超长
-	 *  0-255个字符
-	 *  超长
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	overLength(rule: any, value: any, callback: any) {
+	overLength(rule: any, value: any, callback: any, t?: any) {
 		if (value?.length > 255) {
-			callback(new Error('输入内容过长，请重新输入'));
+			callback(new Error(getErrorMsg('overLength', '输入内容过长，请重新输入', t)));
 		} else {
 			callback();
 		}
 	},
 	/**
-	 * 校验 请输入中文、英文、数字包括下划线
-	 * 名称校验
+	 * 校验中文、英文、数字包括下划线
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorNameCn(rule: any, value: any, callback: any) {
+	validatorNameCn(rule: any, value: any, callback: any, t?: any) {
 		const acount = /^[\u4E00-\u9FA5A-Za-z0-9_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error('请输入中文、英文、数字包括下划线'));
+			callback(new Error(getErrorMsg('validatorNameCn', '请输入中文、英文、数字包括下划线', t)));
 		} else {
 			callback();
 		}
 	},
 	/**
-	 * 校验 请输入大写英文、下划线
-	 * 名称校验
+	 * 校验大写英文、下划线
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorCapital(rule: any, value: any, callback: any) {
+	validatorCapital(rule: any, value: any, callback: any, t?: any) {
 		const acount = /^[A-Z_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error('请输入大写英文、下划线'));
+			callback(new Error(getErrorMsg('validatorCapital', '请输入大写英文、下划线', t)));
 		} else {
 			callback();
 		}
 	},
 
 	/**
-	 * 校验 请输入小写英文、下划线
-	 * 名称校验
+	 * 校验小写英文、下划线
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorLowercase(rule: any, value: any, callback: any) {
+	validatorLowercase(rule: any, value: any, callback: any, t?: any) {
 		const acount = /^[a-z_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error('请输入小写英文、下划线'));
+			callback(new Error(getErrorMsg('validatorLowercase', '请输入小写英文、下划线', t)));
 		} else {
 			callback();
 		}
 	},
 
 	/**
-	 * 校验 请输入小写英文
-	 * 名称校验
+	 * 校验小写英文
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorLower(rule: any, value: any, callback: any) {
+	validatorLower(rule: any, value: any, callback: any, t?: any) {
 		const acount = /^[a-z]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error('请输入小写英文'));
+			callback(new Error(getErrorMsg('validatorLower', '请输入小写英文', t)));
 		} else {
 			callback();
 		}
 	},
 
 	/**
-	 * 校验首尾空白字符的正则表达式
-	 *
+	 * 校验首尾空白字符
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	checkSpace(rule: any, value: any, callback: any) {
+	checkSpace(rule: any, value: any, callback: any, t?: any) {
 		const longrg = /[^\s]+$/;
 		if (!longrg.test(value)) {
-			callback(new Error('请输入非空格信息'));
+			callback(new Error(getErrorMsg('checkSpace', '请输入非空格信息', t)));
 		} else {
 			callback();
 		}
@@ -100,8 +129,12 @@ export const rule = {
 
 	/**
 	 * 校验手机号
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatePhone(rule: any, value: any, callback: any) {
+	validatePhone(rule: any, value: any, callback: any, t?: any) {
 		var isPhone = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/;
 
 		if (value.indexOf('****') >= 0) {
@@ -109,59 +142,119 @@ export const rule = {
 		}
 
 		if (!isPhone.test(value)) {
-			callback(new Error('请输入合法手机号'));
+			callback(new Error(getErrorMsg('validatePhone', '请输入合法手机号', t)));
 		} else {
 			callback();
 		}
 	},
 
-	/* 数字 */
-	number(rule, value, callback) {
-		validateFn('number', rule, value, callback, '包含非数字字符');
+	/**
+	 * 校验数字
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	number(rule, value, callback, t?: any) {
+		validateFn('number', rule, value, callback, getErrorMsg('number', '包含非数字字符', t), t);
 	},
 
-	/* 字母 */
-	letter(rule, value, callback) {
-		validateFn('letter', rule, value, callback, '包含非字母字符');
+	/**
+	 * 校验字母
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	letter(rule, value, callback, t?: any) {
+		validateFn('letter', rule, value, callback, getErrorMsg('letter', '包含非字母字符', t), t);
 	},
 
-	/* 字母和数字 */
-	letterAndNumber(rule, value, callback) {
-		validateFn('letterAndNumber', rule, value, callback, '只能输入字母或数字');
+	/**
+	 * 校验字母和数字
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	letterAndNumber(rule, value, callback, t?: any) {
+		validateFn('letterAndNumber', rule, value, callback, getErrorMsg('letterAndNumber', '只能输入字母或数字', t), t);
 	},
 
-	/* 手机号码 */
-	mobilePhone(rule, value, callback) {
-		validateFn('mobilePhone', rule, value, callback, '手机号码格式有误');
+	/**
+	 * 校验手机号码
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	mobilePhone(rule, value, callback, t?: any) {
+		validateFn('mobilePhone', rule, value, callback, getErrorMsg('mobilePhone', '手机号码格式有误', t), t);
 	},
 
-	/* 字母开头，仅可包含数字 */
-	letterStartNumberIncluded(rule, value, callback) {
-		validateFn('letterStartNumberIncluded', rule, value, callback, '必须以字母开头，可包含数字');
+	/**
+	 * 校验字母开头，可包含数字
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	letterStartNumberIncluded(rule, value, callback, t?: any) {
+		validateFn('letterStartNumberIncluded', rule, value, callback, getErrorMsg('letterStartNumberIncluded', '必须以字母开头，可包含数字', t), t);
 	},
 
-	/* 禁止中文输入 */
-	noChinese(rule, value, callback) {
-		validateFn('noChinese', rule, value, callback, '不可输入中文字符');
+	/**
+	 * 校验禁止中文输入
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	noChinese(rule, value, callback, t?: any) {
+		validateFn('noChinese', rule, value, callback, getErrorMsg('noChinese', '不可输入中文字符', t), t);
 	},
 
-	/* 必须中文输入 */
-	chinese(rule, value, callback) {
-		validateFn('chinese', rule, value, callback, '只能输入中文字符');
+	/**
+	 * 校验必须中文输入
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	chinese(rule, value, callback, t?: any) {
+		validateFn('chinese', rule, value, callback, getErrorMsg('chinese', '只能输入中文字符', t), t);
 	},
 
-	/* 电子邮箱 */
-	email(rule, value, callback) {
-		validateFn('email', rule, value, callback, '邮箱格式有误');
+	/**
+	 * 校验电子邮箱
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	email(rule, value, callback, t?: any) {
+		validateFn('email', rule, value, callback, getErrorMsg('email', '邮箱格式有误', t), t);
 	},
 
-	/* URL网址 */
-	url(rule, value, callback) {
-		validateFn('url', rule, value, callback, 'URL格式有误');
+	/**
+	 * 校验URL网址
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	url(rule, value, callback, t?: any) {
+		validateFn('url', rule, value, callback, getErrorMsg('url', 'URL格式有误', t), t);
 	},
 
-	/* json 格式 */
-	json(rule, value, callback) {
+	/**
+	 * 校验JSON格式
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	json(rule, value, callback, t?: any) {
 		if (validateNull(value) || value.length <= 0) {
 			callback();
 			return;
@@ -171,11 +264,18 @@ export const rule = {
 			JSON.parse(value);
 			callback();
 		} catch (error) {
-			callback(new Error('json 格式有误'));
+			callback(new Error(getErrorMsg('json', 'json 格式有误', t)));
 		}
 	},
 
-	regExp(rule, value, callback) {
+	/**
+	 * 正则表达式校验
+	 * @param rule - 校验规则（需包含 regExp 属性）
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 * @param t - i18n 翻译函数（可选）
+	 */
+	regExp(rule, value, callback, t?: any) {
 		if (validateNull(value) || value.length <= 0) {
 			callback();
 			return;
@@ -184,7 +284,7 @@ export const rule = {
 		const pattern = new RegExp(rule.regExp);
 
 		if (!pattern.test(value)) {
-			const errTxt = rule.errorMsg || 'invalid value';
+			const errTxt = rule.errorMsg || (t ? t('validate.invalidValue') : 'invalid value');
 			callback(new Error(errTxt));
 		} else {
 			callback();
@@ -195,14 +295,19 @@ export const rule = {
 /**
  * @desc  [自定义校验规则]
  * @example
- *  import { validateRule } from "@/utils/validateRules";
+ *  import { rule } from "@/utils/validate";
  *  rules: [
- *     { validator: validateRule.emailValue, trigger: 'blur'}
+ *     { validator: (rule, value, callback) => rule.email(rule, value, callback, t), trigger: 'blur'}
  *  ]
  */
 
-export const getRegExp = function (validatorName) {
-	const commonRegExp = {
+/**
+ * 获取正则表达式
+ * @param validatorName - 验证器名称
+ * @returns 正则表达式字符串
+ */
+export const getRegExp = function (validatorName: string): string {
+	const commonRegExp: Record<string, string> = {
 		number: '^[-]?\\d+(\\.\\d+)?$',
 		letter: '^[A-Za-z]+$',
 		letterAndNumber: '^[A-Za-z0-9]+$',
@@ -216,7 +321,16 @@ export const getRegExp = function (validatorName) {
 	return commonRegExp[validatorName];
 };
 
-const validateFn = (validatorName, rule, value, callback, defaultErrorMsg) => {
+/**
+ * ��用验证函数
+ * @param validatorName - 验证器名称
+ * @param rule - 校验规则
+ * @param value - 输入值
+ * @param callback - 回调函数
+ * @param defaultErrorMsg - 默认错误消息
+ * @param t - i18n 翻译函数（可选）
+ */
+const validateFn = (validatorName: string, rule: any, value: any, callback: any, defaultErrorMsg: string, t?: any) => {
   if (validateNull(value) || value.length <= 0) {
     callback();
     return;
@@ -277,7 +391,7 @@ export const clearMaskedField = (value: string | undefined, maskChar: string = '
  * 遍历指定字段，如果包含脱敏字符则设置为 undefined
  * @param obj 需要清理的对象
  * @param fields 需要清理的字段列表
- * @param maskChar 脱敏字符，默认为 '*'
+ * @param maskChar 脱敏字符，默认为 '**'
  * @returns 清理后的对象（会修改原对象）
  * @mutates obj - 此函数会直接修改传入的对象，不会创建新对象
  * @example
@@ -288,7 +402,7 @@ export const clearMaskedField = (value: string | undefined, maskChar: string = '
 export const clearMaskedFields = <T extends Record<string, any>>(
 	obj: T,
 	fields: (keyof T)[],
-	maskChar: string = '*'
+	maskChar: string = '**'
 ): T => {
 	fields.forEach((field) => {
 		if (obj[field] !== undefined && isMaskedValue(obj[field], maskChar)) {

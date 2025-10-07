@@ -215,4 +215,24 @@ export default {
 			title: '提示'
 		}
 	},
+	validate: {
+		overLength: '输入内容过长，请重新输入',
+		validatorNameCn: '请输入中文、英文、数字包括下划线',
+		validatorCapital: '请输入大写英文、下划线',
+		validatorLowercase: '请输入小写英文、下划线',
+		validatorLower: '请输入小写英文',
+		checkSpace: '请输入非空格信息',
+		validatePhone: '请输入合法手机号',
+		number: '包含非数字字符',
+		letter: '包含非字母字符',
+		letterAndNumber: '只能输入字母或数字',
+		mobilePhone: '手机号码格式有误',
+		letterStartNumberIncluded: '必须以字母开头，可包含数字',
+		noChinese: '不可输入中文字符',
+		chinese: '只能输入中文字符',
+		email: '邮箱格式有误',
+		url: 'URL格式有误',
+		json: 'json 格式有误',
+		invalidValue: '输入值无效',
+	},
 };

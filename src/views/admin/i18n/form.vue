@@ -46,33 +46,33 @@ const form = reactive({
 // 定义校验规则
 const dataRules = ref({
 	name: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: 'name不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('i18n.nameRequired'), trigger: 'blur' },
 		{ validator: rule.noChinese, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateName(rule, value, callback, form.id !== '');
+				validateName(rule, value, callback, form.id !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
 	zhCn: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '中文不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('i18n.zhCnRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateZhCn(rule, value, callback, form.id !== '');
+				validateZhCn(rule, value, callback, form.id !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
 	en: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '英文不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('i18n.enRequired'), trigger: 'blur' },
 		{ validator: rule.letter, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateEn(rule, value, callback, form.id !== '');
+				validateEn(rule, value, callback, form.id !== '', t);
 			},
 			trigger: 'blur',
 		},

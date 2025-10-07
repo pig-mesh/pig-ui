@@ -54,18 +54,21 @@ const dataForm = reactive({
 
 const dataRules = reactive({
 	dictType: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '类型不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('sysdict.dictTypeRequired'), trigger: 'blur' },
 		{ validator: rule.validatorNameCn, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateDictType(rule, value, callback, dataForm.id !== '');
+				validateDictType(rule, value, callback, dataForm.id !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
-	systemFlag: [{ required: true, message: '字典类型不能为空', trigger: 'blur' }],
-	description: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '描述不能为空', trigger: 'blur' }],
+	systemFlag: [{ required: true, message: t('sysdict.systemFlagRequired'), trigger: 'blur' }],
+	description: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('sysdict.descriptionRequired'), trigger: 'blur' },
+	],
 });
 
 // 打开弹窗

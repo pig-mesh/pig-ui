@@ -107,7 +107,7 @@ export function refreshCache() {
 	});
 }
 
-export function validateDictType(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateDictType(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
 	if (isEdit) {
 		return callback();
 	}
@@ -115,14 +115,15 @@ export function validateDictType(rule: any, value: any, callback: any, isEdit: b
 	getObjDetails({ dictType: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('字典已经存在'));
+			const message = t ? t('sysdict.dictTypeExists') : 'Dictionary type already exists';
+			callback(new Error(message));
 		} else {
 			callback();
 		}
 	});
 }
 
-export function validateDictItemLabel(rule: any, value: any, callback: any, type: string, isEdit: boolean) {
+export function validateDictItemLabel(rule: any, value: any, callback: any, type: string, isEdit: boolean, t?: any) {
 	if (isEdit) {
 		return callback();
 	}
@@ -130,7 +131,8 @@ export function validateDictItemLabel(rule: any, value: any, callback: any, type
 	getItemDetails({ dictType: type, label: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('标签已经存在'));
+			const message = t ? t('dictItem.labelExists') : 'Label already exists';
+			callback(new Error(message));
 		} else {
 			callback();
 		}

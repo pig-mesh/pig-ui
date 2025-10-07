@@ -3,11 +3,11 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" ref="queryRef">
-					<el-form-item :label="$t('param.publicName')" prop="publicName">
-						<el-input :placeholder="$t('param.inputpublicNameTip')" style="max-width: 180px" v-model="state.queryForm.publicName" />
+					<el-form-item :label="t('param.publicName')" prop="publicName">
+						<el-input :placeholder="t('param.inputpublicNameTip')" style="max-width: 180px" v-model="state.queryForm.publicName" />
 					</el-form-item>
-					<el-form-item :label="$t('param.publicKey')" prop="publicKey">
-						<el-input :placeholder="$t('param.inputpublicKeyTip')" style="max-width: 180px" v-model="state.queryForm.publicKey" />
+					<el-form-item :label="t('param.publicKey')" prop="publicKey">
+						<el-input :placeholder="t('param.inputpublicKeyTip')" style="max-width: 180px" v-model="state.queryForm.publicKey" />
 					</el-form-item>
 					<el-form-item :label="t('param.systemFlag')" class="ml2" prop="systemFlag">
 						<el-select :placeholder="t('param.inputsystemFlagTip')" v-model="state.queryForm.systemFlag">
@@ -16,20 +16,20 @@
 					</el-form-item>
 					<el-form-item>
 						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
-							{{ $t('common.queryBtn') }}
+							{{ t('common.queryBtn') }}
 						</el-button>
-						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
+						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ t('common.resetBtn') }} </el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
 					<el-button v-auth="'sys_syspublicparam_add'" @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary">
-						{{ $t('common.addBtn') }}
+						{{ t('common.addBtn') }}
 					</el-button>
 
 					<el-button plain v-auth="'sys_syspublicparam_del'" @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
-						{{ $t('common.refreshCacheBtn') }}
+						{{ t('common.refreshCacheBtn') }}
 					</el-button>
 
 					<el-button
@@ -41,7 +41,7 @@
 						icon="Delete"
 						type="primary"
 					>
-						{{ $t('common.delBtn') }}
+						{{ t('common.delBtn') }}
 					</el-button>
 
 					<right-toolbar
@@ -80,13 +80,13 @@
 						<dict-tag :options="dict_type" :value="scope.row.systemFlag"></dict-tag>
 					</template>
 				</el-table-column>
-				<el-table-column :label="$t('common.action')" width="150">
+				<el-table-column :label="t('common.action')" width="150">
 					<template #default="scope">
 						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.publicId)" text type="primary"
-							>{{ $t('common.editBtn') }}
+							>{{ t('common.editBtn') }}
 						</el-button>
 
-						<el-tooltip :content="$t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
+						<el-tooltip :content="t('sysdict.deleteDisabledTip')" :disabled="scope.row.systemFlag === '0'" placement="top">
 							<span style="margin-left: 12px">
 								<el-button
 									icon="delete"
@@ -96,7 +96,7 @@
 									text
 									type="primary"
 								>
-									{{ $t('common.delBtn') }}
+									{{ t('common.delBtn') }}
 								</el-button>
 							</span>
 						</el-tooltip>
@@ -158,13 +158,16 @@ const handleSelectable = (row: any) => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/param/export', Object.assign(state.queryForm,{ids:selectObjs}), 'param.xlsx');
+	downBlobFile('/admin/param/export', { ...state.queryForm, ids: selectObjs.value }, 'param.xlsx');
 };
 
-const handleRefreshCache = () => {
-	refreshCache().then(() => {
-		useMessage().success('同步成功');
-	});
+const handleRefreshCache = async () => {
+	try {
+		await refreshCache();
+		useMessage().success(t('param.syncSuccess'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 多选事件

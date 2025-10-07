@@ -7,14 +7,14 @@
 			<div class="widgets-content">
 				<div class="widgets-top">
 					<div class="flex justify-end custom_btn">
-						<el-button v-if="customizing" type="primary" round @click="save">完成</el-button>
-						<el-button v-else type="primary" round @click="custom">自定义</el-button>
+						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
+						<el-button v-else type="primary" round @click="custom">{{ t('home.widgets.customize') }}</el-button>
 					</div>
 				</div>
 				<div class="widgets" ref="widgets">
 					<div class="widgets-wrapper">
 						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
-							<el-empty description='您的仪表盘是空的！点击右上角的"自定义"按钮添加小组件吧。' :image-size="200"></el-empty>
+							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="200"></el-empty>
 						</div>
 						<el-row :gutter="0">
 							<el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
@@ -52,7 +52,7 @@
 			<div v-if="customizing" class="widgets-aside">
 				<el-container>
 					<el-header>
-						<div class="widgets-aside-title">添加部件</div>
+						<div class="widgets-aside-title">{{ t('home.widgets.addWidget') }}</div>
 						<div class="widgets-aside-close" @click="close()">
 							<el-icon><Close /></el-icon>
 						</div>
@@ -85,7 +85,7 @@
 					<el-main class="nopadding">
 						<div class="widgets-list">
 							<div v-if="myCompsList.length <= 0" class="p-5 text-center widgets-list-nodata">
-								<el-empty description="所有可用小组件都已添加。" :image-size="100"></el-empty>
+								<el-empty :description="t('home.widgets.allAdded')" :image-size="100"></el-empty>
 							</div>
 							<div v-for="item in myCompsList" :key="item.title" class="widgets-list-item">
 								<div class="item-logo">
@@ -104,7 +104,7 @@
 						</div>
 					</el-main>
 					<el-footer style="height: 51px">
-						<el-button size="small" @click="backDefaul()">恢复默认</el-button>
+						<el-button size="small" @click="backDefaul()">{{ t('home.widgets.resetDefault') }}</el-button>
 					</el-footer>
 				</el-container>
 			</div>
@@ -117,15 +117,22 @@ import draggable from 'vuedraggable';
 import allComps from './components/index';
 import { Local } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
+import { useI18n } from 'vue-i18n';
 import type { Component } from 'vue';
 
+/**
+ * 部件组件接口定义
+ */
 interface WidgetComponent {
 	title: string;
-	icon: Component | string; // Can be a component or an icon name string
+	icon: Component | string;
 	description: string;
-	[key: string]: any; // Allow other props
+	[key: string]: any;
 }
 
+/**
+ * 部件列表项接口定义
+ */
 interface WidgetListItem {
 	key: string;
 	title: string;
@@ -134,7 +141,14 @@ interface WidgetListItem {
 	disabled?: boolean;
 }
 
-// Default layout settings
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
+
+/**
+ * 默认布局配置
+ */
 const defaultGrid = ref({
 	layout: [7, 7, 10],
 	copmsList: [
@@ -143,11 +157,30 @@ const defaultGrid = ref({
 		['calendar', 'favorite-menu', 'favorite-flow', 'demo-chart2'],
 	],
 });
+
+/**
+ * 是否处于自定义模式
+ */
 const customizing = ref(false);
+
+/**
+ * 部件容器元素引用
+ */
 const widgets = ref();
+
+/**
+ * 本地存储键名
+ */
 const widgetsKey = ref('widgets');
+
+/**
+ * 当前网格布局配置
+ */
 const grid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
 
+/**
+ * 所有可用部件列表（标记已添加的部件为禁用状态）
+ */
 const allCompsList = computed(() => {
 	const list: WidgetListItem[] = [];
 	for (const [key, compDetails] of Object.entries(allComps as Record<string, WidgetComponent>)) {
@@ -163,8 +196,10 @@ const allCompsList = computed(() => {
 	return list;
 });
 
+/**
+ * 可添加的部件列表（未禁用且在支持列表中的部件）
+ */
 const myCompsList = computed(() => {
-	// Support list
 	const myGrid = [
 		'calendar',
 		'current-user',
@@ -181,9 +216,15 @@ const myCompsList = computed(() => {
 	return allCompsList.value.filter((item: WidgetListItem) => !item.disabled && myGrid.includes(item.key));
 });
 
+/**
+ * 当前已添加的部件列表
+ */
 const nowCompsList = computed(() => grid.value.copmsList.flat());
 
-const custom = () => {
+/**
+ * 进入自定义模式
+ */
+const custom = (): void => {
 	customizing.value = true;
 	nextTick(() => {
 		const oldWidth = widgets.value.offsetWidth;
@@ -192,7 +233,11 @@ const custom = () => {
 	});
 };
 
-const setLayout = (layout: Array<number>) => {
+/**
+ * 设置网格布局
+ * @param layout - 布局配置数组
+ */
+const setLayout = (layout: Array<number>): void => {
 	grid.value.layout = layout;
 	if (layout.join(',') === '24') {
 		if (grid.value.copmsList[1]) {
@@ -206,39 +251,57 @@ const setLayout = (layout: Array<number>) => {
 	}
 };
 
-const push = (item: WidgetListItem) => {
+/**
+ * 添加部件到布局
+ * @param item - 要添加的部件项
+ */
+const push = (item: WidgetListItem): void => {
 	grid.value.copmsList[0].push(item.key);
 };
 
-const remove = (itemKey: string) => {
+/**
+ * 从布局中移除部件
+ * @param itemKey - 要移除的部件键名
+ */
+const remove = (itemKey: string): void => {
 	grid.value.copmsList = grid.value.copmsList.map((obj: string[]) => obj.filter((o: string) => o !== itemKey));
 };
 
-const save = () => {
+/**
+ * 保存布局配置到本地存储
+ */
+const save = (): void => {
 	customizing.value = false;
 	widgets.value.style.removeProperty('transform');
 	Local.set(widgetsKey.value, JSON.stringify(grid.value));
 };
 
-const backDefaul = () => {
+/**
+ * 恢复默认布局
+ */
+const backDefaul = (): void => {
 	customizing.value = false;
 	widgets.value.style.removeProperty('transform');
 	grid.value = defaultGrid.value;
 	Local.remove(widgetsKey.value);
-	// 重新加载页面
 	window.location.reload();
 };
 
-const close = () => {
+/**
+ * 关闭自定义模式
+ */
+const close = (): void => {
 	customizing.value = false;
 	widgets.value.style.removeProperty('transform');
 };
 
+/**
+ * 组件挂载时初始化布局
+ */
 onMounted(() => {
-	// 初始化key
 	const data = useUserInfo().userInfos;
 	widgetsKey.value = `${window.location.host}-${data.user.userId}-widgets}`;
-	let widgets = Local.get(widgetsKey.value);
+	const widgets = Local.get(widgetsKey.value);
 	grid.value = widgets ? JSON.parse(widgets) : defaultGrid.value;
 });
 </script>

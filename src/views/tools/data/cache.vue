@@ -5,7 +5,7 @@
 				class="p-4 min-w-[375px] md:min-w-[700px] xl:min-w-[800px] mt-3 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-3 3xl:grid-cols-6"
 			>
 				<div
-					v-for="(item, index) in 6"
+					v-for="(item, index) in statisticsCards"
 					:key="index"
 					class="relative flex flex-grow !flex-row flex-col items-center rounded-[10px] border-[1px] border-gray-200 bg-white hover:scale-105 hover:shadow-lg bg-clip-border shadow-md shadow-[#F3F3F3] dark:border-[#ffffff33] dark:!bg-[#1d1d1d] dark:text-white dark:shadow-none"
 				>
@@ -29,8 +29,8 @@
 						</div>
 					</div>
 					<div class="flex flex-col justify-center w-auto ml-4 h-50">
-						<p class="text-sm font-medium text-gray-600 dark:text-gray-400 font-dm">{{ labels[index] }}</p>
-						<h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ values[index] }}</h4>
+						<p class="text-sm font-medium text-gray-600 dark:text-gray-400 font-dm">{{ item.label }}</p>
+						<h4 class="text-xl font-bold text-navy-700 dark:text-white">{{ item.value }}</h4>
 					</div>
 				</div>
 			</div>
@@ -38,14 +38,14 @@
 			<div class="sm:flex">
 				<el-card class="sm:mr-4 flex-1 !border-none mt-4 !bg-transparent dark:!bg-transparent" shadow="never">
 					<div>
-						<div class="mb-10 font-semibold dark:text-gray-200">命令统计</div>
+						<div class="mb-10 font-semibold dark:text-gray-200">{{ $t('cache.commandStats', '命令统计') }}</div>
 						<div class="flex h-[30vh] items-center" ref="commandChartRef"></div>
 					</div>
 				</el-card>
 
 				<el-card class="flex-1 !border-none mt-4 !bg-transparent dark:!bg-transparent" shadow="never">
 					<div>
-						<div class="mb-10 font-semibold dark:text-gray-200">内存信息</div>
+						<div class="mb-10 font-semibold dark:text-gray-200">{{ $t('cache.memoryInfo', '内存信息') }}</div>
 						<div class="flex h-[30vh] items-center" ref="memoryChartRef"></div>
 					</div>
 				</el-card>
@@ -57,19 +57,37 @@
 <script setup lang="ts" name="cache">
 import { systemCache } from '/@/api/admin/system';
 import { markRaw } from 'vue';
+import { useI18n } from 'vue-i18n';
 import * as echarts from 'echarts';
 
+const { t } = useI18n();
+
+/**
+ * Redis 基础信息
+ */
 const baseInfo = ref<any>({});
+
+/**
+ * 命令统计图表 DOM 引用
+ */
 const commandChartRef = ref();
+
+/**
+ * 内存信息图表 DOM 引用
+ */
 const memoryChartRef = ref();
 
+/**
+ * 图表配置选项
+ */
 const chartOptions = reactive({
+	/**
+	 * 命令统计饼图配置
+	 */
 	commandChartOption: {
 		tooltip: {
 			trigger: 'item',
-			// formatter: '{b} : {d}%'
 		},
-
 		series: [
 			{
 				label: {
@@ -131,6 +149,9 @@ const chartOptions = reactive({
 		],
 	},
 
+	/**
+	 * 内存信息仪表盘配置
+	 */
 	memoryChartOption: {
 		tooltip: {
 			formatter: '{a} <br/>{b} : {c}%',
@@ -146,7 +167,7 @@ const chartOptions = reactive({
 				data: [
 					{
 						value: '',
-						name: '内存消耗',
+						name: '',
 					},
 				],
 			},
@@ -154,33 +175,79 @@ const chartOptions = reactive({
 	},
 });
 
-const getSystemCache = async () => {
-	const res = await systemCache();
+/**
+ * 获取系统缓存监控数据
+ * @description 从 API 获取 Redis 缓存信息并初始化图表
+ */
+const getCacheMonitorData = async () => {
+	try {
+		const { data } = await systemCache();
 
-	baseInfo.value = res.data.info;
-	baseInfo.value.dbSize = res.data.dbSize;
+		// 设置基础信息
+		baseInfo.value = data.info;
+		baseInfo.value.dbSize = data.dbSize;
 
-	chartOptions.commandChartOption.series[0].data = res.data.commandStats;
+		// 设置命令统计数据
+		chartOptions.commandChartOption.series[0].data = data.commandStats;
 
-	chartOptions.memoryChartOption.series[0].data[0].value = (res.data.info.used_memory / 1024 / 1024).toFixed(2);
-	chartOptions.memoryChartOption.series[0].detail.formatter = '{value}' + 'M';
+		// 设置内存使用数据 (转换为 MB)
+		const usedMemoryMB = (data.info.used_memory / 1024 / 1024).toFixed(2);
+		chartOptions.memoryChartOption.series[0].data[0].value = usedMemoryMB;
+		chartOptions.memoryChartOption.series[0].data[0].name = t('cache.memoryConsumption', '内存消耗');
+		chartOptions.memoryChartOption.series[0].detail.formatter = '{value}M';
 
+		// 初始化图表
+		initCharts();
+	} catch (error) {
+		console.error('Failed to fetch cache monitor data:', error);
+	}
+};
+
+/**
+ * 初始化 ECharts 图表
+ * @description 创建命令统计和内存信息图表实例
+ */
+const initCharts = () => {
 	const commandChart = markRaw(echarts.init(commandChartRef.value));
 	const memoryChart = markRaw(echarts.init(memoryChartRef.value));
+
 	commandChart.setOption(chartOptions.commandChartOption);
 	memoryChart.setOption(chartOptions.memoryChartOption);
 };
 
-getSystemCache();
-
-const labels = computed(() => ['Redis版本', '客户端数', '运行时间(天)', '使用内存', 'AOF是否开启', 'RDB是否成功']);
-
-const values = computed(() => [
-	baseInfo.value?.redis_version,
-	baseInfo.value?.connected_clients,
-	baseInfo.value?.uptime_in_days,
-	baseInfo.value?.used_memory_human,
-	baseInfo.value?.aof_enabled == 0 ? '开启' : '关闭',
-	baseInfo.value?.aof_enabled == 'ok' ? '成功' : '失败',
+/**
+ * 统计卡片数据
+ * @description 计算并返回 Redis 各项统计指标的卡片数据
+ */
+const statisticsCards = computed(() => [
+	{
+		label: t('cache.redisVersion', 'Redis版本'),
+		value: baseInfo.value?.redis_version || '-',
+	},
+	{
+		label: t('cache.clientCount', '客户端数'),
+		value: baseInfo.value?.connected_clients || '0',
+	},
+	{
+		label: t('cache.uptime', '运行时间(天)'),
+		value: baseInfo.value?.uptime_in_days || '0',
+	},
+	{
+		label: t('cache.usedMemory', '使用内存'),
+		value: baseInfo.value?.used_memory_human || '-',
+	},
+	{
+		label: t('cache.aofEnabled', 'AOF是否开启'),
+		value: baseInfo.value?.aof_enabled == 0 ? t('cache.enabled', '开启') : t('cache.disabled', '关闭'),
+	},
+	{
+		label: t('cache.rdbSuccess', 'RDB是否成功'),
+		value: baseInfo.value?.rdb_last_bgsave_status == 'ok' ? t('cache.success', '成功') : t('cache.failed', '失败'),
+	},
 ]);
+
+// 页面挂载时获取缓存监控数据
+onMounted(() => {
+	getCacheMonitorData();
+});
 </script>

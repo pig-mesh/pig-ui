@@ -62,12 +62,12 @@
 			</el-row>
 
 			<el-collapse v-model="collapseActive">
-				<el-collapse-item name="1" title="安全属性">
+				<el-collapse-item name="1" :title="t('client.securityAttributes')">
 					<template #title>
 						<el-icon class="header-icon">
 							<info-filled />
 						</el-icon>
-						安全属性
+						{{ t('client.securityAttributes') }}
 					</template>
 
 					<el-row>
@@ -118,7 +118,10 @@ import { addObj, getObj, putObj, validateclientId } from '/@/api/admin/client';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 
-// 定义子组件向父组件传值/事件
+/**
+ * 定义 emit 方法，用于子组件向父组件通信
+ * @event refresh - 表单提交成功后触发，通知父组件刷新客户端列表数据（在第237行调用）
+ */
 const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
@@ -164,36 +167,42 @@ const collapseActive = ref('1');
 // 定义校验规则
 const dataRules = ref({
 	clientId: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '编号不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('client.clientIdRequired'), trigger: 'blur' },
 		{ validator: rule.validatorLowercase, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateclientId(rule, value, callback, form.id !== '');
+				validateclientId(rule, value, callback, form.id !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
 	clientSecret: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '密钥不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('client.clientSecretRequired'), trigger: 'blur' },
 		{ validator: rule.validatorLower, trigger: 'blur' },
 	],
-	scope: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '域不能为空', trigger: 'blur' }],
-	authorizedGrantTypes: [{ required: true, message: '授权模式不能为空', trigger: 'blur' }],
+	scope: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('client.scopeRequired'), trigger: 'blur' },
+	],
+	authorizedGrantTypes: [{ required: true, message: t('client.authorizedGrantTypesRequired'), trigger: 'blur' }],
 	accessTokenValidity: [
-		{ required: true, message: '令牌时效不能为空', trigger: 'blur' },
-		{ type: 'number', min: 1, message: '令牌时效不能小于一小时', trigger: 'blur' },
+		{ required: true, message: t('client.accessTokenValidityRequired'), trigger: 'blur' },
+		{ type: 'number', min: 1, message: t('client.accessTokenValidityMin'), trigger: 'blur' },
 	],
 	refreshTokenValidity: [
-		{ required: true, message: '刷新时效不能为空', trigger: 'blur' },
-		{ type: 'number', min: 1, message: '刷新时效不能小于两小时', trigger: 'blur' },
+		{ required: true, message: t('client.refreshTokenValidityRequired'), trigger: 'blur' },
+		{ type: 'number', min: 1, message: t('client.refreshTokenValidityMin'), trigger: 'blur' },
 	],
-	captchaFlag: [{ required: true, message: '是否开启验证码校验', trigger: 'blur' }],
-	encFlag: [{ required: true, message: '是否开启密码加密传输', trigger: 'blur' }],
-	onlineQuantity: [{ required: true, message: '是否允许同时在线', trigger: 'blur' }],
-	autoapprove: [{ required: true, message: '自动放行不能为空', trigger: 'blur' }],
-	webServerRedirectUri: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '回调地址不能为空', trigger: 'blur' }],
+	captchaFlag: [{ required: true, message: t('client.captchaFlagRequired'), trigger: 'blur' }],
+	encFlag: [{ required: true, message: t('client.encFlagRequired'), trigger: 'blur' }],
+	onlineQuantity: [{ required: true, message: t('client.onlineQuantityRequired'), trigger: 'blur' }],
+	autoapprove: [{ required: true, message: t('client.autoapproveRequired'), trigger: 'blur' }],
+	webServerRedirectUri: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('client.webServerRedirectUriRequired'), trigger: 'blur' },
+	],
 });
 
 // 打开弹窗
@@ -208,7 +217,7 @@ const openDialog = (id: string) => {
 	// 获取sysOauthClientDetails信息
 	if (id) {
 		form.id = id;
-		getsysOauthClientDetailsData(id);
+		getClientDetailsData(id);
 	}
 };
 
@@ -237,11 +246,13 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getsysOauthClientDetailsData = (id: string) => {
-	// 获取数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+const getClientDetailsData = async (id: string) => {
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 暴露变量

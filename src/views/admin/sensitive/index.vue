@@ -3,10 +3,10 @@
     <div class="layout-padding-auto layout-padding-view">
       <el-row v-show="showSearch">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item label="敏感词" prop="sensitiveWord">
-            <el-input placeholder="请输入敏感词" v-model="state.queryForm.sensitiveWord"/>
+          <el-form-item :label="t('sensitive.sensitiveWord')" prop="sensitiveWord">
+            <el-input :placeholder="t('sensitive.inputSensitiveWordTip')" v-model="state.queryForm.sensitiveWord"/>
           </el-form-item>
-          <el-form-item label="类型" prop="sensitiveType">
+          <el-form-item :label="t('sensitive.sensitiveType')" prop="sensitiveType">
             <el-radio-group v-model="state.queryForm.sensitiveType">
               <el-radio :label="item.value" v-for="(item, index) in sensitive_type" border :key="index">{{ item.label }}
               </el-radio>
@@ -14,9 +14,9 @@
           </el-form-item>
           <el-form-item>
             <el-button icon="search" type="primary" @click="getDataList">
-              查询
+              {{ $t('common.queryBtn') }}
             </el-button>
-            <el-button icon="Refresh" @click="resetQuery">重置</el-button>
+            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
           </el-form-item>
         </el-form>
       </el-row>
@@ -24,15 +24,15 @@
         <div class="mb8" style="width: 100%">
           <el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
                      v-auth="'admin_sysSensitiveWord_add'">
-            新 增
+            {{ $t('common.addBtn') }}
           </el-button>
           <el-button plain :disabled="multiple" icon="Delete" type="primary"
                      v-auth="'admin_sysSensitiveWord_del'" @click="handleDelete(selectObjs)">
-            删 除
+            {{ $t('common.delBtn') }}
           </el-button>
           <el-button plain icon="Check" type="primary"
                      v-auth="'admin_sysSensitiveWord_del'" @click="matchDialogRef.openDialog()">
-            匹配测试
+            {{ t('sensitive.matchTest') }}
           </el-button>
           <el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
             {{ $t('common.refreshCacheBtn') }}
@@ -48,21 +48,21 @@
                 @selection-change="selectionChangHandle"
                 @sort-change="sortChangeHandle">
         <el-table-column type="selection" width="40" align="center"/>
-        <el-table-column type="index" label="#" width="40"/>
-        <el-table-column prop="sensitiveWord" label="敏感词" show-overflow-tooltip/>
-        <el-table-column prop="sensitiveType" label="类型" show-overflow-tooltip>
+        <el-table-column type="index" :label="t('sensitive.index')" width="40"/>
+        <el-table-column prop="sensitiveWord" :label="t('sensitive.sensitiveWord')" show-overflow-tooltip/>
+        <el-table-column prop="sensitiveType" :label="t('sensitive.sensitiveType')" show-overflow-tooltip>
           <template #default="scope">
             <dict-tag :options="sensitive_type" :value="scope.row.sensitiveType"></dict-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="remark" label="备注" width="200" show-overflow-tooltip/>
-        <el-table-column label="操作" width="150">
+        <el-table-column prop="remark" :label="t('sensitive.remark')" width="200" show-overflow-tooltip/>
+        <el-table-column :label="$t('common.action')" width="150">
           <template #default="scope">
             <el-button icon="edit-pen" text type="primary" v-auth="'admin_sysSensitiveWord_edit'"
-                       @click="formDialogRef.openDialog(scope.row.sensitiveId)">编辑
+                       @click="formDialogRef.openDialog(scope.row.sensitiveId)">{{ $t('common.editBtn') }}
             </el-button>
             <el-button icon="delete" text type="primary" v-auth="'admin_sysSensitiveWord_del'"
-                       @click="handleDelete([scope.row.sensitiveId])">删除
+                       @click="handleDelete([scope.row.sensitiveId])">{{ $t('common.delBtn') }}
             </el-button>
           </template>
         </el-table-column>
@@ -79,87 +79,129 @@
 </template>
 
 <script setup lang="ts" name="systemSysSensitiveWord">
-import {BasicTableProps, useTable} from "/@/hooks/table";
-import {fetchList, delObjs, refreshObj} from "/@/api/admin/sensitive";
-import {useMessage, useMessageBox} from "/@/hooks/message";
-import {useDict} from '/@/hooks/dict';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { fetchList, delObjs, refreshObj } from '/@/api/admin/sensitive';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useDict } from '/@/hooks/dict';
+import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const MatchDialog = defineAsyncComponent(() => import('./match.vue'));
-// 定义查询字典
 
-const {sensitive_type} = useDict('sensitive_type')
-// 定义变量内容
-const formDialogRef = ref()
-const matchDialogRef = ref()
-// 搜索变量
-const queryRef = ref()
-const showSearch = ref(true)
-// 多选变量
-const selectObjs = ref([]) as any
-const multiple = ref(true)
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
 
+/**
+ * 敏感词类型字典
+ */
+const { sensitive_type } = useDict('sensitive_type');
+
+/**
+ * 表单对话框引用
+ */
+const formDialogRef = ref();
+
+/**
+ * 匹配测试对话框引用
+ */
+const matchDialogRef = ref();
+
+/**
+ * 查询表单引用
+ */
+const queryRef = ref();
+
+/**
+ * 是否显示搜索区域
+ */
+const showSearch = ref(true);
+
+/**
+ * 多选的敏感词ID数组
+ */
+const selectObjs = ref<string[]>([]);
+
+/**
+ * 是否禁用批量删除按钮（无选中项时禁用）
+ */
+const multiple = ref(true);
+
+/**
+ * 表格状态配置
+ */
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {},
-  pageList: fetchList
-})
+	queryForm: {},
+	pageList: fetchList,
+});
 
-//  table hook
-const {
-  getDataList,
-  currentChangeHandle,
-  sizeChangeHandle,
-  sortChangeHandle,
-  downBlobFile,
-  tableStyle
-} = useTable(state)
+/**
+ * 表格相关钩子函数
+ */
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
+	useTable(state);
 
-// 清空搜索条件
-const resetQuery = () => {
-  // 清空搜索条件
-  queryRef.value?.resetFields()
-  // 清空多选
-  selectObjs.value = []
-  getDataList()
-}
-
-// 导出excel
-const exportExcel = () => {
-  downBlobFile('/admin/sysSensitiveWord/export', Object.assign(state.queryForm, {ids: selectObjs}), 'sysSensitiveWord.xlsx')
-}
-
-// 多选事件
-const selectionChangHandle = (objs: { sensitiveId: string }[]) => {
-  selectObjs.value = objs.map(({sensitiveId}) => sensitiveId);
-  multiple.value = !objs.length;
+/**
+ * 清空搜索条件并重新查询
+ */
+const resetQuery = (): void => {
+	queryRef.value?.resetFields();
+	selectObjs.value = [];
+	getDataList();
 };
 
-// 删除操作
-const handleDelete = async (ids: string[]) => {
-  try {
-    await useMessageBox().confirm('此操作将永久删除');
-  } catch {
-    return;
-  }
-
-  try {
-    await delObjs(ids);
-    getDataList();
-    useMessage().success('删除成功');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
+/**
+ * 导出Excel文件
+ */
+const exportExcel = (): void => {
+	downBlobFile(
+		'/admin/sysSensitiveWord/export',
+		Object.assign(state.queryForm, { ids: selectObjs.value }),
+		'sysSensitiveWord.xlsx'
+	);
 };
 
-// 刷新缓存
-const handleRefreshCache = async () => {
-  try {
-    await refreshObj();
-    getDataList();
-    useMessage().success('刷新成功');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
-}
+/**
+ * 表格多选事件处理
+ * @param objs - 选中的行对象数组
+ */
+const selectionChangHandle = (objs: { sensitiveId: string }[]): void => {
+	selectObjs.value = objs.map(({ sensitiveId }) => sensitiveId);
+	multiple.value = !objs.length;
+};
+
+/**
+ * 删除敏感词
+ * @param ids - 要删除的敏感词ID数组
+ */
+const handleDelete = async (ids: string[]): Promise<void> => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObjs(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
+
+/**
+ * 刷新敏感词缓存
+ */
+const handleRefreshCache = async (): Promise<void> => {
+	try {
+		await refreshObj();
+		getDataList();
+		useMessage().success(t('common.refreshSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
 </script>
