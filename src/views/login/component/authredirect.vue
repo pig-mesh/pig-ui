@@ -5,6 +5,9 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { useMessageBox } from '/@/hooks/message';
 import { useUrlSearchParams } from '@vueuse/core';
 import { SocialLoginEnum } from '/@/api/login';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 // 使用 VueUse 获取 URL 参数
 const params = useUrlSearchParams('hash');
@@ -43,7 +46,7 @@ const bindSocialAccount = async (state: string, code: string) => {
 			params: { state, code },
 		});
 
-		await useMessageBox().confirm('社交账号绑定成功');
+		await useMessageBox().confirm(t('socialLogin.bindSuccess'));
 		window.close();
 };
 
@@ -69,7 +72,7 @@ onMounted(async () => {
 	const stateParam = params.state as string;
 
 	if (!code || !stateParam) {
-		console.error('Missing required parameters: code or state');
+		console.error(t('socialLogin.missingParams'));
 		return;
 	}
 

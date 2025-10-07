@@ -222,13 +222,16 @@ const dataRules = reactive({
 	],
 });
 
-// 获取租户列表
+/**
+ * 获取租户列表
+ * @description 从API获取租户列表并设置默认选中项
+ */
 const getTenantList = async () => {
 	try {
 		tenantLoading.value = true;
 		const response = await fetchList();
 		tenantList.value = response.data || [];
-		
+
 		// 默认选中第一个租户
 		if (tenantList.value.length > 0 && !state.ruleForm.tenantId) {
 			state.ruleForm.tenantId = tenantList.value[0].id;
@@ -240,41 +243,49 @@ const getTenantList = async () => {
 	}
 };
 
-// 处理密码强度得分变化事件
+/**
+ * 处理密码强度得分变化事件
+ * @param e - 密码强度得分
+ */
 const handlePassScore = (e: string) => {
 	score.value = e;
 };
 
 /**
- * @name handleRegister
- * @description 注册事件，包括表单验证、注册、成功后的钩子函数触发
+ * 处理注册事件
+ * @description 包括表单验证、注册、成功后的钩子函数触发
+ * @returns 注册是否成功
  */
 const handleRegister = async () => {
 	if (!dataFormRef.value) return false;
 
-	// 验证表单是否符合规则
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
-
-	// 额外检查用户是否同意条款
-	if (!state.ruleForm.checked) {
-		useMessage().error(t('register.termsRequired'));
-		return false;
-	}
-
 	try {
+		// 验证表单是否符合规则
+		const valid = await dataFormRef.value.validate();
+		if (!valid) return false;
+
+		// 额外检查用户是否同意条款
+		if (!state.ruleForm.checked) {
+			useMessage().error(t('register.termsRequired'));
+			return false;
+		}
+
 		loading.value = true;
 		await registerUser(state.ruleForm);
-		useMessage().success(t('common.optSuccessText'));
+		useMessage().success(t('register.registerSuccess'));
 		emit('afterSuccess');
+		return true;
 	} catch (err: any) {
-		useMessage().error(err.msg);
+		useMessage().error(err.msg || t('errors.networkError'));
+		return false;
 	} finally {
 		loading.value = false;
 	}
 };
 
-// 组件挂载时获取租户列表
+/**
+ * 组件挂载时初始化
+ */
 onMounted(() => {
 	getTenantList();
 });

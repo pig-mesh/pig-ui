@@ -109,36 +109,55 @@ const changeLoginType = (type: LoginTypeEnum, name?: string) => {
 	}
 };
 
-// 获取布局配置信息
+/**
+ * 获取主题配置信息
+ * @returns 主题配置对象
+ */
 const getThemeConfig = computed(() => {
 	return themeConfig.value;
 });
 
-// 登录成功后的跳转处理事件
+/**
+ * 登录成功后的跳转处理事件
+ * @description 处理登录成功后的路由跳转和权限验证
+ */
 const signInSuccess = async () => {
-	const isNoPower = await initBackEndControlRoutes();
-	if (isNoPower) {
-		useMessage().warning('抱歉，您没有登录权限');
-		Session.clear();
-	} else {
+	try {
+		const isNoPower = await initBackEndControlRoutes();
+
+		if (isNoPower) {
+			useMessage().warning(t('errors.unauthorized'));
+			Session.clear();
+			return;
+		}
+
 		// 初始化登录成功时间问候语
-		let currentTimeInfo = formatAxisI18n(new Date(), t);
+		const currentTimeInfo = formatAxisI18n(new Date(), t);
+
+		// 处理路由跳转
 		if (route.query?.redirect) {
-			router.push({
+			await router.push({
 				path: <string>route.query?.redirect
 			});
 		} else {
-			router.push('/');
+			await router.push('/');
 		}
+
 		// 登录成功提示
 		const signInText = t('signInText');
 		useMessage().success(`${currentTimeInfo}，${signInText}`);
+
 		// 添加 loading，防止第一次进入界面时出现短暂空白
 		NextLoading.start();
+	} catch (error) {
+		console.error('Login success handling error:', error);
+		useMessage().error(t('errors.networkError'));
 	}
 };
 
-// 页面加载时初始化语言
+/**
+ * 页面加载时初始化
+ */
 onMounted(() => {
 	NextLoading.done();
 });

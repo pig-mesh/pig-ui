@@ -21,7 +21,7 @@
 				</div>
 				<div class="layout-lock-screen-date-top">
 					<SvgIcon name="ele-Top" />
-					<div class="layout-lock-screen-date-top-text">上滑解锁</div>
+					<div class="layout-lock-screen-date-top-text">{{ t('lockScreen.slideToUnlock') }}</div>
 				</div>
 			</div>
 			<transition name="el-zoom-in-center">
@@ -33,7 +33,7 @@
 						<div class="layout-lock-screen-login-box-name">{{ formData.username }}</div>
 						<div class="layout-lock-screen-login-box-value">
 							<el-input
-								placeholder="请输入密码"
+								:placeholder="t('lockScreen.enterPassword')"
 								ref="layoutLockScreenInputRef"
 								v-model="state.lockScreenPassword"
 								type="password"
@@ -69,6 +69,9 @@ import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { checkPassword } from '/@/api/admin/user';
 import { useUserInfo } from '/@/stores/userInfo';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 // 定义变量内容
 const layoutLockScreenDateRef = ref<HtmlType>();
 const layoutLockScreenInputRef = ref();
