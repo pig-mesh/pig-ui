@@ -217,12 +217,6 @@ export default {
 		switchSuccess: 'Tenant switched successfully, refreshing page...',
 		switchError: 'Failed to switch tenant, please try again'
 	},
-	common: {
-		cancel: 'Cancel',
-		confirm: 'Confirm',
-		confirmButtonText: 'Confirm',
-		cancelButtonText: 'Cancel'
-	},
 	message: {
 		box: {
 			title: 'Tips'

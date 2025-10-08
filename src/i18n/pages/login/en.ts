@@ -192,12 +192,6 @@ export default {
 		unauthorized: 'Unauthorized access',
 	},
 
-	// Common texts
-	common: {
-		optSuccessText: 'Operation successful',
-		optFailedText: 'Operation failed',
-	},
-
 	// Lock screen texts
 	lockScreen: {
 		slideToUnlock: 'Slide to unlock',

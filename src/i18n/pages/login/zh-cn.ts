@@ -185,12 +185,6 @@ export default {
 		unauthorized: '未经授权的访问',
 	},
 
-	// 通用文本
-	common: {
-		optSuccessText: '操作成功',
-		optFailedText: '操作失败',
-	},
-
 	// 锁屏
 	lockScreen: {
 		slideToUnlock: '上滑解锁',
