@@ -1,4 +1,6 @@
 // @ts-nocheck
+import {i18n} from '/@/i18n/index';
+
 /**
  * 判断是否为空
  * @param val 数据
@@ -26,11 +28,10 @@ export const validateNull = (val: any) => {
  * 获取错误消息（支持国际化）
  * @param key - i18n key
  * @param defaultMsg - 默认消息
- * @param t - i18n 翻译函数
  * @returns 错误消息
  */
-const getErrorMsg = (key: string, defaultMsg: string, t?: any): string => {
-	return t ? t(`validate.${key}`) : defaultMsg;
+const getErrorMsg = (key: string, defaultMsg: string): string => {
+	return i18n.global.t(`validate.${key}`) || defaultMsg;
 };
 
 export const rule = {
@@ -39,11 +40,10 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	overLength(rule: any, value: any, callback: any, t?: any) {
+	overLength(rule: any, value: any, callback: any) {
 		if (value?.length > 255) {
-			callback(new Error(getErrorMsg('overLength', '输入内容过长，请重新输入', t)));
+			callback(new Error(getErrorMsg('overLength', '输入内容过长，请重新输入')));
 		} else {
 			callback();
 		}
@@ -53,12 +53,11 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorNameCn(rule: any, value: any, callback: any, t?: any) {
+	validatorNameCn(rule: any, value: any, callback: any) {
 		const acount = /^[\u4E00-\u9FA5A-Za-z0-9_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error(getErrorMsg('validatorNameCn', '请输入中文、英文、数字包括下划线', t)));
+			callback(new Error(getErrorMsg('validatorNameCn', '请输入中文、英文、数字包括下划线')));
 		} else {
 			callback();
 		}
@@ -68,12 +67,11 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorCapital(rule: any, value: any, callback: any, t?: any) {
+	validatorCapital(rule: any, value: any, callback: any) {
 		const acount = /^[A-Z_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error(getErrorMsg('validatorCapital', '请输入大写英文、下划线', t)));
+			callback(new Error(getErrorMsg('validatorCapital', '请输入大写英文、下划线')));
 		} else {
 			callback();
 		}
@@ -84,12 +82,11 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorLowercase(rule: any, value: any, callback: any, t?: any) {
+	validatorLowercase(rule: any, value: any, callback: any) {
 		const acount = /^[a-z_]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error(getErrorMsg('validatorLowercase', '请输入小写英文、下划线', t)));
+			callback(new Error(getErrorMsg('validatorLowercase', '请输入小写英文、下划线')));
 		} else {
 			callback();
 		}
@@ -100,12 +97,11 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatorLower(rule: any, value: any, callback: any, t?: any) {
+	validatorLower(rule: any, value: any, callback: any) {
 		const acount = /^[a-z]+$/;
 		if (value && !acount.test(value)) {
-			callback(new Error(getErrorMsg('validatorLower', '请输入小写英文', t)));
+			callback(new Error(getErrorMsg('validatorLower', '请输入小写英文')));
 		} else {
 			callback();
 		}
@@ -116,12 +112,11 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	checkSpace(rule: any, value: any, callback: any, t?: any) {
+	checkSpace(rule: any, value: any, callback: any) {
 		const longrg = /[^\s]+$/;
 		if (!longrg.test(value)) {
-			callback(new Error(getErrorMsg('checkSpace', '请输入非空格信息', t)));
+			callback(new Error(getErrorMsg('checkSpace', '请输入非空格信息')));
 		} else {
 			callback();
 		}
@@ -132,9 +127,8 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	validatePhone(rule: any, value: any, callback: any, t?: any) {
+	validatePhone(rule: any, value: any, callback: any) {
 		var isPhone = /^1(3\d|4[5-9]|5[0-35-9]|6[2567]|7[0-8]|8\d|9[0-35-9])\d{8}$/;
 
 		if (value.indexOf('****') >= 0) {
@@ -142,7 +136,7 @@ export const rule = {
 		}
 
 		if (!isPhone.test(value)) {
-			callback(new Error(getErrorMsg('validatePhone', '请输入合法手机号', t)));
+			callback(new Error(getErrorMsg('validatePhone', '请输入合法手机号')));
 		} else {
 			callback();
 		}
@@ -153,10 +147,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	number(rule, value, callback, t?: any) {
-		validateFn('number', rule, value, callback, getErrorMsg('number', '包含非数字字符', t), t);
+	number(rule, value, callback) {
+		validateFn('number', rule, value, callback, getErrorMsg('number', '包含非数字字符'));
 	},
 
 	/**
@@ -164,10 +157,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	letter(rule, value, callback, t?: any) {
-		validateFn('letter', rule, value, callback, getErrorMsg('letter', '包含非字母字符', t), t);
+	letter(rule, value, callback) {
+		validateFn('letter', rule, value, callback, getErrorMsg('letter', '包含非字母字符'));
 	},
 
 	/**
@@ -175,10 +167,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	letterAndNumber(rule, value, callback, t?: any) {
-		validateFn('letterAndNumber', rule, value, callback, getErrorMsg('letterAndNumber', '只能输入字母或数字', t), t);
+	letterAndNumber(rule, value, callback) {
+		validateFn('letterAndNumber', rule, value, callback, getErrorMsg('letterAndNumber', '只能输入字母或数字'));
 	},
 
 	/**
@@ -186,10 +177,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	mobilePhone(rule, value, callback, t?: any) {
-		validateFn('mobilePhone', rule, value, callback, getErrorMsg('mobilePhone', '手机号码格式有误', t), t);
+	mobilePhone(rule, value, callback) {
+		validateFn('mobilePhone', rule, value, callback, getErrorMsg('mobilePhone', '手机号码格式有误'));
 	},
 
 	/**
@@ -197,10 +187,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	letterStartNumberIncluded(rule, value, callback, t?: any) {
-		validateFn('letterStartNumberIncluded', rule, value, callback, getErrorMsg('letterStartNumberIncluded', '必须以字母开头，可包含数字', t), t);
+	letterStartNumberIncluded(rule, value, callback) {
+		validateFn('letterStartNumberIncluded', rule, value, callback, getErrorMsg('letterStartNumberIncluded', '必须以字母开头，可包含数字'));
 	},
 
 	/**
@@ -208,10 +197,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	noChinese(rule, value, callback, t?: any) {
-		validateFn('noChinese', rule, value, callback, getErrorMsg('noChinese', '不可输入中文字符', t), t);
+	noChinese(rule, value, callback) {
+		validateFn('noChinese', rule, value, callback, getErrorMsg('noChinese', '不可输入中文字符'));
 	},
 
 	/**
@@ -219,10 +207,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	chinese(rule, value, callback, t?: any) {
-		validateFn('chinese', rule, value, callback, getErrorMsg('chinese', '只能输入中文字符', t), t);
+	chinese(rule, value, callback) {
+		validateFn('chinese', rule, value, callback, getErrorMsg('chinese', '只能输入中文字符'));
 	},
 
 	/**
@@ -230,10 +217,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	email(rule, value, callback, t?: any) {
-		validateFn('email', rule, value, callback, getErrorMsg('email', '邮箱格式有误', t), t);
+	email(rule, value, callback) {
+		validateFn('email', rule, value, callback, getErrorMsg('email', '邮箱格式有误'));
 	},
 
 	/**
@@ -241,10 +227,9 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	url(rule, value, callback, t?: any) {
-		validateFn('url', rule, value, callback, getErrorMsg('url', 'URL格式有误', t), t);
+	url(rule, value, callback) {
+		validateFn('url', rule, value, callback, getErrorMsg('url', 'URL格式有误'));
 	},
 
 	/**
@@ -252,9 +237,8 @@ export const rule = {
 	 * @param rule - 校验规则
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	json(rule, value, callback, t?: any) {
+	json(rule, value, callback) {
 		if (validateNull(value) || value.length <= 0) {
 			callback();
 			return;
@@ -264,7 +248,7 @@ export const rule = {
 			JSON.parse(value);
 			callback();
 		} catch (error) {
-			callback(new Error(getErrorMsg('json', 'json 格式有误', t)));
+			callback(new Error(getErrorMsg('json', 'json 格式有误')));
 		}
 	},
 
@@ -273,9 +257,8 @@ export const rule = {
 	 * @param rule - 校验规则（需包含 regExp 属性）
 	 * @param value - 输入值
 	 * @param callback - 回调函数
-	 * @param t - i18n 翻译函数（可选）
 	 */
-	regExp(rule, value, callback, t?: any) {
+	regExp(rule, value, callback) {
 		if (validateNull(value) || value.length <= 0) {
 			callback();
 			return;
@@ -284,7 +267,7 @@ export const rule = {
 		const pattern = new RegExp(rule.regExp);
 
 		if (!pattern.test(value)) {
-			const errTxt = rule.errorMsg || (t ? t('validate.invalidValue') : 'invalid value');
+			const errTxt = rule.errorMsg || getErrorMsg('validate.invalidValue');
 			callback(new Error(errTxt));
 		} else {
 			callback();
@@ -297,7 +280,7 @@ export const rule = {
  * @example
  *  import { rule } from "@/utils/validate";
  *  rules: [
- *     { validator: (rule, value, callback) => rule.email(rule, value, callback, t), trigger: 'blur'}
+ *     { validator: rule.email, trigger: 'blur'}
  *  ]
  */
 
@@ -322,15 +305,14 @@ export const getRegExp = function (validatorName: string): string {
 };
 
 /**
- * ��用验证函数
+ * 通用验证函数
  * @param validatorName - 验证器名称
  * @param rule - 校验规则
  * @param value - 输入值
  * @param callback - 回调函数
  * @param defaultErrorMsg - 默认错误消息
- * @param t - i18n 翻译函数（可选）
  */
-const validateFn = (validatorName: string, rule: any, value: any, callback: any, defaultErrorMsg: string, t?: any) => {
+const validateFn = (validatorName: string, rule: any, value: any, callback: any, defaultErrorMsg: string) => {
   if (validateNull(value) || value.length <= 0) {
     callback();
     return;
