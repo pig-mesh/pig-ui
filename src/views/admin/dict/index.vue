@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<splitpanes>
-			<pane class="ml10">
+			<pane>
 				<splitpanes>
 					<pane size="30">
 						<div class="layout-padding-auto layout-padding-view">
@@ -47,7 +47,7 @@
 							</el-footer>
 						</div>
 					</pane>
-					<pane class="ml8">
+					<pane>
 						<DicDialog @refresh="handleRefreshTree" ref="dicDialogRef" />
 						<dict-item-dialog ref="dictItemDialogRef"></dict-item-dialog>
 					</pane>
