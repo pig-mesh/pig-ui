@@ -126,3 +126,11 @@ export function delFormObj(id?: string) {
 		method: 'delete',
 	});
 }
+
+export function groupList() {
+	return request({
+		url: '/gen/group/list',
+		method: 'get',
+	});
+}
+
