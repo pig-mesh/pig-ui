@@ -3,17 +3,17 @@
  -->
 <template>
 	<div>
-		<div :class="['widgets-home', customizing ? 'customizing' : '']" ref="main">
-			<div class="widgets-content">
-				<div class="widgets-top">
-					<div class="flex justify-end custom_btn">
+		<div :class="['flex flex-row flex-1 h-full', customizing ? 'lg:mr-[-360px] lg:w-full' : '']" ref="main">
+			<div class="flex-1 overflow-auto overflow-x-hidden p-[5px]">
+				<div class="flex justify-between items-center">
+					<div class="flex justify-end absolute top-[10px] right-[10px] z-[9]">
 						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
 						<el-button v-else type="primary" round @click="custom">{{ t('home.widgets.customize') }}</el-button>
 					</div>
 				</div>
-				<div class="widgets" ref="widgets">
+				<div :class="['origin-top-left transition-transform duration-150', customizing ? 'lg:pb-[10px] max-lg:scale-100' : '']" ref="widgets">
 					<div class="widgets-wrapper">
-						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
+						<div v-if="nowCompsList.length <= 0" :class="['p-5 text-center', customizing ? 'lg:hidden' : '']">
 							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="200"></el-empty>
 						</div>
 						<el-row :gutter="0">
@@ -27,20 +27,24 @@
 									dragClass="aaaaa"
 									force-fallback
 									fallbackOnBody
-									class="draggable-box"
+									class="h-full w-full"
 								>
 									<template #item="{ element }">
-										<div class="widgets-item">
+										<div class="bg-[var(--el-bg-color-overlay)] border border-[var(--el-border-color-light)] shadow-sm rounded-lg mb-0 min-h-[100px] relative widgets-item">
 											<component :is="allComps[element as keyof typeof allComps]"></component>
-											<div v-if="customizing" class="customize-overlay">
-												<el-button class="close" type="danger" plain icon="Close" size="small" @click="remove(element)"></el-button>
-												<label v-if="allComps[element as keyof typeof allComps]">
-													<el-icon v-if="allComps[element as keyof typeof allComps].icon">
-														<component :is="allComps[element as keyof typeof allComps].icon" />
-													</el-icon>
-													{{ allComps[element as keyof typeof allComps].title }}
-												</label>
-											</div>
+											<template v-if="customizing">
+												<div class="absolute inset-0 z-[1] flex flex-col items-center justify-center cursor-move bg-[var(--el-bg-color)]/90">
+													<el-button class="!absolute top-[15px] left-[15px]" type="danger" plain icon="Close" size="small" @click="remove(element)"></el-button>
+													<template v-if="allComps[element as keyof typeof allComps]">
+														<label class="bg-[var(--el-color-primary)] text-white h-10 px-[30px] rounded-[40px] text-lg flex items-center justify-center cursor-move">
+															<el-icon v-if="(allComps[element as keyof typeof allComps] as any).icon" class="mr-[15px] text-2xl">
+																<component :is="(allComps[element as keyof typeof allComps] as any).icon" />
+															</el-icon>
+															{{ (allComps[element as keyof typeof allComps] as any).title }}
+														</label>
+													</template>
+												</div>
+											</template>
 										</div>
 									</template>
 								</draggable>
@@ -49,35 +53,104 @@
 					</div>
 				</div>
 			</div>
-			<div v-if="customizing" class="widgets-aside">
+			<div v-if="customizing" class="w-[360px] max-lg:fixed max-lg:inset-y-0 max-lg:right-0 max-lg:z-50 bg-[var(--el-bg-color)] shadow-sm rounded-lg mb-[5px] min-h-[100px] relative overflow-auto">
 				<el-container>
 					<el-header>
-						<div class="widgets-aside-title">{{ t('home.widgets.addWidget') }}</div>
-						<div class="widgets-aside-close" @click="close()">
+						<div class="text-sm flex items-center justify-center">{{ t('home.widgets.addWidget') }}</div>
+						<div class="text-lg w-[30px] h-[30px] flex items-center justify-center rounded cursor-pointer hover:bg-black/10" @click="close()">
 							<el-icon><Close /></el-icon>
 						</div>
 					</el-header>
 					<el-header style="height: auto">
-						<div class="p-3 selectLayout">
-							<div class="selectLayout-item item01" :class="{ active: grid.layout.join(',') === '12,6,6' }" @click="setLayout([12, 6, 6])">
+						<div class="p-3 w-full flex">
+							<div
+								class="w-[60px] h-[60px] border-2 p-[5px] cursor-pointer mr-[15px] transition-colors duration-200"
+								:class="[
+									grid.layout.join(',') === '12,6,6'
+										? 'border-[var(--el-color-primary)]'
+										: 'border-[var(--el-border-color-light)] hover:border-[var(--el-color-primary)]'
+								]"
+								@click="setLayout([12, 6, 6])"
+							>
 								<el-row :gutter="2">
-									<el-col :span="7"><span></span></el-col>
-									<el-col :span="7"><span></span></el-col>
-									<el-col :span="10"><span></span></el-col>
+									<el-col :span="7">
+										<span
+											class="block h-[46px]"
+											:class="grid.layout.join(',') === '12,6,6' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="7">
+										<span
+											class="block h-[46px]"
+											:class="grid.layout.join(',') === '12,6,6' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="10">
+										<span
+											class="block h-[46px]"
+											:class="grid.layout.join(',') === '12,6,6' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
 								</el-row>
 							</div>
-							<div class="selectLayout-item item02" :class="{ active: grid.layout.join(',') === '24,16,8' }" @click="setLayout([24, 16, 8])">
+							<div
+								class="w-[60px] h-[60px] border-2 p-[5px] cursor-pointer mr-[15px] transition-colors duration-200"
+								:class="[
+									grid.layout.join(',') === '24,16,8'
+										? 'border-[var(--el-color-primary)]'
+										: 'border-[var(--el-border-color-light)] hover:border-[var(--el-color-primary)]'
+								]"
+								@click="setLayout([24, 16, 8])"
+							>
 								<el-row :gutter="2">
-									<el-col :span="24"><span></span></el-col>
-									<el-col :span="16"><span></span></el-col>
-									<el-col :span="8"><span></span></el-col>
+									<el-col :span="24">
+										<span
+											class="block h-[14px] mb-[2px]"
+											:class="grid.layout.join(',') === '24,16,8' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="16">
+										<span
+											class="block h-[30px]"
+											:class="grid.layout.join(',') === '24,16,8' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="8">
+										<span
+											class="block h-[30px]"
+											:class="grid.layout.join(',') === '24,16,8' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
 								</el-row>
 							</div>
-							<div class="selectLayout-item item03" :class="{ active: grid.layout.join(',') === '24' }" @click="setLayout([24])">
+							<div
+								class="w-[60px] h-[60px] border-2 p-[5px] cursor-pointer mr-[15px] transition-colors duration-200"
+								:class="[
+									grid.layout.join(',') === '24'
+										? 'border-[var(--el-color-primary)]'
+										: 'border-[var(--el-border-color-light)] hover:border-[var(--el-color-primary)]'
+								]"
+								@click="setLayout([24])"
+							>
 								<el-row :gutter="2">
-									<el-col :span="24"><span></span></el-col>
-									<el-col :span="24"><span></span></el-col>
-									<el-col :span="24"><span></span></el-col>
+									<el-col :span="24">
+										<span
+											class="block h-[14px] mb-[2px]"
+											:class="grid.layout.join(',') === '24' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="24">
+										<span
+											class="block h-[14px] mb-[2px]"
+											:class="grid.layout.join(',') === '24' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
+									<el-col :span="24">
+										<span
+											class="block h-[14px] mb-[2px]"
+											:class="grid.layout.join(',') === '24' ? 'bg-[var(--el-color-primary)]' : 'bg-[var(--el-border-color-light)]'"
+										></span>
+									</el-col>
 								</el-row>
 							</div>
 						</div>
@@ -87,18 +160,18 @@
 							<div v-if="myCompsList.length <= 0" class="p-5 text-center widgets-list-nodata">
 								<el-empty :description="t('home.widgets.allAdded')" :image-size="100"></el-empty>
 							</div>
-							<div v-for="item in myCompsList" :key="item.title" class="widgets-list-item">
-								<div class="item-logo">
+							<div v-for="item in myCompsList" :key="item.title" class="flex flex-row p-[15px] items-center hover:bg-black/10">
+								<div class="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center text-lg mr-[15px] text-[#6a8bad]">
 									<el-icon>
 										<component :is="item.icon" />
 									</el-icon>
 								</div>
-								<div class="item-info">
-									<h2>{{ item.title }}</h2>
-									<p>{{ item.description }}</p>
+								<div class="flex-1">
+									<h2 class="text-base font-normal cursor-default">{{ item.title }}</h2>
+									<p class="text-xs text-[#999] cursor-default">{{ item.description }}</p>
 								</div>
 								<div class="item-actions">
-									<el-button type="primary" icon="el-icon-plus" size="small" @click="push(item)"></el-button>
+									<el-button type="primary" icon="Plus" size="small" @click="push(item)"></el-button>
 								</div>
 							</div>
 						</div>
@@ -226,6 +299,7 @@ const nowCompsList = computed(() => grid.value.copmsList.flat());
  */
 const custom = (): void => {
 	customizing.value = true;
+
 	nextTick(() => {
 		const oldWidth = widgets.value.offsetWidth;
 		const scale = widgets.value.offsetWidth / oldWidth;
@@ -305,277 +379,4 @@ onMounted(() => {
 	grid.value = widgets ? JSON.parse(widgets) : defaultGrid.value;
 });
 </script>
-<style scoped lang="scss">
-.custom_btn {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	z-index: 9;
-}
 
-.widgets-home {
-	display: flex;
-	flex-direction: row;
-	flex: 1;
-	height: 100%;
-}
-
-.widgets-content {
-	flex: 1;
-	overflow: auto;
-	overflow-x: hidden;
-	padding: 5px;
-}
-
-.widgets-aside {
-	width: 360px;
-	background: #fff;
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-	border-radius: 8px;
-	margin-bottom: 5px;
-	min-height: 100px; /* Ensure a minimum height for better drag experience */
-	position: relative; /* Needed for customize-overlay positioning */
-	overflow: auto;
-}
-
-.widgets-aside-title {
-	font-size: 14px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.widgets-aside-title i {
-	margin-right: 10px;
-	font-size: 18px;
-}
-
-.widgets-aside-close {
-	font-size: 18px;
-	width: 30px;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 3px;
-	cursor: pointer;
-}
-
-.widgets-aside-close:hover {
-	background: rgba(180, 180, 180, 0.1);
-}
-
-.widgets-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.widgets-top-title {
-	font-size: 18px;
-	font-weight: bold;
-}
-
-.widgets {
-	transform-origin: top left;
-	transition: transform 0.15s;
-}
-
-.draggable-box {
-	height: 100%;
-	width: 100%;
-}
-
-.customizing .widgets-wrapper {
-	margin-right: -360px;
-	width: 100%;
-}
-
-.customizing .widgets-wrapper .el-col {
-	padding-bottom: 10px;
-}
-
-.customizing .widgets-wrapper .draggable-box {
-	border: 1px dashed var(--el-color-primary);
-	padding: 15px;
-}
-
-.customizing .widgets-wrapper .no-widgets {
-	display: none;
-}
-
-.widgets-item {
-	background: var(--el-bg-color-overlay);
-	border: 1px solid var(--el-border-color-light);
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-	border-radius: 8px;
-	margin-bottom: 0px; /* Reduced for tighter vertical spacing */
-	min-height: 100px; /* Ensure a minimum height for better drag experience */
-	position: relative; /* Needed for customize-overlay positioning */
-}
-
-.widgets-item > :deep(div) {
-	border-radius: 8px; /* Ensure component content also has rounded corners if it fills the card */
-}
-
-/* Ensure components inside widgets-item are not creating extra margins or borders if not needed */
-.widgets-item > :deep(.el-card) {
-	border: none !important;
-	box-shadow: none !important;
-}
-
-.customize-overlay {
-	position: absolute;
-	top: 0;
-	right: 0;
-	bottom: 0;
-	left: 0;
-	z-index: 1;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	background: rgba(255, 255, 255, 0.9);
-	cursor: move;
-}
-
-.customize-overlay label {
-	background: var(--el-color-primary);
-	color: #fff;
-	height: 40px;
-	padding: 0 30px;
-	border-radius: 40px;
-	font-size: 18px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	cursor: move;
-}
-
-.customize-overlay label i {
-	margin-right: 15px;
-	font-size: 24px;
-}
-
-.customize-overlay .close {
-	position: absolute;
-	top: 15px;
-	left: 15px;
-}
-
-.widgets-list-item {
-	display: flex;
-	flex-direction: row;
-	padding: 15px;
-	align-items: center;
-}
-
-.widgets-list-item .item-logo {
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	background: rgba(180, 180, 180, 0.1);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 18px;
-	margin-right: 15px;
-	color: #6a8bad;
-}
-
-.widgets-list-item .item-info {
-	flex: 1;
-}
-
-.widgets-list-item .item-info h2 {
-	font-size: 16px;
-	font-weight: normal;
-	cursor: default;
-}
-
-.widgets-list-item .item-info p {
-	font-size: 12px;
-	color: #999;
-	cursor: default;
-}
-
-.widgets-list-item:hover {
-	background: rgba(180, 180, 180, 0.1);
-}
-
-.widgets-wrapper .sortable-ghost {
-	opacity: 0.5;
-}
-
-.selectLayout {
-	width: 100%;
-	display: flex;
-}
-
-.selectLayout-item {
-	width: 60px;
-	height: 60px;
-	border: 2px solid var(--el-border-color-light);
-	padding: 5px;
-	cursor: pointer;
-	margin-right: 15px;
-}
-
-.selectLayout-item span {
-	display: block;
-	background: var(--el-border-color-light);
-	height: 46px;
-}
-
-.selectLayout-item.item02 span {
-	height: 30px;
-}
-
-.selectLayout-item.item02 .el-col:nth-child(1) span {
-	height: 14px;
-	margin-bottom: 2px;
-}
-
-.selectLayout-item.item03 span {
-	height: 14px;
-	margin-bottom: 2px;
-}
-
-.selectLayout-item:hover {
-	border-color: var(--el-color-primary);
-}
-
-.selectLayout-item.active {
-	border-color: var(--el-color-primary);
-}
-
-.selectLayout-item.active span {
-	background: var(--el-color-primary);
-}
-
-.dark {
-	.widgets-aside {
-		background: #2b2b2b;
-	}
-
-	.customize-overlay {
-		background: rgba(43, 43, 43, 0.9);
-	}
-}
-
-@media (max-width: 992px) {
-	.customizing .widgets {
-		transform: scale(1) !important;
-	}
-	.customizing .widgets-aside {
-		width: 100%;
-		position: absolute;
-		top: 50%;
-		right: 0;
-		bottom: 0;
-	}
-	.customizing .widgets-wrapper {
-		margin-right: 0;
-	}
-}
-</style>
