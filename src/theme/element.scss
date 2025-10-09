@@ -20,8 +20,8 @@
 	margin-left: 6px;
 }
 
-// 按钮增强交互效果
-.el-button {
+// 按钮增强交互效果（排除 text 类型按钮）
+.el-button:not(.el-button--text):not(.is-text) {
 	transition: all var(--transition-base) var(--transition-function);
 	border-radius: var(--border-radius-md);
 
@@ -32,6 +32,15 @@
 
 	&:active:not(.is-disabled) {
 		transform: translateY(0);
+	}
+
+	// 默认按钮边框增强
+	&.el-button--default {
+		border: 1px solid var(--el-border-color);
+
+		&:hover:not(.is-disabled) {
+			border-color: var(--el-color-primary);
+		}
 	}
 
 	// 主要按钮增强
