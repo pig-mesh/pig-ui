@@ -16,6 +16,7 @@ export interface TaskData {
 export interface TaskSubmitParam {
   paramMap: Record<string, any>
   taskId: string
+  formData: {}
   taskLocalParamMap: {
     approveDesc: string
   }

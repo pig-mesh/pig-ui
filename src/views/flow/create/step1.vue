@@ -16,6 +16,13 @@
 					<el-form-item :label="$t('flow.name')" prop="name">
 						<el-input v-model="form.name" />
 					</el-form-item>
+					<el-form-item :label="$t('flow.flowId')" prop="flowId">
+						<el-input v-model="form.flowId" :placeholder="$t('flow.flowIdTip')" :readonly="isEditMode" />
+						<template #label>
+							<span>{{ $t('flow.flowId') }}</span>
+							<Tip :content="$t('flow.flowIdTip')" />
+						</template>
+					</el-form-item>
 					<el-form-item :label="$t('flow.remark')" prop="remark">
 						<el-input v-model="form.remark" />
 					</el-form-item>
@@ -41,11 +48,11 @@ import { useRoute } from 'vue-router';
 import { useFlowStore } from '../workflow/stores/flow';
 import { GroupVO } from '/@/api/flow/group/types';
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 
-const validate = (f) => {
-	proxy.$refs.ruleForm.validate((valid, fields) => {
-		var arr = [];
+const validate = (f: (valid: boolean, errors: string[]) => void) => {
+	proxy.$refs.ruleForm.validate((valid: boolean, fields: any) => {
+		var arr: string[] = [];
 		if (!valid) {
 			for (var err in fields) {
 				arr.push(fields[err][0].message);
@@ -62,6 +69,15 @@ const rules = reactive<FormRules>({
 	name: [
 		{ required: true, message: '请填写名称', trigger: 'blur' },
 		{ min: 2, max: 10, message: '2-10个字符', trigger: 'blur' },
+	],
+	flowId: [
+		{ required: false, trigger: 'blur' },
+		{ 
+			pattern: /^[a-zA-Z][a-zA-Z0-9]*$/,
+			message: '流程ID只能包含英文字母和数字，且必须以字母开头',
+			trigger: 'blur'
+		},
+		{ min: 1, max: 50, message: '1-50个字符', trigger: 'blur' },
 	],
 	remark: [
 		{ required: false, message: '请填写描述', trigger: 'blur' },
@@ -100,6 +116,11 @@ let props = defineProps({
 const route = useRoute();
 const groupList = ref<GroupVO[]>([]);
 
+// 判断是否为编辑模式
+const isEditMode = computed(() => {
+	return !!route.params.flowId || !!route.query.flowId;
+});
+
 onMounted(() => {
 	queryGroupList().then(({ data }) => {
 		groupList.value = data;
@@ -109,8 +130,8 @@ onMounted(() => {
 watch(
 	() => props.groupId,
 	(val) => {
-		if (val) {
-			form.value.groupId = parseInt(val);
+		if (val !== undefined) {
+			form.value.groupId = val as any;
 		}
 	}
 );

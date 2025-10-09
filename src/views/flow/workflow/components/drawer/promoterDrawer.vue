@@ -12,9 +12,9 @@
 		<div class="demo-drawer__content">
 			<el-tabs type="border-card">
 				<el-tab-pane label="设置发起人">
-					<select-show v-model:orgList="starterConfig.nodeUserList" type="org" :multiple="true"></select-show>
+					<select-show v-model:orgList="starterConfig.nodeUserList" :multiple="true"></select-show>
 				</el-tab-pane>
-				<el-tab-pane label="表单权限">
+				<el-tab-pane label="表单权限" v-if="isDynamicForm">
 					<form-perm :form-perm="starterConfig.formPerms"></form-perm>
 				</el-tab-pane>
 			</el-tabs>
@@ -26,6 +26,7 @@ import selectShow from '/@/components/OrgSelector/index.vue';
 import {useFlowStore} from '../../stores/flow';
 import {useStore} from '../../stores/index';
 import FormPerm from './components/formPerm.vue';
+import { BpmModelFormType } from '/@/views/flow/form/const/constants';
 
 let store = useStore();
 
@@ -37,7 +38,12 @@ watch(starterConfigData, (val) => {
 	starterConfig.value = val.value;
 });
 const step2FormList = computed(() => {
-  return flowStore.step2;
+  return flowStore.step2.formRule || [];
+});
+
+// 判断是否是动态表单类型
+const isDynamicForm = computed(() => {
+	return flowStore.step2.formType === BpmModelFormType.NORMAL;
 });
 
 const openEvent = () => {

@@ -1,6 +1,7 @@
 import type { DragRule } from 'form-create-designer';
 import other from '/@/utils/other';
 import { dayjs } from 'element-plus';
+
 // Create a map of rule creators
 const ruleCreators: Record<string, () => DragRule> = {
 	selectUser: () => ({
@@ -8,6 +9,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-table-form2',
 		label: '人员',
 		name: 'SelectUser',
+		languageKey: ['selectUser'],
 		mask: true,
 		rule() {
 			return {
@@ -48,6 +50,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-group',
 		label: '部门',
 		name: 'SelectDept',
+		languageKey: ['selectDept'],
 		mask: true,
 		rule() {
 			return {
@@ -82,6 +85,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-folder',
 		label: '上传',
 		name: 'UploadFile' + other.getNonDuplicateID(),
+		languageKey: ['uploadFile'],
 		mask: true,
 		rule() {
 			return {
@@ -184,6 +188,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-image',
 		label: '图片',
 		name: 'UploadImage' + other.getNonDuplicateID(),
+		languageKey: ['uploadImgPlus'],
 		mask: true,
 		rule() {
 			return {
@@ -262,6 +267,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-subform',
 		label: '地区',
 		name: 'ChinaArea',
+		languageKey: ['chinaArea'],
 		mask: true,
 		rule() {
 			return {
@@ -310,6 +316,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-edit',
 		label: '签名',
 		name: 'Sign',
+		languageKey: ['sign'],
 		mask: true,
 		rule() {
 			return {
@@ -384,6 +391,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-select',
 		label: '字典',
 		name: 'DictSelect' + other.getNonDuplicateID(),
+		languageKey: ['dictSelect'],
 		mask: true,
 		rule() {
 			return {
@@ -432,6 +440,7 @@ const ruleCreators: Record<string, () => DragRule> = {
 		icon: 'icon-number',
 		label: '流水号',
 		name: 'Sequence',
+		languageKey: ['sequence'],
 		mask: true,
 		rule() {
 			const currentDate = dayjs().format('YYYYMMDD');

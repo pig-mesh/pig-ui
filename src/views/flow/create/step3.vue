@@ -81,10 +81,26 @@ const reErr = ({childNode}) => {
     } else if (type == 4) {
       reErr(childNode);
       for (var i = 0; i < conditionNodes.length; i++) {
-        if (conditionNodes[i].error) {
-          tipList.value.push('请设置' + conditionNodes[i].nodeName + '的条件');
+        const conditionNode = conditionNodes[i];
+        
+        // 检查表达式方式（conditionType === 1）的验证
+        if (conditionNode.conditionType === 1) {
+          // 验证规则名称
+          if (!conditionNode.ruleName || !conditionNode.ruleName.trim()) {
+            tipList.value.push(conditionNode.nodeName + ' 请输入规则名称');
+          }
+          // 验证表达式文本
+          if (!conditionNode.expressionText || !conditionNode.expressionText.trim()) {
+            tipList.value.push(conditionNode.nodeName + ' 请输入条件表达式');
+          }
+        } else {
+          // 原有的条件组方式验证
+          if (conditionNode.error) {
+            tipList.value.push('请设置' + conditionNode.nodeName + '的条件');
+          }
         }
-        reErr(conditionNodes[i]);
+        
+        reErr(conditionNode);
       }
     }
   } else {

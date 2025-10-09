@@ -124,6 +124,7 @@ import { useRoute } from 'vue-router';
 import { getFlowDetail } from '/@/api/flow/flow';
 import { useUserInfo } from '/@/stores/userInfo';
 import other from '/@/utils/other';
+import { BpmModelFormType } from '../form/const/constants';
 
 const route = useRoute();
 onMounted(() => {
@@ -149,7 +150,31 @@ onMounted(() => {
 			}
 			store.step1.remark = data.remark;
 			store.step1.groupId = data.groupId;
-			store.setStep2(FcDesigner.formCreate.parseJson(data.formItems));
+			// 解析 formConfig - 优先使用新的配置格式
+			if (data.formConfig) {
+				try {
+					const formConfig = JSON.parse(data.formConfig);
+					// 设置表单类型和相关配置
+					store.step2.formType = formConfig.formType || BpmModelFormType.NORMAL;
+					if (formConfig.formCustomCreatePath) {
+						store.step2.formCustomCreatePath = formConfig.formCustomCreatePath;
+					}
+					if (formConfig.formCustomViewPath) {
+						store.step2.formCustomViewPath = formConfig.formCustomViewPath;
+					}
+					if (formConfig.formId) {
+						store.step2.formId = formConfig.formId;
+					}
+					if (formConfig.formRule) {
+						store.step2.formRule = formConfig.formRule;
+					}
+					if (formConfig.formOption) {
+						store.step2.formOption = formConfig.formOption;
+					}
+				} catch (error) {
+					console.error('解析 formConfig 失败:', error);
+				}
+			}
 			step3NodeConfig = JSON.parse(data.process);
 		});
 	} else {
@@ -231,7 +256,17 @@ const submitFlow = () => {
 			let step2 = store.step2;
 
 			let flow = other.deepClone(step1);
-			flow.formItems = JSON.stringify(step2);
+			// 根据表单类型保存不同的数据格式
+			if (step2.formType === BpmModelFormType.NORMAL) {
+				// 动态表单：保存表单规则
+				flow.formItems = JSON.stringify(step2.formRule || []);
+			} else {
+				// 自定义表单：保存空数组，表单信息在step2中
+				flow.formItems = JSON.stringify([]);
+				delete step2.formRule;
+			}
+			// 保存完整的表单设计数据
+			flow.formConfig = JSON.stringify(step2);
 			flow.process = JSON.stringify(processData);
 			flow.adminList = JSON.stringify(step1.adminList);
 
@@ -252,4 +287,12 @@ const submitFlow = () => {
 
 // Add steps data
 const steps = [{ title: 'flow.basicInformation' }, { title: 'flow.formDesign' }, { title: 'flow.processDesign' }];
+
+// 监听 activeStep 变化，离开 step2 时自动保存
+watch(activeStep, (newStep, oldStep) => {
+	// 从 step2 (index=1) 切换到其他 step 时自动保存
+	if (oldStep === 1 && newStep !== 1 && step2Ref.value) {
+		step2Ref.value.saveFormDesign?.();
+	}
+});
 </script>

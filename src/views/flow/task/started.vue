@@ -73,20 +73,36 @@
 
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 			<!--			右侧抽屉-->
-			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
+			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="50%" destroy-on-close>
 				<template #header>
 					<h3>{{ currentData?.name }}</h3>
 				</template>
 				<template #default>
-					<el-card class="box-card">
-						<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
-					</el-card>
-					<flow-node-format
-						:disableSelect="true"
-						:processInstanceId="currentData.processInstanceId"
-						:flow-id="currentData.flowId"
-						ref="flowNodeFormatRef"
-					></flow-node-format>
+					<el-row>
+						<el-col :span="16">
+							<el-form label-position="top">
+								<!-- 情况一：动态表单 -->
+								<div v-if="!dynamicFormComponent">
+									<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" :option="option" />
+								</div>
+								<!-- 情况二：自定义业务表单 -->
+								<div v-else>
+									<component 
+										:is="dynamicFormComponent.component" 
+										v-bind="dynamicFormComponent.props"
+									/>
+								</div>
+							</el-form>
+						</el-col>
+						<el-col :span="8">
+							<flow-node-format
+								:disableSelect="true"
+								:processInstanceId="currentData.processInstanceId"
+								:flow-id="currentData.flowId"
+								ref="flowNodeFormatRef"
+							/>
+						</el-col>
+					</el-row>
 				</template>
 			</el-drawer>
 		</div>
@@ -97,15 +113,16 @@ import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import { queryMineStarted, stopProcessInstance } from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-
-import FcDesigner from 'form-create-designer';
-import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { useMessage } from '/@/hooks/message';
+import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
+import { useTaskFormLoader } from './composables/useTaskForm';
 
 const rule = ref([]);
 const fApi = ref();
 const formData = ref({});
+const option = ref<any>({});
+const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // 动态表单组件
 
 const rightDrawerVisible = ref(false);
 
@@ -131,28 +148,30 @@ function stop(row) {
 }
 
 const currentData = ref();
+
+// 使用通用表单加载器
+const currentOpenFlowForm = ref();
+const { loadForm } = useTaskFormLoader({
+	rule,
+	formData,
+	option,
+	dynamicFormComponent,
+	currentOpenFlowForm,
+});
+
 /**
- * 点击开始处理
+ * 点击查看
  * @param row
  */
 const deal = (row) => {
 	currentData.value = row;
-	detail({
-		processInstanceId: row.processInstanceId,
-	}).then((res) => {
-		const { formItems, formPerms, formData: responseFormData } = res.data;
-
-		// 解析表单项并处理权限
-		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
-		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
-
-		rule.value = itemsWithPerms;
-		formData.value = FcDesigner.formCreate.parseJson(responseFormData);
-		currentOpenFlowForm.value = formItems;
-		rightDrawerVisible.value = true;
+	loadForm(() => detail({ processInstanceId: row.processInstanceId }), {
+		parseFormData: true,
+		onSuccess: () => {
+			rightDrawerVisible.value = true;
+		},
 	});
 };
-const currentOpenFlowForm = ref();
 
 // 清空搜索条件
 const resetQuery = () => {

@@ -23,5 +23,5 @@ export interface GroupVO {
 	/**
 	 * 菜单名称
 	 */
-	name?: string;
+	groupName?: string;
 }

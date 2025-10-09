@@ -13,7 +13,7 @@
 				<el-radio-group v-model="approverConfig.assignedType" class="ml-4" @change="assignedTypeChangeEvent">
 					<el-row>
 						<el-col v-for="{ value, label } in setTypes" :key="value" :span="8">
-							<el-radio :label="value">{{ label }}</el-radio>
+							<el-radio :label="value" :disabled="value === 8 && !isDynamicForm">{{ label}} </el-radio>
 						</el-col>
 					</el-row>
 				</el-radio-group>
@@ -21,23 +21,40 @@
 				<el-divider />
 				<template v-if="approverConfig.assignedType === 2">
 					<h4>选择部门</h4>
-					<select-show v-model:orgList="approverConfig.nodeUserList" type="dept"></select-show>
+					<select-show class="mt-4 ml-2" v-model:orgList="approverConfig.nodeUserList" type="dept"></select-show>
 				</template>
 				<template v-if="approverConfig.assignedType === 3">
 					<h4>选择角色</h4>
 
-					<select-show v-model:orgList="approverConfig.nodeUserList" type="role" :multiple="true"></select-show>
+					<select-show class="mt-4 ml-2" v-model:orgList="approverConfig.nodeUserList" type="role" :multiple="true"></select-show>
 				</template>
 				<template v-if="approverConfig.assignedType === 1">
 					<h4>选择成员</h4>
 
-					<select-show v-model:orgList="approverConfig.nodeUserList" type="user" :multiple="true"></select-show>
+					<select-show class="mt-4 ml-2" v-model:orgList="approverConfig.nodeUserList" type="user" :multiple="true"></select-show>
 				</template>
 				<template v-if="approverConfig.assignedType === 8">
 					<h4>人员控件</h4>
 					<el-select v-model="approverConfig.formUserId" clearable class="m-2" placeholder="请选择审批表单" size="large">
 						<el-option v-for="item in step2FormUserList" :key="item.field" :label="item.title" :value="item.field" />
 					</el-select>
+				</template>
+				<template v-if="approverConfig.assignedType === 10">
+					<h4>流程表达式 <Tip content="通过Spring Bean动态获取审批人，支持传递execution执行上下文对象。语法：${beanName.methodName(execution)}"/></h4>
+					<el-input 
+						v-model="approverConfig.assignExpressName" 
+						placeholder="请输入规则名称（方便节点回显）..." 
+						class="m-2 mb-3"
+						clearable
+					/>
+					<el-input 
+						v-model="approverConfig.assignExpress" 
+						type="textarea" 
+						:rows="4" 
+						placeholder="请输入流程表达式..." 
+						class="m-2"
+						clearable
+					/>
 				</template>
 				<template v-if="approverConfig.assignedType === 7">
 					<h4>审批终点</h4>
@@ -87,6 +104,7 @@
 					<el-radio label="TO_USER" size="large">指定人员</el-radio>
 				</el-radio-group>
 				<select-show
+				  class="mt-4 ml-2"
 					v-if="approverConfig?.nobody.handler === 'TO_USER'"
 					v-model:orgList="approverConfig.nobody.assignedUser"
 					type="user"
@@ -96,22 +114,40 @@
 				<el-divider />
 
 				<template v-if="approverConfig.refuse?.handler">
-					<h4>审批被拒绝</h4>
-					<el-radio-group v-model="approverConfig.refuse.handler" class="ml-4">
-						<el-radio label="TO_END" size="large">直接结束流程</el-radio>
-						<el-radio label="TO_NODE" size="large" v-if="rejectNodeList.length > 0">驳回到指定节点</el-radio>
-					</el-radio-group>
-					<el-select
-						v-if="approverConfig.refuse.handler === 'TO_NODE' && rejectNodeList.length > 0"
-						v-model="approverConfig.refuse.nodeId"
-						placeholder="驳回节点"
-						class="mb-2 w-1/2"
-					>
-						<el-option v-for="item in rejectNodeList" :key="item.id" :label="item.name" :value="item.id" />
-					</el-select>
+					<h4 class="mb-3">审批被拒绝</h4>
+					<div class="space-y-3">
+						<div class="flex items-center">
+							<el-radio 
+								v-model="approverConfig.refuse.handler" 
+								label="TO_END" 
+								size="large"
+								class="!mr-6"
+							>
+								直接结束流程
+							</el-radio>
+						</div>
+						<div class="flex items-center gap-3" v-if="rejectNodeList.length > 0">
+							<el-radio 
+								v-model="approverConfig.refuse.handler" 
+								label="TO_NODE" 
+								size="large"
+								class="!mr-0 whitespace-nowrap"
+							>
+								驳回到指定节点
+							</el-radio>
+							<el-select
+								v-if="approverConfig.refuse.handler === 'TO_NODE'"
+								v-model="approverConfig.refuse.nodeId"
+								placeholder="请选择驳回节点"
+								class="flex-1"
+							>
+								<el-option v-for="item in rejectNodeList" :key="item.id" :label="item.name" :value="item.id" />
+							</el-select>
+						</div>
+					</div>
 				</template>
 			</el-tab-pane>
-			<el-tab-pane label="表单权限">
+			<el-tab-pane label="表单权限" v-if="isDynamicForm">
 				<form-perm :form-perm="approverConfig.formPerms"></form-perm>
 			</el-tab-pane>
 			<el-tab-pane label="事件通知">
@@ -121,7 +157,7 @@
 	</el-drawer>
 </template>
 <script setup lang="ts">
-import { setTypes } from '../../utils/const';
+import { setTypes } from '../../utils';
 import { useStore } from '../../stores/index';
 import { useFlowStore } from '../../stores/flow';
 import FormPerm from './components/formPerm.vue';
@@ -129,7 +165,9 @@ import EventConfig from './components/eventConfig.vue';
 import selectShow from '/@/components/OrgSelector/index.vue';
 import { validateNull } from '/@/utils/validate';
 import other from '/@/utils/other';
-import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+import { flattenFormItems } from '../../utils';
+import { BpmModelFormType } from '/@/views/flow/form/const/constants';
+import { processFormItemsWithPerms } from '../../utils/formPermissions';
 
 let flowStore = useFlowStore();
 
@@ -207,20 +245,30 @@ function produceSerialNodeList(parentId, process, nodeArr, nodeObj, noBranch) {
 }
 
 const step2FormList = computed(() => {
-	return flowStore.step2;
+	const formRule = flowStore.step2.formRule || [];
+	// 使用 flattenFormItems 处理嵌套的子表单数据
+	return flattenFormItems(formRule);
+});
+
+// 判断是否是动态表单类型
+const isDynamicForm = computed(() => {
+	return flowStore.step2.formType === BpmModelFormType.NORMAL;
 });
 
 const step2FormUserList = computed(() => {
-	return step2FormList.value.filter((res) => res.type === 'OrgSelector' && res.props?.type === 'user');
+	// step2FormList 现在已经是扁平化处理后的数据，直接使用即可
+	const flattenedList = step2FormList.value;
+	return flattenedList.filter((res) => res.type === 'OrgSelector' && res.props?.type === 'user');
 });
 
 const openEvent = () => {
+	// step2FormList 已经是扁平化处理后的数据
 	let value = step2FormList.value;
 	let formPerms = approverConfig.value.formPerms || {};
 
-	// 初始化默认权限
+	// 初始化默认权限 - 现在处理的是扁平化后的表单项
 	for (const item of value) {
-		if (!formPerms[item.field]) {
+		if (item.field && !formPerms[item.field]) {
 			formPerms[item.field] = 'R';
 		}
 	}
@@ -232,7 +280,28 @@ const openEvent = () => {
 	// 这里可以进一步使用处理后的表单项
 };
 
-let approverConfig = ref({});
+let approverConfig = ref({
+	assignedType: 1,
+	nodeUserList: [],
+	assignExpress: '',
+	assignExpressName: '',
+	formUserId: '',
+	formUserName: '',
+	deptLeaderLevel: 1,
+	multiple: false,
+	multipleMode: 1,
+	nobody: {
+		handler: 'TO_PASS',
+		assignedUser: []
+	},
+	refuse: {
+		handler: 'TO_END',
+		nodeId: ''
+	},
+	formPerms: {},
+	eventConfig: {},
+	error: false
+});
 
 let store = useStore();
 let { setApproverConfig, setApprover } = store;
@@ -261,7 +330,7 @@ watch(
 	() => approverConfig.value.formUserId,
 	(val) => {
 		if (val) {
-			approverConfig.value.formUserName = step2FormUserList.value.filter((res) => res.field === val)[0].field;
+			approverConfig.value.formUserName = step2FormUserList.value.filter((res) => res.field === val)[0].title || step2FormUserList.value.filter((res) => res.field === val)[0].field;
 		}
 	}
 );
@@ -269,6 +338,19 @@ watch(
 //审批人类型变化
 const assignedTypeChangeEvent = () => {
 	approverConfig.value.nodeUserList = [];
+	// 清理流程表达式
+	if (approverConfig.value.assignedType !== 10) {
+		approverConfig.value.assignExpress = '';
+		approverConfig.value.assignExpressName = '';
+	}
+	// 清理其他相关字段
+	if (approverConfig.value.assignedType !== 8) {
+		approverConfig.value.formUserId = '';
+		approverConfig.value.formUserName = '';
+	}
+	if (approverConfig.value.assignedType !== 7) {
+		approverConfig.value.deptLeaderLevel = 1;
+	}
 };
 
 const saveApprover = () => {
@@ -293,6 +375,11 @@ const checkApproval = (nodeConfig) => {
 	} else if (nodeConfig.assignedType == 8 && nodeConfig.formUserId.length == 0) {
 		//表单
 		return false;
+	} else if (nodeConfig.assignedType == 10) {
+		//流程表达式
+		if (!nodeConfig.assignExpress || nodeConfig.assignExpress.trim().length == 0) {
+			return false;
+		}
 	}
 
 	//审批人为空

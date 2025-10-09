@@ -60,22 +60,37 @@
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 
 			<!--			右侧抽屉-->
-			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
+			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="50%" destroy-on-close>
 				<template #header>
 					<h3>{{ currentData?.processName }}</h3>
 				</template>
 				<template #default>
-					<el-card class="box-card">
-						<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
-					</el-card>
-					<flow-node-format
-						:disableSelect="true"
-						:task-id="currentData.taskId"
-						:processInstanceId="currentData.processInstanceId"
-						:flow-id="currentData.flowId"
-						ref="flowNodeFormatRef"
-						class="mt-4"
-					/>
+					<el-row>
+						<el-col :span="16">
+							<el-form label-position="top">
+								<!-- 情况一：动态表单 -->
+								<div v-if="!dynamicFormComponent">
+									<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" :option="option" />
+								</div>
+								<!-- 情况二：自定义业务表单 -->
+								<div v-else>
+									<component 
+										:is="dynamicFormComponent.component" 
+										v-bind="dynamicFormComponent.props"
+									/>
+								</div>
+							</el-form>
+						</el-col>
+						<el-col :span="8">
+							<flow-node-format
+								:disableSelect="true"
+								:task-id="currentData.taskId"
+								:processInstanceId="currentData.processInstanceId"
+								:flow-id="currentData.flowId"
+								ref="flowNodeFormatRef"
+							/>
+						</el-col>
+					</el-row>
 				</template>
 				<template #footer>
 					<div style="flex: auto">
@@ -104,9 +119,9 @@ import TransferHandle from './handler/transfer.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import { queryMineTask, queryTask } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import FcDesigner from 'form-create-designer';
-import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
+import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
+import { useTaskFormLoader } from './composables/useTaskForm';
 
 const rightDrawerVisible = ref(false);
 const showSearch = ref(true);
@@ -115,6 +130,7 @@ const queryRef = ref();
 
 const fApi = ref();
 const formData = ref({});
+const option = ref<any>({});
 
 // Define the FormItem interface if not already defined
 interface FormItem {
@@ -122,6 +138,7 @@ interface FormItem {
 }
 
 const rule = ref<FormItem[]>([]);
+const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // 动态表单组件
 
 const currentData = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -134,28 +151,29 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 
 const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
+// 使用通用表单加载器
+const currentOpenFlowForm = ref();
+const { loadForm } = useTaskFormLoader({
+	rule,
+	formData,
+	option,
+	dynamicFormComponent,
+	currentOpenFlowForm,
+});
+
 /**
  * 点击开始处理
  * @param row
  */
 const deal = (row: any) => {
 	currentData.value = row;
-	queryTask(row.taskId, false).then((res) => {
-		const { formItems, formPerms, formData: responseFormData } = res.data;
-
-		// 解析表单项
-		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
-
-		// 递归处理所有表单项的权限
-		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
-
-		rule.value = itemsWithPerms;
-		formData.value = responseFormData;
-		currentOpenFlowForm.value = formItems;
-		rightDrawerVisible.value = true;
+	loadForm(() => queryTask(row.taskId, false), {
+		parseFormData: false,
+		onSuccess: () => {
+			rightDrawerVisible.value = true;
+		},
 	});
 };
-const currentOpenFlowForm = ref();
 
 const agreeHandler = ref();
 const refuseHandler = ref();
@@ -176,20 +194,20 @@ const taskSubmitEvent = () => {
  * 提交任务
  */
 const submitTask = () => {
-	agreeHandler.value.handle(currentData.value, currentOpenFlowForm.value);
+	agreeHandler.value.handle(currentData.value,formData.value);
 };
 /**
  * 拒绝任务
  */
 const refuseTask = () => {
-	refuseHandler.value.handle(currentData.value, currentOpenFlowForm.value);
+	refuseHandler.value.handle(currentData.value,formData.value);
 };
 
 /**
  * 转办任务
  */
 const transferTask = () => {
-	transferHandler.value.handle(currentData.value, currentOpenFlowForm.value);
+	transferHandler.value.handle(currentData.value,formData.value);
 };
 
 onMounted(() => {

@@ -6,12 +6,12 @@ import type { FlowFormItem, TaskData, TaskSubmitParam } from './types'
 const dialogVisible = ref(false)
 const submitDesc = ref('')
 const currentData = ref<TaskData>()
-const currentOpenFlowForm = ref<FlowFormItem[]>()
+const currentFormData = ref({});
 
-const handle = (row: TaskData, formData: FlowFormItem[]) => {
+const handle = (row: TaskData,formData: any) => {
   submitDesc.value = ''
   currentData.value = row
-  currentOpenFlowForm.value = formData
+  currentFormData.value = formData
   dialogVisible.value = true
 }
 
@@ -21,14 +21,14 @@ const emit = defineEmits<{
 }>()
 
 const submit = async () => {
-  if (!currentData.value || !currentOpenFlowForm.value) return
 
   const formData: Record<string, any> = {}
-  formData[`${currentData.value.nodeId}_approve_condition`] = true
+  formData[`${currentData.value?.nodeId}_approve_condition`] = true
 
   const param: TaskSubmitParam = {
     paramMap: formData,
-    taskId: currentData.value.taskId,
+    formData: currentFormData.value!,
+    taskId: currentData.value!.taskId,
     taskLocalParamMap: {
       approveDesc: submitDesc.value,
     },

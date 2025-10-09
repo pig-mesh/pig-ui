@@ -1,21 +1,10 @@
 <script setup lang="ts">
 import { useFlowStore } from '../../../stores/flow';
-import { getCurrentInstance, computed, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import selectShow from '/@/components/OrgSelector/index.vue';
 import other from '/@/utils/other';
 import { PropType } from 'vue';
-
-// 表单项接口定义
-interface FormItem {
-	id: string;
-	field: string;
-	name: string;
-	type: string;
-	props?: Record<string, any>;
-	value?: any;
-	title?: string;
-	typeName?: string;
-}
+import { flattenFormItems, type FormItem } from '../../../utils/formUtils';
 
 // 表达式类型接口定义
 interface ExpressionType {
@@ -38,7 +27,7 @@ let flowStore = useFlowStore();
 
 // 获取步骤2的表单列表
 const step2FormList = computed(() => {
-	return flowStore.step2 as FormItem[];
+	return (flowStore.step2.formRule as unknown) as FormItem[];
 });
 
 // 定义允许参与计算的表单类型
@@ -47,7 +36,10 @@ const allowedTypes = ['OrgSelector', 'input', 'textarea', 'inputNumber', 'datePi
 // 过滤并处理表单列表
 const formList = computed(() => {
 	const value = step2FormList.value;
-	const $deepCopy = other.deepClone(value.filter((res: FormItem) => allowedTypes.includes(res.type)));
+
+	// 使用统一的flattenFormItems函数,传入类型过滤器
+	const flattened = flattenFormItems(value, allowedTypes);
+	const $deepCopy = other.deepClone(flattened);
 
 	// 添加发起人选项
 	$deepCopy.push({
@@ -144,10 +136,17 @@ let expression = ref<ExpressionMap>({
 	],
 });
 
-// 监听条件键值变化，确保OrgSelector的值始终为数组
+// 监听条件键值变化，清空关系和值字段，并确保OrgSelector的值为数组
 watch(
 	() => props.condition.key,
-	(newKey) => {
+	(newKey, oldKey) => {
+		// 当条件字段发生改变时（不是初始化），清空选择关系和条件值
+		if (oldKey !== undefined && newKey !== oldKey) {
+			props.condition.expression = '';
+			props.condition.value = '';
+		}
+		
+		// 确保OrgSelector的值始终为数组
 		if (formIdObj.value[newKey]?.type === 'OrgSelector') {
 			if (!props.condition.value || !Array.isArray(props.condition.value)) {
 				props.condition.value = [];
