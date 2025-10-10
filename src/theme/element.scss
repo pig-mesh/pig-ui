@@ -486,26 +486,10 @@
 
 /* Card 卡片
 ------------------------------- */
-.el-card {
-	border-radius: var(--border-radius-lg);
-	transition: all var(--transition-base) var(--transition-function);
-	box-shadow: var(--shadow-sm);
-
-	&:hover {
-		box-shadow: var(--shadow-md);
-		transform: translateY(-2px);
-	}
-
-	.el-card__header {
-		padding: 16px 20px;
-		border-bottom: 1px solid var(--next-border-color-lighter);
-		font-weight: 600;
-	}
-
-	.el-card__body {
-		padding: 20px;
-	}
+.el-card__header {
+	padding: 15px 20px;
 }
+
 
 // 日历
 .el-calendar-table .el-calendar-day {
