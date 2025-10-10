@@ -393,11 +393,6 @@
 	.el-sub-menu:not(.is-active):hover .el-sub-menu__title {
 		color: var(--next-bg-menuBarColor) !important;
 	}
-
-	// 横向菜单移除左侧指示器
-	.el-menu-item::before {
-		display: none;
-	}
 }
 
 // 添加弹出子菜单容器的样式

@@ -466,11 +466,6 @@
 		.el-menu-item {
 			color: var(--next-color-white);
 
-			// 左侧激活指示器使用 Twitter 蓝色
-			&::before {
-				background-color: #1d9bf0;
-			}
-
 			// 激活状态
 			&.is-active {
 				background-color: rgba(29, 155, 240, 0.15) !important;
