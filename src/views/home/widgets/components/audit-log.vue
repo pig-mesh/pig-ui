@@ -10,7 +10,7 @@ export default {
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.auditLogsTip') }}</span>
-				<el-button link class="button" text @click="handleRoutr">{{ $t('home.moreTip') }}</el-button>
+				<el-button text class="button" @click="handleRoutr">{{ $t('home.moreTip') }}</el-button>
 			</div>
 		</template>
 		<el-timeline v-if="auditState.dataList.length > 0">

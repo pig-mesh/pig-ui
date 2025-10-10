@@ -1,18 +1,26 @@
 <template>
-	<div>
-		<el-scrollbar style="height: 700px">
-			<el-form label-width="70px">
-				<el-form-item label="排版样式">
-					<el-radio-group v-model="content.style">
-						<el-radio :label="1">横排</el-radio>
-						<el-radio :label="2">竖排</el-radio>
-					</el-radio-group>
+	<div class="w-full overflow-x-hidden">
+		<el-scrollbar style="height: 700px; overflow-x: hidden;">
+			<el-form label-width="80px" class="px-1 w-full max-w-full mr-8">
+				<!-- 标题名称 -->
+				<el-form-item label="标题名称" class="mb-6">
+					<el-input
+						v-model="content.title"
+						placeholder="请输入标题名称"
+						clearable
+						maxlength="20"
+						show-word-limit
+						class="!w-full transition-all duration-200"
+					>
+						<template #prefix>
+							<el-icon class="text-gray-400"><Edit /></el-icon>
+						</template>
+					</el-input>
 				</el-form-item>
-				<el-form-item label="标题名称">
-					<el-input class="!w-[400px]" v-model="content.title" />
-				</el-form-item>
-				<el-form-item label="菜单设置">
-					<div class="flex-1">
+
+				<!-- 菜单设置 -->
+				<el-form-item label="菜单设置" class="!mb-0">
+					<div class="flex-1 w-full">
 						<AddNav v-model="content.data" />
 					</div>
 				</el-form-item>

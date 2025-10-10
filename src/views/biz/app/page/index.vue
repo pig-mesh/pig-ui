@@ -1,16 +1,16 @@
 <template>
-	<div class="layout-padding min-w-[1100px] min-h-[calc(100vh-var(--navbar-height)-80px)] flex flex-col">
+	<div class="layout-padding min-w-[1100px] min-h-[calc(100vh-var(--navbar-height)-80px)] flex flex-col overflow-x-hidden">
 		<el-card shadow="never" class="!border-none flex-1 flex" :body-style="{ flex: 1 }">
-			<div class="flex items-start h-full">
-				<Menu v-model="activeMenu" :menus="menus" class="!w-[15%]" />
-				<preview v-model="selectWidgetIndex" :pageData="getPageData">
+			<div class="flex items-start h-full gap-4 w-full min-w-0">
+				<Menu v-model="activeMenu" :menus="menus" class="!w-[15%] flex-shrink-0" />
+				<preview v-model="selectWidgetIndex" :pageData="getPageData" class="flex-shrink-0">
 					<template #footer>
 						<div class="flex justify-center mt-4">
 							<el-button type="primary" @click="setData">保存</el-button>
 						</div>
 					</template>
 				</preview>
-				<attr-setting class="flex-1" :widget="getSelectWidget" />
+				<attr-setting class="flex-1 min-w-0" :widget="getSelectWidget" />
 			</div>
 		</el-card>
 	</div>

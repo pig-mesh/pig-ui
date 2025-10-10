@@ -41,7 +41,7 @@
 				<el-table-column :label="$t('systoken.clientId')" prop="clientId" show-overflow-tooltip width="100"></el-table-column>
 				<el-table-column :label="$t('systoken.accessToken')" prop="accessToken" show-overflow-tooltip>
 					<template #default="scope">
-						<el-button link type="danger" v-if="filterOwnToken(scope.row)">
+						<el-button text type="danger" v-if="filterOwnToken(scope.row)">
 							{{ scope.row.accessToken }}
 						</el-button>
 					</template>
