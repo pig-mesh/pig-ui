@@ -120,12 +120,16 @@ const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
 const emit = defineEmits(['signInSuccess', 'change']); // 声明事件名称
 const loginFormRef = ref(); // 定义LoginForm表单引用
 const loading = ref(false); // 定义是否正在登录中
+
+const previewUserName = import.meta.env.VITE_PREVIEW_USERNAME; // 演示环境用户名
+const previewPassword = import.meta.env.VITE_PREVIEW_PASSWORD; // 演示环境密码
+
 const state = reactive({
 	isShowPassword: false, // 是否显示密码
 	ruleForm: {
 		// 表单数据
-		username: 'admin', // 用户名
-		password: '123456', // 密码
+		username: previewUserName, // 用户名
+		password: previewPassword, // 密码
 		code: '', // 验证码
 		randomStr: 'blockPuzzle', // 验证码随机数
 	},
