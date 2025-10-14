@@ -195,8 +195,6 @@ const onSignIn = async () => {
 	} catch (err: any) {
 		if (err?.data === LoginErrorEnum.CREDENTIALS_EXPIRED) {
 			emit('change', LoginTypeEnum.EXPIRE, state.ruleForm.username); // 触发修改密码
-		} else {
-			useMessage().error(t('errors.loginFailed'));
 		}
 	} finally {
 		loading.value = false; // 登录结束

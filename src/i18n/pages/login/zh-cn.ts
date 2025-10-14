@@ -179,7 +179,7 @@ export default {
 
 	// 错误消息
 	errors: {
-		loginFailed: '登录失败，请检查您的凭据',
+		loginFailed: '用户名不存在或者密码错误',
 		networkError: '网络错误，请重试',
 		validationError: '请填写所有必填字段',
 		unauthorized: '未经授权的访问',
