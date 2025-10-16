@@ -74,15 +74,15 @@
         
         <el-form-item class="mt-6 text-center">
           <div class="flex justify-center items-center gap-4 w-full">
-            <el-button 
-              type="primary" 
-              @click="submitForm" 
+            <el-button
+              type="primary"
+              @click="submitForm"
               :loading="formLoading"
               :disabled="formLoading"
             >
               {{ isEdit ? '更新' : '提交申请' }}
             </el-button>
-            <el-button 
+            <el-button
               @click="handleCancel"
             >
               取消
@@ -101,12 +101,16 @@ import { getObj, addObj, putObj } from '/@/api/flow/oaLeave';
 import { useRouter, useRoute } from 'vue-router';
 import { useUserInfo } from '/@/stores/userInfo';
 
-// ========== 2. 组件定义 ==========
+// ========== 2. Props 定义 ==========
+const { flowHelper } = defineProps<{
+  flowHelper?: any
+}>();
+
+// ========== 3. 组件定义 ==========
 const router = useRouter();
 const route = useRoute();
-const userStore = useUserInfo();
 
-// ========== 3. 响应式数据定义 ==========
+// ========== 4. 响应式数据定义 ==========
 // 基础响应式变量
 const formRef = ref(); // 表单引用
 const formLoading = ref(false); // 加载状态
@@ -170,25 +174,42 @@ const getOaLeaveData = async (id: string) => {
 // 提交表单方法
 const submitForm = async () => {
   formLoading.value = true; // 防止重复提交
-  
-  // 表单校验
+
+  // 1. 表单校验
   const valid = await formRef.value.validate().catch(() => {});
   if (!valid) {
     formLoading.value = false;
     return false;
   }
 
+  // 2. 审批人校验（使用父组件提供的方法）
+  if (flowHelper && !flowHelper.validate()) {
+    formLoading.value = false;
+    return false;
+  }
+
   try {
-    // 根据是否有ID判断是新增还是修改
+    // 3. 准备提交数据（合并流程数据）
+    let submitData: Record<string, any> = { ...formData };
+
+    if (flowHelper) {
+      const flowData = flowHelper.getFlowData();
+      submitData = {
+        ...submitData,
+        ...flowData  // 包含 flowParamMap（审批人信息）
+      };
+    }
+
+    // 4. 根据是否有ID判断是新增还是修改
     if (isEdit.value) {
-      await putObj(formData);
+      await putObj(submitData);
       useMessage().success('修改成功');
     } else {
-      await addObj(formData);
+      await addObj(submitData);
       useMessage().success('申请提交成功');
     }
-    
-    // 跳转回列表页
+
+    // 5. 跳转回列表页
     router.push('/flow/oaLeave/index');
   } catch (err: any) {
     useMessage().error(err.msg);

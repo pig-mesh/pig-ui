@@ -83,7 +83,7 @@ const formatSelectNodeUser = () => {
 	return obj;
 };
 
-defineExpose({ validate, formatSelectNodeUser });
+defineExpose({ validate, formatSelectNodeUser, nodeUser });
 </script>
 
 <template>

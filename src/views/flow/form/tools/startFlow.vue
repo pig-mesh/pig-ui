@@ -71,6 +71,44 @@ const handleBusinessFormChange = (data: any) => {
 	businessFormData.value = data;
 };
 
+// 校验审批人选择完整性
+const validateFlowNode = () => {
+	if (flowNodeFormatRef.value) {
+		flowNodeValidateResult.value = flowNodeFormatRef.value.validate();
+		return flowNodeValidateResult.value;
+	}
+	return false;
+};
+
+// 审批人工具方法（提供给子组件使用）
+// 使用 markRaw 避免 Vue 进行响应式追踪
+const flowHelper = markRaw({
+	// 校验审批人
+	validate: () => {
+		if (!flowNodeFormatRef.value) return true; // 没有审批人组件时直接通过
+		const isValid = flowNodeFormatRef.value.validate();
+		if (!isValid) {
+			ElMessage.warning('请选择节点执行人');
+		}
+		return isValid;
+	},
+
+	// 获取流程数据（包含审批人信息，包装在 flowParamMap 中）
+	getFlowData: () => {
+		if (!flowNodeFormatRef.value) return {};
+		const approverData = flowNodeFormatRef.value.formatSelectNodeUser();
+		return {
+			flowParamMap: { ...approverData }
+		};
+	},
+
+	// 获取审批人原始数据
+	getRawApproverData: () => {
+		if (!flowNodeFormatRef.value) return {};
+		return flowNodeFormatRef.value.formatSelectNodeUser();
+	}
+});
+
 const submitProcess = () => {
 	let validate = flowNodeFormatRef.value.validate();
 	if (!validate) {
@@ -134,7 +172,8 @@ const startProcess = (f: FlowData) => {
 				// 修改props，去掉readonly属性（发起流程时是可编辑的）
 				dynamicComponent.props = {
 					...dynamicComponent.props,
-					readonly: false
+					readonly: false,
+					flowHelper: flowHelper
 				};
 				dynamicFormComponent.value = dynamicComponent;
 			} else {
@@ -162,6 +201,16 @@ const setupDynamicFormForStart = (formItems: any, formPerms: any) => {
 };
 
 const flowNodeFormatRef = ref();
+const flowNodeValidateResult = ref(false); // 审批人校验结果
+
+// 监听审批人选择变化，实时更新校验结果
+watch(
+	() => flowNodeFormatRef.value?.nodeUser,
+	() => {
+		validateFlowNode();
+	},
+	{ deep: true }
+);
 
 const handleDrawerClosed = () => {
 	formData.value = {};
