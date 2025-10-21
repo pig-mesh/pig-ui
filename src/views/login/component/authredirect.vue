@@ -9,14 +9,22 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
-// 使用 VueUse 获取 URL 参数
-const params = useUrlSearchParams('hash');
+// 使用 VueUse 获取 URL 参数 - 兼容两种URL格式
+const hashParams = useUrlSearchParams('hash');
+const queryParams = useUrlSearchParams('history');
+
+/**
+ * 获取参数值，优先从hash获取，如果没有则从query string获取
+ */
+const getParam = (key: string): string => {
+	return (hashParams[key] || queryParams[key]) as string;
+};
 
 /**
  * 获取授权码，支持多种参数名
  */
 const getAuthCode = (): string => {
-	return (params.code || params.ticket || params.authCode) as string;
+	return getParam('code') || getParam('ticket') || getParam('authCode');
 };
 
 /**
@@ -47,6 +55,10 @@ const bindSocialAccount = async (state: string, code: string) => {
 		});
 
 		await useMessageBox().confirm(t('socialLogin.bindSuccess'));
+
+		// 通知父窗口绑定成功
+		notifyParentWindow({ type: 'social-bind-success' });
+
 		window.close();
 };
 
@@ -69,7 +81,7 @@ const handleSocialLogin = async (state: string, code: string) => {
  */
 onMounted(async () => {
 	const code = getAuthCode();
-	const stateParam = params.state as string;
+	const stateParam = getParam('state');
 
 	if (!code || !stateParam) {
 		console.error(t('socialLogin.missingParams'));

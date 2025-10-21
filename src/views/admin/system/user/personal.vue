@@ -141,6 +141,7 @@ import {Session} from '/@/utils/storage';
 import {useI18n} from 'vue-i18n';
 import {getLoginAppList} from "/@/api/admin/social";
 import { SocialLoginEnum } from '/@/api/login';
+import { useEventListener } from '@vueuse/core';
 
 // 国际化函数
 const { t } = useI18n();
@@ -435,6 +436,18 @@ const initUserInfo = async (userId: any) => {
 		loading.value = false;
 	}
 };
+
+// 监听来自绑定窗口的消息
+useEventListener(window, 'message', (event) => {
+	// 验证消息来源
+	if (event.origin !== window.location.origin) return;
+
+	// 处理绑定成功消息
+	if (event.data.type === 'social-bind-success') {
+		// 刷新用户信息和社交账号列表
+		initUserInfo(formData.value.userId);
+	}
+});
 
 // 暴露变量
 defineExpose({

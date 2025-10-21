@@ -101,7 +101,6 @@ const handleMessage = (event: MessageEvent) => {
 	// 处理登录成功消息
 	if (event.data?.type === 'social-login-success') {
 		cleanup();
-		debugger
 		emit('signInSuccess');
 	}
 };
