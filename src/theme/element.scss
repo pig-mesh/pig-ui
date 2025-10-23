@@ -587,14 +587,9 @@
 	.el-table__header-wrapper {
 		.el-table__header {
 			th.el-table__cell {
-				background-color: var(--next-bg-color-page);
+				background-color: #fafafa;
 				font-weight: 600;
 				color: var(--next-text-color);
-				transition: background-color var(--transition-base) var(--transition-function);
-
-				&:hover {
-					background-color: var(--next-border-color-extra-light);
-				}
 			}
 		}
 	}
@@ -605,12 +600,7 @@
 			transition: background-color var(--transition-fast) var(--transition-function);
 
 			&:hover > td.el-table__cell {
-				background-color: var(--next-color-primary-lighter) !important;
-			}
-
-			// 斑马纹优化
-			&.el-table__row--striped > td.el-table__cell {
-				background-color: rgba(0, 0, 0, 0.02);
+				background-color: rgba(0, 0, 0, 0.04) !important;
 			}
 		}
 	}
