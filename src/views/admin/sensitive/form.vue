@@ -1,16 +1,16 @@
 <template>
-  <el-dialog :title="form.sensitiveId ? '编辑' : '新增'" v-model="visible"
+  <el-dialog :title="form.sensitiveId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
              :close-on-click-modal="false" draggable>
     <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
       <el-row :gutter="24">
         <el-col :span="24" class="mb20">
-          <el-form-item label="敏感词" prop="sensitiveWord">
-            <el-input v-model="form.sensitiveWord" placeholder="请输入敏感词"/>
+          <el-form-item :label="t('sensitive.sensitiveWord')" prop="sensitiveWord">
+            <el-input v-model="form.sensitiveWord" :placeholder="t('sensitive.inputSensitiveWordTip')"/>
           </el-form-item>
         </el-col>
 
         <el-col :span="24" class="mb20">
-          <el-form-item label="类型" prop="sensitiveType">
+          <el-form-item :label="t('sensitive.sensitiveType')" prop="sensitiveType">
             <el-radio-group v-model="form.sensitiveType">
               <el-radio :label="item.value" v-for="(item, index) in sensitive_type" border :key="index">{{ item.label }}
               </el-radio>
@@ -19,119 +19,156 @@
         </el-col>
 
         <el-col :span="24" class="mb20">
-          <el-form-item label="备注" prop="remark">
-            <el-input v-model="form.remark" placeholder="请输入备注"/>
+          <el-form-item :label="t('sensitive.remark')" prop="remark">
+            <el-input v-model="form.remark" :placeholder="t('sensitive.inputRemarkTip')"/>
           </el-form-item>
         </el-col>
       </el-row>
     </el-form>
     <template #footer>
         <span class="dialog-footer">
-          <el-button @click="visible = false">取消</el-button>
-          <el-button type="primary" @click="onSubmit" :disabled="loading">确认</el-button>
+          <el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
+          <el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
         </span>
     </template>
   </el-dialog>
 </template>
 
 <script setup lang="ts" name="SysSensitiveWordDialog">
-import {useDict} from '/@/hooks/dict';
-import {useMessage} from "/@/hooks/message";
-import {getObj, addObj, putObj, validateWord} from '/@/api/admin/sensitive'
-import {rule} from '/@/utils/validate';
+import { useDict } from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { getObj, addObj, putObj, validateWord } from '/@/api/admin/sensitive';
+import { rule } from '/@/utils/validate';
+import { useI18n } from 'vue-i18n';
 
+/**
+ * 定义组件事件
+ */
 const emit = defineEmits(['refresh']);
 
-// 定义变量内容
-const dataFormRef = ref();
-const visible = ref(false)
-const loading = ref(false)
-// 定义字典
-const {sensitive_type} = useDict('sensitive_type')
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
 
-// 提交表单数据
+/**
+ * 表单引用
+ */
+const dataFormRef = ref();
+
+/**
+ * 对话框显示状态
+ */
+const visible = ref(false);
+
+/**
+ * 加载状态
+ */
+const loading = ref(false);
+
+/**
+ * 敏感词类型字典
+ */
+const { sensitive_type } = useDict('sensitive_type');
+
+/**
+ * 表单数据
+ */
 const form = reactive({
-  sensitiveId: '',
-  sensitiveWord: '',
-  sensitiveType: '0',
-  remark: '',
+	sensitiveId: '',
+	sensitiveWord: '',
+	sensitiveType: '0',
+	remark: '',
 });
 
-// 定义校验规则
+/**
+ * 表单验证规则
+ */
 const dataRules = ref({
-  sensitiveWord: [{validator: rule.overLength, trigger: 'blur'}
-    , {
-      validator: (rule: any, value: any, callback: any) => {
-        validateWord(rule, value, callback, form.sensitiveId !== '');
-      }
-      , trigger: 'blur'
-    }
-    , {
-      required: true,
-      message: '敏感词不能为空',
-      trigger: 'blur'
-    }],
-  sensitiveType: [{required: true, message: '类型不能为空', trigger: 'blur'}],
-  remark: [{validator: rule.overLength, trigger: 'blur'}],
-})
+	sensitiveWord: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validateWord(rule, value, callback, form.sensitiveId !== '');
+			},
+			trigger: 'blur',
+		},
+		{
+			required: true,
+			message: t('sensitive.sensitiveWordRequired'),
+			trigger: 'blur',
+		},
+	],
+	sensitiveType: [{ required: true, message: t('sensitive.sensitiveTypeRequired'), trigger: 'blur' }],
+	remark: [{ validator: rule.overLength, trigger: 'blur' }],
+});
 
-// 打开弹窗
-const openDialog = (sensitiveId: string) => {
-  visible.value = true
-  form.sensitiveId = ''
+/**
+ * 打开对话框
+ * @param sensitiveId - 敏感词ID，为空时为新增模式
+ */
+const openDialog = (sensitiveId: string): void => {
+	visible.value = true;
+	form.sensitiveId = '';
 
-  // 重置表单数据
-  nextTick(() => {
-    dataFormRef.value?.resetFields();
-  });
+	// 重置表单数据
+	nextTick(() => {
+		dataFormRef.value?.resetFields();
+	});
 
-  // 获取sysSensitiveWord信息
-  if (sensitiveId) {
-    form.sensitiveId = sensitiveId
-    getsysSensitiveWordData(sensitiveId)
-  }
+	// 获取敏感词详情
+	if (sensitiveId) {
+		form.sensitiveId = sensitiveId;
+		getSensitiveWordData(sensitiveId);
+	}
 };
 
-// 提交
-const onSubmit = async () => {
-  // 立即设置 loading，防止重复点击
-  if (loading.value) return;
-  loading.value = true;
+/**
+ * 提交表单
+ */
+const onSubmit = async (): Promise<void> => {
+	// 防止重复提交
+	if (loading.value) return;
+	loading.value = true;
 
-  try {
-    const valid = await dataFormRef.value.validate().catch(() => {
-    });
-    if (!valid) {
-      loading.value = false;
-      return false;
-    }
+	try {
+		const valid = await dataFormRef.value.validate().catch(() => {});
+		if (!valid) {
+			loading.value = false;
+			return;
+		}
 
-    form.sensitiveId ? await putObj(form) : await addObj(form);
-    useMessage().success(form.sensitiveId ? '修改成功' : '添加成功');
-    visible.value = false;
-    emit('refresh');
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  } finally {
-    loading.value = false;
-  }
+		form.sensitiveId ? await putObj(form) : await addObj(form);
+		useMessage().success(form.sensitiveId ? t('common.editSuccessText') : t('common.addSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-
-// 初始化表单数据
-const getsysSensitiveWordData = (sensitiveId: string) => {
-  // 获取数据
-  loading.value = true
-  getObj({sensitiveId}).then((res: any) => {
-
-    Object.assign(form, res.data)
-  }).finally(() => {
-    loading.value = false
-  })
+/**
+ * 获取敏感词详情数据
+ * @param sensitiveId - 敏感词ID
+ */
+const getSensitiveWordData = async (sensitiveId: string): Promise<void> => {
+	loading.value = true;
+	try {
+		const { data } = await getObj({ sensitiveId });
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
-  openDialog
+	openDialog,
 });
 </script>

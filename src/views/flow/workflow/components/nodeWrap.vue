@@ -23,7 +23,7 @@
 				</div>
 				<div class="content" @click="openConfigDrawer">
 					<div class="text">
-						{{ placeHolder?.length > 0 ? placeHolder : '请选择' + defaultText }}
+						{{ placeHolder?.length > 0 ? placeHolder: '请选择' + defaultText }}
 					</div>
 					<i class="anticon anticon-right arrow"></i>
 				</div>
@@ -60,9 +60,9 @@
 									</div>
 									<div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1" @click="arrTransfer(index)">&gt;</div>
 									<div class="content" v-if="index < nodeConfig.conditionNodes.length - 1" @click="openConfigDrawer(item.priorityLevel)">
-										{{ $func.conditionStr(nodeConfig, index) }}
+										{{ conditionStr(nodeConfig, index) }}
 									</div>
-									<div class="content" v-else>{{ $func.conditionStr(nodeConfig, index) }}</div>
+									<div class="content" v-else>{{ conditionStr(nodeConfig, index) }}</div>
 									<div class="error_tip" v-if="item.error">
 										<i class="anticon anticon-exclamation-circle"></i>
 									</div>
@@ -143,9 +143,9 @@ import addNode from './addNode.vue';
 import Approval from './node/approval.vue';
 
 import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
-import $func from '../utils/index';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
+import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval } from '../utils/workflowHelpers';
 import { useI18n } from 'vue-i18n';
 
 let _uid = getCurrentInstance().uid;
@@ -164,13 +164,13 @@ let defaultText = computed(() => {
 const {t} = useI18n()
 var placeHolder = computed(() => {
 	if (props.nodeConfig.type == 0) {
-		return $func.arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
+		return arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
 	}
 	if (props.nodeConfig.type == 1) {
-		return $func.setApproverStr(props.nodeConfig);
+		return setApproverStr(props.nodeConfig);
 	}
 	if (props.nodeConfig.type == 2) {
-		return $func.copyerStr(props.nodeConfig);
+		return copyerStr(props.nodeConfig);
 	}
 	return '';
 });
@@ -181,13 +181,14 @@ watch(placeHolder, (value, oldValue, onCleanup) => {
 
 import { useFlowStore } from '../stores/flow';
 import other from '/@/utils/other';
+import { flattenFormItems } from '../utils/formUtils';
 
 let flowStore = useFlowStore();
 
 const step2FormList = computed(() => {
 	let step2 = flowStore.step2;
 
-	return step2;
+	return step2.formRule || [];
 });
 
 watch(
@@ -195,13 +196,17 @@ watch(
 	(val) => {
 		let nodeConfig = props.nodeConfig;
 
+		// 获取展平后的表单项列表
+		const flattenedFormList = flattenFormItems(val);
+
 		if (nodeConfig.type == 1) {
 			//审批人
 
 			if (nodeConfig.assignedType == 8) {
 				//表单人员
 				let formUserId = nodeConfig.formUserId;
-				let length = val.filter((res) => res.field === formUserId).length;
+				// 使用展平后的表单列表进行检查
+				let length = flattenedFormList.filter((res) => res.field === formUserId).length;
 				if (length == 0) {
 					nodeConfig.formUserId = '';
 					nodeConfig.formUserName = '';
@@ -211,6 +216,7 @@ watch(
 		}
 		if (nodeConfig.type == 4) {
 			//条件分支
+			
 			var index = 0;
 			var len = nodeConfig.conditionNodes.length;
 			for (var node of nodeConfig.conditionNodes) {
@@ -219,7 +225,8 @@ watch(
 				}
 				for (var item1 of node.conditionList) {
 					for (var item2 of item1.conditionList) {
-						let length = val.filter((res) => res.field === item2.key).length;
+						// 使用展平后的表单列表进行检查
+						let length = flattenedFormList.filter((res) => (res.field === item2.key || item2.key === 'root')).length;
 						if (length == 0) {
 							item2.key = '';
 							item2.expression = '';
@@ -264,9 +271,9 @@ const resetConditionNodesErr = () => {
 };
 onMounted(() => {
 	if (props.nodeConfig.type == 1) {
-		props.nodeConfig.error = !$func.checkApproval(props.nodeConfig);
+		props.nodeConfig.error = !checkApproval(props.nodeConfig);
 	} else if (props.nodeConfig.type == 2) {
-		props.nodeConfig.error = !$func.copyerStr(props.nodeConfig);
+		props.nodeConfig.error = !copyerStr(props.nodeConfig);
 	} else if (props.nodeConfig.type == 4) {
 		resetConditionNodesErr();
 	}

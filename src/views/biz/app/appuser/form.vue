@@ -65,7 +65,7 @@ import { list as roleList } from '/@/api/app/approle';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
-import { rule } from '/@/utils/validate';
+import { rule, clearMaskedField } from '/@/utils/validate';
 
 const { t } = useI18n();
 
@@ -163,23 +163,24 @@ const onSubmit = async () => {
 	if (!valid) return false;
 
 	try {
-		const { userId, phone, password } = dataForm;
+		const { userId } = dataForm;
+
+		// 清除脱敏字段（编辑时不提交星号占位符）
+		const payload = { ...dataForm };
+		payload.phone = clearMaskedField(payload.phone);
+		payload.password = clearMaskedField(payload.password);
 
 		if (userId) {
-			// 清除占位符，避免提交错误的数据
-			if (phone?.includes('*')) dataForm.phone = undefined;
-			if (password?.includes('******')) dataForm.password = undefined;
-
 			loading.value = true;
-			await putObj(dataForm);
+			await putObj(payload);
 			useMessage().success(t('common.editSuccessText'));
-			visible.value = false; // 关闭弹窗
+			visible.value = false;
 			emit('refresh');
 		} else {
 			loading.value = true;
-			await addObj(dataForm);
+			await addObj(payload);
 			useMessage().success(t('common.addSuccessText'));
-			visible.value = false; // 关闭弹窗
+			visible.value = false;
 			emit('refresh');
 		}
 	} catch (error: any) {

@@ -55,7 +55,7 @@ import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/app/appsocial';
 import { useI18n } from 'vue-i18n';
-import { rule } from '/@/utils/validate';
+import { rule, clearMaskedFields } from '/@/utils/validate';
 
 const emit = defineEmits(['refresh']);
 
@@ -114,20 +114,20 @@ const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
-	// 隐藏敏感信息
-	form.appSecret = form.appSecret?.includes('******') ? undefined : form.appSecret;
-	form.appId = form.appId?.includes('******') ? undefined : form.appId;
+	// 清除脱敏字段（编辑时不提交星号占位符）
+	const payload = { ...form };
+	clearMaskedFields(payload, ['appSecret', 'appId']);
 
 	try {
 		loading.value = true;
 		if (form.id) {
-			await putObj(form);
+			await putObj(payload);
 			useMessage().success(t('common.editSuccessText'));
 		} else {
-			await addObj(form);
+			await addObj(payload);
 			useMessage().success(t('common.addSuccessText'));
 		}
-		visible.value = false; // 关闭弹窗
+		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);

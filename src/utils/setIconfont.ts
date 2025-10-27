@@ -1,6 +1,6 @@
 // 字体图标 url
 const cssCdnUrlList: Array<string> = [
-	'//at.alicdn.com/t/c/font_4818804_p6ipzmax4e.css', //
+	'//at.alicdn.com/t/c/font_4818804_ld82bjcqn1i.css', //
 	'/assets/styles/font-awesome.min.css',
 ];
 // 第三方 js url

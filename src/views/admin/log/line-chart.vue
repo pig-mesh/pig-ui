@@ -9,9 +9,27 @@ import { use } from 'echarts/core';
 import { LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { useI18n } from 'vue-i18n';
 
 use([TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridComponent, LineChart, CanvasRenderer]);
 
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
+
+/**
+ * 日志统计数据项接口
+ */
+interface LogSumItem {
+	createTime: string;
+	'0'?: number;
+	'9'?: number;
+}
+
+/**
+ * 图表配置选项
+ */
 const option = reactive({
 	title: {
 		textStyle: {
@@ -43,7 +61,7 @@ const option = reactive({
 		},
 	},
 	legend: {
-		data: ['成功', '失败'],
+		data: [t('syslog.success'), t('syslog.failure')],
 		icon: 'circle',
 		itemWidth: 8,
 		itemHeight: 8,
@@ -106,7 +124,7 @@ const option = reactive({
 	},
 	series: [
 		{
-			name: '成功',
+			name: t('syslog.success'),
 			type: 'line',
 			stack: 'Total',
 			data: [],
@@ -142,7 +160,7 @@ const option = reactive({
 			},
 		},
 		{
-			name: '失败',
+			name: t('syslog.failure'),
 			type: 'line',
 			stack: 'x',
 			data: [],
@@ -180,18 +198,18 @@ const option = reactive({
 	],
 });
 
-interface LogSumItem {
-	createTime: string;
-	'0'?: number;
-	'9'?: number;
-}
-
-onMounted(() => {
-	getSum().then((res) => {
-		option.xAxis.data = res.data.map((item: LogSumItem) => formatPast(new Date(item.createTime), 'mm-dd'));
-		option.series[0].data = res.data.map((item: LogSumItem) => item['0'] || 0);
-		option.series[1].data = res.data.map((item: LogSumItem) => item['9'] || 0);
-	});
+/**
+ * 组件挂载时加载日志统计数据
+ */
+onMounted(async () => {
+	try {
+		const { data } = await getSum();
+		option.xAxis.data = data.map((item: LogSumItem) => formatPast(new Date(item.createTime), 'mm-dd'));
+		option.series[0].data = data.map((item: LogSumItem) => item['0'] || 0);
+		option.series[1].data = data.map((item: LogSumItem) => item['9'] || 0);
+	} catch (err) {
+		console.error('Failed to load log statistics:', err);
+	}
 });
 </script>
 

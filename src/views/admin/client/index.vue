@@ -114,7 +114,7 @@ const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableS
 // 删除缓存
 const handleRefreshCache = () => {
 	refreshCache().then(() => {
-		useMessage().success('同步成功');
+		useMessage().success(t('client.syncSuccess'));
 	});
 };
 

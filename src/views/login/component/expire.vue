@@ -174,7 +174,7 @@ const handleResetPassword = async () => {
   try {
     loading.value = true;
     await resetUserPassword(passwordFormData);
-    useMessage().success(t('common.optSuccessText'));
+    useMessage().success(t('expire.resetSuccess'));
     emit('change', LoginTypeEnum.PASSWORD);
   } catch (err: any) {
     useMessage().error(err.msg);

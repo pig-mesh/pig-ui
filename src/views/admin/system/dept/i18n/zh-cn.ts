@@ -6,9 +6,10 @@ export default {
         weight: '排序',
         sortOrder: '排序',
         leaderId: '部门负责人',
+        rootDept: '根部门',
         inputdeptNameTip: '请输入部门名称',
         inputnameTip: '请输入部门名称',
-        inputLeaderIdTip: '请输入部门领导',
+        inputLeaderIdTip: '请输入部门负责人',
         inputparentIdTip: '请选择上级部门',
         inputsortOrderTip: '请输入排序',
         importTip: '导入部门',
@@ -16,6 +17,9 @@ export default {
         editNodeText: '编辑部门',
         delNodeText: '删除部门',
         tenantNodeErrorText: '当前节点不可操作，请在租户管理功能中维护',
-        view: '树/表视图'
+        view: '树/表视图',
+        parentIdRequired: '上级部门不能为空',
+        nameRequired: '部门名称不能为空',
+        sortOrderRequired: '排序不能为空'
     },
 };

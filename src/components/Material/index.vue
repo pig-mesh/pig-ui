@@ -15,7 +15,7 @@
                 @node-click="handleCatSelect"
             >
               <template v-slot="{ data }">
-                <div class="flex items-center flex-1 min-w-0 pr-4">
+                <div class="flex flex-1 items-center pr-4 min-w-0">
                   <img class="w-[20px] h-[16px] mr-3" src="/@/assets/icon_folder.png"/>
                   <span class="flex-1 mr-2 truncate">
 										{{ data.name }}
@@ -34,11 +34,11 @@
                             teleported
                         >
                           <div>
-                            <el-dropdown-item> {{ $t('material.editGroup') }}</el-dropdown-item>
+                            <el-dropdown-item>{{ t('material.editGroup') }}</el-dropdown-item>
                           </div>
                         </popover-input>
                         <div @click="handleDeleteCate(data.id)">
-                          <el-dropdown-item>{{ $t('material.delGroup') }}</el-dropdown-item>
+                          <el-dropdown-item>{{ t('material.delGroup') }}</el-dropdown-item>
                         </div>
                       </el-dropdown-menu>
                     </template>
@@ -52,7 +52,7 @@
 
       <div class="flex justify-center p-2 border-t border-br">
         <popover-input @confirm="handleAddCate" size="default" width="400px" :limit="20" show-limit teleported>
-          <el-button> {{ $t('material.addGroup') }}</el-button>
+          <el-button>{{ t('material.addGroup') }}</el-button>
         </popover-input>
       </div>
     </div>
@@ -60,22 +60,22 @@
       <div class="flex operate-btn">
         <div class="flex flex-1">
           <el-button icon="folder-add" type="primary" class="ml10" v-auth="'sys_file_del'" @click="visibleUpload = true"
-          >{{ $t('material.uploadFileTip') }}
+          >{{ t('material.uploadFileTip') }}
           </el-button>
 
           <el-button v-if="mode == 'page'" :disabled="!select.length" @click.stop="batchFileDelete()">
-            {{ $t('common.delBtn') }}
+            {{ t('common.delBtn') }}
           </el-button>
 
           <popup v-if="mode == 'page'" class="ml-3" @confirm="batchFileMove" :disabled="!select.length"
-                 :title="$t('material.moveBtn')">
+                 :title="t('material.moveBtn')">
             <template #trigger>
-              <el-button :disabled="!select.length">{{ $t('material.moveBtn') }}</el-button>
+              <el-button :disabled="!select.length">{{ t('material.moveBtn') }}</el-button>
             </template>
 
             <div>
-              <span class="mr-5">移动文件至</span>
-              <el-select v-model="moveId" placeholder="请选择">
+              <span class="mr-5">{{ t('material.moveFileTo') }}</span>
+              <el-select v-model="moveId" :placeholder="t('material.selectPlaceholder')">
                 <template v-for="item in cateLists" :key="item.id">
                   <el-option v-if="item.id !== ''" :label="item.name" :value="item.id"></el-option>
                 </template>
@@ -83,7 +83,7 @@
             </div>
           </popup>
         </div>
-        <el-input class="mr-16 ml-80" :placeholder="$t('file.inputfileNameTip')" v-model="fileParams.original"
+        <el-input class="mr-16 ml-80" :placeholder="t('file.inputfileNameTip')" v-model="fileParams.original"
                   @keyup.enter="refresh">
           <template #append>
             <el-button @click="refresh">
@@ -95,13 +95,13 @@
             </el-button>
           </template>
         </el-input>
-        <div class="flex items-center ml-2">
-          <el-tooltip :content="$t('material.list')" placement="top">
+        <div class="flex gap-2 items-center">
+          <el-tooltip :content="t('material.list')" placement="top">
             <div
-                class="list-icon"
+                class="flex justify-center items-center w-8 h-8 list-icon"
                 :class="{
-								select: listShowType == 'table',
-							}"
+                  'bg-primary-light-8 text-primary': listShowType === 'table'
+                }"
                 @click="listShowType = 'table'"
             >
               <el-icon>
@@ -109,12 +109,12 @@
               </el-icon>
             </div>
           </el-tooltip>
-          <el-tooltip :content="$t('material.grid')" placement="top">
+          <el-tooltip :content="t('material.grid')" placement="top">
             <div
-                class="list-icon"
+                class="flex justify-center items-center w-8 h-8 list-icon"
                 :class="{
-								select: listShowType == 'normal',
-							}"
+                  'bg-primary-light-8 text-primary': listShowType === 'normal'
+                }"
                 @click="listShowType = 'normal'"
             >
               <el-icon>
@@ -127,10 +127,10 @@
       <div class="mt-3" v-if="mode == 'page'">
         <el-checkbox :disabled="!pager.lists.length" v-model="isCheckAll" @change="selectAll"
                      :indeterminate="isIndeterminate">
-          {{ $t('material.allCheck') }}
+          {{ t('material.allCheck') }}
         </el-checkbox>
       </div>
-      <div class="flex flex-col flex-1 min-h-0 mb-1 material-center__content">
+      <div class="flex flex-col flex-1 mb-1 min-h-0 material-center__content">
         <el-scrollbar v-if="pager.lists.length" v-show="listShowType == 'normal'">
           <ul class="flex flex-wrap mt-4 file-list">
             <li class="file-item-wrap" v-for="item in pager.lists" :key="item.id" :style="{ width: fileSize }">
@@ -143,10 +143,10 @@
                   </div>
                 </file-item>
               </del-wrap>
-              <div class="flex items-center justify-center mt-2">
+              <div class="flex justify-center items-center mt-2">
                 {{ item.original }}
               </div>
-              <div class="flex items-center justify-center operation-btns">
+              <div class="flex justify-center items-center operation-btns">
                 <popover-input
                     @confirm="handleFileRename($event, item.id)"
                     size="default"
@@ -156,10 +156,10 @@
                     show-limit
                     teleported
                 >
-                  <el-button type="primary" link> {{ $t('material.rename') }}</el-button>
+                  <el-button type="primary" link>{{ t('material.rename') }}</el-button>
                 </popover-input>
-                <el-button type="primary" link @click="handleDownFile(item)"> {{ $t('material.download') }}</el-button>
-                <el-button type="primary" link @click="handlePreview(item)"> {{ $t('material.view') }}</el-button>
+                <el-button type="primary" link @click="handleDownFile(item)">{{ t('material.download') }}</el-button>
+                <el-button type="primary" link @click="handlePreview(item)">{{ t('material.view') }}</el-button>
               </div>
             </li>
           </ul>
@@ -180,20 +180,20 @@
               <el-checkbox :modelValue="isSelect(row.id)" @change="selectFile(row)"/>
             </template>
           </el-table-column>
-          <el-table-column label="图片" width="100">
+          <el-table-column :label="t('material.image')" width="100">
             <template #default="{ row }">
               <file-item :uri="getFileUri(row)" file-size="50px" :type="type"></file-item>
             </template>
           </el-table-column>
-          <el-table-column label="名称" min-width="100" show-overflow-tooltip>
+          <el-table-column :label="t('material.fileName')" min-width="100" show-overflow-tooltip>
             <template #default="{ row }">
               <el-link @click.stop="handlePreview(getFileUri(row))" :underline="false">
                 {{ row.original }}
               </el-link>
             </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="上传时间" min-width="100"/>
-          <el-table-column label="操作" width="150" fixed="right">
+          <el-table-column prop="createTime" :label="t('material.uploadTime')" min-width="100"/>
+          <el-table-column :label="t('material.operation')" width="150" fixed="right">
             <template #default="{ row }">
               <div class="inline-block">
                 <popover-input
@@ -205,21 +205,21 @@
                     show-limit
                     teleported
                 >
-                  <el-button type="primary" link> 重命名</el-button>
+                  <el-button type="primary" link>{{ t('material.rename') }}</el-button>
                 </popover-input>
               </div>
               <div class="inline-block">
-                <el-button type="primary" link @click.stop="handlePreview(getFileUri(row))"> 查看</el-button>
+                <el-button type="primary" link @click.stop="handlePreview(getFileUri(row))">{{ t('material.view') }}</el-button>
               </div>
               <div class="inline-block">
-                <el-button type="primary" link @click.stop="batchFileDelete([row.id])"> 删除</el-button>
+                <el-button type="primary" link @click.stop="batchFileDelete([row.id])">{{ t('common.delBtn') }}</el-button>
               </div>
             </template>
           </el-table-column>
         </el-table>
 
-        <div class="flex items-center justify-center flex-1" v-if="!pager.lists.length">{{
-            $t('el.transfer.noData')
+        <div class="flex flex-1 justify-center items-center" v-if="!pager.lists.length">{{
+            t('el.transfer.noData')
           }}~
         </div>
       </div>
@@ -230,10 +230,10 @@
     <div class="material__right" v-if="mode == 'picker'">
       <div class="flex flex-wrap justify-between p-2">
         <div class="flex items-center sm">
-          已选择 {{ select.length }}
+          {{ t('material.selectedCount') }} {{ select.length }}
           <span v-if="limit">/{{ limit }}</span>
         </div>
-        <el-button type="primary" link @click="clearSelect">清空</el-button>
+        <el-button type="primary" link @click="clearSelect">{{ t('material.clear') }}</el-button>
       </div>
       <div class="flex-1 min-h-0">
         <el-scrollbar class="ls-scrollbar">
@@ -252,7 +252,7 @@
     <preview v-model="showPreview" :url="previewUrl" :type="type" :fileName="fileName"/>
   </div>
 
-  <el-dialog :title="$t('material.uploadFileTip')" v-model="visibleUpload" :destroy-on-close="true" draggable>
+  <el-dialog :title="t('material.uploadFileTip')" v-model="visibleUpload" :destroy-on-close="true" draggable>
     <upload-file @change="refresh" v-if="props.type === 'image'" :data="{ groupId: cateId, type: typeValue }"
                  :fileType="['png', 'jpg', 'jpeg']"/>
 
@@ -269,6 +269,8 @@
 </template>
 
 <script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+
 const Popup = defineAsyncComponent(() => import('/@/components/Popup/index.vue'));
 const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInput/index.vue'));
 import {useCate, useFile} from './hook';
@@ -277,32 +279,47 @@ import Preview from './preview.vue';
 import type {Ref} from 'vue';
 import other from '/@/utils/other';
 
+const { t } = useI18n();
 const {proxy} = getCurrentInstance();
-const kkServerURL = import.meta.env.VITE_KK_SERVER_URL
+
+/**
+ * 组件属性定义
+ */
 const props = defineProps({
+  /** 文件显示尺寸 */
   fileSize: {
     type: String,
     default: '100px',
   },
+  /** 最大选择数量限制 */
   limit: {
     type: Number,
     default: 1,
   },
+  /** 文件类型：image | video | file */
   type: {
     type: String,
     default: 'image',
   },
+  /** 显示模式：picker | page */
   mode: {
     type: String,
     default: 'picker',
   },
+  /** 分页大小 */
   pageSize: {
     type: Number,
     default: 15,
   },
 });
+
 const emit = defineEmits(['change']);
 const {limit} = toRefs(props);
+
+/**
+ * 计算文件类型对应的数值
+ * @returns {number} 类型值：10-图片, 20-视频, 30-文件
+ */
 const typeValue = computed<number>(() => {
   switch (props.type) {
     case 'image':
@@ -315,11 +332,13 @@ const typeValue = computed<number>(() => {
       return 0;
   }
 });
+
 const visible: Ref<boolean> = ref(false);
 const visibleUpload: Ref<boolean> = ref(false);
 const previewUrl = ref('');
 const fileName = ref('');
 const showPreview = ref(false);
+
 const {
   treeRef,
   cateId,
@@ -363,19 +382,17 @@ const getData = async () => {
 
 /**
  * 当前页码改变事件处理函数
- * @param val 新的页码
+ * @param {number} val - 新的页码
  */
 const currentChangeHandle = (val: number) => {
-  // 修改state.pagination中的current属性
   pager.current = val;
-  // 再次发起查询操作
   getFileList();
 };
 
 /**
  * 处理预览
- *
- * @param {string} item - 资源
+ * @param {Object} item - 文件项对象
+ * @param {string} item.fileName - 文件名
  */
 const handlePreview = (item: { fileName: string }) => {
   previewUrl.value = getFileUri(item);
@@ -385,7 +402,6 @@ const handlePreview = (item: { fileName: string }) => {
 
 /**
  * 处理下载文件
- *
  * @param {any} item - 文件项对象
  */
 const handleDownFile = (item: any) => {
@@ -403,6 +419,7 @@ watch(
       immediate: true,
     }
 );
+
 watch(cateId, () => {
   fileParams.name = '';
   refresh();
@@ -429,6 +446,11 @@ watch(
     }
 );
 
+/**
+ * 获取文件URI
+ * @param {any} item - 文件对象
+ * @returns {string} 文件完整URL
+ */
 const getFileUri = (item: any) => {
   return `${proxy.baseURL}/admin/sys-file/oss/file?fileName=${item.fileName}`;
 };
@@ -459,14 +481,7 @@ defineExpose({
     padding: 16px 16px 0;
 
     .list-icon {
-      border-radius: 3px;
-      display: flex;
-      padding: 5px;
-      cursor: pointer;
-
-      &.select {
-        @apply text-primary bg-primary-light-8;
-      }
+      @apply rounded transition-colors duration-200 cursor-pointer hover:bg-gray-100;
     }
 
     .file-list {

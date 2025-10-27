@@ -6,62 +6,67 @@
 		:close-on-click-modal="false"
 		:close-on-press-escape="false"
 		@close="handleClose"
-		class="tenant-selector-dialog"
 	>
 		<!-- 租户列表 -->
-		<div class="tenant-list" v-loading="props.loading">
+		<div v-loading="props.loading">
 			<el-scrollbar height="400px">
-				<div v-if="!props.loading && props.tenantList.length === 0" class="empty-state">
+				<div v-if="!props.loading && props.tenantList.length === 0" class="flex items-center justify-center h-[400px]">
 					<el-empty :description="t('tenantSelector.noData')" />
 				</div>
-				<div v-else-if="!props.loading" class="tenant-grid">
+				<div v-else-if="!props.loading" class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-1">
 					<div
 						v-for="item in props.tenantList"
 						:key="item.id"
-						class="tenant-card"
-						:class="{ 
-							active: item.id === currentTenantId && (!selectedTenant || selectedTenant.id === currentTenantId),
-							selected: selectedTenant?.id === item.id && item.id !== currentTenantId
+						class="card bg-base-100 border-2 cursor-pointer transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+						:class="{
+							'border-success bg-success/5': item.id === currentTenantId && (!selectedTenant || selectedTenant.id === currentTenantId),
+							'border-primary bg-primary/5 shadow-md': selectedTenant?.id === item.id && item.id !== currentTenantId,
+							'border-base-300': selectedTenant?.id !== item.id && item.id !== currentTenantId
 						}"
 						@click="handleSelectTenant(item)"
 					>
-						<div class="tenant-card-header">
-							<div class="tenant-icon">
-								<el-icon :size="24">
-									<ele-OfficeBuilding />
+						<div class="card-body p-4 gap-3">
+							<!-- Header -->
+							<div class="flex items-center justify-between">
+								<div class="avatar placeholder">
+									<div class="bg-primary/10 text-primary rounded-lg w-12 h-12 flex items-center justify-center">
+										<el-icon :size="24">
+											<ele-OfficeBuilding />
+										</el-icon>
+									</div>
+								</div>
+								<!-- 当前租户勾 -->
+								<el-icon v-if="item.id === currentTenantId" :size="16" color="#67c23a">
+									<ele-CircleCheck />
 								</el-icon>
-							</div>
-							<!-- 当前生效的租户显示绿色勾 -->
-							<div class="tenant-check" v-if="item.id === currentTenantId">
-								<el-icon :size="16" color="#67c23a">
+								<!-- 选中租户勾 -->
+								<el-icon v-else-if="selectedTenant?.id === item.id" :size="16" color="#409eff">
 									<ele-CircleCheck />
 								</el-icon>
 							</div>
-							<!-- 用户选择但未确认的租户显示蓝色勾 -->
-							<div class="tenant-check" v-else-if="selectedTenant?.id === item.id">
-								<el-icon :size="16" color="#409eff">
-									<ele-CircleCheck />
-								</el-icon>
+
+							<!-- Body -->
+							<div class="space-y-1">
+								<h4 class="font-semibold text-base truncate">{{ item.name }}</h4>
+								<p v-if="item.tenantDomain" class="text-sm text-base-content/70 flex items-center gap-1 truncate">
+									<el-icon :size="12"><ele-Link /></el-icon>
+									<span class="truncate">{{ item.tenantDomain }}</span>
+								</p>
+								<p v-if="item.websiteName" class="text-sm text-base-content/70 flex items-center gap-1 truncate">
+									<el-icon :size="12"><ele-Document /></el-icon>
+									<span class="truncate">{{ item.websiteName }}</span>
+								</p>
 							</div>
-						</div>
-						<div class="tenant-card-body">
-							<h4 class="tenant-name">{{ item.name }}</h4>
-							<p class="tenant-domain" v-if="item.tenantDomain">
-								<el-icon :size="12"><ele-Link /></el-icon>
-								{{ item.tenantDomain }}
-							</p>
-							<p class="tenant-website" v-if="item.websiteName">
-								<el-icon :size="12"><ele-Document /></el-icon>
-								{{ item.websiteName }}
-							</p>
-						</div>
-						<div class="tenant-card-footer">
-							<el-tag v-if="item.id === currentTenantId" type="success" size="small">
-								{{ t('tenantSelector.current') }}
-							</el-tag>
-							<el-tag v-else-if="selectedTenant?.id === item.id" type="primary" size="small">
-								{{ t('tenantSelector.selected') }}
-							</el-tag>
+
+							<!-- Footer -->
+							<div class="flex">
+								<el-tag v-if="item.id === currentTenantId" type="success" size="small">
+									{{ t('tenantSelector.current') }}
+								</el-tag>
+								<el-tag v-else-if="selectedTenant?.id === item.id" type="primary" size="small">
+									{{ t('tenantSelector.selected') }}
+								</el-tag>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -69,12 +74,12 @@
 		</div>
 
 		<template #footer>
-			<span class="dialog-footer">
+			<div class="flex gap-2 justify-end">
 				<el-button @click="handleClose">{{ t('common.cancelButtonText') }}</el-button>
 				<el-button type="primary" @click="handleConfirm" :loading="props.loading">
 					{{ t('common.confirmButtonText') }}
 				</el-button>
-			</span>
+			</div>
 		</template>
 	</el-dialog>
 </template>
@@ -82,7 +87,7 @@
 <script setup lang="ts" name="TenantSelector">
 import { useI18n } from 'vue-i18n';
 import { switchPersonalTenant } from '/@/api/admin/tenant';
-import { Session } from '/@/utils/storage';
+import { Local, Session } from '/@/utils/storage';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useUserInfo } from '/@/stores/userInfo';
 import { storeToRefs } from 'pinia';
@@ -204,7 +209,10 @@ const switchTenant = async (tenant: Tenant) => {
 		themeConfig.value.background = tenant.background || '';
 		// 设置小程序二维码
 		themeConfig.value.miniQr = tenant.miniQr || '';
-		
+
+		Local.remove('themeConfig');
+		Local.set('themeConfig', themeConfig.value);
+
 		// 触发变更事件
 		emit('change', tenant);
 		
@@ -241,137 +249,4 @@ defineExpose({
 		initTenantData();
 	}
 });
-</script>
-
-<style scoped lang="scss">
-.tenant-selector-dialog {
-	:deep(.el-dialog__body) {
-		padding-top: 10px !important;
-	}
-}
-
-.tenant-list {
-	.empty-state {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 400px;
-	}
-
-	.tenant-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-		gap: 16px;
-		padding: 4px;
-	}
-
-	.tenant-card {
-		position: relative;
-		background: var(--el-bg-color);
-		border: 2px solid var(--el-border-color-lighter);
-		border-radius: 8px;
-		padding: 20px;
-		cursor: pointer;
-		transition: all 0.3s ease;
-		overflow: hidden;
-
-		&:hover {
-			border-color: var(--el-color-primary-light-3);
-			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-			transform: translateY(-2px);
-		}
-
-		&.active {
-			border-color: var(--el-color-success);
-			background: var(--el-color-success-light-9);
-			box-shadow: 0 2px 8px rgba(103, 194, 58, 0.2);
-		}
-
-		&.selected {
-			border-color: var(--el-color-primary);
-			background: var(--el-color-primary-light-9);
-			box-shadow: 0 4px 12px rgba(64, 158, 255, 0.3);
-			transform: translateY(-2px);
-		}
-
-		.tenant-card-header {
-			display: flex;
-			align-items: center;
-			justify-content: space-between;
-			margin-bottom: 12px;
-
-			.tenant-icon {
-				width: 48px;
-				height: 48px;
-				background: var(--el-color-primary-light-8);
-				border-radius: 12px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				color: var(--el-color-primary);
-			}
-
-			.tenant-check {
-				position: absolute;
-				top: 12px;
-				right: 12px;
-			}
-		}
-
-		.tenant-card-body {
-			.tenant-name {
-				font-size: 16px;
-				font-weight: 600;
-				color: var(--el-text-color-primary);
-				margin: 0 0 8px 0;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-			}
-
-			.tenant-domain,
-			.tenant-website {
-				font-size: 13px;
-				color: var(--el-text-color-regular);
-				margin: 4px 0;
-				display: flex;
-				align-items: center;
-				gap: 4px;
-				overflow: hidden;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-
-				.el-icon {
-					flex-shrink: 0;
-				}
-			}
-		}
-
-		.tenant-card-footer {
-			margin-top: 12px;
-			display: flex;
-			align-items: center;
-			justify-content: flex-start;
-		}
-	}
-}
-
-// 暗黑模式适配
-html.dark {
-	.tenant-card {
-		&.active {
-			background: rgba(103, 194, 58, 0.1);
-		}
-
-		&.selected {
-			background: rgba(64, 158, 255, 0.1);
-		}
-
-		.tenant-card-header {
-			.tenant-icon {
-				background: rgba(64, 158, 255, 0.2);
-			}
-		}
-	}
-}
-</style> 
+</script> 

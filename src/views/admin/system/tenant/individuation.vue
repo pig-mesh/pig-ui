@@ -11,7 +11,7 @@
           <el-form-item prop="footerAuthor" label-width="120px" align="left">
             <template #label>
               {{ t('individuation.footerAuthor') }}
-              <tip content="浏览器底部版权信息、备案信息"/>
+              <tip :content="t('individuation.footerTip')"/>
             </template>
             <el-input v-model="form.footer" :placeholder="t('individuation.inputFooterAuthorTip')"/>
           </el-form-item>
@@ -20,7 +20,7 @@
           <el-form-item prop="icon" label-width="120px" align="left">
             <template #label>
               {{ t('individuation.miniQr') }}
-              <tip content="登录页右下角显示的移动端二维码"/>
+              <tip :content="t('individuation.miniQrTip')"/>
             </template>
             <upload-img v-model:image-url="form.miniQr"/>
           </el-form-item>
@@ -42,7 +42,6 @@
 </template>
 
 <script setup lang="ts" name="systemTenantDialog">
-import {useDict} from '/@/hooks/dict';
 import {useMessage} from '/@/hooks/message';
 import {getObj, putObj} from '/@/api/admin/tenant';
 import {useI18n} from 'vue-i18n';
@@ -61,14 +60,18 @@ const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 字典
-const {status_type} = useDict('status_type');
-
 // 导入配置文件
 const stores = useThemeConfig(pinia);
 const {themeConfig} = storeToRefs(stores);
 
-// 提交表单数据
+/**
+ * 租户个性化配置表单
+ * @property {string} id - 租户ID
+ * @property {string} websiteName - 网站名称
+ * @property {string} background - 登录背景图URL
+ * @property {string} miniQr - 小程序二维码URL
+ * @property {string} footer - 页脚版权信息
+ */
 const form = reactive({
   id: '',
   websiteName: themeConfig.value.globalTitle,
@@ -82,11 +85,13 @@ const form = reactive({
 const dataRules = ref({
 });
 
-// 打开弹窗
+/**
+ * 打开个性化设置对话框
+ * @param {string} id - 租户 ID
+ */
 const openDialog = (id: string): void => {
   visible.value = true;
-  form.id = ''
-
+  form.id = '';
 
   // 重置表单数据
   nextTick(() => {
@@ -97,23 +102,29 @@ const openDialog = (id: string): void => {
     form.id = id;
     getTenantData(id);
   }
-
 };
 
 /**
- * 初始化表格数据。
- * @param {string} id - 部门 ID。
+ * 获取租户个性化配置数据
+ * @param {string} id - 租户 ID
  */
-const getTenantData = async (id: any) => {
-  const res = await getObj(id);
-  Object.assign(form, res.data);
+const getTenantData = async (id: string) => {
+  try {
+    const { data } = await getObj(id);
+    Object.assign(form, data);
+  } catch (err: any) {
+    useMessage().error(err.msg);
+  }
 };
 
-
-// 提交
+/**
+ * 提交个性化配置
+ */
 const onSubmit = async () => {
-  const valid = await dataFormRef.value.validate().catch(() => {
-  });
+  // 防止重复提交
+  if (loading.value) return;
+
+  const valid = await dataFormRef.value.validate().catch(() => {});
   if (!valid) return false;
 
   try {

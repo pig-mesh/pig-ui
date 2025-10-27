@@ -133,7 +133,7 @@ const resetQuery = () => {
 };
 const handleRefreshCache = () => {
 	refreshCache().then(() => {
-		useMessage().success('同步成功');
+		useMessage().success(t('i18n.syncSuccess'));
 	});
 };
 

@@ -1,4 +1,4 @@
-import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '@/utils/formatTime';
+import { parseTime, parseDate, dateTimeStr, dateStr, timeStr } from '/@/utils/formatTime';
 
 declare module 'vue' {
 	interface ComponentCustomProperties {

@@ -33,7 +33,7 @@ export function applyPermissionsToItem(item: FormItem, formPerms: Record<string,
 }
 
 export function processFormItemsWithPerms(items: FormItem[], formPerms: Record<string, string>): FormItem[] {
-	return items.map((item) => {
+    return items.map((item) => {
 		// 处理当前项的权限
 		const processedItem = applyPermissionsToItem(item, formPerms);
 

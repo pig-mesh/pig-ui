@@ -19,11 +19,9 @@ const blurEvent = (index) => {
 		props.nodeConfig.nodeName = props.nodeConfig.nodeName || defaultText;
 	}
 };
-import { bgColors, placeholderList } from '/@/views/flow/workflow/utils/const';
+import { bgColors, placeholderList, conditionStr, setApproverStr, copyerStr, arrToStr } from '/@/views/flow/workflow/utils';
 import { computed } from 'vue';
 import addNode from '../addNode.vue';
-
-import $func from '/@/views/flow/workflow/utils';
 import { useI18n } from 'vue-i18n';
 let defaultText = computed(() => {
 	return placeholderList[props.nodeConfig.type];
@@ -32,13 +30,13 @@ let defaultText = computed(() => {
 const { t } = useI18n;
 var placeHolder = computed(() => {
 	if (props.nodeConfig.type == 0) {
-		return $func.arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
+		return arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
 	}
 	if (props.nodeConfig.type == 1) {
-		return $func.setApproverStr(props.nodeConfig);
+		return setApproverStr(props.nodeConfig);
 	}
 	if (props.nodeConfig.type == 2) {
-		return $func.copyerStr(props.nodeConfig);
+		return copyerStr(props.nodeConfig);
 	}
 	return '';
 });

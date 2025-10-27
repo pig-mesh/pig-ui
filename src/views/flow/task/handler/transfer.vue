@@ -21,12 +21,12 @@ const dialogVisible = ref(false);
 const submitDesc = ref('');
 const userList = ref<Array<{ id: string }>>([]);
 const currentData = ref<TaskData>();
-const currentOpenFlowForm = ref<FlowFormItem[]>();
+const currentFormData = ref({});
 
 const handle = (row: TaskData, formData: FlowFormItem[]) => {
 	submitDesc.value = '';
 	currentData.value = row;
-	currentOpenFlowForm.value = formData;
+	currentFormData.value = formData;
 	dialogVisible.value = true;
 };
 
@@ -53,7 +53,7 @@ const validateForm = (): boolean => {
 };
 
 const submit = async () => {
-	if (!currentOpenFlowForm.value || !currentData.value) return;
+	if (!currentFormData.value || !currentData.value) return;
 
 	// 表单校验
 	if (!validateForm()) return;
@@ -65,6 +65,7 @@ const submit = async () => {
 
 		const param = {
 			paramMap: formData,
+			formData: currentFormData.value!,
 			taskId: currentData.value.taskId,
 			targetUserIdList: userList.value.map((user) => user.id),
 			taskLocalParamMap: {

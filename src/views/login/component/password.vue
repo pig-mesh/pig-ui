@@ -60,15 +60,30 @@
 			</el-button>
 		</el-form-item>
 
-		<div class="flex relative justify-between items-center">
-			<div class="ml-auto text-sm">
-				<a href="#" class="text-blue-500" @click="emit('change', LoginTypeEnum.MOBILE)">
+		<div class="relative flex items-center justify-end mt-6">
+			<div class="flex flex-wrap items-center gap-4 text-sm">
+				<a 
+					href="#" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change', LoginTypeEnum.MOBILE)"
+				>
 					{{ $t('password.mobileLogin') }}
 				</a>
-        <a href="#" class="ml-2 text-primary hover:text-blue-600" @click="emit('change',LoginTypeEnum.FORGET)">
-           {{ $t('password.forgetPassword') }}
-        </a>
-				<a href="#" v-if="autoRegisterEnable" class="ml-2 text-blue-500" @click="emit('change', LoginTypeEnum.REGISTER)">
+				<span class="text-gray-300">|</span>
+				<a 
+					href="#" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change',LoginTypeEnum.FORGET)"
+				>
+					{{ $t('password.forgetPassword') }}
+				</a>
+				<span v-if="autoRegisterEnable" class="text-gray-300">|</span>
+				<a 
+					href="#" 
+					v-if="autoRegisterEnable" 
+					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
+					@click="emit('change', LoginTypeEnum.REGISTER)"
+				>
 					{{ $t('password.createAccount') }}
 				</a>
 			</div>
@@ -89,6 +104,7 @@
 <script setup lang="ts" name="password">
 import { defineAsyncComponent, reactive, ref } from 'vue';
 import { useUserInfo } from '/@/stores/userInfo';
+import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { generateUUID } from '/@/utils/other';
 import { LoginErrorEnum, LoginTypeEnum } from '/@/api/login';
@@ -127,7 +143,10 @@ const verifyEnable = ref(import.meta.env.VITE_VERIFY_ENABLE === 'true');
 const verifyImageEnable = ref(import.meta.env.VITE_VERIFY_IMAGE_ENABLE === 'true');
 const imgSrc = ref('');
 
-// 调用图形证码进行校验
+/**
+ * 获取图形验证码
+ * @description 生成随机字符串并获取图形验证码图片
+ */
 const getVerifyImageCode = () => {
 	state.ruleForm.randomStr = generateUUID();
 	imgSrc.value = `${import.meta.env.VITE_API_URL}${import.meta.env.VITE_IS_MICRO == 'false' ? '/admin' : '/auth'}/code/image?randomStr=${
@@ -135,24 +154,39 @@ const getVerifyImageCode = () => {
 	}`;
 };
 
-// 调用滑块验证码进行校验
+/**
+ * 处理验证流程
+ * @description 先进行表单验证，然后根据配置决定是否显示滑块验证码
+ */
 const handleVerify = async () => {
-	const valid = await loginFormRef.value.validate().catch(() => {}); // 表单校验
+	try {
+		const valid = await loginFormRef.value.validate();
 
-	if (valid && verifyEnable.value) {
-		verifyref.value.show(); // 显示验证组件
-	} else if (valid) {
-		onSignIn(); // 调用登录方法
+		if (valid && verifyEnable.value) {
+			verifyref.value.show(); // 显示验证组件
+		} else if (valid) {
+			await onSignIn(); // 调用登录方法
+		}
+	} catch (error) {
+		// 表单验证失败，无需额外处理
+		console.debug('Form validation failed:', error);
 	}
 };
 
-// 滑块验证码校验成功调用后台登录接口
-const verifySuccess = (params: any) => {
+/**
+ * 滑块验证码校验成功回调
+ * @param params - 验证码参数
+ * @description 获取验证码并调用登录方法
+ */
+const verifySuccess = async (params: any) => {
 	state.ruleForm.code = params.captchaVerification; // 获取验证码
-	onSignIn(); // 调用登录方法
+	await onSignIn(); // 调用登录方法
 };
 
-// 账号密码登录
+/**
+ * 账号密码登录
+ * @description 处理账号密码登录逻辑，包括错误处理和状态管理
+ */
 const onSignIn = async () => {
 	loading.value = true; // 正在登录中
 	try {
@@ -170,6 +204,9 @@ const onSignIn = async () => {
 	}
 };
 
+/**
+ * 组件挂载时初始化
+ */
 onMounted(() => {
 	if (verifyImageEnable.value) {
 		getVerifyImageCode();

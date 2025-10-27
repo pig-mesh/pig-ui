@@ -1,0 +1,22 @@
+export default {
+	cache: {
+		title: 'Cache Monitor',
+		redisVersion: 'Redis Version',
+		clientCount: 'Client Count',
+		uptime: 'Uptime (Days)',
+		usedMemory: 'Used Memory',
+		aofEnabled: 'AOF Enabled',
+		rdbSuccess: 'RDB Success',
+		commandStats: 'Command Statistics',
+		memoryInfo: 'Memory Information',
+		memoryConsumption: 'Memory Consumption',
+		enabled: 'Enabled',
+		disabled: 'Disabled',
+		success: 'Success',
+		failed: 'Failed',
+		dbSize: 'Database Size',
+		connectedClients: 'Connected Clients',
+		uptimeInDays: 'Uptime Days',
+		usedMemoryHuman: 'Used Memory',
+	},
+};

@@ -69,7 +69,7 @@ export function info() {
 	});
 }
 
-export function validateName(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateName(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
 	if (isEdit) {
 		return callback();
 	}
@@ -77,14 +77,15 @@ export function validateName(rule: any, value: any, callback: any, isEdit: boole
 	getObjDetails({ name: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('国际化编码已经存在'));
+			const message = t ? t('i18n.nameExists') : 'I18n key already exists';
+			callback(new Error(message));
 		} else {
 			callback();
 		}
 	});
 }
 
-export function validateZhCn(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateZhCn(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
 	if (isEdit) {
 		return callback();
 	}
@@ -92,14 +93,15 @@ export function validateZhCn(rule: any, value: any, callback: any, isEdit: boole
 	getObjDetails({ zhCn: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('国际化中文已经存在'));
+			const message = t ? t('i18n.zhCnExists') : 'Chinese translation already exists';
+			callback(new Error(message));
 		} else {
 			callback();
 		}
 	});
 }
 
-export function validateEn(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateEn(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
 	if (isEdit) {
 		return callback();
 	}
@@ -107,7 +109,8 @@ export function validateEn(rule: any, value: any, callback: any, isEdit: boolean
 	getObjDetails({ en: value }).then((response) => {
 		const result = response.data;
 		if (result !== null) {
-			callback(new Error('国际化英文已经存在'));
+			const message = t ? t('i18n.enExists') : 'English translation already exists';
+			callback(new Error(message));
 		} else {
 			callback();
 		}

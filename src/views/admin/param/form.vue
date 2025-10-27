@@ -1,5 +1,5 @@
 <template>
-	<el-dialog :close-on-click-modal="false" :title="form.publicId ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
+	<el-dialog :close-on-click-modal="false" :title="form.publicId ? t('common.editBtn') : t('common.addBtn')" draggable v-model="visible">
 		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
@@ -53,8 +53,8 @@
 		</el-form>
 		<template #footer>
 			<span class="dialog-footer">
-				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button @click="visible = false">{{ t('common.cancelButtonText') }}</el-button>
+				<el-button @click="onSubmit" type="primary" :disabled="loading">{{ t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -95,34 +95,34 @@ const form = reactive({
 // 定义校验规则
 const dataRules = reactive({
 	publicName: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('param.nameRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateParamsName(rule, value, callback, form.publicId !== '');
+				validateParamsName(rule, value, callback, form.publicId !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
 	publicKey: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '参数键不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('param.keyRequired'), trigger: 'blur' },
 		{ validator: rule.validatorCapital, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
-				validateParamsCode(rule, value, callback, form.publicId !== '');
+				validateParamsCode(rule, value, callback, form.publicId !== '', t);
 			},
 			trigger: 'blur',
 		},
 	],
-	publicValue: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '参数值不能为空', trigger: 'blur' }],
-	status: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
-	publicType: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
-	systemFlag: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
+	publicValue: [{ validator: rule.overLength, trigger: 'blur' }, { required: true, message: t('param.valueRequired'), trigger: 'blur' }],
+	status: [{ required: true, message: t('param.statusRequired'), trigger: 'blur' }],
+	publicType: [{ required: true, message: t('param.typeRequired'), trigger: 'blur' }],
+	systemFlag: [{ required: true, message: t('param.systemFlagRequired'), trigger: 'blur' }],
 });
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
 	visible.value = true;
 	form.publicId = '';
 
@@ -134,7 +134,7 @@ const openDialog = (id: string) => {
 	// 获取sysPublicParam信息
 	if (id) {
 		form.publicId = id;
-		getsysPublicParamData(id);
+		await getPublicParamData(id);
 	}
 };
 
@@ -163,11 +163,10 @@ const onSubmit = async () => {
 };
 
 // 初始化表单数据
-const getsysPublicParamData = (id: string) => {
+const getPublicParamData = async (id: string) => {
 	// 获取数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+	const { data } = await getObj(id);
+	Object.assign(form, data);
 };
 
 // 暴露变量

@@ -25,6 +25,8 @@ export default {
 		emptyComponent: '请点击左侧组件拖拽到此处',
 		logo: '图标',
 		name: '名称',
+		flowId: '流程ID',
+		flowIdTip: '如果不设置则自动生成ID',
 		createTime: '创建时间',
 		scopeOfUse: '使用范围',
 		creationProcess: '创建流程',

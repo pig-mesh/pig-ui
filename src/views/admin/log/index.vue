@@ -95,103 +95,141 @@
 </template>
 
 <script lang="ts" setup>
-import {BasicTableProps, useTable} from '/@/hooks/table';
-import {delObj, pageList} from '/@/api/admin/log';
-import {useI18n} from 'vue-i18n';
-import {useMessage, useMessageBox} from '/@/hooks/message';
-import {useDict} from '/@/hooks/dict';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { delObj, pageList } from '/@/api/admin/log';
+import { useI18n } from 'vue-i18n';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useDict } from '/@/hooks/dict';
 
 const LogDetail = defineAsyncComponent(() => import('./detail.vue'));
 const LogLineChart = defineAsyncComponent(() => import('./line-chart.vue'));
 
+/**
+ * 日志详情对话框引用
+ */
 const LogDetailRef = ref();
 
-const {log_type} = useDict('log_type');
+/**
+ * 日志类型字典
+ */
+const { log_type } = useDict('log_type');
 
-const {t} = useI18n();
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
 
-// 定义变量内容
+/**
+ * 查询表单引用
+ */
 const queryRef = ref();
+
+/**
+ * 是否显示搜索区域
+ */
 const showSearch = ref(true);
 
-// 多选rows
-const selectObjs = ref([]) as any;
-// 是否可以多选
-const multiple = ref(true);
-let tableRef = ref(null);
+/**
+ * 多选的日志ID数组
+ */
+const selectObjs = ref<string[]>([]);
 
+/**
+ * 是否禁用批量删除按钮（无选中项时禁用）
+ */
+const multiple = ref(true);
+
+/**
+ * 表格引用
+ */
+const tableRef = ref(null);
+
+/**
+ * 表格状态配置
+ */
 const state: BasicTableProps = reactive<BasicTableProps>({
-  queryForm: {
-    logType: '',
-    createTime: '',
-    serviceId: '',
-  },
-  selectObjs: [],
-  pageList: pageList,
-  descs: ['create_time'],
-  createdIsNeed: false,
+	queryForm: {
+		logType: '',
+		createTime: '',
+		serviceId: '',
+	},
+	selectObjs: [],
+	pageList: pageList,
+	descs: ['create_time'],
+	createdIsNeed: false,
 });
 
-//  table hook
-const {
-  downBlobFile,
-  getDataList,
-  currentChangeHandle: baseCurrentChangeHandle,
-  sortChangeHandle,
-  sizeChangeHandle,
-  tableStyle
-} = useTable(state);
+/**
+ * 表格相关钩子函数
+ */
+const { downBlobFile, getDataList, currentChangeHandle: baseCurrentChangeHandle, sortChangeHandle, sizeChangeHandle, tableStyle } =
+	useTable(state);
 
-// 分页事件
-const currentChangeHandle = (page: number) => {
-  // Reset table scroll position to top
-  tableRef.value?.setScrollTop(0);
-  // Call the original handler
-  baseCurrentChangeHandle(page);
+/**
+ * 分页切换事件，重置表格滚动位置
+ * @param page - 目标页码
+ */
+const currentChangeHandle = (page: number): void => {
+	// Reset table scroll position to top
+	tableRef.value?.setScrollTop(0);
+	// Call the original handler
+	baseCurrentChangeHandle(page);
 };
 
-// 清空搜索条件
-const resetQuery = () => {
-  queryRef.value?.resetFields();
-  getDataList();
+/**
+ * 清空搜索条件并重新查询
+ */
+const resetQuery = (): void => {
+	queryRef.value?.resetFields();
+	getDataList();
 };
 
-// 导出excel
-const exportExcel = () => {
-  downBlobFile('/admin/log/export', state.queryForm, 'log.xlsx');
+/**
+ * 导出Excel文件
+ */
+const exportExcel = (): void => {
+	downBlobFile('/admin/log/export', state.queryForm, 'log.xlsx');
 };
 
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
-  selectObjs.value = objs.map(({id}) => id);
-  multiple.value = !objs.length;
+/**
+ * 表格多选事件处理
+ * @param objs - 选中的行对象数组
+ */
+const handleSelectionChange = (objs: { id: string }[]): void => {
+	selectObjs.value = objs.map(({ id }) => id);
+	multiple.value = !objs.length;
 };
 
-// 删除操作
-const handleDelete = async (ids: string[]) => {
-  try {
-    await useMessageBox().confirm(t('common.delConfirmText'));
-  } catch {
-    return;
-  }
+/**
+ * 删除日志记录
+ * @param ids - 要删除的日志ID数组
+ */
+const handleDelete = async (ids: string[]): Promise<void> => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
 
-  try {
-    await delObj(ids);
-    getDataList();
-    useMessage().success(t('common.delSuccessText'));
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
+	try {
+		await delObj(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
-// onMounted 通过路由参数给  serviceId 赋值
+/**
+ * 组件挂载时初始化，根据路由参数设置serviceId并加载数据
+ */
 const route = useRoute();
 onMounted(() => {
-  const {serviceId} = route.query;
-  if (serviceId) {
-    state.queryForm.serviceId = serviceId;
-  }
-  getDataList();
+	const { serviceId } = route.query;
+	if (serviceId) {
+		state.queryForm.serviceId = serviceId;
+	}
+	getDataList();
 });
 </script>
 

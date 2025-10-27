@@ -73,6 +73,7 @@ import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { validateNull } from '/@/utils/validate';
 import { SocialLoginEnum } from '/@/api/login';
+import { useEventListener, useIntervalFn } from '@vueuse/core';
 
 // 使用i18n
 const { t } = useI18n();
@@ -86,12 +87,37 @@ const emit = defineEmits(['signInSuccess']);
 /**
  * 存储弹出窗口实例的 Ref 对象。
  */
-const winOpen = ref();
+const winOpen = ref<Window | null>(null);
 
 /**
- * 计时器对象，用于检查弹出窗口是否关闭。
+ * 处理来自子窗口的消息事件
  */
-const timer = ref();
+const handleMessage = (event: MessageEvent) => {
+	// 验证消息来源
+	if (event.origin !== window.location.origin) {
+		return;
+	}
+
+	// 处理登录成功消息
+	if (event.data?.type === 'social-login-success') {
+		cleanup();
+		emit('signInSuccess');
+	}
+};
+
+/**
+ * 清理资源
+ */
+const cleanup = () => {
+	// 停止轮询
+	pause();
+
+	// 关闭弹出窗口
+	if (winOpen.value && !winOpen.value.closed) {
+		winOpen.value.close();
+		winOpen.value = null;
+	}
+};
 
 /**
  * 点击按钮触发事件的回调函数，用于打开第三方登录授权页面。
@@ -120,25 +146,31 @@ const handleClick = async (thirdpart: SocialLoginEnum) => {
 		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-LOGIN&prompt=consent`;
 	}
 
+	resume(); // 启动轮询
 	// 打开授权窗口并存储实例
 	winOpen.value = other.openWindow(url, thirdpart, 540, 540);
 };
 
-/**
- * 页面加载后执行的函数，用于检查窗口是否关闭。
- */
-onMounted(() => {
-	// 动态获取所属租户的企业微信应用信息和钉钉应用信息
+// 使用 VueUse 的 useEventListener 自动管理消息监听
+useEventListener(window, 'message', handleMessage);
 
-	timer.value = window.setInterval(() => {
+// 使用 VueUse 的 useIntervalFn 作为降级方案检查窗口状态
+const { pause, resume } = useIntervalFn(
+	() => {
 		// 检查弹出窗口是否已关闭
-		if (winOpen.value && winOpen.value.closed == true) {
-			// 停止计时器
-			window.clearInterval(timer.value);
+		if (winOpen.value && winOpen.value.closed) {
+			cleanup();
 			if (Cookies.get('token')) {
 				emit('signInSuccess');
 			}
 		}
-	}, 500);
+	},
+	1000, // 1秒检查一次
+	{ immediate: false } // 不立即执行
+);
+
+// 组件卸载时自动清理
+onUnmounted(() => {
+	cleanup();
 });
 </script>

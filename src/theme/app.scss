@@ -8,21 +8,89 @@
 }
 
 :root {
+	/* Animation & Transition Tokens
+	------------------------------- */
+	--transition-fast: 150ms;
+	--transition-base: 200ms;
+	--transition-slow: 300ms;
+	--transition-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Color System - Base Colors
+	------------------------------- */
 	--next-color-white: #ffffff;
-	--next-bg-main-color: #f8f8f8;
-	--next-bg-color: #f5f5ff;
-	--next-border-color-light: #f1f2f3;
+	--next-color-black: #000000;
+	--next-text-color: #303133;
+	--next-text-color-regular: #606266;
+	--next-text-color-secondary: #909399;
+	--next-text-color-placeholder: #a8abb2;
+
+	/* Background Colors
+	------------------------------- */
+	--next-bg-main-color: #f5f7fa;
+	--next-bg-color: #ffffff;
+	--next-bg-color-page: #f0f2f5;
+	--next-bg-color-overlay: rgba(0, 0, 0, 0.5);
+
+	/* Border Colors
+	------------------------------- */
+	--next-border-color: #dcdfe6;
+	--next-border-color-light: #e4e7ed;
+	--next-border-color-lighter: #ebeef5;
+	--next-border-color-extra-light: #f2f6fc;
+
+	/* Border Radius Tokens
+	------------------------------- */
+	--border-radius-sm: 4px;
+	--border-radius-md: 8px;
+	--border-radius-lg: 12px;
+	--border-radius-xl: 16px;
+	--border-radius-full: 9999px;
+
+	/* Elevation System (Shadows)
+	------------------------------- */
+	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+	--shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+	/* Semantic Color - Primary (inherit from Element Plus)
+	------------------------------- */
 	--next-color-primary-lighter: #ecf5ff;
-	--next-color-success-lighter: #f0f9eb;
-	--next-color-warning-lighter: #fdf6ec;
+	--next-color-primary-light: #a0cfff;
+
+	/* Semantic Color - Success
+	------------------------------- */
+	--next-color-success-lighter: #f0f9ff;
+	--next-color-success-light: #95d475;
+
+	/* Semantic Color - Warning
+	------------------------------- */
+	--next-color-warning-lighter: #fef5e7;
+	--next-color-warning-light: #f5c97f;
+
+	/* Semantic Color - Danger
+	------------------------------- */
 	--next-color-danger-lighter: #fef0f0;
-	--next-color-dark-hover: #0000001a;
-	--next-color-menu-hover: rgba(0, 0, 0, 0.2);
+	--next-color-danger-light: #fab6b6;
+
+	/* Semantic Color - Info
+	------------------------------- */
+	--next-color-info-lighter: #f4f4f5;
+	--next-color-info-light: #b1b3b8;
+
+	/* Interactive States
+	------------------------------- */
+	--next-color-dark-hover: rgba(0, 0, 0, 0.06);
+	--next-color-menu-hover: rgba(0, 0, 0, 0.08);
 	--next-color-user-hover: rgba(0, 0, 0, 0.04);
+	--next-color-hover-bg: rgba(0, 0, 0, 0.02);
+
+	/* Layout Specific Colors
+	------------------------------- */
 	--next-color-seting-main: #e9eef3;
 	--next-color-seting-aside: #d3dce6;
 	--next-color-seting-header: #b3c0d1;
-	--next-text-color: #333333;
 }
 
 html,
@@ -49,7 +117,7 @@ body,
 	width: 100%;
 	height: 100%;
 	.layout-pd {
-		padding: 5px !important;
+		padding: 8px !important;
 	}
 	.layout-flex {
 		display: flex;
@@ -58,13 +126,14 @@ body,
 	}
 	.layout-aside {
 		background: var(--next-bg-menuBar);
-		box-shadow: 2px 0 6px rgb(0 21 41 / 1%);
+		box-shadow: var(--shadow-sm);
 		height: inherit;
 		position: relative;
 		z-index: 1;
 		display: flex;
 		flex-direction: column;
 		overflow-x: hidden !important;
+		transition: all var(--transition-base) var(--transition-function);
 		.el-scrollbar__view {
 			overflow: hidden;
 		}
@@ -101,15 +170,19 @@ body,
 		&-auto {
 			height: inherit;
 			@extend .layout-flex;
-			padding: 10px;
+			padding: 12px;
 		}
 		&-view {
-			background: var(--el-color-white);
+			background: var(--next-bg-color);
 			width: 100%;
 			height: 100%;
-			border-radius: 4px;
-			border: 1px solid var(--el-border-color-light, #ebeef5);
+			border-radius: var(--border-radius-md);
 			overflow: hidden;
+			box-shadow: var(--shadow-xs);
+			transition: box-shadow var(--transition-base) var(--transition-function);
+			&:hover {
+				box-shadow: var(--shadow-sm);
+			}
 		}
 	}
 	// 用于界面高度自适应，主视图区 main 的内边距，用于 iframe
@@ -136,19 +209,19 @@ body,
 	// pc端左侧导航样式
 	.layout-aside-pc-220 {
 		width: 220px !important;
-		transition: width 0.3s ease;
+		transition: width var(--transition-base) var(--transition-function);
 	}
 	.layout-aside-pc-250 {
 		width: 250px !important;
-		transition: width 0.3s ease;
+		transition: width var(--transition-base) var(--transition-function);
 	}
 	.layout-aside-pc-64 {
 		width: 64px !important;
-		transition: width 0.3s ease;
+		transition: width var(--transition-base) var(--transition-function);
 	}
 	.layout-aside-pc-1 {
 		width: 1px !important;
-		transition: width 0.3s ease;
+		transition: width var(--transition-base) var(--transition-function);
 	}
 	// 手机端左侧导航样式
 	.layout-aside-mobile {
@@ -160,11 +233,11 @@ body,
 	}
 	.layout-aside-mobile-close {
 		left: -220px;
-		transition: all 0.3s cubic-bezier(0.39, 0.58, 0.57, 1);
+		transition: all var(--transition-slow) cubic-bezier(0.39, 0.58, 0.57, 1);
 	}
 	.layout-aside-mobile-open {
 		left: 0;
-		transition: all 0.3s cubic-bezier(0.22, 0.61, 0.36, 1);
+		transition: all var(--transition-slow) cubic-bezier(0.22, 0.61, 0.36, 1);
 	}
 	.layout-aside-mobile-mode {
 		position: fixed;
@@ -173,9 +246,10 @@ body,
 		bottom: 0;
 		left: 0;
 		height: 100%;
-		background-color: rgba(0, 0, 0, 0.5);
+		background-color: var(--next-bg-color-overlay);
 		z-index: 9999998;
-		animation: error-img 0.3s;
+		backdrop-filter: blur(4px);
+		animation: fade-in var(--transition-base);
 	}
 	.layout-mian-height-50 {
 		height: calc(100vh - 50px);
@@ -336,4 +410,133 @@ body,
 	.pl#{$i} {
 		padding-left: #{$i}px !important;
 	}
+}
+
+/* 圆角工具类
+------------------------------- */
+.rounded-sm {
+	border-radius: var(--border-radius-sm) !important;
+}
+.rounded-md {
+	border-radius: var(--border-radius-md) !important;
+}
+.rounded-lg {
+	border-radius: var(--border-radius-lg) !important;
+}
+.rounded-xl {
+	border-radius: var(--border-radius-xl) !important;
+}
+.rounded-full {
+	border-radius: var(--border-radius-full) !important;
+}
+
+/* 阴影工具类
+------------------------------- */
+.shadow-xs {
+	box-shadow: var(--shadow-xs) !important;
+}
+.shadow-sm {
+	box-shadow: var(--shadow-sm) !important;
+}
+.shadow-md {
+	box-shadow: var(--shadow-md) !important;
+}
+.shadow-lg {
+	box-shadow: var(--shadow-lg) !important;
+}
+.shadow-xl {
+	box-shadow: var(--shadow-xl) !important;
+}
+.shadow-none {
+	box-shadow: none !important;
+}
+
+/* 过渡动画工具类
+------------------------------- */
+.transition-fast {
+	transition: all var(--transition-fast) var(--transition-function) !important;
+}
+.transition-base {
+	transition: all var(--transition-base) var(--transition-function) !important;
+}
+.transition-slow {
+	transition: all var(--transition-slow) var(--transition-function) !important;
+}
+
+/* 毛玻璃效果
+------------------------------- */
+.backdrop-blur {
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+.backdrop-blur-sm {
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+.backdrop-blur-lg {
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+/* 动画关键帧
+------------------------------- */
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slide-in-up {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-in-down {
+	from {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+/* 无障碍设计 - 减少动画
+------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* 聚焦状态优化
+------------------------------- */
+*:focus-visible {
+	outline: 2px solid var(--el-color-primary);
+	outline-offset: 2px;
+	border-radius: var(--border-radius-sm);
 }

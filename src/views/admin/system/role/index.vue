@@ -117,68 +117,96 @@ const permessionRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选rows
+
+/**
+ * 多选相关变量
+ */
 const selectObjs = ref([]) as any;
-// 是否可以多选
 const multiple = ref(true);
 
+/**
+ * 表格状态配置
+ * @property {Object} queryForm - 查询表单
+ * @property {string} queryForm.roleName - 角色名称
+ * @property {Function} pageList - 分页查询API
+ * @property {string[]} descs - 降序排序字段
+ */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		roleName: '',
 	},
-	pageList: pageList, // H
+	pageList: pageList,
 	descs: ['create_time'],
 });
 
-const dictType = ref([
+/**
+ * 数据权限类型字典
+ * @description 定义角色可访问的数据范围
+ */
+const dictType = computed(() => [
 	{
-		label: '全部',
+		label: t('sysrole.dsType.all'),
 		value: '0',
 	},
 	{
-		label: '自定义',
+		label: t('sysrole.dsType.custom'),
 		value: '1',
 	},
 	{
-		label: '本级及子级',
+		label: t('sysrole.dsType.currentAndChildren'),
 		value: '2',
 	},
 	{
-		label: '本级',
+		label: t('sysrole.dsType.current'),
 		value: '3',
 	},
-  {
-    label: '本人',
-    value: '4',
-  },
+	{
+		label: t('sysrole.dsType.self'),
+		value: '4',
+	},
 ]);
 
 //  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
+/**
+ * 重置搜索条件
+ * @description 清空表单字段并重新加载数据
+ */
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 导出excel
+/**
+ * 导出角色数据为 Excel 文件
+ */
 const exportExcel = () => {
 	downBlobFile('/admin/role/export',Object.assign(state.queryForm,{ids:selectObjs}), 'role.xlsx');
 };
 
-// 是否可以多选
+/**
+ * 判断表格行是否可选择
+ * @param {any} row - 表格行数据
+ * @returns {boolean} 系统管理员角色（roleId='1'）不可选择
+ */
 const handleSelectable = (row: any) => {
 	return row.roleId !== '1';
 };
 
-// 多选事件
+/**
+ * 多选事件处理
+ * @param {Array} objs - 选中的角色对象数组
+ */
 const handleSelectionChange = (objs: { roleId: string }[]) => {
 	selectObjs.value = objs.map(({ roleId }) => roleId);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
+/**
+ * 删除角色
+ * @param {string[]} ids - 要删除的角色ID数组
+ */
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));

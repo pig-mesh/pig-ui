@@ -5,7 +5,8 @@
  * @FilePath: /Workflow-Vue3/src/store/index.js
  */
 import { defineStore } from 'pinia';
-import { FormConfigUserVO, FormVO } from '/@/api/flow/form/types';
+import { FormConfigUserVO, FormVO } from '/@/views/flow/form/const/types';
+import { BpmModelFormType, type FormDesignData } from '/@/views/flow/form/const/constants';
 
 var adminList: FormConfigUserVO[] = reactive([]);
 
@@ -20,13 +21,28 @@ export const useFlowStore = defineStore('flow', {
 				adminList: adminList,
 				remark: '',
 			},
-			step2: [] as FormVO[],
+			step2: {
+				formType: BpmModelFormType.NORMAL,
+				formId: undefined,
+				formCustomCreatePath: '',
+				formCustomViewPath: '',
+				formRule: [],
+				formOption: {}
+			} as FormDesignData,
+			step2Legacy: [] as FormVO[], // 保留原有的表单数据作为兼容
 			step3:{}
 		};
 	},
 	actions: {
-		setStep2(p: FormVO[]) {
+		setStep2(p: FormDesignData) {
 			this.step2 = p;
+		},
+		setStep2Legacy(p: FormVO[]) {
+			this.step2Legacy = p;
+			// 如果是动态表单，同时更新新的数据结构
+			if (this.step2.formType === BpmModelFormType.NORMAL) {
+				this.step2.formRule = p;
+			}
 		},
 		clearStep1() {
 			this.step1 = {
@@ -39,7 +55,14 @@ export const useFlowStore = defineStore('flow', {
 			};
 		},
 		clearStep2() {
-			this.step2 = [];
+			this.step2 = {
+				formType: BpmModelFormType.NORMAL,
+				formId: undefined,
+				formCustomCreatePath: '',
+				formCustomViewPath: '',
+				formRule: []
+			};
+			this.step2Legacy = [];
 		},
 		setStep3(p: any) {
 			this.step3 = p;

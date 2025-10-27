@@ -13,7 +13,7 @@
 			<el-tab-pane label="设置抄送人">
 				<select-show v-model:orgList="copyerConfig.nodeUserList" type="user" :multiple="true"></select-show>
 			</el-tab-pane>
-			<el-tab-pane label="表单权限">
+			<el-tab-pane label="表单权限" v-if="isDynamicForm">
 				<form-perm :hide-key="['E']" :form-perm="copyerConfig.formPerms"></form-perm>
 			</el-tab-pane>
 		</el-tabs>
@@ -21,19 +21,24 @@
 </template>
 <script setup>
 import selectShow from '/@/components/OrgSelector/index.vue';
-
-import $func from '../../utils/index';
+import { copyerStr } from '../../utils';
 import {useStore} from '../../stores/index';
 import {computed, ref, watch} from 'vue';
 import {useFlowStore} from '../../stores/flow';
 import FormPerm from './components/formPerm.vue';
+import { BpmModelFormType } from '/@/views/flow/form/const/constants';
 
 let copyerConfig = ref({});
 
 let flowStore = useFlowStore();
 
 const step2FormList = computed(() => {
-  return flowStore.step2;
+  return flowStore.step2.formRule || [];
+});
+
+// 判断是否是动态表单类型
+const isDynamicForm = computed(() => {
+	return flowStore.step2.formType === BpmModelFormType.NORMAL;
 });
 
 let store = useStore();
@@ -67,7 +72,7 @@ const openEvent = () => {
 };
 
 const saveCopyer = () => {
-	copyerConfig.value.error = !$func.copyerStr(copyerConfig.value);
+	copyerConfig.value.error = !copyerStr(copyerConfig.value);
 	setCopyerConfig({
 		value: copyerConfig.value,
 		flag: true,

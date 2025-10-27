@@ -48,26 +48,45 @@
 </template>
 
 <script lang="ts" name="AppSocialDetailsDialog" setup>
-// 定义子组件向父组件传值/事件
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/admin/social';
 import { useI18n } from 'vue-i18n';
-import { rule } from '/@/utils/validate';
+import { rule, clearMaskedFields } from '/@/utils/validate';
 
+/**
+ * 定义组件事件
+ */
 const emit = defineEmits(['refresh']);
 
+/**
+ * 国际化工具
+ */
 const { t } = useI18n();
 
-// 定义变量内容
+/**
+ * 表单引用
+ */
 const dataFormRef = ref();
+
+/**
+ * 对话框显示状态
+ */
 const visible = ref(false);
+
+/**
+ * 加载状态
+ */
 const loading = ref(false);
 
-// 定义字典
+/**
+ * 社交登录类型字典
+ */
 const { social_type } = useDict('social_type');
 
-// 提交表单数据
+/**
+ * 表单数据
+ */
 const form = reactive({
 	id: '',
 	type: '',
@@ -78,21 +97,35 @@ const form = reactive({
 	ext: '',
 });
 
-// 定义校验规则
+/**
+ * 表单验证规则
+ */
 const dataRules = ref({
-	type: [{ required: true, message: '类型不能为空', trigger: 'blur' }],
-	appId: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: 'appId不能为空', trigger: 'blur' }],
-	remark: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '描述不能为空', trigger: 'blur' }],
+	type: [{ required: true, message: t('social.typeRequired'), trigger: 'blur' }],
+	appId: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('social.appIdRequired'), trigger: 'blur' },
+	],
+	remark: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('social.remarkRequired'), trigger: 'blur' },
+	],
 	redirectUrl: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '回调地址不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('social.redirectUrlRequired'), trigger: 'blur' },
 		{ validator: rule.url, trigger: 'blur' },
 	],
-	appSecret: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: 'appSecret不能为空', trigger: 'blur' }],
+	appSecret: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('social.appSecretRequired'), trigger: 'blur' },
+	],
 });
 
-// 打开弹窗
-const openDialog = (id: string) => {
+/**
+ * 打开对话框
+ * @param id - 社交登录配置ID，为空时为新增模式
+ */
+const openDialog = (id: string): void => {
 	visible.value = true;
 	form.id = '';
 
@@ -101,16 +134,18 @@ const openDialog = (id: string) => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取appSocialDetails信息
+	// 获取社交登录详情
 	if (id) {
 		form.id = id;
-		getappSocialDetailsData(id);
+		getSocialDetailsData(id);
 	}
 };
 
-// 提交
-const onSubmit = async () => {
-	// 立即设置 loading，防止重复点击
+/**
+ * 提交表单
+ */
+const onSubmit = async (): Promise<void> => {
+	// 防止重复提交
 	if (loading.value) return;
 	loading.value = true;
 
@@ -118,21 +153,21 @@ const onSubmit = async () => {
 		const valid = await dataFormRef.value.validate().catch(() => {});
 		if (!valid) {
 			loading.value = false;
-			return false;
+			return;
 		}
 
-		// 隐藏敏感信息
-		form.appSecret = form.appSecret?.includes('******') ? undefined : form.appSecret;
-		form.appId = form.appId?.includes('******') ? undefined : form.appId;
+		// 清除脱敏字段（编辑时不提交星号占位符）
+		const payload = { ...form };
+		clearMaskedFields(payload, ['appSecret', 'appId']);
 
 		if (form.id) {
-			await putObj(form);
+			await putObj(payload);
 			useMessage().success(t('common.editSuccessText'));
 		} else {
-			await addObj(form);
+			await addObj(payload);
 			useMessage().success(t('common.addSuccessText'));
 		}
-		visible.value = false; // 关闭弹窗
+		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
 		useMessage().error(err.msg);
@@ -141,15 +176,22 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化表单数据
-const getappSocialDetailsData = (id: string) => {
-	// 获取数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+/**
+ * 获取社交登录详情数据
+ * @param id - 社交登录配置ID
+ */
+const getSocialDetailsData = async (id: string): Promise<void> => {
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({
 	openDialog,
 });

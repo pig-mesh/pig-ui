@@ -45,10 +45,23 @@ import { CheckboxValueType } from 'element-plus';
 
 const { t } = useI18n();
 
+/** 菜单树组件引用 */
 const menuTree = ref();
+
+/** 是否启用父子节点关联选择(true=不关联, false=关联) */
 const checkStrictly = ref(true);
+
+/** 加载状态 */
 const loading = ref(false);
 
+/**
+ * 组件状态
+ * @property {string[]} checkedKeys - 选中的菜单节点ID数组
+ * @property {any[]} treeData - 菜单树数据
+ * @property {object} defaultProps - 树组件属性配置
+ * @property {string} roleId - 当前编辑的角色ID
+ * @property {object} dialog - 弹窗配置
+ */
 const state = reactive({
 	checkedKeys: [] as any[],
 	treeData: [] as any[],
@@ -64,73 +77,115 @@ const state = reactive({
 	},
 });
 
+/** 临时存储角色原始选中的菜单ID(用于叶子节点解析) */
 const checkedKeys: Ref<any[]> = ref([]);
 
-// 打开弹窗
-const openDialog = (row: any) => {
+/**
+ * 打开权限分配弹窗
+ * @param {object} row - 角色数据对象
+ * @param {string} row.roleId - 角色ID
+ *
+ * 业务逻辑:
+ * 1. 重置所有状态数据
+ * 2. 获取角色已授权的菜单ID列表
+ * 3. 获取系统所有菜单树数据
+ * 4. 过滤父节点,只保留叶子节点选中状态(避免父子节点关联导致的选中异常)
+ */
+const openDialog = async (row: any) => {
+	// 重置状态
 	state.checkedKeys = [];
 	state.treeData = [];
 	checkedKeys.value = [];
 	state.roleId = row.roleId;
+
 	loading.value = true;
-	fetchRoleTree(row.roleId)
-		.then((res) => {
-			checkedKeys.value = res.data;
-			return pageList();
-		})
-		.then((r) => {
-			state.treeData = r.data;
-			state.checkedKeys = other.resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
-		})
-		.finally(() => {
-			loading.value = false;
-		});
 	state.dialog.isShowDialog = true;
+
+	try {
+		// 获取角色已授权的菜单树
+		const { data: roleTreeData } = await fetchRoleTree(row.roleId);
+		checkedKeys.value = roleTreeData;
+
+		// 获取所有菜单列表
+		const { data: menuList } = await pageList();
+		state.treeData = menuList;
+
+		// 解析并设置选中的节点(过滤掉父节点,只保留叶子节点)
+		state.checkedKeys = other.resolveAllEunuchNodeId(state.treeData, checkedKeys.value, []);
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysrole.fetchPermissionDataError'));
+	} finally {
+		loading.value = false;
+	}
 };
 
+/**
+ * 展开/折叠所有树节点
+ * @param {CheckboxValueType} check - 复选框状态(true=展开, false=折叠)
+ */
 const handleExpand = (check: CheckboxValueType) => {
-	const treeList = state.treeData;
-	for (let i = 0; i < treeList.length; i++) {
-		//@ts-ignore
-		menuTree.value.store.nodesMap[treeList[i].id].expanded = check;
-	}
+	state.treeData.forEach((node) => {
+		const treeNode = menuTree.value?.store?.nodesMap?.[node.id];
+		if (treeNode) {
+			treeNode.expanded = check;
+		}
+	});
 };
 
+/**
+ * 全选/取消全选所有菜单
+ * @param {CheckboxValueType} check - 复选框状态(true=全选, false=取消全选)
+ */
 const handleSelectAll = (check: CheckboxValueType) => {
-	if (check) {
-		menuTree.value?.setCheckedKeys(state.treeData.map((item) => item.id));
-	} else {
-		menuTree.value?.setCheckedKeys([]);
-	}
+	const keys = check ? state.treeData.map((item) => item.id) : [];
+	menuTree.value?.setCheckedKeys(keys);
 };
 
-// 提交授权数据
-const onSubmit = () => {
-	// 初始角色选择节点必须包含 【分配权限】 菜单
-	if (state.roleId === '1') {
-		if (
-			!menuTree.value
-				.getCheckedNodes()
-				.map((item: { name: string }) => {
-					return item.name;
-				})
-				.includes('分配权限')
-		) {
+/**
+ * 超级管理员角色ID常量
+ * @description 系统预设的超级管理员角色，拥有所有权限且必须包含【分配权限】菜单
+ */
+const SUPER_ADMIN_ROLE_ID = '1';
+
+/**
+ * 提交权限分配数据
+ *
+ * 业务规则:
+ * 1. 超级管理员(roleId=1)必须保留【分配权限】菜单,防止权限丢失
+ * 2. 提交时需要同时包含:选中的节点 + 半选中的父节点
+ *
+ * 技术说明:
+ * - getCheckedKeys(): 获取完全选中的节点ID
+ * - getHalfCheckedKeys(): 获取半选中状态的父节点ID(子节点部分选中时,父节点为半选中)
+ */
+const onSubmit = async () => {
+	// 超级管理员角色必须包含【分配权限】菜单
+	if (state.roleId === SUPER_ADMIN_ROLE_ID) {
+		const checkedMenuNames = menuTree.value
+			.getCheckedNodes()
+			.map((item: { name: string }) => item.name);
+
+		if (!checkedMenuNames.includes(t('sysrole.assignPermissionMenu'))) {
 			useMessage().error(t('sysrole.mustCheckOneTip'));
 			return;
 		}
 	}
 
-	const menuIds = menuTree.value.getCheckedKeys().join(',').concat(',').concat(menuTree.value.getHalfCheckedKeys().join(','));
+	// 获取选中的菜单ID(包含半选中的父节点)
+	const checkedKeys = menuTree.value.getCheckedKeys();
+	const halfCheckedKeys = menuTree.value.getHalfCheckedKeys();
+	const menuIds = [...checkedKeys, ...halfCheckedKeys].filter(Boolean).join(',');
+
 	loading.value = true;
-	permissionUpd(state.roleId, menuIds)
-		.then(() => {
-			state.dialog.isShowDialog = false;
-			useMessage().success(t('common.editSuccessText'));
-		})
-		.finally(() => {
-			loading.value = false;
-		});
+	try {
+		await permissionUpd(state.roleId, menuIds);
+		state.dialog.isShowDialog = false;
+		useMessage().success(t('common.editSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysrole.permissionUpdateError'));
+	} finally {
+		loading.value = false;
+	}
 };
 
 // 暴露变量

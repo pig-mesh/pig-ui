@@ -21,10 +21,10 @@
         </el-col>
         <el-col :span="1"></el-col>
         <el-col :span="8">
-          <el-button v-waves @click="handleSendCode" :loading="msg.msgKey" :disabled="msg.msgKey"
+          <el-button v-waves @click="handleSendCode" :loading="msgKey" :disabled="msgKey"
                      class="w-full h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">
             <span class="font-semibold text-xs">
-              {{ msg.msgText }}
+              {{ msgText }}
             </span>
           </el-button>
         </el-col>
@@ -94,6 +94,7 @@
   import {rule} from '/@/utils/validate';
   import {useI18n} from 'vue-i18n';
   import {ref, reactive, defineAsyncComponent} from "vue";
+  import { useIntervalFn } from '@vueuse/core';
   import type { FormInstance } from 'element-plus';
   
   const {t} = useI18n();
@@ -114,17 +115,31 @@
   const forgetFormData = reactive({
     phone: '',
     code: '',
-    password: '',
     newpassword1: '',
     newpassword2: '',
   });
 
-  // 定义响应式对象
-  const msg = reactive({
-    msgText: t('mobile.codeText'),
-    msgTime: 60,
-    msgKey: false,
-  });
+  // 定义响应式对象 - 使用 ref 替代 reactive 以配合 VueUse
+  const msgText = ref(t('mobile.codeText'));
+  const msgTime = ref(60);
+  const msgKey = ref(false);
+
+  // 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
+  const { pause, resume } = useIntervalFn(
+    () => {
+      msgTime.value--;
+      msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+
+      if (msgTime.value === 0) {
+        msgTime.value = 60;
+        msgText.value = t('mobile.codeText');
+        msgKey.value = false;
+        pause();
+      }
+    },
+    1000,
+    { immediate: false }
+  );
 
   const validatorPassword2 = (rule: any, value: any, callback: any) => {
     if (value !== forgetFormData.newpassword1) {
@@ -183,14 +198,15 @@
   });
   
   /**
-   * 处理发送验证码事件。
+   * 处理发送验证码事件
+   * @description 验证手机号格式并发送验证码
    */
   const handleSendCode = async () => {
     if (!dataFormRef.value) return;
-    
+
     try {
       await dataFormRef.value.validateField('phone');
-      
+
       const {msg, data} = await sendMobileCode(forgetFormData.phone);
       if (data !== false) {
         useMessage().success(t('mobile.sendSuccess'));
@@ -199,60 +215,55 @@
         useMessage().error(msg);
       }
     } catch (error: any) {
-      if (error.message) {
-        useMessage().error(error.message);
-      } else {
-        useMessage().error(error.data || error.msg || t('mobile.sendFailed'));
-      }
+      const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
+      useMessage().error(errorMsg);
     }
   };
   
   /**
-   * 计算并更新倒计时。
+   * 计算并更新倒计时
+   * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
    */
   const timeCacl = () => {
-    msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
-    msg.msgKey = true;
-    const time = setInterval(() => {
-      msg.msgTime--;
-      msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
-      if (msg.msgTime === 0) {
-        msg.msgTime = 60;
-        msg.msgText = t('mobile.codeText');
-        msg.msgKey = false;
-        clearInterval(time);
-      }
-    }, 1000);
+    msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+    msgKey.value = true;
+    resume();
   };
 
-  // 处理密码强度得分变化事件
+  /**
+   * 处理密码强度得分变化事件
+   * @param e - 密码强度得分
+   */
   const handlePassScore = (e: string) => {
     score.value = e;
   };
 
   /**
-   * @name handleResetPassword
-   * @description 重置密码
+   * 处理重置密码事件
+   * @description 验证表单并执行密码重置操作
+   * @returns 重置是否成功
    */
   const handleResetPassword = async () => {
     if (!dataFormRef.value) return false;
-    
-    // 验证表单是否符合规则
-    const valid = await dataFormRef.value.validate().catch(() => {});
-    if (!valid) return false;
 
     try {
+        // 验证表单是否符合规则
+        const valid = await dataFormRef.value.validate();
+        if (!valid) return false;
+
         // 开始加载
         loading.value = true;
         // 调用重置密码API
         await forgetUserPassword(forgetFormData);
         // 成功提示
-        useMessage().success(t('common.optSuccessText'));
+        useMessage().success(t('forget.resetSuccess'));
         // 触发跳转到登录页面
         emit('change', LoginTypeEnum.PASSWORD);
+        return true;
     } catch (err: any) {
         // 提示错误信息
-        useMessage().error(err.msg);
+        useMessage().error(err.msg || t('errors.networkError'));
+        return false;
     } finally {
         // 结束加载状态
         loading.value = false;

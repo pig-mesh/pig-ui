@@ -37,101 +37,110 @@
 </template>
 
 <script setup lang="ts" name="systemDept">
-import {BasicTableProps, useTable} from '/@/hooks/table';
-import {deptTree, delObj} from '/@/api/admin/dept';
-import {useMessage, useMessageBox} from '/@/hooks/message';
-import {useI18n} from 'vue-i18n';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { deptTree, delObj } from '/@/api/admin/dept';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const DeptForm = defineAsyncComponent(() => import('./form.vue'));
-const {t} = useI18n();
-// 定义变量内容
-const tableRef = ref(); // 表格引用
-const deptDialogRef = ref(); // 部门对话框引用
-const excelUploadRef = ref(); // Excel上传引用
-const showSearch = ref(true); // 是否显示搜索栏
-const isExpand = ref(false); // 是否展开
+const { t } = useI18n();
+
+/** 表格引用 */
+const tableRef = ref();
+
+/** 部门对话框引用 */
+const deptDialogRef = ref();
+
+/** 是否展开所有节点 */
+const isExpand = ref(false);
 
 /**
- * 查询部门树方法，返回 Promise 对象
- * @param params - 查询参数
- * @returns Promise&lt;any&gt;
+ * 查询部门树方法
+ * @param {Object} params - 查询参数
+ * @returns {Promise<any>} 部门树数据
  */
 const queryDeptTree = (params?: any) => {
-  return deptTree(params);
+	return deptTree(params);
 };
 
 /**
- * 定义响应式表格数据
+ * 表格状态配置
+ * @property {Function} pageList - 分页查询API
+ * @property {Object} queryForm - 查询表单
+ * @property {string} queryForm.deptName - 部门名称
+ * @property {boolean} isPage - 是否分页（false表示树形结构不分页）
+ * @property {string[]} descs - 降序排序字段
  */
 const state: BasicTableProps = reactive<BasicTableProps>({
-  pageList: queryDeptTree, // 页面列表数据
-  queryForm: {
-    deptName: '', // 部门名称
-  },
-  isPage: false, // 是否分页
-  descs: ['create_time'], // 排序字段
+	pageList: queryDeptTree,
+	queryForm: {
+		deptName: '',
+	},
+	isPage: false,
+	descs: ['create_time'],
 });
 
-/**
- * 使用 useTable 定义表格相关操作
- */
-const {getDataList, tableStyle} = useTable(state);
+/** 表格相关操作 */
+const { getDataList, tableStyle } = useTable(state);
 
 /**
- * 展开/折叠部门树方法
+ * 展开/折叠部门树
+ * @description 切换所有节点的展开/折叠状态
  */
 const handleExpand = async () => {
-  isExpand.value = !isExpand.value;
-  const dataList = await deptTree();
-  toggleExpand(dataList.data, isExpand.value);
+	isExpand.value = !isExpand.value;
+	const { data } = await deptTree();
+	toggleExpand(data, isExpand.value);
 };
 
 /**
- * 递归方法，用于展开/折叠部门树
- * @param children - 子节点
- * @param unfold - 是否展开
+ * 递归切换节点展开/折叠状态
+ * @param {Array} children - 子节点数组
+ * @param {boolean} unfold - 是否展开（true=展开，false=折叠）
  */
 const toggleExpand = (children: any[], unfold = true) => {
-  for (const key in children) {
-    tableRef.value?.toggleRowExpansion(children[key], unfold);
-    if (children[key].children) {
-      toggleExpand(children[key].children!, unfold);
-    }
-  }
+	for (const key in children) {
+		tableRef.value?.toggleRowExpansion(children[key], unfold);
+		if (children[key].children) {
+			toggleExpand(children[key].children!, unfold);
+		}
+	}
 };
 
 /**
- * 删除当前行
- * @param row - 当前行数据
+ * 删除部门
+ * @param {Object} row - 当前行数据
  */
 const handleDelete = async (row: any) => {
-  try {
-    await useMessageBox().confirm(t('common.delConfirmText'));
-  } catch {
-    return;
-  }
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
 
-  try {
-    await delObj(row.id);
-    getDataList();
-    useMessage().success(t('common.delSuccessText'));
-  } catch (err: any) {
-    useMessage().error(err.msg);
-  }
+	try {
+		await delObj(row.id);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
-const handleAdd = ()=>{
-  deptDialogRef.value.openDialog('add')
-}
-
 /**
- * 暴露组件中的一些方法和变量
+ * 新增部门
+ * @description 打开新增部门弹窗
  */
+const handleAdd = () => {
+	deptDialogRef.value.openDialog('add');
+};
+
+// 暴露变量
 defineExpose({
-  handleAdd, // 新增时间
-  state, // 响应式表格数据
-  getDataList, // 获取列表数据方法
-  handleExpand // 展开/折叠部门树方法
+	handleAdd,
+	state,
+	getDataList,
+	handleExpand,
 });
 </script>

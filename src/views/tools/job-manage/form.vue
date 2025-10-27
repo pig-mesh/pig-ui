@@ -84,21 +84,30 @@
 </template>
 
 <script lang="ts" name="SysJobDialog" setup>
-// 定义子组件向父组件传值/事件
+/**
+ * Job Form Dialog Component
+ * 作业表单对话框组件
+ * Handles job creation and editing
+ * 处理作业创建和编辑
+ */
+
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj, validateJob } from '/@/api/daemon/job';
 import { useI18n } from 'vue-i18n';
 
+// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'));
 
+// 获取国际化方法
 const { t } = useI18n();
 
 // 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
+const popoverVisible = ref(false);
 
 // 定义字典
 const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
@@ -120,21 +129,25 @@ const form = reactive({
 	remark: '',
 });
 
+/**
+ * Controls popover visibility
+ * 控制弹出框可见性
+ * @param bol - Whether popover is visible 弹出框是否可见
+ */
 const popoverVis = (bol: boolean) => {
 	popoverVisible.value = bol;
 };
 
-const popoverVisible = ref(false);
 // 定义校验规则
 const dataRules = reactive({
-	jobName: [{ required: true, message: '任务名称不能为空', trigger: 'blur' }],
-	jobGroup: [{ required: true, message: '任务组名不能为空', trigger: 'blur' }],
-	jobType: [{ required: true, message: '任务类型不能为空', trigger: 'blur' }],
-	cronExpression: [{ required: true, message: 'cron不能为空', trigger: 'blur' }],
-	misfirePolicy: [{ required: true, message: '策略不能为空', trigger: 'blur' }],
-	executePath: [{ required: true, message: '执行路径不能为空', trigger: 'blur' }],
+	jobName: [{ required: true, message: t('job.jobNameRequired'), trigger: 'blur' }],
+	jobGroup: [{ required: true, message: t('job.jobGroupRequired'), trigger: 'blur' }],
+	jobType: [{ required: true, message: t('job.jobTypeRequired'), trigger: 'blur' }],
+	cronExpression: [{ required: true, message: t('job.cronExpressionRequired'), trigger: 'blur' }],
+	misfirePolicy: [{ required: true, message: t('job.misfirePolicyRequired'), trigger: 'blur' }],
+	executePath: [{ required: true, message: t('job.executePathRequired'), trigger: 'blur' }],
 	className: [
-		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{ required: true, message: t('job.classNameRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateJob(rule, value, callback, form);
@@ -143,7 +156,7 @@ const dataRules = reactive({
 		},
 	],
 	methodName: [
-		{ required: true, message: '方法不能为空', trigger: 'blur' },
+		{ required: true, message: t('job.methodNameRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateJob(rule, value, callback, form);
@@ -161,24 +174,31 @@ const dataRules = reactive({
 	],
 });
 
-// 打开弹窗
-const openDialog = (id: string) => {
+/**
+ * Opens the dialog for job creation or editing
+ * 打开作业创建或编辑对话框
+ * @param id - Job ID for editing, empty for creation 作业ID（编辑时传入，创建时为空）
+ */
+const openDialog = async (id: string) => {
 	visible.value = true;
 	form.jobId = '';
 
 	// 重置表单数据
-	nextTick(() => {
+	await nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
 	// 获取sysJob信息
 	if (id) {
 		form.jobId = id;
-		getsysJobData(id);
+		await getsysJobData(id);
 	}
 };
 
-// 提交
+/**
+ * Handles form submission
+ * 处理表单提交
+ */
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -190,18 +210,24 @@ const onSubmit = async () => {
 		visible.value = false;
 		emit('refresh');
 	} catch (err: any) {
-		useMessage().error('任务初始化异常');
+		useMessage().error(t('job.jobInitException'));
 	} finally {
 		loading.value = false;
 	}
 };
 
-// 初始化表单数据
-const getsysJobData = (id: string) => {
-	// 获取数据
-	getObj(id).then((res: any) => {
-		Object.assign(form, res.data);
-	});
+/**
+ * Fetches job data for editing
+ * 获取作业数据进行编辑
+ * @param id - Job ID 作业ID
+ */
+const getsysJobData = async (id: string) => {
+	try {
+		const data = await getObj(id);
+		Object.assign(form, data);
+	} catch (error: any) {
+		useMessage().error(t('job.fetchJobDataFailed'));
+	}
 };
 
 // 暴露变量

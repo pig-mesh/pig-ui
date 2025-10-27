@@ -10,7 +10,7 @@ export default {
 		<template #header>
 			<div class="card-header">
 				<span>{{ $t('home.newsletterTip') }}</span>
-				<el-button link class="button" text @click="openList">{{ $t('home.moreTip') }}</el-button>
+				<el-button text class="button" @click="openList">{{ $t('home.moreTip') }}</el-button>
 			</div>
 		</template>
 		<el-timeline v-if="newsList.length > 0">

@@ -57,7 +57,8 @@
                   </el-button>
                   <el-button
                       class="save_btn !px-6 !h-9 hover:scale-105 transition-transform"
-                      type="warning"
+                      type="primary"
+                      plain
                       size="small"
                       @click="handleDelete"
                   >
@@ -67,75 +68,172 @@
                 </div>
               </div>
 
-              <div v-if="showRightFlag" class="right">
-                <div class="configure_page">
-                  <div class="delete_btn">
-                    <el-button icon="Delete" size="mini" type="danger" @click="deleteMenu(tempObj)">删除当前菜单 </el-button>
-                  </div>
-                  <div>
-                    <span>菜单名称：</span>
-                    <el-input v-model="tempObj.name" class="input_width" clearable placeholder="请输入菜单名称" />
-                  </div>
-                  <div v-if="showConfigureContent">
-                    <div class="menu_content">
-                      <span>菜单标识：</span>
-                      <el-input v-model="tempObj.key" class="input_width" clearable placeholder="请输入菜单 KEY" />
-                    </div>
-                    <div class="menu_content">
-                      <span>菜单内容：</span>
-                      <el-select v-model="tempObj.type" class="menu_option" clearable placeholder="请选择">
-                        <el-option v-for="item in menuOptions" :key="item.value" :label="item.label" :value="item.value" />
-                      </el-select>
-                    </div>
-                    <div class="configur_content" v-if="tempObj.type === 'view'">
-                      <span>跳转链接：</span>
-                      <el-input class="input_width" v-model="tempObj.url" placeholder="请输入链接" clearable />
-                    </div>
-                    <div class="configur_content" v-if="tempObj.type === 'miniprogram'">
-                      <div class="applet">
-                        <span>小程序的 appid ：</span>
-                        <el-input class="input_width" v-model="tempObj.miniProgramAppId" placeholder="请输入小程序的appid" clearable />
+              <!-- 配置面板 -->
+              <div v-if="showRightFlag" class="right !bg-transparent">
+                <el-card shadow="never" class="!border-2 !border-gray-200 dark:!border-gray-700 !rounded-xl overflow-hidden !bg-white dark:!bg-gray-800">
+                  <!-- 卡片头部 -->
+                  <template #header>
+                    <div class="flex items-center justify-between">
+                      <div class="flex items-center gap-3">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-md">
+                          <el-icon class="text-white text-xl"><Setting /></el-icon>
+                        </div>
+                        <div>
+                          <div class="text-lg font-semibold text-gray-900 dark:text-gray-100">菜单配置</div>
+                          <div class="text-sm text-gray-500 dark:text-gray-400">设置菜单名称和响应行为</div>
+                        </div>
                       </div>
-                      <div class="applet">
-                        <span>小程序的页面路径：</span>
+                      <el-button
+                        type="primary"
+                        plain
+                        @click="deleteMenu(tempObj)"
+                        class="!rounded-lg"
+                        :icon="Delete"
+                      >
+                        删除菜单
+                      </el-button>
+                    </div>
+                  </template>
+
+                  <!-- 配置表单 -->
+                  <el-form label-width="120px" class="px-2">
+                    <!-- 菜单名称 -->
+                    <el-form-item label="菜单名称" class="!mb-6">
+                      <el-input
+                        v-model="tempObj.name"
+                        placeholder="请输入菜单名称"
+                        clearable
+                        maxlength="8"
+                        show-word-limit
+                        class="!w-full"
+                      >
+                        <template #prefix>
+                          <el-icon class="text-gray-400"><Edit /></el-icon>
+                        </template>
+                      </el-input>
+                    </el-form-item>
+
+                    <template v-if="showConfigureContent">
+                      <!-- 菜单标识 -->
+                      <el-form-item label="菜单标识" class="!mb-6">
                         <el-input
-                            class="input_width"
+                          v-model="tempObj.key"
+                          placeholder="请输入菜单 KEY"
+                          clearable
+                          class="!w-full"
+                        >
+                          <template #prefix>
+                            <el-icon class="text-gray-400"><Key /></el-icon>
+                          </template>
+                        </el-input>
+                      </el-form-item>
+
+                      <!-- 菜单类型 -->
+                      <el-form-item label="菜单类型" class="!mb-6">
+                        <el-select
+                          v-model="tempObj.type"
+                          placeholder="请选择菜单类型"
+                          clearable
+                          class="!w-full"
+                        >
+                          <el-option
+                            v-for="item in menuOptions"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value"
+                          />
+                        </el-select>
+                      </el-form-item>
+
+                      <!-- 跳转链接 -->
+                      <div v-if="tempObj.type === 'view'" class="p-4 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800 mb-6">
+                        <div class="flex items-center gap-2 mb-3">
+                          <el-icon class="text-blue-500"><Link /></el-icon>
+                          <span class="font-medium text-gray-900 dark:text-gray-100">跳转网页设置</span>
+                        </div>
+                        <el-form-item label="跳转链接" class="!mb-0">
+                          <el-input
+                            v-model="tempObj.url"
+                            placeholder="请输入链接地址，如：https://www.example.com"
+                            clearable
+                            class="!w-full"
+                          >
+                            <template #prefix>
+                              <el-icon class="text-gray-400"><Link /></el-icon>
+                            </template>
+                          </el-input>
+                        </el-form-item>
+                      </div>
+
+                      <!-- 小程序配置 -->
+                      <div v-if="tempObj.type === 'miniprogram'" class="p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border border-purple-200 dark:border-purple-800 mb-6">
+                        <div class="flex items-center gap-2 mb-4">
+                          <el-icon class="text-purple-500"><Postcard /></el-icon>
+                          <span class="font-medium text-gray-900 dark:text-gray-100">小程序配置</span>
+                        </div>
+                        <el-form-item label="小程序 AppID" class="!mb-4">
+                          <el-input
+                            v-model="tempObj.miniProgramAppId"
+                            placeholder="请输入小程序的 AppID"
+                            clearable
+                            class="!w-full"
+                          />
+                        </el-form-item>
+                        <el-form-item label="页面路径" class="!mb-4">
+                          <el-input
                             v-model="tempObj.miniProgramPagePath"
                             placeholder="请输入小程序的页面路径，如：pages/index"
                             clearable
-                        />
-                      </div>
-                      <div class="applet">
-                        <span>小程序的备用网页：</span>
-                        <el-input class="input_width" v-model="tempObj.url" placeholder="不支持小程序的老版本客户端将打开本网页" clearable />
-                      </div>
-                      <p class="blue">tips:需要和公众号进行关联才可以把小程序绑定带微信菜单上哟！</p>
-                    </div>
-                    <div class="configur_content" v-if="tempObj.type === 'article_view_limited'">
-                      <el-row>
-                        <div class="select-item" v-if="tempObj && tempObj.replyArticles">
-                          <wx-news :objData="tempObj.replyArticles" />
-                          <el-row class="ope-row">
-                            <el-button type="danger" icon="delete" circle @click="deleteMaterial" />
-                          </el-row>
+                            class="!w-full"
+                          />
+                        </el-form-item>
+                        <el-form-item label="备用网页" class="!mb-0">
+                          <el-input
+                            v-model="tempObj.url"
+                            placeholder="不支持小程序的老版本客户端将打开本网页"
+                            clearable
+                            class="!w-full"
+                          />
+                        </el-form-item>
+                        <div class="mt-3 flex items-start gap-2 p-3 bg-blue-50 dark:bg-blue-900/30 rounded-lg">
+                          <el-icon class="text-blue-500 mt-0.5"><InfoFilled /></el-icon>
+                          <span class="text-sm text-blue-700 dark:text-blue-300">需要和公众号进行关联才可以把小程序绑定到微信菜单</span>
                         </div>
-                        <div v-else>
-                          <el-row>
-                            <el-col :span="24" style="text-align: center">
-                              <el-button type="success" @click="openMaterial"> 素材库选择<i class="fansel-icon--right"></i> </el-button>
-                            </el-col>
-                          </el-row>
+                      </div>
+
+                      <!-- 图文消息 -->
+                      <div v-if="tempObj.type === 'article_view_limited'" class="p-4 bg-gradient-to-br from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20 rounded-xl border border-green-200 dark:border-green-800 mb-6">
+                        <div class="flex items-center gap-2 mb-4">
+                          <el-icon class="text-green-500"><Document /></el-icon>
+                          <span class="font-medium text-gray-900 dark:text-gray-100">图文消息设置</span>
+                        </div>
+                        <div v-if="tempObj && tempObj.replyArticles && tempObj.replyArticles.length > 0" class="select-item">
+                          <wx-news :objData="tempObj.replyArticles" />
+                          <div class="mt-3 text-center">
+                            <el-button type="danger" :icon="Delete" circle @click="deleteMaterial" />
+                          </div>
+                        </div>
+                        <div v-else class="text-center py-6">
+                          <el-button type="success" @click="openMaterial" :icon="FolderOpened">
+                            从素材库选择
+                          </el-button>
                         </div>
                         <wx-material-select ref="dialogNewsRef" @selectMaterial="selectMaterial" />
-                      </el-row>
-                    </div>
-                    <div class="configur_content" v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'">
-                      <wx-reply :objData="tempObj" v-if="hackResetWxReplySelect" />
-                    </div>
-                  </div>
-                </div>
+                      </div>
+
+                      <!-- 点击回复 / 扫码回复 -->
+                      <div v-if="tempObj.type === 'click' || tempObj.type === 'scancode_waitmsg'" class="p-4 bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl border border-orange-200 dark:border-orange-800 mb-6">
+                        <div class="flex items-center gap-2 mb-4">
+                          <el-icon class="text-orange-500"><ChatDotRound /></el-icon>
+                          <span class="font-medium text-gray-900 dark:text-gray-100">回复内容设置</span>
+                        </div>
+                        <wx-reply :objData="tempObj" v-if="hackResetWxReplySelect" />
+                      </div>
+                    </template>
+                  </el-form>
+                </el-card>
               </div>
-            </div>
+             </div>
           </el-scrollbar>
         </div>
       </pane>
@@ -149,6 +247,20 @@ import {getObj, publishObj, saveObj} from '/@/api/mp/wx-menu';
 // 部门树使用的数据
 import {fetchAccountList} from '/@/api/mp/wx-account';
 import {useMessage, useMessageBox} from '/@/hooks/message';
+import {
+  Plus,
+  Check,
+  Delete,
+  InfoFilled,
+  Setting,
+  Edit,
+  Key,
+  Link,
+  Postcard,
+  Document,
+  FolderOpened,
+  ChatDotRound,
+} from '@element-plus/icons-vue';
 
 const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
 

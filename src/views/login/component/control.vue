@@ -19,7 +19,7 @@
 		</el-dropdown>
 
 		<!-- 主题切换 -->
-		<el-tooltip v-if="isDarkModeEnabled" :content="getThemeConfig.isDark ? '切换亮色模式' : '切换暗色模式'" placement="bottom">
+		<el-tooltip v-if="isDarkModeEnabled" :content="getThemeConfig.isDark ? t('control.toggleLightMode') : t('control.toggleDarkMode')" placement="bottom">
 			<div
 				class="flex justify-center items-center w-9 h-9 rounded-lg backdrop-blur-sm transition-colors cursor-pointer bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 				@click="onThemeClick"
@@ -43,7 +43,7 @@ import { useDark } from '@vueuse/core';
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { locale } = useI18n();
+const { locale, t } = useI18n();
 
 // 语言切换状态
 const state = reactive({

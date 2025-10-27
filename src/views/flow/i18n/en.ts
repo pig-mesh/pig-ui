@@ -20,6 +20,8 @@ export default {
 		checkSubIng: 'check ing',
 		logo: 'logo',
 		name: 'name',
+		flowId: 'Flow ID',
+		flowIdTip: 'Auto-generate ID if not set',
 		remark: 'remark',
 		group: 'group',
 		admin: 'admin',

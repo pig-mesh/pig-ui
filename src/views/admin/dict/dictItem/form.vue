@@ -60,32 +60,32 @@ const dataForm = reactive({
 });
 
 const dataRules = reactive({
-  dictType: [{validator: rule.overLength, trigger: 'blur'}, {
-    required: true,
-    message: '请点选左侧字典项',
-    trigger: 'blur'
-  }],
-  value: [{validator: rule.overLength, trigger: 'blur'}, {required: true, message: '数据值不能为空', trigger: 'blur'}],
+  dictType: [
+    { validator: rule.overLength, trigger: 'blur' },
+    { required: true, message: t('dictItem.inputDictTypeTip'), trigger: 'blur' },
+  ],
+  value: [
+    { validator: rule.overLength, trigger: 'blur' },
+    { required: true, message: t('dictItem.valueRequired'), trigger: 'blur' },
+  ],
   label: [
-    {validator: rule.overLength, trigger: 'blur'},
-    {required: true, message: '标签不能为空', trigger: 'blur'},
+    { validator: rule.overLength, trigger: 'blur' },
+    { required: true, message: t('dictItem.labelRequired'), trigger: 'blur' },
     {
       validator: (rule: any, value: any, callback: any) => {
-        validateDictItemLabel(rule, value, callback, dataForm.dictType, dataForm.id !== '');
+        validateDictItemLabel(rule, value, callback, dataForm.dictType, dataForm.id !== '', t);
       },
       trigger: 'blur',
     },
   ],
-  description: [{validator: rule.overLength, trigger: 'blur'}, {
-    required: true,
-    message: '描述不能为空',
-    trigger: 'blur'
-  }],
-  sortOrder: [{validator: rule.overLength, trigger: 'blur'}, {
-    required: true,
-    message: '排序不能为空',
-    trigger: 'blur'
-  }],
+  description: [
+    { validator: rule.overLength, trigger: 'blur' },
+    { required: true, message: t('dictItem.descriptionRequired'), trigger: 'blur' },
+  ],
+  sortOrder: [
+    { validator: rule.overLength, trigger: 'blur' },
+    { required: true, message: t('dictItem.sortOrderRequired'), trigger: 'blur' },
+  ],
 });
 
 // 打开弹窗

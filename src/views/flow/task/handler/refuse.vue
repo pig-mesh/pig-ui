@@ -8,13 +8,13 @@ const submitDesc = ref('');
 
 const currentData = ref();
 const currentProcessInstanceId = ref('')
-const currentOpenFlowForm = ref();
+const currentFormData = ref({});
 
 const handle = (row, formData) => {
   submitDesc.value = '';
   currentProcessInstanceId.value = row.processInstanceId;
 	currentData.value = row;
-	currentOpenFlowForm.value = formData;
+	currentFormData.value = formData;
 
 	dialogVisible.value = true;
 };
@@ -27,7 +27,8 @@ const submit = () => {
   formData[`${currentData.value.nodeId}_approve_condition`] = false;
 
   const param = {
-    paramMap: formData,
+		paramMap: formData,
+		formData: currentFormData.value!,
     taskId: currentData.value.taskId,
     taskLocalParamMap: {
       approveDesc: '拒绝原因：' + submitDesc.value,

@@ -28,3 +28,11 @@ pnpm-debug.log*
 package-lock.json
 yarn.lock
 pnpm-lock.yaml
+
+# cursor review
+final_review_gate.py
+.claude/settings.local.json
+
+
+### test
+*-aitest*

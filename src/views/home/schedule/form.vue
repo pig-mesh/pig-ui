@@ -51,52 +51,72 @@
 </template>
 
 <script setup lang="ts" name="SysScheduleDialog">
-import {useMessage} from '/@/hooks/message';
-import {addObj, getObj, putObj} from '/@/api/admin/schedule';
-import {useI18n} from 'vue-i18n';
-import {useDict} from '/@/hooks/dict';
+import { useMessage } from '/@/hooks/message';
+import { addObj, getObj, putObj } from '/@/api/admin/schedule';
+import { useI18n } from 'vue-i18n';
+import { useDict } from '/@/hooks/dict';
 
+/**
+ * 定义组件事件
+ */
 const emit = defineEmits(['refresh']);
 
-// 获取字典内容
+/**
+ * 日程类型和状态字典
+ */
 const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_status');
 
-// 使用国际化实例
+/**
+ * 国际化工具
+ */
 const { t } = useI18n();
 
-// 定义变量内容
+/**
+ * 表单引用
+ */
 const dataFormRef = ref();
+
+/**
+ * 对话框显示状态
+ */
 const visible = ref(false);
+
+/**
+ * 加载状态
+ */
 const loading = ref(false);
 
-// 提交表单数据
+/**
+ * 表单数据
+ */
 const form = reactive({
 	id: '',
 	title: '',
-  scheduleType: 'record',
-  scheduleState: '0',
+	scheduleType: 'record',
+	scheduleState: '0',
 	content: '',
-  scheduleTime: '',
-  scheduleDate: '',
-});
-
-// 定义校验规则
-const dataRules = ref({
-	title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
-  scheduleType: [{ required: true, message: '日程类型不能为空', trigger: 'blur' }],
-  scheduleState: [{ required: true, message: '状态不能为空', trigger: 'blur' }],
-	content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
-  scheduleTime: [{ required: true, message: '时间不能为空', trigger: 'blur' }],
-  scheduleDate: [{ required: true, message: '日期不能为空', trigger: 'blur' }],
+	scheduleTime: '',
+	scheduleDate: '',
 });
 
 /**
- * 打开日程表单弹窗
- * @function
- * @param {string} id - 日程ID
- * @param {Object} row - 行数据
+ * 表单验证规则
  */
-const openDialog = (id: string, row: any) => {
+const dataRules = ref({
+	title: [{ required: true, message: t('schedule.titleRequired'), trigger: 'blur' }],
+	scheduleType: [{ required: true, message: t('schedule.typeRequired'), trigger: 'blur' }],
+	scheduleState: [{ required: true, message: t('schedule.stateRequired'), trigger: 'blur' }],
+	content: [{ required: true, message: t('schedule.contentRequired'), trigger: 'blur' }],
+	scheduleTime: [{ required: true, message: t('schedule.timeRequired'), trigger: 'blur' }],
+	scheduleDate: [{ required: true, message: t('schedule.dateRequired'), trigger: 'blur' }],
+});
+
+/**
+ * 打开对话框
+ * @param id - 日程ID，为空时为新增模式
+ * @param row - 行数据，可能包含日期等信息
+ */
+const openDialog = (id: string, row: any): void => {
 	visible.value = true;
 	form.id = '';
 
@@ -107,22 +127,20 @@ const openDialog = (id: string, row: any) => {
 		form.date = row.date;
 	}
 
-	// 获取sysSchedule信息
+	// 获取日程详情
 	if (id) {
 		form.id = id;
-		getsysScheduleData(id);
+		getScheduleData(id);
 	}
 };
 
 /**
- * 提交表单数据
- * @function
- * @async
+ * 提交表单
  */
-const onSubmit = async () => {
+const onSubmit = async (): Promise<void> => {
 	// 验证表单是否符合规则
 	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+	if (!valid) return;
 
 	try {
 		loading.value = true;
@@ -138,18 +156,23 @@ const onSubmit = async () => {
 };
 
 /**
- * 获取sysSchedule数据
- * @function
- * @param {string} id - 日程ID
+ * 获取日程详情数据
+ * @param id - 日程ID
  */
-const getsysScheduleData = (id: string) => {
-	// 获取数据
+const getScheduleData = async (id: string): Promise<void> => {
 	loading.value = true;
-	getObj(id)
-		.then((res: any) => Object.assign(form, res.data))
-		.finally(() => (loading.value = false));
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
-// 暴露变量
+/**
+ * 暴露方法供父组件调用
+ */
 defineExpose({ openDialog });
 </script>

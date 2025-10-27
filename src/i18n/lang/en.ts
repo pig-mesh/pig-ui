@@ -217,15 +217,29 @@ export default {
 		switchSuccess: 'Tenant switched successfully, refreshing page...',
 		switchError: 'Failed to switch tenant, please try again'
 	},
-	common: {
-		cancel: 'Cancel',
-		confirm: 'Confirm',
-		confirmButtonText: 'Confirm',
-		cancelButtonText: 'Cancel'
-	},
 	message: {
 		box: {
 			title: 'Tips'
 		}
+	},
+	validate: {
+		overLength: 'Input is too long, please re-enter',
+		validatorNameCn: 'Please enter Chinese, English, numbers and underscores',
+		validatorCapital: 'Please enter uppercase letters and underscores',
+		validatorLowercase: 'Please enter lowercase letters and underscores',
+		validatorLower: 'Please enter lowercase letters',
+		checkSpace: 'Please enter non-whitespace characters',
+		validatePhone: 'Please enter a valid phone number',
+		number: 'Contains non-numeric characters',
+		letter: 'Contains non-alphabetic characters',
+		letterAndNumber: 'Only letters or numbers allowed',
+		mobilePhone: 'Invalid mobile phone format',
+		letterStartNumberIncluded: 'Must start with a letter, numbers allowed',
+		noChinese: 'Chinese characters not allowed',
+		chinese: 'Only Chinese characters allowed',
+		email: 'Invalid email format',
+		url: 'Invalid URL format',
+		json: 'Invalid JSON format',
+		invalidValue: 'Invalid value',
 	},
 };

@@ -58,20 +58,26 @@
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 		</div>
 		<!--			右侧抽屉-->
-		<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="600px">
+		<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="50%" destroy-on-close>
 			<template #header>
 				<h3>{{ currentData?.processName }}</h3>
 			</template>
 			<template #default>
-				<el-card class="box-card">
-					<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
-				</el-card>
-				<flow-node-format
-					:disableSelect="true"
-					:processInstanceId="currentData.processInstanceId"
-					:flow-id="currentData.flowId"
-					ref="flowNodeFormatRef"
-				></flow-node-format>
+				<el-row>
+					<el-col :span="16">
+						<el-form label-position="top">
+							<FormCreate :rule="rule" v-model="formData" v-model:api="fApi" />
+						</el-form>
+					</el-col>
+					<el-col :span="8">
+						<flow-node-format
+							:disableSelect="true"
+							:processInstanceId="currentData.processInstanceId"
+							:flow-id="currentData.flowId"
+							ref="flowNodeFormatRef"
+						/>
+					</el-col>
+				</el-row>
 			</template>
 		</el-drawer>
 	</div>
@@ -80,14 +86,16 @@
 <script setup lang="ts">
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
-
 import { queryMineCC, queryMineCCDetail } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
+import { useTaskFormLoader } from './composables/useTaskForm';
 
-import FcDesigner from 'form-create-designer';
-import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
+// Define the FormItem interface if not already defined
+interface FormItem {
+	// Define the properties of FormItem based on your data structure
+}
 
-const rule = ref([]);
+const rule = ref<FormItem[]>([]);
 const fApi = ref();
 const formData = ref({});
 const currentData = ref();
@@ -109,27 +117,29 @@ const loading = ref(false);
 const showSearch = ref(true);
 const queryRef = ref();
 
+// 使用通用表单加载器
+const currentOpenFlowForm = ref();
+const { loadForm } = useTaskFormLoader({
+	rule,
+	formData,
+	option: ref({}),
+	dynamicFormComponent: shallowRef(null),
+	currentOpenFlowForm,
+});
+
 /**
- * 点击开始处理
+ * 点击查看
  * @param row
  */
-const deal = (row) => {
+const deal = (row: any) => {
 	currentData.value = row;
-
-	queryMineCCDetail({ id: row.id }).then((res) => {
-		const { formItems, formPerms, formData: responseFormData } = res.data;
-
-		// 解析表单项并处理权限
-		const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
-		const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
-
-		rule.value = itemsWithPerms;
-		formData.value = FcDesigner.formCreate.parseJson(responseFormData);
-		currentOpenFlowForm.value = formItems;
-		rightDrawerVisible.value = true;
+	loadForm(() => queryMineCCDetail({ id: row.id }), {
+		parseFormData: true,
+		onSuccess: () => {
+			rightDrawerVisible.value = true;
+		},
 	});
 };
-const currentOpenFlowForm = ref();
 
 // 清空搜索条件
 const resetQuery = () => {

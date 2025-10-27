@@ -85,6 +85,7 @@ import other from '/@/utils/other';
 import { CheckboxValueType } from 'element-plus';
 import {rule} from "/@/utils/validate";
 
+
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
@@ -98,7 +99,17 @@ const loading = ref(false);
 // 字典
 const { status_type } = useDict('status_type');
 
-// 提交表单数据
+/**
+ * 租户表单数据
+ * @property {string} id - 租户ID（编辑时有值）
+ * @property {string} name - 租户名称
+ * @property {string} code - 租户编码（创建后不可修改）
+ * @property {string} tenantDomain - 租户域名
+ * @property {string} startTime - 有效期开始时间
+ * @property {string} endTime - 有效期结束时间
+ * @property {string} status - 租户状态（'0'-正常，'9'-冻结）
+ * @property {string} menuId - 租户可用菜单ID列表（逗号分隔）
+ */
 const form = reactive({
 	id: '',
 	name: '',
@@ -115,21 +126,30 @@ const form = reactive({
 	menuId: '',
 });
 
+/**
+ * 菜单树数据
+ */
 const menuData = ref<any[]>([]);
 
+/**
+ * 树形组件配置
+ */
 const defaultProps = reactive({
 	label: 'name',
 	value: 'id',
 	disabled: true,
 });
 
+/**
+ * 已选中的菜单ID列表
+ */
 const checkedMenu = ref<any[]>([]);
 
 // 定义校验规则
 const dataRules = ref({
 	name: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '名称不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('tenant.nameRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateTenantName(rule, value, callback, form.id !== '');
@@ -138,8 +158,8 @@ const dataRules = ref({
 		},
 	],
 	code: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '编码不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('tenant.codeRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateTenantCode(rule, value, callback, form.id !== '');
@@ -147,12 +167,15 @@ const dataRules = ref({
 			trigger: 'blur',
 		},
 	],
-	startTime: [{ required: true, message: '开始时间不能为空', trigger: 'blur' }],
-	endTime: [{ required: true, message: '结束时间不能为空', trigger: 'blur' }],
-	status: [{ required: true, message: 'status不能为空', trigger: 'blur' }],
+	startTime: [{ required: true, message: t('tenant.startTimeRequired'), trigger: 'blur' }],
+	endTime: [{ required: true, message: t('tenant.endTimeRequired'), trigger: 'blur' }],
+	status: [{ required: true, message: t('tenant.statusRequired'), trigger: 'blur' }],
 });
 
-// 打开弹窗
+/**
+ * 打开租户表单对话框
+ * @param {string} id - 租户 ID，如果为空则为新增模式，否则为编辑模式
+ */
 const openDialog = (id: string): void => {
 	visible.value = true;
 	form.id = '';
@@ -171,7 +194,20 @@ const openDialog = (id: string): void => {
 	getMenuData();
 };
 
-// 提交
+/**
+ * 租户必选菜单常量
+ * @description 租户必须包含这些菜单才能正常运作
+ */
+const REQUIRED_MENU_IDS = {
+  /** 角色管理菜单ID - 租户必须有角色管理功能 */
+  ROLE_MANAGEMENT: '1300',
+  /** 角色权限菜单ID - 租户必须有角色权限配置功能 */
+  ROLE_PERMISSION: '1302'
+} as const;
+
+/**
+ * 提交表单数据
+ */
 const onSubmit = async () => {
 	// 立即设置 loading，防止重复点击
 	if (loading.value) return;
@@ -185,22 +221,23 @@ const onSubmit = async () => {
 		}
 
 		if (menuTreeRef.value?.getCheckedKeys().length === 0) {
-			useMessage().error('请选择租户套餐菜单');
+			useMessage().error(t('tenant.selectMenuRequired'));
 			loading.value = false;
 			return false;
 		}
 
 		if (menuTreeRef.value?.getCheckedKeys()) {
-			let checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()]
+			const checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()];
 
-			if (!checkMenu.includes('1300')) {
-				useMessage().error('必须分配角色管理功能');
+			// 验证租户必选菜单
+			if (!checkMenu.includes(REQUIRED_MENU_IDS.ROLE_MANAGEMENT)) {
+				useMessage().error(t('tenant.roleManagementRequired'));
 				loading.value = false;
 				return false;
 			}
 
-			if (!checkMenu.includes('1302')) {
-				useMessage().error('必须分配角色管理功能');
+			if (!checkMenu.includes(REQUIRED_MENU_IDS.ROLE_PERMISSION)) {
+				useMessage().error(t('tenant.roleManagementRequired'));
 				loading.value = false;
 				return false;
 			}
@@ -221,23 +258,35 @@ const onSubmit = async () => {
 };
 
 /**
- * 初始化表格数据。
- * @param {string} id - 部门 ID。
+ * 获取租户详细数据
+ * @param {string} id - 租户 ID
  */
 const getTenantData = async (id: string) => {
-	const res = await getObj(id);
-	Object.assign(form, res.data);
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 /**
- * 获取菜单数据
+ * 获取租户菜单树数据
  */
 const getMenuData = async () => {
-	const res = await treemenu();
-	menuData.value = res.data;
-	checkedMenu.value = form.menuId ? other.resolveAllEunuchNodeId(menuData.value, form.menuId.split(','), []) : [];
+	try {
+		const { data } = await treemenu();
+		menuData.value = data;
+		checkedMenu.value = form.menuId ? other.resolveAllEunuchNodeId(menuData.value, form.menuId.split(','), []) : [];
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
+/**
+ * 展开/折叠所有菜单节点
+ * @param {CheckboxValueType} check - 是否展开
+ */
 const handleExpand = (check: CheckboxValueType) => {
 	const treeList = menuData.value;
 	for (let i = 0; i < treeList.length; i++) {
@@ -246,6 +295,10 @@ const handleExpand = (check: CheckboxValueType) => {
 	}
 };
 
+/**
+ * 全选/取消全选菜单节点
+ * @param {CheckboxValueType} check - 是否全选
+ */
 const handleSelectAll = (check: CheckboxValueType) => {
 	if (check) {
 		menuTreeRef.value?.setCheckedKeys(menuData.value.map((item) => item.id));

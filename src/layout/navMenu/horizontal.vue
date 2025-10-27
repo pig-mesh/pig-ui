@@ -1,6 +1,6 @@
 <template>
   <div class="el-menu-horizontal-warp">
-    <el-scrollbar @wheel.native.prevent="onElMenuHorizontalScroll" ref="elMenuHorizontalScrollRef">
+    <el-scrollbar ref="elMenuHorizontalScrollRef">
       <el-menu router :default-active="state.defaultActive" :ellipsis="false" background-color="transparent"
                mode="horizontal">
         <template v-for="val in menuLists">
@@ -66,11 +66,6 @@ const state = reactive({
 const menuLists = computed(() => {
   return <RouteItems>props.menuList;
 });
-// 设置横向滚动条可以鼠标滚轮滚动
-const onElMenuHorizontalScroll = (e: WheelEventType) => {
-  const eventDelta = e.wheelDelta || -e.deltaY * 40;
-  elMenuHorizontalScrollRef.value.$refs.wrapRef.scrollLeft = elMenuHorizontalScrollRef.value.$refs.wrapRef.scrollLeft + eventDelta / 4;
-};
 // 初始化数据，页面刷新时，滚动条滚动到对应位置
 const initElMenuOffsetLeft = () => {
   nextTick(() => {
@@ -126,7 +121,7 @@ const setCurrentRouterHighlight = (currentRoute: RouteToFrom) => {
 // 使用递归查询对应的父级路由
 const searchParent = (routesList: any, path: string) => {
   let route = undefined;
-  routesList.forEach((item) => {
+  routesList.forEach((item: any) => {
     if (item.path === path) {
       route = item;
       return;
@@ -168,8 +163,28 @@ onBeforeRouteUpdate((to) => {
   overflow: hidden;
   margin-right: 30px;
 
+  // 隐藏垂直滚动条
   :deep(.el-scrollbar__bar.is-vertical) {
     display: none;
+  }
+
+  // 美化横向滚动条（醒目的橙色，与顶栏蓝色形成对比）
+  :deep(.el-scrollbar__bar.is-horizontal) {
+    height: 14px; // 更宽的滚动条
+    bottom: 0;
+    opacity: 1; // 始终显示
+
+    .el-scrollbar__thumb {
+      background-color: #f59e0b; // 醒目的琥珀橙色
+      border-radius: 7px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); // 明显的阴影
+      transition: all 0.3s ease;
+
+      &:hover {
+        background-color: #d97706; // hover 时更深的橙色
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      }
+    }
   }
 
   :deep(a) {

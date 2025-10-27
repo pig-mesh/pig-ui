@@ -61,7 +61,7 @@ export function getValue(key?: String) {
     });
 }
 
-export function validateParamsCode(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateParamsCode(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
     if (isEdit) {
         return callback();
     }
@@ -69,14 +69,15 @@ export function validateParamsCode(rule: any, value: any, callback: any, isEdit:
     getObjDetails({publicKey: value}).then((response) => {
         const result = response.data;
         if (result !== null) {
-            callback(new Error('参数编码已经存在'));
+            const message = t ? t('param.keyExists') : 'Parameter key already exists';
+            callback(new Error(message));
         } else {
             callback();
         }
     });
 }
 
-export function validateParamsName(rule: any, value: any, callback: any, isEdit: boolean) {
+export function validateParamsName(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
     if (isEdit) {
         return callback();
     }
@@ -84,7 +85,8 @@ export function validateParamsName(rule: any, value: any, callback: any, isEdit:
     getObjDetails({publicName: value}).then((response) => {
         const result = response.data;
         if (result !== null) {
-            callback(new Error('参数名称已经存在'));
+            const message = t ? t('param.nameExists') : 'Parameter name already exists';
+            callback(new Error(message));
         } else {
             callback();
         }

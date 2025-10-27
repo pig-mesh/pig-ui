@@ -31,15 +31,15 @@
 						</el-icon>
 					</template>
 				</el-input>
-				<el-button
-					v-waves
-					@click="handleSendCode"
-					:loading="msg.msgKey"
-					:disabled="msg.msgKey"
-					class="w-24 h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
-				>
-					<span class="text-xs font-semibold">{{ msg.msgText }}</span>
-				</el-button>
+			<el-button
+				v-waves
+				@click="handleSendCode"
+				:loading="msgKey"
+				:disabled="msgKey"
+				class="w-24 h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600"
+			>
+				<span class="text-xs font-semibold">{{ msgText }}</span>
+			</el-button>
 			</div>
 		</el-form-item>
 
@@ -88,6 +88,7 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 import { ref } from 'vue';
+import { useIntervalFn } from '@vueuse/core';
 import type { FormInstance } from 'element-plus';
 
 const { t } = useI18n();
@@ -117,7 +118,8 @@ const loginRules = reactive({
 });
 
 /**
- * 处理发送验证码事件。
+ * 处理发送验证码事件
+ * @description 验证手机号格式并发送验证码
  */
 const handleSendCode = async () => {
 	if (!loginFormRef.value) return;
@@ -128,22 +130,19 @@ const handleSendCode = async () => {
 		const { msg, data } = await sendMobileCode(loginForm.mobile);
 		if (data !== false) {
 			useMessage().success(t('mobile.sendSuccess'));
-
 			timeCacl();
 		} else {
 			useMessage().error(msg);
 		}
 	} catch (error: any) {
-		if (error.message) {
-			useMessage().error(error.message);
-		} else {
-			useMessage().error(error.data || error.msg || t('mobile.sendFailed'));
-		}
+		const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
+		useMessage().error(errorMsg);
 	}
 };
 
 /**
- * 处理登录事件。
+ * 处理登录事件
+ * @description 验证表单并执行手机号登录
  */
 const handleLogin = async () => {
 	if (!loginFormRef.value) return;
@@ -154,34 +153,43 @@ const handleLogin = async () => {
 		await useUserInfo().loginByMobile(loginForm);
 		useMessage().success(t('mobile.loginSuccess'));
 		emit('signInSuccess');
+	} catch (error) {
+		useMessage().error(t('errors.loginFailed'));
 	} finally {
 		loading.value = false;
 	}
 };
 
-// 定义响应式对象
-const msg = reactive({
-	msgText: t('mobile.codeText'),
-	msgTime: 60,
-	msgKey: false,
-});
+// 定义响应式对象 - 使用 ref 替代 reactive 以配合 VueUse
+const msgText = ref(t('mobile.codeText'));
+const msgTime = ref(60);
+const msgKey = ref(false);
+
+// 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
+const { pause, resume } = useIntervalFn(
+	() => {
+		msgTime.value--;
+		msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+
+		if (msgTime.value === 0) {
+			msgTime.value = 60;
+			msgText.value = t('mobile.codeText');
+			msgKey.value = false;
+			pause();
+		}
+	},
+	1000,
+	{ immediate: false }
+);
 
 /**
- * 计算并更新倒计时。
+ * 计算并更新倒计时
+ * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
  */
 const timeCacl = () => {
-	msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
-	msg.msgKey = true;
-	const time = setInterval(() => {
-		msg.msgTime--;
-		msg.msgText = `${msg.msgTime}${t('mobile.seconds')}`;
-		if (msg.msgTime === 0) {
-			msg.msgTime = 60;
-			msg.msgText = t('mobile.codeText');
-			msg.msgKey = false;
-			clearInterval(time);
-		}
-	}, 1000);
+	msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+	msgKey.value = true;
+	resume();
 };
 </script>
 

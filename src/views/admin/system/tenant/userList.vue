@@ -4,34 +4,34 @@
 			<!-- 搜索栏 -->
 			<div class="mb-4">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
-					<el-form-item label="用户名" prop="username">
+					<el-form-item :label="$t('tenant.usernameLabel')" prop="username">
 						<el-input
 							v-model="state.queryForm.username"
-							placeholder="请输入用户名"
+							:placeholder="$t('tenant.inputUsernameTip')"
 							style="width: 180px"
 							clearable
 						/>
 					</el-form-item>
-					<el-form-item label="姓名" prop="name">
+					<el-form-item :label="$t('tenant.nameLabel')" prop="name">
 						<el-input
 							v-model="state.queryForm.name"
-							placeholder="请输入姓名"
+							:placeholder="$t('tenant.inputnameTip')"
 							style="width: 180px"
 							clearable
 						/>
 					</el-form-item>
-					<el-form-item label="邮箱" prop="email">
+					<el-form-item :label="$t('tenant.emailLabel')" prop="email">
 						<el-input
 							v-model="state.queryForm.email"
-							placeholder="请输入邮箱"
+							:placeholder="$t('tenant.inputEmailTip')"
 							style="width: 180px"
 							clearable
 						/>
 					</el-form-item>
-					<el-form-item label="手机号" prop="phone">
+					<el-form-item :label="$t('tenant.phoneLabel')" prop="phone">
 						<el-input
 							v-model="state.queryForm.phone"
-							placeholder="请输入手机号"
+							:placeholder="$t('tenant.inputPhoneTip')"
 							style="width: 180px"
 							clearable
 						/>
@@ -61,19 +61,19 @@
 					icon="Delete"
 					type="primary"
 				>
-					批量移除
+					{{ $t('tenant.batchRemoveBtn') }}
 				</el-button>
 				<span v-if="!multiple" class="ml-2 text-sm text-gray-500">
-					已选择 {{ selectObjs.length }} 个用户
+					{{ $t('tenant.selectedUsers', { count: selectObjs.length }) }}
 				</span>
 			</div>
 
 			<!-- 用户列表 -->
 			<div class="flex-1 overflow-hidden">
 				<el-scrollbar class="h-full">
-					<el-table 
-						v-loading="state.loading" 
-						:data="state.dataList" 
+					<el-table
+						v-loading="state.loading"
+						:data="state.dataList"
 						style="width: 100%"
 						border
 						:cell-style="tableStyle.cellStyle"
@@ -82,19 +82,19 @@
 						row-key="userId"
 					>
 						<el-table-column type="selection" width="50" :selectable="checkSelectable" />
-						<el-table-column type="index" label="序号" width="60" />
-						<el-table-column prop="username" label="用户名" min-width="120" show-overflow-tooltip />
-						<el-table-column prop="name" label="姓名" min-width="100" show-overflow-tooltip />
-						<el-table-column prop="email" label="邮箱" min-width="100" show-overflow-tooltip />
-						<el-table-column prop="phone" label="手机号" min-width="100" show-overflow-tooltip />
-						<el-table-column label="状态" min-width="60">
+						<el-table-column type="index" :label="$t('tenant.index')" width="60" />
+						<el-table-column prop="username" :label="$t('tenant.usernameLabel')" min-width="120" show-overflow-tooltip />
+						<el-table-column prop="name" :label="$t('tenant.nameLabel')" min-width="100" show-overflow-tooltip />
+						<el-table-column prop="email" :label="$t('tenant.emailLabel')" min-width="100" show-overflow-tooltip />
+						<el-table-column prop="phone" :label="$t('tenant.phoneLabel')" min-width="100" show-overflow-tooltip />
+						<el-table-column :label="$t('tenant.status')" min-width="60">
 							<template #default="scope">
 								<el-tag :type="scope.row.lockFlag === '0' ? 'success' : 'danger'">
-									{{ scope.row.lockFlag === '0' ? '正常' : '锁定' }}
+									{{ scope.row.lockFlag === '0' ? $t('tenant.normalStatus') : $t('tenant.lockedStatus') }}
 								</el-tag>
 							</template>
 						</el-table-column>
-						<el-table-column label="操作" width="80" fixed="right">
+						<el-table-column :label="$t('common.action')" width="80" fixed="right">
 							<template #default="scope">
 								<el-button
 									icon="delete"
@@ -103,9 +103,9 @@
 									type="primary"
 									size="small"
 									:disabled="scope.row.userId === '1' && currentTenantId === '1'"
-									:title="scope.row.userId === '1' && currentTenantId === '1' ? '系统管理员不能移除' : ''"
+									:title="scope.row.userId === '1' && currentTenantId === '1' ? $t('tenant.systemAdminCannotRemove') : ''"
 								>
-									移除
+									{{ $t('tenant.removeBtn') }}
 								</el-button>
 							</template>
 						</el-table-column>
@@ -232,11 +232,15 @@ const visible = ref(false);
 const queryRef = ref();
 const currentTenantId = ref('');
 
-// 多选相关变量
+/**
+ * 多选相关变量
+ */
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
-// 邀请用户相关变量
+/**
+ * 邀请用户相关变量
+ */
 const inviteDialogVisible = ref(false);
 const inviteFormRef = ref();
 const inviteLoading = ref(false);
@@ -246,7 +250,13 @@ const userList = ref([]) as any;
 const postList = ref([]) as any;
 const deptList = ref([]) as any;
 
-// 邀请用户表单
+/**
+ * 邀请用户表单
+ * @property {string} userId - 用户ID
+ * @property {string} roleId - 角色ID
+ * @property {string} postId - 岗位ID
+ * @property {string} deptId - 部门ID
+ */
 const inviteForm = reactive({
 	userId: '',
 	roleId: '',
@@ -257,13 +267,13 @@ const inviteForm = reactive({
 // 邀请用户表单验证规则
 const inviteFormRules = ref({
 	userId: [
-		{ required: true, message: '请选择用户', trigger: 'change' }
+		{ required: true, message: t('tenant.selectUserTip'), trigger: 'change' }
 	],
 	roleId: [
-		{ required: true, message: '请选择角色', trigger: 'change' }
+		{ required: true, message: t('tenant.selectRoleTip'), trigger: 'change' }
 	],
 	deptId: [
-		{ required: true, message: '请选择部门', trigger: 'change' }
+		{ required: true, message: t('tenant.selectDeptTip'), trigger: 'change' }
 	]
 });
 
@@ -296,42 +306,54 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 // 使用 useTable hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
-// 检查行是否可选择
+/**
+ * 检查表格行是否可选择
+ * @param {any} row - 表格行数据
+ * @returns {boolean} 是否可选择
+ */
 const checkSelectable = (row: any) => {
-	// 过滤掉 userId === 1 的用户 并且租户id !== 1 的用户才能选择
-	return row.userId !== '1' || currentTenantId.value !== '1' ;
+	// 系统租户中的系统管理员不能被选择
+	return !(row.userId === '1' && currentTenantId.value === '1');
 };
 
-// 多选事件处理
+/**
+ * 多选事件处理
+ * @param {Array} objs - 选中的用户对象数组
+ */
 const handleSelectionChange = (objs: { userId: string, tenantId: string }[]) => {
 	const validSelection = objs.filter(obj => obj.userId !== '1' || currentTenantId.value !== '1');
 	selectObjs.value = validSelection.map(({ userId }) => userId);
 	multiple.value = !validSelection.length;
 };
 
-// 搜索用户
+/**
+ * 搜索可邀请的用户
+ * @param {string} query - 搜索关键字
+ */
 const handleSearchUser = async (query: string) => {
 	if (!query) {
 		userList.value = [];
 		return;
 	}
-	
+
 	try {
 		userSearchLoading.value = true;
-		const response = await getAvailableUsers({
+		const { data } = await getAvailableUsers({
 			tenantId: currentTenantId.value,
 			username: query
 		});
-		userList.value = response.data || [];
+		userList.value = data || [];
 	} catch (err: any) {
-		useMessage().error(err.msg || '搜索用户失败');
+		useMessage().error(err.msg || t('tenant.searchUserFailed'));
 		userList.value = [];
 	} finally {
 		userSearchLoading.value = false;
 	}
 };
 
-// 打开邀请用户弹窗
+/**
+ * 打开邀请用户弹窗
+ */
 const handleInviteUser = async () => {
 	try {
 		// 获取组织数据（角色、岗位、部门）
@@ -341,22 +363,24 @@ const handleInviteUser = async () => {
 		roleList.value = data.sysRoles || [];
 		postList.value = data.sysPosts || [];
 		deptList.value = data.sysDepts || [];
-		
+
 		// 重置表单
 		inviteForm.userId = '';
 		inviteForm.roleId = '';
 		inviteForm.postId = '';
 		inviteForm.deptId = '';
 		userList.value = [];
-		
+
 		// 打开弹窗
 		inviteDialogVisible.value = true;
 	} catch (err: any) {
-		useMessage().error(err.msg || '获取角色列表失败');
+		useMessage().error(err.msg || t('tenant.getRoleListFailed'));
 	}
 };
 
-// 提交邀请用户
+/**
+ * 提交邀请用户
+ */
 const handleSubmitInvite = async () => {
 	try {
 		const valid = await inviteFormRef.value.validate();
@@ -376,13 +400,15 @@ const handleSubmitInvite = async () => {
 		inviteDialogVisible.value = false;
 		getDataList(); // 刷新用户列表
 	} catch (err: any) {
-		useMessage().error(err.msg || '邀请用户失败');
+		useMessage().error(err.msg || t('tenant.inviteUserFailed'));
 	} finally {
 		inviteLoading.value = false;
 	}
 };
 
-// 取消邀请用户
+/**
+ * 取消邀请用户
+ */
 const handleCancelInvite = () => {
 	inviteDialogVisible.value = false;
 	inviteForm.userId = '';
@@ -392,16 +418,17 @@ const handleCancelInvite = () => {
 	userList.value = [];
 };
 
-// 批量移除用户
+/**
+ * 批量移除用户
+ */
 const handleBatchRemove = async () => {
 	if (selectObjs.value.length === 0) {
-		useMessage().warning('请选择要移除的用户');
+		useMessage().warning(t('tenant.selectUserWarning'));
 		return;
 	}
 
-
 	try {
-		await useMessageBox().confirm(`确定要从租户中移除选中的 ${selectObjs.value.length} 个用户吗？`);
+		await useMessageBox().confirm(t('tenant.batchRemoveConfirm', { count: selectObjs.value.length }));
 	} catch {
 		return;
 	}
@@ -411,21 +438,24 @@ const handleBatchRemove = async () => {
 			tenantId: currentTenantId.value,
 			userIds: selectObjs.value
 		});
-		
-		useMessage().success('用户移除成功');
+
+		useMessage().success(t('tenant.removeSuccess'));
 		getDataList();
 		// 清空选择
 		selectObjs.value = [];
 		multiple.value = true;
 	} catch (err: any) {
-		useMessage().error(err.msg || '移除失败');
+		useMessage().error(err.msg || t('tenant.removeFailed'));
 	}
 };
 
-// 移除单个用户
+/**
+ * 移除单个用户
+ * @param {any} user - 用户对象
+ */
 const handleRemoveUser = async (user: any) => {
 	try {
-		await useMessageBox().confirm(`确定要从租户中移除用户 "${user.name || user.username}" 吗？`);
+		await useMessageBox().confirm(t('tenant.removeConfirm', { name: user.name || user.username }));
 	} catch {
 		return;
 	}
@@ -435,21 +465,25 @@ const handleRemoveUser = async (user: any) => {
 			tenantId: currentTenantId.value,
 			userIds: [user.userId]
 		});
-		
-		useMessage().success('用户移除成功');
+
+		useMessage().success(t('tenant.removeSuccess'));
 		getDataList();
 	} catch (err: any) {
-		useMessage().error(err.msg || '移除失败');
+		useMessage().error(err.msg || t('tenant.removeFailed'));
 	}
 };
 
-// 重置查询
+/**
+ * 重置查询条件
+ */
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 关闭抽屉
+/**
+ * 关闭抽屉并重置所有状态
+ */
 const handleClose = () => {
 	visible.value = false;
 	// 重置数据
@@ -475,7 +509,10 @@ const handleClose = () => {
 	deptList.value = [];
 };
 
-// 打开抽屉
+/**
+ * 打开用户列表抽屉
+ * @param {string} tenantId - 租户 ID
+ */
 const openDrawer = (tenantId: string) => {
 	currentTenantId.value = tenantId;
 	visible.value = true;

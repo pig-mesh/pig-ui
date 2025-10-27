@@ -34,32 +34,40 @@ const props = defineProps({
 });
 
 /**
- * 获取路由对象的实例。
+ * 路由对象实例
  */
 const router = useRouter();
 
 /**
- * 获取 tagsView 路由列表 store 对象的实例。
+ * tagsView 路由列表 store 对象实例
  */
 const storesTagsViewRoutes = useTagsViewRoutes();
-const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes); // 将 tagView 路由列表转换为 Ref 对象
 
 /**
- * 点击跳转链接触发事件的回调函数。
- * @param path - 需要跳转的路径。
+ * 收藏路由列表（响应式引用）
  */
-const handleRoute = (path: string) => {
-	router.push(path); // 跳转到指定路由页面
+const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
+
+/**
+ * 点击快捷方式跳转到指定路由
+ * @param path - 需要跳转的路径
+ */
+const handleRoute = (path: string): void => {
+	router.push(path);
 };
 
 /**
- * 关闭收藏路由的事件回调函数。
- * @param item - 需要删除的路由信息。
+ * 取消收藏路由
+ * @param item - 需要删除的路由信息
  */
-const handleCloseFavorite = (item: any) => {
-	storesTagsViewRoutes.delFavoriteRoutes(item); // 从收藏路由列表中删除指定路由
+const handleCloseFavorite = (item: any): void => {
+	storesTagsViewRoutes.delFavoriteRoutes(item);
 };
 
+/**
+ * 根据类型过滤显示的路由列表
+ * 流程类型显示流程路径，其他类型显示非流程路径
+ */
 const showRoutes = computed(() => {
 	if (props.type === 'flow') {
 		return favoriteRoutes.value.filter((item) => item.path.includes('/flow/list/index?flowId'));

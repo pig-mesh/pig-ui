@@ -80,10 +80,10 @@
 									</div>
 								</div>
 								<p class="my-3 text-sm font-normal text-gray-500 dark:text-gray-400">
-									状态： {{ status_type.find((item: any) => item.value === tenant.status)?.label }}
+									{{ $t('tenant.statusLabel') }}： {{ status_type.find((item: any) => item.value === tenant.status)?.label }}
 								</p>
 								<p class="my-3 text-sm font-normal text-gray-500 dark:text-gray-400">
-									有效期： {{ parseDate(tenant.startTime) }} - {{ parseDate(tenant.endTime) }}
+									{{ $t('tenant.validityPeriodLabel') }}： {{ parseDate(tenant.startTime) }} - {{ parseDate(tenant.endTime) }}
 								</p>
 								<div class="flex items-center justify-between mt-6 text-sm font-semibold text-gray-900 dark:text-gray-100">
 									<div class="flex">
@@ -214,18 +214,25 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 //  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile } = useTable(state);
 
-// 清空搜索条件
+/**
+ * 重置搜索条件并刷新列表
+ */
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 导出excel
+/**
+ * 导出租户数据为 Excel 文件
+ */
 const exportExcel = () => {
-	downBlobFile('/admin/tenant/export', Object.assign(state.queryForm, { ids: selectObjs }), 'tenant.xlsx');
+	downBlobFile('/admin/tenant/export', { ...state.queryForm, ids: selectObjs.value }, 'tenant.xlsx');
 };
 
-// 删除操作
+/**
+ * 删除租户操作
+ * @param {string[]} ids - 要删除的租户 ID 数组
+ */
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
@@ -244,10 +251,15 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 
-//刷新缓存
-const handleRefreshCache = () => {
-	fetchList().then(() => {
-		useMessage().success('同步成功');
-	});
+/**
+ * 刷新租户缓存
+ */
+const handleRefreshCache = async () => {
+	try {
+		await fetchList();
+		useMessage().success(t('tenant.syncCacheSuccess'));
+	} catch (err: any) {
+		useMessage().error(err.msg || t('tenant.syncCacheFailed'));
+	}
 };
 </script>

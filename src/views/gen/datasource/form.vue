@@ -75,7 +75,7 @@ import {useMessage} from '/@/hooks/message';
 import {getObj, addObj, putObj} from '/@/api/gen/datasource';
 import {useI18n} from 'vue-i18n';
 import {useDict} from '/@/hooks/dict';
-import {rule} from "/@/utils/validate";
+import {rule, clearMaskedField} from "/@/utils/validate";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -168,11 +168,13 @@ const onSubmit = async () => {
   });
   if (!valid) return false;
 
-  form.password = form.password?.includes('******') ? undefined : form.password;
+  // 清除脱敏字段（编辑时不提交星号占位符）
+  const payload = { ...form };
+  payload.password = clearMaskedField(payload.password);
 
   try {
     loading.value = true;
-    form.id ? await putObj(form) : await addObj(form);
+    form.id ? await putObj(payload) : await addObj(payload);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;
     emit('refresh');

@@ -90,47 +90,85 @@ import { useI18n } from 'vue-i18n';
 
 // 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-const { t } = useI18n();
-// 定义查询字典
 
+/**
+ * 国际化工具
+ */
+const { t } = useI18n();
+
+/**
+ * 社交登录类型字典
+ */
 const { social_type } = useDict('social_type');
-// 定义变量内容
+
+/**
+ * 表单对话框引用
+ */
 const formDialogRef = ref();
-// 搜索变量
+
+/**
+ * 查询表单引用
+ */
 const queryRef = ref();
+
+/**
+ * 是否显示搜索区域
+ */
 const showSearch = ref(true);
-// 多选变量
-const selectObjs = ref([]) as any;
+
+/**
+ * 多选的对象ID数组
+ */
+const selectObjs = ref<string[]>([]);
+
+/**
+ * 是否禁用批量删除按钮（无选中项时禁用）
+ */
 const multiple = ref(true);
 
+/**
+ * 表格状态配置
+ */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],
 });
 
-//  table hook
+/**
+ * 表格相关钩子函数
+ */
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
-const resetQuery = () => {
+/**
+ * 清空搜索条件并重新查询
+ */
+const resetQuery = (): void => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 导出excel
-const exportExcel = () => {
-	downBlobFile('/admin/social/export', Object.assign(state.queryForm,{ids:selectObjs}), 'social.xlsx');
+/**
+ * 导出Excel文件
+ */
+const exportExcel = (): void => {
+	downBlobFile('/admin/social/export', Object.assign(state.queryForm, { ids: selectObjs.value }), 'social.xlsx');
 };
 
-// 多选事件
-const handleSelectionChange = (objs: { id: string }[]) => {
+/**
+ * 表格多选事件处理
+ * @param objs - 选中的行对象数组
+ */
+const handleSelectionChange = (objs: { id: string }[]): void => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
-const handleDelete = async (ids: string[]) => {
+/**
+ * 删除社交登录配置
+ * @param ids - 要删除的ID数组
+ */
+const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
 	} catch {
