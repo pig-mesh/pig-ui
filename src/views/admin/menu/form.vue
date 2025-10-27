@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="state.ruleForm.menuId ? $t('common.editBtn') : $t('common.addBtn')" width="600" v-model="visible"
-             :close-on-click-modal="false" :destroy-on-close="true" draggable>
+             :close-on-click-modal="false" draggable>
     <el-form ref="menuDialogFormRef" :model="state.ruleForm" :rules="dataRules" label-width="90px" v-loading="loading">
       <el-form-item :label="$t('sysmenu.menuType')" prop="menuType">
         <el-radio-group v-model="state.ruleForm.menuType">
@@ -115,22 +115,24 @@ const dataRules = reactive({
 });
 
 // 打开弹窗
-const openDialog = (type: string, row?: any) => {
+const openDialog = async (type: string, row?: any) => {
   state.ruleForm.menuId = '';
   visible.value = true;
 
-  nextTick(() => {
-    menuDialogFormRef.value?.resetFields();
-    state.ruleForm.parentId = row?.id || '-1';
-  });
+  await nextTick();
+  
+  menuDialogFormRef.value?.resetFields();
+  state.ruleForm.parentId = row?.id || '-1';
+  state.ruleForm.path = '';
+  state.ruleForm.permission = '';
 
   if (row?.id && type === 'edit') {
     state.ruleForm.menuId = row.id;
     // 获取当前节点菜单信息
-    getMenuDetail(row.id);
+    await getMenuDetail(row.id);
   }
   // 渲染上级菜单列表树
-  getAllMenuData();
+  await getAllMenuData();
 };
 
 // 获取菜单节点的详细信息
