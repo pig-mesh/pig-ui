@@ -472,7 +472,7 @@
 				color: #1d9bf0 !important;
 			}
 
-			// hover 状态
+			// hover 状态 - 增强动画效果（与 light 模式一致）
 			&:hover:not(.is-active) {
 				background-color: var(--next-color-hover) !important;
 			}
@@ -482,6 +482,7 @@
 		.el-sub-menu__title {
 			color: var(--next-color-white);
 
+			// hover 状态 - 增强动画效果（与 light 模式一致）
 			&:hover {
 				background-color: var(--next-color-hover) !important;
 			}
@@ -497,6 +498,40 @@
 		.el-sub-menu.is-active.is-opened > .el-sub-menu__title {
 			background-color: transparent !important;
 			color: #1d9bf0 !important;
+		}
+	}
+
+	// 菜单层级样式 - 暗色模式（使用 CSS 层级选择器，与 light 模式一致）
+	// Level 2: 第一层嵌套
+	.el-sub-menu .el-menu {
+		> .el-menu-item,
+		> .el-sub-menu > .el-sub-menu__title {
+			// hover 补偿左边框（32px - 3px = 29px）
+			&:hover {
+				padding-left: 29px !important;
+			}
+		}
+	}
+
+	// Level 3: 第二层嵌套
+	.el-sub-menu .el-sub-menu .el-menu {
+		> .el-menu-item,
+		> .el-sub-menu > .el-sub-menu__title {
+			// hover 补偿左边框（48px - 3px = 45px）
+			&:hover {
+				padding-left: 45px !important;
+			}
+		}
+	}
+
+	// Level 4+: 第三层及更深嵌套
+	.el-sub-menu .el-sub-menu .el-sub-menu .el-menu {
+		> .el-menu-item,
+		> .el-sub-menu > .el-sub-menu__title {
+			// hover 补偿左边框（64px - 3px = 61px）
+			&:hover {
+				padding-left: 61px !important;
+			}
 		}
 	}
 

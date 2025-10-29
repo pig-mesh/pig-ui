@@ -258,7 +258,8 @@
 	padding: 0 16px !important;
 	border-radius: var(--border-radius-md);
 	font-size: 14px;
-	transition: all var(--transition-base) var(--transition-function);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
 
 	// 激活状态
 	&.is-active {
@@ -266,7 +267,7 @@
 		font-weight: 600;
 	}
 
-	// hover 状态
+	// hover 状态 - 增强动画效果
 	&:hover:not(.is-active) {
 		background-color: var(--next-bg-menuBarActiveColor) !important;
 		transform: translateX(2px);
@@ -281,8 +282,10 @@
 	padding: 0 16px !important;
 	border-radius: var(--border-radius-md);
 	font-size: 14px;
-	transition: all var(--transition-base) var(--transition-function);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	position: relative;
 
+	// hover 状态 - 增强动画效果
 	&:hover {
 		background-color: var(--next-bg-menuBarActiveColor) !important;
 		transform: translateX(2px);
@@ -346,6 +349,52 @@
 	width: 20px !important;
 	text-align: center;
 	justify-content: center;
+}
+
+// 菜单层级样式（使用 CSS 层级选择器自动处理）
+// Level 2: 第一层嵌套 - .el-sub-menu 下的 .el-menu 里的项
+.el-sub-menu .el-menu {
+	> .el-menu-item,
+	> .el-sub-menu > .el-sub-menu__title {
+		height: 40px !important;
+		line-height: 40px !important;
+		padding-left: 32px !important;
+
+		// hover 补偿左边框（32px - 3px = 29px）
+		&:hover {
+			padding-left: 29px !important;
+		}
+	}
+}
+
+// Level 3: 第二层嵌套 - .el-sub-menu 下的 .el-sub-menu 下的 .el-menu 里的项
+.el-sub-menu .el-sub-menu .el-menu {
+	> .el-menu-item,
+	> .el-sub-menu > .el-sub-menu__title {
+		height: 40px !important;
+		line-height: 40px !important;
+		padding-left: 48px !important;
+
+		// hover 补偿左边框（48px - 3px = 45px）
+		&:hover {
+			padding-left: 45px !important;
+		}
+	}
+}
+
+// Level 4+: 第三层及更深嵌套
+.el-sub-menu .el-sub-menu .el-sub-menu .el-menu {
+	> .el-menu-item,
+	> .el-sub-menu > .el-sub-menu__title {
+		height: 40px !important;
+		line-height: 40px !important;
+		padding-left: 64px !important;
+
+		// hover 补偿左边框（64px - 3px = 61px）
+		&:hover {
+			padding-left: 61px !important;
+		}
+	}
 }
 
 // 水平菜单、横向菜单折叠 a 标签
