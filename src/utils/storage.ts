@@ -3,8 +3,9 @@ import Cookies from 'js-cookie';
 // 存储键常量
 export const STORAGE_KEYS = {
 	TOKEN: 'token',
-	REFRESH_TOKEN: 'refresh_token', 
+	REFRESH_TOKEN: 'refresh_token',
 	TENANT_ID: 'tenantId',
+	DEPT_ID: 'deptId',
 } as const;
 
 /**
@@ -22,12 +23,22 @@ export const Local = {
 	},
 	// 设置永久缓存
 	set<T>(key: string, val: T) {
+		if (val === undefined || val === null) {
+			console.warn(`Attempted to store undefined/null value for key "${key}". Skipping.`);
+			return;
+		}
 		window.localStorage.setItem(Local.setKey(key), JSON.stringify(val));
 	},
 	// 获取永久缓存
 	get(key: string) {
 		let json = <string>window.localStorage.getItem(Local.setKey(key));
-		return JSON.parse(json);
+		if (!json || json === 'undefined' || json === 'null') return null;
+		try {
+			return JSON.parse(json);
+		} catch (error) {
+			console.error(`Failed to parse JSON for key "${key}":`, error);
+			return null;
+		}
 	},
 	// 移除永久缓存
 	remove(key: string) {
@@ -49,20 +60,30 @@ export const Local = {
 export const Session = {
 	// 设置临时缓存
 	set(key: string, val: any) {
-		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) {
+		if (val === undefined || val === null) {
+			console.warn(`Attempted to store undefined/null value for key "${key}". Skipping.`);
+			return;
+		}
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID || key === STORAGE_KEYS.DEPT_ID) {
 			Cookies.set(key, val);
 		}
 		window.sessionStorage.setItem(key, JSON.stringify(val));
 	},
 	// 获取临时缓存
 	get(key: string) {
-		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) return Cookies.get(key);
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID || key === STORAGE_KEYS.DEPT_ID) return Cookies.get(key);
 		let json = <string>window.sessionStorage.getItem(key);
-		return JSON.parse(json);
+		if (!json || json === 'undefined' || json === 'null') return null;
+		try {
+			return JSON.parse(json);
+		} catch (error) {
+			console.error(`Failed to parse JSON for key "${key}":`, error);
+			return null;
+		}
 	},
 	// 移除临时缓存
 	remove(key: string) {
-		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID) return Cookies.remove(key);
+		if (key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID || key === STORAGE_KEYS.DEPT_ID) return Cookies.remove(key);
 		window.sessionStorage.removeItem(key);
 	},
 	// 移除全部临时缓存
@@ -70,6 +91,7 @@ export const Session = {
 		Cookies.remove(STORAGE_KEYS.TOKEN);
 		Cookies.remove(STORAGE_KEYS.REFRESH_TOKEN);
 		Cookies.remove(STORAGE_KEYS.TENANT_ID);
+		Cookies.remove(STORAGE_KEYS.DEPT_ID);
 		window.sessionStorage.clear();
 	},
 	// 获取当前存储的 token
@@ -79,5 +101,9 @@ export const Session = {
 	// 获取当前的租户
 	getTenant() {
 		return Local.get(STORAGE_KEYS.TENANT_ID) ? Local.get(STORAGE_KEYS.TENANT_ID) : 1;
+	},
+	// 获取当前的部门
+	getDeptId() {
+		return Local.get(STORAGE_KEYS.DEPT_ID) ? Local.get(STORAGE_KEYS.DEPT_ID) : '';
 	},
 };

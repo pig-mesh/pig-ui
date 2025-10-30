@@ -59,6 +59,9 @@
 					<el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
 						{{ $t('user.dropdown3') }}
 					</el-dropdown-item>
+					<el-dropdown-item v-if="shouldShowDeptOption" command="dept">
+						{{ $t('user.dropdown4') }}
+					</el-dropdown-item>
 					<el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
@@ -67,12 +70,17 @@
 		<Search ref="searchRef" />
 		<global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
 		<personal-drawer ref="personalDrawerRef"></personal-drawer>
-		<tenant-selector 
-			ref="tenantSelectorRef" 
-			:tenant-list="tenantList" 
+		<tenant-selector
+			ref="tenantSelectorRef"
+			:tenant-list="tenantList"
 			:loading="tenantLoading"
 			@change="onTenantChange"
 		></tenant-selector>
+		<dept-selector
+			ref="deptSelectorRef"
+			:dept-list="deptList"
+			:loading="deptLoading"
+		></dept-selector>
 	</div>
 </template>
 
@@ -90,6 +98,7 @@ import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMsg } from '/@/stores/msg';
 import { fetchUserMessageList } from '/@/api/admin/message';
 import { getPersonalTenant } from '/@/api/admin/tenant';
+import { type Dept } from '/@/api/admin/dept';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
@@ -97,6 +106,7 @@ const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
 const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
+const DeptSelector = defineAsyncComponent(() => import('./deptSelector.vue'));
 
 // 定义租户接口
 interface Tenant {
@@ -109,6 +119,7 @@ interface Tenant {
 	miniQr?: string;
 }
 
+
 // 定义变量内容
 const { locale, t } = useI18n();
 const router = useRouter();
@@ -120,14 +131,24 @@ const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
 const tenantSelectorRef = ref();
+const deptSelectorRef = ref();
 
 // 租户列表状态
 const tenantList = ref<Tenant[]>([]);
 const tenantLoading = ref(false);
 
+// 部门列表状态
+const deptList = ref<Dept[]>([]);
+const deptLoading = ref(false);
+
 // 计算属性：是否应该显示租户选项
 const shouldShowTenantOption = computed(() => {
 	return tenantList.value.length > 1;
+});
+
+// 计算属性：是否应该显示部门选项
+const shouldShowDeptOption = computed(() => {
+	return deptList.value.length > 1;
 });
 
 // 计算属性：当前租户显示名称
@@ -225,6 +246,11 @@ const onHandleCommandClick = (path: string) => {
 		if (shouldShowTenantOption.value) {
 			tenantSelectorRef.value.open();
 		}
+	} else if (path === 'dept') {
+		// 只有在部门数量大于1时才打开部门选择器
+		if (shouldShowDeptOption.value) {
+			deptSelectorRef.value.open();
+		}
 	} else {
 		router.push(path);
 	}
@@ -287,6 +313,20 @@ const onTenantChange = (tenant: Tenant) => {
 	loadTenantList();
 };
 
+// 获取部门列表
+const loadDeptList = async () => {
+	try {
+		deptLoading.value = true;
+		// 直接从 userInfoStore 中读取 deptList
+		deptList.value = userInfos.value.deptList || [];
+	} catch (error) {
+		console.error('加载部门列表失败:', error);
+		deptList.value = [];
+	} finally {
+		deptLoading.value = false;
+	}
+};
+
 // 页面加载时
 onMounted(() => {
 	if (Local.get('themeConfig')) {
@@ -295,9 +335,12 @@ onMounted(() => {
 	}
 
 	getIsDot();
-	
+
 	// 加载租户列表
 	loadTenantList();
+
+	// 加载部门列表
+	loadDeptList();
 });
 </script>
 

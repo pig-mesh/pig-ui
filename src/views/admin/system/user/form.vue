@@ -38,15 +38,16 @@
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
-						<el-form-item :label="$t('sysuser.dept')" prop="deptId">
+						<el-form-item :label="$t('sysuser.dept')" prop="deptIds">
 							<el-tree-select
 								:data="deptData"
 								:props="{ value: 'id', label: 'name', children: 'children' }"
 								check-strictly
 								class="w100"
+								multiple
 								clearable
 								:placeholder="$t('sysuser.selectDept')"
-								v-model="dataForm.deptId"
+								v-model="dataForm.deptIds"
 							>
 							</el-tree-select>
 						</el-form-item>
@@ -121,7 +122,7 @@ const props = defineProps({
  * @property {string|undefined} password - 密码（6-20位，编辑时为脱敏值）
  * @property {string} lockFlag - 锁定标志（'0'-正常，'9'-锁定）
  * @property {string|undefined} phone - 手机号
- * @property {string} deptId - 部门ID
+ * @property {string[]} deptIds - 部门ID列表
  * @property {string[]} post - 岗位ID列表
  * @property {string[]} role - 角色ID列表
  * @property {string} name - 姓名
@@ -137,7 +138,7 @@ const dataForm = reactive({
 	qqOpenid: '',
 	lockFlag: '0',
 	phone: '' as String | undefined,
-	deptId: '',
+	deptIds: [] as string[],
 	roleList: [],
 	postList: [],
 	nickname: '',
@@ -174,7 +175,7 @@ const dataRules = ref({
 		{ required: true, message: t('sysuser.nameRequired'), trigger: 'blur' },
 		{ validator: rule.chinese, trigger: 'blur' },
 	],
-	deptId: [{ required: true, message: t('sysuser.deptRequired'), trigger: 'blur' }],
+	deptIds: [{ required: true, message: t('sysuser.deptRequired'), trigger: 'blur' }],
 	role: [{ required: true, message: t('sysuser.roleRequired'), trigger: 'blur' }],
 	post: [{ required: true, message: t('sysuser.postRequired'), trigger: 'blur' }],
 	// 手机号校验，不能为空、新增的时不能重复校验
@@ -280,9 +281,9 @@ const getUserData = async (id: string) => {
 		if (data.postList) {
 			dataForm.post = data.postList.map((item: { postId: string }) => item.postId);
 		}
-    if (data.deptList){
-      dataForm.deptId = data.deptList.map((item: { deptId: string }) => item.deptId)[0];
-    }
+		if (data.deptList) {
+			dataForm.deptIds = data.deptList.map((item: { deptId: string }) => item.deptId);
+		}
 		
 	} catch (err: any) {
 		useMessage().error(err.msg);
@@ -299,8 +300,8 @@ const getDeptData = async () => {
 	const { data } = await deptTree();
 	deptData.value = data;
 	// 默认选择在树中选中的部门
-	if (!dataForm.userId) {
-		dataForm.deptId = props.deptId;
+	if (!dataForm.userId && props.deptId) {
+		dataForm.deptIds = [props.deptId];
 	}
 };
 

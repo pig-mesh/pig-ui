@@ -99,7 +99,7 @@ export default {
 		dropdown1: '首页',
 		dropdown2: '个人中心',
 		dropdown3: '切换租户',
-		dropdown4: '当前租户',
+		dropdown4: '切换部门',
 		dropdown5: '退出登录',
 		searchPlaceholder: '菜单搜索：支持中文、路由路径',
 		newTitle: '通知',
@@ -209,6 +209,16 @@ export default {
 		confirmMessage: '确定要切换到租户 "{name}" 吗？切换后页面将刷新。',
 		switchSuccess: '租户切换成功，即将刷新页面...',
 		switchError: '租户切换失败，请重试'
+	},
+	deptSelector: {
+		title: '切换部门',
+		noData: '暂无可切换的部门',
+		current: '当前部门',
+		selected: '已选择',
+		selectTip: '请选择要切换的部门',
+		sameError: '当前已是该部门，无需切换',
+		switchSuccess: '部门切换成功',
+		switchError: '部门切换失败'
 	},
 	message: {
 		box: {

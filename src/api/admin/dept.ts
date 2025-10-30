@@ -1,5 +1,15 @@
 import request from '/@/utils/request';
 
+/**
+ * 部门信息接口
+ */
+export interface Dept {
+	deptId: string;
+	name: string;
+	parentId?: string;
+	parentName?: string;
+}
+
 export const deptTree = (params?: Object) => {
     return request({
         url: '/admin/dept/tree',
@@ -79,5 +89,27 @@ export const orgTreeSearcheUser = (param: Object) => {
         url: '/admin/dept/org/user/search',
         method: 'get',
         params: param
+    });
+}
+
+/**
+ * 获取用户的部门列表
+ */
+export function getPersonalDept() {
+    return request({
+        url: '/admin/user/personal/dept',
+        method: 'get',
+    });
+}
+
+/**
+ * 切换用户当前部门
+ * @param deptId 部门ID
+ */
+export function switchPersonalDept(deptId: string) {
+    return request({
+        url: '/admin/user/personal/dept/update',
+        method: 'put',
+        data: { deptId },
     });
 }

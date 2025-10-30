@@ -106,7 +106,7 @@ export default {
 		dropdown1: 'Home Page',
 		dropdown2: 'Personal Center',
 		dropdown3: 'Tenant Switch',
-		dropdown4: 'Current Tenant',
+		dropdown4: 'Department Switch',
 		dropdown5: 'Log Out',
 		searchPlaceholder: 'Menu Search: Supports Chinese and Routing Path',
 		newTitle: 'Notice',
@@ -216,6 +216,16 @@ export default {
 		confirmMessage: 'Are you sure to switch to tenant "{name}"? The page will refresh after switching.',
 		switchSuccess: 'Tenant switched successfully, refreshing page...',
 		switchError: 'Failed to switch tenant, please try again'
+	},
+	deptSelector: {
+		title: 'Switch Department',
+		noData: 'No switchable departments',
+		current: 'Current',
+		selected: 'Selected',
+		selectTip: 'Please select a department to switch',
+		sameError: 'Already in this department, no need to switch',
+		switchSuccess: 'Department switched successfully',
+		switchError: 'Failed to switch department'
 	},
 	message: {
 		box: {

@@ -33,7 +33,7 @@ export default {
 		usernameRequired: '用户名不能为空',
 		usernameLength: '用户名称长度必须介于 5 和 20 之间',
 		passwordRequired: '密码不能为空',
-		selectDept: '请选择所属部门',
+		selectDept: '请选择所属部门（可多选）',
 		selectRole: '请选择角色',
 		selectPost: '请选择岗位',
 	},

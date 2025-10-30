@@ -33,7 +33,7 @@ export default {
 		usernameRequired: 'Username cannot be empty',
 		usernameLength: 'Username length must be between 5 and 20 characters',
 		passwordRequired: 'Password cannot be empty',
-		selectDept: 'Please select a department',
+		selectDept: 'Please select departments (multiple)',
 		selectRole: 'Please select roles',
 		selectPost: 'Please select posts',
 	},

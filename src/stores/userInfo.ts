@@ -18,6 +18,9 @@ export const useUserInfo = defineStore('userInfo', {
 			authBtnList: [],
 			tenantId: '',
 			tenantName: '',
+			deptId: '',
+			deptName: '',
+			deptList: [],
 		},
 	}),
 
@@ -125,18 +128,26 @@ export const useUserInfo = defineStore('userInfo', {
 		 */
 		async setUserInfos() {
 			await getUserInfo().then((res) => {
+				// 解构后台返回数据
+				const { deptList = [], deptId, roleList, permissions, tenantId, tenantName = '' } = res.data;
+
 				const userInfo: any = {
 					user: res.data,
 					time: new Date().getTime(),
-					roles: res.data.roleList,
-					authBtnList: res.data.permissions,
-					tenantId: res.data.tenantId,
-					tenantName: res.data.tenantName || ''
+					roles: roleList,
+					authBtnList: permissions,
+					tenantId,
+					tenantName,
+					deptId: deptId || '',
+					deptList
 				};
 				this.userInfos = userInfo;
 
 				//设置租户
-				this.updateTenantInfo(res.data.tenantId, res.data.tenantName);
+				this.updateTenantInfo(tenantId, tenantName);
+
+				//设置部门（使用主部门）
+				this.updateDeptInfo(deptId);
 			});
 		},
 
@@ -150,10 +161,25 @@ export const useUserInfo = defineStore('userInfo', {
 			this.userInfos.tenantId = tenantId;
 			this.userInfos.tenantName = tenantName;
 
-				// 保存租户信息到本地
-				Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
-				Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
-				Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
+			// 保存租户信息到本地
+			Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
+			Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
+			Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
+		},
+
+		/**
+		 * 更新部门信息方法
+		 * @function updateDeptInfo
+		 * @param {string} deptId - 部门ID
+		 * @param {string} deptName - 部门名称
+		 */
+		updateDeptInfo(deptId: String) {
+			this.userInfos.deptId = deptId;
+
+			// 保存部门信息到本地
+			Session.set(STORAGE_KEYS.DEPT_ID, deptId);
+			Local.set(STORAGE_KEYS.DEPT_ID, deptId);
+			Cookies.set(STORAGE_KEYS.DEPT_ID, deptId);
 		},
 	},
 });
