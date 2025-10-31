@@ -12,7 +12,7 @@
 			<el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
 				<template #title>
 					<SvgIcon :name="val.meta.icon" />
-					<span>{{ $t(val.name) }}</span>
+					<span>{{ $t(val.meta.title || val.name) }}</span>
 				</template>
 				<SubItem :chil="val.children" />
 			</el-sub-menu>
@@ -21,10 +21,10 @@
 				<el-menu-item :index="val.path" :key="val.path">
 					<SvgIcon :name="val.meta.icon" />
 					<template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
-						<span>{{ $t(val.name) }}</span>
+						<span>{{ $t(val.meta.title || val.name) }}</span>
 					</template>
 					<template #title v-else>
-						<a class="w100" @click.prevent="onALinkClick(val)">{{ $t(val.name) }}</a>
+						<a class="w100" @click.prevent="onALinkClick(val)">{{ $t(val.meta.title || val.name) }}</a>
 					</template>
 				</el-menu-item>
 			</template>

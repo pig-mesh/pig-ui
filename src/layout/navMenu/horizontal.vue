@@ -7,7 +7,7 @@
           <el-sub-menu :index="val.path" v-if="val.children && val.children.length > 0" :key="val.path">
             <template #title>
               <SvgIcon :name="val.meta.icon"/>
-              <span class="font-semibold">{{ $t(val.name) }}</span>
+              <span class="font-semibold">{{ $t(val.meta.title || val.name) }}</span>
             </template>
             <SubItem :chil="val.children"/>
           </el-sub-menu>
@@ -16,12 +16,12 @@
               <template #title v-if="!val.meta.isLink || (val.meta.isLink && val.meta.isIframe)">
                 <!-- 此处可 指定 color='red' 等指定顶栏SVG颜色 -->
                 <SvgIcon :name="val.meta.icon"/>
-                <p class="font-semibold">{{ $t(val.name) }}</p>
+                <p class="font-semibold">{{ $t(val.meta.title || val.name) }}</p>
               </template>
               <template #title v-else>
                 <a class="w100" @click.prevent="onALinkClick(val)">
                   <SvgIcon :name="val.meta.icon"/>
-                  {{ $t(val.name) }}
+                  {{ $t(val.meta.title || val.name) }}
                 </a>
               </template>
             </el-menu-item>
