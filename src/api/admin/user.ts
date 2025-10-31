@@ -157,3 +157,23 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
 		}
 	});
 }
+
+/**
+ * 同步钉钉用户
+ */
+export const syncUser = () => {
+	return request({
+		url: '/admin/connect/sync/ding/user',
+		method: 'post',
+	});
+};
+
+/**
+ * 同步企业微信用户
+ */
+export const syncCpUser = () => {
+	return request({
+		url: '/admin/connect/sync/cp/user',
+		method: 'post',
+	});
+};

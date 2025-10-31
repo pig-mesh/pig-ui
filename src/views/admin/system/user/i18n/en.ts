@@ -36,6 +36,10 @@ export default {
 		selectDept: 'Please select departments (multiple)',
 		selectRole: 'Please select roles',
 		selectPost: 'Please select posts',
+		syncDingTalkBtn: 'Sync DingTalk Users',
+		syncWeChatBtn: 'Sync WeChat Users',
+		syncDingTalkSuccess: 'DingTalk users synced successfully',
+		syncWeChatSuccess: 'WeChat users synced successfully',
 	},
 	personal: {
 		name: 'Personal Info',

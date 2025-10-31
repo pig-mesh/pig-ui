@@ -43,6 +43,28 @@
 							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
 								{{ $t('common.importBtn') }}
 							</el-button>
+							<el-button
+								v-if="enableDingTalkSync"
+								plain
+								icon="refresh"
+								type="primary"
+								class="ml10"
+								@click="handleSyncDingTalk"
+								:loading="syncDingTalkLoading"
+							>
+								{{ $t('sysuser.syncDingTalkBtn') }}
+							</el-button>
+							<el-button
+								v-if="enableWeChatSync"
+								plain
+								icon="refresh"
+								type="primary"
+								class="ml10"
+								@click="handleSyncWeChat"
+								:loading="syncWeChatLoading"
+							>
+								{{ $t('sysuser.syncWeChatBtn') }}
+							</el-button>
 
 							<el-button
 								plain
@@ -146,7 +168,7 @@
 </template>
 
 <script lang="ts" name="systemUser" setup>
-import { delObj, pageList, putObj } from '/@/api/admin/user';
+import { delObj, pageList, putObj, syncUser, syncCpUser } from '/@/api/admin/user';
 import { deptTree } from '/@/api/admin/dept';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -160,12 +182,22 @@ const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInp
 
 const { t } = useI18n();
 
+// 环境变量配置
+const enableDingTalkSync = import.meta.env.VITE_SYNC_DINGTALK_ENABLED === 'true';
+const enableWeChatSync = import.meta.env.VITE_SYNC_WECHAT_ENABLED === 'true';
+
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const inputPassword = ref();
+
+/** 钉钉同步加载状态 */
+const syncDingTalkLoading = ref(false);
+
+/** 企业微信同步加载状态 */
+const syncWeChatLoading = ref(false);
 
 /**
  * 多选相关变量
@@ -298,5 +330,39 @@ const changePassword = async (row: any) => {
 	await putObj(row);
 	useMessage().success(t('common.optSuccessText'));
 	getDataList();
+};
+
+/**
+ * 同步钉钉用户
+ * @description 调用钉钉用户同步接口，成功后刷新数据列表
+ */
+const handleSyncDingTalk = async () => {
+	try {
+		syncDingTalkLoading.value = true;
+		await syncUser();
+		useMessage().success(t('sysuser.syncDingTalkSuccess'));
+		getDataList();
+	} catch (error) {
+		console.error('同步钉钉用户失败:', error);
+	} finally {
+		syncDingTalkLoading.value = false;
+	}
+};
+
+/**
+ * 同步企业微信用户
+ * @description 调用企业微信用户同步接口，成功后刷新数据列表
+ */
+const handleSyncWeChat = async () => {
+	try {
+		syncWeChatLoading.value = true;
+		await syncCpUser();
+		useMessage().success(t('sysuser.syncWeChatSuccess'));
+		getDataList();
+	} catch (error) {
+		console.error('同步企业微信用户失败:', error);
+	} finally {
+		syncWeChatLoading.value = false;
+	}
 };
 </script>

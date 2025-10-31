@@ -22,6 +22,28 @@
 					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
 					</el-button>
+					<el-button
+						v-if="enableDingTalkSync"
+						plain
+						icon="refresh"
+						type="primary"
+						class="ml10"
+						@click="handleSyncDingTalk"
+						:loading="syncDingTalkLoading"
+					>
+						{{ $t('sysdept.syncDingTalkBtn') }}
+					</el-button>
+					<el-button
+						v-if="enableWeChatSync"
+						plain
+						icon="refresh"
+						type="primary"
+						class="ml10"
+						@click="handleSyncWeChat"
+						:loading="syncWeChatLoading"
+					>
+						{{ $t('sysdept.syncWeChatBtn') }}
+					</el-button>
 					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }}</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
@@ -54,6 +76,15 @@
 
 <script lang="ts" name="systemDept" setup>
 import { downBlobFile } from '/@/utils/other';
+import { syncDept, syncCpDept } from '/@/api/admin/dept';
+import { useMessage } from '/@/hooks/message';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
+
+// 环境变量配置
+const enableDingTalkSync = import.meta.env.VITE_SYNC_DINGTALK_ENABLED === 'true';
+const enableWeChatSync = import.meta.env.VITE_SYNC_WECHAT_ENABLED === 'true';
 
 const TreeView = defineAsyncComponent(() => import('./tree-view.vue'));
 const TableView = defineAsyncComponent(() => import('./table-view.vue'));
@@ -86,6 +117,12 @@ const state = reactive({
 		deptName: '',
 	},
 });
+
+/** 钉钉同步加载状态 */
+const syncDingTalkLoading = ref(false);
+
+/** 企业微信同步加载状态 */
+const syncWeChatLoading = ref(false);
 
 /**
  * 过滤节点
@@ -153,5 +190,39 @@ const getDataList = () => {
  */
 const resetQuery = () => {
 	queryRef.value.resetFields();
+};
+
+/**
+ * 同步钉钉部门
+ * @description 调用钉钉部门同步接口，成功后刷新数据列表
+ */
+const handleSyncDingTalk = async () => {
+	try {
+		syncDingTalkLoading.value = true;
+		await syncDept();
+		useMessage().success(t('sysdept.syncDingTalkSuccess'));
+		getDataList();
+	} catch (error) {
+		console.error('同步钉钉部门失败:', error);
+	} finally {
+		syncDingTalkLoading.value = false;
+	}
+};
+
+/**
+ * 同步企业微信部门
+ * @description 调用企业微信部门同步接口，成功后刷新数据列表
+ */
+const handleSyncWeChat = async () => {
+	try {
+		syncWeChatLoading.value = true;
+		await syncCpDept();
+		useMessage().success(t('sysdept.syncWeChatSuccess'));
+		getDataList();
+	} catch (error) {
+		console.error('同步企业微信部门失败:', error);
+	} finally {
+		syncWeChatLoading.value = false;
+	}
 };
 </script>

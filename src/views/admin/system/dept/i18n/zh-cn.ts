@@ -20,6 +20,10 @@ export default {
         view: '树/表视图',
         parentIdRequired: '上级部门不能为空',
         nameRequired: '部门名称不能为空',
-        sortOrderRequired: '排序不能为空'
+        sortOrderRequired: '排序不能为空',
+        syncDingTalkBtn: '同步钉钉部门',
+        syncWeChatBtn: '同步企微部门',
+        syncDingTalkSuccess: '钉钉部门同步成功',
+        syncWeChatSuccess: '企业微信部门同步成功'
     },
 };

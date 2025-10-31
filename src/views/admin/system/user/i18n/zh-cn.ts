@@ -36,6 +36,10 @@ export default {
 		selectDept: '请选择所属部门（可多选）',
 		selectRole: '请选择角色',
 		selectPost: '请选择岗位',
+		syncDingTalkBtn: '同步钉钉用户',
+		syncWeChatBtn: '同步企微用户',
+		syncDingTalkSuccess: '钉钉用户同步成功',
+		syncWeChatSuccess: '企业微信用户同步成功',
 	},
 	personal: {
 		name: '个人信息',
