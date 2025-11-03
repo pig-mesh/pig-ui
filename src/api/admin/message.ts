@@ -8,6 +8,14 @@ export function fetchUserMessageReadList(query?: Object) {
 	});
 }
 
+export const sendMobileInnerCode = (mobile: string) => {
+	return request({
+		url: '/admin/sysMessage/send/smsInnerCode',
+		method: 'get',
+		params: { mobile },
+	});
+};
+
 export function readUserMessage(params?: object) {
 	return request({
 		url: '/admin/sysMessage/read',

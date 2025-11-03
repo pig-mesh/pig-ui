@@ -27,7 +27,61 @@
 						</el-col>
 						<el-col :span="24" class="mb20">
 							<el-form-item :label="$t('personal.phoneLabel')" prop="phone">
-								<el-input v-model="formData.phone" :placeholder="$t('personal.inputPhonePlaceholder')" clearable></el-input>
+								<div class="flex w-full gap-2">
+									<el-input
+										v-model="formData.phone"
+										:placeholder="$t('personal.inputPhonePlaceholder')"
+										:style="{ width: showPhoneCodeInput ? '50%' : '100%' }"
+									>
+										<template #suffix>
+											<div class="flex items-center gap-1">
+												<!-- 恢复按钮 - 仅当手机号被修改时显示 -->
+												<el-icon
+													v-if="showPhoneCodeInput"
+													class="cursor-pointer hover:text-blue-500"
+													@click="handleResetPhone"
+													title="恢复原手机号"
+												>
+													<ele-RefreshLeft />
+												</el-icon>
+												<!-- 清空按钮 - 当有内容时显示 -->
+												<el-icon
+													v-if="formData.phone"
+													class="cursor-pointer hover:text-red-500"
+													@click="formData.phone = undefined"
+													title="清空"
+												>
+													<ele-CircleClose />
+												</el-icon>
+											</div>
+										</template>
+									</el-input>
+
+									<!-- 验证码输入框 - 仅在修改手机号时显示 -->
+									<el-input
+										v-if="showPhoneCodeInput"
+										v-model="phoneCode"
+										maxlength="4"
+										:placeholder="$t('mobile.placeholder2')"
+										clearable
+										style="width: 30%"
+									>
+										<template #prefix>
+											<el-icon><ele-Position /></el-icon>
+										</template>
+									</el-input>
+
+									<el-button
+										v-if="showPhoneCodeInput"
+										v-waves
+										@click="handleSendPhoneCode"
+										:loading="msgKey"
+										:disabled="msgKey"
+										style="width: 20%"
+									>
+										<span class="text-xs font-semibold">{{ msgText }}</span>
+									</el-button>
+								</div>
 							</el-form-item>
 						</el-col>
 
@@ -141,7 +195,8 @@ import {Session} from '/@/utils/storage';
 import {useI18n} from 'vue-i18n';
 import {getLoginAppList} from "/@/api/admin/social";
 import { SocialLoginEnum } from '/@/api/login';
-import { useEventListener } from '@vueuse/core';
+import { useEventListener, useIntervalFn } from '@vueuse/core';
+import { sendMobileInnerCode } from '/@/api/admin/message';
 
 // 国际化函数
 const { t } = useI18n();
@@ -177,6 +232,20 @@ const formData = ref({
 	phone: undefined as string | undefined,
 });
 
+// 保存初始手机号，用于判断是否修改了手机号
+const initialPhone = ref<string | undefined>(undefined);
+
+// 验证码相关状态
+const phoneCode = ref('');
+const msgText = ref(t('mobile.codeText'));
+const msgTime = ref(60);
+const msgKey = ref(false);
+
+// 判断是否显示验证码输入框（仅当手机号被修改时显示）
+const showPhoneCodeInput = computed(() => {
+	return formData.value.phone !== initialPhone.value && formData.value.phone !== undefined;
+});
+
 // 控制密码输入框显示/隐藏
 const showPassword = ref(false);
 
@@ -196,12 +265,34 @@ const passwordFormData = reactive({
 const formdataRef = ref();
 const passwordFormdataRef = ref();
 
+/**
+ * 自定义验证器：验证码条件验证
+ * @description 仅当手机号被修改时，验证码才是必填的
+ */
+const validatorPhoneCode = (_rule: any, value: any, callback: any) => {
+	// 如果手机号未修改，跳过验证
+	if (formData.value.phone === initialPhone.value) {
+		callback();
+		return;
+	}
+
+	// 手机号已修改，验证码为必填
+	if (!value || value.trim() === '') {
+		callback(new Error(t('mobile.codeRequired')));
+	} else if (value.length !== 4) {
+		callback(new Error(t('mobile.codeLength')));
+	} else {
+		callback();
+	}
+};
+
 // 用户基本信息表单验证规则
 const ruleForm = reactive({
 	phone: [
 		{ required: true, message: t('personal.phoneRequired'), trigger: 'blur' },
 		{ validator: rule.validatePhone, trigger: 'blur' },
 	],
+	code: [{ validator: validatorPhoneCode, trigger: 'blur' }],
 	nickname: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: t('personal.nicknameRequired'), trigger: 'blur' }],
 	email: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: t('personal.emailRequired'), trigger: 'blur' }],
 	name: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: t('personal.nameRequired'), trigger: 'blur' }],
@@ -212,7 +303,7 @@ const ruleForm = reactive({
  * @param value 当前输入值
  * @param callback 回调函数
  */
-const validatorPassword2 = (rule: any, value: any, callback: any) => {
+const validatorPassword2 = (_rule: any, value: any, callback: any) => {
 	if (value !== passwordFormData.newpassword1) {
 		callback(new Error(t('personal.passwordRule')));
 	} else {
@@ -226,7 +317,7 @@ const validatorPassword2 = (rule: any, value: any, callback: any) => {
  * @param value 当前输入值
  * @param callback 回调函数
  */
-const validatorScore = (rule: any, value: any, callback: any) => {
+const validatorScore = (_rule: any, _value: any, callback: any) => {
 	if (score.value <= 1) {
 		callback(new Error(t('personal.passwordScore')));
 	} else {
@@ -295,6 +386,78 @@ const handleChangePassword = async () => {
 	}
 };
 
+// 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
+const { pause, resume } = useIntervalFn(
+	() => {
+		msgTime.value--;
+		msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+
+		if (msgTime.value === 0) {
+			msgTime.value = 60;
+			msgText.value = t('mobile.codeText');
+			msgKey.value = false;
+			pause();
+		}
+	},
+	1000,
+	{ immediate: false }
+);
+
+/**
+ * 计算并更新倒计时
+ * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
+ */
+const timeCacl = () => {
+	msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
+	msgKey.value = true;
+	resume();
+};
+
+/**
+ * 处理发送手机验证码事件
+ * @description 验证新手机号格式并发送验证码
+ */
+const handleSendPhoneCode = async () => {
+	if (!formdataRef.value) return;
+
+	try {
+		// 验证新手机号格式
+		await formdataRef.value.validateField('phone');
+
+		const { msg, data } = await sendMobileInnerCode(formData.value.phone as string);
+		if (data !== false) {
+			useMessage().success(t('mobile.sendSuccess'));
+			timeCacl();
+		} else {
+			useMessage().error(msg);
+		}
+	} catch (error: any) {
+		const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
+		useMessage().error(errorMsg);
+	}
+};
+
+/**
+ * 重置手机号到初始状态
+ * @description 恢复原手机号、清空验证码、停止倒计时
+ */
+const handleResetPhone = () => {
+	// 1. 恢复原手机号
+	formData.value.phone = initialPhone.value;
+
+	// 2. 清空验证码
+	phoneCode.value = '';
+
+	// 3. 停止倒计时并重置状态
+	pause();
+	msgTime.value = 60;
+	msgText.value = t('mobile.codeText');
+	msgKey.value = false;
+
+	// 4. 清除验证错误提示
+	formdataRef.value?.clearValidate(['phone', 'code']);
+};
+
 /**
  * 保存用户基本信息
  * 1. 验证表单数据
@@ -313,9 +476,24 @@ const handleSaveUser = async () => {
 	formData.value.phone = clearMaskedField(formData.value.phone);
 
 	try {
+		// 构建提交数据
+		const submitData: any = { ...formData.value };
+
+		// 如果手机号被修改，添加验证码参数
+		if (formData.value.phone !== initialPhone.value) {
+			submitData.code = phoneCode.value;
+		}
+
 		// 调用编辑用户信息接口
-		await editInfo(formData.value);
+		await editInfo(submitData);
 		useMessage().success(t('personal.updateSuccess'));
+
+		// 更新初始手机号为新的手机号
+		initialPhone.value = formData.value.phone;
+
+		// 清空验证码输入
+		phoneCode.value = '';
+
 		// 更新上下文的 user信息
 		useUserInfo().setUserInfos();
 	} catch (err: any) {
@@ -428,6 +606,13 @@ const initUserInfo = async (userId: any) => {
 		// 解构获取用户详细信息
 		const { data } = await getObj(userId);
 		formData.value = data;
+
+		// 保存初始手机号，用于判断是否修改
+		initialPhone.value = data.phone;
+
+		// 清空验证码输入
+		phoneCode.value = '';
+
 		// 初始化社交账号绑定状态
 		initSocialList();
 	} catch (err: any) {
