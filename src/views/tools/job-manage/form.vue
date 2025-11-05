@@ -223,7 +223,7 @@ const onSubmit = async () => {
  */
 const getsysJobData = async (id: string) => {
 	try {
-		const data = await getObj(id);
+		const { data } = await getObj(id);
 		Object.assign(form, data);
 	} catch (error: any) {
 		useMessage().error(t('job.fetchJobDataFailed'));
