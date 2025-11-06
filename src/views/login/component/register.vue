@@ -119,7 +119,7 @@ const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthM
 const { t } = useI18n();
 
 // 表单引用
-const dataFormRef = ref<FormInstance | null>(null);
+const dataFormRef = ref<FormInstance>();
 
 // 加载中状态
 const loading = ref(false);
@@ -257,19 +257,13 @@ const handlePassScore = (e: string) => {
  * @returns 注册是否成功
  */
 const handleRegister = async () => {
-	if (!dataFormRef.value) return false;
+	// 验证表单是否符合规则
+	const valid = await dataFormRef.value?.validate().catch(() => {});
+	if (!valid) {
+		return false;
+	}
 
 	try {
-		// 验证表单是否符合规则
-		const valid = await dataFormRef.value.validate();
-		if (!valid) return false;
-
-		// 额外检查用户是否同意条款
-		if (!state.ruleForm.checked) {
-			useMessage().error(t('register.termsRequired'));
-			return false;
-		}
-
 		loading.value = true;
 		await registerUser(state.ruleForm);
 		useMessage().success(t('register.registerSuccess'));
