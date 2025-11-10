@@ -170,15 +170,20 @@ export default {
 							barAreaBorderColor.value = '#5cb85c';
 							text.value = '验证成功';
 							bindingClick.value = false;
+							showRefresh.value = false;
 							if (mode.value == 'pop') {
 								setTimeout(() => {
 									proxy.$parent.clickShow = false;
 									refresh();
 								}, 1500);
 							}
-							proxy.$parent.$emit('success', { captchaVerification });
+							setTimeout(() => {
+								text.value = '';
+								proxy.$parent.$parent.closeBox();
+								proxy.$parent.$parent.$emit('success', { captchaVerification });
+							}, 1000);
 						} else {
-							proxy.$parent.$emit('error', proxy);
+							proxy.$parent.$parent.$emit('error', proxy);
 							barAreaColor.value = '#d9534f';
 							barAreaBorderColor.value = '#d9534f';
 							text.value = '验证失败';

@@ -94,7 +94,7 @@
 	<Verify
 		@success="verifySuccess"
 		:mode="'pop'"
-		:captchaType="'blockPuzzle'"
+		:captchaType="captchaType"
 		v-if="verifyEnable"
 		:imgSize="{ width: '330px', height: '155px' }"
 		ref="verifyref"
@@ -104,7 +104,6 @@
 <script setup lang="ts" name="password">
 import { defineAsyncComponent, reactive, ref } from 'vue';
 import { useUserInfo } from '/@/stores/userInfo';
-import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { generateUUID } from '/@/utils/other';
 import { LoginErrorEnum, LoginTypeEnum } from '/@/api/login';
@@ -114,6 +113,7 @@ const { t } = useI18n();
 
 // 动态加载滑块验证码组件
 const Verify = defineAsyncComponent(() => import('/@/components/Verifition/Verify.vue'));
+const captchaType = import.meta.env.VITE_CAPTCHA_TYPE || 'clickWord';
 
 // 定义变量内容
 const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
@@ -127,7 +127,7 @@ const state = reactive({
 		username: 'admin', // 用户名
 		password: '123456', // 密码
 		code: '', // 验证码
-		randomStr: 'blockPuzzle', // 验证码随机数
+		randomStr: captchaType, // 验证码随机数
 	},
 });
 
