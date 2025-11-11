@@ -3,6 +3,9 @@
 		<Logo v-if="setIsShowLogo" />
 		<Breadcrumb />
 		<Horizontal :menuList="state.menuList" v-if="isLayoutTransverse" />
+		<div class="more-menu-wrapper">
+			<More />
+		</div>
 		<User />
 	</div>
 </template>
@@ -14,6 +17,7 @@ import mittBus from '/@/utils/mitt';
 
 // 引入组件
 const Breadcrumb = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/breadcrumb.vue'));
+const More = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/more.vue'));
 const User = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/user.vue'));
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
 const Horizontal = defineAsyncComponent(() => import('/@/layout/navMenu/horizontal.vue'));
@@ -116,5 +120,15 @@ onUnmounted(() => {
 	align-items: center;
 	background: var(--next-bg-topBar);
 	border-bottom: 1px solid var(--next-border-color-light);
+
+	.more-menu-wrapper {
+		display: flex;
+		align-items: center;
+
+		// 响应式：小屏幕时隐藏More组件
+		@media (max-width: 768px) {
+			display: none;
+		}
+	}
 }
 </style>

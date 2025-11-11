@@ -118,6 +118,12 @@ export default {
 		logOutConfirm: 'Determine',
 		logOutCancel: 'Cancel',
 		logOutExit: 'Exiting',
+		more: 'More',
+		theme: 'Theme Settings',
+		language: 'Language',
+		fullscreen: 'Fullscreen',
+		exitFullscreen: 'Exit Fullscreen',
+		lockScreen: 'Lock Screen',
 	},
 	tagsView: {
 		refresh: 'Refresh',

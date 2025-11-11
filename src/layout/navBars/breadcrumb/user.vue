@@ -1,34 +1,17 @@
 <template>
 	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
-		<el-dropdown :show-timeout="70" :hide-timeout="50" trigger="click" @command="onLanguageChange">
-			<div class="layout-navbars-breadcrumb-user-icon">
-				<i class="iconfont" :class="state.disabledI18n === 'en' ? 'icon-fuhao-yingwen' : 'icon-fuhao-zhongwen'" :title="$t('user.title1')"></i>
-			</div>
-			<template #dropdown>
-				<el-dropdown-menu>
-					<el-dropdown-item command="zh-cn" :disabled="state.disabledI18n === 'zh-cn'">简体中文</el-dropdown-item>
-					<el-dropdown-item command="en" :disabled="state.disabledI18n === 'en'">English</el-dropdown-item>
-				</el-dropdown-menu>
-			</template>
-		</el-dropdown>
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onLockClick">
-			<el-icon :title="$t('layout.threeLockScreenTime')">
-				<ele-Lock />
-			</el-icon>
-		</div>
+		<!-- 全局搜索 -->
 		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
-			<el-icon :title="$t('user.title2')">
+			<el-icon :title="$t('user.title2')" :size="18">
 				<ele-Search />
 			</el-icon>
 		</div>
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onLayoutSetingClick">
-			<i class="icon-skin iconfont" :title="$t('user.title3')"></i>
-		</div>
+		<!-- 通知消息 -->
 		<div class="layout-navbars-breadcrumb-user-icon">
 			<el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
 				<template #reference>
 					<el-badge :is-dot="isDot">
-						<el-icon :title="$t('user.title4')">
+						<el-icon :title="$t('user.title4')" :size="18">
 							<ele-Bell />
 						</el-icon>
 					</el-badge>
@@ -38,13 +21,8 @@
 				</template>
 			</el-popover>
 		</div>
-		<div class="layout-navbars-breadcrumb-user-icon mr10" @click="onScreenfullClick">
-			<i
-				class="iconfont"
-				:title="state.isScreenfull ? $t('user.title6') : $t('user.title5')"
-				:class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"
-			></i>
-		</div>
+		<!-- 用户菜单 - 添加分隔线 -->
+		<div class="user-divider"></div>
 		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 			<span class="layout-navbars-breadcrumb-user-link">
 				<img :src="userInfos.user.avatar?.startsWith('http') ? userInfos.user.avatar : baseURL + userInfos.user.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
@@ -56,13 +34,13 @@
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
-					<el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
+          <el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
+          <el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
 						{{ $t('user.dropdown3') }}
 					</el-dropdown-item>
 					<el-dropdown-item v-if="shouldShowDeptOption" command="dept">
 						{{ $t('user.dropdown4') }}
 					</el-dropdown-item>
-					<el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
@@ -86,19 +64,16 @@
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
 import { logout } from '/@/api/login';
-import { ElMessage, ElMessageBox } from 'element-plus';
-import screenfull from 'screenfull';
+import { ElMessageBox } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
-import { Local, Session } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMsg } from '/@/stores/msg';
 import { fetchUserMessageList } from '/@/api/admin/message';
 import { getPersonalTenant } from '/@/api/admin/tenant';
-import { type Dept } from '/@/api/admin/dept';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
@@ -119,9 +94,8 @@ interface Tenant {
 	miniQr?: string;
 }
 
-
 // 定义变量内容
-const { locale, t } = useI18n();
+const { t } = useI18n();
 const router = useRouter();
 const stores = useUserInfo();
 const storesThemeConfig = useThemeConfig();
@@ -184,22 +158,7 @@ const layoutUserFlexNum = computed(() => {
 	else num = '';
 	return num;
 });
-// 全屏点击时
-const onScreenfullClick = () => {
-	if (!screenfull.isEnabled) {
-		ElMessage.warning('暂不不支持全屏');
-		return false;
-	}
-	screenfull.toggle();
-	screenfull.on('change', () => {
-		if (screenfull.isFullscreen) state.isScreenfull = true;
-		else state.isScreenfull = false;
-	});
-};
-// 布局配置 icon 点击时
-const onLayoutSetingClick = () => {
-	mittBus.emit('openSettingsDrawer');
-};
+
 // 下拉菜单点击时
 const onHandleCommandClick = (path: string) => {
 	if (path === 'logOut') {
@@ -255,34 +214,15 @@ const onHandleCommandClick = (path: string) => {
 		router.push(path);
 	}
 };
+
 // 菜单搜索点击
 const onSearchClick = () => {
 	searchRef.value.openSearch();
 };
-// 语言切换
-const onLanguageChange = (lang: string) => {
-	Local.remove('themeConfig');
-	themeConfig.value.globalI18n = lang;
-	Local.set('themeConfig', themeConfig.value);
-	locale.value = lang;
-	other.useTitle();
-	initI18nOrSize('globalI18n', 'disabledI18n');
-};
-// 锁屏
-const onLockClick = () => {
-	themeConfig.value.isLockScreen = true;
-	themeConfig.value.lockScreenTime = 0;
-	Local.set('themeConfig', themeConfig.value);
-};
-
-// 初始化组件大小/i18n
-const initI18nOrSize = (value: string, attr: string) => {
-	state[attr] = Local.get('themeConfig')[value];
-};
 
 // 获取到消息
 const rollback = (msg: string) => {
-			useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxisI18n(new Date(), t) });
+	useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxisI18n(new Date(), t) });
 };
 
 // 获取是否显示未读
@@ -329,13 +269,8 @@ const loadDeptList = async () => {
 
 // 页面加载时
 onMounted(() => {
-	if (Local.get('themeConfig')) {
-		initI18nOrSize('globalComponentSize', 'disabledSize');
-		initI18nOrSize('globalI18n', 'disabledI18n');
-	}
-
 	getIsDot();
-
+	
 	// 加载租户列表
 	loadTenantList();
 
@@ -355,6 +290,13 @@ onMounted(() => {
 		display: flex;
 		align-items: center;
 		white-space: nowrap;
+		padding: 0 8px;
+		cursor: pointer;
+		transition: background 0.3s ease-in-out;
+
+		&:hover {
+			background: var(--next-color-user-hover);
+		}
 
 		&-photo {
 			width: 25px;
@@ -364,13 +306,14 @@ onMounted(() => {
 	}
 
 	&-icon {
-		padding: 0 10px;
+		padding: 0 8px;
 		cursor: pointer;
 		color: var(--next-bg-topBarColor);
 		height: 50px;
 		line-height: 50px;
 		display: flex;
 		align-items: center;
+		transition: background 0.3s ease-in-out;
 
 		&:hover {
 			background: var(--next-color-user-hover);
@@ -380,6 +323,14 @@ onMounted(() => {
 				animation: logoAnimation 0.3s ease-in-out;
 			}
 		}
+	}
+
+	.user-divider {
+		width: 1px;
+		height: 18px;
+		background: var(--next-border-color-light);
+		margin: 0 8px;
+		opacity: 0.6;
 	}
 
 	:deep(.el-dropdown) {
@@ -395,6 +346,42 @@ onMounted(() => {
 
 	:deep(.el-badge__content.is-fixed) {
 		top: 12px;
+	}
+}
+
+// 响应式适配
+@media (max-width: 1200px) {
+	.layout-navbars-breadcrumb-user {
+		// 小屏幕时减少间距
+		&-icon {
+			padding: 0 6px;
+		}
+
+		.user-divider {
+			margin: 0 6px;
+		}
+
+		&-link {
+			padding: 0 6px;
+		}
+	}
+}
+
+@media (max-width: 768px) {
+	.layout-navbars-breadcrumb-user {
+		// 移动端进一步压缩
+		&-icon {
+			padding: 0 4px;
+		}
+
+		.user-divider {
+			margin: 0 4px;
+		}
+
+		&-link {
+			padding: 0 4px;
+			font-size: 14px;
+		}
 	}
 }
 </style>

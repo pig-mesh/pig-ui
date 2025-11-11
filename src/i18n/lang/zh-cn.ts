@@ -111,6 +111,12 @@ export default {
 		logOutConfirm: '确定',
 		logOutCancel: '取消',
 		logOutExit: '退出中',
+		more: '更多',
+		theme: '主题设置',
+		language: '语言',
+		fullscreen: '全屏',
+		exitFullscreen: '退出全屏',
+		lockScreen: '锁屏',
 	},
 	tagsView: {
 		refresh: '刷新',
