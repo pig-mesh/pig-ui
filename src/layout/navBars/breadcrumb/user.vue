@@ -1,13 +1,13 @@
 <template>
-	<div class="layout-navbars-breadcrumb-user pr15" :style="{ flex: layoutUserFlexNum }">
+	<div class="flex items-center justify-end pr-[15px]" :style="{ flex: layoutUserFlexNum }">
 		<!-- 全局搜索 -->
-		<div class="layout-navbars-breadcrumb-user-icon" @click="onSearchClick">
+		<div class="px-2 md:px-[6px] lg:px-2 cursor-pointer text-[var(--next-bg-topBarColor)] h-[50px] leading-[50px] flex items-center transition-colors duration-300 hover:bg-[var(--next-color-user-hover)]" @click="onSearchClick">
 			<el-icon :title="$t('user.title2')" :size="18">
 				<ele-Search />
 			</el-icon>
 		</div>
 		<!-- 通知消息 -->
-		<div class="layout-navbars-breadcrumb-user-icon">
+		<div class="px-2 md:px-[6px] lg:px-2 cursor-pointer text-[var(--next-bg-topBarColor)] h-[50px] leading-[50px] flex items-center transition-colors duration-300 hover:bg-[var(--next-color-user-hover)]">
 			<el-popover placement="bottom" trigger="click" transition="el-zoom-in-top" :width="300" :persistent="false">
 				<template #reference>
 					<el-badge :is-dot="isDot">
@@ -21,16 +21,45 @@
 				</template>
 			</el-popover>
 		</div>
-		<!-- 用户菜单 - 添加分隔线 -->
-		<div class="user-divider"></div>
-		<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
-			<span class="layout-navbars-breadcrumb-user-link">
-				<img :src="userInfos.user.avatar?.startsWith('http') ? userInfos.user.avatar : baseURL + userInfos.user.avatar" class="layout-navbars-breadcrumb-user-link-photo mr5" />
-				{{ userInfos.user.username }}
-				<el-icon class="el-icon--right">
-					<ele-ArrowDown />
-				</el-icon>
+		<!-- 展示部门信息/切换功能-->
+		<div v-if="deptList.length > 0" class="px-2 md:px-[6px] lg:px-2 text-[var(--next-bg-topBarColor)] h-[50px] leading-[50px] flex items-center">
+			<!-- 只有一个部门时，显示纯文本 -->
+			<span v-if="deptList.length === 1" class="flex items-center whitespace-nowrap text-[var(--next-bg-topBarColor)] text-sm">
+				{{ currentDeptName }}
 			</span>
+			<!-- 多个部门时，显示下拉选择 -->
+			<el-dropdown v-else @command="onDeptChange" :show-timeout="70" :hide-timeout="50">
+				<span class="flex items-center whitespace-nowrap cursor-pointer text-[var(--next-bg-topBarColor)] text-sm transition-opacity duration-300 hover:opacity-80">
+					{{ currentDeptName }}
+					<el-icon class="el-icon--right">
+						<ele-ArrowDown />
+					</el-icon>
+				</span>
+				<template #dropdown>
+					<el-dropdown-menu>
+						<el-dropdown-item
+							v-for="dept in deptList"
+							:key="dept.deptId"
+							:command="dept.deptId"
+							:disabled="dept.deptId === currentDeptId"
+						>
+							{{ dept.name }}
+						</el-dropdown-item>
+					</el-dropdown-menu>
+				</template>
+			</el-dropdown>
+		</div>
+		<!-- 用户菜单 - 添加分隔线 -->
+		<div class="w-px h-[18px] bg-[var(--next-border-color-light)] mx-[2px] md:mx-[6px] lg:mx-[2px] opacity-60"></div>
+		<div class="px-2 md:px-[6px] lg:px-2">
+			<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
+				<span class="h-full flex items-center whitespace-nowrap cursor-pointer transition-colors duration-300 hover:bg-[var(--next-color-user-hover)]">
+					<img :src="userInfos.user.avatar?.startsWith('http') ? userInfos.user.avatar : baseURL + userInfos.user.avatar" class="w-[25px] h-[25px] rounded-full mr-[5px]" />
+					<span class="text-sm md:text-sm">{{ userInfos.user.username }}</span>
+					<el-icon class="el-icon--right">
+						<ele-ArrowDown />
+					</el-icon>
+				</span>
 			<template #dropdown>
 				<el-dropdown-menu>
 					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
@@ -38,13 +67,11 @@
           <el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
 						{{ $t('user.dropdown3') }}
 					</el-dropdown-item>
-					<el-dropdown-item v-if="shouldShowDeptOption" command="dept">
-						{{ $t('user.dropdown4') }}
-					</el-dropdown-item>
 					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
 				</el-dropdown-menu>
 			</template>
 		</el-dropdown>
+		</div>
 		<Search ref="searchRef" />
 		<global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
 		<personal-drawer ref="personalDrawerRef"></personal-drawer>
@@ -54,11 +81,6 @@
 			:loading="tenantLoading"
 			@change="onTenantChange"
 		></tenant-selector>
-		<dept-selector
-			ref="deptSelectorRef"
-			:dept-list="deptList"
-			:loading="deptLoading"
-		></dept-selector>
 	</div>
 </template>
 
@@ -74,6 +96,8 @@ import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMsg } from '/@/stores/msg';
 import { fetchUserMessageList } from '/@/api/admin/message';
 import { getPersonalTenant } from '/@/api/admin/tenant';
+import { switchPersonalDept } from '/@/api/admin/dept';
+import type { Dept } from '/@/api/admin/dept';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
@@ -81,7 +105,6 @@ const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
 const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
-const DeptSelector = defineAsyncComponent(() => import('./deptSelector.vue'));
 
 // 定义租户接口
 interface Tenant {
@@ -105,7 +128,6 @@ const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
 const tenantSelectorRef = ref();
-const deptSelectorRef = ref();
 
 // 租户列表状态
 const tenantList = ref<Tenant[]>([]);
@@ -120,30 +142,16 @@ const shouldShowTenantOption = computed(() => {
 	return tenantList.value.length > 1;
 });
 
-// 计算属性：是否应该显示部门选项
-const shouldShowDeptOption = computed(() => {
-	return deptList.value.length > 1;
+// 计算属性：当前部门 ID
+const currentDeptId = computed(() => {
+	return Session.getDeptId() || userInfos.value.deptId;
 });
 
-// 计算属性：当前租户显示名称
-const currentTenantName = computed(() => {
-	if (tenantList.value.length <= 1) return null;
-	const currentTenantId = Session.getTenant();
-	const currentTenant = tenantList.value.find(tenant => tenant.id === currentTenantId);
-	return currentTenant?.name || null;
-});
-
-interface State {
-	[key: string]: boolean | string;
-	isScreenfull: boolean;
-	disabledI18n: string;
-	disabledSize: string;
-}
-
-const state = reactive<State>({
-	isScreenfull: false,
-	disabledI18n: 'zh-cn',
-	disabledSize: 'large',
+// 计算属性：当前部门显示名称
+const currentDeptName = computed(() => {
+	const currentId = currentDeptId.value;
+	const currentDept = deptList.value.find((dept) => dept.deptId === currentId);
+	return currentDept?.name || t('user.selectDept');
 });
 
 // 是否开启websocket
@@ -205,11 +213,6 @@ const onHandleCommandClick = (path: string) => {
 		if (shouldShowTenantOption.value) {
 			tenantSelectorRef.value.open();
 		}
-	} else if (path === 'dept') {
-		// 只有在部门数量大于1时才打开部门选择器
-		if (shouldShowDeptOption.value) {
-			deptSelectorRef.value.open();
-		}
 	} else {
 		router.push(path);
 	}
@@ -218,6 +221,20 @@ const onHandleCommandClick = (path: string) => {
 // 菜单搜索点击
 const onSearchClick = () => {
 	searchRef.value.openSearch();
+};
+
+// 处理部门切换
+const onDeptChange = async (deptId: string) => {
+	try {
+		// 调用切换接口
+		await switchPersonalDept(deptId);
+		// 更新 store
+		stores.updateDeptInfo(deptId);
+		// 刷新页面
+		window.location.reload();
+	} catch (error) {
+		console.error('切换部门失败:', error);
+	}
 };
 
 // 获取到消息
@@ -248,7 +265,7 @@ const loadTenantList = async () => {
 };
 
 // 处理租户切换后的回调
-const onTenantChange = (tenant: Tenant) => {
+const onTenantChange = () => {
 	// 重新加载租户列表以确保数据同步
 	loadTenantList();
 };
@@ -280,108 +297,25 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
-.layout-navbars-breadcrumb-user {
+// Element Plus 组件深层样式定制
+:deep(.el-dropdown) {
+	color: var(--next-bg-topBarColor);
+}
+
+:deep(.el-badge) {
+	height: 40px;
+	line-height: 40px;
 	display: flex;
 	align-items: center;
-	justify-content: flex-end;
-
-	&-link {
-		height: 100%;
-		display: flex;
-		align-items: center;
-		white-space: nowrap;
-		padding: 0 8px;
-		cursor: pointer;
-		transition: background 0.3s ease-in-out;
-
-		&:hover {
-			background: var(--next-color-user-hover);
-		}
-
-		&-photo {
-			width: 25px;
-			height: 25px;
-			border-radius: 100%;
-		}
-	}
-
-	&-icon {
-		padding: 0 8px;
-		cursor: pointer;
-		color: var(--next-bg-topBarColor);
-		height: 50px;
-		line-height: 50px;
-		display: flex;
-		align-items: center;
-		transition: background 0.3s ease-in-out;
-
-		&:hover {
-			background: var(--next-color-user-hover);
-
-			i {
-				display: inline-block;
-				animation: logoAnimation 0.3s ease-in-out;
-			}
-		}
-	}
-
-	.user-divider {
-		width: 1px;
-		height: 18px;
-		background: var(--next-border-color-light);
-		margin: 0 8px;
-		opacity: 0.6;
-	}
-
-	:deep(.el-dropdown) {
-		color: var(--next-bg-topBarColor);
-	}
-
-	:deep(.el-badge) {
-		height: 40px;
-		line-height: 40px;
-		display: flex;
-		align-items: center;
-	}
-
-	:deep(.el-badge__content.is-fixed) {
-		top: 12px;
-	}
 }
 
-// 响应式适配
-@media (max-width: 1200px) {
-	.layout-navbars-breadcrumb-user {
-		// 小屏幕时减少间距
-		&-icon {
-			padding: 0 6px;
-		}
-
-		.user-divider {
-			margin: 0 6px;
-		}
-
-		&-link {
-			padding: 0 6px;
-		}
-	}
+:deep(.el-badge__content.is-fixed) {
+	top: 12px;
 }
 
-@media (max-width: 768px) {
-	.layout-navbars-breadcrumb-user {
-		// 移动端进一步压缩
-		&-icon {
-			padding: 0 4px;
-		}
-
-		.user-divider {
-			margin: 0 4px;
-		}
-
-		&-link {
-			padding: 0 4px;
-			font-size: 14px;
-		}
-	}
+// 图标 hover 动画
+.hover\:bg-\[var\(--next-color-user-hover\)\]:hover i {
+	display: inline-block;
+	animation: logoAnimation 0.3s ease-in-out;
 }
 </style>
