@@ -1,13 +1,16 @@
 <template>
 	<div v-show="showBox" :class="mode == 'pop' ? 'mask' : ''" @click="handleMaskClick">
 		<div :class="mode == 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }" @click.stop>
-			<div v-if="mode == 'pop'" class="verifybox-top">
-				{{ t('verify.complete') }}
+			<div
+				v-if="mode == 'pop'"
+				class="flex items-center justify-between h-12 px-4 text-base font-semibold text-gray-800 border-b border-gray-200 dark:text-gray-100 dark:border-gray-700 dark:bg-gray-800"
+			>
+				<span>{{ t('verify.complete') }}</span>
 				<span class="verifybox-close" @click="closeBox">
 					<i class="iconfont icon-close"></i>
 				</span>
 			</div>
-			<div :style="{ padding: mode == 'pop' ? '15px' : '0' }" class="verifybox-bottom">
+			<div :style="{ padding: mode == 'pop' ? '5px 10px' : '0' }" class="verifybox-bottom">
 				<!-- 验证码容器 -->
 				<component
 					:is="componentType"
@@ -160,27 +163,17 @@ export default {
 	top: 50%;
 	transform: translate(-50%, -50%);
 	margin: auto;
-	height: 280px;
+	height: 270px;
 	overflow: hidden;
 	min-width: 320px;
 	z-index: 1002;
 }
 
-.verifybox-top {
-	padding: 0 15px;
-	height: 50px;
-	line-height: 50px;
-	text-align: left;
-	font-size: 16px;
-	color: #45494c;
-	border-bottom: 1px solid #e4e7eb;
-	box-sizing: border-box;
-}
+/* 弹框标题样式已迁移到 Tailwind CSS（见模板第 6 行）*/
 
 .verifybox-bottom {
-	padding: 15px;
 	box-sizing: border-box;
-	height: calc(100% - 50px);
+	height: calc(100% - 30px);
 	overflow: hidden;
 }
 
@@ -446,11 +439,7 @@ html.dark {
 		box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
 	}
 
-	.verifybox-top {
-		color: var(--el-text-color-primary);
-		border-bottom: 1px solid var(--el-border-color-darker);
-		background-color: var(--el-bg-color-darker);
-	}
+	/* .verifybox-top 暗黑模式样式已迁移到 Tailwind CSS（见模板第 6 行）*/
 
 	.verify-bar-area {
 		background: var(--el-bg-color-darker);

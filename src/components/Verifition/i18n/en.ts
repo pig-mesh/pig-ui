@@ -6,6 +6,11 @@ export default {
 			success: 'Verification successful',
 			fail: 'Verification failed',
 			time: 'Verified in {time}s'
+		},
+		points: {
+			explain: 'Click the words in order: {words}',
+			success: 'Verification successful',
+			fail: 'Verification failed'
 		}
 	}
 };

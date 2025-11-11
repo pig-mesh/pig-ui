@@ -3,7 +3,9 @@
 		<div v-if="type === '2'" :style="{ height: parseInt(setSize.imgHeight) + vSpace + 'px' }" class="verify-img-out">
 			<div :style="{ width: setSize.imgWidth, height: setSize.imgHeight }" class="verify-img-panel modern-shadow">
 				<img :src="'data:image/png;base64,' + backImgBase" alt="" style="width: 100%; height: 100%; display: block" />
-				<div v-show="showRefresh" class="verify-refresh" @click="refresh"><i class="iconfont icon-refresh"></i></div>
+				<div v-show="showRefresh" class="verify-refresh bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-full shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200" @click="refresh">
+					<i class="iconfont icon-refresh text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"></i>
+				</div>
 				<transition name="tips">
 					<span v-if="tipWords" :class="passFlag ? 'suc-bg' : 'err-bg'" class="verify-tips">{{ tipWords }}</span>
 				</transition>
@@ -11,7 +13,7 @@
 		</div>
 		<!-- 公共部分 -->
 		<div :style="{ width: setSize.imgWidth, height: barSize.height, 'line-height': barSize.height }" class="verify-bar-area modern-bar">
-			<span class="verify-msg" v-text="text"></span>
+			<span class="verify-msg text-sm font-medium text-gray-600 dark:text-gray-300" v-text="text"></span>
 			<div
 				:style="{
 					width: leftBarWidth !== undefined ? leftBarWidth : barSize.height,
@@ -21,7 +23,7 @@
 				}"
 				class="verify-left-bar"
 			>
-				<span class="verify-msg" v-text="finishText"></span>
+				<span class="verify-msg text-sm font-medium text-gray-600 dark:text-gray-300" v-text="finishText"></span>
 				<div
 					:style="{
 						width: barSize.height,
