@@ -124,6 +124,8 @@ export default {
 		fullscreen: 'Fullscreen',
 		exitFullscreen: 'Exit Fullscreen',
 		lockScreen: 'Lock Screen',
+		selectDept: 'Select Department',
+		selectTenant: 'Select Tenant',
 	},
 	tagsView: {
 		refresh: 'Refresh',

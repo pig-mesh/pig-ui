@@ -117,6 +117,8 @@ export default {
 		fullscreen: '全屏',
 		exitFullscreen: '退出全屏',
 		lockScreen: '锁屏',
+		selectDept: '选择部门',
+		selectTenant: '选择租户',
 	},
 	tagsView: {
 		refresh: '刷新',
