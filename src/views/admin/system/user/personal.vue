@@ -32,6 +32,7 @@
 										v-model="formData.phone"
 										:placeholder="$t('personal.inputPhonePlaceholder')"
 										:style="{ width: showPhoneCodeInput ? '50%' : '100%' }"
+										@focus="handlePhoneFocus"
 									>
 										<template #suffix>
 											<div class="flex items-center gap-1">
@@ -187,7 +188,7 @@
 
 <script setup lang="ts" name="personal">
 import {useUserInfo} from '/@/stores/userInfo';
-import {editInfo, getObj, password, unbindingUser} from '/@/api/admin/user';
+import {editInfo, getObj, password, unbindingUser, validatePhone} from '/@/api/admin/user';
 import {useMessage} from '/@/hooks/message';
 import {rule, validateNull, clearMaskedField} from '/@/utils/validate';
 import other from '/@/utils/other';
@@ -291,6 +292,12 @@ const ruleForm = reactive({
 	phone: [
 		{ required: true, message: t('personal.phoneRequired'), trigger: 'blur' },
 		{ validator: rule.validatePhone, trigger: 'blur' },
+		{
+			validator: (rule: any, value: any, callback: any) => {
+				validatePhone(rule, value, callback, true, initialPhone.value, t);
+			},
+			trigger: 'blur',
+		},
 	],
 	code: [{ validator: validatorPhoneCode, trigger: 'blur' }],
 	nickname: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: t('personal.nicknameRequired'), trigger: 'blur' }],
@@ -434,6 +441,17 @@ const handleSendPhoneCode = async () => {
 	} catch (error: any) {
 		const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
 		useMessage().error(errorMsg);
+	}
+};
+
+/**
+ * 处理手机号输入框获得焦点事件
+ * @description 如果手机号是脱敏值，清空输入框让用户重新输入
+ */
+const handlePhoneFocus = () => {
+	// 如果手机号包含脱敏字符，清空输入框
+	if (formData.value.phone && formData.value.phone.includes('*')) {
+		formData.value.phone = '';
 	}
 };
 
