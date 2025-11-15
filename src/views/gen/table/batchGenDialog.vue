@@ -142,7 +142,7 @@ const openDialog = async (tables: any[], currentDsName: string) => {
 			// 并发同步所有选中的表
 			const syncResults = await Promise.allSettled(
 				tables.map((table) =>
-					useSyncTableApi(currentDsName, table.name).then((response) => {
+					useSyncTableApi(currentDsName, table.name, true).then((response) => {
 						// 只返回有效的表元数据
 						return response.data?.id && response.data?.tableName ? response.data : null;
 					})

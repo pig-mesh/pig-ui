@@ -38,8 +38,12 @@ export function putObj(obj?: Object) {
 	});
 }
 
-export const useSyncTableApi = (dsName: string, tableName: string) => {
-	return request.get('/gen/table/sync/' + dsName + '/' + tableName);
+export const useSyncTableApi = (dsName: string, tableName: string, isBatch?: boolean) => {
+	return request({
+		url: '/gen/table/sync/' + dsName + '/' + tableName,
+		method: 'get',
+		params: { isBatch: isBatch },
+	});
 };
 
 export const useTableApi = (dsName: string, tableName: string) => {

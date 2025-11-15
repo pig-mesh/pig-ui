@@ -33,10 +33,10 @@
 			<!-- 字段编辑设置 -->
 			<edit-table ref="editTableRef" :tableName="tableName" :dsName="dsName" v-if="active === 1" />
 
-			<div class="flex gap-4 justify-center mt-6">
+			<div class="flex justify-center gap-4 mt-6">
 				<el-button v-if="active === 0" plain type="primary" size="large" icon="ArrowRight" @click="go(1)"> 下一步 </el-button>
 				<el-button v-if="active === 1" plain icon="ArrowLeft" size="large" @click="go(0)"> 上一步 </el-button>
-				<el-button v-if="active === 1" plain type="success" size="large" icon="View" @click="preview"> 保存并预览 </el-button>
+				<el-button v-if="active === 1" type="primary" size="large" icon="View" @click="preview"> 保存并预览 </el-button>
 				<el-button v-if="active === 1" plain type="primary" size="large" icon="Download" @click="generatorHandle"> 保存并生成 </el-button>
 			</div>
 		</el-card>
