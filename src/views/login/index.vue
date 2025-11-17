@@ -11,7 +11,7 @@
 
 		<!-- 居中登录卡片 -->
 		<div
-			class="relative z-10 w-full md:w-[560px] h-auto min-h-[690px] bg-white dark:bg-slate-800 rounded-none md:rounded-2xl shadow-none md:shadow-[0_32px_64px_-12px_rgba(19,51,107,0.20),0_0_1px_0_rgba(19,51,107,0.20)] dark:md:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.40),0_0_1px_0_rgba(0,0,0,0.40)] px-8 py-10 md:px-[90px] md:py-[90px] transition-all duration-600 animate-slide-in-up"
+			class="relative z-10 w-full md:w-[560px] h-auto min-h-[690px] bg-white dark:bg-slate-800 rounded-none md:rounded-2xl shadow-none md:shadow-[0_32px_64px_-12px_rgba(19,51,107,0.20),0_0_1px_0_rgba(19,51,107,0.20)] dark:md:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.40),0_0_1px_0_rgba(0,0,0,0.40)] px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up"
 		>
 			<!-- Logo 和品牌区域 -->
 			<div class="flex items-center justify-center mb-8">
@@ -40,15 +40,8 @@
 				<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
 				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType"/>
 
-				<!-- 分割线 -->
-				<div class="flex items-center my-9">
-					<div class="flex-1 h-px bg-gray-250 dark:bg-slate-600"></div>
-					<span class="px-3 text-sm text-gray-500 dark:text-slate-400">{{ $t('divider.or') }}</span>
-					<div class="flex-1 h-px bg-gray-250 dark:bg-slate-600"></div>
-				</div>
-
-				<!-- 社交登录 -->
-				<social @signInSuccess="signInSuccess" />
+				<!-- 社交登录（包含内置分割线） -->
+				<social @signInSuccess="signInSuccess" v-if="loginType === LoginTypeEnum.PASSWORD || loginType === LoginTypeEnum.MOBILE" />
 			</div>
 		</div>
 

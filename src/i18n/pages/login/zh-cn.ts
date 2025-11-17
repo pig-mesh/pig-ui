@@ -23,6 +23,9 @@ export default {
 
 	// 密码登录
 	password: {
+		accountLabel: '用户名',
+		passwordLabel: '密码',
+		codeLabel: '验证码',
 		accountPlaceholder1: '请输入用户名',
 		accountPlaceholder2: '请输入密码',
 		accountPlaceholder3: '请输入验证码',
@@ -48,6 +51,8 @@ export default {
 
 	// 手机号登录
 	mobile: {
+		mobileLabel: '手机号',
+		codeLabel: '验证码',
 		placeholder1: '请输入手机号',
 		placeholder2: '请输入验证码',
 		codeText: '获取验证码',
@@ -145,6 +150,7 @@ export default {
 	},
 	// 社交登录按钮
 	socialLogin: {
+		orContinueWith: '或继续使用',
 		wechatWork: '企微',
 		dingtalk: '钉钉',
 		bindSuccess: '社交账号绑定成功',

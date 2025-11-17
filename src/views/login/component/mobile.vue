@@ -1,36 +1,36 @@
 <template>
-	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm" @keyup.enter="handleLogin">
+	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm" @keyup.enter="handleLogin" style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
 		<!-- 手机号输入框 -->
-		<el-form-item class="login-animation1 mb-7" prop="mobile">
+		<el-form-item class="login-animation1 mb-5" prop="mobile">
 			<el-input
 				text
 				type="tel"
 				:placeholder="$t('mobile.placeholder1')"
 				v-model="loginForm.mobile"
 				clearable
-				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md border-gray-200 dark:border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+				class="h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
 				autocomplete="off"
 			>
 				<template #prefix>
-					<i class="iconfont icon-dianhua el-input__icon text-gray-400 dark:text-slate-400"></i>
+					<i class="iconfont icon-dianhua el-input__icon text-gray-400 dark:text-slate-500"></i>
 				</template>
 			</el-input>
 		</el-form-item>
 
 		<!-- 验证码输入框 + 获取验证码按钮 -->
-		<el-form-item class="login-animation2 mb-7" prop="code">
-			<div class="flex gap-2">
+		<el-form-item class="login-animation2 mb-6" prop="code">
+			<div class="flex gap-3">
 				<el-input
 					text
 					maxlength="4"
 					:placeholder="$t('mobile.placeholder2')"
 					v-model="loginForm.code"
 					clearable
-					class="flex-1 h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+					class="flex-1 h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
 					autocomplete="off"
 				>
 					<template #prefix>
-						<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+						<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
 							<ele-Position />
 						</el-icon>
 					</template>
@@ -40,28 +40,18 @@
 					@click="handleSendCode"
 					:loading="msgKey"
 					:disabled="msgKey"
-					class="w-[120px] h-11 text-sm rounded-md font-medium border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+					class="w-[120px] h-11 text-[13px] rounded-md font-medium border border-gray-300 dark:border-slate-600 bg-transparent text-gray-600 dark:text-slate-300 hover:bg-gray-50 hover:border-gray-400 dark:hover:bg-slate-700 dark:hover:border-slate-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					<span class="text-xs font-semibold">{{ msgText }}</span>
+					<span class="font-semibold">{{ msgText }}</span>
 				</el-button>
 			</div>
 		</el-form-item>
 
-		<!-- 服务协议提示 -->
-		<div class="flex items-center justify-center mt-4 mb-4">
-			<span class="text-xs text-gray-500 dark:text-slate-400">
-				{{ $t('password.agreement') }}
-				<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline mx-1">{{ $t('password.serviceAgreement') }}</a>
-				{{ $t('password.and') }}
-				<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline mx-1">{{ $t('password.privacyPolicy') }}</a>
-			</span>
-		</div>
-
 		<!-- 登录按钮 -->
-		<el-form-item class="login-animation4">
+		<el-form-item class="login-animation4 mb-4">
 			<el-button
 				type="primary"
-				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium text-base transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]"
+				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 font-medium text-[15px] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(37,99,235,0.24)] hover:-translate-y-[1px] active:scale-[0.98]"
 				v-waves
 				@click="handleLogin"
 				:loading="loading"
@@ -70,23 +60,24 @@
 			</el-button>
 		</el-form-item>
 
-		<!-- 底部链接 -->
-		<div class="flex items-center justify-center mt-5 gap-3 text-sm font-medium">
+		<!-- 服务协议提示 -->
+		<div class="flex items-center justify-center mb-3">
+			<span class="text-xs text-gray-400 dark:text-slate-500 text-center leading-relaxed">
+				{{ $t('password.agreement') }}
+				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.serviceAgreement') }}</a>
+				{{ $t('password.and') }}
+				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.privacyPolicy') }}</a>
+			</span>
+		</div>
+
+		<!-- 返回登录链接 -->
+		<div class="flex items-center justify-center text-[13px]">
 			<a
 				href="#"
-				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
 				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
 			>
 				{{ $t('mobile.backToLogin') }}
-			</a>
-			<div v-if="autoRegisterEnable" class="w-px h-3 bg-gray-300 dark:bg-slate-600"></div>
-			<a
-				href="#"
-				v-if="autoRegisterEnable"
-				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
-				@click.prevent="emit('change', LoginTypeEnum.REGISTER)"
-			>
-				{{ $t('mobile.createAccount') }}
 			</a>
 		</div>
 	</el-form>

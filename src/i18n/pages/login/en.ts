@@ -27,6 +27,9 @@ export default {
 
 	// Password login texts
 	password: {
+		accountLabel: 'Username',
+		passwordLabel: 'Password',
+		codeLabel: 'Verification Code',
 		accountPlaceholder1: 'Please enter username',
 		accountPlaceholder2: 'Please enter password',
 		accountPlaceholder3: 'Please enter the verification code',
@@ -52,6 +55,8 @@ export default {
 
 	// Mobile login texts
 	mobile: {
+		mobileLabel: 'Mobile Number',
+		codeLabel: 'Verification Code',
 		placeholder1: 'Please enter mobile number',
 		placeholder2: 'Please enter verification code',
 		signIn: 'Sign In',
@@ -148,6 +153,7 @@ export default {
 
 	// Social login platform texts
 	socialLogin: {
+		orContinueWith: 'Or continue with',
 		wechatWork: 'WeCom',
 		dingtalk: 'DingTalk',
 		bindSuccess: 'Social account bound successfully',

@@ -2,7 +2,7 @@
 	<!-- 注册页面标题 -->
 	<div class="mb-9 text-center">
 		<h2 class="text-lg font-medium text-gray-900 dark:text-white">
-			{{ $t('password.registerTitle') }}
+			{{ $t('register.title') }}
 		</h2>
 	</div>
 
