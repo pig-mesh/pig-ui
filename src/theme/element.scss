@@ -647,16 +647,6 @@
 	}
 
 	// 表格行增强
-	.el-table__body-wrapper {
-		.el-table__row {
-			transition: background-color var(--transition-fast) var(--transition-function);
-
-			&:hover > td.el-table__cell {
-				background-color: rgba(0, 0, 0, 0.04) !important;
-			}
-		}
-	}
-
 	// 固定列阴影优化
 	&::before {
 		background-color: var(--next-border-color-light);
