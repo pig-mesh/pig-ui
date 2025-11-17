@@ -1,36 +1,30 @@
 <template>
 	<div v-if="!autoTenantEnable">
-		<el-dropdown trigger="click" placement="bottom" @command="handleCommand">
-			<div
-				class="flex items-center justify-center w-48 px-3 py-2 mx-auto space-x-2 text-sm text-gray-600 transition-colors duration-200 rounded-lg cursor-pointer dark:text-slate-300 hover:bg-gray-100 dark:hover:bg-slate-700"
-			>
-				<el-icon>
-					<ele-OfficeBuilding class="text-gray-400 dark:text-slate-400" />
+		<el-select
+			v-model="tenant"
+			:placeholder="$t('tenantSelect.select')"
+			class="w-full h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md border-gray-200 dark:border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+			@change="handleTenantChange"
+		>
+			<template #prefix>
+				<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+					<ele-OfficeBuilding />
 				</el-icon>
-				<span class="font-medium dark:text-slate-300">{{ getCurrentTenantName }}</span>
-				<el-icon>
-					<ele-ArrowDown class="text-gray-400 dark:text-slate-400" />
-				</el-icon>
-			</div>
-			<template #dropdown>
-				<el-dropdown-menu class="!p-2 !min-w-[12rem] dark:!bg-slate-800 dark:!border-slate-700">
-					<el-dropdown-item
-						v-for="item in tenantList"
-						:key="item.id"
-						:command="item"
-						class="!flex !items-center !space-x-2 !rounded !px-3 !text-gray-700 dark:!text-slate-300 hover:!bg-gray-100 dark:hover:!bg-slate-700"
-					>
-						<el-icon>
-							<ele-OfficeBuilding class="text-gray-400 dark:text-slate-400" />
-						</el-icon>
-						<span class="font-medium dark:text-slate-300">{{ item.name }}</span>
-						<el-icon v-if="item.id === tenant" class="ml-auto text-blue-500">
-							<ele-Check />
-						</el-icon>
-					</el-dropdown-item>
-				</el-dropdown-menu>
 			</template>
-		</el-dropdown>
+			<el-option
+				v-for="item in tenantList"
+				:key="item.id"
+				:label="item.name"
+				:value="item.id"
+			>
+				<div class="flex items-center">
+					<el-icon class="mr-2 text-gray-400 dark:text-slate-400">
+						<ele-OfficeBuilding />
+					</el-icon>
+					<span>{{ item.name }}</span>
+				</div>
+			</el-option>
+		</el-select>
 	</div>
 </template>
 
@@ -85,12 +79,20 @@ const handleAutoTenant = () => {
 	}
 };
 
-// 处理租户选择
+// 处理租户选择（原有方法，用于下拉菜单）
 const handleCommand = (tenant: Tenant) => {
 	Session.set(STORAGE_KEYS.TENANT_ID, tenant.id);
 	Local.set(STORAGE_KEYS.TENANT_ID, tenant.id);
 	Cookies.set(STORAGE_KEYS.TENANT_ID, tenant.id);
 	window.location.reload();
+};
+
+// 处理租户变更（用于 el-select）
+const handleTenantChange = (tenantId: string) => {
+	const selectedTenant = tenantList.value.find(t => t.id === tenantId);
+	if (selectedTenant) {
+		handleCommand(selectedTenant);
+	}
 };
 
 // 初始化租户配置

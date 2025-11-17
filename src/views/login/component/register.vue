@@ -1,102 +1,121 @@
 <template>
+	<!-- 注册页面标题 -->
+	<div class="mb-9 text-center">
+		<h2 class="text-lg font-medium text-gray-900 dark:text-white">
+			{{ $t('password.registerTitle') }}
+		</h2>
+	</div>
+
 	<el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="state.ruleForm">
-		<!-- 租户下拉选择 -->
-		<el-form-item class="login-animation1" prop="tenantId">
-			<el-select 
-				v-model="state.ruleForm.tenantId" 
+		<!-- 租户选择 -->
+		<el-form-item class="login-animation1 mb-6" prop="tenantId">
+			<el-select
+				v-model="state.ruleForm.tenantId"
 				:placeholder="$t('password.tenantPlaceholder')"
 				clearable
-				class="w-full dark:bg-slate-700 dark:text-slate-200"
+				class="w-full h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
 				:loading="tenantLoading"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-OfficeBuilding />
 					</el-icon>
 				</template>
-				<el-option 
-					v-for="item in tenantList" 
-					:key="item.id" 
-					:label="item.name" 
-					:value="item.id" 
+				<el-option
+					v-for="item in tenantList"
+					:key="item.id"
+					:label="item.name"
+					:value="item.id"
 				/>
 			</el-select>
 		</el-form-item>
+
 		<!-- 用户名 -->
-		<el-form-item class="login-animation1" prop="username">
+		<el-form-item class="login-animation1 mb-6" prop="username">
 			<el-input
 				text
 				:placeholder="$t('password.accountPlaceholder1')"
 				v-model="state.ruleForm.username"
 				clearable
 				autocomplete="off"
-				class="dark:bg-slate-700 dark:text-slate-200"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-User />
 					</el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="password">
+
+		<!-- 密码 -->
+		<el-form-item class="login-animation2 mb-6" prop="password">
 			<strength-meter
 				:placeholder="$t('password.accountPlaceholder2')"
 				v-model="state.ruleForm.password"
 				autocomplete="off"
-				class="dark:bg-slate-700 dark:text-slate-200"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
 				:maxLength="20"
 				:minLength="6"
 				@score="handlePassScore"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-Unlock />
 					</el-icon>
 				</template>
 			</strength-meter>
 		</el-form-item>
-		<el-form-item class="login-animation3" prop="phone">
+
+		<!-- 手机号 -->
+		<el-form-item class="login-animation3 mb-6" prop="phone">
 			<el-input
 				text
+				type="tel"
 				:placeholder="$t('password.phonePlaceholder4')"
 				v-model="state.ruleForm.phone"
 				clearable
 				autocomplete="off"
-				class="dark:bg-slate-700 dark:text-slate-200"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-Position />
 					</el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item prop="checked">
-			<el-checkbox v-model="state.ruleForm.checked" class="dark:text-slate-400">
-				<span class="text-gray-400 dark:text-slate-400">{{ $t('password.readAccept') }}</span>
+
+		<!-- 同意条款 -->
+		<el-form-item prop="checked" class="mb-6">
+			<el-checkbox v-model="state.ruleForm.checked" class="text-sm">
+				<span class="text-gray-500 dark:text-slate-400">{{ $t('password.readAccept') }}</span>
+				<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline mx-1">{{ $t('password.privacyPolicy') }}</a>
 			</el-checkbox>
-			<span class="text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300">
-				{{ $t('password.privacyPolicy') }}
-			</span>
 		</el-form-item>
 
+		<!-- 注册按钮 -->
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="rounded-lg login-content-submit" v-waves @click="handleRegister" :loading="loading">
+			<el-button
+				type="primary"
+				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium text-base transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]"
+				v-waves
+				@click="handleRegister"
+				:loading="loading"
+			>
 				<span class="font-semibold tracking-wide">{{ $t('password.registerBtnText') }}</span>
 			</el-button>
 		</el-form-item>
 
-		<div class="relative flex items-center justify-between">
-			<div class="ml-auto text-sm">
-				<a
-					href="#"
-					class="text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300"
-					@click="emit('change', LoginTypeEnum.PASSWORD)"
-				>
-					{{ $t('password.backToLogin') }}
-				</a>
-			</div>
+		<!-- 返回登录链接 -->
+		<div class="flex items-center justify-center mt-3 text-sm font-medium">
+			<a
+				href="#"
+				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
+			>
+				{{ $t('password.backToLogin') }}
+			</a>
 		</div>
 	</el-form>
 </template>

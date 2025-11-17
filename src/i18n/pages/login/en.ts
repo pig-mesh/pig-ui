@@ -40,7 +40,10 @@ export default {
 		createAccount: 'Create Account',
 		imageCodeTip: 'Please enter image verification code',
 		readAccept: 'I have read and accept',
-		privacyPolicy: 'the Privacy Policy',
+		agreement: 'I have read and accept',
+		serviceAgreement: 'Terms of Service',
+		and: 'and',
+		privacyPolicy: 'Privacy Policy',
 		oldPassword: 'Please enter old password',
 		newPassword: 'Please enter new password',
 		confirmPassword: 'Please confirm new password',
@@ -93,6 +96,8 @@ export default {
 	// Forget password texts
 	forget: {
 		title: 'Reset Password',
+		resetPasswordTitle: 'Reset Password',
+		resetPasswordTip: 'Please enter your mobile number and verification code to reset password',
 		username: 'Username',
 		mobile: 'Mobile Number',
 		code: 'Verification Code',

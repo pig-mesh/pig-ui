@@ -1,53 +1,54 @@
 <template>
-	<div class="flex items-center justify-center min-h-screen px-5 py-5 bg-gray-100 dark:bg-slate-900 min-w-screen">
-		<!-- 右上角控制组件 -->
-		<Control />
+	<div
+		class="relative flex items-center justify-center min-h-screen overflow-hidden min-w-screen"
+		:style="backgroundStyle"
+	>
 
+		<!-- 右上角控制组件 -->
+		<div class="absolute z-20 top-6 right-6">
+			<Control />
+		</div>
+
+		<!-- 居中登录卡片 -->
 		<div
-			class="w-full overflow-hidden bg-white border border-gray-200 shadow-lg dark:bg-slate-800 rounded-3xl dark:border-slate-700"
-			style="max-width: 1000px"
+			class="relative z-10 w-full md:w-[560px] h-auto min-h-[690px] bg-white dark:bg-slate-800 rounded-none md:rounded-2xl shadow-none md:shadow-[0_32px_64px_-12px_rgba(19,51,107,0.20),0_0_1px_0_rgba(19,51,107,0.20)] dark:md:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.40),0_0_1px_0_rgba(0,0,0,0.40)] px-8 py-10 md:px-[90px] md:py-[90px] transition-all duration-600 animate-slide-in-up"
 		>
-			<div class="w-full md:flex">
-				<!-- 左侧插图区域 -->
-				<div
-					class="hidden w-[55%] bg-gradient-to-br from-blue-400 via-blue-300 to-blue-200 dark:from-slate-800 dark:via-slate-700 dark:to-slate-900/95 md:flex md:items-center md:justify-center"
-				>
+			<!-- Logo 和品牌区域 -->
+			<div class="flex items-center justify-center mb-8">
+				<div class="flex items-center justify-center w-14 h-14 bg-gray-50 dark:bg-slate-700 rounded-lg border-[1.5px] border-gray-200 dark:border-slate-600">
 					<img
-						class="w-[85%] h-auto max-h-[650px] object-contain opacity-100 dark:opacity-75 transition-opacity duration-300 hover:opacity-90"
-						:src="!themeConfig.background ? illustration : baseURL + themeConfig.background"
-						alt="Login illustration"
+						class="object-contain w-9 h-9"
+						:src="!themeConfig.logo ? logo : baseURL + themeConfig.logo"
+						alt="Logo"
 					/>
 				</div>
-
-				<!-- 右侧登录表单区域 -->
-				<div class="w-full px-5 py-16 md:w-[45%] md:px-12">
-					<div class="mb-16 text-center">
-						<h1 class="text-4xl font-bold text-gray-900 dark:text-white tracking-wide font-['Inter']">{{ getThemeConfig.globalTitle }}</h1>
-						<!-- 租户选择 -->
-						<div class="mt-6" v-if="tenantEnable">
-							<tenant class="shadow-sm" />
-						</div>
-					</div>
-
-					<div class="w-full px-5">
-						<!-- 登录表单组件 -->
-						<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
-						<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
-						<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
-						<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
-            <forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType"/>
-
-						<!-- 分割线 -->
-						<div class="flex items-center justify-center my-6 space-x-3">
-							<span class="w-20 h-[1.5px] bg-gray-200 dark:bg-slate-600"></span>
-							<span class="text-gray-600 dark:text-slate-400">{{ $t('divider.or') }}</span>
-							<span class="w-20 h-[1.5px] bg-gray-200 dark:bg-slate-600"></span>
-						</div>
-
-						<!-- 社交登录 -->
-						<social @signInSuccess="signInSuccess" />
-					</div>
+				<div class="ml-5 text-4xl font-bold text-gray-900 dark:text-white">
+					{{ getThemeConfig.globalTitle }}
 				</div>
+			</div>
+
+			<!-- 租户选择（条件渲染） -->
+			<div class="mb-6" v-if="tenantEnable">
+				<tenant />
+			</div>
+
+			<!-- 登录表单组件 -->
+			<div class="w-full">
+				<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
+				<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
+				<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
+				<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
+				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType"/>
+
+				<!-- 分割线 -->
+				<div class="flex items-center my-9">
+					<div class="flex-1 h-px bg-gray-250 dark:bg-slate-600"></div>
+					<span class="px-3 text-sm text-gray-500 dark:text-slate-400">{{ $t('divider.or') }}</span>
+					<div class="flex-1 h-px bg-gray-250 dark:bg-slate-600"></div>
+				</div>
+
+				<!-- 社交登录 -->
+				<social @signInSuccess="signInSuccess" />
 			</div>
 		</div>
 
@@ -62,7 +63,7 @@
 <script setup lang="ts" name="loginIndex">
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
-import illustration from '/@/assets/login/login_bg.svg';
+import logo from '/@/assets/login/logo.svg';
 import { useI18n } from 'vue-i18n';
 import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
@@ -96,6 +97,36 @@ const tenantEnable = ref(import.meta.env.VITE_TENANT_LIST_ENABLE === 'true');
 const loginType = ref(LoginTypeEnum.PASSWORD);
 // 用户名
 const username = ref('');
+
+// 响应式窗口宽度
+const windowWidth = ref(window.innerWidth);
+
+// 监听窗口大小变化
+const handleResize = () => {
+	windowWidth.value = window.innerWidth;
+};
+
+/**
+ * 动态背景样式
+ * 根据暗黑模式和响应式断点选择对应的 SVG 背景
+ */
+const backgroundStyle = computed(() => {
+	const isDark = themeConfig.value.isDark;
+	const isMobile = windowWidth.value < 768; // md 断点
+
+	// 根据暗黑模式和设备类型选择背景文件
+	let bgFile = '';
+	if (isMobile) {
+		bgFile = isDark ? 'login-bg-phone-dark.svg' : 'login-bg-phone.svg';
+	} else {
+		bgFile = isDark ? 'login-bg-dark.svg' : 'login-bg.svg';
+	}
+
+	return {
+		background: `url(${new URL(`../../assets/login/${bgFile}`, import.meta.url).href}) no-repeat center/cover`,
+		userSelect: 'none'
+	};
+});
 
 /**
  * 切换登录类型
@@ -160,5 +191,31 @@ const signInSuccess = async () => {
  */
 onMounted(() => {
 	NextLoading.done();
+	window.addEventListener('resize', handleResize);
+});
+
+/**
+ * 页面卸载时清理
+ */
+onUnmounted(() => {
+	window.removeEventListener('resize', handleResize);
 });
 </script>
+
+<style scoped>
+/* 页面加载动画 */
+@keyframes slide-in-up {
+	from {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+.animate-slide-in-up {
+	animation: slide-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+</style>

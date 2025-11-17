@@ -32,7 +32,10 @@ export default {
 		resetBtnText: '重 置',
 		registerBtnText: '注 册',
 		readAccept: '我已仔细阅读并接受',
-		privacyPolicy: '《隐私政策》',
+		agreement: '我已仔细阅读并接受',
+		serviceAgreement: '服务协议',
+		and: '和',
+		privacyPolicy: '隐私政策',
 		oldPassword: '请输入原密码',
 		newPassword: '请输入新密码',
 		confirmPassword: '请确认新密码',
@@ -90,6 +93,8 @@ export default {
 	// 忘记密码
 	forget: {
 		title: '重置密码',
+		resetPasswordTitle: '重置密码',
+		resetPasswordTip: '请输入您的手机号和验证码以重置密码',
 		username: '用户名',
 		mobile: '手机号',
 		code: '验证码',

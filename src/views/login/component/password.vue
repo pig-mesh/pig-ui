@@ -1,37 +1,40 @@
 <template>
 	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="handleVerify">
-		<el-form-item class="login-animation1" prop="username">
+		<!-- 用户名输入框 -->
+		<el-form-item class="login-animation1 mb-7" prop="username">
 			<el-input
 				text
 				:placeholder="$t('password.accountPlaceholder1')"
 				v-model="state.ruleForm.username"
 				clearable
 				autocomplete="off"
-				class="dark:bg-slate-700 dark:text-slate-200"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md border-gray-200 dark:border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-User />
 					</el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="password">
+
+		<!-- 密码输入框 -->
+		<el-form-item class="login-animation2 mb-7" prop="password">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
 				v-model="state.ruleForm.password"
-				class="dark:bg-slate-700 dark:text-slate-200"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md border-gray-200 dark:border-slate-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
 				autocomplete="off"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon dark:text-slate-400">
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 						<ele-Unlock />
 					</el-icon>
 				</template>
 				<template #suffix>
 					<i
-						class="iconfont el-input__icon login-content-password"
+						class="iconfont el-input__icon login-content-password cursor-pointer text-gray-400 dark:text-slate-400 hover:text-gray-600 dark:hover:text-slate-300"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
 						@click="state.isShowPassword = !state.isShowPassword"
 					>
@@ -39,57 +42,84 @@
 				</template>
 			</el-input>
 		</el-form-item>
-		<el-form-item class="login-animation2" prop="code" v-if="verifyImageEnable">
-			<el-col :span="15">
-				<el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="state.ruleForm.code" clearable autocomplete="off">
+
+		<!-- 验证码输入框（条件渲染） -->
+		<el-form-item class="login-animation2 mb-7" prop="code" v-if="verifyImageEnable">
+			<div class="flex gap-2">
+				<el-input
+					text
+					maxlength="4"
+					:placeholder="$t('mobile.placeholder2')"
+					v-model="state.ruleForm.code"
+					clearable
+					autocomplete="off"
+					class="flex-1 h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				>
 					<template #prefix>
-						<el-icon class="el-input__icon">
+						<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
 							<ele-Position />
 						</el-icon>
 					</template>
 				</el-input>
-			</el-col>
-			<el-col :span="1"></el-col>
-			<el-col :span="8">
-				<img :src="imgSrc" @click="getVerifyImageCode" />
-			</el-col>
+				<img
+					:src="imgSrc"
+					@click="getVerifyImageCode"
+					class="w-[120px] h-11 rounded-md cursor-pointer object-cover border border-gray-200 dark:border-slate-600 hover:opacity-80 transition-opacity"
+					alt="验证码"
+				/>
+			</div>
 		</el-form-item>
-		<el-form-item class="mt-4 login-animation4">
-			<el-button type="primary" class="rounded-lg login-content-submit" v-waves @click="handleVerify" :loading="loading">
+
+		<!-- 服务协议提示 -->
+		<div class="flex items-center justify-center mt-4 mb-4">
+			<span class="text-xs text-gray-500 dark:text-slate-400">
+				{{ $t('password.agreement') }}
+				<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline mx-1">{{ $t('password.serviceAgreement') }}</a>
+				{{ $t('password.and') }}
+				<a href="#" class="text-blue-600 dark:text-blue-400 hover:underline mx-1">{{ $t('password.privacyPolicy') }}</a>
+			</span>
+		</div>
+
+		<!-- 登录按钮 -->
+		<el-form-item class="login-animation4">
+			<el-button
+				type="primary"
+				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium text-base transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]"
+				v-waves
+				@click="handleVerify"
+				:loading="loading"
+			>
 				<span class="font-semibold tracking-wide">{{ $t('password.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
 
-		<div class="relative flex items-center justify-end mt-6">
-			<div class="flex flex-wrap items-center gap-4 text-sm">
-				<a 
-					href="#" 
-					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
-					@click="emit('change', LoginTypeEnum.MOBILE)"
-				>
-					{{ $t('password.mobileLogin') }}
-				</a>
-				<span class="text-gray-300">|</span>
-				<a 
-					href="#" 
-					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
-					@click="emit('change',LoginTypeEnum.FORGET)"
-				>
-					{{ $t('password.forgetPassword') }}
-				</a>
-				<span v-if="autoRegisterEnable" class="text-gray-300">|</span>
-				<a 
-					href="#" 
-					v-if="autoRegisterEnable" 
-					class="font-medium text-blue-500 transition-colors duration-200 hover:text-blue-600"
-					@click="emit('change', LoginTypeEnum.REGISTER)"
-				>
-					{{ $t('password.createAccount') }}
-				</a>
-			</div>
+		<!-- 底部链接 -->
+		<div class="flex items-center justify-center mt-5 gap-3 text-sm font-medium">
+			<a
+				href="#"
+				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				@click.prevent="emit('change', LoginTypeEnum.MOBILE)"
+			>
+				{{ $t('password.mobileLogin') }}
+			</a>
+			<div class="w-px h-3 bg-gray-300 dark:bg-slate-600"></div>
+			<a
+				href="#"
+				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				@click.prevent="emit('change',LoginTypeEnum.FORGET)"
+			>
+				{{ $t('password.forgetPassword') }}
+			</a>
+			<div v-if="autoRegisterEnable" class="w-px h-3 bg-gray-300 dark:bg-slate-600"></div>
+			<a
+				href="#"
+				v-if="autoRegisterEnable"
+				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				@click.prevent="emit('change', LoginTypeEnum.REGISTER)"
+			>
+				{{ $t('password.createAccount') }}
+			</a>
 		</div>
-
-		<div class="font12 mt30 login-animation4 login-msg text-slate-400">{{ $t('browserMsgText') }}</div>
 	</el-form>
 	<Verify
 		@success="verifySuccess"

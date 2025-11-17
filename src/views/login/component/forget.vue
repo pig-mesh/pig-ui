@@ -1,91 +1,125 @@
 <template>
-    <el-form size="large" class="login-content-form" ref="dataFormRef" :rules="dataRules" :model="forgetFormData">
-      <el-form-item class="login-animation1" prop="phone">
-        <el-input text :placeholder="$t('mobile.placeholder1')" v-model="forgetFormData.phone" clearable autocomplete="off"
-                  class="dark:bg-slate-700 dark:text-slate-200">
-          <template #prefix>
-            <i class="iconfont icon-dianhua el-input__icon dark:text-slate-400"></i>
-          </template>
-        </el-input>
-      </el-form-item>
-      <el-form-item class="login-animation2" prop="code">
-        <el-col :span="15">
-          <el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="forgetFormData.code" clearable
-                    autocomplete="off" class="dark:bg-slate-700 dark:text-slate-200">
-            <template #prefix>
-              <el-icon class="el-input__icon dark:text-slate-400">
-                <ele-Position/>
-              </el-icon>
-            </template>
-          </el-input>
-        </el-col>
-        <el-col :span="1"></el-col>
-        <el-col :span="8">
-          <el-button v-waves @click="handleSendCode" :loading="msgKey" :disabled="msgKey"
-                     class="w-full h-11 text-sm rounded-md transition-all duration-300 hover:-translate-y-[1px] hover:shadow-btn dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600">
-            <span class="font-semibold text-xs">
-              {{ msgText }}
-            </span>
-          </el-button>
-        </el-col>
-      </el-form-item>
-      <el-form-item class="login-animation2" prop="newpassword1">
-        <strength-meter
-          :placeholder="$t('forget.newPasswordPlaceholder')"
-          v-model="forgetFormData.newpassword1"
-          autocomplete="off"
-          class="dark:bg-slate-700 dark:text-slate-200"
-          :maxLength="20"
-          :minLength="6"
-          @score="handlePassScore"
-        >
-          <template #prefix>
-            <el-icon class="el-input__icon dark:text-slate-400">
-              <ele-Unlock/>
-            </el-icon>
-          </template>
-        </strength-meter>
-      </el-form-item>
+	<!-- 忘记密码页面标题 -->
+	<div class="mb-9 text-center">
+		<h2 class="text-lg font-medium text-gray-900 dark:text-white">
+			{{ $t('forget.resetPasswordTitle') }}
+		</h2>
+		<p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+			{{ $t('forget.resetPasswordTip') }}
+		</p>
+	</div>
 
-      <el-form-item class="login-animation2" prop="newpassword2">
-        <strength-meter
-          :placeholder="$t('forget.confirmPasswordPlaceholder')"
-          v-model="forgetFormData.newpassword2"
-          autocomplete="off"
-          class="dark:bg-slate-700 dark:text-slate-200"
-          :maxLength="20"
-          :minLength="6"
-          @score="handlePassScore"
-        >
-          <template #prefix>
-            <el-icon class="el-input__icon dark:text-slate-400">
-              <ele-Unlock/>
-            </el-icon>
-          </template>
-        </strength-meter>
-      </el-form-item>
+	<el-form size="large" class="login-content-form" ref="dataFormRef" :rules="dataRules" :model="forgetFormData">
+		<!-- 手机号 -->
+		<el-form-item class="login-animation1 mb-6" prop="phone">
+			<el-input
+				text
+				type="tel"
+				:placeholder="$t('mobile.placeholder1')"
+				v-model="forgetFormData.phone"
+				clearable
+				autocomplete="off"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+			>
+				<template #prefix>
+					<i class="iconfont icon-dianhua el-input__icon text-gray-400 dark:text-slate-400"></i>
+				</template>
+			</el-input>
+		</el-form-item>
 
-      <el-form-item class="login-animation4">
-        <el-button type="primary" class="login-content-submit rounded-lg w-full h-11 text-sm font-semibold tracking-wide" 
-                   v-waves @click="handleResetPassword" :loading="loading">
-          <span class="tracking-wide font-semibold">{{ $t('password.resetBtnText') }}</span>
-        </el-button>
-      </el-form-item>
+		<!-- 验证码 -->
+		<el-form-item class="login-animation2 mb-6" prop="code">
+			<div class="flex gap-2">
+				<el-input
+					text
+					maxlength="4"
+					:placeholder="$t('mobile.placeholder2')"
+					v-model="forgetFormData.code"
+					clearable
+					autocomplete="off"
+					class="flex-1 h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				>
+					<template #prefix>
+						<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+							<ele-Position/>
+						</el-icon>
+					</template>
+				</el-input>
+				<el-button
+					v-waves
+					@click="handleSendCode"
+					:loading="msgKey"
+					:disabled="msgKey"
+					class="w-[120px] h-11 text-sm rounded-md font-medium border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+				>
+					<span class="text-xs font-semibold">{{ msgText }}</span>
+				</el-button>
+			</div>
+		</el-form-item>
 
-      <div class="flex relative justify-between items-center">
-        <div class="ml-auto text-sm">
-          <a href="#" class="text-blue-500 hover:text-blue-400 dark:text-blue-400 dark:hover:text-blue-300" 
-             @click="emit('change', LoginTypeEnum.PASSWORD)">
-            {{ $t('password.backToLogin') }}
-          </a>
-        </div>
-      </div>
+		<!-- 新密码 -->
+		<el-form-item class="login-animation2 mb-6" prop="newpassword1">
+			<strength-meter
+				:placeholder="$t('forget.newPasswordPlaceholder')"
+				v-model="forgetFormData.newpassword1"
+				autocomplete="off"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				:maxLength="20"
+				:minLength="6"
+				@score="handlePassScore"
+			>
+				<template #prefix>
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+						<ele-Unlock/>
+					</el-icon>
+				</template>
+			</strength-meter>
+		</el-form-item>
 
-      <div class="mt-8 text-xs leading-normal text-slate-400 login-animation4">
-        {{ $t('browserMsgText') }}
-      </div>
-    </el-form>
-  </template>
+		<!-- 确认密码 -->
+		<el-form-item class="login-animation2 mb-6" prop="newpassword2">
+			<strength-meter
+				:placeholder="$t('forget.confirmPasswordPlaceholder')"
+				v-model="forgetFormData.newpassword2"
+				autocomplete="off"
+				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				:maxLength="20"
+				:minLength="6"
+				@score="handlePassScore"
+			>
+				<template #prefix>
+					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+						<ele-Unlock/>
+					</el-icon>
+				</template>
+			</strength-meter>
+		</el-form-item>
+
+		<!-- 重置密码按钮 -->
+		<el-form-item class="login-animation4">
+			<el-button
+				type="primary"
+				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 font-medium text-base transition-all duration-200 hover:-translate-y-[1px] active:scale-[0.98]"
+				v-waves
+				@click="handleResetPassword"
+				:loading="loading"
+			>
+				<span class="font-semibold tracking-wide">{{ $t('password.resetBtnText') }}</span>
+			</el-button>
+		</el-form-item>
+
+		<!-- 返回登录链接 -->
+		<div class="flex items-center justify-center mt-3 text-sm font-medium">
+			<a
+				href="#"
+				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
+			>
+				{{ $t('password.backToLogin') }}
+			</a>
+		</div>
+	</el-form>
+</template>
   
   <script setup lang="ts" name="forget">
   import {LoginTypeEnum, sendMobileCode} from '/@/api/login';
