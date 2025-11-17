@@ -150,7 +150,7 @@ export default {
 	},
 	// 社交登录按钮
 	socialLogin: {
-		orContinueWith: '或继续使用',
+		orContinueWith: 'or',
 		wechatWork: '企微',
 		dingtalk: '钉钉',
 		bindSuccess: '社交账号绑定成功',
