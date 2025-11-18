@@ -5,7 +5,7 @@ import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
 import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
-import viteCompression from 'vite-plugin-compression';
+import viteCompression from 'vite-plugin-compression2';
 // @ts-ignore
 import { svgBuilder } from '/@/components/IconSelector/index';
 
@@ -42,7 +42,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				promiseImportName: (i) => `__tla_${i}`, // TLA Promise 导入名
 			}),
 			viteCompression({
-				deleteOriginFile: false, // 压缩后删除原来的文件
+				deleteOriginalAssets: false, // 压缩后是否删除原始文件
 			}),
 		],
 		root: process.cwd(), // 项目根目录
@@ -55,7 +55,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			host: '0.0.0.0', // 服务器地址
 			port: env.VITE_PORT as unknown as number, // 服务器端口号
 			open: env.VITE_OPEN === 'true', // 是否自动打开浏览器
-			allowedHosts: true, // 允许所有域名和IP访问
+			// allowedHosts 在 Vite 5 中已移除，默认允许所有主机访问
 			hmr: true, // 启用热更新
 			proxy: {
 				'/api': {
@@ -99,7 +99,15 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				},
 			},
 		},
-		css: { preprocessorOptions: { css: { charset: false } } },
+		css: {
+			preprocessorOptions: {
+				css: { charset: false },
+				scss: {
+					api: 'modern-compiler', // 使用现代 Sass API,消除 legacy-js-api 警告
+					silenceDeprecations: ['import'] // 静默 @import 废弃警告(等待后续迁移到 @use/@forward)
+				}
+			}
+		},
 		define: {
 			__VUE_I18N_LEGACY_API__: JSON.stringify(false),
 			__VUE_I18N_FULL_INSTALL__: JSON.stringify(false),

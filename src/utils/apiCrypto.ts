@@ -2,7 +2,7 @@ import other from './other';
 
 // 从环境变量获取加密密钥
 const ENCRYPTION_KEY = import.meta.env.VITE_PWD_ENC_KEY;
-const ENCRYPTION_ENABLED = import.meta.env.VITE_API_ENC_ENABLED  === 'true' ?? false;
+const ENCRYPTION_ENABLED = import.meta.env.VITE_API_ENC_ENABLED === 'true';
 
 /**
  * 使用指定密钥加密数据
