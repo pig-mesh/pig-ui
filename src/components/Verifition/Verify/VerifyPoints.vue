@@ -10,8 +10,13 @@
 					'margin-bottom': vSpace + 'px',
 				}"
 			>
-				<div class="verify-refresh" style="z-index: 3" @click="refresh" v-show="showRefresh">
-					<i class="iconfont icon-refresh"></i>
+				<div
+					class="verify-refresh bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-md shadow-sm hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200"
+					style="z-index: 3"
+					@click="refresh"
+					v-show="showRefresh"
+				>
+					<i class="iconfont icon-refresh text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"></i>
 				</div>
 				<img
 					:src="'data:image/png;base64,' + pointBackImgBase"
@@ -48,7 +53,7 @@
 			class="verify-bar-area"
 			:style="{ width: setSize.imgWidth, color: this.barAreaColor, 'border-color': this.barAreaBorderColor, 'line-height': this.barSize.height }"
 		>
-			<span class="verify-msg">{{ text }}</span>
+			<span class="verify-msg text-sm font-medium text-gray-600 dark:text-gray-300" v-html="text"></span>
 		</div>
 	</div>
 </template>
@@ -61,6 +66,7 @@ import { resetSize } from '../utils/util';
 import { aesEncrypt } from '../utils/ase';
 import { reqGet, reqCheck } from '../api/index';
 import { onMounted, reactive, ref, nextTick, toRefs, getCurrentInstance } from 'vue';
+import { useI18n } from 'vue-i18n';
 export default {
 	name: 'VerifyPoints',
 	props: {
@@ -99,6 +105,7 @@ export default {
 	setup(props) {
 		const { mode, captchaType } = toRefs(props);
 		const { proxy } = getCurrentInstance();
+		const { t } = useI18n();
 		let secretKey = ref(''), //后端返回的ase加密秘钥
 			checkNum = ref(3), //默认需要点击的字数
 			fontPos = reactive([]), //选中的坐标信息
@@ -168,20 +175,25 @@ export default {
 						if (res.repCode == '0000') {
 							barAreaColor.value = '#4cae4c';
 							barAreaBorderColor.value = '#5cb85c';
-							text.value = '验证成功';
+							text.value = t('verify.points.success');
 							bindingClick.value = false;
+							showRefresh.value = false;
 							if (mode.value == 'pop') {
 								setTimeout(() => {
 									proxy.$parent.clickShow = false;
 									refresh();
 								}, 1500);
 							}
-							proxy.$parent.$emit('success', { captchaVerification });
+							setTimeout(() => {
+								text.value = '';
+								proxy.$parent.$parent.closeBox();
+								proxy.$parent.$parent.$emit('success', { captchaVerification });
+							}, 1000);
 						} else {
-							proxy.$parent.$emit('error', proxy);
+							proxy.$parent.$parent.$emit('error', proxy);
 							barAreaColor.value = '#d9534f';
 							barAreaBorderColor.value = '#d9534f';
-							text.value = '验证失败';
+							text.value = t('verify.points.fail');
 							setTimeout(() => {
 								refresh();
 							}, 700);
@@ -213,7 +225,7 @@ export default {
 			checkPosArr.splice(0, checkPosArr.length);
 			num.value = 1;
 			getPictrue();
-			text.value = '验证失败';
+			text.value = t('verify.points.fail');
 			showRefresh.value = true;
 		};
 
@@ -229,7 +241,10 @@ export default {
 					backToken.value = res.repData.token;
 					secretKey.value = res.repData.secretKey;
 					poinTextList.value = res.repData.wordList;
-					text.value = '请依次点击【' + poinTextList.value.join(',') + '】';
+					// 使用国际化 + 关键字彩色高亮
+					const wordsStr = poinTextList.value.join(',');
+					const highlightWords = `<span class="text-blue-600 dark:text-blue-400 font-semibold">${wordsStr}</span>`;
+					text.value = t('verify.points.explain', { words: highlightWords });
 				} else {
 					text.value = res.repMsg;
 				}

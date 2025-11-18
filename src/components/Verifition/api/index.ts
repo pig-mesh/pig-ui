@@ -9,7 +9,7 @@ export function reqGet(data: Object) {
 	return request({
 		url: '/auth/code/create',
 		method: 'get',
-		data,
+		params: data,
 	});
 }
 

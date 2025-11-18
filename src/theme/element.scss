@@ -247,7 +247,7 @@
 .el-menu {
 	border-right: none !important;
 	width: 100%;
-	padding: 8px 0;
+	padding: 0;
 }
 
 // 菜单项基础样式
@@ -310,9 +310,13 @@
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题
 .el-menu--collapse {
 	width: 64px !important;
-
+	.el-menu-item {
+		margin: 4px 8px;
+		.el-menu-tooltip__trigger {
+			left: -4px;
+		}
+	}
 	// 折叠时移除间距
-	.el-menu-item,
 	.el-sub-menu__title {
 		margin: 4px 8px;
 		padding: 0 !important;
@@ -339,7 +343,6 @@
 	font-size: 16px !important;
 	display: inline-block;
 	vertical-align: middle;
-	margin-right: 8px;
 	width: 20px !important;
 	text-align: center;
 	justify-content: center;

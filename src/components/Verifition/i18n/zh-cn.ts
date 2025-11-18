@@ -6,6 +6,11 @@ export default {
       success: '验证成功',
       fail: '验证失败',
       time: '{time}s验证成功'
+    },
+    points: {
+      explain: '请依次点击【{words}】',
+      success: '验证成功',
+      fail: '验证失败'
     }
   }
 }
