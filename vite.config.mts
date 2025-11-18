@@ -18,7 +18,7 @@ const pathResolve = (dir: string) => {
 
 const alias: Record<string, string> = {
 	'/@': pathResolve('./src/'),
-	'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
+	'vue-i18n': 'vue-i18n/dist/vue-i18n.esm-bundler.js',
 };
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
@@ -104,7 +104,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				css: { charset: false },
 				scss: {
 					api: 'modern-compiler', // 使用现代 Sass API,消除 legacy-js-api 警告
-					silenceDeprecations: ['import'] // 静默 @import 废弃警告(等待后续迁移到 @use/@forward)
 				}
 			}
 		},
