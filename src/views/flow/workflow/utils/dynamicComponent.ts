@@ -2,7 +2,11 @@
  * 动态组件加载工具
  * 用于根据路径动态加载业务表单组件
  */
-import { markRaw } from 'vue'
+import { markRaw, defineAsyncComponent } from 'vue'
+
+// 使用 import.meta.glob 在构建时预扫描所有 views 目录下的组件
+// Vite 会在构建时将所有匹配的文件打包，确保生产环境可用
+const viewsModules: Record<string, any> = import.meta.glob('/src/views/**/*.{vue,tsx}')
 
 /**
  * 注册并获取组件
@@ -17,16 +21,34 @@ export function registerComponent(path: string): any {
 
   // 处理路径，确保以 / 开头
   const normalizedPath = path.startsWith('/') ? path : `/${path}`
-  
-  try {
-    // 动态导入组件
-    // 这里使用动态导入，Vite会自动处理路径解析
-    // 使用 markRaw 来避免组件被响应式化
-    return markRaw(defineAsyncComponent(() => import(/* @vite-ignore */ `/src/views${normalizedPath}`)))
-  } catch (error) {
-    console.error(`动态加载组件失败: ${normalizedPath}`, error)
+  // 构建完整路径
+  const fullPath = `/src/views${normalizedPath}`
+
+  // 从预构建的组件注册表中查找匹配的组件
+  const keys = Object.keys(viewsModules)
+  const matchKeys = keys.filter((key) => {
+    // 支持精确匹配或后缀匹配
+    return key === fullPath || key.endsWith(normalizedPath)
+  })
+
+  // 找到唯一匹配
+  if (matchKeys?.length === 1) {
+    const matchKey = matchKeys[0]
+    // 使用 markRaw 避免组件被响应式化
+    return markRaw(defineAsyncComponent(viewsModules[matchKey]))
+  }
+
+  // 多个匹配，需要更精确的路径
+  if (matchKeys?.length > 1) {
+    console.error(`多个组件匹配路径 "${normalizedPath}":`, matchKeys)
+    console.error('请使用更精确的路径，或检查是否存在重复的组件路径')
     return null
   }
+
+  // 未找到匹配
+  console.error(`未找到组件: ${normalizedPath}`)
+  console.error('可用的组件路径:', keys)
+  return null
 }
 
 // 动态表单组件类型定义

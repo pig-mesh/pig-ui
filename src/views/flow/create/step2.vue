@@ -160,31 +160,52 @@ const saveFormDesign = () => {
 }
 
 // 表单验证方法
-const validate = async (callback: (valid: boolean, errors?: string[]) => void): Promise<void> => {
+const validate = async (): Promise<void> => {
 	try {
 		if (flowStore.step2.formType === BpmModelFormType.NORMAL) {
 			// 验证动态表单
 			if (designerRef.value) {
 				const rule = designerRef.value.getRule()
 				if (rule.length === 0) {
-					callback(false, ['请设计表单内容'])
-					return
+					throw ['请设计表单内容']
 				}
 				flowStore.step2.formRule = rule
 			}
-			callback(true)
 		} else if (flowStore.step2.formType === BpmModelFormType.CUSTOM) {
 			// 验证自定义表单
 			if (customFormRef.value) {
-				await customFormRef.value.validate()
+				try {
+					await customFormRef.value.validate()
+				} catch (fields: any) {
+					// Element Plus 2.11+ 的错误格式处理
+					const arr: string[] = []
+					if (fields && typeof fields === 'object') {
+						// 如果是验证字段对象
+						for (const field in fields) {
+							if (Array.isArray(fields[field])) {
+								arr.push(fields[field][0]?.message || '验证失败')
+							}
+						}
+					} else if (typeof fields === 'string') {
+						// 如果是字符串错误
+						arr.push(fields)
+					} else {
+						arr.push('表单验证失败')
+					}
+					throw arr
+				}
 			}
-			callback(true)
 		} else {
-			callback(false, ['请选择表单类型'])
+			throw ['请选择表单类型']
 		}
 	} catch (error) {
+		// 如果 error 已经是数组，直接抛出
+		if (Array.isArray(error)) {
+			throw error
+		}
+		// 否则包装成数组
 		const errorMessage = error instanceof Error ? error.message : '表单验证失败'
-		callback(false, [errorMessage])
+		throw [errorMessage]
 	}
 }
 

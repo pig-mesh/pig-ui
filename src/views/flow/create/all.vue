@@ -90,14 +90,13 @@ import Step2 from './step2.vue';
 import Step3 from './step3.vue';
 import { useFlowStore } from '../workflow/stores/flow';
 import { LocationQuery, LocationQueryValue, useRouter } from 'vue-router';
-import FcDesigner from 'form-create-designer';
 
 let store = useFlowStore();
 const step1Ref = ref();
 const step2Ref = ref();
 const step3Ref = ref();
 
-const validateErrMsg = ref([]);
+const validateErrMsg = ref<string[]>([]);
 
 const activeStep = ref(0);
 const validateFlowStep = ref(0);
@@ -109,7 +108,7 @@ const gotoEdit = () => {
 	activeStep.value = validateFlowStep.value;
 	validateDialogShow.value = false;
 };
-const publish = (t) => {
+const publish = () => {
 	validateErrMsg.value = [];
 
 	validateFlowStep.value = 0;
@@ -200,47 +199,44 @@ let step3NodeConfig = reactive({});
 
 var paramGroupId = ref();
 
-const checkStep1 = () => {
-	step1Ref.value.validate(function (valid, arr) {
-		if (valid) {
-			validateFlowStep.value = 1;
+const checkStep1 = async () => {
+	try {
+		await step1Ref.value.validate();
+		validateFlowStep.value = 1;
 
-			setTimeout(function () {
-				checkStep2();
-			}, 500);
-		} else {
-			validatingShow.value = false;
-			//错误信息
-			validateErrMsg.value = arr;
-		}
-	});
+		setTimeout(function () {
+			checkStep2();
+		}, 500);
+	} catch (errors) {
+		validatingShow.value = false;
+		// 错误信息处理：确保 errors 是数组
+		validateErrMsg.value = Array.isArray(errors) ? errors : [String(errors)];
+	}
 };
-const checkStep2 = () => {
-	step2Ref.value.validate(function (valid, arr) {
-		if (valid) {
-			setTimeout(function () {
-				validateFlowStep.value = 2;
-				checkStep3();
-			});
-		} else {
-			validatingShow.value = false;
-			//错误信息
-			validateErrMsg.value = arr;
-		}
-	});
-};
-
-const checkStep3 = () => {
-	setTimeout(function () {
-		step3Ref.value.validate(function (valid, arr) {
-			if (valid) {
-				validateFlowStep.value = 3;
-			} else {
-				validatingShow.value = false;
-				//错误信息
-				validateErrMsg.value = arr;
-			}
+const checkStep2 = async () => {
+	try {
+		await step2Ref.value.validate();
+		setTimeout(function () {
+			validateFlowStep.value = 2;
+			checkStep3();
 		});
+	} catch (errors) {
+		validatingShow.value = false;
+		// 错误信息处理：确保 errors 是数组
+		validateErrMsg.value = Array.isArray(errors) ? errors : [String(errors)];
+	}
+};
+
+const checkStep3 = async () => {
+	setTimeout(async function () {
+		try {
+			await step3Ref.value.validate();
+			validateFlowStep.value = 3;
+		} catch (errors) {
+			validatingShow.value = false;
+			// 错误信息处理：确保 errors 是数组
+			validateErrMsg.value = Array.isArray(errors) ? errors : [String(errors)];
+		}
 	});
 };
 const router = useRouter();

@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import nodeWrap from '../workflow/components/nodeWrap.vue';
 import promoterDrawer from '../workflow/components/drawer/promoterDrawer.vue';
 import approverDrawer from '../workflow/components/drawer/approverDrawer.vue';
@@ -39,13 +39,13 @@ import conditionDrawer from '../workflow/components/drawer/conditionDrawer.vue';
 import {useI18n} from 'vue-i18n';
 import {useFlowStore} from "../workflow/stores/flow";
 
-let store = useFlowStore();
+const store = useFlowStore();
 
 const {t} = useI18n();
 
-let tipList = ref([]);
-let nowVal = ref(100);
-let nodeConfig = ref({
+const tipList = ref<string[]>([]);
+const nowVal = ref(100);
+const nodeConfig = ref({
   nodeName: t('flow.initiator'),
   type: 0,
   id: 'root',
@@ -55,7 +55,7 @@ let nodeConfig = ref({
   childNode: {},
 });
 
-let props = defineProps({
+const props = defineProps({
   nodeConfigObj: {
     type: Object,
   },
@@ -68,21 +68,21 @@ watch(
     }
 );
 
-const reErr = ({childNode}) => {
+const reErr = ({childNode}: any) => {
   if (childNode) {
-    let {type, error, nodeName, conditionNodes} = childNode;
-    if (type == 1 || type == 2) {
+    const {type, error, nodeName, conditionNodes} = childNode;
+    if (type === 1 || type === 2) {
       if (error) {
         tipList.value.push(nodeName + ' 未设置人员');
       }
       reErr(childNode);
-    } else if (type == 3) {
+    } else if (type === 3) {
       reErr(childNode);
-    } else if (type == 4) {
+    } else if (type === 4) {
       reErr(childNode);
-      for (var i = 0; i < conditionNodes.length; i++) {
+      for (let i = 0; i < conditionNodes.length; i++) {
         const conditionNode = conditionNodes[i];
-        
+
         // 检查表达式方式（conditionType === 1）的验证
         if (conditionNode.conditionType === 1) {
           // 验证规则名称
@@ -99,46 +99,42 @@ const reErr = ({childNode}) => {
             tipList.value.push('请设置' + conditionNode.nodeName + '的条件');
           }
         }
-        
+
         reErr(conditionNode);
       }
     }
-  } else {
-    childNode = null;
   }
 };
 
 watch(() => nodeConfig.value, (v) => {
-  store.setStep3(v)
-}, {deep: true})
+  store.setStep3(v);
+}, {deep: true});
 const getProcessData = async () => {
   return nodeConfig.value;
 };
-const zoomSize = (type) => {
-  if (type == 1) {
-    if (nowVal.value == 50) {
+const zoomSize = (type: number) => {
+  if (type === 1) {
+    if (nowVal.value === 50) {
       return;
     }
     nowVal.value -= 10;
   } else {
-    if (nowVal.value == 300) {
+    if (nowVal.value === 300) {
       return;
     }
     nowVal.value += 10;
   }
 };
-const validate = (f) => {
+const validate = async (): Promise<void> => {
   tipList.value = [];
-  if (nodeConfig.value.childNode == undefined || nodeConfig.value.childNode.id === undefined) {
+  if (nodeConfig.value.childNode === undefined || nodeConfig.value.childNode.id === undefined) {
     tipList.value = ['请完善流程节点'];
   }
 
   reErr(nodeConfig.value);
-  if (tipList.value.length != 0) {
-    f(false, tipList.value);
-    return;
+  if (tipList.value.length !== 0) {
+    throw tipList.value;
   }
-  f(true);
 };
 defineExpose({validate, getProcessData});
 </script>
