@@ -48,6 +48,8 @@ declare interface UserInfosState<T = any> {
 declare interface KeepAliveNamesState {
 	keepAliveNames: string[];
 	cachedViews: string[];
+	// 记录已关闭的路由路径，用于强制刷新
+	closedRoutes: Set<string>;
 }
 
 // 后端返回原始路由(未处理时)
