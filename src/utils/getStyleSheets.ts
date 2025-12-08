@@ -8,11 +8,23 @@ const getAlicdnIconfont = () => {
 			const styles: any = document.styleSheets;
 			let sheetsList = [] as any[];
 			let sheetsIconList = [] as any[];
+
+			// 优先查找本地 iconfont.css 文件
 			for (let i = 0; i < styles.length; i++) {
-				if (styles[i].href && styles[i].href.indexOf('at.alicdn.com') > -1) {
+				if (styles[i].href && styles[i].href.indexOf('/assets/iconfont/iconfont.css') > -1) {
 					sheetsList.push(styles[i]);
 				}
 			}
+
+			// 如果没有找到本地文件，尝试从阿里 CDN 加载（向后兼容）
+			if (sheetsList.length === 0) {
+				for (let i = 0; i < styles.length; i++) {
+					if (styles[i].href && styles[i].href.indexOf('at.alicdn.com') > -1) {
+						sheetsList.push(styles[i]);
+					}
+				}
+			}
+
 			for (let i = 0; i < sheetsList.length; i++) {
 				for (let j = 0; j < sheetsList[i].cssRules.length; j++) {
 					if (sheetsList[i].cssRules[j].selectorText && sheetsList[i].cssRules[j].selectorText.indexOf('.icon-') > -1) {

@@ -1,6 +1,6 @@
 // 字体图标 url
 const cssCdnUrlList: Array<string> = [
-	'//at.alicdn.com/t/c/font_4818804_ld82bjcqn1i.css', //
+    '/assets/iconfont/iconfont.css', // 本地图标文件
 	'/assets/styles/font-awesome.min.css',
 ];
 // 第三方 js url
