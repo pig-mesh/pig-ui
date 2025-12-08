@@ -41,9 +41,10 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormRules } from 'element-plus';
+import type { FormRules, FormItemRule } from 'element-plus';
 import selectShow from '/@/components/OrgSelector/index.vue';
 import { queryGroupList } from '/@/api/flow/group';
+import { validateFlowId } from '/@/api/flow/flow';
 import { useRoute } from 'vue-router';
 import { useFlowStore } from '../workflow/stores/flow';
 import { GroupVO } from '/@/api/flow/group/types';
@@ -68,6 +69,34 @@ const validate = async (): Promise<void> => {
 
 // 暴露方法和属性给父组件
 defineExpose({ validate });
+
+// 异步验证流程ID是否存在
+const validateFlowIdAsync = async (rule: any, value: string, callback: any): Promise<void> => {
+	// 如果是编辑模式，不验证
+	if (isEditMode.value) {
+		callback();
+		return;
+	}
+
+	// 如果为空或者不满足格式要求，跳过此验证（由其他规则处理）
+	if (!value || !/^[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
+		callback();
+		return;
+	}
+
+	try {
+		const { data } = await validateFlowId(value);
+		// 假设后台返回 { exists: true/false } 或者直接返回布尔值
+		if (data === true || data?.exists === true) {
+			callback();
+		} else {
+			callback(new Error('流程ID不存在'));
+		}
+	} catch (error) {
+		callback(new Error('流程ID不存在'));
+	}
+};
+
 const rules = reactive<FormRules>({
 	name: [
 		{ required: true, message: '请填写名称', trigger: 'blur' },
@@ -75,12 +104,13 @@ const rules = reactive<FormRules>({
 	],
 	flowId: [
 		{ required: false, trigger: 'blur' },
-		{ 
+		{
 			pattern: /^[a-zA-Z][a-zA-Z0-9]*$/,
 			message: '流程ID只能包含英文字母和数字，且必须以字母开头',
 			trigger: 'blur'
 		},
 		{ min: 1, max: 50, message: '1-50个字符', trigger: 'blur' },
+		{ validator: validateFlowIdAsync, trigger: 'blur' }
 	],
 	remark: [
 		{ required: false, message: '请填写描述', trigger: 'blur' },

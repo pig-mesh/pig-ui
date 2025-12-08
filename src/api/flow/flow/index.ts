@@ -74,3 +74,16 @@ export function startFlow(obj: any) {
 		data: obj,
 	});
 }
+
+/**
+ * 验证流程ID是否在所有实现类中存在
+ *
+ * @param flowId 流程ID
+ */
+export function validateFlowId(flowId: string) {
+	return request({
+		url: '/task/process/validateFlowId',
+		method: 'get',
+		params: { flowId },
+	});
+}
