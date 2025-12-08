@@ -8,7 +8,7 @@
 		<el-row :gutter="10" v-if="showRoutes.length > 0">
 			<el-col class="shortcutCard" :span="6" :key="shortcut.id" v-for="shortcut in showRoutes">
 				<SvgIcon name="ele-Close" :size="12" class="shortcutCardClose" @click="handleCloseFavorite(shortcut)" />
-				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.name" @click="handleRoute(shortcut.path)" />
+				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.meta?.title || shortcut.name" @click="handleRoute(shortcut.path)" />
 			</el-col>
 		</el-row>
 		<el-empty :image-size="48" :description="props.emptyDescription" v-else />
@@ -72,6 +72,7 @@ const showRoutes = computed(() => {
 	if (props.type === 'flow') {
 		return favoriteRoutes.value.filter((item) => item.path.includes('/flow/list/index?flowId'));
 	} else {
+		console.log(favoriteRoutes.value);
 		return favoriteRoutes.value.filter((item) => !item.path.includes('/flow/list/index?flowId'));
 	}
 });
