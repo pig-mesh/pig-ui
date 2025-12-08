@@ -50,16 +50,19 @@ import { GroupVO } from '/@/api/flow/group/types';
 
 const { proxy } = getCurrentInstance() as any;
 
-const validate = (f: (valid: boolean, errors: string[]) => void) => {
-	proxy.$refs.ruleForm.validate((valid: boolean, fields: any) => {
-		var arr: string[] = [];
-		if (!valid) {
-			for (var err in fields) {
-				arr.push(fields[err][0].message);
+const validate = async (): Promise<void> => {
+	return new Promise((resolve, reject) => {
+		proxy.$refs.ruleForm.validate((valid: boolean, fields: any) => {
+			if (valid) {
+				resolve();
+			} else {
+				const arr: string[] = [];
+				for (const err in fields) {
+					arr.push(fields[err][0].message);
+				}
+				reject(arr);
 			}
-		}
-
-		f(valid, arr);
+		});
 	});
 };
 
