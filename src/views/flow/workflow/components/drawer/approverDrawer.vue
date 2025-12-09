@@ -117,9 +117,9 @@
 					<h4 class="mb-3">审批被拒绝</h4>
 					<div class="space-y-3">
 						<div class="flex items-center">
-							<el-radio 
-								v-model="approverConfig.refuse.handler" 
-								label="TO_END" 
+							<el-radio
+								v-model="approverConfig.refuse.handler"
+								label="TO_END"
 								size="large"
 								class="!mr-6"
 							>
@@ -127,9 +127,9 @@
 							</el-radio>
 						</div>
 						<div class="flex items-center gap-3" v-if="rejectNodeList.length > 0">
-							<el-radio 
-								v-model="approverConfig.refuse.handler" 
-								label="TO_NODE" 
+							<el-radio
+								v-model="approverConfig.refuse.handler"
+								label="TO_NODE"
 								size="large"
 								class="!mr-0 whitespace-nowrap"
 							>
@@ -143,6 +143,16 @@
 							>
 								<el-option v-for="item in rejectNodeList" :key="item.id" :label="item.name" :value="item.id" />
 							</el-select>
+						</div>
+						<div class="flex items-center">
+							<el-radio
+								v-model="approverConfig.refuse.handler"
+								label="TO_START"
+								size="large"
+								class="!mr-6"
+							>
+								驳回到发起人
+							</el-radio>
 						</div>
 					</div>
 				</template>

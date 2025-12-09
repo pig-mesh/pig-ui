@@ -53,7 +53,8 @@
 				<el-table-column label="结束时间" prop="endTime" width="200" />
 				<el-table-column label="状态" prop="taskCreateTime" width="200">
 					<template #default="scope">
-						<el-tag v-if="scope.row.status == 1">进行中</el-tag>
+						<el-tag v-if="scope.row.rejectToStarter" type="warning">驳回待提交</el-tag>
+						<el-tag v-else-if="scope.row.status == 1">进行中</el-tag>
 						<el-tag v-else-if="scope.row?.finishReason == '9'" type="danger">终止</el-tag>
 						<el-tag v-else-if="scope.row?.finishReason == '1'" type="success">通过</el-tag>
 						<el-tag v-else-if="scope.row?.finishReason == '0'" type="danger">拒绝</el-tag>
@@ -64,7 +65,24 @@
 				<el-table-column fixed="right" label="操作">
 					<template #default="scope">
 						<el-button type="primary" size="small" link icon="View" @click="deal(scope.row)"> 查看 </el-button>
-						<el-button :disabled="scope.row.status != 1" type="primary" size="small" link icon="VideoPause" @click="stop(scope.row)">
+						<el-button
+							v-if="scope.row.rejectToStarter"
+							type="warning"
+							size="small"
+							link
+							icon="RefreshRight"
+							@click="handleResubmit(scope.row)"
+						>
+							重新提交
+						</el-button>
+						<el-button
+							:disabled="scope.row.status != 1"
+							type="primary"
+							size="small"
+							link
+							icon="VideoPause"
+							@click="stop(scope.row)"
+						>
 							终止流程
 						</el-button>
 					</template>
@@ -105,12 +123,49 @@
 					</el-row>
 				</template>
 			</el-drawer>
+
+			<!-- 重新提交抽屉 -->
+			<el-drawer v-model="resubmitDrawerVisible" v-if="resubmitDrawerVisible" direction="rtl" size="50%" destroy-on-close>
+				<template #header>
+					<h3>{{ resubmitData?.name }} - 重新提交</h3>
+				</template>
+				<template #default>
+					<el-row>
+						<el-col :span="16">
+							<el-form label-position="top">
+								<div v-if="!resubmitDynamicFormComponent">
+									<FormCreate :rule="resubmitRule" v-model="resubmitFormData" v-model:api="resubmitFApi" :option="resubmitOption" />
+								</div>
+								<div v-else>
+									<component
+										:is="resubmitDynamicFormComponent.component"
+										v-bind="resubmitDynamicFormComponent.props"
+									/>
+								</div>
+							</el-form>
+						</el-col>
+						<el-col :span="8">
+							<flow-node-format
+								:disableSelect="true"
+								:processInstanceId="resubmitData.processInstanceId"
+								:flow-id="resubmitData.flowId"
+							/>
+						</el-col>
+					</el-row>
+				</template>
+				<template #footer>
+					<div style="flex: auto">
+						<el-button size="large" @click="resubmitDrawerVisible = false">取消</el-button>
+						<el-button size="large" type="primary" icon="Check" :loading="resubmitLoading" @click="doResubmit">提交</el-button>
+					</div>
+				</template>
+			</el-drawer>
 		</div>
 	</div>
 </template>
 <script setup lang="ts">
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import { queryMineStarted, stopProcessInstance } from '/@/api/flow/task';
+import { queryMineStarted, stopProcessInstance, resubmitTask } from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
@@ -177,6 +232,59 @@ const deal = (row) => {
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
+};
+
+// ========== 重新提交功能 ==========
+const resubmitDrawerVisible = ref(false);
+const resubmitData = ref();
+const resubmitRule = ref([]);
+const resubmitFApi = ref();
+const resubmitFormData = ref({});
+const resubmitOption = ref<any>({});
+const resubmitDynamicFormComponent = shallowRef<DynamicFormComponent | null>(null);
+const resubmitCurrentOpenFlowForm = ref();
+const resubmitLoading = ref(false);
+
+// 重新提交的表单加载器
+const { loadForm: loadResubmitForm } = useTaskFormLoader({
+	rule: resubmitRule,
+	formData: resubmitFormData,
+	option: resubmitOption,
+	dynamicFormComponent: resubmitDynamicFormComponent,
+	currentOpenFlowForm: resubmitCurrentOpenFlowForm,
+});
+
+/**
+ * 点击重新提交按钮
+ */
+const handleResubmit = (row: any) => {
+	resubmitData.value = row;
+	loadResubmitForm(() => detail({ processInstanceId: row.processInstanceId }), {
+		parseFormData: true,
+		onSuccess: () => {
+			resubmitDrawerVisible.value = true;
+		},
+	});
+};
+
+/**
+ * 执行重新提交
+ */
+const doResubmit = async () => {
+	resubmitLoading.value = true;
+	try {
+		await resubmitTask({
+			taskId: resubmitData.value.resubmitTaskId,
+			formData: resubmitFormData.value,
+		});
+		useMessage().success('重新提交成功');
+		resubmitDrawerVisible.value = false;
+		getDataList();
+	} catch (error) {
+		console.error('重新提交失败:', error);
+	} finally {
+		resubmitLoading.value = false;
+	}
 };
 
 onMounted(() => {

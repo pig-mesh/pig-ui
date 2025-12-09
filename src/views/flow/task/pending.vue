@@ -52,7 +52,16 @@
 				<el-table-column label="任务时间" prop="taskCreateTime" />
 				<el-table-column fixed="right" label="操作" width="200">
 					<template #default="scope">
-						<el-button type="primary" size="small" link icon="VideoPlay" @click="deal(scope.row)"> 开始处理 </el-button>
+						<el-button
+					type="primary"
+					size="small"
+					link
+					icon="VideoPlay"
+					:disabled="scope.row.taskName?.includes('发起人')"
+					@click="deal(scope.row)"
+				>
+					开始处理
+				</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -94,9 +103,16 @@
 				</template>
 				<template #footer>
 					<div style="flex: auto">
-						<el-button size="large" type="danger" icon="Close" @click="refuseTask">拒绝</el-button>
-						<el-button size="large" type="primary" icon="Check" @click="submitTask">提交</el-button>
-						<el-button size="large" type="info" icon="Share" @click="transferTask">转办</el-button>
+						<!-- 发起人节点（驳回后重新提交场景）：显示重新提交按钮 -->
+						<template v-if="currentData?.nodeId === 'root'">
+							<el-button size="large" type="primary" icon="Check" @click="handleResubmit">重新提交</el-button>
+						</template>
+						<!-- 普通审批节点：显示审批按钮 -->
+						<template v-else>
+							<el-button size="large" type="danger" icon="Close" @click="refuseTask">拒绝</el-button>
+							<el-button size="large" type="primary" icon="Check" @click="submitTask">提交</el-button>
+							<el-button size="large" type="info" icon="Share" @click="transferTask">转办</el-button>
+						</template>
 					</div>
 				</template>
 			</el-drawer>
@@ -117,7 +133,7 @@ import AgreeHandle from './handler/agree.vue';
 import RefuseHandle from './handler/refuse.vue';
 import TransferHandle from './handler/transfer.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import { queryMineTask, queryTask } from '/@/api/flow/task';
+import { queryMineTask, queryTask, resubmitTask } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
@@ -208,6 +224,22 @@ const refuseTask = () => {
  */
 const transferTask = () => {
 	transferHandler.value.handle(currentData.value,formData.value);
+};
+
+/**
+ * 重新提交任务（驳回到发起人后）
+ * 当流程被驳回到发起人时，发起人使用此方法重新编辑表单并提交
+ */
+const handleResubmit = async () => {
+	try {
+		await resubmitTask({
+			taskId: currentData.value.taskId,
+			formData: formData.value,
+		});
+		taskSubmitEvent();
+	} catch (error) {
+		console.error('重新提交失败', error);
+	}
 };
 
 onMounted(() => {

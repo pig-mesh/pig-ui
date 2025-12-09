@@ -105,6 +105,20 @@ export function transferTask(param: Object) {
 	});
 }
 
+/**
+ * 重新提交任务（驳回到发起人后）
+ * 当流程被驳回到发起人时，发起人使用此方法重新编辑表单并提交
+ *
+ * @param param 包含 taskId 和 formData
+ */
+export function resubmitTask(param: Object) {
+	return request({
+		url: '/task/task/resubmitTask',
+		method: 'post',
+		data: param,
+	});
+}
+
 // 格式化流程节点显示
 export function formatStartNodeShow(param: Object) {
 	return request({
