@@ -24,4 +24,5 @@ pnpm-debug.log*
 
 # lock files
 yarn.lock
+package-lock.json
 .vscode
