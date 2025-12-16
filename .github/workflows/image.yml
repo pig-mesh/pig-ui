@@ -45,7 +45,7 @@ jobs:
         run: |
           docker compose -f ./docker/docker-compose.yaml build
           registry="registry.cn-hangzhou.aliyuncs.com/pigx/"
-          for service in $(docker-compose -f ./docker/docker-compose.yaml config --services); do
+          for service in $(docker compose -f ./docker/docker-compose.yaml config --services); do
             docker tag ${service}:latest ${registry}${service}:latest
             docker push ${registry}${service}:latest
           done
