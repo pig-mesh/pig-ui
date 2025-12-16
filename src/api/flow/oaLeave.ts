@@ -9,7 +9,7 @@ import request from "/@/utils/request"
  */
 export function fetchList(query?: Object) {
   return request({
-    url: '/flow/bpmOaLeave/page',
+    url: '/task/bpmOaLeave/page',
     method: 'get',
     params: query
   })
@@ -22,7 +22,7 @@ export function fetchList(query?: Object) {
  */
 export function addObj(obj?: Object) {
   return request({
-    url: '/flow/bpmOaLeave',
+    url: '/task/bpmOaLeave',
     method: 'post',
     data: obj
   })
@@ -35,7 +35,7 @@ export function addObj(obj?: Object) {
  */
 export function getObj(obj?: Object) {
   return request({
-    url: '/flow/bpmOaLeave/details',
+    url: '/task/bpmOaLeave/details',
     method: 'get',
     params: obj
   })
@@ -48,7 +48,7 @@ export function getObj(obj?: Object) {
  */
 export function delObjs(ids?: Object) {
   return request({
-    url: '/flow/bpmOaLeave',
+    url: '/task/bpmOaLeave',
     method: 'delete',
     data: ids
   })
@@ -61,7 +61,7 @@ export function delObjs(ids?: Object) {
  */
 export function putObj(obj?: Object) {
   return request({
-    url: '/flow/bpmOaLeave',
+    url: '/task/bpmOaLeave',
     method: 'put',
     data: obj
   })
