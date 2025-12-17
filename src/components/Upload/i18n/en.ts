@@ -17,8 +17,12 @@ export default {
 		files: 'files allowed',
 	},
 	uploadTipPrefix: 'Please upload',
+	uploadTipPaste: 'Supports click, drag and paste upload.',
 	sizeLimitTip: 'size less than',
+	sizeLimitTipParam: 'Max size: {fileSize}MB.',
+	limitTipParam: 'Max {limit} images.',
 	formatTip: 'format is',
+	formatTipParam: 'Formats: {fileType}.',
 	fileSuffix: 'files',
 	invalidFormatError: 'Incorrect file format, please upload {fileType} format pictures!',
 	invalidFilenameError: 'Incorrect file name, cannot contain commas!',
@@ -28,4 +32,5 @@ export default {
 	uploadFailRetry: 'Upload failed, please try again',
 	uploadFail: 'Image upload failed, please try again',
 	uploadText: 'Click to upload',
+	uploadSuccess: 'Upload success',
 };

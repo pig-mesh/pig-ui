@@ -17,8 +17,12 @@ export default {
 		files: '个文件',
 	},
 	uploadTipPrefix: '请上传',
+	uploadTipPaste: '支持点击、拖拽、粘贴上传。',
 	sizeLimitTip: '大小不超过',
+	sizeLimitTipParam: '大小不超过 {fileSize}MB。',
+	limitTipParam: '最多上传 {limit} 张。',
 	formatTip: '格式为',
+	formatTipParam: '仅支持 {fileType} 格式。',
 	fileSuffix: '的文件',
 	invalidFormatError: '文件格式不正确，请上传{fileType}图片格式文件!',
 	invalidFilenameError: '文件名不正确，不能包含英文逗号!',
@@ -28,4 +32,5 @@ export default {
 	uploadFailRetry: '上传失败，请重试',
 	uploadFail: '上传图片失败，请重试',
 	uploadText: '点击上传',
+	uploadSuccess: '上传成功',
 };
