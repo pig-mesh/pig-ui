@@ -27,4 +27,5 @@ export default {
 	limitExceedError: '上传文件数量不能超过 {limit} 个!',
 	uploadFailRetry: '上传失败，请重试',
 	uploadFail: '上传图片失败，请重试',
+	uploadText: '点击上传',
 };

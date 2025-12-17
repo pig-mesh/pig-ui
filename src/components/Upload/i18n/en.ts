@@ -27,4 +27,5 @@ export default {
 	limitExceedError: 'Number of uploaded files cannot exceed {limit}!',
 	uploadFailRetry: 'Upload failed, please try again',
 	uploadFail: 'Image upload failed, please try again',
+	uploadText: 'Click to upload',
 };

@@ -71,8 +71,8 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 				<div v-if="node.userVoList?.length" class="flex flex-wrap gap-2 mb-3">
 					<div v-for="(item1, index1) in node.userVoList" :key="index1" class="w-10 text-center">
 						<div class="flex flex-col items-center">
-							<upload-img v-model:image-url="item1.avatar" width="30px" height="30px"></upload-img>
-							<div class="mt-1 w-full text-xs truncate">{{ item1.name }}</div>
+							<upload-img disabled v-model:image-url="item1.avatar" width="30px" height="30px"></upload-img>
+							<div class="w-full mt-1 text-xs truncate">{{ item1.name }}</div>
 						</div>
 					</div>
 				</div>
@@ -80,7 +80,7 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 				<!-- Comments Section -->
 				<div v-for="(item1, index1) in node.userVoList" :key="'comment-' + index1">
 					<div v-if="item1.approveDesc" class="mb-3">
-						<div class="flex gap-2 items-center mb-2">
+						<div class="flex items-center gap-2 mb-2">
 							<div class="w-10 text-center">
 								<upload-img v-model:image-url="item1.avatar" disabled width="30px" height="30px"></upload-img>
 							</div>
@@ -89,7 +89,7 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 								<span class="ml-1 text-gray-500">(添加了评论) {{ item1.showTime }}</span>
 							</div>
 						</div>
-						<div class="p-3 text-sm bg-gray-50 rounded">{{ item1.approveDesc }}</div>
+						<div class="p-3 text-sm rounded bg-gray-50">{{ item1.approveDesc }}</div>
 					</div>
 				</div>
 

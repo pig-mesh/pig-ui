@@ -3,7 +3,7 @@
 	<div class="w-full upload-file">
 		<!-- 当禁用时只显示文件列表，不使用el-upload组件 -->
 		<div v-if="props.disabled">
-			<div v-if="fileList.length === 0" class="flex justify-center items-center px-4 text-gray-400 bg-gray-50 rounded-md p">
+			<div v-if="fileList.length === 0" class="flex items-center justify-center px-4 text-gray-400 rounded-md bg-gray-50 p">
 				<el-icon class="mr-2 text-lg"><Document /></el-icon>
 				<span class="text-sm">{{ $t('excel.noFiles') }}</span>
 			</div>
@@ -11,7 +11,7 @@
 				<div
 					v-for="(file, index) in fileList"
 					:key="index"
-					class="flex items-center px-4 py-3 mb-1 rounded transition-colors duration-200 cursor-pointer group hover:bg-blue-50"
+					class="flex items-center px-4 py-3 mb-1 transition-colors duration-200 rounded cursor-pointer group hover:bg-blue-50"
 					@click="handlePreview(file)"
 				>
 					<el-icon class="mr-3 text-blue-500"><Document /></el-icon>
