@@ -72,7 +72,6 @@ const showRoutes = computed(() => {
 	if (props.type === 'flow') {
 		return favoriteRoutes.value.filter((item) => item.path.includes('/flow/list/index?flowId'));
 	} else {
-		console.log(favoriteRoutes.value);
 		return favoriteRoutes.value.filter((item) => !item.path.includes('/flow/list/index?flowId'));
 	}
 });
