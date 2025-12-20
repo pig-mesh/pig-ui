@@ -1,5 +1,6 @@
-import request from '/@/utils/request';
 import axios from 'axios';
+import request from '/@/utils/request';
+import { Session } from '/@/utils/storage';
 import { decrypt } from '/@/utils/apiCrypto';
 
 export function fetchList(query?: Object) {
@@ -60,13 +61,26 @@ export function refreshCache() {
  *  注意这里使用原声axios对象进行操作，request 实例中依赖i18n 所以还没有初始化会报错
  * @returns
  */
-export function info() {
-	return axios.get(import.meta.env.VITE_API_URL + '/admin/i18n/info').then((response) => {
-		if (response.data.encryption) {
-			response.data = decrypt(response.data.encryption);
-		}
-		return response;
-	});
+export async function info() {
+	const headers: Record<string, string> = {};
+
+	const token = Session.getToken();
+	if (token) headers.Authorization = `Bearer ${token}`;
+
+	const tenantId = Session.getTenant();
+	if (tenantId) headers['TENANT-ID'] = String(tenantId);
+
+	const version = import.meta.env.VITE_GRAY_VERSION;
+	if (version) headers.VERSION = version;
+
+	const timeout = Number(import.meta.env.VITE_REQUEST_TIMEOUT) || 50000;
+	const res = await axios.get(`${import.meta.env.VITE_API_URL}/admin/i18n/info`, { headers, timeout });
+
+	if (res.data?.encryption) {
+		return decrypt(res.data.encryption);
+	}
+
+	return res.data;
 }
 
 export function validateName(rule: any, value: any, callback: any, isEdit: boolean, t?: any) {
