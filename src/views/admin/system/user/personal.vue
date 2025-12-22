@@ -221,6 +221,7 @@ const formData = ref({
 	nickname: '',
 	wxDingUserid: '',
 	wxCpUserid: '',
+	wxOpenid: '',
 	phone: undefined as string | undefined,
 });
 
@@ -529,6 +530,11 @@ const initSocialList = () => {
 			type: SocialLoginEnum.DINGTALK,
 			openId: formData.value.wxDingUserid,
 		},
+		{
+			name: '微信扫码',
+			type: SocialLoginEnum.WECHAT,
+			openId: formData.value.wxOpenid,
+		},
 	];
 };
 
@@ -562,6 +568,11 @@ const handleClick = async (thirdpart: SocialLoginEnum) => {
 	// 钉钉授权URL
 	if (thirdpart === SocialLoginEnum.DINGTALK) {
 		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-BIND&prompt=consent`;
+	}
+
+	// 微信扫码授权URL
+	if (thirdpart === SocialLoginEnum.WECHAT) {
+		url = `https://open.weixin.qq.com/connect/qrconnect?appid=${result.appId}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_login&state=${SocialLoginEnum.WECHAT}-BIND#wechat_redirect`;
 	}
 
 	// 打开授权窗口

@@ -155,7 +155,11 @@ export default {
 	socialLogin: {
 		orContinueWith: 'Or continue with',
 		wechatWork: 'WeCom',
+		wechatWorkDesc: 'Scan with WeCom app',
 		dingtalk: 'DingTalk',
+		dingtalkDesc: 'Scan with DingTalk app',
+		wechat: 'WeChat',
+		wechatDesc: 'Scan with WeChat app',
 		bindSuccess: 'Social account bound successfully',
 		missingParams: 'Missing required parameters: code or state',
 	},

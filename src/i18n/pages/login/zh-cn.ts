@@ -151,8 +151,12 @@ export default {
 	// 社交登录按钮
 	socialLogin: {
 		orContinueWith: 'or',
-		wechatWork: '企微',
+		wechatWork: '企业微信',
+		wechatWorkDesc: '使用企业微信扫码登录',
 		dingtalk: '钉钉',
+		dingtalkDesc: '使用钉钉扫码登录',
+		wechat: '微信',
+		wechatDesc: '使用微信扫码登录',
 		bindSuccess: '社交账号绑定成功',
 		missingParams: '缺少必要参数: code 或 state',
 	},
