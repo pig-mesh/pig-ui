@@ -1,90 +1,85 @@
 <template>
-	<div class="container">
-		<el-tag :color="randomColor()" class="container-tag">
-			<SvgIcon :name="props.icon" :size="25" color="#ffffff" />
-		</el-tag>
-		<span class="container-span">{{ $t(props.label) }}</span>
+	<div
+		class="group relative flex flex-col items-center gap-1 px-1 py-1.5 rounded-lg cursor-pointer transition-all duration-200 hover:bg-black/[0.04] active:scale-95 dark:hover:bg-white/[0.06]"
+		@click="$emit('click')"
+	>
+		<!-- Close Button -->
+		<div
+			v-if="closable"
+			class="absolute -top-0.5 -right-0.5 flex items-center justify-center w-4 h-4 rounded-full bg-black/[0.08] text-gray-400 opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 hover:bg-red-500/15 hover:text-red-500 dark:bg-white/10 dark:hover:bg-red-500/20 dark:hover:text-red-400"
+			@click.stop="$emit('close')"
+		>
+			<SvgIcon name="ele-Close" :size="10" />
+		</div>
+
+		<!-- Icon Container with Gradient -->
+		<div
+			class="flex items-center justify-center w-8 h-8 rounded-lg shrink-0 shadow-sm transition-transform duration-200 group-hover:scale-105"
+			:style="iconStyle"
+		>
+			<SvgIcon :name="props.icon" :size="16" color="#ffffff" />
+		</div>
+
+		<!-- Label -->
+		<span class="text-[11px] font-medium text-gray-600 text-center leading-tight break-words max-w-[68px] dark:text-gray-300">
+			{{ $t(props.label) }}
+		</span>
 	</div>
 </template>
 
-<script setup name="shortcut">
+<script setup lang="ts" name="shortcut">
 const props = defineProps({
 	icon: {
 		type: String,
-		default: () => 'menu-outlined',
-		required: false,
+		default: 'menu-outlined',
 	},
 	label: {
 		type: String,
-		default: () => '快捷方式',
-		required: false,
+		default: '快捷方式',
 	},
 	color: {
 		type: String,
-		default: () => '',
-		required: false,
+		default: '',
+	},
+	closable: {
+		type: Boolean,
+		default: true,
 	},
 });
-// 颜色列表
-const colorList = ['#7265E6', '#FFBF00', '#00A2AE', '#F56A00', '#1890FF', '#606D80'];
-// 获取随机颜色
-const randomColor = () => {
-	if (props.color) {
+
+defineEmits(['click', 'close']);
+
+// Curated gradient color palette
+const gradientMap: Record<string, { from: string; to: string }> = {
+	purple: { from: '#7C3AED', to: '#A855F7' },
+	blue: { from: '#3B82F6', to: '#60A5FA' },
+	teal: { from: '#14B8A6', to: '#2DD4BF' },
+	orange: { from: '#F97316', to: '#FB923C' },
+	pink: { from: '#EC4899', to: '#F472B6' },
+	indigo: { from: '#6366F1', to: '#818CF8' },
+};
+
+const colorKeys = Object.keys(gradientMap);
+
+// Get consistent color based on label hash (not random)
+const getColorKey = (): string => {
+	if (props.color && gradientMap[props.color]) {
 		return props.color;
 	}
-	return colorList[randomNum(0, colorList.length - 1)];
-};
-// 获取minNum到maxNum内的随机数
-const randomNum = (minNum, maxNum) => {
-	switch (arguments.length) {
-		case 1:
-			return parseInt(Math.random() * minNum + 1, 10);
-			// eslint-disable-next-line no-unreachable
-			break;
-		case 2:
-			return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-			// eslint-disable-next-line no-unreachable
-			break;
-		default:
-			return 0;
-			// eslint-disable-next-line no-unreachable
-			break;
+	// Hash the label to get consistent color
+	let hash = 0;
+	const str = props.label || 'default';
+	for (let i = 0; i < str.length; i++) {
+		hash = str.charCodeAt(i) + ((hash << 5) - hash);
 	}
+	return colorKeys[Math.abs(hash) % colorKeys.length];
 };
+
+const iconStyle = computed(() => {
+	const colorKey = getColorKey();
+	const gradient = gradientMap[colorKey];
+	return {
+		background: `linear-gradient(135deg, ${gradient.from} 0%, ${gradient.to} 100%)`,
+	};
+});
 </script>
-
-<style scoped>
-.container {
-	height: 60px;
-	/*border:1px solid var(--border-color-split);*/
-	border-radius: 5px;
-	display: flex;
-	align-items: center;
-	cursor: pointer;
-	/*实现渐变（时间变化效果）*/
-	-webkit-transition: all 0.5s;
-	-moz-transition: all 0.5s;
-	-ms-transition: all 0.5s;
-	-o-transition: all 0.5s;
-	transition: all 0.5s;
-}
-.container:hover {
-	background: var(--border-color-split);
-}
-.container-tag {
-	width: 42px;
-	height: 42px;
-	border-radius: 10px;
-	display: flex;
-	align-items: center;
-	margin-left: 10px;
-	font-size: 24px;
-}
-
-.container-span {
-	max-width: 60%;
-	font-weight: 500;
-	margin-left: 10px;
-	color: #6d6b6b;
-}
-</style>

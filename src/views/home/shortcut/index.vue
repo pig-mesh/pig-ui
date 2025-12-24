@@ -1,16 +1,22 @@
 <template>
-	<el-card class="h-[191px] box-card">
+	<el-card class="h-[191px] box-card" :body-style="{ height: 'calc(100% - 50px)', padding: '8px 12px' }">
 		<template #header>
 			<div class="card-header">
 				<span>{{ props.title }}</span>
 			</div>
 		</template>
-		<el-row :gutter="10" v-if="showRoutes.length > 0">
-			<el-col class="shortcutCard" :span="6" :key="shortcut.id" v-for="shortcut in showRoutes">
-				<SvgIcon name="ele-Close" :size="12" class="shortcutCardClose" @click="handleCloseFavorite(shortcut)" />
-				<shortcutCard :icon="shortcut.meta?.icon" :label="shortcut.meta?.title || shortcut.name" @click="handleRoute(shortcut.path)" />
-			</el-col>
-		</el-row>
+		<div class="h-full pr-1 -mr-1 overflow-y-auto" v-if="showRoutes.length > 0">
+			<div class="grid grid-cols-6">
+				<shortcutCard
+					v-for="shortcut in showRoutes"
+					:key="shortcut.id"
+					:icon="shortcut.meta?.icon"
+					:label="shortcut.meta?.title || shortcut.name"
+					@click="handleRoute(shortcut.path)"
+					@close="handleCloseFavorite(shortcut)"
+				/>
+			</div>
+		</div>
 		<el-empty :image-size="48" :description="props.emptyDescription" v-else />
 	</el-card>
 </template>
@@ -78,17 +84,5 @@ const showRoutes = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.shortcutCard {
-	position: relative;
-
-	.shortcutCardClose {
-		position: absolute;
-		top: 0;
-		right: 30%;
-		font-weight: 700;
-		font-size: 20px;
-		cursor: pointer;
-		color: #6d6b6b;
-	}
-}
+/* Styles moved to ShortcutCard component */
 </style>
