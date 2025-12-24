@@ -10,5 +10,5 @@ export default {
 </template>
 
 <script setup lang="ts" name="SysFavoriteDashboard">
-const Shortcut = defineAsyncComponent(() => import('/@/views/home/shortcut/index.vue'));
+import Shortcut from '/@/views/home/shortcut/index.vue';
 </script>

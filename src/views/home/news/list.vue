@@ -23,7 +23,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchUserMessageList } from '/@/api/admin/message';
 import { useI18n } from 'vue-i18n';
 
-const NewsContent = defineAsyncComponent(() => import('./content.vue'));
+import NewsContent from './content.vue';
 
 /**
  * 国际化工具

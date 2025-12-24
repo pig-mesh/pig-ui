@@ -38,8 +38,8 @@ export default {
 <script setup lang="ts" name="newsLetter">
 import { fetchUserMessageList } from '/@/api/admin/message';
 
-const NewsContent = defineAsyncComponent(() => import('/@/views/home/news/content.vue'));
-const NewsLists = defineAsyncComponent(() => import('/@/views/home/news/list.vue'));
+import NewsContent from '/@/views/home/news/content.vue';
+import NewsLists from '/@/views/home/news/list.vue';
 
 const listRef = ref();
 const contentRef = ref();

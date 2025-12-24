@@ -67,8 +67,8 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { parseDate } from '/@/utils/formatTime';
 import { list, putObj } from '/@/api/admin/schedule';
 
-const ScheduleForm = defineAsyncComponent(() => import('/@/views/home/schedule/form.vue'));
-const Schedule = defineAsyncComponent(() => import('/@/views/home/schedule/index.vue'));
+import ScheduleForm from '/@/views/home/schedule/form.vue';
+import Schedule from '/@/views/home/schedule/index.vue';
 
 // 获取当前国际化方言
 const storesThemeConfig = useThemeConfig();

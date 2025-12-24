@@ -100,8 +100,7 @@ const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_st
  */
 const emit = defineEmits(['refresh']);
 
-// 引入组件
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+import FormDialog from './form.vue';
 
 /**
  * 国际化工具
