@@ -11,5 +11,5 @@ export default {
 	</el-card>
 </template>
 <script setup lang="ts" name="line-chart">
-const LogLineChart = defineAsyncComponent(() => import('/@/views/admin/log/line-chart.vue'));
+import LogLineChart from '/@/views/admin/log/line-chart.vue';
 </script>
