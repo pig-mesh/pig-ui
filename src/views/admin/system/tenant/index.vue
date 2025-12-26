@@ -115,7 +115,7 @@
 											type="primary"
 											>{{ $t('tenant.userListBtn') }}
 										</el-button>
-										<el-button
+										<!-- <el-button
 											class="!p-0"
 											icon="HomeFilled"
 											@click="individuationRef.openDialog(tenant.id)"
@@ -123,7 +123,7 @@
 											type="primary"
 											v-auth="'sys_systenant_edit'"
 											>{{ $t('tenant.individuationBtn') }}
-										</el-button>
+										</el-button> -->
 										<el-button
 											class="!p-0"
 											icon="edit-pen"
