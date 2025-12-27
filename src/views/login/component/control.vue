@@ -1,9 +1,9 @@
 <template>
-	<div class="flex fixed top-0 right-0 z-10 items-center p-5 space-x-2">
+	<div class="fixed top-0 right-0 z-10 flex items-center p-5 space-x-2">
 		<!-- 语言切换 -->
 		<el-dropdown v-if="isI18nEnabled" trigger="click" @command="onLanguageChange">
 			<div
-				class="flex justify-center items-center w-9 h-9 rounded-lg backdrop-blur-sm transition-colors cursor-pointer bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
+				class="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 			>
 				<i
 					class="text-lg text-gray-600 dark:text-slate-300 iconfont"
@@ -21,7 +21,7 @@
 		<!-- 主题切换 -->
 		<el-tooltip v-if="isDarkModeEnabled" :content="getThemeConfig.isDark ? t('control.toggleLightMode') : t('control.toggleDarkMode')" placement="bottom">
 			<div
-				class="flex justify-center items-center w-9 h-9 rounded-lg backdrop-blur-sm transition-colors cursor-pointer bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
+				class="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 				@click="onThemeClick"
 			>
 				<el-icon :size="18" class="text-gray-600 dark:text-slate-300">

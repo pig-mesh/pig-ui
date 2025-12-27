@@ -57,6 +57,10 @@
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
 import logo from '/@/assets/login/logo.svg';
+import loginBgLight from '/@/assets/login/login-bg.svg';
+import loginBgDark from '/@/assets/login/login-bg-dark.svg';
+import loginBgPhoneLight from '/@/assets/login/login-bg-phone.svg';
+import loginBgPhoneDark from '/@/assets/login/login-bg-phone-dark.svg';
 import { useI18n } from 'vue-i18n';
 import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
@@ -107,16 +111,16 @@ const backgroundStyle = computed(() => {
 	const isDark = themeConfig.value.isDark;
 	const isMobile = windowWidth.value < 768; // md 断点
 
-	// 根据暗黑模式和设备类型选择背景文件
-	let bgFile = '';
+	// 根据暗黑模式和设备类型选择背景
+	let bgUrl = '';
 	if (isMobile) {
-		bgFile = isDark ? 'login-bg-phone-dark.svg' : 'login-bg-phone.svg';
+		bgUrl = isDark ? loginBgPhoneDark : loginBgPhoneLight;
 	} else {
-		bgFile = isDark ? 'login-bg-dark.svg' : 'login-bg.svg';
+		bgUrl = isDark ? loginBgDark : loginBgLight;
 	}
 
 	return {
-		background: `url(${new URL(`../../assets/login/${bgFile}`, import.meta.url).href}) no-repeat center/cover`,
+		background: `url(${bgUrl}) no-repeat center/cover`,
 		userSelect: 'none'
 	};
 });
