@@ -8,7 +8,7 @@
 				v-model="state.ruleForm.username"
 				clearable
 				autocomplete="off"
-				class="h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
+				class="login-input h-11 rounded-md transition-all duration-200"
 			>
 				<template #prefix>
 					<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
@@ -24,7 +24,7 @@
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
 				v-model="state.ruleForm.password"
-				class="h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
+				class="login-input h-11 rounded-md transition-all duration-200"
 				autocomplete="off"
 			>
 				<template #prefix>
@@ -53,7 +53,7 @@
 					v-model="state.ruleForm.code"
 					clearable
 					autocomplete="off"
-					class="flex-1 h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
+					class="login-input flex-1 h-11 rounded-md transition-all duration-200"
 				>
 					<template #prefix>
 						<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
@@ -64,7 +64,7 @@
 				<img
 					:src="imgSrc"
 					@click="getVerifyImageCode"
-					class="w-[120px] h-11 rounded-md cursor-pointer object-cover border border-gray-300 dark:border-slate-600 hover:opacity-80 hover:border-gray-400 dark:hover:border-slate-500 transition-all duration-200"
+					class="captcha-img w-[120px] h-11 rounded-md cursor-pointer object-cover transition-all duration-200"
 					alt="验证码"
 				/>
 			</div>
@@ -74,7 +74,7 @@
 		<el-form-item class="login-animation4 mb-5">
 			<el-button
 				type="primary"
-				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 font-medium text-[15px] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(37,99,235,0.24)] hover:-translate-y-[1px] active:scale-[0.98]"
+				class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200"
 				v-waves
 				@click="handleVerify"
 				:loading="loading"
@@ -87,7 +87,7 @@
 		<div class="flex items-center justify-center gap-3 mb-6 text-[13px]">
 			<a
 				href="#"
-				class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+				class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
 				@click.prevent="emit('change',LoginTypeEnum.FORGET)"
 			>
 				{{ $t('password.forgetPassword') }}
@@ -95,7 +95,7 @@
 			<span class="text-gray-300 dark:text-slate-600">|</span>
 			<a
 				href="#"
-				class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+				class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
 				@click.prevent="emit('change', LoginTypeEnum.MOBILE)"
 			>
 				{{ $t('password.mobileLogin') }}
@@ -104,7 +104,7 @@
 				<span class="text-gray-300 dark:text-slate-600">|</span>
 				<a
 					href="#"
-					class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+					class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
 					@click.prevent="emit('change', LoginTypeEnum.REGISTER)"
 				>
 					{{ $t('password.createAccount') }}
@@ -116,9 +116,9 @@
 		<div class="flex items-center justify-center">
 			<span class="text-xs text-gray-400 dark:text-slate-500 text-center leading-relaxed">
 				{{ $t('password.agreement') }}
-				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.serviceAgreement') }}</a>
+				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.serviceAgreement') }}</a>
 				{{ $t('password.and') }}
-				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.privacyPolicy') }}</a>
+				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.privacyPolicy') }}</a>
 			</span>
 		</div>
 	</el-form>
@@ -248,3 +248,4 @@ onMounted(() => {
 	}
 });
 </script>
+

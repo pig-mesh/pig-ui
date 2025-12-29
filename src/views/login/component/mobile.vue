@@ -8,7 +8,7 @@
 				:placeholder="$t('mobile.placeholder1')"
 				v-model="loginForm.mobile"
 				clearable
-				class="h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
+				class="login-input h-11 rounded-md transition-all duration-200"
 				autocomplete="off"
 			>
 				<template #prefix>
@@ -26,7 +26,7 @@
 					:placeholder="$t('mobile.placeholder2')"
 					v-model="loginForm.code"
 					clearable
-					class="flex-1 h-11 bg-white dark:bg-slate-700 dark:text-slate-200 rounded-md border border-gray-300 dark:border-slate-600 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:focus:ring-blue-900/30 transition-all duration-200"
+					class="login-input flex-1 h-11 rounded-md transition-all duration-200"
 					autocomplete="off"
 				>
 					<template #prefix>
@@ -40,7 +40,7 @@
 					@click="handleSendCode"
 					:loading="msgKey"
 					:disabled="msgKey"
-					class="w-[120px] h-11 text-[13px] rounded-md font-medium border border-gray-300 dark:border-slate-600 bg-transparent text-gray-600 dark:text-slate-300 hover:bg-gray-50 hover:border-gray-400 dark:hover:bg-slate-700 dark:hover:border-slate-500 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+					class="send-code-btn w-[120px] h-11 text-[13px] rounded-md font-medium transition-all duration-200"
 				>
 					<span class="font-semibold">{{ msgText }}</span>
 				</el-button>
@@ -51,7 +51,7 @@
 		<el-form-item class="login-animation4 mb-4">
 			<el-button
 				type="primary"
-				class="w-full h-11 rounded-md bg-blue-600 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-700 font-medium text-[15px] transition-all duration-200 hover:shadow-[0_4px_12px_rgba(37,99,235,0.24)] hover:-translate-y-[1px] active:scale-[0.98]"
+				class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200"
 				v-waves
 				@click="handleLogin"
 				:loading="loading"
@@ -64,9 +64,9 @@
 		<div class="flex items-center justify-center mb-3">
 			<span class="text-xs text-gray-400 dark:text-slate-500 text-center leading-relaxed">
 				{{ $t('password.agreement') }}
-				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.serviceAgreement') }}</a>
+				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.serviceAgreement') }}</a>
 				{{ $t('password.and') }}
-				<a href="#" class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200">{{ $t('password.privacyPolicy') }}</a>
+				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.privacyPolicy') }}</a>
 			</span>
 		</div>
 
@@ -74,7 +74,7 @@
 		<div class="flex items-center justify-center text-[13px]">
 			<a
 				href="#"
-				class="text-gray-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors duration-200"
+				class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
 				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
 			>
 				{{ $t('mobile.backToLogin') }}
@@ -195,8 +195,3 @@ const timeCacl = () => {
 };
 </script>
 
-<style scoped>
-.shadow-btn {
-	box-shadow: 0 4px 12px rgba(var(--el-color-primary-rgb), 0.2);
-}
-</style>

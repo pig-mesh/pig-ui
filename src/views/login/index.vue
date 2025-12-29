@@ -11,11 +11,11 @@
 
 		<!-- 居中登录卡片 -->
 		<div
-			class="relative z-10 w-full md:w-[560px] h-auto min-h-[690px] bg-white dark:bg-slate-800 rounded-none md:rounded-2xl shadow-none md:shadow-[0_32px_64px_-12px_rgba(19,51,107,0.20),0_0_1px_0_rgba(19,51,107,0.20)] dark:md:shadow-[0_32px_64px_-12px_rgba(0,0,0,0.40),0_0_1px_0_rgba(0,0,0,0.40)] px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up"
+			class="login-card relative z-10 w-full md:w-[560px] h-auto min-h-[690px] rounded-none md:rounded-2xl px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up"
 		>
 			<!-- Logo 和品牌区域 -->
 			<div class="flex items-center justify-center mb-8">
-				<div class="flex items-center justify-center w-14 h-14 bg-gray-50 dark:bg-slate-700 rounded-lg border-[1.5px] border-gray-200 dark:border-slate-600">
+				<div class="flex items-center justify-center rounded-lg logo-container w-14 h-14">
 					<img
 						class="object-contain w-9 h-9"
 						:src="!themeConfig.logo ? logo : baseURL + themeConfig.logo"

@@ -15,7 +15,7 @@
 		<div class="flex items-center justify-center gap-4">
 			<!-- 企业微信 -->
 			<button @click="handleClick(SocialLoginEnum.WEIXIN_CP)"
-				class="flex items-center justify-center transition-all duration-300 ease-out bg-white border border-gray-200 cursor-pointer group w-14 h-14 rounded-2xl dark:bg-slate-800/60 dark:border-slate-600/80 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:border-blue-300 dark:hover:border-blue-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/20 active:scale-95 active:translate-y-0"
+				class="social-btn social-btn-blue flex items-center justify-center transition-all duration-200 ease-out cursor-pointer group w-14 h-14 rounded-2xl"
 				:title="$t('socialLogin.wechatWork')">
 				<svg class="transition-transform duration-300 w-7 h-7 group-hover:scale-110" viewBox="0 0 1229 1024"
 					xmlns="http://www.w3.org/2000/svg">
@@ -39,7 +39,7 @@
 
 			<!-- 钉钉 -->
 			<button @click="handleClick(SocialLoginEnum.DINGTALK)"
-				class="flex items-center justify-center transition-all duration-300 ease-out bg-white border border-gray-200 cursor-pointer group w-14 h-14 rounded-2xl dark:bg-slate-800/60 dark:border-slate-600/80 hover:bg-sky-50 dark:hover:bg-sky-900/20 hover:border-sky-300 dark:hover:border-sky-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-sky-500/20 active:scale-95 active:translate-y-0"
+				class="social-btn social-btn-sky flex items-center justify-center transition-all duration-200 ease-out cursor-pointer group w-14 h-14 rounded-2xl"
 				:title="$t('socialLogin.dingtalk')">
 				<svg class="transition-transform duration-300 w-7 h-7 group-hover:scale-110" viewBox="0 0 1024 1024"
 					xmlns="http://www.w3.org/2000/svg">
@@ -51,7 +51,7 @@
 
 			<!-- 微信 -->
 			<button @click="handleClick(SocialLoginEnum.WECHAT)"
-				class="flex items-center justify-center transition-all duration-300 ease-out bg-white border border-gray-200 cursor-pointer group w-14 h-14 rounded-2xl dark:bg-slate-800/60 dark:border-slate-600/80 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-300 dark:hover:border-green-700 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/20 active:scale-95 active:translate-y-0"
+				class="social-btn social-btn-green flex items-center justify-center transition-all duration-200 ease-out cursor-pointer group w-14 h-14 rounded-2xl"
 				:title="$t('socialLogin.wechat')">
 				<svg t="1766391832175" class="transition-transform duration-300 w-7 h-7 group-hover:scale-110" viewBox="0 0 1024 1024" version="1.1"
 					xmlns="http://www.w3.org/2000/svg" p-id="7334" width="256" height="256">
@@ -181,3 +181,4 @@ onUnmounted(() => {
 	cleanup();
 });
 </script>
+
