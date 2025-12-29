@@ -5,7 +5,6 @@ import DictSelect from '/@/components/DictTag/Select.vue';
 import UploadExcel from '/@/components/Upload/Excel.vue';
 import UploadFile from '/@/components/Upload/index.vue';
 import UploadImg from '/@/components/Upload/Image.vue';
-import UploadImgPlus from '/@/components/Upload/ImagePlus.vue';
 import UploadImgPaste from '/@/components/Upload/ImagePaste.vue';
 import DelWrap from '/@/components/DelWrap/index.vue';
 import Editor from '/@/components/Editor/index.vue';

@@ -183,17 +183,17 @@ const ruleCreators: Record<string, () => DragRule> = {
 			];
 		},
 	}),
-	uploadImgPlus: () => ({
+	uploadImg: () => ({
 		menu: 'biz',
 		icon: 'icon-image',
 		label: '图片',
 		name: 'UploadImage' + other.getNonDuplicateID(),
-		languageKey: ['uploadImgPlus'],
+		languageKey: ['uploadImg'],
 		mask: true,
 		rule() {
 			return {
-				type: 'UploadImgPlus',
-				field: 'UploadImgPlus',
+				type: 'UploadImg',
+				field: 'UploadImg',
 				title: '图片上传',
 				$required: true,
 				props: {},
