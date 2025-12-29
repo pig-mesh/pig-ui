@@ -32,7 +32,7 @@ export default {
         inputTenantIdTip: 'Please enter tenant ID',
         inputEmbeddedTip: 'Please select embedded status',
         inputComponentTip: 'Please enter component name',
-        deleteDisabledTip: 'Cannot delete menu with children',
+        deleteDisabledTip: 'System built-in menus cannot be deleted',
         menuTypeLeft: 'Left Menu',
         menuTypeTop: 'Top Menu',
         menuTypeButton: 'Button',

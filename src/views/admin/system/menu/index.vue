@@ -188,13 +188,19 @@ const onOpenEditMenu = (type: string, row: any) => {
 };
 
 /**
+ * 保护菜单ID（防误删）
+ */
+const protectedDeleteMenuIds = ['1000', '2000'];
+
+/**
  * 判断删除按钮是否禁用
- * @description 有子节点的菜单不允许删除
+ * @description 有子节点的菜单不允许删除；内置菜单（1000/2000）不允许删除
  * @param {any} row - 菜单行数据
  * @returns {boolean} true-禁用删除，false-允许删除
  */
 const deleteMenuDisabled = (row: any) => {
-	return (row.children || []).length > 0;
+	const menuId = String(row?.id);
+	return (row.children || []).length > 0 || protectedDeleteMenuIds.includes(menuId);
 };
 
 /**
@@ -233,7 +239,6 @@ const load = async (row: any, treeNode: any, resolve: (date: any[]) => void) => 
 
 	// 并发控制：防止重复加载同一节点
 	if (loadingSet.has(row.id)) {
-		console.warn(`节点 ${row.id} 正在加载中，跳过重复请求`);
 		return resolve([]);
 	}
 
