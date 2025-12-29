@@ -1,6 +1,12 @@
 <template>
 	<div>
-		<el-drawer v-model="drawerVisible" title="发起流程" size="50%" direction="rtl" destroy-on-close @closed="handleDrawerClosed">
+		<el-drawer v-model="drawerVisible" :size="isFullscreen ? '100%' : '70%'" direction="rtl" destroy-on-close @closed="handleDrawerClosed">
+			<template #header>
+				<div class="flex items-center justify-between w-full">
+					<span>发起流程</span>
+					<el-button :icon="isFullscreen ? 'ScaleToOriginal' : 'FullScreen'" text @click="isFullscreen = !isFullscreen" />
+				</div>
+			</template>
 			<template #default>
 				<el-row>
 					<el-col :span="16">
@@ -64,6 +70,7 @@ const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // �
 const businessFormData = ref<Record<string, any>>({}); // 业务表单数据
 
 const drawerVisible = ref<Boolean>(false);
+const isFullscreen = ref(false);
 const currentOpenFlow = ref<FlowData | undefined>();
 
 // 处理业务表单数据变化

@@ -49,6 +49,7 @@ function getBranchLabel(node: FlowNode, index: number): string {
 }
 
 import { Check, Plus, Refresh } from '@element-plus/icons-vue';
+import { formatPast } from '/@/utils/formatTime';
 </script>
 
 <template>
@@ -68,11 +69,14 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 				</div>
 
 				<!-- User Avatar List Section -->
-				<div v-if="node.userVoList?.length" class="flex flex-wrap gap-2 mb-3">
-					<div v-for="(item1, index1) in node.userVoList" :key="index1" class="w-10 text-center">
+				<div v-if="node.userVoList?.length" class="flex flex-wrap gap-3 mb-3">
+					<div v-for="(item1, index1) in node.userVoList" :key="index1" class="text-center">
 						<div class="flex flex-col items-center">
 							<upload-img disabled v-model:image-url="item1.avatar" width="30px" height="30px"></upload-img>
-							<div class="w-full mt-1 text-xs truncate">{{ item1.name }}</div>
+							<div class="mt-1 text-xs">
+								<span>{{ item1.name }}</span>
+								<span v-if="item1.showTime" class="ml-1 text-gray-400">{{ formatPast(item1.showTime) }}</span>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -86,7 +90,7 @@ import { Check, Plus, Refresh } from '@element-plus/icons-vue';
 							</div>
 							<div class="text-xs">
 								<span class="font-medium">{{ item1.name }}</span>
-								<span class="ml-1 text-gray-500">(添加了评论) {{ item1.showTime }}</span>
+								<span class="ml-1 text-gray-500">(添加了评论) {{ formatPast(item1.showTime) }}</span>
 							</div>
 						</div>
 						<div class="p-3 text-sm rounded bg-gray-50">{{ item1.approveDesc }}</div>

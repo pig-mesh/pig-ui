@@ -58,9 +58,12 @@
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 		</div>
 		<!--			右侧抽屉-->
-		<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="50%" destroy-on-close>
+		<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" :size="isFullscreen ? '100%' : '70%'" destroy-on-close>
 			<template #header>
-				<h3>{{ currentData?.processName }}</h3>
+				<div class="flex items-center justify-between w-full">
+					<h3>{{ currentData?.processName }}</h3>
+					<el-button :icon="isFullscreen ? 'ScaleToOriginal' : 'FullScreen'" text @click="isFullscreen = !isFullscreen" />
+				</div>
 			</template>
 			<template #default>
 				<el-row>
@@ -112,6 +115,7 @@ const { tableStyle ,getDataList, currentChangeHandle,
   sizeChangeHandle, } = useTable(state);
 
 const rightDrawerVisible = ref(false);
+const isFullscreen = ref(false);
 
 const loading = ref(false);
 const showSearch = ref(true);

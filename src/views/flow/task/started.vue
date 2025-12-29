@@ -91,9 +91,12 @@
 
 			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination"></pagination>
 			<!--			右侧抽屉-->
-			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" size="50%" destroy-on-close>
+			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" :size="isFullscreen ? '100%' : '70%'" destroy-on-close>
 				<template #header>
-					<h3>{{ currentData?.name }}</h3>
+					<div class="flex items-center justify-between w-full">
+						<h3>{{ currentData?.name }}</h3>
+						<el-button :icon="isFullscreen ? 'ScaleToOriginal' : 'FullScreen'" text @click="isFullscreen = !isFullscreen" />
+					</div>
 				</template>
 				<template #default>
 					<el-row>
@@ -125,9 +128,12 @@
 			</el-drawer>
 
 			<!-- 重新提交抽屉 -->
-			<el-drawer v-model="resubmitDrawerVisible" v-if="resubmitDrawerVisible" direction="rtl" size="50%" destroy-on-close>
+			<el-drawer v-model="resubmitDrawerVisible" v-if="resubmitDrawerVisible" direction="rtl" :size="isResubmitFullscreen ? '100%' : '70%'" destroy-on-close>
 				<template #header>
-					<h3>{{ resubmitData?.name }} - 重新提交</h3>
+					<div class="flex items-center justify-between w-full">
+						<h3>{{ resubmitData?.name }} - 重新提交</h3>
+						<el-button :icon="isResubmitFullscreen ? 'ScaleToOriginal' : 'FullScreen'" text @click="isResubmitFullscreen = !isResubmitFullscreen" />
+					</div>
 				</template>
 				<template #default>
 					<el-row>
@@ -180,6 +186,7 @@ const option = ref<any>({});
 const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // 动态表单组件
 
 const rightDrawerVisible = ref(false);
+const isFullscreen = ref(false);
 
 const loading = ref(false);
 const showSearch = ref(true);
@@ -236,6 +243,7 @@ const resetQuery = () => {
 
 // ========== 重新提交功能 ==========
 const resubmitDrawerVisible = ref(false);
+const isResubmitFullscreen = ref(false);
 const resubmitData = ref();
 const resubmitRule = ref([]);
 const resubmitFApi = ref();
