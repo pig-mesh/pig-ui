@@ -3,10 +3,12 @@
 		<Logo v-if="setIsShowLogo" />
 		<Breadcrumb />
 		<Horizontal :menuList="state.menuList" v-if="isLayoutTransverse" />
-		<div class="more-menu-wrapper">
-			<More />
+		<div class="layout-navbars-breadcrumb-actions">
+			<div class="more-menu-wrapper">
+				<More />
+			</div>
+			<User />
 		</div>
-		<User />
 	</div>
 </template>
 
@@ -120,6 +122,12 @@ onUnmounted(() => {
 	align-items: center;
 	background: var(--next-bg-topBar);
 	border-bottom: 1px solid var(--next-border-color-light);
+
+	.layout-navbars-breadcrumb-actions {
+		margin-left: auto;
+		display: flex;
+		align-items: center;
+	}
 
 	.more-menu-wrapper {
 		display: flex;
