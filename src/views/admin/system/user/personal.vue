@@ -190,7 +190,6 @@ import { getLoginAppList } from "/@/api/admin/social";
 import { SocialLoginEnum } from '/@/api/login';
 import { useEventListener, useIntervalFn } from '@vueuse/core';
 import { sendMobileInnerCode } from '/@/api/admin/message';
-import { el } from 'element-plus/es/locale';
 
 // 国际化函数
 const { t } = useI18n();
