@@ -1,8 +1,8 @@
-import { defineStore } from 'pinia';
 import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
 import Cookies from 'js-cookie';
+import { useThemeConfig } from './themeConfig';
 
 /**
  * @function useUserInfo
@@ -32,7 +32,7 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @param {Object} data - 登录数据
 		 * @returns {Promise<Object>}
 		 */
-		async login(data:any) {
+		async login(data: any) {
 			data.grant_type = 'password';
 			data.scope = 'server';
 
@@ -152,26 +152,31 @@ export const useUserInfo = defineStore('userInfo', {
 		},
 
 		/**
-		 * 更新租户信息方法
+		 * 更新租户信息方法（只负责状态和存储，主题由 useTenant 处理）
 		 * @function updateTenantInfo
 		 * @param {string} tenantId - 租户ID
 		 * @param {string} tenantName - 租户名称
 		 */
 		updateTenantInfo(tenantId: string, tenantName: string) {
+			// 更新 store 状态
 			this.userInfos.tenantId = tenantId;
 			this.userInfos.tenantName = tenantName;
 
-			// 保存租户信息到本地
+			// 保存租户信息到本地存储（Session/Local/Cookies 三端同步）
 			Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
 			Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
 			Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
+
+			// 更新主题配置中的租户信息
+			const storesThemeConfig = useThemeConfig();
+			const { themeConfig } = storeToRefs(storesThemeConfig);
+			themeConfig.value.globalTitle = tenantName || import.meta.env.VITE_GLOBAL_TITLE;
 		},
 
 		/**
 		 * 更新部门信息方法
 		 * @function updateDeptInfo
 		 * @param {string} deptId - 部门ID
-		 * @param {string} deptName - 部门名称
 		 */
 		updateDeptInfo(deptId: String) {
 			this.userInfos.deptId = deptId;

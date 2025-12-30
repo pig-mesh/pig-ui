@@ -87,8 +87,8 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
-// 是否启用租户下拉框显示
-const tenantEnable = ref(import.meta.env.VITE_TENANT_LIST_ENABLE === 'true');
+// 是否启用租户自动选择
+const tenantEnable = ref(import.meta.env.VITE_AUTO_TENANT === 'true');
 
 // 登录方式
 const loginType = ref(LoginTypeEnum.PASSWORD);

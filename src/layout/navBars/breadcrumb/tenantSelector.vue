@@ -13,7 +13,7 @@
 				<div v-if="!props.loading && props.tenantList.length === 0" class="flex items-center justify-center h-[400px]">
 					<el-empty :description="t('tenantSelector.noData')" />
 				</div>
-				<div v-else-if="!props.loading" class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-1">
+				<div v-else-if="!props.loading" class="grid grid-cols-1 gap-3 p-1 sm:grid-cols-2">
 					<div
 						v-for="item in props.tenantList"
 						:key="item.id"
@@ -25,11 +25,11 @@
 						}"
 						@click="handleSelectTenant(item)"
 					>
-						<div class="card-body p-4 gap-3">
+						<div class="gap-3 p-4 card-body">
 							<!-- Header -->
 							<div class="flex items-center justify-between">
 								<div class="avatar placeholder">
-									<div class="bg-primary/10 text-primary rounded-lg w-12 h-12 flex items-center justify-center">
+									<div class="flex items-center justify-center w-12 h-12 rounded-lg bg-primary/10 text-primary">
 										<el-icon :size="24">
 											<ele-OfficeBuilding />
 										</el-icon>
@@ -47,12 +47,12 @@
 
 							<!-- Body -->
 							<div class="space-y-1">
-								<h4 class="font-semibold text-base truncate">{{ item.name }}</h4>
-								<p v-if="item.tenantDomain" class="text-sm text-base-content/70 flex items-center gap-1 truncate">
+								<h4 class="text-base font-semibold truncate">{{ item.name }}</h4>
+								<p v-if="item.tenantDomain" class="flex items-center gap-1 text-sm truncate text-base-content/70">
 									<el-icon :size="12"><ele-Link /></el-icon>
 									<span class="truncate">{{ item.tenantDomain }}</span>
 								</p>
-								<p v-if="item.websiteName" class="text-sm text-base-content/70 flex items-center gap-1 truncate">
+								<p v-if="item.websiteName" class="flex items-center gap-1 text-sm truncate text-base-content/70">
 									<el-icon :size="12"><ele-Document /></el-icon>
 									<span class="truncate">{{ item.websiteName }}</span>
 								</p>
@@ -74,7 +74,7 @@
 		</div>
 
 		<template #footer>
-			<div class="flex gap-2 justify-end">
+			<div class="flex justify-end gap-2">
 				<el-button @click="handleClose">{{ t('common.cancelButtonText') }}</el-button>
 				<el-button type="primary" @click="handleConfirm" :loading="props.loading">
 					{{ t('common.confirmButtonText') }}
@@ -86,26 +86,14 @@
 
 <script setup lang="ts" name="TenantSelector">
 import { useI18n } from 'vue-i18n';
-import { switchPersonalTenant } from '/@/api/admin/tenant';
-import { Local, Session } from '/@/utils/storage';
-import { useThemeConfig } from '/@/stores/themeConfig';
+import { Session } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
-import { storeToRefs } from 'pinia';
 import { useMessage } from '/@/hooks/message';
+import { useTenant, type Tenant } from '/@/hooks/tenant';
 import { PropType } from 'vue';
 
 const { t } = useI18n();
-
-// 定义租户接口
-interface Tenant {
-	id: string;
-	name: string;
-	tenantDomain?: string;
-	websiteName?: string;
-	footer?: string;
-	background?: string;
-	miniQr?: string;
-}
+const { selectTenant: doSelectTenant } = useTenant();
 
 // 定义组件的 props 和 emits
 const props = defineProps({
@@ -190,40 +178,14 @@ const handleConfirm = () => {
 // 切换租户
 const switchTenant = async (tenant: Tenant) => {
 	try {
-		
-		// 调用后台API进行租户切换
-		await switchPersonalTenant(tenant.id);
-		
-		// 更新用户信息中的租户信息
-		userInfoStore.updateTenantInfo(tenant.id, tenant.name);
-		
-		// 更新主题配置
-		const stores = useThemeConfig();
-		const { themeConfig } = storeToRefs(stores);
-		
-		// 设置全局标题
-		themeConfig.value.globalTitle = tenant.websiteName || import.meta.env.VITE_GLOBAL_TITLE;
-		// 设置页脚作者
-		themeConfig.value.footerAuthor = tenant.footer || import.meta.env.VITE_FOOTER_TITLE;
-		// 设置背景
-		themeConfig.value.background = tenant.background || '';
-		// 设置小程序二维码
-		themeConfig.value.miniQr = tenant.miniQr || '';
-
-		Local.remove('themeConfig');
-		Local.set('themeConfig', themeConfig.value);
-
 		// 触发变更事件
 		emit('change', tenant);
-		
-		// 显示成功消息
-		useMessage().success(t('tenantSelector.switchSuccess'));
-		
+
 		// 关闭弹窗
 		visible.value = false;
-		
-		// 延迟后刷新页面
-		window.location.reload();
+
+		// 使用 composable 执行切换（调用API、更新store、应用主题、刷新页面）
+		await doSelectTenant(tenant, { callApi: true, reload: true });
 	} catch (error: any) {
 		useMessage().error(error.msg || t('tenantSelector.switchError'));
 	}
