@@ -10,9 +10,9 @@ export function fetchUserMessageReadList(query?: Object) {
 
 export const sendMobileInnerCode = (mobile: string) => {
 	return request({
-		url: '/admin/sysMessage/send/smsInnerCode',
+		url: '/admin/sysMessage/send/smsCode',
 		method: 'get',
-		params: { mobile },
+		params: { mobile, registered: false },
 	});
 };
 

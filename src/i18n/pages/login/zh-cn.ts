@@ -93,6 +93,14 @@ export default {
 		passwordLength: '用户密码长度必须介于 6 和 20 之间',
 		passwordStrength: '密码强度太低',
 		termsRequired: '请阅读并同意条款',
+		// 验证码相关
+		codePlaceholder: '请输入验证码',
+		codeRequired: '请输入验证码',
+		codeLength: '验证码为4位',
+		codeText: '获取验证码',
+		seconds: '秒后重发',
+		sendSuccess: '验证码发送成功',
+		sendFailed: '验证码发送失败',
 	},
 
 	// 忘记密码

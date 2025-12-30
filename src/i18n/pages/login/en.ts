@@ -96,6 +96,14 @@ export default {
 		passwordLength: 'Password length must be between 6 and 20 characters',
 		passwordStrength: 'Password strength is too low',
 		termsRequired: 'Please read and accept the terms',
+		// Verification code
+		codePlaceholder: 'Enter verification code',
+		codeRequired: 'Please enter verification code',
+		codeLength: 'Code must be 4 digits',
+		codeText: 'Get Code',
+		seconds: 's',
+		sendSuccess: 'Code sent successfully',
+		sendFailed: 'Failed to send code',
 	},
 
 	// Forget password texts

@@ -423,8 +423,8 @@ const handleSendPhoneCode = async () => {
 		// 验证新手机号格式
 		await formdataRef.value.validateField('phone');
 
-		const { msg, data } = await sendMobileInnerCode(formData.value.phone as string);
-		if (data !== false) {
+		const { msg, ok } = await sendMobileInnerCode(formData.value.phone as string);
+		if (ok) {
 			useMessage().success(t('mobile.sendSuccess'));
 			timeCacl();
 		} else {
