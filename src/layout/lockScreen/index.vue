@@ -1,59 +1,62 @@
 <template>
 	<div v-show="state.isShowLockScreen">
-		<div class="layout-lock-screen-mask"></div>
-		<div class="layout-lock-screen-img" :class="{ 'layout-lock-screen-filter': state.isShowLoockLogin }"></div>
-		<div class="layout-lock-screen">
-			<div
-				class="layout-lock-screen-date"
-				ref="layoutLockScreenDateRef"
-				@mousedown="onDownPc"
-				@mousemove="onMovePc"
-				@mouseup="onEnd"
-				@touchstart.stop="onDownApp"
-				@touchmove.stop="onMoveApp"
-				@touchend.stop="onEnd"
-			>
-				<div class="layout-lock-screen-date-box">
-					<div class="layout-lock-screen-date-box-time">
-						{{ state.time.hm }}<span class="layout-lock-screen-date-box-minutes">{{ state.time.s }}</span>
+		<!-- 遮罩层 -->
+		<div class="fixed inset-0 z-[9999990] bg-white"></div>
+		<!-- 背景图 -->
+		<div class="lock-screen-bg fixed inset-0 z-[9999991] bg-cover" :class="{ 'blur-sm': state.isShowLoockLogin }">
+		</div>
+		<!-- 主容器 -->
+		<div class="fixed inset-0 z-[9999992]">
+			<!-- 时间显示区域 -->
+			<div ref="layoutLockScreenDateRef" class="absolute inset-0 z-[9999993] select-none text-white">
+				<!-- 时间信息 -->
+				<div class="absolute bottom-[50px] left-[30px]">
+					<div class="text-[100px] text-white">
+						{{ state.time.hm }}<span class="text-base">{{ state.time.s }}</span>
 					</div>
-					<div class="layout-lock-screen-date-box-info">{{ state.time.mdq }}</div>
+					<div class="text-[40px] text-white">{{ state.time.mdq }}</div>
 				</div>
-				<div class="layout-lock-screen-date-top">
-					<SvgIcon name="ele-Top" />
-					<div class="layout-lock-screen-date-top-text">{{ t('lockScreen.slideToUnlock') }}</div>
+				<!-- 滑动解锁提示 -->
+				<div
+					class="group absolute bottom-[50px] right-[30px] size-10 overflow-hidden rounded-full border border-white/30 bg-white/10 text-center leading-10 text-white opacity-80 transition-all duration-300 hover:border-white/50 hover:bg-white/20 hover:opacity-100 hover:shadow-[0_0_12px_rgba(255,255,255,0.5)]">
+					<SvgIcon name="ele-Top" class="transition-transform duration-300 group-hover:-translate-y-10" />
+					<div
+						class="pointer-events-none absolute left-1/2 top-[150%] w-9 -translate-x-1/2 -translate-y-1/2 text-xs leading-tight text-white opacity-0 transition-all duration-300 group-hover:top-1/2 group-hover:opacity-100">
+						{{ t('lockScreen.slideToUnlock') }}
+					</div>
 				</div>
 			</div>
+			<!-- 登录面板 -->
 			<transition name="el-zoom-in-center">
-				<div v-show="state.isShowLoockLogin" class="layout-lock-screen-login">
-					<div class="layout-lock-screen-login-box">
-						<div class="layout-lock-screen-login-box-img">
-							<img :src="baseURL + formData.avatar" />
+				<div v-show="state.isShowLoockLogin"
+					class="relative z-[9999994] flex h-full w-full flex-col justify-center text-white">
+					<div class="m-auto text-center">
+						<!-- 头像 -->
+						<div class="mx-auto size-[180px]">
+							<img :src="baseURL + formData.avatar" class="rounded-full size-full" />
 						</div>
-						<div class="layout-lock-screen-login-box-name">{{ formData.username }}</div>
-						<div class="layout-lock-screen-login-box-value">
-							<el-input
-								:placeholder="t('lockScreen.enterPassword')"
-								ref="layoutLockScreenInputRef"
-								v-model="state.lockScreenPassword"
-								type="password"
-								@keyup.enter.native.stop="onLockScreenSubmit()"
-							>
+						<!-- 用户名 -->
+						<div class="my-4 mb-8 text-2xl">{{ formData.username }}</div>
+						<!-- 密码输入 -->
+						<div>
+							<el-input ref="layoutLockScreenInputRef" v-model="state.lockScreenPassword"
+								:placeholder="t('lockScreen.enterPassword')" type="password"
+								@keyup.enter.native.stop="onLockScreenSubmit()">
 								<template #append>
 									<el-button @click="onLockScreenSubmit">
-										<el-icon class="el-input__icon">
-											<ele-Right />
-										</el-icon>
+										<el-icon class="el-input__icon"><ele-Right /></el-icon>
 									</el-button>
 								</template>
 							</el-input>
-							<p style="color: red">{{ mes }}</p>
+							<p class="text-red-500">{{ mes }}</p>
 						</div>
 					</div>
-					<div class="layout-lock-screen-login-icon">
-						<SvgIcon name="ele-Microphone" :size="20" />
-						<SvgIcon name="ele-AlarmClock" :size="20" />
-						<SvgIcon name="ele-SwitchButton" :size="20" />
+					<!-- 底部图标 -->
+					<div class="absolute bottom-[30px] right-[30px] flex gap-4">
+						<SvgIcon name="ele-Microphone" :size="20" class="cursor-pointer opacity-80 hover:opacity-100" />
+						<SvgIcon name="ele-AlarmClock" :size="20" class="cursor-pointer opacity-80 hover:opacity-100" />
+						<SvgIcon name="ele-SwitchButton" :size="20"
+							class="cursor-pointer opacity-80 hover:opacity-100" />
 					</div>
 				</div>
 			</transition>
@@ -62,7 +65,6 @@
 </template>
 
 <script setup lang="ts" name="layoutLockScreen">
-import { nextTick, onMounted, reactive, ref, onUnmounted } from 'vue';
 import { formatDate } from '/@/utils/formatTime';
 import { Local } from '/@/utils/storage';
 import { storeToRefs } from 'pinia';
@@ -70,314 +72,169 @@ import { useThemeConfig } from '/@/stores/themeConfig';
 import { checkPassword } from '/@/api/admin/user';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
+import { useIntervalFn, usePointerSwipe } from '@vueuse/core';
 
 const { t } = useI18n();
 // 定义变量内容
-const layoutLockScreenDateRef = ref<HtmlType>();
+const layoutLockScreenDateRef = ref<HTMLElement>();
 const layoutLockScreenInputRef = ref();
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
+
+// 滑动解锁阈值（向上滑动超过此值触发解锁）
+const UNLOCK_THRESHOLD = 150;
+
 const state = reactive({
-	transparency: 1,
-	downClientY: 0,
-	moveDifference: 0,
 	isShowLoockLogin: false,
-	isFlags: false,
-	querySelectorEl: '' as HtmlType,
 	time: {
 		hm: '',
 		s: '',
 		mdq: '',
 	},
-	setIntervalTime: 0,
 	isShowLockScreen: false,
-	isShowLockScreenIntervalTime: 0,
 	lockScreenPassword: '',
 });
 
-// 鼠标按下 pc
-const onDownPc = (down: MouseEvent) => {
-	state.isFlags = true;
-	state.downClientY = down.clientY;
-};
-// 鼠标按下 app
-const onDownApp = (down: TouchEvent) => {
-	state.isFlags = true;
-	state.downClientY = down.touches[0].clientY;
-};
-// 鼠标移动 pc
-const onMovePc = (move: MouseEvent) => {
-	state.moveDifference = move.clientY - state.downClientY;
-	onMove();
-};
-// 鼠标移动 app
-const onMoveApp = (move: TouchEvent) => {
-	state.moveDifference = move.touches[0].clientY - state.downClientY;
-	onMove();
-};
-// 鼠标移动事件
-const onMove = () => {
-	if (state.isFlags) {
-		const el = <HTMLElement>state.querySelectorEl;
-		const opacitys = (state.transparency -= 1 / 200);
-		if (state.moveDifference >= 0) return false;
-		el.setAttribute('style', `top:${state.moveDifference}px;cursor:pointer;opacity:${opacitys};`);
-		if (state.moveDifference < -400) {
-			el.setAttribute('style', `top:${-el.clientHeight}px;cursor:pointer;transition:all 0.3s ease;`);
-			state.moveDifference = -el.clientHeight;
+// 使用 usePointerSwipe 统一处理 PC/移动端的滑动事件
+const { distanceY, isSwiping } = usePointerSwipe(layoutLockScreenDateRef, {
+	threshold: 10,
+	onSwipe() {
+		const el = layoutLockScreenDateRef.value;
+		if (!el || distanceY.value <= 0) return; // 只处理向上滑动
+
+		const offset = -distanceY.value;
+		const opacity = Math.max(0, 1 - distanceY.value / UNLOCK_THRESHOLD);
+		el.style.cssText = `top:${offset}px;cursor:pointer;opacity:${opacity};`;
+
+		// 超过阈值，触发解锁动画
+		if (distanceY.value > UNLOCK_THRESHOLD) {
+			el.style.cssText = `top:${-el.clientHeight}px;cursor:pointer;transition:all 0.3s ease;`;
 			setTimeout(() => {
-				el && el.parentNode?.removeChild(el);
+				el.style.display = 'none';
+				state.isShowLoockLogin = true;
+				layoutLockScreenInputRef.value?.focus();
 			}, 300);
 		}
-		if (state.moveDifference === -el.clientHeight) {
-			state.isShowLoockLogin = true;
-			layoutLockScreenInputRef.value.focus();
+	},
+	onSwipeEnd() {
+		const el = layoutLockScreenDateRef.value;
+		if (!el) return;
+
+		// 未达到阈值，回弹到原位
+		if (distanceY.value <= UNLOCK_THRESHOLD && !state.isShowLoockLogin) {
+			el.style.cssText = `top:0px;opacity:1;transition:all 0.3s ease;`;
 		}
-	}
-};
-// 鼠标松开
-const onEnd = () => {
-	state.isFlags = false;
-	state.transparency = 1;
-	if (state.moveDifference >= -400) {
-		(<HTMLElement>state.querySelectorEl).setAttribute('style', `top:0px;opacity:1;transition:all 0.3s ease;`);
-	}
-};
-// 获取要拖拽的初始元素
-const initGetElement = () => {
-	nextTick(() => {
-		state.querySelectorEl = layoutLockScreenDateRef.value;
-	});
-};
+	},
+});
 // 时间初始化
-const initTime = () => {
+const updateTime = () => {
 	state.time.hm = formatDate(new Date(), 'HH:MM');
 	state.time.s = formatDate(new Date(), 'SS');
 	state.time.mdq = formatDate(new Date(), 'mm月dd日，WWW');
 };
-// 时间初始化定时器
-const initSetTime = () => {
-	initTime();
-	state.setIntervalTime = window.setInterval(() => {
-		initTime();
-	}, 1000);
-};
 
-/**
- * 初始化锁屏相关信息
- */
-const initLockScreen = () => {
-	if (themeConfig.value.isLockScreen) {
-		state.isShowLockScreenIntervalTime = window.setInterval(() => {
-			if (themeConfig.value.lockScreenTime <= 1) {
-				state.isShowLockScreen = true;
-				setLocalThemeConfig();
-				return false;
-			}
-			themeConfig.value.lockScreenTime--;
-		}, 1000);
-	} else {
-		clearInterval(state.isShowLockScreenIntervalTime);
-	}
-};
+// 使用 VueUse 的 useIntervalFn 管理时间更新定时器（自动清理）
+updateTime();
+useIntervalFn(updateTime, 1000);
 
 // 存储布局配置
 const setLocalThemeConfig = () => {
 	themeConfig.value.isDrawer = false;
 	Local.set('themeConfig', themeConfig.value);
 };
+
+// 锁屏倒计时处理
+const handleLockScreenCountdown = () => {
+	if (!themeConfig.value.isLockScreen) return;
+
+	if (themeConfig.value.lockScreenTime <= 1) {
+		state.isShowLockScreen = true;
+		setLocalThemeConfig();
+		pauseLockScreenTimer();
+	} else {
+		themeConfig.value.lockScreenTime--;
+	}
+};
+
+// 使用 VueUse 的 useIntervalFn 管理锁屏倒计时（自动清理）
+const { pause: pauseLockScreenTimer, resume: resumeLockScreenTimer } = useIntervalFn(
+	handleLockScreenCountdown,
+	1000,
+	{ immediate: false }
+);
+
+/**
+ * 初始化锁屏相关信息
+ */
+const initLockScreen = () => {
+	if (themeConfig.value.isLockScreen) {
+		resumeLockScreenTimer();
+	} else {
+		pauseLockScreenTimer();
+	}
+};
 const mes = ref();
+
+/**
+ * 更新锁屏状态并保存配置
+ * @param isLocked 是否锁定屏幕
+ */
+const updateLockScreenState = (isLocked: boolean) => {
+	themeConfig.value.isLockScreen = isLocked;
+	themeConfig.value.lockScreenTime = 30;
+	setLocalThemeConfig();
+
+	// 解锁成功时清除锁屏显示状态
+	if (!isLocked) {
+		state.isShowLockScreen = false;
+	}
+};
 
 /**
  * 处理密码输入事件，验证密码正确性并解锁
  */
 const onLockScreenSubmit = async () => {
 	try {
-		// 调用checkPassword方法验证密码
-		await checkPassword(state.lockScreenPassword);
-		// 更新全局主题配置中的isLockScreen和lockScreenTime属性
-		themeConfig.value.isLockScreen = false;
-		themeConfig.value.lockScreenTime = 30;
-		// 将最新的主题配置保存到本地存储中
-		setLocalThemeConfig();
+		const { data, msg } = await checkPassword(state.lockScreenPassword);
+		mes.value = msg;
+		// 根据验证结果更新锁屏状态
+		if (data) {
+			updateLockScreenState(false);
+		}
 	} catch (err: any) {
-		// 捕获异常并将错误提示信息赋值给mes变量
 		mes.value = err.msg;
-    themeConfig.value.isLockScreen = false;
-    themeConfig.value.lockScreenTime = 30;
-    // 将最新的主题配置保存到本地存储中
-    setLocalThemeConfig();
+		// 异常时解锁，避免用户被锁住
+		updateLockScreenState(false);
 	}
 };
 
-const formData = reactive({});
+const formData = reactive<{ avatar?: string; username?: string }>({});
 // 页面加载时
 onMounted(() => {
 	const data = useUserInfo().userInfos;
 	Object.assign(formData, data.user);
-	initGetElement();
-	initSetTime();
 	initLockScreen();
 });
-// 页面卸载时
-onUnmounted(() => {
-	window.clearInterval(state.setIntervalTime);
-	window.clearInterval(state.isShowLockScreenIntervalTime);
-});
+// 注意：useIntervalFn 会在组件卸载时自动清理定时器，无需手动 clearInterval
 </script>
 
-<style scoped lang="scss">
-.layout-lock-screen-fixed {
-	position: fixed;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-}
-.layout-lock-screen-filter {
-	filter: blur(1px);
-}
-.layout-lock-screen-mask {
-	background: var(--el-color-white);
-	@extend .layout-lock-screen-fixed;
-	z-index: 9999990;
-}
-.layout-lock-screen-img {
-	@extend .layout-lock-screen-fixed;
+<style scoped>
+/* 背景图片 */
+.lock-screen-bg {
 	background-image: url('/@/assets/lockScreen.png');
-	background-size: 100% 100%;
-	z-index: 9999991;
 }
-.layout-lock-screen {
-	@extend .layout-lock-screen-fixed;
-	z-index: 9999992;
-	&-date {
-		position: absolute;
-		left: 0;
-		top: 0;
-		width: 100%;
-		height: 100%;
-		color: var(--el-color-white);
-		z-index: 9999993;
-		user-select: none;
-		&-box {
-			position: absolute;
-			left: 30px;
-			bottom: 50px;
-			&-time {
-				font-size: 100px;
-				color: var(--el-color-white);
-			}
-			&-info {
-				font-size: 40px;
-				color: var(--el-color-white);
-			}
-			&-minutes {
-				font-size: 16px;
-			}
-		}
-		&-top {
-			width: 40px;
-			height: 40px;
-			line-height: 40px;
-			border-radius: 100%;
-			border: 1px solid var(--el-border-color-light, #ebeef5);
-			background: rgba(255, 255, 255, 0.1);
-			color: var(--el-color-white);
-			opacity: 0.8;
-			position: absolute;
-			right: 30px;
-			bottom: 50px;
-			text-align: center;
-			overflow: hidden;
-			transition: all 0.3s ease;
-			i {
-				transition: all 0.3s ease;
-			}
-			&-text {
-				opacity: 0;
-				position: absolute;
-				top: 150%;
-				font-size: 12px;
-				color: var(--el-color-white);
-				left: 50%;
-				line-height: 1.2;
-				transform: translate(-50%, -50%);
-				transition: all 0.3s ease;
-				width: 35px;
-			}
-			&:hover {
-				border: 1px solid rgba(255, 255, 255, 0.5);
-				background: rgba(255, 255, 255, 0.2);
-				box-shadow: 0 0 12px 0 rgba(255, 255, 255, 0.5);
-				color: var(--el-color-white);
-				opacity: 1;
-				transition: all 0.3s ease;
-				i {
-					transform: translateY(-40px);
-					transition: all 0.3s ease;
-				}
-				.layout-lock-screen-date-top-text {
-					opacity: 1;
-					top: 50%;
-					transition: all 0.3s ease;
-				}
-			}
-		}
-	}
-	&-login {
-		position: relative;
-		z-index: 9999994;
-		width: 100%;
-		height: 100%;
-		left: 0;
-		top: 0;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		color: var(--el-color-white);
-		&-box {
-			text-align: center;
-			margin: auto;
-			&-img {
-				width: 180px;
-				height: 180px;
-				margin: auto;
-				img {
-					width: 100%;
-					height: 100%;
-					border-radius: 100%;
-				}
-			}
-			&-name {
-				font-size: 26px;
-				margin: 15px 0 30px;
-			}
-		}
-		&-icon {
-			position: absolute;
-			right: 30px;
-			bottom: 30px;
-			i {
-				font-size: 20px;
-				margin-left: 15px;
-				cursor: pointer;
-				opacity: 0.8;
-				&:hover {
-					opacity: 1;
-				}
-			}
-		}
-	}
-}
+
+/* Element Plus 输入框样式覆盖 */
 :deep(.el-input-group__append) {
-	background: var(--el-color-white);
-	padding: 0px 15px;
+	background: white;
+	border-radius: 20%;
 }
+
 :deep(.el-input__inner) {
 	border-right-color: var(--el-border-color-extra-light);
-	&:hover {
-		border-color: var(--el-border-color-extra-light);
-	}
+}
+
+:deep(.el-input__inner:hover) {
+	border-color: var(--el-border-color-extra-light);
 }
 </style>
