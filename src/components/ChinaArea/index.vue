@@ -79,7 +79,7 @@ const handleChange = (value: String[]) => {
 
 // 初始化数据
 onMounted(async () => {
-	const { data } = await fetchTree({ type: props.type });
+	const { data } = await fetchTree({ areaType: props.type });
 	areas.value = data;
 });
 </script>
