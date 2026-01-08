@@ -41,6 +41,8 @@ export default {
 		dictType: 'Type',
 		description: 'Description',
 		sortOrder: 'Sort Order',
+		listClass: 'Tag Type',
+		inputListClassTip: 'Please select tag type',
 		createBy: 'Created By',
 		updateBy: 'Updated By',
 		createTime: 'Created Time',

@@ -44,6 +44,8 @@ export default {
 		dictType: '类型',
 		description: '描述',
 		sortOrder: '排序',
+		listClass: '标签类型',
+		inputListClassTip: '请选择标签类型',
 		createBy: '创建人',
 		updateBy: '修改人',
 		createTime: '创建时间',

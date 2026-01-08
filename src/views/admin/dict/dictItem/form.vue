@@ -18,6 +18,15 @@
         <el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')"
                          clearable></el-input-number>
       </el-form-item>
+      <el-form-item :label="$t('dictItem.listClass')" prop="listClass">
+        <el-select v-model="dataForm.listClass" :placeholder="$t('dictItem.inputListClassTip')" clearable class="w-full">
+          <el-option v-for="item in listClassOptions" :key="item.value" :label="item.label" :value="item.value">
+            <el-tag v-if="item.value" :type="item.value === 'primary' ? '' : item.value" size="small" class="ml-2">
+              {{ item.label }}
+            </el-tag>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('dictItem.remarks')" prop="remarks">
         <el-input type="textarea" maxlength="100" :rows="3" v-model="dataForm.remarks"
                   :placeholder="$t('dictItem.inputRemarksTip')"></el-input>
@@ -56,8 +65,19 @@ const dataForm = reactive({
   label: '',
   description: '',
   sortOrder: 0,
+  listClass: '',
   remarks: '',
 });
+
+// 标签类型选项
+const listClassOptions = [
+  { label: '默认', value: '' },
+  { label: '主要 Primary', value: 'primary' },
+  { label: '成功 Success', value: 'success' },
+  { label: '信息 Info', value: 'info' },
+  { label: '警告 Warning', value: 'warning' },
+  { label: '危险 Danger', value: 'danger' },
+];
 
 const dataRules = reactive({
   dictType: [

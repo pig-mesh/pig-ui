@@ -19,6 +19,14 @@
 			<el-table-column prop="label" :label="$t('dictItem.label')" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="description" :label="$t('dictItem.description')" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="sortOrder" :label="$t('dictItem.sortOrder')" show-overflow-tooltip></el-table-column>
+			<el-table-column prop="listClass" :label="$t('dictItem.listClass')" width="120">
+				<template #default="scope">
+					<el-tag v-if="scope.row.listClass" :type="scope.row.listClass === 'primary' ? '' : scope.row.listClass" size="small">
+						{{ scope.row.label }}
+					</el-tag>
+					<span v-else>-</span>
+				</template>
+			</el-table-column>
 			<el-table-column prop="remarks" :label="$t('dictItem.remarks')" show-overflow-tooltip></el-table-column>
 			<el-table-column prop="createTime" :label="$t('dictItem.createTime')" show-overflow-tooltip></el-table-column>
 
