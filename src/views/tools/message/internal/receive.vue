@@ -13,7 +13,7 @@
 			</el-form>
 		</el-row>
 		<el-table :data="state.dataList" v-loading="state.loading" style="width: 100%" @sort-change="sortChangeHandle">
-			<el-table-column type="index" :label="$t('common.index')" width="60" />
+			<el-table-column type="index" label="#" width="60" />
 			<el-table-column prop="title" :label="t('internal.title')" show-overflow-tooltip />
 			<el-table-column prop="username" :label="t('internal.username')" show-overflow-tooltip />
 			<el-table-column prop="name" :label="t('internal.name')" show-overflow-tooltip />
