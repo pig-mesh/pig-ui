@@ -17,6 +17,7 @@ export default {
 		copyBtn:'Copy',
 		action: 'Action',
 		optSuccessText: 'Operation successful',
+		optFailText: 'Operation failed',
 		optConfirmText: 'Confirm this operation?',
 		editSuccessText: 'Successfully edited',
 		addSuccessText: 'Successfully added',

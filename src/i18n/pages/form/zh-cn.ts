@@ -16,6 +16,7 @@ export default {
 		copyBtn: '复制',
 		action: '操作',
 		optSuccessText: '操作成功',
+		optFailText: '操作失败',
 		editSuccessText: '修改成功',
 		addSuccessText: '添加成功',
 		delSuccessText: '删除成功',
