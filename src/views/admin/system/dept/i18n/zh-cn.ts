@@ -24,6 +24,10 @@ export default {
         syncDingTalkBtn: '同步钉钉部门',
         syncWeChatBtn: '同步企微部门',
         syncDingTalkSuccess: '钉钉部门同步成功',
-        syncWeChatSuccess: '企业微信部门同步成功'
+        syncWeChatSuccess: '企微部门同步成功',
+        importDingTalkBtn: '导入钉钉部门',
+        importDingTalkTip: '导入钉钉部门数据',
+        importWeChatBtn: '导入企微部门',
+        importWeChatTip: '导入企业微信部门数据'
     },
 };

@@ -4,12 +4,13 @@
 			<pane size="15">
 				<div class="layout-padding-auto layout-padding-view">
 					<el-scrollbar>
-						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList" :show-expand="true" @node-click="handleNodeClick">
+						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList"
+							:show-expand="true" @node-click="handleNodeClick">
 							<!-- 没有数据权限提示 -->
 							<template #default="{ node, data }">
-								<el-tooltip v-if="data.isLock" class="item" effect="dark" :content="$t('sysuser.noDataScopeTip')" placement="right-start">
-									<span
-										>{{ node.label }}
+								<el-tooltip v-if="data.isLock" class="item" effect="dark"
+									:content="$t('sysuser.noDataScopeTip')" placement="right-start">
+									<span>{{ node.label }}
 										<SvgIcon name="ele-Lock" />
 									</span>
 								</el-tooltip>
@@ -24,97 +25,76 @@
 					<el-row v-show="showSearch">
 						<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 							<el-form-item :label="$t('sysuser.username')" prop="username">
-								<el-input v-model="state.queryForm.username" :placeholder="$t('sysuser.inputUsernameTip')" clearable />
+								<el-input v-model="state.queryForm.username"
+									:placeholder="$t('sysuser.inputUsernameTip')" clearable />
 							</el-form-item>
 							<el-form-item :label="$t('sysuser.phone')" prop="phone">
-								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')" clearable />
+								<el-input v-model="state.queryForm.phone" :placeholder="$t('sysuser.inputPhoneTip')"
+									clearable />
 							</el-form-item>
 							<el-form-item>
-								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn') }}</el-button>
+								<el-button icon="Search" type="primary" @click="getDataList">{{ $t('common.queryBtn')
+									}}</el-button>
 								<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 							</el-form-item>
 						</el-form>
 					</el-row>
 					<el-row>
 						<div class="mb8" style="width: 100%">
-							<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary" @click="userDialogRef.openDialog()">
+							<el-button v-auth="'sys_user_add'" icon="folder-add" type="primary"
+								@click="userDialogRef.openDialog()">
 								{{ $t('common.addBtn') }}
 							</el-button>
-							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary" @click="excelUploadRef.show()">
+							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary"
+								@click="excelUploadRef.show()">
 								{{ $t('common.importBtn') }}
 							</el-button>
-							<el-button
-								v-if="enableDingTalkSync"
-								plain
-								icon="refresh"
-								type="primary"
-								class="ml10"
-								@click="handleSyncDingTalk"
-								:loading="syncDingTalkLoading"
-							>
-								{{ $t('sysuser.syncDingTalkBtn') }}
+							<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
+								@click="handleImportDingTalk">
+								{{ $t('sysuser.importDingTalkBtn') }}
 							</el-button>
-							<el-button
-								v-if="enableWeChatSync"
-								plain
-								icon="refresh"
-								type="primary"
-								class="ml10"
-								@click="handleSyncWeChat"
-								:loading="syncWeChatLoading"
-							>
-								{{ $t('sysuser.syncWeChatBtn') }}
+							<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
+								@click="handleImportWeChat">
+								{{ $t('sysuser.importWeChatBtn') }}
 							</el-button>
 
-							<el-button
-								plain
-								v-auth="'sys_user_del'"
-								:disabled="multiple"
-								class="ml10"
-								icon="Delete"
-								type="primary"
-								@click="handleDelete(selectObjs)"
-							>
+							<el-button plain v-auth="'sys_user_del'" :disabled="multiple" class="ml10" icon="Delete"
+								type="primary" @click="handleDelete(selectObjs)">
 								{{ $t('common.delBtn') }}
 							</el-button>
 
-							<right-toolbar
-								v-model:showSearch="showSearch"
-								:export="'sys_user_export'"
-								@exportExcel="exportExcel"
-								@queryTable="getDataList"
-								class="ml10 mr20"
-								style="float: right"
-							/>
+							<right-toolbar v-model:showSearch="showSearch" :export="'sys_user_export'"
+								@exportExcel="exportExcel" @queryTable="getDataList" class="ml10 mr20"
+								style="float: right" />
 						</div>
 					</el-row>
-					<el-table
-						v-loading="state.loading"
-						:data="state.dataList"
-						@selection-change="handleSelectionChange"
-						row-key="userId"
-						border
-						:cell-style="tableStyle.cellStyle"
-						:header-cell-style="tableStyle.headerCellStyle"
-					>
+					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
+						row-key="userId" border :cell-style="tableStyle.cellStyle"
+						:header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :selectable="handleSelectable" type="selection" width="40" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left" show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.name')" prop="name" show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.phone')" prop="phone" show-overflow-tooltip></el-table-column>
+						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left"
+							show-overflow-tooltip></el-table-column>
+						<el-table-column :label="$t('sysuser.name')" prop="name"
+							show-overflow-tooltip></el-table-column>
+						<el-table-column :label="$t('sysuser.phone')" prop="phone"
+							show-overflow-tooltip></el-table-column>
 						<el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
 							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName }}</el-tag>
+								<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName
+									}}</el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
 							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName }}</el-tag>
+								<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName
+									}}</el-tag>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
 							<template #default="scope">
-								<el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)" active-value="0" inactive-value="9"></el-switch>
+								<el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)"
+									active-value="0" inactive-value="9"></el-switch>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('common.action')" width="200" fixed="right">
@@ -123,26 +103,24 @@
 									<!-- 重置密码 -->
 									<popover-input v-model="inputPassword" @confirm="changePassword(scope.row)">
 										<template #default>
-											<el-button v-auth="'sys_user_edit'" icon="RefreshLeft" text type="primary" class="mr-4">
+											<el-button v-auth="'sys_user_edit'" icon="RefreshLeft" text type="primary"
+												class="mr-4">
 												{{ $t('sysuser.passwordBtn') }}
 											</el-button>
 										</template>
 									</popover-input>
 									<!-- 修改信息 -->
-									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary" @click="userDialogRef.openDialog(scope.row.userId)">
+									<el-button v-auth="'sys_user_edit'" icon="edit-pen" text type="primary"
+										@click="userDialogRef.openDialog(scope.row.userId)">
 										{{ $t('common.editBtn') }}
 									</el-button>
 									<!-- 删除用户 -->
-									<el-tooltip :content="$t('sysuser.deleteDisabledTip')" :disabled="scope.row.userId !== '1'" placement="top">
+									<el-tooltip :content="$t('sysuser.deleteDisabledTip')"
+										:disabled="scope.row.userId !== '1'" placement="top">
 										<span style="margin-left: 12px">
-											<el-button
-												icon="delete"
-												v-auth="'sys_user_del'"
-												:disabled="scope.row.username === 'admin'"
-												text
-												type="primary"
-												@click="handleDelete([scope.row.userId])"
-												>{{ $t('common.delBtn') }}
+											<el-button icon="delete" v-auth="'sys_user_del'"
+												:disabled="scope.row.username === 'admin'" text type="primary"
+												@click="handleDelete([scope.row.userId])">{{ $t('common.delBtn') }}
 											</el-button>
 										</span>
 									</el-tooltip>
@@ -150,25 +128,28 @@
 							</template>
 						</el-table-column>
 					</el-table>
-					<pagination v-bind="state.pagination" @current-change="currentChangeHandle" @size-change="sizeChangeHandle"> </pagination>
+					<pagination v-bind="state.pagination" @current-change="currentChangeHandle"
+						@size-change="sizeChangeHandle">
+					</pagination>
 				</div>
 			</pane>
 		</splitpanes>
 
 		<user-form ref="userDialogRef" @refresh="getDataList(false)" :deptId="state.queryForm.deptId" />
 
-		<upload-excel
-			ref="excelUploadRef"
-			:title="$t('sysuser.importUserTip')"
-			temp-url="/admin/sys-file/local/file/user.xlsx"
-			url="/admin/user/import"
-			@refreshDataList="getDataList"
-		/>
+		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
+			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
+		<upload-excel ref="wechatUploadRef" :title="$t('sysuser.importWeChatTip')"
+			temp-url="/admin/sys-file/local/file/cp.xlsx" url="/admin/connect/import/wecom/user"
+			@refreshDataList="getDataList" />
+		<upload-excel ref="dingUploadRef" :title="$t('sysuser.importDingTalkTip')"
+			temp-url="/admin/sys-file/local/file/dingtalk.xlsx" url="/admin/connect/import/ding/user"
+			@refreshDataList="getDataList" />
 	</div>
 </template>
 
 <script lang="ts" name="systemUser" setup>
-import { delObj, pageList, putObj, syncUser, syncCpUser } from '/@/api/admin/user';
+import { delObj, pageList, putObj } from '/@/api/admin/user';
 import { deptTree } from '/@/api/admin/dept';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
@@ -189,15 +170,11 @@ const enableWeChatSync = import.meta.env.VITE_SYNC_WECHAT_ENABLED === 'true';
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
+const wechatUploadRef = ref();
+const dingUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const inputPassword = ref();
-
-/** 钉钉同步加载状态 */
-const syncDingTalkLoading = ref(false);
-
-/** 企业微信同步加载状态 */
-const syncWeChatLoading = ref(false);
 
 /**
  * 多选相关变量
@@ -333,36 +310,18 @@ const changePassword = async (row: any) => {
 };
 
 /**
- * 同步钉钉用户
- * @description 调用钉钉用户同步接口，成功后刷新数据列表
+ * 处理钉钉用户导入
+ * @description 打开钉钉用户导入对话框
  */
-const handleSyncDingTalk = async () => {
-	try {
-		syncDingTalkLoading.value = true;
-		await syncUser();
-		useMessage().success(t('sysuser.syncDingTalkSuccess'));
-		getDataList();
-	} catch (error) {
-		console.error('同步钉钉用户失败:', error);
-	} finally {
-		syncDingTalkLoading.value = false;
-	}
+const handleImportDingTalk = () => {
+	dingUploadRef.value.show();
 };
 
 /**
- * 同步企业微信用户
- * @description 调用企业微信用户同步接口，成功后刷新数据列表
+ * 处理企业微信用户导入
+ * @description 打开企业微信用户导入对话框
  */
-const handleSyncWeChat = async () => {
-	try {
-		syncWeChatLoading.value = true;
-		await syncCpUser();
-		useMessage().success(t('sysuser.syncWeChatSuccess'));
-		getDataList();
-	} catch (error) {
-		console.error('同步企业微信用户失败:', error);
-	} finally {
-		syncWeChatLoading.value = false;
-	}
+const handleImportWeChat = () => {
+	wechatUploadRef.value.show();
 };
 </script>

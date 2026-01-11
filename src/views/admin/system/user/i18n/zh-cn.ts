@@ -40,6 +40,10 @@ export default {
 		syncWeChatBtn: '同步企微用户',
 		syncDingTalkSuccess: '钉钉用户同步成功',
 		syncWeChatSuccess: '企业微信用户同步成功',
+		importDingTalkBtn: '导入钉钉用户',
+		importDingTalkTip: '导入钉钉用户数据',
+		importWeChatBtn: '导入企微用户',
+		importWeChatTip: '导入企业微信用户数据'
 	},
 	personal: {
 		name: '个人信息',

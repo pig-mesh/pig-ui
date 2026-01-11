@@ -4,7 +4,8 @@
 			<el-row shadow="hover" v-show="showSearch" class="ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="filter">
 					<el-form-item prop="deptName" :label="$t('sysdept.name')">
-						<el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px" v-model="state.queryForm.deptName"></el-input>
+						<el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px"
+							v-model="state.queryForm.deptName"></el-input>
 					</el-form-item>
 					<el-form-item>
 						<el-button icon="search" type="primary" @click="filter">
@@ -16,43 +17,24 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button icon="folder-add" type="primary" class="top-right-btn" v-if="!defaultTreeViewRef" v-auth="'sys_dept_add'" @click="handleAdd">
+					<el-button icon="folder-add" type="primary" class="top-right-btn" v-if="!defaultTreeViewRef"
+						v-auth="'sys_dept_add'" @click="handleAdd">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
 					</el-button>
-					<el-button
-						v-if="enableDingTalkSync"
-						plain
-						icon="refresh"
-						type="primary"
-						class="ml10"
-						@click="handleSyncDingTalk"
-						:loading="syncDingTalkLoading"
-					>
+					<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
+						@click="handleImportDingTalk">
 						{{ $t('sysdept.syncDingTalkBtn') }}
 					</el-button>
-					<el-button
-						v-if="enableWeChatSync"
-						plain
-						icon="refresh"
-						type="primary"
-						class="ml10"
-						@click="handleSyncWeChat"
-						:loading="syncWeChatLoading"
-					>
-						{{ $t('sysdept.syncWeChatBtn') }}
+					<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
+						@click="handleImportWeChat">
+						{{ $t('sysdept.importWeChatBtn') }}
 					</el-button>
 					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }}</el-button>
-					<right-toolbar
-						v-model:showSearch="showSearch"
-						:export="'sys_dept_add'"
-						@exportExcel="exportExcel"
-						class="ml10"
-						style="float: right; margin-right: 20px"
-						@queryTable="getDataList"
-					>
+					<right-toolbar v-model:showSearch="showSearch" :export="'sys_dept_add'" @exportExcel="exportExcel"
+						class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList">
 						<el-tooltip class="item" effect="dark" :content="$t('queryTree.view')" placement="top">
 							<el-button circle icon="Grid" @click="handleView"></el-button>
 						</el-tooltip>
@@ -63,20 +45,20 @@
 			<tree-view ref="treeViewRef" v-if="defaultTreeViewRef" />
 			<table-view ref="tableViewRef" v-if="!defaultTreeViewRef" />
 
-			<upload-excel
-				ref="excelUploadRef"
-				:title="$t('sysdept.importTip')"
-				url="/admin/dept/import"
-				temp-url="/admin/sys-file/local/file/dept.xlsx"
-				@refreshDataList="getDataList"
-			/>
+			<upload-excel ref="excelUploadRef" :title="$t('sysdept.importTip')" url="/admin/dept/import"
+				temp-url="/admin/sys-file/local/file/dept.xlsx" @refreshDataList="getDataList" />
+			<upload-excel ref="wechatUploadRef" :title="$t('sysdept.importWeChatTip')"
+				temp-url="/admin/sys-file/local/file/cp.xlsx" url="/admin/connect/import/wecom/dept"
+				@refreshDataList="getDataList" />
+			<upload-excel ref="dingUploadRef" :title="$t('sysdept.importDingTalkTip')"
+				temp-url="/admin/sys-file/local/file/dingtalk.xlsx" url="/admin/connect/import/ding/dept"
+				@refreshDataList="getDataList" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" name="systemDept" setup>
 import { downBlobFile } from '/@/utils/other';
-import { syncDept, syncCpDept } from '/@/api/admin/dept';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 
@@ -101,6 +83,12 @@ const tableViewRef = ref();
 /** Excel上传组件引用 */
 const excelUploadRef = ref();
 
+/** 企业微信上传组件引用 */
+const wechatUploadRef = ref();
+
+/** 钉钉上传组件引用 */
+const dingUploadRef = ref();
+
 /** 是否显示搜索区域 */
 const showSearch = ref(true);
 
@@ -117,12 +105,6 @@ const state = reactive({
 		deptName: '',
 	},
 });
-
-/** 钉钉同步加载状态 */
-const syncDingTalkLoading = ref(false);
-
-/** 企业微信同步加载状态 */
-const syncWeChatLoading = ref(false);
 
 /**
  * 过滤节点
@@ -193,36 +175,18 @@ const resetQuery = () => {
 };
 
 /**
- * 同步钉钉部门
- * @description 调用钉钉部门同步接口，成功后刷新数据列表
+ * 处理钉钉部门导入
+ * @description 打开钉钉部门导入对话框
  */
-const handleSyncDingTalk = async () => {
-	try {
-		syncDingTalkLoading.value = true;
-		await syncDept();
-		useMessage().success(t('sysdept.syncDingTalkSuccess'));
-		getDataList();
-	} catch (error) {
-		console.error('同步钉钉部门失败:', error);
-	} finally {
-		syncDingTalkLoading.value = false;
-	}
+const handleImportDingTalk = () => {
+	dingUploadRef.value.show();
 };
 
 /**
- * 同步企业微信部门
- * @description 调用企业微信部门同步接口，成功后刷新数据列表
+ * 处理企业微信部门导入
+ * @description 打开企业微信部门导入对话框
  */
-const handleSyncWeChat = async () => {
-	try {
-		syncWeChatLoading.value = true;
-		await syncCpDept();
-		useMessage().success(t('sysdept.syncWeChatSuccess'));
-		getDataList();
-	} catch (error) {
-		console.error('同步企业微信部门失败:', error);
-	} finally {
-		syncWeChatLoading.value = false;
-	}
+const handleImportWeChat = () => {
+	wechatUploadRef.value.show();
 };
 </script>
