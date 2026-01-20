@@ -24,6 +24,8 @@ export interface TaskFormConfig {
 export interface LoadFormOptions {
 	/** 是否解析formData (默认false) */
 	parseFormData?: boolean;
+	/** 是否只读模式 (默认true，用于查看；false用于编辑/重新提交) */
+	readonly?: boolean;
 	/** 成功回调 */
 	onSuccess?: () => void;
 	/** 错误回调 */
@@ -73,8 +75,13 @@ export function useTaskFormLoader(config: TaskFormConfig) {
 			// 解析表单配置选项
 			option.value = JSON.parse(formConfig).formOption;
 
+			// 根据 readonly 参数决定使用详情路径还是提交路径
+			// readonly=true（默认）：使用 formCustomViewPath（详情路径）
+			// readonly=false：使用 formCustomCreatePath（提交路径，用于重新提交等场景）
+			const isReadonly = options.readonly !== false;
+
 			// 尝试创建自定义业务表单组件
-			const dynamicComponent = createDynamicFormComponent(formConfig, processInstanceId, true);
+			const dynamicComponent = createDynamicFormComponent(formConfig, processInstanceId, isReadonly);
 
 			if (dynamicComponent) {
 				// 使用自定义业务表单

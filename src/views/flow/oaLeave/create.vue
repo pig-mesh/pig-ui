@@ -1,31 +1,17 @@
 <template>
   <div class="layout-padding-auto layout-padding-view">
     <div :class="className">
-      <el-form
-        ref="formRef"
-        v-loading="formLoading"
-        :model="formData"
-        :rules="formRules"
-        label-position="top"
-      >
-      <el-row :gutter="20">
-        <el-col :span="24" :md="12" class="mt-8 md:mb-0">
-          <el-form-item label="申请人" prop="username" >
-            <el-input v-model="formData.username" disabled placeholder="请输入申请人用户名" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="24" :md="12" class="mt-8 md:mb-0">
+      <el-form ref="formRef" v-loading="formLoading" :model="formData" :rules="formRules" label-position="top">
+        <el-row :gutter="20">
+          <el-col :span="24" :md="12" class="mt-8 md:mb-0">
+            <el-form-item label="申请人" prop="username">
+              <el-input v-model="formData.username" disabled placeholder="请输入申请人用户名" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="24" :md="12" class="mt-8 md:mb-0">
             <el-form-item label="请假天数" prop="leaveDay">
-              <el-input-number 
-                disabled
-                v-model="formData.leaveDay" 
-                :min="1" 
-                :max="365" 
-                :step="15"
-                placeholder="请输入请假天数"
-                style="width: 100%"
-                class="flex-1 max-w-xs w-full"
-              />
+              <el-input-number disabled v-model="formData.leaveDay" :min="1" :max="365" :step="15" placeholder="请输入请假天数"
+                style="width: 100%" class="flex-1 w-full max-w-xs" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -37,54 +23,32 @@
             <el-option label="调休" :value="4" />
           </el-select>
         </el-form-item>
-        
+
         <el-form-item label="请假原因" prop="leaveReason">
-          <el-input 
-            v-model="formData.leaveReason" 
-            type="textarea" 
-            :rows="3"
-            placeholder="请输入请假原因" 
-          />
+          <el-input v-model="formData.leaveReason" type="textarea" :rows="3" placeholder="请输入请假原因" />
         </el-form-item>
-        
+
         <el-row :gutter="20" class="flex-col md:flex-row">
           <el-col :span="24" :md="12" class="mb-8 md:mb-0">
             <el-form-item label="开始时间" prop="startTime">
-              <el-date-picker 
-                v-model="formData.startTime"
-                type="datetime" 
-                placeholder="请选择开始时间" 
-                :value-format="dateTimeStr"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="formData.startTime" type="datetime" placeholder="请选择开始时间"
+                :value-format="dateTimeStr" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="24" :md="12">
             <el-form-item label="结束时间" prop="endTime">
-              <el-date-picker 
-                v-model="formData.endTime"
-                type="datetime" 
-                placeholder="请选择结束时间" 
-                :value-format="dateTimeStr"
-                style="width: 100%"
-              />
+              <el-date-picker v-model="formData.endTime" type="datetime" placeholder="请选择结束时间"
+                :value-format="dateTimeStr" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
-        
+
         <el-form-item class="mt-6 text-center">
-          <div class="flex justify-center items-center gap-4 w-full">
-            <el-button
-              type="primary"
-              @click="submitForm"
-              :loading="formLoading"
-              :disabled="formLoading"
-            >
+          <div class="flex items-center justify-center w-full gap-4">
+            <el-button type="primary" @click="submitForm" :loading="formLoading" :disabled="formLoading">
               {{ isEdit ? '更新' : '提交申请' }}
             </el-button>
-            <el-button
-              @click="handleCancel"
-            >
+            <el-button @click="handleCancel">
               取消
             </el-button>
           </div>
@@ -102,8 +66,10 @@ import { useRouter, useRoute } from 'vue-router';
 import { useUserInfo } from '/@/stores/userInfo';
 
 // ========== 2. Props 定义 ==========
-const { flowHelper } = defineProps<{
-  flowHelper?: any
+const props = defineProps<{
+  flowHelper?: any;
+  processInstanceId?: string;
+  readonly?: boolean;
 }>();
 
 // ========== 3. 组件定义 ==========
@@ -157,13 +123,14 @@ const formRules = ref({
 });
 
 // ========== 6. 方法定义 ==========
-// 获取详情数据
-const getOaLeaveData = async (id: string) => {
+// 获取详情数据（支持通过 id 或 processInstanceId 查询）
+const getOaLeaveData = async (params: { id?: string; processInstanceId?: string }) => {
   try {
     formLoading.value = true;
-    const { data } = await getObj({ id: id });
-    // 直接将第一条数据赋值给表单
-    Object.assign(formData, data[0]);
+    const { data } = await getObj(params);
+    if (data?.length > 0) {
+      Object.assign(formData, data[0]);
+    }
   } catch (error) {
     useMessage().error('获取数据失败');
   } finally {
@@ -176,14 +143,14 @@ const submitForm = async () => {
   formLoading.value = true; // 防止重复提交
 
   // 1. 表单校验
-  const valid = await formRef.value.validate().catch(() => {});
+  const valid = await formRef.value.validate().catch(() => { });
   if (!valid) {
     formLoading.value = false;
     return false;
   }
 
   // 2. 审批人校验（使用父组件提供的方法）
-  if (flowHelper && !flowHelper.validate()) {
+  if (props.flowHelper && !props.flowHelper.validate()) {
     formLoading.value = false;
     return false;
   }
@@ -192,8 +159,8 @@ const submitForm = async () => {
     // 3. 准备提交数据（合并流程数据）
     let submitData: Record<string, any> = { ...formData };
 
-    if (flowHelper) {
-      const flowData = flowHelper.getFlowData();
+    if (props.flowHelper) {
+      const flowData = props.flowHelper.getFlowData();
       submitData = {
         ...submitData,
         ...flowData  // 包含 flowParamMap（审批人信息）
@@ -210,7 +177,9 @@ const submitForm = async () => {
     }
 
     // 5. 跳转回列表页
-    router.push('/flow/oaLeave/index');
+    if (!props.processInstanceId) {
+      router.push('/flow/oaLeave/index');
+    }
   } catch (err: any) {
     useMessage().error(err.msg);
   } finally {
@@ -242,14 +211,19 @@ watch([() => formData.startTime, () => formData.endTime], () => {
 
 // 页面初始化
 onMounted(() => {
-  // 检查是否是编辑模式
   const id = route.query.id as string;
+
   if (id) {
+    // 通过路由参数获取数据（常规编辑模式）
     isEdit.value = true;
     formData.id = id;
-    getOaLeaveData(id);
+    getOaLeaveData({ id });
+  } else if (props.processInstanceId) {
+    // 通过 processInstanceId 获取数据（重新提交场景）
+    isEdit.value = true;
+    getOaLeaveData({ processInstanceId: props.processInstanceId });
   }
-  
+
   // 设置默认申请人用户名
   if (!formData.username) {
     formData.username = useUserInfo().userInfos.user.username;

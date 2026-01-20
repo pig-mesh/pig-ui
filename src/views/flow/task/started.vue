@@ -269,6 +269,7 @@ const handleResubmit = (row: any) => {
 	resubmitData.value = row;
 	loadResubmitForm(() => detail({ processInstanceId: row.processInstanceId }), {
 		parseFormData: true,
+		readonly: false, // 重新提交需要可编辑表单，使用 formCustomCreatePath
 		onSuccess: () => {
 			resubmitDrawerVisible.value = true;
 		},

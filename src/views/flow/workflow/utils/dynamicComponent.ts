@@ -66,9 +66,8 @@ export interface DynamicFormComponent {
 /**
  * 根据formConfig动态创建表单组件
  * @param formConfig 表单配置
- * @param businessKey 业务键值
- * @param readonly 是否只读
  * @param processInstanceId 流程实例ID
+ * @param readonly 是否只读
  * @returns 组件配置对象
  */
 export function createDynamicFormComponent(formConfig: any, processInstanceId?: string, readonly?: boolean): DynamicFormComponent | null {
