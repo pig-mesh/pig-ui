@@ -6,7 +6,7 @@
 				<el-button link class="button" text @click="handleRoutr">{{ $t('home.moreTip') }}</el-button>
 			</div>
 		</template>
-		<el-timeline v-if="logState.dataList.length > 0">
+		<el-timeline v-if="Array.isArray(logState.dataList) && logState.dataList.length > 0">
 			<el-timeline-item v-for="(item, index) in logState.dataList" :key="index" :timestamp="item.createTime">
 				{{ item.title }} - {{ item.remoteAddr }}
 			</el-timeline-item>
@@ -46,5 +46,11 @@ const handleRoutr = () => {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
+}
+
+// element-plus 2.13.1 中 el-timeline 会默认新增 is-start 导致左边距异常
+:deep(.el-timeline.is-start) {
+	padding-left: 0 !important;
+	padding-right: 0 !important;
 }
 </style>
