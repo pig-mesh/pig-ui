@@ -16,7 +16,7 @@ use([TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridCo
 /**
  * 国际化工具
  */
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 /**
  * 日志统计数据项接口
@@ -28,9 +28,18 @@ interface LogSumItem {
 }
 
 /**
- * 图表配置选项
+ * 图表数据
  */
-const option = reactive({
+const chartData = reactive({
+	xAxisData: [] as string[],
+	successData: [] as number[],
+	failureData: [] as number[],
+});
+
+/**
+ * 图表配置选项（使用 computed 实现国际化动态更新）
+ */
+const option = computed(() => ({
 	title: {
 		textStyle: {
 			fontSize: 16,
@@ -82,7 +91,7 @@ const option = reactive({
 	xAxis: {
 		type: 'category',
 		boundaryGap: false,
-		data: [],
+		data: chartData.xAxisData,
 		axisLine: {
 			show: false,
 		},
@@ -127,7 +136,7 @@ const option = reactive({
 			name: t('syslog.success'),
 			type: 'line',
 			stack: 'Total',
-			data: [],
+			data: chartData.successData,
 			smooth: true,
 			symbol: 'circle',
 			symbolSize: 8,
@@ -163,7 +172,7 @@ const option = reactive({
 			name: t('syslog.failure'),
 			type: 'line',
 			stack: 'x',
-			data: [],
+			data: chartData.failureData,
 			smooth: true,
 			symbol: 'circle',
 			symbolSize: 8,
@@ -196,7 +205,7 @@ const option = reactive({
 			},
 		},
 	],
-});
+}));
 
 /**
  * 组件挂载时加载日志统计数据
@@ -204,9 +213,9 @@ const option = reactive({
 onMounted(async () => {
 	try {
 		const { data } = await getSum();
-		option.xAxis.data = data.map((item: LogSumItem) => formatPast(new Date(item.createTime), 'mm-dd'));
-		option.series[0].data = data.map((item: LogSumItem) => item['0'] || 0);
-		option.series[1].data = data.map((item: LogSumItem) => item['9'] || 0);
+		chartData.xAxisData = data.map((item: LogSumItem) => formatPast(new Date(item.createTime), 'mm-dd'));
+		chartData.successData = data.map((item: LogSumItem) => item['0'] || 0);
+		chartData.failureData = data.map((item: LogSumItem) => item['9'] || 0);
 	} catch (err) {
 		console.error('Failed to load log statistics:', err);
 	}
