@@ -3,26 +3,24 @@
 		<el-card shadow="never" class="!border-none flex-1 h-full dark:bg-gray-800" :body-style="{ height: '100%' }">
 			<div class="flex items-start w-full h-full min-w-0 gap-6">
 				<!-- Mobile Preview Section -->
-				<div class="flex flex-col items-center flex-shrink-0 ml-16">
+				<div class="flex flex-col items-center flex-shrink-0 px-[16px] py-4">
 					<!-- 手机预览容器 -->
 					<div class="relative">
 						<!-- 手机外壳装饰 -->
 						<div
-							class="absolute -inset-3 bg-gradient-to-b from-gray-800 to-gray-900 dark:from-gray-900 dark:to-black rounded-[2.5rem] shadow-2xl">
+							class="absolute -inset-3 bg-gradient-to-b from-gray-800 to-gray-900 dark:from-gray-900 dark:to-black rounded-[2.8rem] shadow-2xl">
 						</div>
 
-						<!-- 手机屏幕区域 -->
+						<!-- 手机屏幕区域 - iPhone 17 比例 (149.6mm x 71.5mm = 2.09:1) -->
 						<div
-							class="relative bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 w-[360px] h-[640px] rounded-[2rem] shadow-xl overflow-hidden border-8 border-gray-800 dark:border-black">
-							<!-- 顶部刘海 -->
-							<div
-								class="absolute top-0 z-50 flex items-center justify-center w-32 h-6 gap-2 -translate-x-1/2 bg-gray-800 left-1/2 dark:bg-black rounded-b-2xl">
-								<div class="w-12 h-1 bg-gray-700 rounded-full dark:bg-gray-800"></div>
-								<div class="w-2 h-2 bg-gray-700 rounded-full dark:bg-gray-800"></div>
+							class="relative bg-[#f8f8f8] dark:bg-[var(--next-color-disabled)] w-[360px] min-h-[770px] rounded-[2.5rem] shadow-xl overflow-hidden border-[6px] border-gray-800 dark:border-black">
+							<!-- 动态岛 (Dynamic Island) -->
+							<div class="absolute top-3 left-1/2 -translate-x-1/2 w-[100px] h-[32px] bg-black rounded-full z-50 flex items-center justify-center gap-2">
+								<div class="w-2.5 h-2.5 bg-gray-800 rounded-full ring-1 ring-gray-700"></div>
 							</div>
 
 							<!-- 屏幕内容区域 -->
-							<div class="relative w-full h-full pt-6 pb-[60px] flex items-center justify-center">
+							<div class="relative w-full h-full pt-12 pb-[60px] flex items-center justify-center">
 								<div class="text-center text-gray-400 dark:text-gray-600">
 									<el-icon class="mb-2 text-6xl">
 										<Monitor />
@@ -94,7 +92,7 @@
 
 					<!-- 表单区域 - 可滚动 -->
 					<div class="flex-1 min-h-0 pr-2 overflow-x-hidden overflow-y-auto">
-						<el-form label-width="80px" class="w-full max-w-full mr-6">
+						<el-form label-width="80px" class="w-full">
 							<!-- 导航列表 -->
 							<draggable class="mb-6 space-y-4" v-model="tabbar.list" animation="300"
 								draggable=".draggable" itemKey="index" :move="onMove" handle=".drag-handle">
@@ -189,7 +187,7 @@
 
 					<!-- 底部操作区域 - 固定在底部 -->
 					<div
-						class="flex-shrink-0 pt-4 pr-8 bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+						class="flex-shrink-0 pt-4 bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-800">
 						<!-- 操作按钮 -->
 						<div class="flex items-center gap-3">
 							<!-- 保存按钮 -->

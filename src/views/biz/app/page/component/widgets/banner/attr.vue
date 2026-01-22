@@ -1,7 +1,6 @@
 <template>
-	<div class="w-full overflow-x-hidden">
-		<el-scrollbar style="height: 700px; overflow-x: hidden;">
-			<el-form label-width="80px" class="px-1 w-full max-w-full mr-8">
+	<div class="w-full">
+		<el-form label-width="80px" class="px-1 w-full">
 				<!-- 是否启用 -->
 				<el-form-item label="是否启用" v-if="type == 'mobile'" class="mb-6">
 					<el-radio-group v-model="content.enabled" class="!flex gap-2">
@@ -136,7 +135,6 @@
 					</el-alert>
 				</el-form-item>
 			</el-form>
-		</el-scrollbar>
 	</div>
 </template>
 <script lang="ts" setup>
