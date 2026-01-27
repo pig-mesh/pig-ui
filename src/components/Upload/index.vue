@@ -110,7 +110,9 @@ const baseUrl = import.meta.env.VITE_API_URL || '';
 
 // 获取文件名
 const getFileName = (file: any): string => {
-	return file.url ? other.getQueryString(file.url, 'fileName') || other.getQueryString(file.url, 'originalFileName') : 'File';
+	if (file?.name) return file.name;
+	if (!file?.url) return 'File';
+	return other.getQueryString(file.url, 'originalFileName') || other.getQueryString(file.url, 'fileName') || 'File';
 };
 
 // 根据文件类型生成accept属性值
