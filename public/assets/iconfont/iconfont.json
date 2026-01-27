@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "29657595",
+      "name": "巡检任务",
+      "font_class": "xunjianrenwu",
+      "unicode": "e6ad",
+      "unicode_decimal": 59053
+    },
+    {
       "icon_id": "5204393",
       "name": "云盘",
       "font_class": "yunpan",
