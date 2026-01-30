@@ -1,63 +1,30 @@
 <template>
   <!-- 消息内容 -->
-  <el-drawer v-model="visible" size="50%" direction="rtl" :with-header="false" class="news-content-drawer">
-    <div class="min-h-full p-6 news-content-wrapper">
-      <div class="max-w-4xl mx-auto">
-        <!-- 头部区域 -->
-        <div class="news-header rounded-t-xl shadow-sm p-6">
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-3">
-              <div class="w-3 h-3 bg-blue-500 rounded-full indicator-dot"></div>
-              <span class="text-sm font-medium news-tag px-3 py-1 rounded-full">{{ t('home.announcement') }}</span>
-            </div>
-            <el-button
-              type="text"
-              @click="visible = false"
-              class="close-button transition-colors"
-            >
-              <el-icon><Close /></el-icon>
-            </el-button>
-          </div>
+  <el-drawer v-model="visible" size="50%" direction="rtl" :title="t('home.announcement')">
+    <div class="flex justify-center">
+      <div class="w-full max-w-[680px]">
+        <!-- 标题 -->
+        <h1 class="mb-4 text-2xl font-bold leading-tight text-gray-900">
+          {{ currentNew.title }}
+        </h1>
 
-          <h1 class="text-2xl font-bold leading-tight mb-4 news-title">
-            {{ currentNew.title }}
-          </h1>
-
-          <div class="flex items-center justify-between text-sm news-meta">
-            <div class="flex items-center space-x-4">
-              <div class="flex items-center space-x-2">
-                <el-icon class="meta-icon"><User /></el-icon>
-                <span>{{ currentNew.createBy }}</span>
-              </div>
-              <div class="flex items-center space-x-2">
-                <el-icon class="meta-icon"><Clock /></el-icon>
-                <span>{{ currentNew.createTime }}</span>
-              </div>
-            </div>
-            <div v-if="currentNew.readFlag === '0'" class="flex items-center space-x-1 unread-badge">
-              <el-icon><Warning /></el-icon>
-              <span class="text-xs">{{ $t('msg.unread') }}</span>
-            </div>
-          </div>
+        <!-- 元信息 - 淡色小字 -->
+        <div class="flex items-center mb-8 space-x-4 text-sm text-gray-400">
+          <span>{{ currentNew.createBy }}</span>
+          <span>·</span>
+          <span>{{ currentNew.createTime }}</span>
+          <span v-if="currentNew.readFlag === '0'" class="text-orange-400">· {{ $t('msg.unread') }}</span>
         </div>
 
-        <!-- 内容区域 -->
-        <div class="news-body rounded-b-xl shadow-sm p-8">
-          <div class="prose prose-lg max-w-none">
-            <div
-              class="leading-relaxed news-content"
-              v-html="currentNew.content"
-              style="line-height: 1.8; font-size: 16px;"
-            ></div>
-          </div>
+        <!-- 分隔线 -->
+        <div class="mb-8 border-t border-gray-100"></div>
 
-          <!-- 底部分割线 -->
-          <div class="mt-8 pt-6 news-footer">
-            <div class="flex items-center justify-center text-xs footer-text">
-              <el-icon class="mr-1"><Document /></el-icon>
-              <span>{{ t('home.thanksForReading') }}</span>
-            </div>
-          </div>
+        <!-- 正文内容 -->
+        <div class="text-base leading-relaxed text-gray-700" v-html="currentNew.content"></div>
+
+        <!-- 底部提示 -->
+        <div class="pt-6 mt-12 text-center border-t border-gray-100">
+          <span class="text-xs text-gray-300">{{ t('home.thanksForReading') }}</span>
         </div>
       </div>
     </div>
@@ -66,7 +33,6 @@
 
 <script setup lang="ts" name="newsLetter">
 import { readUserMessage } from '/@/api/admin/message';
-import { Close, User, Clock, Warning, Document } from '@element-plus/icons-vue';
 import { useI18n } from 'vue-i18n';
 
 /**
