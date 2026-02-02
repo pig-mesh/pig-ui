@@ -20,7 +20,7 @@
         <em>{{ $t('excel.clickUpload') }}</em>
       </div>
       <template #tip>
-        <div class="el-upload__tip text-center">
+        <div class="text-center el-upload__tip">
           <span>{{ $t('excel.fileFormat') }}</span>
           <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline"
                    @click="downExcelTemp" v-if="tempUrl"
@@ -36,15 +36,23 @@
   </el-dialog>
 
   <!--校验失败错误数据-->
-  <el-dialog :title="$t('excel.validationFailureData')" v-model="state.errorVisible">
-    <el-table :data="state.errorData">
+  <el-dialog :title="$t('excel.validationFailureData')" v-model="state.errorVisible" width="60%">
+    <el-table :data="paginatedErrorData" max-height="400">
       <el-table-column property="lineNum" :label="$t('excel.lineNumbers')" width="100"></el-table-column>
       <el-table-column property="errors" :label="$t('excel.misDescription')" show-overflow-tooltip>
         <template v-slot="scope">
-          <el-tag type="danger" v-for="error in scope.row.errors" :key="error">{{ error }}</el-tag>
+          <el-tag type="danger" v-for="error in scope.row.errors" :key="error" style="margin-right: 4px;">{{ error }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
+    <el-pagination
+        v-if="state.errorData.length > state.errorPageSize"
+        class="justify-end mt-4"
+        v-model:current-page="state.errorCurrentPage"
+        :page-size="state.errorPageSize"
+        :total="state.errorData.length"
+        layout="total, prev, pager, next"
+    />
   </el-dialog>
 </template>
 
@@ -70,7 +78,9 @@ const uploadRef = ref();
 
 const state = reactive({
   errorVisible: false,
-  errorData: [],
+  errorData: [] as any[],
+  errorCurrentPage: 1,
+  errorPageSize: 20,
   dialog: {
     title: '',
     isShowDialog: false,
@@ -154,6 +164,15 @@ const headers = computed(() => {
     Authorization: 'Bearer ' + Session.getToken(),
     'TENANT-ID': Session.getTenant(),
   };
+});
+
+/**
+ * 分页后的错误数据
+ */
+const paginatedErrorData = computed(() => {
+  const start = (state.errorCurrentPage - 1) * state.errorPageSize;
+  const end = start + state.errorPageSize;
+  return state.errorData.slice(start, end);
 });
 
 // 暴露变量
