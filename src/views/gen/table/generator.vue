@@ -308,6 +308,11 @@ const dataRules = ref({
 			message: '必填项不能为空',
 			trigger: 'blur',
 		},
+		{
+			max: 50,
+			message: '功能名不能超过50个字符',
+			trigger: 'blur',
+		},
 	],
 	generatorType: [
 		{ validator: rule.overLength, trigger: 'blur' },
