@@ -48,6 +48,10 @@ import { Api, Rule } from '@form-create/element-ui';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 import { createDynamicFormComponent, type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
+import { initFormCreateFetch } from '/@/views/flow/workflow/utils/formCreateFetch';
+
+// 初始化 form-create fetch 拦截器
+initFormCreateFetch();
 
 // 定义接口
 interface FlowData {

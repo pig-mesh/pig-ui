@@ -22,9 +22,9 @@
 							<div
 								v-for="(flow, index1) in item.items"
 								:key="index1"
-								class="flex relative items-start p-4 bg-blue-50 rounded-xl shadow-lg dark:bg-slate-800 hover:scale-110 hover:shadow-lg"
+								class="relative flex items-start p-4 shadow-lg bg-blue-50 rounded-xl dark:bg-slate-800 hover:scale-110 hover:shadow-lg"
 							>
-								<div class="flex justify-center items-center ml-8 w-12 h-12 bg-blue-50 rounded-full border border-blue-100 dark:bg-slate-700 dark:border-slate-600">
+								<div class="flex items-center justify-center w-12 h-12 ml-8 border border-blue-100 rounded-full bg-blue-50 dark:bg-slate-700 dark:border-slate-600">
 									<upload-img v-model:imageUrl="flow.logo" disabled width="50px" height="50px"></upload-img>
 								</div>
 								<div class="ml-8">

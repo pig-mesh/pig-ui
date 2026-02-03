@@ -1,8 +1,8 @@
 <template>
   <div class="p-5 bg-white dark:bg-[var(--next-color-disabled)] rounded-lg transition-colors duration-300">
     <!-- 表单类型选择 -->
-    <div class="mb-6 py-4">
-      <el-radio-group v-model="flowStore.step2.formType" class="grid grid-cols-2 gap-4 w-full">
+    <div class="py-4 mb-6">
+      <el-radio-group v-model="flowStore.step2.formType" class="grid w-full grid-cols-2 gap-4">
         <el-radio
           v-for="option in BpmModelFormTypeOptions"
           :key="option.value"
@@ -15,8 +15,7 @@
                       hover:border-blue-500 dark:hover:border-[#1d9bf0]
                       hover:shadow-md cursor-pointer">
             <div class="flex-shrink-0 mt-0.5">
-              <div class="w-4 h-4 rounded-full border-2 border-gray-300 dark:border-gray-500
-                          flex items-center justify-center transition-all">
+              <div class="flex items-center justify-center w-4 h-4 transition-all border-2 border-gray-300 rounded-full dark:border-gray-500">
                 <div class="w-2 h-2 rounded-full bg-blue-500 dark:bg-[#1d9bf0] scale-0 transition-transform"></div>
               </div>
             </div>
@@ -108,8 +107,10 @@ import { BpmModelFormType, BpmModelFormTypeOptions } from '../form/const/constan
 import type { FormRules } from 'element-plus'
 import { rules } from '../form/const/form-rules'
 import { useFlowStore } from '../workflow/stores/flow'
-import { CommonHeaderEnum } from '/@/utils/request'
-import { Session } from '/@/utils/storage'
+import { initFormCreateFetch } from '../workflow/utils/formCreateFetch'
+
+// 初始化 form-create fetch 拦截器
+initFormCreateFetch()
 
 // Refs
 const designerRef = ref<InstanceType<typeof FcDesigner> | null>(null)
@@ -208,34 +209,6 @@ const validate = async (): Promise<void> => {
 		throw [errorMessage]
 	}
 }
-
-// 配置表单请求拦截器
-FcDesigner.designerForm.fetch = FcDesigner.formCreate.fetch = (options: any) => {
-	const headers: Record<string, string> = {};
-
-	// 添加认证token
-	const token = Session.getToken();
-	if (token) {
-		headers[CommonHeaderEnum.AUTHORIZATION] = `Bearer ${token}`;
-	}
-
-	// 添加租户ID
-	const tenantId = Session.getTenant();
-	if (tenantId) {
-		headers[CommonHeaderEnum.TENANT_ID] = tenantId;
-	}
-
-	// 发起请求
-	fetch(options.action, {
-		headers,
-		method: options.method,
-	})
-		.then(async (res) => {
-			const data = await res.json();
-			options.onSuccess(data);
-		})
-		.catch(options.onError);
-};
 
 // 初始化表单设计器
 const initDesigner = async () => {
