@@ -30,7 +30,7 @@
       </template>
     </el-upload>
     <template #footer>
-      <el-button type="primary" @click="submitFileForm">{{ $t('common.confirmButtonText') }}</el-button>
+      <el-button type="primary" :loading="state.upload.isUploading" @click="submitFileForm">{{ $t('common.confirmButtonText') }}</el-button>
       <el-button @click="state.upload.open = false">{{ $t('common.cancelButtonText') }}</el-button>
     </template>
   </el-dialog>
