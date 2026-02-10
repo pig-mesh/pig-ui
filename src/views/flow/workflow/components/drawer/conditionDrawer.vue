@@ -1,84 +1,97 @@
 <template>
-	<el-drawer
-		:append-to-body="true"
-		title="条件设置"
-		v-model="visible"
-		:show-close="false"
-		:size="550"
-		@open="openEvent"
-		:before-close="saveCondition"
-	>
+	<el-drawer :append-to-body="true" title="条件设置" v-model="visible" :show-close="false" :size="580" @open="openEvent"
+		:before-close="saveCondition" class="condition-drawer">
 		<template #header="{ titleId, titleClass }">
-			<h3 :id="titleId" :class="titleClass">条件设置</h3>
-		</template>
-		<el-form label-width="120px">
-			<el-form-item label="条件设置类型">
-				<el-radio-group v-model="conditionConfig.conditionType" :disabled="isBusinessForm">
-					<el-radio :label="0">条件组方式</el-radio>
-					<el-radio :label="1">表达式方式</el-radio>
-				</el-radio-group>
-			</el-form-item>
-			<el-form-item label="条件组关系" v-if="conditionConfig.conditionType === 0">
-				<el-switch v-model="conditionConfig.groupMode" active-text="且" inactive-text="或" />
-			</el-form-item>
-			<el-form-item label="规则名称" v-if="conditionConfig.conditionType === 1">
-				<el-input
-					v-model="conditionConfig.ruleName"
-					placeholder="请输入规则名称，例如：高金额审批规则、部门主管审批等"
-					style="width: 100%"
-				/>
-			</el-form-item>
-			<el-form-item label="条件表达式" v-if="conditionConfig.conditionType === 1">
-				<el-input
-					v-model="conditionConfig.expressionText"
-					type="textarea"
-					:rows="6"
-					placeholder="请输入条件表达式，例如：
-springbean.method(execution)"
-					style="width: 100%"
-				/>
-				<div class="form-tip">
-					<el-text type="info" size="small">
-						支持常用动态bean计算：springbean.method(execution)
-					</el-text>
-				</div>
-			</el-form-item>
-		</el-form>
-
-		<el-card v-if="conditionConfig.conditionType === 0" class="box-card" v-for="(item, index) in conditionConfig.conditionList" :key="index" style="margin-bottom: 20px">
-			<template #header>
-				<div class="card-header">
-					<span>条件组{{ index + 1 }}</span>
-					<el-switch v-model="item.mode" active-text="且" inactive-text="或" />
-
-					<el-button text v-if="conditionConfig.conditionList.length > 1" @click="deleteGroup(index)" icon="Delete"></el-button>
-				</div>
-			</template>
-			<div v-for="(item1, index1) in item.conditionList" :key="index1">
-				<div style="display: flex; flex-direction: row; justify-content: space-between">
-					<div>
-						{{ index1 == 0 ? '当' : item.mode ? '且' : '或' }}
-					</div>
-					<div>
-						<el-button text @click="deleteCondition(index, index1)" v-if="item.conditionList.length > 1" icon="Delete"></el-button>
-					</div>
-				</div>
-				<!-- 根据条件类型显示不同的组件 -->
-				<condition v-if="conditionConfig.conditionType === 0" :condition="item1"></condition>
-				<form-condition v-else :condition="item1"></form-condition>
+			<div class="drawer-header">
+				<h3 :id="titleId" :class="titleClass">条件设置</h3>
 			</div>
-			<el-button dark type="success" style="margin-top: 20px" @click="addOneCondition(item, index)">添加条件</el-button>
-		</el-card>
-		<el-button v-if="conditionConfig.conditionType === 0" dark type="primary" @click="addOneConditionGroup">添加条件组</el-button>
+		</template>
+		<div class="px-1">
+			<el-form label-width="100px" class="mb-2">
+				<el-form-item label="设置类型">
+					<el-radio-group v-model="conditionConfig.conditionType" :disabled="isBusinessForm">
+						<el-radio-button :label="0">条件组方式</el-radio-button>
+						<el-radio-button :label="1">表达式方式</el-radio-button>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="组间关系" v-if="conditionConfig.conditionType === 0">
+					<el-switch v-model="conditionConfig.groupMode" active-text="且(AND)" inactive-text="或(OR)"
+						inline-prompt />
+				</el-form-item>
+				<el-form-item label="规则名称" v-if="conditionConfig.conditionType === 1">
+					<el-input v-model="conditionConfig.ruleName"
+						placeholder="例如：高金额审批规则、部门主管审批等" />
+				</el-form-item>
+				<el-form-item label="条件表达式" v-if="conditionConfig.conditionType === 1">
+					<el-input v-model="conditionConfig.expressionText" type="textarea" :rows="6"
+						placeholder="请输入条件表达式，例如：springbean.method(execution)" />
+					<div class="mt-2">
+						<el-text type="info" size="small">
+							支持常用动态bean计算：springbean.method(execution)
+						</el-text>
+					</div>
+				</el-form-item>
+			</el-form>
+
+			<!-- 条件组列表 -->
+			<div v-if="conditionConfig.conditionType === 0" class="flex flex-col gap-4">
+				<div v-for="(item, index) in conditionConfig.conditionList" :key="index"
+					class="overflow-hidden transition-shadow duration-200 border border-gray-200 rounded-lg bg-gray-50 hover:shadow-md">
+					<!-- 条件组头部 -->
+					<div class="flex justify-between items-center px-4 py-2.5 bg-gray-100 border-b border-gray-200">
+						<div class="flex items-center gap-2 text-sm font-medium text-gray-700">
+							<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[var(--el-color-primary)] text-white text-[11px] font-semibold leading-none">{{ index + 1 }}</span>
+							<span>条件组</span>
+						</div>
+						<div class="flex items-center gap-2">
+							<el-switch v-model="item.mode" active-text="且" inactive-text="或" size="small" />
+							<el-button v-if="conditionConfig.conditionList.length > 1" text type="danger"
+								size="small" @click="deleteGroup(index)" icon="Delete" />
+						</div>
+					</div>
+					<!-- 条件项列表 -->
+					<div class="px-4 pt-3 pb-1">
+						<div v-for="(item1, index1) in item.conditionList" :key="index1"
+							class="mb-2" :class="index1 > 0 ? 'pt-2 border-t border-dashed border-gray-200' : ''">
+							<div class="flex items-center justify-between mb-2">
+								<span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium leading-5.5"
+									:class="index1 === 0
+										? 'bg-blue-50 text-[var(--el-color-primary)] border border-blue-200'
+										: item.mode
+											? 'bg-green-50 text-green-500 border border-green-200'
+											: 'bg-orange-50 text-orange-400 border border-orange-200'">
+									{{ index1 === 0 ? '当' : item.mode ? '且' : '或' }}
+								</span>
+								<el-button v-if="item.conditionList.length > 1" text type="danger" size="small"
+									@click="deleteCondition(index, index1)" icon="Delete" />
+							</div>
+							<div class="pl-1">
+								<condition v-if="conditionConfig.conditionType === 0" :condition="item1" />
+								<form-condition v-else :condition="item1" />
+							</div>
+						</div>
+					</div>
+					<!-- 添加条件按钮 -->
+					<div class="px-4 pt-2 pb-3.5">
+						<el-button type="primary" plain size="small" @click="addOneCondition(item, index)"
+							icon="Plus">添加条件</el-button>
+					</div>
+				</div>
+
+				<!-- 添加条件组按钮 -->
+				<el-button type="primary" plain @click="addOneConditionGroup" icon="Plus"
+					class="w-full !border-dashed">添加条件组</el-button>
+			</div>
+		</div>
 	</el-drawer>
 </template>
 <script setup>
-import {computed, getCurrentInstance, ref, watch} from 'vue';
-import { conditionStr, copyerStr } from '../../utils';
-import {useStore} from '../../stores/index';
+import { computed, ref, watch } from 'vue';
+import { conditionStr } from '../../utils';
+import { useStore } from '../../stores/index';
 import Condition from './components/condition.vue';
 import FormCondition from './components/formCondition.vue';
-import {useFlowStore} from '../../stores/flow';
+import { useFlowStore } from '../../stores/flow';
 import { BpmModelFormType } from '../../../form/const/constants';
 
 let conditionsConfig = ref({
@@ -113,7 +126,7 @@ const addOneConditionGroup = () => {
 	if (!conditionConfig.value.conditionList) {
 		conditionConfig.value.conditionList = [];
 	}
-	
+
 	// 根据条件类型创建不同的条件对象
 	let initialCondition;
 	if (conditionConfig.value.conditionType === 1) {
@@ -121,14 +134,14 @@ const addOneConditionGroup = () => {
 	} else {
 		initialCondition = { key: '', expression: '', value: '' };
 	}
-	
+
 	conditionConfig.value.conditionList.push({
 		mode: true,
 		conditionList: [initialCondition],
 	});
 };
 //添加组内一个条件
-const addOneCondition = (item, index) => {
+const addOneCondition = (item) => {
 	if (!item.conditionList) {
 		item.conditionList = [];
 	}
@@ -143,12 +156,12 @@ const addOneCondition = (item, index) => {
 let flowStore = useFlowStore();
 
 const step2FormList = computed(() => {
-  return flowStore.step2.formRule || [];
+	return flowStore.step2.formRule || [];
 });
 
 // 判断是否为业务表单（自定义表单）
 const isBusinessForm = computed(() => {
-  return flowStore.step2.formType === BpmModelFormType.CUSTOM;
+	return flowStore.step2.formType === BpmModelFormType.CUSTOM;
 });
 
 // 递归搜索表单项，支持children属性
@@ -174,12 +187,12 @@ const openEvent = () => {
 	if (conditionConfig.value.conditionType === undefined) {
 		conditionConfig.value.conditionType = isBusinessForm.value ? 1 : 0;
 	}
-	
+
 	// 初始化表达式文本
 	if (conditionConfig.value.expressionText === undefined) {
 		conditionConfig.value.expressionText = '';
 	}
-	
+
 	// 确保在抽屉打开时有正确的初始化
 	if (!conditionConfig.value.conditionList || conditionConfig.value.conditionList.length === 0) {
 		let initialCondition;
@@ -200,25 +213,35 @@ watch(conditionsConfig1, (val) => {
 			let conditionList = group.conditionList;
 			for (var con of conditionList) {
 				let key = con.key;
-        if (key === 'root') {
-					con.keyType = 'SelectUser';
+				if (key === 'root') {
+					// 根据判断维度设置不同的 keyType
+					const orgType = con.orgType || 'user';
+					if (orgType === 'dept') {
+						con.keyType = 'SelectDept';
+					} else if (orgType === 'role') {
+						con.keyType = 'SelectRole';
+					} else if (orgType === 'post') {
+						con.keyType = 'SelectPost';
+					} else {
+						con.keyType = 'SelectUser';
+					}
 				} else {
 					// 递归搜索包含children的表单项
 					let ele = findFormItemByField(step2FormList.value, key);
 					if (ele && ele?.props?.type === 'user') {
 						con.keyType = 'SelectUser';
-					}else if (ele && ele?.props?.type === 'dept') {
-            con.keyType = 'SelectDept';
-          } else if (ele) {
-            con.keyType = ele.type;
-          }
+					} else if (ele && ele?.props?.type === 'dept') {
+						con.keyType = 'SelectDept';
+					} else if (ele) {
+						con.keyType = ele.type;
+					}
 				}
 			}
 		}
 	}
 	conditionsConfig.value = val.value;
 	PriorityLevel.value = val.priorityLevel;
-	
+
 	// 正确初始化当前编辑的条件配置
 	if (val.priorityLevel && val.priorityLevel <= conditionsConfig.value.conditionNodes.length) {
 		const targetNode = conditionsConfig.value.conditionNodes[val.priorityLevel - 1];
@@ -239,9 +262,9 @@ watch(conditionsConfig1, (val) => {
 		} else {
 			initialCondition = { key: '', expression: '', value: '' };
 		}
-		
-		conditionConfig.value = { 
-			nodeUserList: [], 
+
+		conditionConfig.value = {
+			nodeUserList: [],
 			conditionList: [{ mode: true, conditionList: [initialCondition] }],
 			groupMode: true,
 			conditionType: defaultConditionType,
@@ -250,7 +273,6 @@ watch(conditionsConfig1, (val) => {
 		};
 	}
 });
-const { proxy } = getCurrentInstance();
 
 const saveCondition = () => {
 	// 确保当前编辑的条件已经保存到对应的条件节点中
@@ -279,7 +301,7 @@ const saveCondition = () => {
 
 		conditionNode.error = false;
 		let conditionList = conditionNode.conditionList;
-		
+
 		// 最后一个条件节点（"其他条件"）不需要验证
 		if (i != conditionsConfig.value.conditionNodes.length - 1) {
 			var error = conditionList.length == 0;
@@ -321,11 +343,11 @@ const saveCondition = () => {
 		flag: true,
 		id: conditionsConfig1.value.id,
 	});
-	
+
 	closeDrawer();
 };
 
-const closeDrawer = (val) => {
+const closeDrawer = () => {
 	setCondition(false);
 };
 
@@ -346,19 +368,8 @@ watch(() => conditionConfig.value.conditionType, (newType, oldType) => {
 		} else {
 			initialCondition = { key: '', expression: '', value: '' };
 		}
-		
+
 		conditionConfig.value.conditionList = [{ mode: true, conditionList: [initialCondition] }];
 	}
 });
 </script>
-<style scoped>
-.card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.form-tip {
-	margin-top: 8px;
-}
-</style>

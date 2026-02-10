@@ -55,12 +55,21 @@ const formList = computed(() => {
 	return $deepCopy as FormItem[];
 });
 
+// 发起人判断维度选项
+const orgDimensionOptions = [
+	{ value: 'user', label: '用户' },
+	{ value: 'dept', label: '部门' },
+	{ value: 'role', label: '角色' },
+	{ value: 'post', label: '岗位' },
+];
+
 // 条件接口定义
 interface Condition {
 	key: string;
 	value: any;
 	keyType?: string;
 	expression?: string;
+	orgType?: string;
 }
 
 // 组件属性定义
@@ -136,6 +145,12 @@ let expression = ref<ExpressionMap>({
 	],
 });
 
+// 当前条件是否为发起人字段
+const isRootField = computed(() => props.condition.key === 'root');
+
+// 发起人当前选择的判断维度，默认 user
+const currentOrgType = computed(() => props.condition.orgType || 'user');
+
 // 监听条件键值变化，清空关系和值字段，并确保OrgSelector的值为数组
 watch(
 	() => props.condition.key,
@@ -144,8 +159,14 @@ watch(
 		if (oldKey !== undefined && newKey !== oldKey) {
 			props.condition.expression = '';
 			props.condition.value = '';
+			// 切换字段时重置维度
+			if (newKey === 'root') {
+				props.condition.orgType = 'user';
+			} else {
+				props.condition.orgType = undefined;
+			}
 		}
-		
+
 		// 确保OrgSelector的值始终为数组
 		if (formIdObj.value[newKey]?.type === 'OrgSelector') {
 			if (!props.condition.value || !Array.isArray(props.condition.value)) {
@@ -154,6 +175,16 @@ watch(
 		}
 	},
 	{ immediate: true }
+);
+
+// 监听发起人判断维度变化，切换维度时清空已选值
+watch(
+	() => props.condition.orgType,
+	(newType, oldType) => {
+		if (oldType !== undefined && newType !== oldType) {
+			props.condition.value = [];
+		}
+	}
 );
 </script>
 
@@ -208,17 +239,54 @@ watch(
 		>
 			<el-option v-for="item in formIdObj[condition.key]?.props?.options || []" :key="item.key" :label="item.value" :value="item.key" />
 		</el-select>
-		<div style="margin-top: 20px">
+		<!-- 发起人字段：判断维度选择 -->
+		<el-select
+			v-if="isRootField"
+			v-model="condition.orgType"
+			placeholder="选择判断维度"
+			style="width: 100%; margin-top: 20px"
+		>
+			<el-option v-for="item in orgDimensionOptions" :key="item.value" :label="item.label" :value="item.value" />
+		</el-select>
+
+		<!-- 发起人字段：根据维度显示对应选择器 -->
+		<div v-if="isRootField" style="margin-top: 20px">
 			<select-show
-				v-if="formIdObj[condition.key]?.type === 'OrgSelector' && formIdObj[condition.key]?.props?.type === 'user'"
+				v-if="currentOrgType === 'user'"
+				v-model:orgList="condition.value"
+				type="user"
+				:multiple="true"
+			></select-show>
+			<select-show
+				v-if="currentOrgType === 'dept'"
+				v-model:orgList="condition.value"
+				type="dept"
+				:multiple="true"
+			></select-show>
+			<select-show
+				v-if="currentOrgType === 'role'"
+				v-model:orgList="condition.value"
+				type="role"
+				:multiple="true"
+			></select-show>
+			<select-show
+				v-if="currentOrgType === 'post'"
+				v-model:orgList="condition.value"
+				type="post"
+				:multiple="true"
+			></select-show>
+		</div>
+
+		<!-- 非发起人的 OrgSelector 字段 -->
+		<div v-if="!isRootField && formIdObj[condition.key]?.type === 'OrgSelector' && formIdObj[condition.key]?.props?.type === 'user'" style="margin-top: 20px">
+			<select-show
 				v-model:orgList="condition.value"
 				type="user"
 				:multiple="true"
 			></select-show>
 		</div>
-		<div style="margin-top: 20px">
+		<div v-if="!isRootField && formIdObj[condition.key]?.type === 'OrgSelector' && formIdObj[condition.key]?.props?.type === 'dept'" style="margin-top: 20px">
 			<select-show
-				v-if="formIdObj[condition.key]?.type === 'OrgSelector' && formIdObj[condition.key]?.props?.type === 'dept'"
 				v-model:orgList="condition.value"
 				type="dept"
 				:multiple="true"

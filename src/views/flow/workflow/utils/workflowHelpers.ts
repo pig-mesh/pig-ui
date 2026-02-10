@@ -271,7 +271,7 @@ export function conditionStr(nodeConfig: NodeConfig, index: number): string {
 				const name = valueElement.title || valueElement.name;
 				let valueShow: string = value;
 
-				if (valueElement.type === 'SelectUser' || valueElement.type === 'SelectDept' || valueElement.type === 'OrgSelector') {
+				if (valueElement.type === 'SelectUser' || valueElement.type === 'SelectDept' || valueElement.type === 'SelectRole' || valueElement.type === 'SelectPost' || valueElement.type === 'OrgSelector') {
 					valueShow = value.map((res: any) => res.name).join(',');
 				} else if (valueElement.type === 'SingleSelect') {
 					valueShow = value.map((res: any) => res.value).join(',');

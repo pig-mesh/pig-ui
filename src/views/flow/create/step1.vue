@@ -157,6 +157,9 @@ const isEditMode = computed(() => {
 onMounted(() => {
 	queryGroupList().then(({ data }) => {
 		groupList.value = data;
+		if (!form.value.groupId && data.length > 0) {
+			form.value.groupId = data[0].id;
+		}
 	});
 });
 
