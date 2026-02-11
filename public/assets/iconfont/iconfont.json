@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "44379365",
+      "name": "AI技能库",
+      "font_class": "AIjinengku",
+      "unicode": "e6ae",
+      "unicode_decimal": 59054
+    },
+    {
+      "icon_id": "42800214",
+      "name": "code-review",
+      "font_class": "code-review",
+      "unicode": "e7ef",
+      "unicode_decimal": 59375
+    },
+    {
       "icon_id": "29657595",
       "name": "巡检任务",
       "font_class": "xunjianrenwu",
