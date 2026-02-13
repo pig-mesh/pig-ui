@@ -66,7 +66,6 @@ import { useMessage } from '/@/hooks/message';
 import { useUserInfo } from '/@/stores/userInfo';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
-import { ref } from 'vue';
 import { useIntervalFn } from '@vueuse/core';
 import type { FormInstance } from 'element-plus';
 
@@ -74,7 +73,6 @@ const { t } = useI18n();
 const emit = defineEmits(['signInSuccess', 'change']);
 
 // 创建一个 ref 对象，并将其初始化为 null
-const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
 const loginFormRef = ref<FormInstance | null>(null);
 const loading = ref(false);
 

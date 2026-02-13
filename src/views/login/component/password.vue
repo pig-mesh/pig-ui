@@ -1,17 +1,17 @@
 <template>
 	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="handleVerify" style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
 		<!-- 用户名输入框 -->
-		<el-form-item class="login-animation1 mb-5" prop="username">
+		<el-form-item class="mb-5 login-animation1" prop="username">
 			<el-input
 				text
 				:placeholder="$t('password.accountPlaceholder1')"
 				v-model="state.ruleForm.username"
 				clearable
 				autocomplete="off"
-				class="login-input h-11 rounded-md transition-all duration-200"
+				class="transition-all duration-200 rounded-md login-input h-11"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
+					<el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
 						<ele-User />
 					</el-icon>
 				</template>
@@ -19,22 +19,22 @@
 		</el-form-item>
 
 		<!-- 密码输入框 -->
-		<el-form-item class="login-animation2 mb-5" prop="password">
+		<el-form-item class="mb-5 login-animation2" prop="password">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
 				v-model="state.ruleForm.password"
-				class="login-input h-11 rounded-md transition-all duration-200"
+				class="transition-all duration-200 rounded-md login-input h-11"
 				autocomplete="off"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
+					<el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
 						<ele-Unlock />
 					</el-icon>
 				</template>
 				<template #suffix>
 					<i
-						class="iconfont el-input__icon login-content-password cursor-pointer text-gray-400 dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300 transition-colors duration-200"
+						class="text-gray-400 transition-colors duration-200 cursor-pointer iconfont el-input__icon login-content-password dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
 						@click="state.isShowPassword = !state.isShowPassword"
 					>
@@ -44,7 +44,7 @@
 		</el-form-item>
 
 		<!-- 验证码输入框（条件渲染） -->
-		<el-form-item class="login-animation2 mb-6" prop="code" v-if="verifyImageEnable">
+		<el-form-item class="mb-6 login-animation2" prop="code" v-if="verifyImageEnable">
 			<div class="flex gap-3">
 				<el-input
 					text
@@ -53,10 +53,10 @@
 					v-model="state.ruleForm.code"
 					clearable
 					autocomplete="off"
-					class="login-input flex-1 h-11 rounded-md transition-all duration-200"
+					class="flex-1 transition-all duration-200 rounded-md login-input h-11"
 				>
 					<template #prefix>
-						<el-icon class="el-input__icon text-gray-400 dark:text-slate-500">
+						<el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
 							<ele-Position />
 						</el-icon>
 					</template>
@@ -71,7 +71,7 @@
 		</el-form-item>
 
 		<!-- 登录按钮 -->
-		<el-form-item class="login-animation4 mb-5">
+		<el-form-item class="mb-5 login-animation4">
 			<el-button
 				type="primary"
 				class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200"
@@ -87,7 +87,7 @@
 		<div class="flex items-center justify-center gap-3 mb-6 text-[13px]">
 			<a
 				href="#"
-				class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
+				class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
 				@click.prevent="emit('change',LoginTypeEnum.FORGET)"
 			>
 				{{ $t('password.forgetPassword') }}
@@ -95,7 +95,7 @@
 			<span class="text-gray-300 dark:text-slate-600">|</span>
 			<a
 				href="#"
-				class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
+				class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
 				@click.prevent="emit('change', LoginTypeEnum.MOBILE)"
 			>
 				{{ $t('password.mobileLogin') }}
@@ -104,7 +104,7 @@
 				<span class="text-gray-300 dark:text-slate-600">|</span>
 				<a
 					href="#"
-					class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200"
+					class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
 					@click.prevent="emit('change', LoginTypeEnum.REGISTER)"
 				>
 					{{ $t('password.createAccount') }}
@@ -114,11 +114,11 @@
 
 		<!-- 服务协议提示 -->
 		<div class="flex items-center justify-center">
-			<span class="text-xs text-gray-400 dark:text-slate-500 text-center leading-relaxed">
+			<span class="text-xs leading-relaxed text-center text-gray-400 dark:text-slate-500">
 				{{ $t('password.agreement') }}
-				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.serviceAgreement') }}</a>
+				<a href="#" class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400">{{ $t('password.serviceAgreement') }}</a>
 				{{ $t('password.and') }}
-				<a href="#" class="login-link text-gray-500 dark:text-slate-400 transition-all duration-200">{{ $t('password.privacyPolicy') }}</a>
+				<a href="#" class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400">{{ $t('password.privacyPolicy') }}</a>
 			</span>
 		</div>
 	</el-form>
@@ -133,7 +133,6 @@
 </template>
 
 <script setup lang="ts" name="password">
-import { defineAsyncComponent, reactive, ref } from 'vue';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
 import { generateUUID } from '/@/utils/other';

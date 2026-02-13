@@ -19,13 +19,13 @@
 		</el-dropdown>
 
 		<!-- 主题切换 -->
-		<el-tooltip v-if="isDarkModeEnabled" :content="getThemeConfig.isDark ? t('control.toggleLightMode') : t('control.toggleDarkMode')" placement="bottom">
+		<el-tooltip v-if="isDarkModeEnabled" :content="themeConfig.isDark ? t('control.toggleLightMode') : t('control.toggleDarkMode')" placement="bottom">
 			<div
 				class="flex items-center justify-center transition-colors rounded-lg cursor-pointer w-9 h-9 backdrop-blur-sm bg-white/80 dark:bg-slate-800/80 hover:bg-gray-100 dark:hover:bg-slate-700"
 				@click="onThemeClick"
 			>
 				<el-icon :size="18" class="text-gray-600 dark:text-slate-300">
-					<ele-Moon v-if="!getThemeConfig.isDark" />
+					<ele-Moon v-if="!themeConfig.isDark" />
 					<ele-Sunny v-else />
 				</el-icon>
 			</div>
@@ -87,16 +87,6 @@ const onThemeClick = () => {
 	Local.set('themeConfig', themeConfig.value);
 };
 
-// 初始化暗黑模式
-const initDark = () => {
-	isDark.value = themeConfig.value.isDark;
-};
-
-// 获取布局配置信息
-const getThemeConfig = computed(() => {
-	return themeConfig.value;
-});
-
 // 在 script setup 中添加
 const initLanguage = () => {
 	if (!isI18nEnabled) return; // 如果未启用多语言，直接返回
@@ -121,7 +111,7 @@ const initLanguage = () => {
 // 修改 onMounted 钩子
 onMounted(() => {
 	initLanguage();
-	initDark();
+	isDark.value = themeConfig.value.isDark;
 });
 </script>
 

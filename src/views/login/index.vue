@@ -1,8 +1,6 @@
 <template>
-	<div
-		class="relative flex items-center justify-center min-h-screen overflow-hidden min-w-screen"
-		:style="backgroundStyle"
-	>
+	<div class="relative flex items-center justify-center min-h-screen overflow-hidden min-w-screen"
+		:style="backgroundStyle">
 
 		<!-- 右上角控制组件 -->
 		<div class="absolute z-20 top-6 right-6">
@@ -11,19 +9,15 @@
 
 		<!-- 居中登录卡片 -->
 		<div
-			class="login-card relative z-10 w-full md:w-[560px] h-auto min-h-[690px] rounded-none md:rounded-2xl px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up"
-		>
+			class="login-card relative z-10 w-full md:w-[560px] h-auto min-h-[690px] rounded-none md:rounded-2xl px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up">
 			<!-- Logo 和品牌区域 -->
 			<div class="flex items-center justify-center mb-8">
 				<div class="flex items-center justify-center rounded-lg logo-container w-14 h-14">
-					<img
-						class="object-contain w-9 h-9"
-						:src="!themeConfig.logo ? logo : baseURL + themeConfig.logo"
-						alt="Logo"
-					/>
+					<img class="object-contain w-9 h-9" :src="!themeConfig.logo ? logo : baseURL + themeConfig.logo"
+						alt="Logo" />
 				</div>
 				<div class="ml-5 text-4xl font-bold text-gray-900 dark:text-white">
-					{{ getThemeConfig.globalTitle }}
+					{{ themeConfig.globalTitle }}
 				</div>
 			</div>
 
@@ -35,13 +29,16 @@
 			<!-- 登录表单组件 -->
 			<div class="w-full">
 				<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
-				<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess" @change="changeLoginType" />
-				<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess" @change="changeLoginType" />
+				<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess"
+					@change="changeLoginType" />
+				<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess"
+					@change="changeLoginType" />
 				<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
-				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType"/>
+				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType" />
 
 				<!-- 社交登录（包含内置分割线） -->
-				<social @signInSuccess="signInSuccess" v-if="loginType === LoginTypeEnum.PASSWORD || loginType === LoginTypeEnum.MOBILE" />
+				<social @signInSuccess="signInSuccess"
+					v-if="loginType === LoginTypeEnum.PASSWORD || loginType === LoginTypeEnum.MOBILE" />
 			</div>
 		</div>
 
@@ -62,6 +59,7 @@ import loginBgDark from '/@/assets/login/login-bg-dark.svg';
 import loginBgPhoneLight from '/@/assets/login/login-bg-phone.svg';
 import loginBgPhoneDark from '/@/assets/login/login-bg-phone-dark.svg';
 import { useI18n } from 'vue-i18n';
+import { useWindowSize } from '@vueuse/core';
 import { formatAxisI18n } from '/@/utils/formatTime';
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
@@ -95,13 +93,8 @@ const loginType = ref(LoginTypeEnum.PASSWORD);
 // 用户名
 const username = ref('');
 
-// 响应式窗口宽度
-const windowWidth = ref(window.innerWidth);
-
-// 监听窗口大小变化
-const handleResize = () => {
-	windowWidth.value = window.innerWidth;
-};
+// 响应式窗口宽度（自动清理）
+const { width: windowWidth } = useWindowSize();
 
 /**
  * 动态背景样式
@@ -110,14 +103,9 @@ const handleResize = () => {
 const backgroundStyle = computed(() => {
 	const isDark = themeConfig.value.isDark;
 	const isMobile = windowWidth.value < 768; // md 断点
-
-	// 根据暗黑模式和设备类型选择背景
-	let bgUrl = '';
-	if (isMobile) {
-		bgUrl = isDark ? loginBgPhoneDark : loginBgPhoneLight;
-	} else {
-		bgUrl = isDark ? loginBgDark : loginBgLight;
-	}
+	const bgUrl = isMobile
+		? (isDark ? loginBgPhoneDark : loginBgPhoneLight)
+		: (isDark ? loginBgDark : loginBgLight);
 
 	return {
 		background: `url(${bgUrl}) no-repeat center/cover`,
@@ -138,16 +126,7 @@ const changeLoginType = (type: LoginTypeEnum, name?: string) => {
 };
 
 /**
- * 获取主题配置信息
- * @returns 主题配置对象
- */
-const getThemeConfig = computed(() => {
-	return themeConfig.value;
-});
-
-/**
  * 登录成功后的跳转处理事件
- * @description 处理登录成功后的路由跳转和权限验证
  */
 const signInSuccess = async () => {
 	try {
@@ -188,14 +167,6 @@ const signInSuccess = async () => {
  */
 onMounted(() => {
 	NextLoading.done();
-	window.addEventListener('resize', handleResize);
-});
-
-/**
- * 页面卸载时清理
- */
-onUnmounted(() => {
-	window.removeEventListener('resize', handleResize);
 });
 </script>
 
@@ -206,6 +177,7 @@ onUnmounted(() => {
 		opacity: 0;
 		transform: translateY(30px);
 	}
+
 	to {
 		opacity: 1;
 		transform: translateY(0);

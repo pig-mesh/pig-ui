@@ -1,6 +1,6 @@
 <template>
 	<!-- 忘记密码页面标题 -->
-	<div class="mb-9 text-center">
+	<div class="text-center mb-9">
 		<h2 class="text-lg font-medium text-gray-900 dark:text-white">
 			{{ $t('forget.resetPasswordTitle') }}
 		</h2>
@@ -11,7 +11,7 @@
 
 	<el-form size="large" class="login-content-form" ref="dataFormRef" :rules="dataRules" :model="forgetFormData">
 		<!-- 手机号 -->
-		<el-form-item class="login-animation1 mb-6" prop="phone">
+		<el-form-item class="mb-6 login-animation1" prop="phone">
 			<el-input
 				text
 				type="tel"
@@ -19,16 +19,16 @@
 				v-model="forgetFormData.phone"
 				clearable
 				autocomplete="off"
-				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
 			>
 				<template #prefix>
-					<i class="iconfont icon-dianhua el-input__icon text-gray-400 dark:text-slate-400"></i>
+					<i class="text-gray-400 iconfont icon-dianhua el-input__icon dark:text-slate-400"></i>
 				</template>
 			</el-input>
 		</el-form-item>
 
 		<!-- 验证码 -->
-		<el-form-item class="login-animation2 mb-6" prop="code">
+		<el-form-item class="mb-6 login-animation2" prop="code">
 			<div class="flex gap-2">
 				<el-input
 					text
@@ -37,10 +37,10 @@
 					v-model="forgetFormData.code"
 					clearable
 					autocomplete="off"
-					class="flex-1 h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+					class="flex-1 rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
 				>
 					<template #prefix>
-						<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+						<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
 							<ele-Position/>
 						</el-icon>
 					</template>
@@ -58,18 +58,18 @@
 		</el-form-item>
 
 		<!-- 新密码 -->
-		<el-form-item class="login-animation2 mb-6" prop="newpassword1">
+		<el-form-item class="mb-6 login-animation2" prop="newpassword1">
 			<strength-meter
 				:placeholder="$t('forget.newPasswordPlaceholder')"
 				v-model="forgetFormData.newpassword1"
 				autocomplete="off"
-				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
 				:maxLength="20"
 				:minLength="6"
 				@score="handlePassScore"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
 						<ele-Unlock/>
 					</el-icon>
 				</template>
@@ -77,18 +77,18 @@
 		</el-form-item>
 
 		<!-- 确认密码 -->
-		<el-form-item class="login-animation2 mb-6" prop="newpassword2">
+		<el-form-item class="mb-6 login-animation2" prop="newpassword2">
 			<strength-meter
 				:placeholder="$t('forget.confirmPasswordPlaceholder')"
 				v-model="forgetFormData.newpassword2"
 				autocomplete="off"
-				class="h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200 rounded-md"
+				class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
 				:maxLength="20"
 				:minLength="6"
 				@score="handlePassScore"
 			>
 				<template #prefix>
-					<el-icon class="el-input__icon text-gray-400 dark:text-slate-400">
+					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
 						<ele-Unlock/>
 					</el-icon>
 				</template>
@@ -112,7 +112,7 @@
 		<div class="flex items-center justify-center mt-3 text-sm font-medium">
 			<a
 				href="#"
-				class="text-blue-600 dark:text-blue-400 hover:underline cursor-pointer"
+				class="text-blue-600 cursor-pointer dark:text-blue-400 hover:underline"
 				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
 			>
 				{{ $t('password.backToLogin') }}
@@ -127,7 +127,6 @@
   import {useMessage} from '/@/hooks/message';
   import {rule} from '/@/utils/validate';
   import {useI18n} from 'vue-i18n';
-  import {ref, reactive, defineAsyncComponent} from "vue";
   import { useIntervalFn } from '@vueuse/core';
   import type { FormInstance } from 'element-plus';
   
