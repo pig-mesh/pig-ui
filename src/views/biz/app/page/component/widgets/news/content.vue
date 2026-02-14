@@ -42,7 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import { fetchList } from '/@/api/app/appArticle';
 import type options from './options';
 type OptionsType = ReturnType<typeof options>;
@@ -63,7 +62,3 @@ const getData = async () => {
 };
 getData();
 </script>
-
-<style lang="scss" scoped>
-/* 移除了所有 SCSS 样式，全部使用 Tailwind CSS 内联样式 */
-</style>

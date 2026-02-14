@@ -41,7 +41,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import widgets from '../widgets';
 
 defineProps({

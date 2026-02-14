@@ -27,7 +27,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import type options from './options';
 import AddNav from '../../add-nav.vue';
 type OptionsType = ReturnType<typeof options>;
@@ -42,5 +41,3 @@ defineProps({
 	},
 });
 </script>
-
-<style lang="scss" scoped></style>

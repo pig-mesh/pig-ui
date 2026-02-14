@@ -7,7 +7,3 @@
 	</div>
 </template>
 <script lang="ts" setup></script>
-
-<style lang="scss" scoped>
-// All styles now handled by Tailwind classes
-</style>

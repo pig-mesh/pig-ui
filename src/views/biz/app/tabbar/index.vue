@@ -280,10 +280,7 @@ const handleDelete = (index: number) => {
 };
 
 const onMove = (e: any) => {
-	if (e.relatedContext.index == 0) {
-		return false;
-	}
-	return true;
+	return e.relatedContext.index !== 0;
 };
 
 const getData = async () => {
@@ -298,16 +295,14 @@ const getData = async () => {
 
 const setData = async () => {
 	try {
-		const data = toRaw(tabbar.list).map((item, index) => {
-			return {
-				...(item.id && { id: item.id }), // Only include id if it exists
-				name: item.name,
-				selected: item.selected,
-				unselected: item.unselected,
-				link: JSON.stringify(item.link), // 将link转为字符串
-				sortOrder: index,
-			};
-		});
+		const data = toRaw(tabbar.list).map((item, index) => ({
+			...(item.id && { id: item.id }),
+			name: item.name,
+			selected: item.selected,
+			unselected: item.unselected,
+			link: JSON.stringify(item.link),
+			sortOrder: index,
+		}));
 		await putObj(data);
 		await getData();
 		useMessage().success('保存成功');
@@ -317,6 +312,5 @@ const setData = async () => {
 	}
 };
 
-// Initialize data
 getData();
 </script>

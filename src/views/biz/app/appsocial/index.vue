@@ -9,10 +9,10 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
+						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
+						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
@@ -21,7 +21,6 @@
 					<el-button
 						@click="formDialogRef.openDialog()"
 						class="ml10"
-						formDialogRef
 						icon="folder-add"
 						type="primary"
 						v-auth="'app_social_details_add'"
@@ -33,7 +32,6 @@
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
-						formDialogRef
 						icon="Delete"
 						type="primary"
 						v-auth="'app_social_details_del'"
@@ -97,18 +95,13 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
-// 定义查询字典
-
 const { app_social_type } = useDict('app_social_type');
-// 定义变量内容
+
 const formDialogRef = ref();
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
@@ -120,30 +113,23 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	descs: ['create_time'],
 });
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
 const resetQuery = () => {
-	// 清空搜索条件
 	queryRef.value.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-// 导出excel
 const exportExcel = () => {
 	downBlobFile('/app/appsocial/export', state.queryForm, 'appsocial.xlsx');
 };
 
-// 多选事件
 const handleSelectionChange = (objs: { id: string }[]) => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));

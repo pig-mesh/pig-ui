@@ -6,7 +6,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import type options from './options';
 import DecorationImg from '../../decoration-img.vue';
 type OptionsType = ReturnType<typeof options>;
@@ -21,12 +20,6 @@ const props = defineProps({
 	},
 });
 const getImage = computed(() => {
-	const { data } = props.content;
-	if (Array.isArray(data)) {
-		return data[0] ? data[0].image : '';
-	}
-	return '';
+	return props.content.data?.[0]?.image ?? '';
 });
 </script>
-
-<style lang="scss" scoped></style>

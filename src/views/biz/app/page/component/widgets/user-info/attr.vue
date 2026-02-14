@@ -2,7 +2,6 @@
 	<div></div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import type options from './options';
 type OptionsType = ReturnType<typeof options>;
 defineProps({
@@ -16,5 +15,3 @@ defineProps({
 	},
 });
 </script>
-
-<style lang="scss" scoped></style>

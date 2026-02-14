@@ -34,6 +34,7 @@
 				:data="state.dataList"
 				v-loading="state.loading"
 				border
+				@selection-change="handleSelectionChange"
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle.headerCellStyle"
 			>
@@ -69,17 +70,12 @@ import { fetchList, delObjs } from '/@/api/app/appArticleCategory';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-// 定义查询字典
 
 const { yes_no_type } = useDict('yes_no_type');
-// 定义变量内容
 const formDialogRef = ref();
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
@@ -88,24 +84,23 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: fetchList,
 });
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
 const resetQuery = () => {
-	// 清空搜索条件
 	queryRef.value?.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-// 导出excel
+const handleSelectionChange = (objs: { id: string }[]) => {
+	selectObjs.value = objs.map(({ id }) => id);
+	multiple.value = !objs.length;
+};
+
 const exportExcel = () => {
 	downBlobFile('/app/appArticleCategory/export', state.queryForm, 'appArticleCategory.xlsx');
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm('此操作将永久删除');

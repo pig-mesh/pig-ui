@@ -59,60 +59,46 @@
 </template>
 
 <script setup lang="ts" name="systemAppContacts">
-import { BasicTableProps, useTable } from "/@/hooks/table";
-import { fetchList, delObjs } from "/@/api/app/appContacts";
-import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useDict } from '/@/hooks/dict';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { fetchList, delObjs } from '/@/api/app/appContacts';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
-// 定义查询字典
-
-// 定义变量内容
-const formDialogRef = ref()
-// 搜索变量
-const queryRef = ref()
-const showSearch = ref(true)
-// 多选变量
-const selectObjs = ref([]) as any
-const multiple = ref(true)
+const formDialogRef = ref();
+const queryRef = ref();
+const showSearch = ref(true);
+const selectObjs = ref([]) as any;
+const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
   queryForm: {},
-  pageList: fetchList
-})
+  pageList: fetchList,
+});
 
-//  table hook
 const {
   getDataList,
   currentChangeHandle,
   sizeChangeHandle,
   sortChangeHandle,
   downBlobFile,
-	tableStyle
-} = useTable(state)
+  tableStyle,
+} = useTable(state);
 
-// 清空搜索条件
 const resetQuery = () => {
-  // 清空搜索条件
-  queryRef.value?.resetFields()
-  // 清空多选
-  selectObjs.value = []
-  getDataList()
-}
+  queryRef.value?.resetFields();
+  selectObjs.value = [];
+  getDataList();
+};
 
-// 导出excel
 const exportExcel = () => {
-  downBlobFile('/app/appContacts/export', Object.assign(state.queryForm, { ids: selectObjs }), 'appContacts.xlsx')
-}
+  downBlobFile('/app/appContacts/export', Object.assign(state.queryForm, { ids: selectObjs }), 'appContacts.xlsx');
+};
 
-// 多选事件
 const selectionChangHandle = (objs: { id: string }[]) => {
   selectObjs.value = objs.map(({ id }) => id);
   multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
   try {
     await useMessageBox().confirm('此操作将永久删除');

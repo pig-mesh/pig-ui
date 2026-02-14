@@ -25,81 +25,73 @@
 </template>
 
 <script setup lang="ts" name="AppContactsDialog">
-import { useDict } from '/@/hooks/dict';
-import { useMessage } from "/@/hooks/message";
-import { getObj, addObj, putObj } from '/@/api/app/appContacts'
+import { useMessage } from '/@/hooks/message';
+import { getObj, addObj, putObj } from '/@/api/app/appContacts';
 import { rule } from '/@/utils/validate';
+
 const emit = defineEmits(['refresh']);
-
-// 定义变量内容
 const dataFormRef = ref();
-const visible = ref(false)
-const loading = ref(false)
-// 定义字典
+const visible = ref(false);
+const loading = ref(false);
 
-// 提交表单数据
 const form = reactive({
-		id:'',
-	  contactName: '',
-	  contactPhone: '',
-	  remark: '',
+  id: '',
+  contactName: '',
+  contactPhone: '',
+  remark: '',
 });
 
-// 定义校验规则
 const dataRules = ref({
-        contactName: [{required: true, message: '联系人不能为空', trigger: 'blur'}],
-    contactPhone: [{required: true, message: '手机号不能为空', trigger: 'blur'}, { validator: rule.mobilePhone, trigger: 'blur' }],
-})
+  contactName: [{ required: true, message: '联系人不能为空', trigger: 'blur' }],
+  contactPhone: [
+    { required: true, message: '手机号不能为空', trigger: 'blur' },
+    { validator: rule.mobilePhone, trigger: 'blur' },
+  ],
+});
 
-// 打开弹窗
 const openDialog = (id: string) => {
-  visible.value = true
-  form.id = ''
+  visible.value = true;
+  form.id = '';
 
-  // 重置表单数据
-	nextTick(() => {
-		dataFormRef.value?.resetFields();
-	});
+  nextTick(() => {
+    dataFormRef.value?.resetFields();
+  });
 
-  // 获取appContacts信息
   if (id) {
-    form.id = id
-    getappContactsData(id)
+    form.id = id;
+    getappContactsData(id);
   }
 };
 
-// 提交
 const onSubmit = async () => {
-	const valid = await dataFormRef.value.validate().catch(() => {});
-	if (!valid) return false;
+  const valid = await dataFormRef.value.validate().catch(() => {});
+  if (!valid) return false;
 
-	try {
+  try {
     loading.value = true;
-		form.id ? await putObj(form) : await addObj(form);
-		useMessage().success(form.id ? '修改成功' : '添加成功');
-		visible.value = false;
-		emit('refresh');
-	} catch (err: any) {
-		useMessage().error(err.msg);
-	} finally {
+    form.id ? await putObj(form) : await addObj(form);
+    useMessage().success(form.id ? '修改成功' : '添加成功');
+    visible.value = false;
+    emit('refresh');
+  } catch (err: any) {
+    useMessage().error(err.msg);
+  } finally {
     loading.value = false;
   }
 };
 
-
-// 初始化表单数据
 const getappContactsData = (id: string) => {
-  // 获取数据
-  loading.value = true
-  getObj(id).then((res: any) => {
-    Object.assign(form, res.data)
-  }).finally(() => {
-    loading.value = false
-  })
+  loading.value = true;
+  getObj(id)
+    .then((res: any) => {
+      Object.assign(form, res.data);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-// 暴露变量
 defineExpose({
-  openDialog
+  openDialog,
 });
 </script>

@@ -15,8 +15,6 @@
 	</el-menu>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
-
 defineProps({
 	menus: {
 		type: Object as PropType<Record<string, any>>,

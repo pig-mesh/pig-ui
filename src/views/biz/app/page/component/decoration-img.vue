@@ -12,8 +12,6 @@
 </template>
 
 <script lang="ts" setup>
-import { computed } from 'vue';
-import type { CSSProperties } from 'vue';
 import { imageProps } from 'element-plus';
 import other from '/@/utils/other';
 const props = defineProps({
@@ -32,7 +30,7 @@ const props = defineProps({
 	...imageProps,
 });
 
-const styles = computed<CSSProperties>(() => {
+const styles = computed<import('vue').CSSProperties>(() => {
 	return {
 		width: other.addUnit(props.width),
 		height: other.addUnit(props.height),

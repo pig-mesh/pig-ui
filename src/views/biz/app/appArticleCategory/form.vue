@@ -26,16 +26,13 @@
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { getObj, addObj, putObj } from '/@/api/app/appArticleCategory';
-const emit = defineEmits(['refresh']);
 
-// 定义变量内容
+const emit = defineEmits(['refresh']);
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-// 定义字典
 const { yes_no_type } = useDict('yes_no_type');
 
-// 提交表单数据
 const form = reactive({
 	id: '',
 	name: '',
@@ -43,30 +40,25 @@ const form = reactive({
 	isShow: 1,
 });
 
-// 定义校验规则
 const dataRules = ref({
 	name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
 	isShow: [{ required: true, message: '是否显示', trigger: 'blur' }],
 });
 
-// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取appArticleCategory信息
 	if (id) {
 		form.id = id;
 		getappArticleCategoryData(id);
 	}
 };
 
-// 提交
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -84,9 +76,7 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化表单数据
 const getappArticleCategoryData = (id: string) => {
-	// 获取数据
 	loading.value = true;
 	getObj(id)
 		.then((res: any) => {
@@ -97,7 +87,6 @@ const getappArticleCategoryData = (id: string) => {
 		});
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

@@ -30,13 +30,10 @@ enum pagesTypeEnum {
 }
 
 const generatePageData = (widgetNames: string[]) => {
-	return widgetNames.map((widgetName) => {
-		const options = {
-			id: other.getNonDuplicateID(),
-			...(widgets[widgetName]?.options() || {}),
-		};
-		return options;
-	});
+	return widgetNames.map((widgetName) => ({
+		id: other.getNonDuplicateID(),
+		...(widgets[widgetName]?.options() || {}),
+	}));
 };
 
 const menus: Record<

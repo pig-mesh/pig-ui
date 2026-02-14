@@ -38,9 +38,8 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import { useMessage } from '/@/hooks/message';
-import type { PropType } from 'vue';
 import type options from './options';
+import { useMessage } from '/@/hooks/message';
 import Draggable from 'vuedraggable';
 const LinkPicker = defineAsyncComponent(() => import('/@/components/Link/picker.vue'));
 
@@ -75,5 +74,3 @@ const handleDelete = (index: number) => {
 	props.content.data.splice(index, 1);
 };
 </script>
-
-<style lang="scss" scoped></style>

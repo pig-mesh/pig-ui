@@ -75,7 +75,6 @@
 </template>
 <script lang="ts" setup>
 import widgets from '../widgets';
-import type { PropType } from 'vue';
 
 defineProps({
 	pageData: {

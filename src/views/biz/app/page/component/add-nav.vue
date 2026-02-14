@@ -94,7 +94,6 @@
 	</div>
 </template>
 <script lang="ts" setup>
-import type { PropType } from 'vue';
 import Draggable from 'vuedraggable';
 import { useMessage } from '/@/hooks/message';
 import { Plus } from '@element-plus/icons-vue';
@@ -102,7 +101,7 @@ const LinkPicker = defineAsyncComponent(() => import('/@/components/Link/picker.
 
 const props = defineProps({
 	modelValue: {
-		type: Array as PropType<any[]>,
+		type: Array as any,
 		default: () => [],
 	},
 	max: {
@@ -144,4 +143,3 @@ const handleDelete = (index: number) => {
 };
 </script>
 
-<style lang="scss" scoped></style>

@@ -95,22 +95,16 @@
 </template>
 
 <script setup lang="ts" name="AppArticleDialog">
-import mittBus from "/@/utils/mitt";
-import {useMessage} from '/@/hooks/message';
-import {getObj, addObj, putObj} from '/@/api/app/appArticle';
-import {getObjList} from '/@/api/app/appArticleCategory';
+import mittBus from '/@/utils/mitt';
+import { useMessage } from '/@/hooks/message';
+import { getObj, addObj, putObj } from '/@/api/app/appArticle';
+import { getObjList } from '/@/api/app/appArticleCategory';
 
-const emit = defineEmits(['refresh']);
 const route = useRoute();
-
-// 定义变量内容
 const dataFormRef = ref();
-const visible = ref(false);
 const loading = ref(false);
-// 定义字典
-
 const articleCateList = ref([]);
-// 提交表单数据
+
 const form = reactive({
   id: '',
   cid: '',
@@ -124,35 +118,26 @@ const form = reactive({
   sort: 0,
 });
 
-// 定义校验规则
 const dataRules = ref({
-  cid: [{required: true, message: '分类不能为空', trigger: 'blur'}],
-  title: [{required: true, message: '标题不能为空', trigger: 'blur'}],
-  intro: [{required: true, message: '简介不能为空', trigger: 'blur'}],
-  summary: [{required: true, message: '摘要不能为空', trigger: 'blur'}],
-  image: [{required: true, message: '封面不能为空', trigger: 'blur'}],
-  content: [{required: true, message: '内容不能为空', trigger: 'blur'}],
-  author: [{required: true, message: '作者不能为空', trigger: 'blur'}],
-  visit: [{required: true, message: '浏览不能为空', trigger: 'blur'}],
+  cid: [{ required: true, message: '分类不能为空', trigger: 'blur' }],
+  title: [{ required: true, message: '标题不能为空', trigger: 'blur' }],
+  intro: [{ required: true, message: '简介不能为空', trigger: 'blur' }],
+  summary: [{ required: true, message: '摘要不能为空', trigger: 'blur' }],
+  image: [{ required: true, message: '封面不能为空', trigger: 'blur' }],
+  content: [{ required: true, message: '内容不能为空', trigger: 'blur' }],
+  author: [{ required: true, message: '作者不能为空', trigger: 'blur' }],
+  visit: [{ required: true, message: '浏览不能为空', trigger: 'blur' }],
 });
 
-// 提交
 const onSubmit = async () => {
-  const valid = await dataFormRef.value.validate().catch(() => {
-  });
+  const valid = await dataFormRef.value.validate().catch(() => {});
   if (!valid) return false;
 
   try {
     loading.value = true;
     form.id ? await putObj(form) : await addObj(form);
     useMessage().success(form.id ? '修改成功' : '添加成功');
-    visible.value = false;
-    emit('refresh');
-    // 关闭当前tab
-    mittBus.emit(
-        "onCurrentContextmenuClick",
-        Object.assign({}, {contextMenuClickId: 1, ...route})
-    );
+    mittBus.emit('onCurrentContextmenuClick', { contextMenuClickId: 1, ...route });
   } catch (err: any) {
     useMessage().error(err.msg);
   } finally {
@@ -160,20 +145,17 @@ const onSubmit = async () => {
   }
 };
 
-// 初始化表单数据
 const getAppArticleData = (id: string) => {
-  // 获取数据
   loading.value = true;
   getObj(id)
-      .then((res: any) => {
-        Object.assign(form, res.data);
-      })
-      .finally(() => {
-        loading.value = false;
-      });
+    .then((res: any) => {
+      Object.assign(form, res.data);
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 
-// 查询全部的分类
 const getAppCateList = () => {
   getObjList().then((res: any) => {
     articleCateList.value = res.data;
@@ -183,22 +165,7 @@ const getAppCateList = () => {
 onMounted(() => {
   getAppCateList();
   if (route.query?.id) {
-    getAppArticleData(route.query?.id);
+    getAppArticleData(route.query.id as string);
   }
 });
 </script>
-
-<style scoped lang="scss">
-.footer-btns {
-  height: 60px;
-
-  &__content {
-    bottom: 0;
-    height: 60px;
-    right: 0;
-    left: 0;
-    z-index: 99;
-    @apply flex justify-center items-center shadow;
-  }
-}
-</style>
