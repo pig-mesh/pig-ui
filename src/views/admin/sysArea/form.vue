@@ -78,39 +78,15 @@ import { rule } from '/@/utils/validate';
 
 const ChinaArea = defineAsyncComponent(() => import('/@/components/ChinaArea/index.vue'));
 
-/**
- * 定义组件事件
- */
 const emit = defineEmits(['refresh']);
-
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
 
-/**
- * 是否类型字典
- */
 const { yes_no_type } = useDict('yes_no_type');
 
-/**
- * 地区类型字典
- */
 const area_type_dict = [
 	{ value: '0', label: t('area.country') },
 	{ value: '1', label: t('area.province') },
@@ -119,12 +95,9 @@ const area_type_dict = [
 	{ value: '4', label: t('area.street') },
 ];
 
-/**
- * 表单数据
- */
 const form = reactive({
 	id: '',
-	pid: 100000,
+	pid: '100000',
 	name: '',
 	letter: '',
 	adcode: 0,
@@ -136,9 +109,6 @@ const form = reactive({
 	cityCode: '',
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = ref({
 	name: [
 		{ required: true, message: t('area.nameRequired'), trigger: 'blur' },
@@ -162,40 +132,27 @@ const dataRules = ref({
 	],
 });
 
-/**
- * 打开对话框
- * @param id - 地区ID，为空时为新增模式
- */
 const openDialog = (id: string): void => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取地区详情
 	if (id) {
 		form.id = id;
 		getAreaData(id);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
-	// 防止重复提交
 	if (loading.value) return;
 	loading.value = true;
 
 	try {
 		const valid = await dataFormRef.value.validate().catch(() => {});
-		if (!valid) {
-			loading.value = false;
-			return;
-		}
+		if (!valid) return;
 
 		form.id ? await putObj(form) : await addObj(form);
 		useMessage().success(form.id ? t('common.editSuccessText') : t('common.addSuccessText'));
@@ -208,14 +165,10 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取地区详情数据
- * @param id - 地区ID
- */
 const getAreaData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
-		const { data } = await getObj({ id: id });
+		const { data } = await getObj({ id });
 		Object.assign(form, data);
 	} catch (err: any) {
 		useMessage().error(err.msg);
@@ -224,18 +177,10 @@ const getAreaData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 地区选择变更处理
- * @param data - 选中的地区编码，以逗号分隔
- */
 const handleChange = (data: string): void => {
-	const dataArray = data.split(',');
-	form.pid = dataArray[dataArray.length - 1];
+	form.pid = data.split(',').at(-1) ?? '';
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

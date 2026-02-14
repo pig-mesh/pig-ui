@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="120px" ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" label-width="120px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('client.clientId')" prop="clientId">
@@ -151,12 +151,6 @@ const form = reactive({
 	accessTokenValidity: 43200,
 	refreshTokenValidity: 2592001,
 	autoapprove: 'true',
-	delFlag: '',
-	createBy: '',
-	updateBy: '',
-	createTime: '',
-	updateTime: '',
-	tenantId: '',
 	onlineQuantity: '1',
 	captchaFlag: '1',
 	encFlag: '1',

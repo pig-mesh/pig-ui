@@ -73,5 +73,11 @@ export default {
 		descriptionRequired: '描述不能为空',
 		sortOrderRequired: '排序不能为空',
 		labelExists: '标签名已经存在',
+		listClassDefault: '默认',
+		listClassPrimary: '主要 Primary',
+		listClassSuccess: '成功 Success',
+		listClassInfo: '信息 Info',
+		listClassWarning: '警告 Warning',
+		listClassDanger: '危险 Danger',
 	},
 };

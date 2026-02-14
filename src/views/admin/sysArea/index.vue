@@ -84,24 +84,13 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-// 省市区查询组件
 const ChinaArea = defineAsyncComponent(() => import('/@/components/ChinaArea/index.vue'));
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 
-/**
- * 是否类型字典
- */
 const { yes_no_type } = useDict('yes_no_type');
 
-/**
- * 地区类型字典
- */
 const area_type_dict = [
 	{ value: '0', label: t('area.country') },
 	{ value: '1', label: t('area.province') },
@@ -110,39 +99,13 @@ const area_type_dict = [
 	{ value: '4', label: t('area.street') },
 ];
 
-/**
- * 表单对话框引用
- */
 const formDialogRef = ref();
-
-/**
- * 查询表单引用
- */
 const queryRef = ref();
-
-/**
- * 是否显示搜索区域
- */
 const showSearch = ref(true);
-
-/**
- * 多选的地区ID数组
- */
 const selectObjs = ref<string[]>([]);
-
-/**
- * 是否禁用批量删除按钮（无选中项时禁用）
- */
 const multiple = ref(true);
-
-/**
- * 父级地区选择值
- */
 const pid = ref();
 
-/**
- * 表格状态配置
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		adcode: '',
@@ -152,15 +115,9 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: fetchList,
 });
 
-/**
- * 表格相关钩子函数
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
 	useTable(state);
 
-/**
- * 清空搜索条件并重新查询
- */
 const resetQuery = (): void => {
 	queryRef.value?.resetFields();
 	pid.value = '';
@@ -168,26 +125,15 @@ const resetQuery = (): void => {
 	getDataList();
 };
 
-/**
- * 导出Excel文件
- */
 const exportExcel = (): void => {
-	downBlobFile('/admin/sysArea/export', Object.assign(state.queryForm, { ids: selectObjs.value }), 'sysArea.xlsx');
+	downBlobFile('/admin/sysArea/export', { ...state.queryForm, ids: selectObjs.value }, 'sysArea.xlsx');
 };
 
-/**
- * 表格多选事件处理
- * @param objs - 选中的行对象数组
- */
 const selectionChangHandle = (objs: { id: string }[]): void => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-/**
- * 删除地区
- * @param ids - 要删除的地区ID数组
- */
 const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
@@ -204,12 +150,7 @@ const handleDelete = async (ids: string[]): Promise<void> => {
 	}
 };
 
-/**
- * 地区选择变更处理
- * @param data - 选中的地区编码，以逗号分隔
- */
 const handleChange = (data: string): void => {
-	const dataArray = data.split(',');
-	state.queryForm.adcode = dataArray[dataArray.length - 1];
+	state.queryForm.adcode = data.split(',').at(-1);
 };
 </script>

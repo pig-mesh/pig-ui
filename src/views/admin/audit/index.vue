@@ -13,10 +13,10 @@
 						<el-input :placeholder="t('audit.inputCreateByTip')" v-model="state.queryForm.createBy" style="max-width: 180px" />
 					</el-form-item>
 					<el-form-item>
-						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button icon="Refresh" formDialogRef @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
@@ -24,7 +24,6 @@
 				<div class="mb8" style="width: 100%">
 					<el-button
 						plain
-						formDialogRef
 						:disabled="multiple"
 						icon="Delete"
 						type="primary"
@@ -100,16 +99,14 @@ const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, do
 
 // 清空搜索条件
 const resetQuery = () => {
-	// 清空搜索条件
 	queryRef.value?.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/audit/export', Object.assign(state.queryForm,{ids:selectObjs}), 'audit.xlsx');
+	downBlobFile('/admin/audit/export', { ...state.queryForm, ids: selectObjs.value }, 'audit.xlsx');
 };
 
 // 多选事件

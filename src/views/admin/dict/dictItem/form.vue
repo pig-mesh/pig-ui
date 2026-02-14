@@ -70,14 +70,14 @@ const dataForm = reactive({
 });
 
 // 标签类型选项
-const listClassOptions = [
-  { label: '默认', value: '' },
-  { label: '主要 Primary', value: 'primary' },
-  { label: '成功 Success', value: 'success' },
-  { label: '信息 Info', value: 'info' },
-  { label: '警告 Warning', value: 'warning' },
-  { label: '危险 Danger', value: 'danger' },
-];
+const listClassOptions = computed(() => [
+  { label: t('dictItem.listClassDefault'), value: '' },
+  { label: t('dictItem.listClassPrimary'), value: 'primary' },
+  { label: t('dictItem.listClassSuccess'), value: 'success' },
+  { label: t('dictItem.listClassInfo'), value: 'info' },
+  { label: t('dictItem.listClassWarning'), value: 'warning' },
+  { label: t('dictItem.listClassDanger'), value: 'danger' },
+]);
 
 const dataRules = reactive({
   dictType: [
@@ -109,7 +109,7 @@ const dataRules = reactive({
 });
 
 // 打开弹窗
-const openDialog = (row: any, dictForm: any) => {
+const openDialog = async (row: any, dictForm: any) => {
   visible.value = true;
   dataForm.id = '';
 
@@ -121,20 +121,27 @@ const openDialog = (row: any, dictForm: any) => {
     }
   });
   if (row?.id) {
-    getItemObj(row.id).then((res) => {
-      Object.assign(dataForm, res.data);
-    });
+    try {
+      const { data } = await getItemObj(row.id);
+      Object.assign(dataForm, data);
+    } catch (err: any) {
+      useMessage().error(err.msg);
+    }
   }
 };
 
 // 提交
 const onSubmit = async () => {
-  const valid = await dicDialogFormRef.value.validate().catch(() => {
-  });
-  if (!valid) return false;
+  if (loading.value) return;
+  loading.value = true;
 
   try {
-    loading.value = true;
+    const valid = await dicDialogFormRef.value.validate().catch(() => {});
+    if (!valid) {
+      loading.value = false;
+      return false;
+    }
+
     dataForm.id ? await putItemObj(dataForm) : await addItemObj(dataForm);
     useMessage().success(t(dataForm.id ? 'common.editSuccessText' : 'common.addSuccessText'));
     visible.value = false;

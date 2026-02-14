@@ -41,39 +41,14 @@ import { getObj, addObj, putObj, validateWord } from '/@/api/admin/sensitive';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 定义组件事件
- */
 const emit = defineEmits(['refresh']);
-
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 表单引用
- */
-const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
-const visible = ref(false);
-
-/**
- * 加载状态
- */
-const loading = ref(false);
-
-/**
- * 敏感词类型字典
- */
 const { sensitive_type } = useDict('sensitive_type');
 
-/**
- * 表单数据
- */
+const dataFormRef = ref();
+const visible = ref(false);
+const loading = ref(false);
+
 const form = reactive({
 	sensitiveId: '',
 	sensitiveWord: '',
@@ -81,9 +56,6 @@ const form = reactive({
 	remark: '',
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = ref({
 	sensitiveWord: [
 		{ validator: rule.overLength, trigger: 'blur' },
@@ -103,40 +75,27 @@ const dataRules = ref({
 	remark: [{ validator: rule.overLength, trigger: 'blur' }],
 });
 
-/**
- * 打开对话框
- * @param sensitiveId - 敏感词ID，为空时为新增模式
- */
 const openDialog = (sensitiveId: string): void => {
 	visible.value = true;
 	form.sensitiveId = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取敏感词详情
 	if (sensitiveId) {
 		form.sensitiveId = sensitiveId;
 		getSensitiveWordData(sensitiveId);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
-	// 防止重复提交
 	if (loading.value) return;
 	loading.value = true;
 
 	try {
 		const valid = await dataFormRef.value.validate().catch(() => {});
-		if (!valid) {
-			loading.value = false;
-			return;
-		}
+		if (!valid) return;
 
 		form.sensitiveId ? await putObj(form) : await addObj(form);
 		useMessage().success(form.sensitiveId ? t('common.editSuccessText') : t('common.addSuccessText'));
@@ -149,10 +108,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取敏感词详情数据
- * @param sensitiveId - 敏感词ID
- */
 const getSensitiveWordData = async (sensitiveId: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -165,9 +120,6 @@ const getSensitiveWordData = async (sensitiveId: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

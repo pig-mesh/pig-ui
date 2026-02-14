@@ -70,5 +70,11 @@ export default {
 		descriptionRequired: 'Description cannot be empty',
 		sortOrderRequired: 'Sort order cannot be empty',
 		labelExists: 'Label already exists',
+		listClassDefault: 'Default',
+		listClassPrimary: 'Primary',
+		listClassSuccess: 'Success',
+		listClassInfo: 'Info',
+		listClassWarning: 'Warning',
+		listClassDanger: 'Danger',
 	},
 };

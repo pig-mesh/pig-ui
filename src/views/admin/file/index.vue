@@ -17,20 +17,7 @@ import { useI18n } from 'vue-i18n';
 
 const Material = defineAsyncComponent(() => import('/@/components/Material/index.vue'));
 const { t } = useI18n();
-const tabsMap = [
-	{
-		type: 'image',
-		name: t('file.image'),
-	},
-	{
-		type: 'video',
-		name: t('file.video'),
-	},
-	{
-		type: 'file',
-		name: t('file.file'),
-	},
-];
+const tabsMap = ['image', 'video', 'file'].map((type) => ({ type, name: t(`file.${type}`) }));
 const activeTab = ref('image');
 </script>
 

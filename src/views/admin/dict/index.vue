@@ -104,9 +104,7 @@ const state = reactive({
 	 * @returns 字典列表数据
 	 */
 	queryList: (name?: string) => {
-		return fetchList({
-			name: name,
-		});
+		return fetchList({ name });
 	},
 });
 

@@ -112,22 +112,24 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 // 删除缓存
-const handleRefreshCache = () => {
-	refreshCache().then(() => {
+const handleRefreshCache = async () => {
+	try {
+		await refreshCache();
 		useMessage().success(t('client.syncSuccess'));
-	});
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 const resetQuery = () => {
 	queryRef.value.resetFields();
-	// state.queryForm = {};
 	selectObjs.value = [];
 	getDataList();
 };
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/client/export', Object.assign(state.queryForm,{ids:selectObjs}), 'client.xlsx');
+	downBlobFile('/admin/client/export', { ...state.queryForm, ids: selectObjs.value }, 'client.xlsx');
 };
 
 // 多选事件

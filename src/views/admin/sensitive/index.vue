@@ -85,76 +85,34 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const MatchDialog = defineAsyncComponent(() => import('./match.vue'));
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 敏感词类型字典
- */
 const { sensitive_type } = useDict('sensitive_type');
 
-/**
- * 表单对话框引用
- */
 const formDialogRef = ref();
-
-/**
- * 匹配测试对话框引用
- */
 const matchDialogRef = ref();
-
-/**
- * 查询表单引用
- */
 const queryRef = ref();
-
-/**
- * 是否显示搜索区域
- */
 const showSearch = ref(true);
-
-/**
- * 多选的敏感词ID数组
- */
 const selectObjs = ref<string[]>([]);
-
-/**
- * 是否禁用批量删除按钮（无选中项时禁用）
- */
+/** 无选中项时为 true，禁用批量删除按钮 */
 const multiple = ref(true);
 
-/**
- * 表格状态配置
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
 });
 
-/**
- * 表格相关钩子函数
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
 	useTable(state);
 
-/**
- * 清空搜索条件并重新查询
- */
 const resetQuery = (): void => {
 	queryRef.value?.resetFields();
 	selectObjs.value = [];
 	getDataList();
 };
 
-/**
- * 导出Excel文件
- */
 const exportExcel = (): void => {
 	downBlobFile(
 		'/admin/sysSensitiveWord/export',
@@ -163,19 +121,11 @@ const exportExcel = (): void => {
 	);
 };
 
-/**
- * 表格多选事件处理
- * @param objs - 选中的行对象数组
- */
 const selectionChangHandle = (objs: { sensitiveId: string }[]): void => {
 	selectObjs.value = objs.map(({ sensitiveId }) => sensitiveId);
 	multiple.value = !objs.length;
 };
 
-/**
- * 删除敏感词
- * @param ids - 要删除的敏感词ID数组
- */
 const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
@@ -192,9 +142,6 @@ const handleDelete = async (ids: string[]): Promise<void> => {
 	}
 };
 
-/**
- * 刷新敏感词缓存
- */
 const handleRefreshCache = async (): Promise<void> => {
 	try {
 		await refreshObj();

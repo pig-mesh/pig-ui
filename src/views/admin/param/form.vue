@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" :title="form.publicId ? t('common.editBtn') : t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-row :gutter="20">
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.publicName')" prop="publicName">
@@ -164,9 +164,12 @@ const onSubmit = async () => {
 
 // 初始化表单数据
 const getPublicParamData = async (id: string) => {
-	// 获取数据
-	const { data } = await getObj(id);
-	Object.assign(form, data);
+	try {
+		const { data } = await getObj(id);
+		Object.assign(form, data);
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
 };
 
 // 暴露变量

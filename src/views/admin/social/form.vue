@@ -54,39 +54,14 @@ import { addObj, getObj, putObj } from '/@/api/admin/social';
 import { useI18n } from 'vue-i18n';
 import { rule, clearMaskedFields } from '/@/utils/validate';
 
-/**
- * 定义组件事件
- */
 const emit = defineEmits(['refresh']);
-
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 表单引用
- */
-const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
-const visible = ref(false);
-
-/**
- * 加载状态
- */
-const loading = ref(false);
-
-/**
- * 社交登录类型字典
- */
 const { social_type } = useDict('social_type');
 
-/**
- * 表单数据
- */
+const dataFormRef = ref();
+const visible = ref(false);
+const loading = ref(false);
+
 const form = reactive({
 	id: '',
 	type: '',
@@ -97,9 +72,6 @@ const form = reactive({
 	ext: '',
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = ref({
 	type: [{ required: true, message: t('social.typeRequired'), trigger: 'blur' }],
 	appId: [
@@ -121,42 +93,29 @@ const dataRules = ref({
 	],
 });
 
-/**
- * 打开对话框
- * @param id - 社交登录配置ID，为空时为新增模式
- */
 const openDialog = (id: string): void => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取社交登录详情
 	if (id) {
 		form.id = id;
 		getSocialDetailsData(id);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
-	// 防止重复提交
 	if (loading.value) return;
 	loading.value = true;
 
 	try {
 		const valid = await dataFormRef.value.validate().catch(() => {});
-		if (!valid) {
-			loading.value = false;
-			return;
-		}
+		if (!valid) return;
 
-		// 清除脱敏字段（编辑时不提交星号占位符）
+		// 编辑时清除脱敏占位符，避免提交星号值
 		const payload = { ...form };
 		clearMaskedFields(payload, ['appSecret', 'appId']);
 
@@ -176,10 +135,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取社交登录详情数据
- * @param id - 社交登录配置ID
- */
 const getSocialDetailsData = async (id: string): Promise<void> => {
 	try {
 		const { data } = await getObj(id);
@@ -189,9 +144,6 @@ const getSocialDetailsData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

@@ -72,7 +72,7 @@ const dataRules = reactive({
 });
 
 // 打开弹窗
-const openDialog = (id: string) => {
+const openDialog = async (id: string) => {
 	visible.value = true;
 	dataForm.id = '';
 	nextTick(() => {
@@ -80,9 +80,12 @@ const openDialog = (id: string) => {
 	});
 
 	if (id) {
-		getObj(id).then((res) => {
-			Object.assign(dataForm, res.data);
-		});
+		try {
+			const { data } = await getObj(id);
+			Object.assign(dataForm, data);
+		} catch (err: any) {
+			useMessage().error(err.msg);
+		}
 	}
 };
 

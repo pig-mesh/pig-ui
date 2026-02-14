@@ -51,7 +51,6 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
-const visible = ref(false);
 const DictForm = defineAsyncComponent(() => import('./form.vue'));
 const dictformRef = ref();
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -90,5 +89,3 @@ defineExpose({
 	open,
 });
 </script>
-
-<style scoped></style>
