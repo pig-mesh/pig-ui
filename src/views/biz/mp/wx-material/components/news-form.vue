@@ -94,18 +94,13 @@ import { useMessageBox } from '/@/hooks/message';
 import { addObj, materialNewsUpdate } from '/@/api/mp/wx-material';
 
 const WxMaterialSelect = defineAsyncComponent(() => import('/@/components/Wechat/wx-material-select/main.vue'));
-
 const WxFileUpload = defineAsyncComponent(() => import('/@/components/Wechat/fileUpload/index.vue'));
 
 const WxMaterialSelectRef = ref();
-
 const dialogNewsVisible = ref(false);
-
 const operateMaterial = ref('add');
-
 const addMaterialLoading = ref(false);
 
-// 定义刷新表格emit
 const emit = defineEmits(['ok']);
 
 const dialogNewsClose = () => {
@@ -116,45 +111,37 @@ const dialogNewsClose = () => {
 		});
 };
 
-// 公众号id
 const accountId = ref();
 
-// 文章数据
-const articlesAdd = ref([
-	{
-		title: '',
-		thumbMediaId: '',
-		author: '',
-		digest: '',
-		showCoverPic: '',
-		content: '',
-		contentSourceUrl: '',
-		needOpenComment: '',
-		onlyFansCanComment: '',
-		thumbUrl: '',
-	},
-]);
-// 激活文章
+const emptyArticle = () => ({
+	title: '',
+	thumbMediaId: '',
+	author: '',
+	digest: '',
+	showCoverPic: '',
+	content: '',
+	contentSourceUrl: '',
+	needOpenComment: '',
+	onlyFansCanComment: '',
+	thumbUrl: '',
+});
+
+const articlesAdd = ref([emptyArticle()]);
 const isActiveAddNews = ref(0);
-// 编辑媒体的id
 const articlesMediaId = ref();
 
 const openDialog = (data: any, item?: any, mediaId?: any, type: any = 'add') => {
-	// 设置组件内不用账号
 	accountId.value = data.accountId;
 	uploadData.appId = data.accountId;
 
 	dialogNewsVisible.value = true;
-	operateMaterial.value = 'add';
+	operateMaterial.value = type;
 
 	if (item) {
 		articlesAdd.value = item;
 	}
 	if (mediaId) {
-		articlesMediaId.value = mediaId || '';
-	}
-	if (type) {
-		operateMaterial.value = type;
+		articlesMediaId.value = mediaId;
 	}
 };
 
@@ -177,67 +164,26 @@ const handleImageChange = (response) => {
 	articlesAdd.value[isActiveAddNews.value].thumbUrl = response.data.url;
 };
 
+const resetAfterSubmit = () => {
+	dialogNewsVisible.value = false;
+	isActiveAddNews.value = 0;
+	articlesAdd.value = [emptyArticle()];
+	emit('ok');
+};
+
 const onSubmit = () => {
 	addMaterialLoading.value = true;
-	if (operateMaterial.value === 'add') {
-		addObj({
-			articles: articlesAdd.value,
-			appId: accountId.value,
+	const payload = operateMaterial.value === 'add'
+		? addObj({ articles: articlesAdd.value, appId: accountId.value })
+		: materialNewsUpdate({ articles: articlesAdd.value, mediaId: articlesMediaId.value, appId: accountId.value });
+
+	payload
+		.then(() => {
+			resetAfterSubmit();
 		})
-			.then(() => {
-				addMaterialLoading.value = false;
-				dialogNewsVisible.value = false;
-				isActiveAddNews.value = 0;
-				articlesAdd.value = [
-					{
-						title: '',
-						thumbMediaId: '',
-						author: '',
-						digest: '',
-						showCoverPic: '',
-						content: '',
-						contentSourceUrl: '',
-						needOpenComment: '',
-						onlyFansCanComment: '',
-						thumbUrl: '',
-					},
-				];
-				emit('ok');
-			})
-			.finally(() => {
-				addMaterialLoading.value = false;
-			});
-	}
-	if (operateMaterial.value === 'edit') {
-		materialNewsUpdate({
-			articles: articlesAdd.value,
-			mediaId: articlesMediaId.value,
-			appId: accountId.value,
-		})
-			.then(() => {
-				addMaterialLoading.value = false;
-				dialogNewsVisible.value = false;
-				isActiveAddNews.value = 0;
-				articlesAdd.value = [
-					{
-						title: '',
-						thumbMediaId: '',
-						author: '',
-						digest: '',
-						showCoverPic: '',
-						content: '',
-						contentSourceUrl: '',
-						needOpenComment: '',
-						onlyFansCanComment: '',
-						thumbUrl: '',
-					},
-				];
-				emit('ok');
-			})
-			.finally(() => {
-				addMaterialLoading.value = false;
-			});
-	}
+		.finally(() => {
+			addMaterialLoading.value = false;
+		});
 };
 
 const activeNews = (index) => {
@@ -256,18 +202,7 @@ const minusNews = (index) => {
 };
 
 const plusNews = () => {
-	articlesAdd.value.push({
-		title: '',
-		thumbMediaId: '',
-		author: '',
-		digest: '',
-		showCoverPic: '',
-		content: '',
-		contentSourceUrl: '',
-		needOpenComment: '',
-		onlyFansCanComment: '',
-		thumbUrl: '',
-	});
+	articlesAdd.value.push(emptyArticle());
 	isActiveAddNews.value = articlesAdd.value.length - 1;
 };
 
@@ -279,13 +214,12 @@ const downNews = (index) => {
 };
 
 const upNews = (index) => {
-	const temp = articlesAdd[index];
-	articlesAdd[index] = articlesAdd[index - 1];
-	articlesAdd[index - 1] = temp;
+	const temp = articlesAdd.value[index];
+	articlesAdd.value[index] = articlesAdd.value[index - 1];
+	articlesAdd.value[index - 1] = temp;
 	isActiveAddNews.value = index - 1;
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

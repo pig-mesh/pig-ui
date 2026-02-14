@@ -55,22 +55,18 @@
 </template>
 
 <script lang="ts" name="WxAccountDialog" setup>
-// 定义子组件向父组件传值/事件
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/mp/wx-account';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
 
 const emit = defineEmits(['refresh']);
-
 const { t } = useI18n();
 
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 提交表单数据
 const form = reactive({
 	id: '',
 	name: '',
@@ -82,7 +78,6 @@ const form = reactive({
 	aeskey: '',
 });
 
-// 定义校验规则
 const dataRules = ref({
 	name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
 	account: [{ required: true, message: '微信号不能为空', trigger: 'blur' }],
@@ -96,24 +91,20 @@ const dataRules = ref({
 	aeskey: [{ required: true, message: '加密密钥不能为空', trigger: 'blur' }],
 });
 
-// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields();
 	}
 
-	// 获取wxAccount信息
 	if (id) {
 		form.id = id;
 		getwxAccountData(id);
 	}
 };
 
-// 提交
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -138,9 +129,8 @@ const onSubmit = async () => {
 		loading.value = false;
 	}
 };
-// 初始化表单数据
+
 const getwxAccountData = (id: string) => {
-	// 获取数据
 	loading.value = true;
 	getObj(id)
 		.then((res: any) => {
@@ -151,7 +141,6 @@ const getwxAccountData = (id: string) => {
 		});
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

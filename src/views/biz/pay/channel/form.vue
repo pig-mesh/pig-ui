@@ -75,11 +75,10 @@
 </template>
 
 <script lang="ts" name="PayChannelDialog" setup>
-// 定义子组件向父组件传值/事件
-import { useDict } from '/@/hooks/dict';
-import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/pay/channel';
 import { useI18n } from 'vue-i18n';
+import { useMessage } from '/@/hooks/message';
+import { useDict } from '/@/hooks/dict';
+import { addObj, getObj, putObj } from '/@/api/pay/channel';
 import { rule } from '/@/utils/validate';
 // @ts-ignore
 import JsonEditor from '@axolo/json-editor-vue';
@@ -88,12 +87,10 @@ const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
 const { status_type, channel_type } = useDict('status_type', 'channel_type');
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 提交表单数据
 const form = reactive({
 	id: '',
 	mchId: '',
@@ -108,7 +105,6 @@ const form = reactive({
 	appId: '' as String | undefined,
 });
 
-// 定义校验规则
 const dataRules = ref({
 	appId: [
 		{ validator: rule.overLength, trigger: 'blur' },
@@ -144,41 +140,34 @@ const dataRules = ref({
 	],
 });
 
-// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value.resetFields();
 	});
 
-	// 获取payChannel信息
 	if (id) {
 		form.id = id;
 		getpayChannelData(id);
 	}
 };
 
-// 提交
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
 	try {
 		loading.value = true;
-		// 清除占位符，避免提交错误的数据
-		const { appId, channelMchId, param } = form;
 
-		if (appId?.includes('**')) {
+		if (form.appId?.includes('**')) {
 			form.appId = undefined;
 		}
-		if (channelMchId?.includes('**')) {
+		if (form.channelMchId?.includes('**')) {
 			form.channelMchId = undefined;
 		}
-
-		if (param?.includes('**')) {
+		if (form.param?.includes('**')) {
 			form.param = undefined;
 		}
 
@@ -193,25 +182,18 @@ const onSubmit = async () => {
 	}
 };
 
-/**
- * 根据 ID 获取支付通道数据并初始化表单。
- * @param {string} id - 要查询的支付通道 ID。
- * @returns {Promise<void>} - 初始化表单的 Promise 实例。
- */
-const getpayChannelData = async (id: string): Promise<void> => {
-	loading.value = true; // 显示加载状态
-
+const getpayChannelData = async (id: string) => {
+	loading.value = true;
 	try {
-		const res = await getObj(id); // 执行查询操作
-		Object.assign(form, res.data); // 将查询到的数据合并到表单中
-	} catch (err) {
-		useMessage().error('操作失败'); // 如果查询失败，则显示错误提示信息
+		const res = await getObj(id);
+		Object.assign(form, res.data);
+	} catch {
+		useMessage().error('操作失败');
 	} finally {
-		loading.value = false; // 结束加载状态
+		loading.value = false;
 	}
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

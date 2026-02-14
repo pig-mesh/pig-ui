@@ -145,9 +145,7 @@ const WxNews = defineAsyncComponent(() => import('/@/components/Wechat/wx-news/i
 
 const deptData = reactive({
 	queryList: (name?: string) => {
-		return fetchAccountList({
-			name: name,
-		});
+		return fetchAccountList({ name });
 	},
 });
 
@@ -162,7 +160,6 @@ const uploadData = ref({
 
 const materialType = ref('image');
 
-// 点击树
 const handleNodeClick = (data: any) => {
 	checkAppId.value = data.appid;
 	uploadData.value.appId = data.appid;
@@ -172,9 +169,7 @@ const handleNodeClick = (data: any) => {
 };
 
 const handleClick = (tab) => {
-	if (checkAppId.value) {
-		// getPage(this.page)
-	} else {
+	if (!checkAppId.value) {
 		useMessage().error('请选择公众号');
 	}
 	materialType.value = tab.paneName;
@@ -215,11 +210,10 @@ const delMaterial = (item: any) => {
 		});
 };
 
-// 视频
-
 const dialogVideoVisible = ref(false);
-
 const addMaterialLoading = ref(false);
+const uploadForm = ref();
+const uploadFileVideo = ref();
 
 const handleAddVideo = () => {
 	dialogVideoVisible.value = true;
@@ -230,19 +224,15 @@ const uploadRules = reactive({
 	introduction: [{ required: true, message: '请输入描述', trigger: 'blur' }],
 });
 
-const uploadForm = ref();
-
-const uploadFileVideo = ref();
-
-const subVideo = () => {
-	uploadForm.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
+const subVideo = async () => {
+	try {
+		await uploadForm.value.validate();
 		uploadFileVideo.value.submit().then(() => {
 			dialogVideoVisible.value = false;
 		});
-	});
+	} catch {
+		return false;
+	}
 };
 
 const handleDown = (row: any) => {
@@ -261,8 +251,6 @@ const handleDown = (row: any) => {
 	});
 };
 
-// 图文
-
 const dialogNewsRef = ref();
 
 const handleAddNews = () => {
@@ -273,9 +261,7 @@ const handleAddNews = () => {
 
 const handleEditNews = (item) => {
 	dialogNewsRef.value.openDialog(
-		{
-			accountId: checkAppId.value,
-		},
+		{ accountId: checkAppId.value },
 		JSON.parse(JSON.stringify(item.content.newsItem)),
 		item.mediaId,
 		'edit'
@@ -288,15 +274,13 @@ const handleInfo = (row) => {
 		appId: checkAppId.value,
 	})
 		.then((response) => {
-			const downUrl = response.data.downUrl;
-			window.open(downUrl, '_blank');
+			window.open(response.data.downUrl, '_blank');
 		})
 		.catch((err) => {
 			useMessage().error(err.msg);
 		});
 };
 
-// 默认选择第一个公众号
 onMounted(async () => {
 	const { data } = await deptData.queryList();
 	if (data?.length > 0) {

@@ -54,27 +54,22 @@ import { useI18n } from 'vue-i18n';
 const { t } = useI18n();
 const emit = defineEmits(['refresh']);
 
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-
 const wxAccountAppid = ref();
 
-// 提交表单数据
 const form = reactive({
 	id: '',
 });
 
 const dataRules = ref([]);
 
-// 打开弹窗
 const openDialog = (row: any, accountId: string) => {
 	visible.value = true;
 	form.id = row.id;
 	wxAccountAppid.value = accountId;
 
-	// 重置表单数据
 	if (dataFormRef.value) {
 		dataFormRef.value.resetFields();
 	}
@@ -96,41 +91,26 @@ const getFansData = () => {
 		});
 };
 
-// 提交
-const onSubmit = () => {
-	dataFormRef.value.validate((valid: boolean) => {
-		if (!valid) {
-			return false;
-		}
-		loading.value = true;
+const onSubmit = async () => {
+	const valid = await dataFormRef.value.validate().catch(() => {});
+	if (!valid) return false;
+
+	loading.value = true;
+	try {
 		if (form.id) {
-			putObj(form)
-				.then(() => {
-					useMessage().success(t('common.editSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
+			await putObj(form);
+			useMessage().success(t('common.editSuccessText'));
 		} else {
-			addObj(form)
-				.then(() => {
-					useMessage().success(t('common.addSuccessText'));
-					visible.value = false; // 关闭弹窗
-					emit('refresh');
-				})
-				.catch((err: any) => {
-					useMessage().error(err.msg);
-				})
-				.finally(() => {
-					loading.value = false;
-				});
+			await addObj(form);
+			useMessage().success(t('common.addSuccessText'));
 		}
-	});
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		loading.value = false;
+	}
 };
 
 const tagOption = ref([]);
@@ -140,10 +120,7 @@ const getTagList = () => {
 	});
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });
 </script>
-
-<style scoped></style>

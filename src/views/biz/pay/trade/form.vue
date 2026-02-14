@@ -75,22 +75,17 @@
 </template>
 
 <script lang="ts" name="PayTradeOrderDialog" setup>
-// 定义子组件向父组件传值/事件
+import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/pay/trade';
-import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['refresh']);
 
 const { t } = useI18n();
-
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-// 定义字典
 
-// 提交表单数据
 const form = reactive({
 	orderId: '',
 	channelId: '',
@@ -115,20 +110,16 @@ const form = reactive({
 	paySuccTime: '',
 });
 
-// 定义校验规则
 const dataRules = ref({});
 
-// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.orderId = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取payTradeOrder信息
 	if (id) {
 		form.orderId = id;
 		getpayTradeOrderData(id);
@@ -154,7 +145,6 @@ const dictType = ref([
 	},
 ]);
 
-// 提交
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -172,21 +162,18 @@ const onSubmit = async () => {
 	}
 };
 
-// 初始化表单数据
 const getpayTradeOrderData = async (id: string) => {
-	loading.value = true; // 显示加载状态
-
+	loading.value = true;
 	try {
-		const res = await getObj(id); // 执行查询操作
-		Object.assign(form, res.data); // 将查询到的数据合并到表单中
-	} catch (err) {
-		useMessage().error('操作失败'); // 如果查询失败，则显示错误提示信息
+		const res = await getObj(id);
+		Object.assign(form, res.data);
+	} catch {
+		useMessage().error('操作失败');
 	} finally {
-		loading.value = false; // 结束加载状态
+		loading.value = false;
 	}
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

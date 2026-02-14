@@ -81,18 +81,15 @@
 </template>
 
 <script lang="ts" name="systemPayGoodsOrder" setup>
+import { useI18n } from 'vue-i18n';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { delObjs, fetchList } from '/@/api/pay/goods';
-import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useI18n } from 'vue-i18n';
 
-// 引入组件
 const { t } = useI18n();
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
-const selectObjs = ref([]) as any;
+const selectObjs = ref<string[]>([]);
 const multiple = ref(true);
 
 const state: BasicTableProps = reactive<BasicTableProps>({
@@ -124,30 +121,23 @@ const dictType = ref([
   },
 ]);
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 清空搜索条件
 const resetQuery = () => {
-	// 清空搜索条件
 	queryRef.value.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-// 导出excel
 const exportExcel = () => {
 	downBlobFile('/pay/goods/export', state.queryForm, 'order.xlsx');
 };
 
-// 多选事件
 const handleSelectionChange = (objs: { goodsOrderId: string }[]) => {
 	selectObjs.value = objs.map(({ goodsOrderId }) => goodsOrderId);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));

@@ -49,25 +49,24 @@
 </template>
 
 <script setup lang="ts" name="wx-statistics">
-import {useMessage} from '/@/hooks/message';
-import {fetchAccountList, fetchStatistics} from '/@/api/mp/wx-account';
-import {markRaw} from 'vue';
+import { useMessage } from '/@/hooks/message';
+import { fetchAccountList, fetchStatistics } from '/@/api/mp/wx-account';
 import * as echarts from 'echarts';
 
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 
-const beginTime = ref(new Date().getTime() - 3600 * 1000 * 24 * 7);
-const endTime = ref(new Date().getTime() - 3600 * 1000 * 24);
+const DAY_MS = 3600 * 1000 * 24;
+const beginTime = ref(Date.now() - DAY_MS * 7);
+const endTime = ref(Date.now() - DAY_MS);
 
 const check = () => {
-	const start = new Date(beginTime.value);
-	const end = new Date(endTime.value);
-	if (end.getTime() >= new Date().getTime()) {
+	const endMs = new Date(endTime.value).getTime();
+	if (endMs >= Date.now()) {
 		useMessage().error('统计结束日小于当前日期，请重新选择');
 		return false;
 	}
 
-	if (end.getTime() - start.getTime() >= 3600 * 1000 * 24 * 7) {
+	if (endMs - new Date(beginTime.value).getTime() >= DAY_MS * 7) {
 		useMessage().error('时间间隔7天以内，请重新选择');
 		return false;
 	}
@@ -75,7 +74,6 @@ const check = () => {
 
 const accountId = ref();
 
-// 点击树
 const handleNodeClick = (node: any) => {
 	accountId.value = node.appid;
 	initdata();
@@ -83,117 +81,26 @@ const handleNodeClick = (node: any) => {
 
 const deptData = reactive({
 	queryList: (name?: string) => {
-		return fetchAccountList({
-			name: name,
-		});
+		return fetchAccountList({ name });
 	},
 });
 
 const userCumulateRef = ref();
-
-// 初始化折线图
-const userCumulate = () => {
-	const userCumulate = markRaw(echarts.init(userCumulateRef.value));
-	const option = {
-		title: {
-			text: '用户分析数据',
-		},
-		xAxis: {
-			type: 'category',
-			data: LintData.value[0],
-		},
-		yAxis: {
-			type: 'value',
-		},
-		series: [
-			{
-				type: 'line',
-				data: LintData.value[1],
-			},
-		],
-	};
-	userCumulate.setOption(option);
-};
-
 const userShardRef = ref();
-
-// 初始化折线图
-const userShard = () => {
-	const userShard = markRaw(echarts.init(userShardRef.value));
-	const option = {
-		title: {
-			text: '接口分析数据',
-		},
-		xAxis: {
-			type: 'category',
-			data: LintData.value[2],
-		},
-		yAxis: {
-			type: 'value',
-		},
-		series: [
-			{
-				type: 'line',
-				data: LintData.value[3],
-			},
-		],
-	};
-	userShard.setOption(option);
-};
-
 const upstreamMsgDistMonthRef = ref();
-
-// 初始化折线图
-const upstreamMsgDistMonth = () => {
-	const upstreamMsgDistMonth = markRaw(echarts.init(upstreamMsgDistMonthRef.value));
-	const option = {
-		title: {
-			text: '消息分析数据',
-		},
-		xAxis: {
-			type: 'category',
-			data: LintData.value[4],
-		},
-		yAxis: {
-			type: 'value',
-		},
-		series: [
-			{
-				type: 'line',
-				data: LintData.value[5],
-			},
-		],
-	};
-	upstreamMsgDistMonth.setOption(option);
-};
-
 const interfaceSummaryRef = ref();
 
-// 初始化折线图
-const interfaceSummary = () => {
-	const interfaceSummary = markRaw(echarts.init(interfaceSummaryRef.value));
-	const option = {
-		title: {
-			text: '图文分享数据',
-		},
-		xAxis: {
-			type: 'category',
-			data: LintData.value[0],
-		},
-		yAxis: {
-			type: 'value',
-		},
-		series: [
-			{
-				type: 'line',
-				data: LintData.value[1],
-			},
-		],
-	};
-	interfaceSummary.setOption(option);
+const initLineChart = (elRef: any, title: string, xData: any[], yData: any[]) => {
+	const chart = markRaw(echarts.init(elRef));
+	chart.setOption({
+		title: { text: title },
+		xAxis: { type: 'category', data: xData },
+		yAxis: { type: 'value' },
+		series: [{ type: 'line', data: yData }],
+	});
 };
 
-const LintData = ref([[], [], [], [], [], [], [], []]);
+const lineData = ref([[], [], [], [], [], [], [], []]);
 
 const initdata = () => {
 	fetchStatistics({
@@ -201,25 +108,24 @@ const initdata = () => {
 		interval: new Date(beginTime.value).getTime() + '-' + new Date(endTime.value).getTime(),
 	})
 		.then((res) => {
-			LintData.value = res.data;
+			lineData.value = res.data;
 		})
 		.catch((err) => {
 			useMessage().error(err.msg);
 		})
 		.finally(() => {
-			userCumulate();
-			userShard();
-			upstreamMsgDistMonth();
-			interfaceSummary();
+			initLineChart(userCumulateRef.value, '用户分析数据', lineData.value[0], lineData.value[1]);
+			initLineChart(userShardRef.value, '接口分析数据', lineData.value[2], lineData.value[3]);
+			initLineChart(upstreamMsgDistMonthRef.value, '消息分析数据', lineData.value[4], lineData.value[5]);
+			initLineChart(interfaceSummaryRef.value, '图文分享数据', lineData.value[0], lineData.value[1]);
 		});
 };
 
-// 默认选择第一个公众号
 onMounted(async () => {
-  const { data } = await deptData.queryList();
-  if (data?.length > 0) {
-    handleNodeClick(data[0]);
-  }
+	const { data } = await deptData.queryList();
+	if (data?.length > 0) {
+		handleNodeClick(data[0]);
+	}
 });
 </script>
 
