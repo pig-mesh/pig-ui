@@ -4,100 +4,40 @@ import { i18n } from '../i18n';
 const { t } = i18n.global;
 
 const defaultOptions = {
-	duration: 3000, // 显示时间为3秒
-	showClose: true, // 显示关闭按钮
-	offset: 20, // 消息距离顶部的偏移量
+	duration: 3000,
+	showClose: true,
+	offset: 20,
 };
 
-interface MessageImplements {
-	info(title: string): void;
-	warning(title: string): void;
-	success(title: string): void;
-	error(title: string): void;
+type MessageType = 'info' | 'warning' | 'success' | 'error';
+
+function showMessage(message: string, type: MessageType, overrides?: Record<string, any>) {
+	ElMessage({ ...defaultOptions, message, type, ...overrides });
 }
 
 export function useMessage() {
-	class MessageClass implements MessageImplements {
-		// 普通提示
-		info(title: string): void {
-			ElMessage({
-				...defaultOptions,
-				message: title,
-				type: 'info',
-			});
-		}
-
-		// 警告提示
-		warning(title: string): void {
-			ElMessage({
-				...defaultOptions,
-				message: title,
-				type: 'warning',
-			});
-		}
-
-		// 成功提示
-		success(title: string): void {
-			ElMessage({
-				...defaultOptions,
-				message: title,
-				type: 'success',
-			});
-		}
-
-		// 错误提示
-		error(title: string): void {
-			ElMessage({
-				...defaultOptions,
-				message: title,
-				type: 'error',
-				duration: 2000, // 错误提示显示时间延长到5秒
-			});
-		}
-	}
-
-	return new MessageClass();
+	return {
+		info: (msg: string) => showMessage(msg, 'info'),
+		warning: (msg: string) => showMessage(msg, 'warning'),
+		success: (msg: string) => showMessage(msg, 'success'),
+		error: (msg: string) => showMessage(msg, 'error', { duration: 2000 }),
+	};
 }
 
 export function useMessageBox() {
-	class MessageBoxClass implements MessageImplements {
-		// 普通提示
-		info(msg: string): void {
-			ElMessageBox.alert(msg, t('message.box.title'));
-		}
+	const { alert, confirm, prompt } = ElMessageBox;
+	const title = () => t('message.box.title');
+	const buttons = () => ({
+		confirmButtonText: t('common.confirmButtonText'),
+		cancelButtonText: t('common.cancelButtonText'),
+	});
 
-		// 警告提示
-		warning(msg: string): void {
-			ElMessageBox.alert(msg, t('message.box.title'), { type: 'warning' });
-		}
-
-		// 成功提示
-		success(msg: string): void {
-			ElMessageBox.alert(msg, t('message.box.title'), { type: 'success' });
-		}
-
-		// 错误提示
-		error(msg: string): void {
-			ElMessageBox.alert(msg, t('message.box.title'), { type: 'error' });
-		}
-
-		// 确认窗体
-		confirm(msg: string) {
-			return ElMessageBox.confirm(msg, t('message.box.title'), {
-				confirmButtonText: t('common.confirmButtonText'),
-				cancelButtonText: t('common.cancelButtonText'),
-				type: 'warning',
-			});
-		}
-		// 提交内容
-		prompt(msg: string) {
-			return ElMessageBox.prompt(msg, t('message.box.title'), {
-				confirmButtonText: t('common.confirmButtonText'),
-				cancelButtonText: t('common.cancelButtonText'),
-				type: 'warning',
-			});
-		}
-	}
-
-	return new MessageBoxClass();
+	return {
+		info: (msg: string) => alert(msg, title()),
+		warning: (msg: string) => alert(msg, title(), { type: 'warning' }),
+		success: (msg: string) => alert(msg, title(), { type: 'success' }),
+		error: (msg: string) => alert(msg, title(), { type: 'error' }),
+		confirm: (msg: string) => confirm(msg, title(), { ...buttons(), type: 'warning' }),
+		prompt: (msg: string) => prompt(msg, title(), { ...buttons(), type: 'warning' }),
+	};
 }

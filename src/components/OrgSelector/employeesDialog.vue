@@ -1,63 +1,81 @@
+<!--
+  EmployeesDialog 组织选择弹窗组件
+
+  功能：弹窗内左侧为选择面板（SelectBox），右侧为已选结果面板（SelectResult）。
+  当未传入 type 时，显示选项卡（用户/部门/角色/岗位）切换；
+  传入 type 时，直接显示对应类型的选择面板。
+
+  Props：
+  - visible    : boolean - 弹窗是否可见（v-model:visible）
+  - data       : OrgItem[] - 已选中的数据（用于初始化）
+  - type       : string  - 选择类型，不传则显示选项卡
+  - multiple   : boolean - 是否多选
+  - selectSelf : boolean - 是否允许选择当前用户
+
+  Events：
+  - update:visible - 关闭弹窗
+  - change         - 确认选择，返回选中项列表
+-->
 <template>
-  <el-dialog 
-    :title="$t('orgSelecotr.select')" 
-    v-model="visibleDialog" 
-    :width="800" 
-    append-to-body 
+  <el-dialog
+    :title="$t('orgSelecotr.select')"
+    v-model="visibleDialog"
+    :width="800"
+    append-to-body
   >
     <div class="flex h-[600px]">
       <!-- 左侧选择区域 - 6/10 宽度 -->
       <div class="w-3/5">
-        <!-- 选项卡切换 - 只有当不传 type 的时候才显示 -->
+        <!-- 选项卡切换：仅在未指定 type 时显示 -->
         <div v-if="!props.type">
             <el-tabs v-model="currentType" @tab-change="handleTypeChange">
               <el-tab-pane :label="$t('orgSelecotr.user')" name="user">
-                  <selectBox 
+                  <selectBox
                     :key="`user-${tabKey}`"
-                    :ref="(el) => selectBoxRefs.user = el" 
-                    :selectSelf="selectSelf" 
-                    :list="list" 
+                    :ref="(el) => selectBoxRefs.user = el"
+                    :selectSelf="selectSelf"
+                    :list="list"
                     :multiple="multiple"
-                    v-model:selectedList="selectedList" 
+                    v-model:selectedList="selectedList"
                     :type="'user'"
                   />
               </el-tab-pane>
               <el-tab-pane :label="$t('orgSelecotr.dept')" name="dept">
-                  <selectBox 
+                  <selectBox
                     :key="`dept-${tabKey}`"
-                    :ref="(el) => selectBoxRefs.dept = el" 
-                    :selectSelf="selectSelf" 
-                    :list="list" 
+                    :ref="(el) => selectBoxRefs.dept = el"
+                    :selectSelf="selectSelf"
+                    :list="list"
                     :multiple="multiple"
-                    v-model:selectedList="selectedList" 
+                    v-model:selectedList="selectedList"
                     :type="'dept'"
                   />
               </el-tab-pane>
               <el-tab-pane :label="$t('orgSelecotr.role')" name="role">
-                  <selectBox 
+                  <selectBox
                     :key="`role-${tabKey}`"
-                    :ref="(el) => selectBoxRefs.role = el" 
-                    :selectSelf="selectSelf" 
-                    :list="list" 
+                    :ref="(el) => selectBoxRefs.role = el"
+                    :selectSelf="selectSelf"
+                    :list="list"
                     :multiple="multiple"
-                    v-model:selectedList="selectedList" 
+                    v-model:selectedList="selectedList"
                     :type="'role'"
                   />
               </el-tab-pane>
               <el-tab-pane :label="$t('orgSelecotr.post')" name="post">
-                  <selectBox 
+                  <selectBox
                     :key="`post-${tabKey}`"
-                    :ref="(el) => selectBoxRefs.post = el" 
-                    :selectSelf="selectSelf" 
-                    :list="list" 
+                    :ref="(el) => selectBoxRefs.post = el"
+                    :selectSelf="selectSelf"
+                    :list="list"
                     :multiple="multiple"
-                    v-model:selectedList="selectedList" 
+                    v-model:selectedList="selectedList"
                     :type="'post'"
                   />
               </el-tab-pane>
             </el-tabs>
         </div>
-        <!-- 当传了 type 时，直接显示 selectBox -->
+        <!-- 指定 type 时，直接显示单个 selectBox -->
         <selectBox v-else ref="selectBoxRef" :selectSelf="selectSelf" :list="list" :multiple="multiple"
         v-model:selectedList="selectedList" :type="currentType"/>
       </div>
@@ -79,11 +97,15 @@
 <script setup>
 import selectBox from './selectBox.vue';
 import selectResult from './selectResult.vue';
-import {computed, watch, ref, onMounted} from 'vue';
-import {departments, searchVal, getDepartmentList} from './common';
+import { computed, watch, ref } from 'vue';
+import { useVModel } from '@vueuse/core';
+import { departments, searchVal, getDepartmentList } from './common';
 import other from '/@/utils/other';
 
+/** 单一类型模式下的 selectBox 引用 */
 const selectBoxRef = ref();
+
+/** 选项卡模式下各类型 selectBox 的引用 */
 const selectBoxRefs = ref({
   user: ref(),
   dept: ref(),
@@ -91,15 +113,17 @@ const selectBoxRefs = ref({
   post: ref()
 });
 
-let props = defineProps({
+const props = defineProps({
   visible: {
     type: Boolean,
     default: false,
   },
+  /** 初始已选中的数据 */
   data: {
     type: Array,
     default: () => [],
   },
+  /** 选择类型，不传则显示选项卡切换 */
   type: {
     type: String,
   },
@@ -113,200 +137,128 @@ let props = defineProps({
   },
 });
 
-//已选择的集合
-let selectedList = ref([]);
+const emit = defineEmits(['update:visible', 'change']);
 
-// 当前选中的类型
-const currentType = ref(props.type || 'user');
+const { data, type, multiple } = toRefs(props);
 
-// 用于强制重新渲染的 key
+/** 使用 useVModel 简化弹窗 visible 的双向绑定 */
+const visibleDialog = useVModel(props, 'visible', emit);
+
+/** 弹窗内部的已选列表（独立于外部数据，确认时才同步） */
+const selectedList = ref([]);
+
+/** 当前激活的选择类型 */
+const currentType = ref(type.value || 'user');
+
+/** 用于强制重新渲染选项卡内容的 key */
 const tabKey = ref(0);
 
-// 处理类型切换
-const handleTypeChange = (type) => {
-  currentType.value = type;
-  // 清空搜索框
+/** 选项卡切换时清空搜索并重新加载对应类型数据 */
+const handleTypeChange = (newType) => {
+  currentType.value = newType;
   searchVal.value = '';
-  // 只重新加载当前类型的数据，避免重复调用
-  getDepartmentList(0, type);
+  getDepartmentList(0, newType);
 };
 
-let emits = defineEmits(['update:visible', 'change']);
-let visibleDialog = computed({
-  get() {
-    return props.visible;
-  },
-  set() {
-    closeDialog();
-  },
-});
-const isChecked = (id, type) => {
-  return selectedList.value.filter((res) => res.id === id && res.type === type).length > 0;
+/** 检查某项是否已被选中 */
+const isChecked = (id, itemType) => {
+  return selectedList.value.some((res) => res.id === id && res.type === itemType);
 };
 
-let list = computed(() => {
-  let value = departments.value;
+/** 按类型分组的列表数据，传递给 selectBox */
+const list = computed(() => {
+  const value = departments.value;
+  const { childDepartments = [], roleList = [], postList = [], employees = [] } = value ?? {};
   return [
-    {
-      type: 'dept',
-      data: value === undefined ? [] : value.childDepartments,
-    },
-    {
-      type: 'role',
-      data: value === undefined ? [] : value.roleList,
-    },
-    {
-      type: 'post',
-      data: value === undefined ? [] : value.postList,
-    },
+    { type: 'dept', data: childDepartments },
+    { type: 'role', data: roleList },
+    { type: 'post', data: postList },
     {
       type: 'user',
-      data: value === undefined ? [] : value.employees,
+      data: employees,
       change: (item) => {
         if (!isChecked(item.id, item.type)) {
-          if (!props.multiple) {
-            //单选
+          if (!multiple.value) {
             selectedList.value = [];
           }
-
           selectedList.value.push(item);
         } else {
-          selectedList.value = selectedList.value.filter((res) => !(res.id === item.id && res.type === item.type));
+          selectedList.value = selectedList.value.filter(({ id, type: t }) => !(id === item.id && t === item.type));
         }
       },
     },
   ];
 });
-let resList = computed(() => {
-  let userData = selectedList.value.filter((res) => res.type === 'user');
-  let deptData = selectedList.value.filter((res) => res.type === 'dept');
-  let roleData = selectedList.value.filter((res) => res.type === 'role');
-  let postData = selectedList.value.filter((res) => res.type === 'post');
 
-  let data = [];
-  
-  // 始终显示所有已选择的项目，不根据 currentType 过滤
-  if (deptData.length > 0) {
-    data.push({
-      type: 'dept',
-      data: deptData,
-      cancel: (item) => {
-        item.selected = false;
-        // 处理两种 ref 结构：单一类型模式使用 selectBoxRef，标签页模式使用 selectBoxRefs
-        const currentRef = props.type ? selectBoxRef.value : selectBoxRefs.value[item.type];
-        if (currentRef) {
-          currentRef.changeEvent(item);
-        }
-      },
-    });
-  }
-  
-  if (roleData.length > 0) {
-    data.push({
-      type: 'role',
-      data: roleData,
-      cancel: (item) => {
-        item.selected = false;
-        // 处理两种 ref 结构：单一类型模式使用 selectBoxRef，标签页模式使用 selectBoxRefs
-        const currentRef = props.type ? selectBoxRef.value : selectBoxRefs.value[item.type];
-        if (currentRef) {
-          currentRef.changeEvent(item);
-        }
-      },
-    });
-  }
-  
-  if (postData.length > 0) {
-    data.push({
-      type: 'post',
-      data: postData,
-      cancel: (item) => {
-        item.selected = false;
-        // 处理两种 ref 结构：单一类型模式使用 selectBoxRef，标签页模式使用 selectBoxRefs
-        const currentRef = props.type ? selectBoxRef.value : selectBoxRefs.value[item.type];
-        if (currentRef) {
-          currentRef.changeEvent(item);
-        }
-      },
-    });
-  }
-  
-  if (userData.length > 0) {
-    data.push({
-      type: 'user',
-      data: userData,
-      cancel: (item) => {
-        item.selected = false;
-        // 处理两种 ref 结构：单一类型模式使用 selectBoxRef，标签页模式使用 selectBoxRefs
-        const currentRef = props.type ? selectBoxRef.value : selectBoxRefs.value[item.type];
-        if (currentRef) {
-          currentRef.changeEvent(item);
-        }
-      },
-    });
-  }
-  
-  return data;
-});
-
-watch(
-    () => props.visible,
-    (val) => {
-      if (val) {
-        selectedList.value = props.data;
-        searchVal.value = '';
-        // 重置 tabKey 确保组件重新渲染
-        tabKey.value = 0;
-        // 如果有传入 type，则设置为当前类型
-        if (props.type) {
-          currentType.value = props.type;
-        }
-      }
-    }
-);
-
-// 监听 props.type 变化
-watch(
-    () => props.type,
-    (newType) => {
-      if (newType) {
-        currentType.value = newType;
-      }
-    }
-);
-
-const closeDialog = () => {
-  emits('update:visible', false);
+/**
+ * 获取当前类型对应的 selectBox ref
+ * 单一类型模式用 selectBoxRef，选项卡模式用 selectBoxRefs
+ */
+const getSelectBoxRef = (itemType) => {
+  return type.value ? selectBoxRef.value : selectBoxRefs.value[itemType];
 };
 
-let total = computed(() => {
-  let v = departments.value;
-  if (!v) {
-    return 0;
+/**
+ * 取消选中某项：标记为未选中并通知 selectBox 同步状态
+ */
+const cancelItem = (item) => {
+  item.selected = false;
+  getSelectBoxRef(item.type)?.changeEvent(item);
+};
+
+/** 右侧已选结果列表，按类型分组并附带取消回调 */
+const resList = computed(() => {
+  const groups = ['dept', 'role', 'post', 'user'];
+  return groups
+    .map((groupType) => ({
+      type: groupType,
+      data: selectedList.value.filter(({ type: t }) => t === groupType),
+      cancel: cancelItem,
+    }))
+    .filter(({ data: groupData }) => groupData.length > 0);
+});
+
+// 弹窗打开时，用外部数据初始化内部已选列表
+watch(
+  () => props.visible,
+  (val) => {
+    if (val) {
+      selectedList.value = data.value;
+      searchVal.value = '';
+      tabKey.value = 0;
+      if (type.value) {
+        currentType.value = type.value;
+      }
+    }
   }
+);
+
+// 同步外部 type 变化
+watch(type, (newType) => {
+  if (newType) {
+    currentType.value = newType;
+  }
+});
+
+/** 已选项总数 */
+const total = computed(() => {
+  if (!departments.value) return 0;
   return selectedList.value.length;
 });
 
-let saveDialog = () => {
-  const v = selectedList.value;
-
-  let checkedList = other.deepClone(v).map((item) => ({
-    type: item.type,
-    id: item.id,
-    name: item.name,
-    avatar: item.avatar,
+/** 确认选择：深拷贝并精简字段后通知父组件 */
+const saveDialog = () => {
+  const checkedList = other.deepClone(selectedList.value).map(({ type: t, id, name, avatar }) => ({
+    type: t, id, name, avatar,
   }));
-  emits('change', checkedList);
-  //selectedList.value=[]
+  emit('change', checkedList);
 };
+
+/** 清空所有已选项 */
 const delList = () => {
   for (const item of other.deepClone(selectedList.value)) {
     item.selected = false;
-    // 处理两种 ref 结构：单一类型模式使用 selectBoxRef，标签页模式使用 selectBoxRefs
-    const currentRef = props.type ? selectBoxRef.value : selectBoxRefs.value[item.type];
-    if (currentRef) {
-      currentRef.changeEvent(item);
-    }
+    getSelectBoxRef(item.type)?.changeEvent(item);
   }
   selectedList.value = [];
 };
