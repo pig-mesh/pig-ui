@@ -71,16 +71,11 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { downBlobFile } from '/@/utils/other';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
-
-// 定义变量内容
 const formDialogRef = ref();
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
@@ -90,26 +85,22 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	descs: ['create_time'],
 });
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
 const downloadDoc = (dsName: string) => {
 	downBlobFile('/gen/dsconf/doc', { dsName }, `${dsName}.html`);
 };
 
-// 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 多选事件
 const handleSelectionChange = (objs: { id: string }[]) => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));

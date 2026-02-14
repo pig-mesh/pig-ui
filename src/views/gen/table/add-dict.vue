@@ -55,11 +55,9 @@ import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { dict_type } = useDict('dict_type');
 const { t } = useI18n();
-// 定义变量内容
 const dicDialogFormRef = ref();
 
 const visible = ref(false);

@@ -27,7 +27,7 @@
 						type="primary"
 						class="ml10"
 						@click="openBatchGenDialog"
-						:disabled="(state.selectObjs || []).length === 0 || (state.selectObjs || []).length > 5"
+						:disabled="state.selectObjs.length === 0 || state.selectObjs.length > 5"
 					>
 						{{ $t('gen.batchGenBtn') }}
 					</el-button>
@@ -74,8 +74,6 @@
 </template>
 
 <script lang="ts" name="systemTable" setup>
-import { reactive, onMounted, ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList, useSyncTableApi, useTableApi } from '/@/api/gen/table';
 import { list } from '/@/api/gen/datasource';
@@ -85,17 +83,11 @@ import { validateNull } from '/@/utils/validate';
 import BatchGenDialog from './batchGenDialog.vue';
 import { ElMessage } from 'element-plus';
 
-// 定义变量内容
 const router = useRouter();
-// 引入组件
 const { t } = useI18n();
-// const { currentRoute } = useRoute();
-
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
 const tableRef = ref();
-// 多选变量
 const datasourceList = ref();
 const batchGenDialogRef = ref();
 
@@ -108,14 +100,11 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	selectObjs: [],
 });
 
-//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-// 初始化数据
 onMounted(() => {
 	list().then((res) => {
 		datasourceList.value = res.data;
-		// 默认去第一个数据源
 		if (datasourceList.value.length > 0) {
 			state.queryForm.dsName = datasourceList.value[0].name;
 		}
@@ -141,20 +130,17 @@ const openGen = (row: any) => {
 		});
 };
 
-// 同步表数据
 const syncTable = (row: any) => {
 	useSyncTableApi(state.queryForm.dsName, row.name).then(() => {
 		useMessage().success(t('common.optSuccessText'));
 	});
 };
 
-// 清空搜索条件
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	getDataList();
 };
 
-// 导出excel
 const exportExcel = () => {
 	downBlobFile('/gen/table/export', state.queryForm, 'table.xlsx');
 };
@@ -163,7 +149,6 @@ const handleRowClick = (row: any) => {
 	tableRef.value.toggleRowSelection(row);
 };
 
-// 处理表格选中
 const handleSelectionChange = (selection: any[]) => {
 	state.selectObjs = selection;
 	if (selection.length > 5) {
@@ -171,7 +156,6 @@ const handleSelectionChange = (selection: any[]) => {
 	}
 };
 
-// 打开批量生成弹窗
 const openBatchGenDialog = () => {
 	batchGenDialogRef.value.openDialog(state.selectObjs, state.queryForm.dsName);
 };

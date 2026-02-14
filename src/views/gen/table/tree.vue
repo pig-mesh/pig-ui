@@ -114,9 +114,6 @@ watch(
 	{ deep: true, immediate: true }
 );
 
-onMounted(() => {});
-
-// 暴露变量
 defineExpose({
 	openDialog,
 });

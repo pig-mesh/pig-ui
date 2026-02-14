@@ -138,10 +138,7 @@ const props = defineProps({
 	},
 });
 
-const visible = ref(false);
-
 const sortable = ref() as any;
-
 const formDialogRef = ref();
 const typeList = ref([]) as any;
 const fieldDictList = ref([]) as any;
@@ -209,7 +206,7 @@ const formValidatorList = reactive([
 	{ label: 'URL网址', value: 'url' },
 ]);
 
-const propToType = reactive({
+const propToType: Record<string, string> = reactive({
 	tinyint: 'number',
 	smallint: 'number',
 	mediumint: 'number',
@@ -262,7 +259,6 @@ const handleDictRefresh = async (dictType: string) => {
 };
 
 const openDialog = (dName: string, tName: string) => {
-	visible.value = true;
 	tableName.value = tName;
 	dsName.value = dName;
 
@@ -305,9 +301,9 @@ const getTable = (dsName: string, tableName: string) => {
 	useTableApi(dsName, tableName)
 		.then((res) => {
 			tableId.value = res.data.id;
-			fieldList.value = res.data.fieldList.map((item) => {
-				item.queryFormType ? item.queryFormType : propToType[item.fieldType];
-				item.formType ? item.formType : propToType[item.fieldType];
+			fieldList.value = res.data.fieldList.map((item:any) => {
+				item.queryFormType ??= propToType[item.fieldType];
+				item.formType ??= propToType[item.fieldType];
 				return item;
 			});
 		})
@@ -335,9 +331,7 @@ const getFieldTypeList = async () => {
 
 const getDictList = () => {
 	fetchDictList().then((res) => {
-		for (const item of res.data) {
-			fieldDictList.value.push({ label: item.description, value: item.dictType });
-		}
+		fieldDictList.value = res.data.map((item: any) => ({ label: item.description, value: item.dictType }));
 	});
 };
 

@@ -88,18 +88,13 @@ import {list} from "/@/api/gen/datasource";
 import {useSyncTableApi, useTableApi} from "/@/api/gen/table";
 import {validateNull} from "/@/utils/validate";
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const {t} = useI18n()
-// 定义变量内容
 const formDialogRef = ref()
 const datasourceList = ref();
 const router = useRouter();
-
-// 搜索变量
 const queryRef = ref()
 const showSearch = ref(true)
-// 多选变量
 const selectObjs = ref([]) as any
 const multiple = ref(true)
 
@@ -110,7 +105,6 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   descs: ["create_time"]
 })
 
-//  table hook
 const {
   getDataList,
   currentChangeHandle,
@@ -120,27 +114,21 @@ const {
   tableStyle
 } = useTable(state)
 
-// 清空搜索条件
 const resetQuery = () => {
-  // 清空搜索条件
   queryRef.value?.resetFields()
-  // 清空多选
   selectObjs.value = []
   getDataList()
 }
 
-// 导出excel
 const exportExcel = () => {
   downBlobFile('/order/create-table/export', state.queryForm, 'create-table.xlsx')
 }
 
-// 多选事件
-const handleSelectionChange = (objs: any) => {
+const handleSelectionChange = (objs: { id: string }[]) => {
   selectObjs.value = objs.map(({id}) => id);
   multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
   try {
     await useMessageBox().confirm(t('common.delConfirmText'));

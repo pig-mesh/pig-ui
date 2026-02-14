@@ -39,15 +39,10 @@ import {rule} from "/@/utils/validate";
 
 const CodeEditor = defineAsyncComponent(() => import('/@/components/CodeEditor/index.vue'));
 const emit = defineEmits(['refresh']);
-
 const { t } = useI18n();
-
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-
-// 定义字典
 
 // 提交表单数据
 const form = reactive({
@@ -86,8 +81,6 @@ const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
 
-	// 校验模板是否为空
-
 	try {
 		loading.value = true;
 		form.id ? await putObj(form) : await addObj(form);
@@ -113,14 +106,3 @@ defineExpose({
 	openDialog,
 });
 </script>
-
-<style scoped>
-.splitpanes__pane {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: Helvetica, Arial, sans-serif;
-	color: rgba(255, 255, 255, 0.6);
-	font-size: 5em;
-}
-</style>

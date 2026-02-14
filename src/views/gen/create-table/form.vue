@@ -142,7 +142,7 @@ const form = reactive({
  * @param {*} value
  * @param {*} callback
  */
-let validateTableName = async (rule, value, callback) => {
+const validateTableName = async (_rule: any, value: string, callback: (error?: Error) => void) => {
   const {data} = await fetchList({tableName: value})
   if (data.total === 0) {
     callback()
@@ -245,11 +245,21 @@ const getCreateTableData = (id: string) => {
   })
 };
 
+const DEFAULT_COLUMNS = [
+  { name: 'id', comment: '主键', typeName: 'bigint', precision: 20, scale: 0, defaultValue: null, primary: 1, nullable: -1 },
+  { name: 'create_by', comment: '创建人', typeName: 'varchar', precision: 64, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
+  { name: 'create_time', comment: '创建时间', typeName: 'datetime', precision: 0, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
+  { name: 'update_by', comment: '修改人', typeName: 'varchar', precision: 64, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
+  { name: 'update_time', comment: '修改时间', typeName: 'datetime', precision: 0, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
+  { name: 'del_flag', comment: '删除标记', typeName: 'char', precision: 1, scale: 0, defaultValue: '0', primary: -1, nullable: -1 },
+  { name: 'tenant_id', comment: '租户ID', typeName: 'bigint', precision: 0, scale: 0, primary: -1, nullable: -1 },
+];
+
 let index = 1;
 const onAddItem = () => {
-  let find = form.columns.find(f => f.name === 'id');
-  if (find) {
-    let obj = {
+  const hasId = form.columns.find(f => f.name === 'id');
+  if (hasId) {
+    form.columns.splice(index++, 0, {
       name: '',
       comment: '',
       typeName: 'varchar',
@@ -257,112 +267,27 @@ const onAddItem = () => {
       scale: 0,
       defaultValue: null,
       primary: -1,
-      nullable: 1
-    };
-
-    // 从 index为 1 的位置开始添加, 并且新增的字段要依次向后
-    form.columns.splice(index++, 0, obj)
-    return
+      nullable: 1,
+    });
+    return;
   }
-  let id = {
-    name: 'id',
-    comment: '主键',
-    typeName: 'bigint',
-    precision: 20,
-    scale: 0,
-    defaultValue: null,
-    primary: 1,
-    nullable: -1
-  };
-  let create_user = {
-    name: 'create_by',
-    comment: '创建人',
-    typeName: 'varchar',
-    precision: 64,
-    scale: 0,
-    defaultValue: null,
-    primary: -1,
-    nullable: 1
-  };
-  let create_time = {
-    name: 'create_time',
-    comment: '创建时间',
-    typeName: 'datetime',
-    precision: 0,
-    scale: 0,
-    defaultValue: null,
-    primary: -1,
-    nullable: 1
-  };
-
-  let update_user = {
-    name: 'update_by',
-    comment: '修改人',
-    typeName: 'varchar',
-    precision: 64,
-    scale: 0,
-    defaultValue: null,
-    primary: -1,
-    nullable: 1
-  };
-
-  let update_time = {
-    name: 'update_time',
-    comment: '修改时间',
-    typeName: 'datetime',
-    precision: 0,
-    scale: 0,
-    defaultValue: null,
-    primary: -1,
-    nullable: 1
-  };
-
-  let del_flag = {
-    name: 'del_flag',
-    comment: '删除标记',
-    typeName: 'char',
-    precision: 1,
-    scale: 0,
-    defaultValue: '0',
-    primary: -1,
-    nullable: -1
-  };
-
-  let tenant_id = {
-    name: 'tenant_id',
-    comment: '租户ID',
-    typeName: 'bigint',
-    precision: 0,
-    scale: 0,
-    primary: -1,
-    nullable: -1
-  };
-
-  form.columns.push(id);
-  form.columns.push(create_user);
-  form.columns.push(create_time);
-  form.columns.push(update_user);
-  form.columns.push(update_time);
-  form.columns.push(del_flag);
-  form.columns.push(tenant_id);
+  form.columns.push(...DEFAULT_COLUMNS.map(col => ({ ...col })));
 }
 
 const getFieldTypeList = async () => {
   typeList.value = [];
-  // 获取数据
   const {data} = await list();
-  // 设置属性类型值
   const typeMap = new Map();
   data.forEach((item: any) => {
-    const {attrType, columnType} = item;
-    if (!typeMap.has(attrType)) {
-      typeMap.set(columnType, attrType);
+    const {columnType} = item;
+    if (!typeMap.has(columnType)) {
+      typeMap.set(columnType, true);
       typeList.value.push({label: columnType, value: columnType});
     }
   });
 };
 
-const handleDelete = (index: number, row: any) => {
+const handleDelete = (index: number) => {
   form.columns.splice(index, 1)
 }
 

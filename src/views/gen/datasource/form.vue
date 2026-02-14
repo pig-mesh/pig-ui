@@ -77,16 +77,11 @@ import {useI18n} from 'vue-i18n';
 import {useDict} from '/@/hooks/dict';
 import {rule, clearMaskedField} from "/@/utils/validate";
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const {t} = useI18n();
-
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-
-// 定义字典处理
 const {ds_config_type, ds_type} = useDict('ds_config_type', 'ds_type');
 
 // 提交表单数据
@@ -95,7 +90,7 @@ const form = reactive({
   name: '',
   url: '',
   username: '',
-  password: ('' as string) || undefined,
+  password: undefined as string | undefined,
   createTime: '',
   updateTime: '',
   dsType: '',
@@ -113,7 +108,7 @@ const form = reactive({
  * @param {*} callback
  */
 const validateDsName = (_rule, value, callback) => {
-  var re = /(?=.*[a-z])(?=.*_)/;
+  const re = /(?=.*[a-z])(?=.*_)/;
   if (value && !re.test(value)) {
     callback(new Error('数据源名称不合法, 组名_数据源名形式'));
   } else {

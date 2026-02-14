@@ -111,9 +111,8 @@ const getChildTableColumnList = (val: string) => {
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
-  // 同步子表数据
-  useSyncTableApi(currentDsName.value,form.childTableName).then(() => {
-    useMessage().success('子表信息同步成功')
+  useSyncTableApi(currentDsName.value, form.childTableName).then(() => {
+    useMessage().success('子表信息同步成功');
   });
 
 	visible.value = false;
@@ -135,9 +134,6 @@ watch(
 	{ deep: true, immediate: true }
 );
 
-onMounted(() => {});
-
-// 暴露变量
 defineExpose({
 	openDialog,
 });

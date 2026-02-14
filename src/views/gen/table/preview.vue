@@ -21,7 +21,7 @@
 						:name="item.codePath"
 						:key="item.codePath"
 					>
-						<SvgIcon name="ele-CopyDocument" :size="25" class="copy_btn" @click="copyText(item.code)" />
+						<SvgIcon name="ele-CopyDocument" :size="25" class="copy_btn" @click="handleCopy(item.code)" />
 					</el-tab-pane>
 					<code-editor ref="codeEditorRef" theme="darcula" v-model="previewCodeStr" mode="go" readOnly height="calc(100vh - 100px)"></code-editor>
 				</el-tabs>
@@ -30,23 +30,33 @@
 	</el-dialog>
 </template>
 <script setup lang="ts" name="preview">
+import { useClipboard } from '@vueuse/core';
+import { ElMessage } from 'element-plus';
+import { useI18n } from 'vue-i18n';
 import { useGeneratorPreviewApi } from '/@/api/gen/table';
 import { handleTree } from '/@/utils/other';
-import commonFunction from '/@/utils/commonFunction';
 const CodeEditor = defineAsyncComponent(() => import('/@/components/CodeEditor/index.vue'));
 
-const { copyText } = commonFunction();
+const { t } = useI18n();
+const { copy } = useClipboard();
+
+const handleCopy = async (text: string) => {
+	try {
+		await copy(text);
+		ElMessage.success(t('layout.copyTextSuccess'));
+	} catch {
+		ElMessage.error(t('layout.copyTextError'));
+	}
+};
 
 const visible = ref(false);
 // ======== 显示页面 ========
 const preview = reactive({
-	open: false,
-	titel: '代码预览',
 	fileTree: [],
 	activeName: '',
 });
 
-const previewCodegen = ref([]);
+const previewCodegen = ref<{ codePath: string; code: string }[]>([]);
 const previewCodeStr = ref('');
 const fileTreeOriginal = ref([] as any[]);
 
@@ -68,8 +78,8 @@ const getGenCodeFile = (id: string) => {
 	useGeneratorPreviewApi(id)
 		.then((res: any) => {
 			previewCodegen.value = res;
-			for (let index in res) {
-				fileTreeOriginal.value.push(res[index].codePath);
+			for (const item of res) {
+				fileTreeOriginal.value.push(item.codePath);
 			}
 			// 默认选中第一个 选项卡
 			previewCodeStr.value = res[0].code;
@@ -108,7 +118,7 @@ const handleTabClick = (item: any) => {
  * @returns {*[]}
  */
 const handleFiles = (fileTreeOriginal: any) => {
-	const exists = {};
+	const exists: Record<string, boolean> = {};
 	const files = [] as any[];
 
 	// 遍历每个元素

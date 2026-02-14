@@ -88,18 +88,12 @@ import {delObjs, fetchList, online} from '/@/api/gen/template';
 import {useMessage, useMessageBox} from '/@/hooks/message';
 import {useI18n} from 'vue-i18n';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const {t} = useI18n();
-// 定义查询字典
-
-// 定义变量内容
 const formDialogRef = ref();
 const updateDisabled = ref(false);
-// 搜索变量
 const queryRef = ref();
 const showSearch = ref(true);
-// 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
@@ -109,30 +103,23 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   descs: ['create_time'],
 });
 
-//  table hook
 const {getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle} = useTable(state);
 
-// 清空搜索条件
 const resetQuery = () => {
-  // 清空搜索条件
   queryRef.value.resetFields();
-  // 清空多选
   selectObjs.value = [];
   getDataList();
 };
 
-// 导出excel
 const exportExcel = () => {
   downBlobFile('/gen/template/export', state.queryForm, 'template.xlsx');
 };
 
-// 多选事件
 const handleSelectionChange = (objs: { id: string }[]) => {
   selectObjs.value = objs.map(({id}) => id);
   multiple.value = !objs.length;
 };
 
-// 删除操作
 const handleDelete = async (ids: string[]) => {
   try {
     await useMessageBox().confirm(t('common.delConfirmText'));

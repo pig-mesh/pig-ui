@@ -35,16 +35,12 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/gen/group';
 import { useI18n } from 'vue-i18n';
 import { list as templateList } from '/@/api/gen/template';
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
-
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 const templateData = ref<any[]>([]);
-// 定义字典
 
 // 提交表单数据
 const form = reactive({
@@ -133,13 +129,9 @@ const getgenGroupData = (id: string) => {
 		form.tableType = foundPrefix || '单表';
 		form.actualGroupName = actualName;
 		
-		form.templateId = [];
-		if (res.data.templateList) {
-			let list = res.data.templateList;
-			list.forEach((item: any) => {
-				form.templateId.push(item.id);
-			});
-		}
+		form.templateId = res.data.templateList
+			? res.data.templateList.map((item: any) => item.id)
+			: [];
 	});
 };
 
