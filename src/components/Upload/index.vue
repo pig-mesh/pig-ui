@@ -118,16 +118,7 @@ const getFileName = (file: any): string => {
 // 根据文件类型生成accept属性值
 const fileAccept = computed(() => {
 	if (!props.fileType || props.fileType.length === 0) return '';
-
-	let acceptValues: string[] = [];
-
-	for (const ext of props.fileType) {
-		if (typeof ext === 'string') {
-			acceptValues.push(`.${ext}`);
-		}
-	}
-
-	return acceptValues.join(',');
+	return (props.fileType as string[]).map((ext) => `.${ext}`).join(',');
 });
 
 interface FileItem {
@@ -213,7 +204,7 @@ const headers = computed(() => {
 
 // 请求参数处理
 const formData = computed(() => {
-	return Object.assign(props.data, { dir: props.dir });
+	return { ...props.data, dir: props.dir };
 });
 
 // 上传前校检格式和大小
@@ -293,14 +284,10 @@ const handleExceed = () => {
  * @returns {string} 返回转换后的字符串。
  */
 const listToString = (list: FileItem[], separator = ','): string => {
-	let strs = '';
-	separator = separator || ',';
-	for (let i in list) {
-		if (list[i].url) {
-			strs += list[i].url + separator;
-		}
-	}
-	return strs !== '' ? strs.substr(0, strs.length - 1) : '';
+	return list
+		.filter((item) => item.url)
+		.map((item) => item.url)
+		.join(separator);
 };
 
 const handleUploadError = () => {

@@ -20,7 +20,7 @@ export function addGroup(data: Group) {
  *
  * @param data
  */
-export function delGroup(id: number) {
+export function delGroup(id: string) {
 	return request({
 		url: '/task/processGroup/delete/' + id,
 		method: 'delete',

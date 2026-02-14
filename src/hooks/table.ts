@@ -22,7 +22,7 @@ export interface BasicTableProps {
 	// 数据列表查询接口api方法，接收任意数量参数，返回Promise
 	pageList?: (...arg: any) => Promise<any>;
 	// loading标志，默认为false
-	loading?: Boolean;
+	loading?: boolean;
 	// 多选结果数组
 	selectObjs?: any[];
 	// 排序字段数组
@@ -54,7 +54,7 @@ export interface Pagination {
 	// 每页显示条数选择器的选项数组，默认为[10,20,30,40]
 	pageSizes?: any[];
 	// 分页组件布局方式，可选值有 total,sizes,prev,jump,next，默认为'total,sizes,prev,jump,next'
-	layout?: String;
+	layout?: string;
 }
 
 export function useTable(options?: BasicTableProps) {
@@ -76,7 +76,7 @@ export function useTable(options?: BasicTableProps) {
 			total: 0,
 			pageSizes: [1, 10, 20, 50, 100, 200],
 			layout: 'total, sizes, prev, pager, next, jumper',
-		} as Pagination,
+		},
 		// 当前选中的数据项，默认为空数组
 		dataListSelections: [],
 		// 是否正在从服务器加载数据，默认为false
@@ -185,11 +185,11 @@ export function useTable(options?: BasicTableProps) {
 	const sortChangeHandle = (column: any) => {
 		const prop = other.toUnderline(column.prop);
 
-		// First remove the property from both arrays to avoid duplicates
+		// 先从两个数组中移除该属性，避免重复
 		state.ascs = state.ascs?.filter((item) => item !== prop) || [];
 		state.descs = state.descs?.filter((item) => item !== prop) || [];
 
-		// Then add to the appropriate array based on sort direction
+		// 根据排序方向添加到对应数组
 		if (column.order === 'descending') {
 			state.descs?.push(prop);
 		} else if (column.order === 'ascending') {

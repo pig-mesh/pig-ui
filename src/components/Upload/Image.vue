@@ -137,6 +137,7 @@ const number = ref(0);
 const uploadList = ref<FileItem[]>([]);
 const imgViewVisible = ref(false);
 const imageUpload = ref<UploadInstance | null>(null);
+const loadingInstance = ref<ReturnType<typeof ElLoading.service> | null>(null);
 const baseURL = import.meta.env.VITE_API_URL || '';
 const uploadImgUrl = computed(() => baseURL + props.action);
 const fileList = ref<FileItem[]>([]);
@@ -238,7 +239,7 @@ const handleBeforeUpload = (file: UploadRawFile) => {
 			return false;
 		}
 	}
-	ElLoading.service({ text: t('uploading') });
+	loadingInstance.value = ElLoading.service({ text: t('uploading') });
 	number.value++;
 	return true;
 };
@@ -251,12 +252,12 @@ const handleExceed = () => {
 // 上传成功回调
 const handleUploadSuccess = (res: UploadResponse, file: UploadFile) => {
 	if (res.code === 0) {
-		// 如果返回的是 OSS 地址则不需要增加 baseURL
 		uploadList.value.push({ name: res.data.fileName, url: res.data.url });
 		uploadedSuccessfully();
 	} else {
 		number.value--;
-		ElLoading.service().close();
+		loadingInstance.value?.close();
+		loadingInstance.value = null;
 		ElMessage.error(t('uploadFailRetry'));
 		imageUpload.value?.handleRemove(file);
 		uploadedSuccessfully();
@@ -265,7 +266,7 @@ const handleUploadSuccess = (res: UploadResponse, file: UploadFile) => {
 
 // 删除图片
 const handleDelete = (file: UploadFile) => {
-	const findex = fileList.value.map((f) => f.name).indexOf(file.name);
+	const findex = fileList.value.findIndex((f) => f.name === file.name);
 	if (findex > -1) {
 		fileList.value.splice(findex, 1);
 		const resultString = listToString(fileList.value);
@@ -277,7 +278,8 @@ const handleDelete = (file: UploadFile) => {
 // 上传失败
 const handleUploadError = () => {
 	ElMessage.error(t('uploadFail'));
-	ElLoading.service().close();
+	loadingInstance.value?.close();
+	loadingInstance.value = null;
 };
 
 // 上传结束处理
@@ -289,7 +291,8 @@ const uploadedSuccessfully = () => {
 		const resultString = listToString(fileList.value);
 		emit('update:modelValue', resultString);
 		emit('update:imageUrl', resultString);
-		ElLoading.service().close();
+		loadingInstance.value?.close();
+		loadingInstance.value = null;
 	}
 };
 
@@ -302,13 +305,10 @@ const handlePictureCardPreview = (file: UploadFile) => {
 
 // 对象转成指定字符串分隔
 const listToString = (list: FileItem[], separator = ','): string => {
-	let strs = '';
-	for (const item of list) {
-		if (item.url) {
-			strs += item.url + separator;
-		}
-	}
-	return strs !== '' ? strs.slice(0, -1) : '';
+	return list
+		.filter((item) => item.url)
+		.map((item) => item.url)
+		.join(separator);
 };
 </script>
 

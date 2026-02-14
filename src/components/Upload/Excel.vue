@@ -81,10 +81,6 @@ const state = reactive({
   errorData: [] as any[],
   errorCurrentPage: 1,
   errorPageSize: 20,
-  dialog: {
-    title: '',
-    isShowDialog: false,
-  },
   upload: {
     open: false,
     isUploading: false,
@@ -133,11 +129,10 @@ const handleFileSuccess = (response: any) => {
     state.errorData = response.data;
     uploadRef.value.clearFiles();
     // 刷新表格
-    emit?.('refreshDataList');
+    emit('refreshDataList');
   } else {
     useMessage().success(response.msg ? response.msg : '导入成功');
-    // 刷新表格
-    emit?.('refreshDataList');
+    emit('refreshDataList');
   }
 };
 
