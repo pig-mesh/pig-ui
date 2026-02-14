@@ -2,14 +2,13 @@
 	<formCreate
 		:rule="rule"
 		:option="options"
-		:modelValue="modelValue"
-		@update:modelValue="emit('update:modelValue', $event)"
-		:api="api"
-		@update:api="emit('update:api', $event)"
+		v-model="modelValue"
+		v-model:api="apiRef"
 	/>
 </template>
 
 <script setup lang="ts">
+import { useVModel } from '@vueuse/core';
 import { Api, Rule } from '@form-create/element-ui';
 
 interface Props {
@@ -27,6 +26,9 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const emit = defineEmits(['update:modelValue', 'update:api']);
+
+const modelValue = useVModel(props, 'modelValue', emit);
+const apiRef = useVModel(props, 'api', emit);
 
 // Default options
 const options = computed(() => ({

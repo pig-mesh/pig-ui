@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useFlowStore } from '../../../stores/flow';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watch, type PropType } from 'vue';
+import { watchImmediate } from '@vueuse/core';
 import selectShow from '/@/components/OrgSelector/index.vue';
 import other from '/@/utils/other';
-import { PropType } from 'vue';
 import { flattenFormItems, type FormItem } from '../../../utils/formUtils';
 
 // 表达式类型接口定义
@@ -84,7 +84,9 @@ let props = defineProps({
 const formIdObj = computed(() => {
 	const obj: Record<string, FormItem> = {};
 	formList.value.forEach((item: FormItem) => {
-		obj[item.field] = item;
+		if (item.field) {
+			obj[item.field] = item;
+		}
 	});
 	return obj;
 });
@@ -152,7 +154,7 @@ const isRootField = computed(() => props.condition.key === 'root');
 const currentOrgType = computed(() => props.condition.orgType || 'user');
 
 // 监听条件键值变化，清空关系和值字段，并确保OrgSelector的值为数组
-watch(
+watchImmediate(
 	() => props.condition.key,
 	(newKey, oldKey) => {
 		// 当条件字段发生改变时（不是初始化），清空选择关系和条件值
@@ -173,8 +175,7 @@ watch(
 				props.condition.value = [];
 			}
 		}
-	},
-	{ immediate: true }
+	}
 );
 
 // 监听发起人判断维度变化，切换维度时清空已选值
