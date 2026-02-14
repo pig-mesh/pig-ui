@@ -31,9 +31,7 @@
 import { useI18n } from 'vue-i18n';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 
-// 定义变量内容
-const storesTagsViewRoutes = useTagsViewRoutes();
-const { tagsViewRoutes } = storeToRefs(storesTagsViewRoutes);
+const { tagsViewRoutes } = storeToRefs(useTagsViewRoutes());
 const layoutMenuAutocompleteRef = ref();
 const { t } = useI18n();
 const router = useRouter();
@@ -43,7 +41,6 @@ const state = reactive<SearchState>({
 	tagsViewList: [],
 });
 
-// 搜索弹窗打开
 const openSearch = () => {
 	state.menuQuery = '';
 	state.isShowSearch = true;
@@ -54,42 +51,39 @@ const openSearch = () => {
 		});
 	});
 };
-// 搜索弹窗关闭
+
 const closeSearch = () => {
 	state.isShowSearch = false;
 };
-// 菜单搜索数据过滤
+
 const menuSearch = (queryString: string, cb: Function) => {
-	let results = queryString ? state.tagsViewList.filter(createFilter(queryString)) : state.tagsViewList;
+	const results = queryString ? state.tagsViewList.filter(createFilter(queryString)) : state.tagsViewList;
 	cb(results);
 };
 // 菜单搜索过滤
 const createFilter = (queryString: string) => {
 	return (restaurant: RouteItem) => {
-		const title = restaurant.meta?.title || restaurant.name
+		const title = restaurant.meta?.title || restaurant.name;
 		return restaurant.path.toLowerCase().indexOf(queryString.toLowerCase()) > -1 || t(title as string).indexOf(queryString.toLowerCase()) > -1;
 	};
 };
-// 初始化菜单数据
+
 const initTageView = () => {
-	if (state.tagsViewList.length > 0) return false;
+	if (state.tagsViewList.length > 0) return;
 	tagsViewRoutes.value.map((v: RouteItem) => {
 		if (!v.meta?.isHide) state.tagsViewList.push({ ...v });
 	});
 };
-// 当前菜单选中时
+
 const onHandleSelect = (item: RouteItem) => {
-	let { path, redirect } = item;
+	const { path, redirect } = item;
 	if (item.meta?.isLink && !item.meta?.isIframe) window.open(item.meta?.isLink);
 	else if (redirect) router.push(redirect);
 	else router.push(path);
 	closeSearch();
 };
 
-// 暴露变量
-defineExpose({
-	openSearch,
-});
+defineExpose({ openSearch });
 </script>
 
 <style scoped lang="scss">

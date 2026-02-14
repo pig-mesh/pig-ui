@@ -19,9 +19,9 @@
 				</el-dropdown-item>
 				<el-dropdown-item :divided="true" command="fullscreen">
 					<el-icon class="mr5">
-						<i class="iconfont" :class="!state.isScreenfull ? 'icon-fullscreen' : 'icon-tuichuquanping'"></i>
+						<i class="iconfont" :class="!isFullscreen ? 'icon-fullscreen' : 'icon-tuichuquanping'"></i>
 					</el-icon>
-					{{ state.isScreenfull ? $t('user.exitFullscreen') : $t('user.fullscreen') }}
+					{{ isFullscreen ? $t('user.exitFullscreen') : $t('user.fullscreen') }}
 				</el-dropdown-item>
 				<el-dropdown-item command="lock">
 					<el-icon class="mr5"><ele-Lock /></el-icon>
@@ -34,24 +34,22 @@
 
 <script setup lang="ts" name="layoutBreadcrumbMore">
 import { ElMessage } from 'element-plus';
-import screenfull from 'screenfull';
 import { useI18n } from 'vue-i18n';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { Local } from '/@/utils/storage';
+import { useFullscreen } from '@vueuse/core';
 
 const { locale, t } = useI18n();
-const storesThemeConfig = useThemeConfig();
-const { themeConfig } = storeToRefs(storesThemeConfig);
+const { themeConfig } = storeToRefs(useThemeConfig());
+const { isFullscreen, isSupported: isFullscreenSupported, toggle: toggleFullscreen } = useFullscreen();
 
 interface State {
-	isScreenfull: boolean;
 	disabledI18n: string;
 }
 
 const state = reactive<State>({
-	isScreenfull: false,
 	disabledI18n: 'zh-cn',
 });
 
@@ -91,15 +89,11 @@ const onLanguageToggle = () => {
 
 // 全屏切换
 const onScreenfullClick = () => {
-	if (!screenfull.isEnabled) {
+	if (!isFullscreenSupported.value) {
 		ElMessage.warning('暂不支持全屏');
-		return false;
+		return;
 	}
-	screenfull.toggle();
-	screenfull.on('change', () => {
-		if (screenfull.isFullscreen) state.isScreenfull = true;
-		else state.isScreenfull = false;
-	});
+	toggleFullscreen();
 };
 
 // 锁屏
@@ -109,14 +103,14 @@ const onLockClick = () => {
 	Local.set('themeConfig', themeConfig.value);
 };
 
-// 初始化i18n
+// 初始化 i18n
 const initI18n = () => {
-	if (Local.get('themeConfig')) {
-		state.disabledI18n = Local.get('themeConfig')['globalI18n'];
+	const config = Local.get('themeConfig');
+	if (config) {
+		state.disabledI18n = config['globalI18n'];
 	}
 };
 
-// 页面加载时
 onMounted(() => {
 	initI18n();
 });

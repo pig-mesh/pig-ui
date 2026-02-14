@@ -9,27 +9,24 @@
 
 <script setup lang="ts" name="layoutLogo">
 import {useThemeConfig} from '/@/stores/themeConfig';
+import { useWindowSize } from '@vueuse/core';
 import logoMini from '/@/assets/logo-mini.svg';
 
-// 定义变量内容
-const storesThemeConfig = useThemeConfig();
-const {themeConfig} = storeToRefs(storesThemeConfig);
+const {themeConfig} = storeToRefs(useThemeConfig());
+const { width: windowWidth } = useWindowSize();
 
-// 设置 logo 的显示。classic 经典布局默认显示 logo
 const setShowLogo = computed(() => {
-  let {isCollapse, layout} = themeConfig.value;
-  return !isCollapse || layout === 'classic' || document.body.clientWidth < 1000;
+  const {isCollapse, layout} = themeConfig.value;
+  return !isCollapse || layout === 'classic' || windowWidth.value < 1000;
 });
 
-// 设置 title 的显示颜色。根据布局模式自动显示
 const setFontColor = computed(() => {
-  let {layout} = themeConfig.value;
+  const {layout} = themeConfig.value;
   return layout === 'classic' || layout === 'transverse' ? `var(--next-bg-topBarColor)` : 'var(--el-color-primary)';
 });
 
-// logo 点击实现菜单展开/收起
 const onThemeConfigChange = () => {
-  if (themeConfig.value.layout === 'transverse') return false;
+  if (themeConfig.value.layout === 'transverse') return;
   themeConfig.value.isCollapse = !themeConfig.value.isCollapse;
 };
 </script>
@@ -51,7 +48,6 @@ const onThemeConfigChange = () => {
     display: inline-block;
     font-size: 21.5px;
     font-weight: 700;
-    white-space: nowrap;
   }
 
   &:hover {

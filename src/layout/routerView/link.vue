@@ -16,28 +16,23 @@
 <script setup lang="ts" name="layoutLinkView">
 import { verifyUrl } from '/@/utils/toolsValidate';
 
-// 定义变量内容
 const route = useRoute();
 const state = reactive<LinkViewState>({
 	title: '',
 	isLink: '',
 });
 
-// 立即前往
 const onGotoFullPage = () => {
-	if (verifyUrl(<string>state.isLink)) window.open(state.isLink);
-	else window.open(`${state.isLink}`);
+	window.open(<string>state.isLink);
 };
-// 监听路由的变化，设置内容
+
 watch(
 	() => route.path,
 	() => {
 		state.title = <string>route.name;
 		state.isLink = <string>route.meta.isLink;
 	},
-	{
-		immediate: true,
-	}
+	{ immediate: true }
 );
 </script>
 

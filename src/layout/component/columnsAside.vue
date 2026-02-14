@@ -46,12 +46,10 @@
 
 <script setup lang="ts" name="layoutColumnsAside">
 import { RouteRecordRaw } from 'vue-router';
-import pinia from '/@/stores/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import mittBus from '/@/utils/mitt';
 
-// 定义变量内容
 const columnsAsideOffsetTopRefs = ref<RefType>([]);
 const columnsAsideActiveRef = ref();
 const stores = useRoutesList();
@@ -70,22 +68,21 @@ const state = reactive<ColumnsAsideState>({
 	routeSplit: [],
 });
 
-// 设置菜单高亮位置移动
 const setColumnsAsideMove = (k: number) => {
 	state.liIndex = k;
 	columnsAsideActiveRef.value.style.top = `${columnsAsideOffsetTopRefs.value[k].offsetTop + state.difference}px`;
 };
-// 菜单高亮点击事件
+
 const onColumnsAsideMenuClick = (v: RouteItem, k: number) => {
 	setColumnsAsideMove(k);
-	let { path, redirect } = v;
+	const { path, redirect } = v;
 	if (redirect) router.push(redirect);
 	else router.push(path);
 };
-// 鼠标移入时，显示当前的子级菜单
+
 const onColumnsAsideMenuMouseenter = (v: RouteRecordRaw, k: number) => {
-	if (!themeConfig.value.isColumnsMenuHoverPreload) return false;
-	let { path } = v;
+	if (!themeConfig.value.isColumnsMenuHoverPreload) return;
+	const { path } = v;
 	state.liOldPath = path;
 	state.liOldIndex = k;
 	state.liHoverIndex = k;
@@ -93,32 +90,31 @@ const onColumnsAsideMenuMouseenter = (v: RouteRecordRaw, k: number) => {
 	stores.setColumnsMenuHover(false);
 	stores.setColumnsNavHover(true);
 };
-// 鼠标移走时，显示原来的子级菜单
+
 const onColumnsAsideMenuMouseleave = async () => {
 	await stores.setColumnsNavHover(false);
-	// 添加延时器，防止拿到的 store.state.routesList 值不是最新的
 	setTimeout(() => {
 		if (!isColumnsMenuHover && !isColumnsNavHover) mittBus.emit('restoreDefault');
 	}, 100);
 };
-// 设置高亮动态位置
+
 const onColumnsAsideDown = (k: number) => {
 	nextTick(() => {
 		setColumnsAsideMove(k);
 	});
 };
-// 设置/过滤路由（非静态路由/是否显示在菜单中）
+
 const setFilterRoutes = () => {
 	state.columnsAsideList = filterRoutesFun(routesList.value);
 	const resData: MittMenu = setSendChildren(route.path);
-	if (Object.keys(resData).length <= 0) return false;
+	if (Object.keys(resData).length <= 0) return;
 	onColumnsAsideDown(resData.item?.k);
 	mittBus.emit('setSendColumnsChildren', resData);
 };
 // 传送当前子级数据到菜单中
 const setSendChildren = (path: string) => {
 	const parentRoute = searchParent(routesList.value, path) as any;
-	let currentData: MittMenu = { children: [] };
+	const currentData: MittMenu = { children: [] };
 	state.columnsAsideList.map((v: RouteItem, k: number) => {
 		if (v.path === parentRoute.path) {
 			v['k'] = k;
@@ -129,7 +125,7 @@ const setSendChildren = (path: string) => {
 	});
 	return currentData;
 };
-// 路由过滤递归函数
+
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 	return arr
 		.filter((item: T) => !item.meta?.isHide)
@@ -139,21 +135,20 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 			return item;
 		});
 };
-// tagsView 点击时，根据路由查找下标 columnsAsideList，实现左侧菜单高亮
+
+// tagsView 点击时，根据路由查找下标实现左侧菜单高亮
 const setColumnsMenuHighlight = (path: string) => {
 	const parentRoute = searchParent(routesList.value, path) as any;
 	const currentSplitRoute = state.columnsAsideList.find((v: RouteItem) => v.path === parentRoute.path);
-	if (!currentSplitRoute) return false;
-	// 延迟拿值，防止取不到
+	if (!currentSplitRoute) return;
 	setTimeout(() => {
 		onColumnsAsideDown(currentSplitRoute.k);
 	}, 0);
 };
 
-// 使用递归查询对应的父级路由
 const searchParent = (routesList: any, path: string) => {
 	let route = undefined;
-	routesList.forEach((item) => {
+	routesList.forEach((item: any) => {
 		if (item.path === path) {
 			route = item;
 			return;
@@ -166,40 +161,42 @@ const searchParent = (routesList: any, path: string) => {
 	return route;
 };
 
-// 页面加载时
 onMounted(() => {
 	setFilterRoutes();
-	// 销毁变量，防止鼠标再次移入时，保留了上次的记录
 	mittBus.on('restoreDefault', () => {
 		state.liOldIndex = null;
 		state.liOldPath = null;
 	});
 });
-// 页面卸载时
+
 onUnmounted(() => {
 	mittBus.off('restoreDefault', () => {});
 });
-// 路由更新时
+
 onBeforeRouteUpdate((to) => {
 	setColumnsMenuHighlight(to.path);
 	mittBus.emit('setSendColumnsChildren', setSendChildren(to.path));
 });
-// 监听布局配置信息的变化，动态增加菜单高亮位置移动像素
+
+// 监听布局配置变化，动态调整菜单高亮位置
 watch(
-	pinia.state,
-	(val) => {
-		val.themeConfig.themeConfig.columnsAsideStyle === 'columnsRound' ? (state.difference = 3) : (state.difference = 0);
-		if (!val.routesList.isColumnsMenuHover && !val.routesList.isColumnsNavHover) {
+	() => themeConfig.value.columnsAsideStyle,
+	(style) => {
+		state.difference = style === 'columnsRound' ? 3 : 0;
+	}
+);
+
+watch(
+	[isColumnsMenuHover, isColumnsNavHover],
+	([menuHover, navHover]) => {
+		if (!menuHover && !navHover) {
 			state.liHoverIndex = null;
 			mittBus.emit('setSendColumnsChildren', setSendChildren(route.path));
 		} else {
 			state.liHoverIndex = state.liOldIndex;
-			if (!state.liOldPath) return false;
+			if (!state.liOldPath) return;
 			mittBus.emit('setSendColumnsChildren', setSendChildren(state.liOldPath));
 		}
-	},
-	{
-		deep: true,
 	}
 );
 </script>

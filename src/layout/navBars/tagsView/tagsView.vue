@@ -59,11 +59,10 @@ import { isObjectValueEqual } from '/@/utils/arrayOperation';
 import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { useMessage } from '/@/hooks/message';
+import { useEventListener } from '@vueuse/core';
 
-// 引入组件
 const Contextmenu = defineAsyncComponent(() => import('/@/layout/navBars/tagsView/contextmenu.vue'));
 
-// 定义变量内容
 const tagsRefs = ref<RefType>([]);
 const scrollbarRef = ref();
 const contextmenuRef = ref();
@@ -86,14 +85,8 @@ const state = reactive<TagsViewState>({
 	tagsViewRoutesList: [],
 });
 
-// 动态设置 tagsView 风格样式
-const setTagsStyle = computed(() => {
-	return themeConfig.value.tagsStyle;
-});
-// 获取布局配置信息
-const getThemeConfig = computed(() => {
-	return themeConfig.value;
-});
+const setTagsStyle = computed(() => themeConfig.value.tagsStyle);
+const getThemeConfig = computed(() => themeConfig.value);
 // 设置 自定义 tagsView 名称、 自定义 tagsView 名称国际化
 const setTagsViewNameI18n = computed(() => {
 	return (v: RouteItem) => {
@@ -524,10 +517,10 @@ const onSortableResize = async () => {
 	if (other.isMobile()) state.sortable.el && state.sortable.destroy();
 };
 // 页面加载前
+useEventListener(window, 'resize', onSortableResize);
 onBeforeMount(() => {
 	// 初始化，防止手机端直接访问时还可以拖拽
 	onSortableResize();
-	window.addEventListener('resize', onSortableResize);
 	// 监听非本页面调用 0 刷新当前，1 关闭当前，2 关闭其它，3 关闭全部 4 当前页全屏
 	mittBus.on('onCurrentContextmenuClick', (data: RouteItem) => {
 		// 通过方法点击关闭 tagsView
@@ -560,8 +553,6 @@ onUnmounted(() => {
 	mittBus.off('openOrCloseSortable', () => {});
 	// 取消监听布局配置开启 TagsView 共用
 	mittBus.off('openShareTagsView', () => {});
-	// 取消窗口 resize 监听
-	window.removeEventListener('resize', onSortableResize);
 });
 // 页面更新时
 onBeforeUpdate(() => {

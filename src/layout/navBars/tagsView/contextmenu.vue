@@ -30,28 +30,21 @@
 </template>
 
 <script setup lang="ts" name="layoutTagsViewContextmenu">
-import { computed, reactive, onMounted, onUnmounted, watch } from 'vue';
+import { computed, reactive, watch } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-const storesTagsViewRoutes = useTagsViewRoutes();
-const { favoriteRoutes } = storeToRefs(storesTagsViewRoutes);
+import { useEventListener } from '@vueuse/core';
 
-// 定义父组件传过来的值
+const { favoriteRoutes } = storeToRefs(useTagsViewRoutes());
+
 const props = defineProps({
 	dropdown: {
 		type: Object,
-		default: () => {
-			return {
-				x: 0,
-				y: 0,
-			};
-		},
+		default: () => ({ x: 0, y: 0 }),
 	},
 });
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['currentContextmenuClick']);
-
 // 定义变量内容
 const state = reactive({
 	isShow: false,
@@ -79,49 +72,36 @@ const state = reactive({
 	arrowLeft: 10,
 });
 
-// 父级传过来的坐标 x,y 值
 const dropdowns = computed(() => {
-	// 117 为 `Dropdown 下拉菜单` 的宽度
+	// 117 为 Dropdown 下拉菜单的宽度
 	if (props.dropdown.x + 117 > document.documentElement.clientWidth) {
-		return {
-			x: document.documentElement.clientWidth - 117 - 5,
-			y: props.dropdown.y,
-		};
-	} else {
-		return props.dropdown;
+		return { x: document.documentElement.clientWidth - 117 - 5, y: props.dropdown.y };
 	}
+	return props.dropdown;
 });
-// 当前项菜单点击
+
 const onCurrentContextmenuClick = (contextMenuClickId: number) => {
 	emit('currentContextmenuClick', Object.assign({}, { contextMenuClickId }, state.item));
 };
+
 // 打开右键菜单：判断是否固定，固定则不显示关闭按钮
 const openContextmenu = (item: RouteItem) => {
 	state.item = item;
-	item.meta?.isAffix ? (state.dropdownList[1].affix = true) : (state.dropdownList[1].affix = false);
-	if (!favoriteRoutes.value.find((route) => route.path === item.path)) {
-		state.dropdownList[5].show = true;
-	} else {
-		state.dropdownList[5].show = false;
-	}
+	state.dropdownList[1].affix = !!item.meta?.isAffix;
+	state.dropdownList[5].show = !favoriteRoutes.value.find((route) => route.path === item.path);
 
 	closeContextmenu();
 	setTimeout(() => {
 		state.isShow = true;
 	}, 10);
 };
-// 关闭右键菜单
+
 const closeContextmenu = () => {
 	state.isShow = false;
 };
-// 监听页面监听进行右键菜单的关闭
-onMounted(() => {
-	document.body.addEventListener('click', closeContextmenu);
-});
-// 页面卸载时，移除右键菜单监听事件
-onUnmounted(() => {
-	document.body.removeEventListener('click', closeContextmenu);
-});
+
+useEventListener(document.body, 'click', closeContextmenu);
+
 // 监听下拉菜单位置
 watch(
 	() => props.dropdown,
@@ -134,10 +114,7 @@ watch(
 	}
 );
 
-// 暴露变量
-defineExpose({
-	openContextmenu,
-});
+defineExpose({ openContextmenu });
 </script>
 
 <style scoped lang="scss">

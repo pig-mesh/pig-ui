@@ -29,20 +29,15 @@ import { computed } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import other from '/@/utils/other';
 
-// 定义父组件传过来的值
 const props = defineProps({
-	// 菜单列表
 	chil: {
 		type: Array<RouteRecordRaw>,
 		default: () => [],
 	},
 });
 
-// 获取父级菜单数据
-const chils = computed(() => {
-	return <RouteItems>props.chil;
-});
-// 打开外部链接
+const chils = computed(() => <RouteItems>props.chil);
+
 const onALinkClick = (val: RouteItem) => {
 	other.handleOpenLink(val);
 };

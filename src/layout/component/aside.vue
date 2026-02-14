@@ -10,28 +10,22 @@
 </template>
 
 <script setup lang="ts" name="layoutAside">
-import {computed, defineAsyncComponent, onBeforeMount, reactive, ref, watch} from 'vue';
-import {storeToRefs} from 'pinia';
-import pinia from '/@/stores/index';
 import {useRoutesList} from '/@/stores/routesList';
 import {useThemeConfig} from '/@/stores/themeConfig';
 import {useTagsViewRoutes} from '/@/stores/tagsViewRoutes';
 import mittBus from '/@/utils/mitt';
 import {useI18n} from 'vue-i18n';
-import {useRoute} from "vue-router";
 
-// 引入组件
 const Logo = defineAsyncComponent(() => import('/@/layout/logo/index.vue'));
 const Vertical = defineAsyncComponent(() => import('/@/layout/navMenu/vertical.vue'));
 const { locale } = useI18n();
-// 定义变量内容
 const layoutAsideScrollbarRef = ref();
 const stores = useRoutesList();
 const storesThemeConfig = useThemeConfig();
-const storesTagsViewRoutes = useTagsViewRoutes();
 const { routesList } = storeToRefs(stores);
 const { themeConfig } = storeToRefs(storesThemeConfig);
-const { isTagsViewCurrenFull } = storeToRefs(storesTagsViewRoutes);
+const { isTagsViewCurrenFull } = storeToRefs(useTagsViewRoutes());
+const route = useRoute();
 const state = reactive<AsideState>({
 	menuList: [],
 	clientWidth: 0,
@@ -42,7 +36,6 @@ const setCollapseStyle = computed(() => {
 	const { layout, isCollapse, menuBar } = themeConfig.value;
 	const asideBrTheme = ['#FFFFFF', '#FFF', '#fff', '#ffffff'];
 	const asideBrColor = asideBrTheme.includes(menuBar) ? 'layout-el-aside-br-color' : '';
-	// 判断是否是手机端
 	if (state.clientWidth <= 1000) {
 		if (isCollapse) {
 			document.body.setAttribute('class', 'el-popup-parent--hidden');
@@ -53,43 +46,27 @@ const setCollapseStyle = computed(() => {
 			modeDivs.addEventListener('click', closeLayoutAsideMobileMode);
 			return [asideBrColor, 'layout-aside-mobile', 'layout-aside-mobile-open'];
 		} else {
-			// 关闭弹窗
 			closeLayoutAsideMobileMode();
 			return [asideBrColor, 'layout-aside-mobile', 'layout-aside-mobile-close'];
 		}
-	} else {
-		return [
-			asideBrColor,
-			layout === 'columns'
-				? isCollapse
-					? 'layout-aside-pc-1'
-					: locale.value === 'en'
-					? 'layout-aside-pc-250'
-					: 'layout-aside-pc-220'
-				: isCollapse
-				? 'layout-aside-pc-64'
-				: locale.value === 'en'
-				? 'layout-aside-pc-250'
-				: 'layout-aside-pc-220',
-		];
 	}
+
+	const widthClass = isCollapse
+		? (layout === 'columns' ? 'layout-aside-pc-1' : 'layout-aside-pc-64')
+		: (locale.value === 'en' ? 'layout-aside-pc-250' : 'layout-aside-pc-220');
+	return [asideBrColor, widthClass];
 });
 
-const route = useRoute();
 // 设置是否显示左侧菜单栏
 const setShowAside = computed(() => {
-  let { layout } = themeConfig.value;
-  if(layout !== 'classic'){
-    return true
-  }
-  // 首页不显示侧边栏
-  return route.path !== '/home'
+  const { layout } = themeConfig.value;
+  if (layout !== 'classic') return true;
+  return route.path !== '/home';
 });
 
-// 设置显示/隐藏 logo
 const setShowLogo = computed(() => {
-	let { layout, isShowLogo } = themeConfig.value;
-	return (isShowLogo && layout === 'defaults') || (isShowLogo && layout === 'columns');
+	const { layout, isShowLogo } = themeConfig.value;
+	return isShowLogo && (layout === 'defaults' || layout === 'columns');
 });
 
 // 关闭移动端蒙版
@@ -99,16 +76,15 @@ const closeLayoutAsideMobileMode = () => {
 	setTimeout(() => {
 		el?.parentNode?.removeChild(el);
 	}, 300);
-	const clientWidth = document.body.clientWidth;
-	if (clientWidth < 1000) themeConfig.value.isCollapse = false;
+	if (document.body.clientWidth < 1000) themeConfig.value.isCollapse = false;
 	document.body.setAttribute('class', '');
 };
-// 设置/过滤路由（非静态路由/是否显示在菜单中）
+
 const setFilterRoutes = () => {
-	if (themeConfig.value.layout === 'columns') return false;
+	if (themeConfig.value.layout === 'columns') return;
 	state.menuList = filterRoutesFun(routesList.value);
 };
-// 路由过滤递归函数
+
 const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 	return arr
 		.filter((item: T) => !item.meta?.isHide)
@@ -118,30 +94,26 @@ const filterRoutesFun = <T extends RouteItem>(arr: T[]): T[] => {
 			return item;
 		});
 };
-// 设置菜单导航是否固定（移动端）
+
 const initMenuFixed = (clientWidth: number) => {
 	state.clientWidth = clientWidth;
 };
-// 鼠标移入、移出
+
 const onAsideEnterLeave = (bool: Boolean) => {
-	let { layout } = themeConfig.value;
-	if (layout !== 'columns') return false;
+	if (themeConfig.value.layout !== 'columns') return;
 	if (!bool) mittBus.emit('restoreDefault');
 	stores.setColumnsMenuHover(bool);
 };
-// 页面加载前
 onBeforeMount(() => {
 	initMenuFixed(document.body.clientWidth);
 	setFilterRoutes();
-	// 此界面不需要取消监听(mittBus.off('setSendColumnsChildren))
-	// 因为切换布局时有的监听需要使用，取消了监听，某些操作将不生效
+	// 此界面不需要取消监听，因为切换布局时有的监听需要使用
 	mittBus.on('setSendColumnsChildren', (res: MittMenu) => {
 		state.menuList = res.children;
 	});
 	mittBus.on('setSendClassicChildren', (res: MittMenu) => {
-		let { layout, isClassicSplitMenu } = themeConfig.value;
+		const { layout, isClassicSplitMenu } = themeConfig.value;
 		if (layout === 'classic' && isClassicSplitMenu) {
-			state.menuList = [];
 			state.menuList = res.children;
 		}
 	});
@@ -153,22 +125,22 @@ onBeforeMount(() => {
 		closeLayoutAsideMobileMode();
 	});
 });
-// 监听 themeConfig 配置文件的变化，更新菜单 el-scrollbar 的高度
+// 监听 themeConfig 变化，更新菜单 el-scrollbar 的高度
 watch(themeConfig.value, (val) => {
 	if (val.isShowLogoChange !== val.isShowLogo) {
 		if (layoutAsideScrollbarRef.value) layoutAsideScrollbarRef.value.update();
 	}
 });
-// 监听 pinia 值的变化，动态赋值给菜单中
+// 监听路由列表和布局配置变化
 watch(
-	pinia.state,
-	(val) => {
-		let { layout, isClassicSplitMenu } = val.themeConfig.themeConfig;
-		if (layout === 'classic' && isClassicSplitMenu) return false;
+	[
+		() => routesList.value,
+		() => themeConfig.value.layout,
+		() => themeConfig.value.isClassicSplitMenu
+	],
+	([_routes, layout, isClassicSplitMenu]) => {
+		if (layout === 'classic' && isClassicSplitMenu) return;
 		setFilterRoutes();
-	},
-	{
-		deep: true,
 	}
 );
 </script>

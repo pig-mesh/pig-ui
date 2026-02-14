@@ -106,7 +106,6 @@ const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/s
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
 const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
 
-// 定义租户接口
 interface Tenant {
 	id: string;
 	name: string;
@@ -117,57 +116,39 @@ interface Tenant {
 	miniQr?: string;
 }
 
-// 定义变量内容
 const { t } = useI18n();
 const router = useRouter();
 const stores = useUserInfo();
-const storesThemeConfig = useThemeConfig();
 const { userInfos } = storeToRefs(stores);
-const { themeConfig } = storeToRefs(storesThemeConfig);
+const { themeConfig } = storeToRefs(useThemeConfig());
 const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
 const tenantSelectorRef = ref();
 
-// 租户列表状态
 const tenantList = ref<Tenant[]>([]);
 const tenantLoading = ref(false);
-
-// 部门列表状态
 const deptList = ref<Dept[]>([]);
-const deptLoading = ref(false);
 
-// 计算属性：是否应该显示租户选项
-const shouldShowTenantOption = computed(() => {
-	return tenantList.value.length > 1;
-});
+const shouldShowTenantOption = computed(() => tenantList.value.length > 1);
 
-// 计算属性：当前部门 ID
-const currentDeptId = computed(() => {
-	return Session.getDeptId() || userInfos.value.deptId;
-});
+const currentDeptId = computed(() => Session.getDeptId() || userInfos.value.deptId);
 
 // 计算属性：当前部门显示名称
 const currentDeptName = computed(() => {
-	const currentId = currentDeptId.value;
-	const currentDept = deptList.value.find((dept) => dept.deptId === currentId);
+	const currentDept = deptList.value.find((dept) => dept.deptId === currentDeptId.value);
 	return currentDept?.name || t('user.selectDept');
 });
 
-// 是否开启websocket
 const websocketEnable = ref(import.meta.env.VITE_WEBSOCKET_ENABLE === 'true');
 
 // 设置分割样式
 const layoutUserFlexNum = computed(() => {
-	let num: string | number = '';
 	const { layout, isClassicSplitMenu } = themeConfig.value;
-	const layoutArr: string[] = ['defaults', 'columns'];
-	if (layoutArr.includes(layout) || (layout === 'classic' && !isClassicSplitMenu)) num = '1';
-	else num = '';
-	return num;
+	return ['defaults', 'columns'].includes(layout) || (layout === 'classic' && !isClassicSplitMenu) ? '1' : '';
 });
 
-// 下拉菜单点击时
+// 下拉菜单点击
 const onHandleCommandClick = (path: string) => {
 	if (path === 'logOut') {
 		ElMessageBox({
@@ -218,12 +199,10 @@ const onHandleCommandClick = (path: string) => {
 	}
 };
 
-// 菜单搜索点击
 const onSearchClick = () => {
 	searchRef.value.openSearch();
 };
 
-// 处理部门切换
 const onDeptChange = async (deptId: string) => {
 	try {
 		// 调用切换接口
@@ -237,12 +216,10 @@ const onDeptChange = async (deptId: string) => {
 	}
 };
 
-// 获取到消息
 const rollback = (msg: string) => {
 	useMsg().setMsg({ label: 'websocket消息', value: msg, time: formatAxisI18n(new Date(), t) });
 };
 
-// 获取是否显示未读
 const isDot = ref(false);
 const getIsDot = () => {
 	fetchUserMessageList({ category: '1', readFlag: '0' }).then((res) => {
@@ -250,7 +227,6 @@ const getIsDot = () => {
 	});
 };
 
-// 获取租户列表
 const loadTenantList = async () => {
 	try {
 		tenantLoading.value = true;
@@ -264,34 +240,17 @@ const loadTenantList = async () => {
 	}
 };
 
-// 处理租户切换后的回调
 const onTenantChange = () => {
-	// 重新加载租户列表以确保数据同步
 	loadTenantList();
 };
 
-// 获取部门列表
-const loadDeptList = async () => {
-	try {
-		deptLoading.value = true;
-		// 直接从 userInfoStore 中读取 deptList
-		deptList.value = userInfos.value.deptList || [];
-	} catch (error) {
-		console.error('加载部门列表失败:', error);
-		deptList.value = [];
-	} finally {
-		deptLoading.value = false;
-	}
+const loadDeptList = () => {
+	deptList.value = userInfos.value.deptList || [];
 };
 
-// 页面加载时
 onMounted(() => {
 	getIsDot();
-	
-	// 加载租户列表
 	loadTenantList();
-
-	// 加载部门列表
 	loadDeptList();
 });
 </script>

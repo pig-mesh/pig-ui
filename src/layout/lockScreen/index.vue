@@ -75,11 +75,9 @@ import { useI18n } from 'vue-i18n';
 import { useIntervalFn, usePointerSwipe } from '@vueuse/core';
 
 const { t } = useI18n();
-// 定义变量内容
 const layoutLockScreenDateRef = ref<HTMLElement>();
 const layoutLockScreenInputRef = ref();
-const storesThemeConfig = useThemeConfig();
-const { themeConfig } = storeToRefs(storesThemeConfig);
+const { themeConfig } = storeToRefs(useThemeConfig());
 
 // 滑动解锁阈值（向上滑动超过此值触发解锁）
 const UNLOCK_THRESHOLD = 150;
@@ -96,7 +94,7 @@ const state = reactive({
 });
 
 // 使用 usePointerSwipe 统一处理 PC/移动端的滑动事件
-const { distanceY, isSwiping } = usePointerSwipe(layoutLockScreenDateRef, {
+const { distanceY } = usePointerSwipe(layoutLockScreenDateRef, {
 	threshold: 10,
 	onSwipe() {
 		const el = layoutLockScreenDateRef.value;
@@ -143,7 +141,9 @@ const setLocalThemeConfig = () => {
 	Local.set('themeConfig', themeConfig.value);
 };
 
-// 锁屏倒计时处理
+/**
+ * 初始化锁屏相关信息
+ */
 const handleLockScreenCountdown = () => {
 	if (!themeConfig.value.isLockScreen) return;
 
@@ -156,16 +156,12 @@ const handleLockScreenCountdown = () => {
 	}
 };
 
-// 使用 VueUse 的 useIntervalFn 管理锁屏倒计时（自动清理）
 const { pause: pauseLockScreenTimer, resume: resumeLockScreenTimer } = useIntervalFn(
 	handleLockScreenCountdown,
 	1000,
 	{ immediate: false }
 );
 
-/**
- * 初始化锁屏相关信息
- */
 const initLockScreen = () => {
 	if (themeConfig.value.isLockScreen) {
 		resumeLockScreenTimer();
@@ -175,10 +171,6 @@ const initLockScreen = () => {
 };
 const mes = ref();
 
-/**
- * 更新锁屏状态并保存配置
- * @param isLocked 是否锁定屏幕
- */
 const updateLockScreenState = (isLocked: boolean) => {
 	themeConfig.value.isLockScreen = isLocked;
 	themeConfig.value.lockScreenTime = 30;
@@ -191,7 +183,7 @@ const updateLockScreenState = (isLocked: boolean) => {
 };
 
 /**
- * 处理密码输入事件，验证密码正确性并解锁
+ * 处理密码输入，验证密码正确性并解锁
  */
 const onLockScreenSubmit = async () => {
 	try {
@@ -209,13 +201,12 @@ const onLockScreenSubmit = async () => {
 };
 
 const formData = reactive<{ avatar?: string; username?: string }>({});
-// 页面加载时
+
 onMounted(() => {
 	const data = useUserInfo().userInfos;
 	Object.assign(formData, data.user);
 	initLockScreen();
 });
-// 注意：useIntervalFn 会在组件卸载时自动清理定时器，无需手动 clearInterval
 </script>
 
 <style scoped>
