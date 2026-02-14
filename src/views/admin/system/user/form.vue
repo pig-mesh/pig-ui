@@ -132,12 +132,12 @@ const props = defineProps({
 const dataForm = reactive({
 	userId: '',
 	username: '',
-	password: '' as String | undefined,
+	password: '' as string | undefined,
 	salt: '',
 	wxOpenid: '',
 	qqOpenid: '',
 	lockFlag: '0',
-	phone: '' as String | undefined,
+	phone: '' as string | undefined,
 	deptIds: [] as string[],
 	roleList: [],
 	postList: [],
@@ -244,17 +244,15 @@ const onSubmit = async () => {
 		if (userId) {
 			// 清除脱敏占位符，避免提交错误的数据
 			clearMaskedFields(dataForm, ['phone', 'password']);
-
 			await putObj(dataForm);
 			useMessage().success(t('common.editSuccessText'));
-			visible.value = false; // 关闭弹窗
-			emit('refresh');
 		} else {
 			await addObj(dataForm);
 			useMessage().success(t('common.addSuccessText'));
-			visible.value = false; // 关闭弹窗
-			emit('refresh');
 		}
+
+		visible.value = false;
+		emit('refresh');
 	} catch (error: any) {
 		useMessage().error(error.msg);
 	} finally {

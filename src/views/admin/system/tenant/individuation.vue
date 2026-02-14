@@ -81,9 +81,7 @@ const form = reactive({
 });
 
 
-// 定义校验规则
-const dataRules = ref({
-});
+const dataRules = ref({});
 
 /**
  * 打开个性化设置对话框

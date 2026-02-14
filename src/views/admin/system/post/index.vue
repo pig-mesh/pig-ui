@@ -115,7 +115,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/post/export', Object.assign(state.queryForm,{ids:selectObjs}), 'post.xlsx');
+	downBlobFile('/admin/post/export', { ...state.queryForm, ids: selectObjs.value }, 'post.xlsx');
 };
 
 // 多选事件

@@ -560,22 +560,19 @@ const handleClick = async (thirdpart: SocialLoginEnum) => {
 	}
 
 	// 构建OAuth回调地址
-	let redirect_uri, url;
-	redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
+	const redirect_uri = encodeURIComponent(window.location.origin + '/#/authredirect');
 
-	// 企业微信授权URL
-	if (thirdpart === SocialLoginEnum.WEIXIN_CP) {
-		url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=${SocialLoginEnum.WEIXIN_CP}-BIND`;
-	}
-
-	// 钉钉授权URL
-	if (thirdpart === SocialLoginEnum.DINGTALK) {
-		url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-BIND&prompt=consent`;
-	}
-
-	// 微信扫码授权URL
-	if (thirdpart === SocialLoginEnum.WECHAT) {
-		url = `https://open.weixin.qq.com/connect/qrconnect?appid=${result.appId}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_login&state=${SocialLoginEnum.WECHAT}-BIND#wechat_redirect`;
+	let url: string | undefined;
+	switch (thirdpart) {
+		case SocialLoginEnum.WEIXIN_CP:
+			url = `https://open.work.weixin.qq.com/wwopen/sso/qrConnect?appid=${result.appId}&agentid=${result.ext}&redirect_uri=${redirect_uri}&state=${SocialLoginEnum.WEIXIN_CP}-BIND`;
+			break;
+		case SocialLoginEnum.DINGTALK:
+			url = `https://login.dingtalk.com/oauth2/auth?redirect_uri=${redirect_uri}&response_type=code&client_id=${result.appId}&scope=openid&state=${SocialLoginEnum.DINGTALK}-BIND&prompt=consent`;
+			break;
+		case SocialLoginEnum.WECHAT:
+			url = `https://open.weixin.qq.com/connect/qrconnect?appid=${result.appId}&redirect_uri=${redirect_uri}&response_type=code&scope=snsapi_login&state=${SocialLoginEnum.WECHAT}-BIND#wechat_redirect`;
+			break;
 	}
 
 	// 打开授权窗口

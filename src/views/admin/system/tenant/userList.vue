@@ -352,6 +352,17 @@ const handleSearchUser = async (query: string) => {
 };
 
 /**
+ * 重置邀请表单状态
+ */
+const resetInviteForm = () => {
+	inviteForm.userId = '';
+	inviteForm.roleId = '';
+	inviteForm.postId = '';
+	inviteForm.deptId = '';
+	userList.value = [];
+};
+
+/**
  * 打开邀请用户弹窗
  */
 const handleInviteUser = async () => {
@@ -364,14 +375,7 @@ const handleInviteUser = async () => {
 		postList.value = data.sysPosts || [];
 		deptList.value = data.sysDepts || [];
 
-		// 重置表单
-		inviteForm.userId = '';
-		inviteForm.roleId = '';
-		inviteForm.postId = '';
-		inviteForm.deptId = '';
-		userList.value = [];
-
-		// 打开弹窗
+		resetInviteForm();
 		inviteDialogVisible.value = true;
 	} catch (err: any) {
 		useMessage().error(err.msg || t('tenant.getRoleListFailed'));
@@ -411,11 +415,7 @@ const handleSubmitInvite = async () => {
  */
 const handleCancelInvite = () => {
 	inviteDialogVisible.value = false;
-	inviteForm.userId = '';
-	inviteForm.roleId = '';
-	inviteForm.postId = '';
-	inviteForm.deptId = '';
-	userList.value = [];
+	resetInviteForm();
 };
 
 /**

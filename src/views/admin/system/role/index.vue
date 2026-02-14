@@ -182,7 +182,7 @@ const resetQuery = () => {
  * 导出角色数据为 Excel 文件
  */
 const exportExcel = () => {
-	downBlobFile('/admin/role/export',Object.assign(state.queryForm,{ids:selectObjs}), 'role.xlsx');
+	downBlobFile('/admin/role/export', { ...state.queryForm, ids: selectObjs.value }, 'role.xlsx');
 };
 
 /**

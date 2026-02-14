@@ -24,5 +24,10 @@ export default {
 		inputupdateTimeTip: 'Please enter update time',
 		inputupdateByTip: 'Please enter updater',
 		inputtenantIdTip: 'Please enter tenant ID',
+		postCodeRequired: 'Post code is required',
+		postNameRequired: 'Post name is required',
+		postSortRequired: 'Sort order is required',
+		remarkRequired: 'Description is required',
+		fetchPostDataError: 'Failed to fetch post data',
 	},
 };

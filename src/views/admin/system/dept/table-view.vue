@@ -56,15 +56,6 @@ const deptDialogRef = ref();
 const isExpand = ref(false);
 
 /**
- * 查询部门树方法
- * @param {Object} params - 查询参数
- * @returns {Promise<any>} 部门树数据
- */
-const queryDeptTree = (params?: any) => {
-	return deptTree(params);
-};
-
-/**
  * 表格状态配置
  * @property {Function} pageList - 分页查询API
  * @property {Object} queryForm - 查询表单
@@ -73,7 +64,7 @@ const queryDeptTree = (params?: any) => {
  * @property {string[]} descs - 降序排序字段
  */
 const state: BasicTableProps = reactive<BasicTableProps>({
-	pageList: queryDeptTree,
+	pageList: deptTree,
 	queryForm: {
 		deptName: '',
 	},
@@ -100,10 +91,10 @@ const handleExpand = async () => {
  * @param {boolean} unfold - 是否展开（true=展开，false=折叠）
  */
 const toggleExpand = (children: any[], unfold = true) => {
-	for (const key in children) {
-		tableRef.value?.toggleRowExpansion(children[key], unfold);
-		if (children[key].children) {
-			toggleExpand(children[key].children!, unfold);
+	for (const child of children) {
+		tableRef.value?.toggleRowExpansion(child, unfold);
+		if (child.children) {
+			toggleExpand(child.children, unfold);
 		}
 	}
 };

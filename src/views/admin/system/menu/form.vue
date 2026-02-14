@@ -278,7 +278,7 @@ const getAllMenuData = async () => {
     type: '0',
   });
 
-  let menu = {
+  const menu = {
     id: '-1',
     name: t('sysmenu.rootMenu'),
     children: data,

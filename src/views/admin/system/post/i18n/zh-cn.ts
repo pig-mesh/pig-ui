@@ -24,5 +24,10 @@ export default {
 		inputupdateTimeTip: '请输入更新时间',
 		inputupdateByTip: '请输入更新人',
 		inputtenantIdTip: '请输入租户ID',
+		postCodeRequired: '岗位编码不能为空',
+		postNameRequired: '岗位名称不能为空',
+		postSortRequired: '岗位排序不能为空',
+		remarkRequired: '岗位描述不能为空',
+		fetchPostDataError: '获取岗位数据失败',
 	},
 };

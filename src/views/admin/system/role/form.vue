@@ -97,53 +97,23 @@ const dataForm = reactive({
 });
 
 /**
- * 角色名称唯一性验证器
- * @description 新增时验证角色名称是否已存在
+ * 创建唯一性验证器
+ * @param {string} field - 要验证的字段名
+ * @param {string} errorKey - 错误提示的 i18n key
  */
-const validateRoleName = async (rule: any, value: any, callback: any) => {
-	if (!value) {
-		return callback();
-	}
+const createUniqueValidator = (field: string, errorKey: string) => {
+	return async (rule: any, value: any, callback: any) => {
+		if (!value || form.roleId) {
+			return callback();
+		}
 
-	if (form.roleId) {
-		return callback();
-	}
-
-	try {
-		const { data } = await getObjDetails({ roleName: value });
-		if (data !== null) {
-			callback(new Error(t('sysrole.roleNameExists')));
-		} else {
+		try {
+			const { data } = await getObjDetails({ [field]: value });
+			data !== null ? callback(new Error(t(errorKey))) : callback();
+		} catch {
 			callback();
 		}
-	} catch (error) {
-		callback();
-	}
-};
-
-/**
- * 角色标识唯一性验证器
- * @description 新增时验证角色标识是否已存在
- */
-const validateRoleCode = async (rule: any, value: any, callback: any) => {
-	if (!value) {
-		return callback();
-	}
-
-	if (form.roleId) {
-		return callback();
-	}
-
-	try {
-		const { data } = await getObjDetails({ roleCode: value });
-		if (data !== null) {
-			callback(new Error(t('sysrole.roleCodeExists')));
-		} else {
-			callback();
-		}
-	} catch (error) {
-		callback();
-	}
+	};
 };
 
 // 定义校验规则
@@ -151,13 +121,13 @@ const dataRules = computed(() => ({
 	roleName: [
 		{ required: true, message: t('sysrole.roleNameRequired'), trigger: 'blur' },
 		{ min: 3, max: 20, message: t('sysrole.roleNameLength'), trigger: 'blur' },
-		{ validator: validateRoleName, trigger: 'blur' },
+		{ validator: createUniqueValidator('roleName', 'sysrole.roleNameExists'), trigger: 'blur' },
 	],
 	roleCode: [
 		{ required: true, message: t('sysrole.roleCodeRequired'), trigger: 'blur' },
 		{ min: 3, max: 20, message: t('sysrole.roleCodeLength'), trigger: 'blur' },
 		{ validator: rule.validatorCapital, trigger: 'blur' },
-		{ validator: validateRoleCode, trigger: 'blur' },
+		{ validator: createUniqueValidator('roleCode', 'sysrole.roleCodeExists'), trigger: 'blur' },
 	],
 	roleDesc: [{ validator: rule.overLength, trigger: 'blur' }],
 	dsType: [{ required: true, message: t('sysrole.dsTypeRequired'), trigger: 'blur' }],

@@ -16,7 +16,7 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="onOpenAddMenu" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
+					<el-button @click="onOpenMenuDialog" class="ml10" icon="folder-add" type="primary" v-auth="'sys_menu_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<right-toolbar
@@ -65,10 +65,10 @@
 				<el-table-column :label="$t('sysmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
 				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
 					<template #default="scope">
-						<el-button icon="folder-add" @click="onOpenAddMenu('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
+						<el-button icon="folder-add" @click="onOpenMenuDialog('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
 						</el-button>
-						<el-button icon="edit-pen" @click="onOpenEditMenu('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'"
+						<el-button icon="edit-pen" @click="onOpenMenuDialog('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
 
@@ -170,20 +170,11 @@ const tableList = computed(() => {
 });
 
 /**
- * 打开新增菜单弹窗
+ * 打开新增/编辑菜单弹窗
  * @param {string} [type] - 操作类型
- * @param {any} [row] - 当前行数据（作为新增菜单的父节点）
+ * @param {any} [row] - 当前行数据（新增时作为父节点，编辑时为要编辑的数据）
  */
-const onOpenAddMenu = (type?: string, row?: any) => {
-	menuDialogRef.value.openDialog(type, row);
-};
-
-/**
- * 打开编辑菜单弹窗
- * @param {string} type - 操作类型
- * @param {any} row - 要编辑的菜单数据
- */
-const onOpenEditMenu = (type: string, row: any) => {
+const onOpenMenuDialog = (type?: string, row?: any) => {
 	menuDialogRef.value.openDialog(type, row);
 };
 

@@ -118,11 +118,6 @@ const form = reactive({
 	startTime: '',
 	endTime: '',
 	status: '0',
-	delFlag: '',
-	createBy: '',
-	updateBy: '',
-	createTime: '',
-	updateTime: '',
 	menuId: '',
 });
 
@@ -230,13 +225,8 @@ const onSubmit = async () => {
 			const checkMenu = [...menuTreeRef.value.getCheckedKeys(), ...menuTreeRef.value.getHalfCheckedKeys()];
 
 			// 验证租户必选菜单
-			if (!checkMenu.includes(REQUIRED_MENU_IDS.ROLE_MANAGEMENT)) {
-				useMessage().error(t('tenant.roleManagementRequired'));
-				loading.value = false;
-				return false;
-			}
-
-			if (!checkMenu.includes(REQUIRED_MENU_IDS.ROLE_PERMISSION)) {
+			const requiredMenuIds = Object.values(REQUIRED_MENU_IDS);
+			if (requiredMenuIds.some((id) => !checkMenu.includes(id))) {
 				useMessage().error(t('tenant.roleManagementRequired'));
 				loading.value = false;
 				return false;
@@ -288,11 +278,12 @@ const getMenuData = async () => {
  * @param {CheckboxValueType} check - 是否展开
  */
 const handleExpand = (check: CheckboxValueType) => {
-	const treeList = menuData.value;
-	for (let i = 0; i < treeList.length; i++) {
-		//@ts-ignore
-		menuTreeRef.value.store.nodesMap[treeList[i].id].expanded = check;
-	}
+	menuData.value.forEach((node) => {
+		const treeNode = menuTreeRef.value?.store?.nodesMap?.[node.id];
+		if (treeNode) {
+			treeNode.expanded = check;
+		}
+	});
 };
 
 /**

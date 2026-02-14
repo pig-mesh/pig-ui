@@ -138,14 +138,11 @@ const onSubmit = async () => {
 const getDeptData = async () => {
 	try {
 		const { data } = await deptTree();
-		parentData.value = [];
-		const dept = {
+		parentData.value = [{
 			id: '0',
 			name: t('sysdept.rootDept'),
-			children: [] as any[],
-		};
-		dept.children = data;
-		parentData.value.push(dept);
+			children: data,
+		}];
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	}

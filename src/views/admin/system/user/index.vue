@@ -50,11 +50,11 @@
 								{{ $t('common.importBtn') }}
 							</el-button>
 							<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
-								@click="handleImportDingTalk">
+								@click="dingUploadRef.show()">
 								{{ $t('sysuser.importDingTalkBtn') }}
 							</el-button>
 							<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
-								@click="handleImportWeChat">
+								@click="wechatUploadRef.show()">
 								{{ $t('sysuser.importWeChatBtn') }}
 							</el-button>
 
@@ -179,7 +179,7 @@ const inputPassword = ref();
 /**
  * 多选相关变量
  */
-const selectObjs = ref([]) as any;
+const selectObjs = ref<string[]>([]);
 const multiple = ref(true);
 
 /**
@@ -205,7 +205,7 @@ const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableS
  * @property {Function} queryList - 部门树查询方法
  */
 const deptData = reactive({
-	queryList: (name: String) => {
+	queryList: (name: string) => {
 		return deptTree({
 			deptName: name,
 		});
@@ -236,7 +236,7 @@ const handleNodeClick = (e: any) => {
  * 导出用户数据为 Excel 文件
  */
 const exportExcel = () => {
-	downBlobFile('/admin/user/export', Object.assign(state.queryForm, { ids: selectObjs }), 'users.xlsx');
+	downBlobFile('/admin/user/export', { ...state.queryForm, ids: selectObjs }, 'users.xlsx');
 };
 
 /**
@@ -309,19 +309,4 @@ const changePassword = async (row: any) => {
 	getDataList();
 };
 
-/**
- * 处理钉钉用户导入
- * @description 打开钉钉用户导入对话框
- */
-const handleImportDingTalk = () => {
-	dingUploadRef.value.show();
-};
-
-/**
- * 处理企业微信用户导入
- * @description 打开企业微信用户导入对话框
- */
-const handleImportWeChat = () => {
-	wechatUploadRef.value.show();
-};
 </script>

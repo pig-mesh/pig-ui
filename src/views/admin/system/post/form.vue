@@ -46,18 +46,13 @@ const form = reactive({
 	postName: '',
 	postSort: 0,
 	remark: '',
-	delFlag: '',
-	createTime: '',
-	createBy: '',
-	updateTime: '',
-	updateBy: '',
 });
 
 // 定义校验规则
-const dataRules = ref({
+const dataRules = computed(() => ({
 	postCode: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '岗位编码不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('post.postCodeRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validatePostCode(rule, value, callback, form.postId !== '');
@@ -66,8 +61,8 @@ const dataRules = ref({
 		},
 	],
 	postName: [
-    { validator: rule.overLength, trigger: 'blur' },
-		{ required: true, message: '岗位名称不能为空', trigger: 'blur' },
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('post.postNameRequired'), trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validatePostName(rule, value, callback, form.postId !== '');
@@ -75,9 +70,15 @@ const dataRules = ref({
 			trigger: 'blur',
 		},
 	],
-	postSort: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '岗位排序不能为空', trigger: 'blur' }],
-	remark: [{ validator: rule.overLength, trigger: 'blur' },{ required: true, message: '岗位描述不能为空', trigger: 'blur' }],
-});
+	postSort: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('post.postSortRequired'), trigger: 'blur' },
+	],
+	remark: [
+		{ validator: rule.overLength, trigger: 'blur' },
+		{ required: true, message: t('post.remarkRequired'), trigger: 'blur' },
+	],
+}));
 
 // 打开弹窗
 const openDialog = async (id: string) => {
@@ -125,7 +126,7 @@ const getPostData = async (id: string) => {
 		const { data } = await getObj(id);
 		Object.assign(form, data);
 	} catch (err: any) {
-		useMessage().error(err.msg || '获取岗位数据失败');
+		useMessage().error(err.msg || t('post.fetchPostDataError'));
 	}
 };
 

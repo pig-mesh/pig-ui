@@ -18,18 +18,18 @@
 			<el-row>
 				<div class="mb8" style="width: 100%">
 					<el-button icon="folder-add" type="primary" class="top-right-btn" v-if="!defaultTreeViewRef"
-						v-auth="'sys_dept_add'" @click="handleAdd">
+						v-auth="'sys_dept_add'" @click="tableViewRef.handleAdd()">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
 					</el-button>
 					<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
-						@click="handleImportDingTalk">
+						@click="dingUploadRef.show()">
 						{{ $t('sysdept.syncDingTalkBtn') }}
 					</el-button>
 					<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
-						@click="handleImportWeChat">
+						@click="wechatUploadRef.show()">
 						{{ $t('sysdept.importWeChatBtn') }}
 					</el-button>
 					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }}</el-button>
@@ -120,14 +120,6 @@ const filter = () => {
 };
 
 /**
- * 新增部门
- * @description 表格视图下调用新增方法
- */
-const handleAdd = () => {
-	tableViewRef.value.handleAdd();
-};
-
-/**
  * 切换视图模式
  * @description 在树形视图和表格视图之间切换
  */
@@ -174,19 +166,4 @@ const resetQuery = () => {
 	queryRef.value.resetFields();
 };
 
-/**
- * 处理钉钉部门导入
- * @description 打开钉钉部门导入对话框
- */
-const handleImportDingTalk = () => {
-	dingUploadRef.value.show();
-};
-
-/**
- * 处理企业微信部门导入
- * @description 打开企业微信部门导入对话框
- */
-const handleImportWeChat = () => {
-	wechatUploadRef.value.show();
-};
 </script>

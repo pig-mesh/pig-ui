@@ -39,7 +39,7 @@ const { t } = useI18n();
 const props = reactive({ id: 'id', pid: 'parentId', label: 'name', expand: 'expand', children: 'children' });
 
 /** 组织树数据 */
-const data = reactive({});
+const data = reactive<Record<string, any>>({});
 
 /** 右键菜单定义 */
 const defineMenus = reactive([
@@ -95,7 +95,7 @@ const filter = (deptName: string) => {
  */
 const filterNodeMethod = (value: string, data: any): boolean => {
 	if (!value) return true;
-	return data.label.indexOf(value) !== -1;
+	return data.label.includes(value);
 };
 
 /**
