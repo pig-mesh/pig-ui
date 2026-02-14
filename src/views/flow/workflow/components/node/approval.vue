@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const { proxy } = getCurrentInstance();
 let isInput = ref(false);
 
 let props = defineProps({
@@ -10,7 +9,8 @@ let props = defineProps({
 		default: () => {},
 	},
 });
-const blurEvent = (index) => {
+const emits = defineEmits(['update:nodeConfig']);
+const blurEvent = (index?: number) => {
 	if (index || index === 0) {
 		isInputList.value[index] = false;
 		props.nodeConfig.conditionNodes[index].nodeName = props.nodeConfig.conditionNodes[index].nodeName || '条件';
@@ -27,7 +27,7 @@ let defaultText = computed(() => {
 	return placeholderList[props.nodeConfig.type];
 });
 
-const { t } = useI18n;
+const { t } = useI18n();
 var placeHolder = computed(() => {
 	if (props.nodeConfig.type == 0) {
 		return arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
@@ -41,14 +41,14 @@ var placeHolder = computed(() => {
 	return '';
 });
 
-const clickEvent = (index) => {
+const clickEvent = (index?: number) => {
 	if (index || index === 0) {
 		isInputList.value[index] = true;
 	} else {
 		isInput.value = true;
 	}
 };
-let isInputList = ref([]);
+let isInputList = ref<boolean[]>([]);
 
 const delNode = () => {
 	emits('update:nodeConfig', props.nodeConfig.childNode);
@@ -92,7 +92,7 @@ const delNode = () => {
 </template>
 
 <style scoped>
-@import '/@/views/flow/workflow/css/workflow.css';
+@import '../../css/workflow.css';
 
 .error_tip {
 	position: absolute;

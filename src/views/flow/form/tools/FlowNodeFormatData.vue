@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import type { PropType } from 'vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormat.vue';
 import { formatStartNodeShow } from '/@/api/flow/task';
 
-let props = defineProps({
+const props = defineProps({
 	flowId: {
 		type: String,
 		default: '',
@@ -21,17 +22,17 @@ let props = defineProps({
 	},
 	formData: {
 		type: Object,
-		dafault: () => {},
+		default: () => ({}),
 	},
 	selectUserNodeId: {
-		type: Array,
-		dafault: () => [],
+		type: Array as PropType<string[]>,
+		default: () => [],
 	},
 });
 const row = ref([]);
 
-const queryData = (p) => {
-	var data = {
+const queryData = (p: Record<string, any>) => {
+	const data = {
 		flowId: props.flowId,
 		processInstanceId: props.processInstanceId,
 		paramMap: p,
@@ -41,45 +42,38 @@ const queryData = (p) => {
 		row.value = res.data;
 	});
 };
+
+let debounceTimer: ReturnType<typeof setTimeout> | null = null;
 watch(
 	() => props.formData,
 	(val) => {
-		setTimeout(function () {
-			if (new Date().getTime() - formDataChangeTime.value > 500) {
-				formDataChangeTime.value = new Date().getTime();
-				queryData(val);
-			}
-		}, 600);
+		if (debounceTimer) clearTimeout(debounceTimer);
+		debounceTimer = setTimeout(() => queryData(val), 500);
 	}
 );
-const formDataChangeTime = ref();
+
 onMounted(() => {
-	formDataChangeTime.value = new Date().getTime();
 	queryData({});
 });
 
 const validate = () => {
-	for (var k of props.selectUserNodeId) {
-		var d = nodeUser.value[k];
-		if (d && d.length > 0) {
-		} else {
+	for (const k of props.selectUserNodeId) {
+		const d = nodeUser.value[k];
+		if (!d || d.length === 0) {
 			return false;
 		}
 	}
-
 	return true;
 };
 
-const nodeUser = ref({});
+const nodeUser = ref<Record<string, any>>({});
 
 const formatSelectNodeUser = () => {
-	var obj = {};
-
-	for (var k of props.selectUserNodeId) {
-		var d = nodeUser.value[k];
+	const obj: Record<string, any> = {};
+	for (const k of props.selectUserNodeId) {
+		const d = nodeUser.value[k];
 		obj[k + '_assignee_select'] = d;
 	}
-
 	return obj;
 };
 

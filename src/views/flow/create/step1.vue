@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-import type { FormRules, FormItemRule } from 'element-plus';
+import type { FormRules } from 'element-plus';
 import selectShow from '/@/components/OrgSelector/index.vue';
 import { queryGroupList } from '/@/api/flow/group';
 import { validateFlowId } from '/@/api/flow/flow';
@@ -49,11 +49,11 @@ import { useRoute } from 'vue-router';
 import { useFlowStore } from '../workflow/stores/flow';
 import { GroupVO } from '/@/api/flow/group/types';
 
-const { proxy } = getCurrentInstance() as any;
+const ruleForm = ref();
 
 const validate = async (): Promise<void> => {
 	return new Promise((resolve, reject) => {
-		proxy.$refs.ruleForm.validate((valid: boolean, fields: any) => {
+		ruleForm.value.validate((valid: boolean, fields: any) => {
 			if (valid) {
 				resolve();
 			} else {
@@ -71,29 +71,20 @@ const validate = async (): Promise<void> => {
 defineExpose({ validate });
 
 // 异步验证流程ID是否存在
-const validateFlowIdAsync = async (rule: any, value: string, callback: any): Promise<void> => {
+const validateFlowIdAsync = async (_rule: any, value: string) => {
 	// 如果是编辑模式，不验证
 	if (isEditMode.value) {
-		callback();
 		return;
 	}
 
 	// 如果为空或者不满足格式要求，跳过此验证（由其他规则处理）
 	if (!value || !/^[a-zA-Z][a-zA-Z0-9]*$/.test(value)) {
-		callback();
 		return;
 	}
 
-	try {
-		const { data } = await validateFlowId(value);
-		// 假设后台返回 { exists: true/false } 或者直接返回布尔值
-		if (data === true || data?.exists === true) {
-			callback();
-		} else {
-			callback(new Error('流程ID不存在'));
-		}
-	} catch (error) {
-		callback(new Error('流程ID不存在'));
+	const { data } = await validateFlowId(value);
+	if (data !== true && data?.exists !== true) {
+		throw new Error('流程ID不存在');
 	}
 };
 
@@ -139,9 +130,9 @@ const rules = reactive<FormRules>({
 	],
 });
 
-let props = defineProps({
+const props = defineProps({
 	groupId: {
-		type: Number,
+		type: String,
 		default: undefined,
 	},
 });
@@ -167,7 +158,7 @@ watch(
 	() => props.groupId,
 	(val) => {
 		if (val !== undefined) {
-			form.value.groupId = val as any;
+			form.value.groupId = val;
 		}
 	}
 );

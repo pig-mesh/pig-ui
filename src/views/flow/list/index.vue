@@ -47,79 +47,38 @@
 import { queryMineStartGroupFlowList } from '/@/api/flow/group';
 import { GroupVO } from '/@/api/flow/group/types';
 import Start from '/@/views/flow/form/tools/startFlow.vue';
-import { LocationQuery, LocationQueryValue, useRoute } from 'vue-router';
 
-// 定义引用
 const startRef = ref();
 const queryRef = ref();
 const successGroupList = ref<GroupVO[]>([]);
+const queryForm = reactive({ flowName: '' });
 
-// 定义响应式数据
-const queryForm = reactive({
-	flowName: '',
-});
-
-// 查询流程列表
 const handleQuery = async () => {
-	const res = await queryMineStartGroupFlowList('0');
-	const { data } = res;
-
-	// 根据用户输入的flowName进行过滤
-	if (queryForm.flowName) {
-		const filteredData = data.map(({ items, ...rest }) => ({
-			...rest,
-			items: items.filter(({ name }) => name.includes(queryForm.flowName)),
-		}));
-
-		successGroupList.value = filteredData;
-	} else {
-		successGroupList.value = data;
-	}
+	const { data } = await queryMineStartGroupFlowList('0');
+	successGroupList.value = queryForm.flowName
+		? data.map(({ items, ...rest }) => ({
+				...rest,
+				items: items?.filter(({ formName }) => formName?.includes(queryForm.flowName)),
+			}))
+		: data;
 };
 
-// 清空搜索条件并执行查询方法
 const resetQuery = () => {
 	queryRef.value.resetFields();
 	handleQuery();
 };
 
-// 发起流程
 const startProcess = (flow: any) => {
 	startRef.value.handle(flow);
 };
 
 const route = useRoute();
-// 页面加载完成后执行查询方法
+
 onMounted(() => {
 	handleQuery();
-	// 流程参数
-	const query: LocationQuery = route.query;
-	const flowId = (query.flowId as LocationQueryValue) ?? '';
+	const flowId = route.query.flowId as string | undefined;
 	if (flowId) {
-		startProcess({ flowId: flowId });
+		startProcess({ flowId });
 	}
 });
 </script>
-<style scoped lang="scss">
-.item {
-	margin: 5px 20px;
-	padding: 5px;
-	padding-bottom: 0px;
-	width: 260px;
-	display: flex;
-	flex-direction: row;
-	border-radius: 5px;
-	border: 1px solid var(--el-color-info);
-
-	.f2 {
-		font-weight: bolder;
-		height: 50px;
-		margin-left: 15px;
-		width: 183px;
-	}
-}
-
-.item:hover {
-	border: 1px solid var(--el-color-primary);
-}
-</style>

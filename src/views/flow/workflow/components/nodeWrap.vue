@@ -23,7 +23,7 @@
 				</div>
 				<div class="content" @click="openConfigDrawer">
 					<div class="text">
-						{{ placeHolder?.length > 0 ? placeHolder : '请选择' + defaultText }}
+						{{ placeHolder?.length > 0 ? placeHolder: '请选择' + defaultText }}
 					</div>
 					<i class="anticon anticon-right arrow"></i>
 				</div>
@@ -60,9 +60,9 @@
 									</div>
 									<div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1" @click="arrTransfer(index)">&gt;</div>
 									<div class="content" v-if="index < nodeConfig.conditionNodes.length - 1" @click="openConfigDrawer(item.priorityLevel)">
-										{{ $func.conditionStr(nodeConfig, index) }}
+										{{ conditionStr(nodeConfig, index) }}
 									</div>
-									<div class="content" v-else>{{ $func.conditionStr(nodeConfig, index) }}</div>
+									<div class="content" v-else>{{ conditionStr(nodeConfig, index) }}</div>
 									<div class="error_tip" v-if="item.error">
 										<i class="anticon anticon-exclamation-circle"></i>
 									</div>
@@ -143,34 +143,34 @@ import addNode from './addNode.vue';
 import Approval from './node/approval.vue';
 
 import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
-import $func from '../utils/index';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
+import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval } from '../utils/workflowHelpers';
 import { useI18n } from 'vue-i18n';
 
-let _uid = getCurrentInstance().uid;
+const _uid = getCurrentInstance().uid;
 
-let props = defineProps({
+const props = defineProps({
 	nodeConfig: {
 		type: Object,
 		default: () => ({}),
 	},
 });
 
-let defaultText = computed(() => {
+const defaultText = computed(() => {
 	return placeholderList[props.nodeConfig.type];
 });
 
 const {t} = useI18n()
-var placeHolder = computed(() => {
+const placeHolder = computed(() => {
 	if (props.nodeConfig.type == 0) {
-		return $func.arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
+		return arrToStr(props.nodeConfig.nodeUserList) || t('flow.allUser');
 	}
 	if (props.nodeConfig.type == 1) {
-		return $func.setApproverStr(props.nodeConfig);
+		return setApproverStr(props.nodeConfig);
 	}
 	if (props.nodeConfig.type == 2) {
-		return $func.copyerStr(props.nodeConfig);
+		return copyerStr(props.nodeConfig);
 	}
 	return '';
 });
@@ -181,27 +181,32 @@ watch(placeHolder, (value, oldValue, onCleanup) => {
 
 import { useFlowStore } from '../stores/flow';
 import other from '/@/utils/other';
+import { flattenFormItems } from '../utils/formUtils';
 
-let flowStore = useFlowStore();
+const flowStore = useFlowStore();
 
 const step2FormList = computed(() => {
 	let step2 = flowStore.step2;
 
-	return step2;
+	return step2.formRule || [];
 });
 
 watch(
 	() => step2FormList.value,
 	(val) => {
-		let nodeConfig = props.nodeConfig;
+		const nodeConfig = props.nodeConfig;
+
+		// 获取展平后的表单项列表
+		const flattenedFormList = flattenFormItems(val);
 
 		if (nodeConfig.type == 1) {
 			//审批人
 
 			if (nodeConfig.assignedType == 8) {
 				//表单人员
-				let formUserId = nodeConfig.formUserId;
-				let length = val.filter((res) => res.field === formUserId).length;
+				const formUserId = nodeConfig.formUserId;
+				// 使用展平后的表单列表进行检查
+				const length = flattenedFormList.filter((res) => res.field === formUserId).length;
 				if (length == 0) {
 					nodeConfig.formUserId = '';
 					nodeConfig.formUserName = '';
@@ -211,15 +216,17 @@ watch(
 		}
 		if (nodeConfig.type == 4) {
 			//条件分支
-			var index = 0;
-			var len = nodeConfig.conditionNodes.length;
-			for (var node of nodeConfig.conditionNodes) {
+
+			let index = 0;
+			const len = nodeConfig.conditionNodes.length;
+			for (const node of nodeConfig.conditionNodes) {
 				if (index >= len - 1) {
 					break;
 				}
-				for (var item1 of node.conditionList) {
-					for (var item2 of item1.conditionList) {
-						let length = val.filter((res) => (res.field === item2.key || item2.key === 'root')).length;
+				for (const item1 of node.conditionList) {
+					for (const item2 of item1.conditionList) {
+						// 使用展平后的表单列表进行检查
+						const length = flattenedFormList.filter((res) => (res.field === item2.key || item2.key === 'root')).length;
 						if (length == 0) {
 							item2.key = '';
 							item2.expression = '';
@@ -235,23 +242,23 @@ watch(
 	}
 );
 
-let isInputList = ref([]);
-let isInput = ref(false);
+const isInputList = ref([]);
+const isInput = ref(false);
 const resetConditionNodesErr = () => {
 	if (props.nodeConfig.type == 5) {
 		return;
 	}
-	for (var i = 0; i < props.nodeConfig.conditionNodes.length; i++) {
-		let conditionNode = props.nodeConfig.conditionNodes[i];
+	for (let i = 0; i < props.nodeConfig.conditionNodes.length; i++) {
+		const conditionNode = props.nodeConfig.conditionNodes[i];
 
 		conditionNode.error = false;
-		let conditionList = conditionNode.conditionList;
+		const conditionList = conditionNode.conditionList;
 		if (i != props.nodeConfig.conditionNodes.length - 1) {
-			var error = conditionList.length == 0;
+			let error = conditionList.length == 0;
 
-			for (var it of conditionList) {
+			for (const it of conditionList) {
 				error = it.conditionList.length == 0;
-				for (var ite of it.conditionList) {
+				for (const ite of it.conditionList) {
 					if (!ite.key || !ite.expression || !ite.value) {
 						error = true;
 						break;
@@ -264,20 +271,20 @@ const resetConditionNodesErr = () => {
 };
 onMounted(() => {
 	if (props.nodeConfig.type == 1) {
-		props.nodeConfig.error = !$func.checkApproval(props.nodeConfig);
+		props.nodeConfig.error = !checkApproval(props.nodeConfig);
 	} else if (props.nodeConfig.type == 2) {
-		props.nodeConfig.error = !$func.copyerStr(props.nodeConfig);
+		props.nodeConfig.error = !copyerStr(props.nodeConfig);
 	} else if (props.nodeConfig.type == 4) {
 		resetConditionNodesErr();
 	}
 });
-let emits = defineEmits(['update:nodeConfig']);
-let store = useStore();
-let { setPromoter, setApprover, setCopyer, setCondition, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig } = store;
-let starterConfigData = computed(() => store.starterConfigData);
-let approverConfigData = computed(() => store.approverConfigData);
-let copyerConfig1 = computed(() => store.copyerConfig1);
-let conditionsConfig1 = computed(() => store.conditionsConfig1);
+const emits = defineEmits(['update:nodeConfig']);
+const store = useStore();
+const { setPromoter, setApprover, setCopyer, setCondition, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig } = store;
+const starterConfigData = computed(() => store.starterConfigData);
+const approverConfigData = computed(() => store.approverConfigData);
+const copyerConfig1 = computed(() => store.copyerConfig1);
+const conditionsConfig1 = computed(() => store.conditionsConfig1);
 
 watch(starterConfigData, (approver) => {
 	if (approver.flag && approver.id === _uid) {
@@ -396,7 +403,7 @@ const reData = (data, addData) => {
 	}
 };
 const openConfigDrawer = (priorityLevel) => {
-	var { type } = props.nodeConfig;
+	const { type } = props.nodeConfig;
 	if (type == 0) {
 		setPromoter(true);
 		setStarterConfig({
@@ -444,7 +451,7 @@ const arrTransfer = (index, type = 1) => {
 };
 </script>
 <style scoped>
-@import '/@/views/flow/workflow/css/workflow.css';
+@import '../css/workflow.css';
 
 .error_tip {
 	position: absolute;

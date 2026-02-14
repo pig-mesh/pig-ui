@@ -15,7 +15,7 @@
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="请假原因">
-            <div class="whitespace-pre-wrap">{{ detailData.leaveReason }}</div>
+            <div class="whitespace-pre-wrap break-words">{{ detailData.leaveReason }}</div>
           </el-descriptions-item>
           <el-descriptions-item label="开始时间">
             {{ parseTime(detailData.startTime) }}
@@ -57,8 +57,6 @@ const props = withDefaults(defineProps<Props>(), {
   readonly: true
 });
 
-// ========== 3. 组件定义 ==========
-
 // ========== 3. 响应式数据定义 ==========
 const loading = ref(false);
 const route = useRoute();
@@ -77,10 +75,10 @@ const detailData = ref({
 
 // ========== 4. 方法定义 ==========
 // 获取详情数据
-const getDetailData = async (id?: string,processInstanceId?: string) => {
+const getDetailData = async (id?: string, processInstanceId?: string) => {
   try {
     loading.value = true;
-    const { data } = await getObj({ id: id,processInstanceId:processInstanceId });
+    const { data } = await getObj({ id, processInstanceId });
     // 直接将第一条数据赋值给详情数据
     Object.assign(detailData.value, data[0]);
   } catch (error) {
@@ -138,7 +136,6 @@ const getStatusTagType = (status: number | string) => {
 // ========== 5. 生命周期 ==========
 onMounted(() => {
   // 优先使用 props 中的 id 或 businessKey，如果没有则使用路由参数
-  const route = useRoute();
   const id = props.id || (route.query.id as string);
   const processInstanceId = props.processInstanceId;
   if (id || processInstanceId) {
@@ -148,10 +145,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style scoped>
-.whitespace-pre-wrap {
-  white-space: pre-wrap;
-  word-break: break-word;
-}
-</style>

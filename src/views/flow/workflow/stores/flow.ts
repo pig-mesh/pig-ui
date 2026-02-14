@@ -8,7 +8,7 @@ import { defineStore } from 'pinia';
 import { FormConfigUserVO, FormVO } from '/@/views/flow/form/const/types';
 import { BpmModelFormType, type FormDesignData } from '/@/views/flow/form/const/constants';
 
-var adminList: FormConfigUserVO[] = reactive([]);
+const adminList: FormConfigUserVO[] = reactive([]);
 
 export const useFlowStore = defineStore('flow', {
 	state: () => {
@@ -17,7 +17,7 @@ export const useFlowStore = defineStore('flow', {
 				logo: '',
 				name: '',
 				flowId: '',
-				groupId: undefined,
+				groupId: undefined as string | undefined,
 				adminList: adminList,
 				remark: '',
 			},
@@ -49,7 +49,7 @@ export const useFlowStore = defineStore('flow', {
 				logo: '',
 				name: '',
 				flowId: '',
-				groupId: undefined,
+				groupId: undefined as string | undefined,
 				adminList: adminList,
 				remark: '',
 			};

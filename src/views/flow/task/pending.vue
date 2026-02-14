@@ -152,12 +152,7 @@ const fApi = ref();
 const formData = ref({});
 const option = ref<any>({});
 
-// Define the FormItem interface if not already defined
-interface FormItem {
-	// Define the properties of FormItem based on your data structure
-}
-
-const rule = ref<FormItem[]>([]);
+const rule = ref<any[]>([]);
 const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // 动态表单组件
 
 const currentData = ref();

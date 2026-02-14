@@ -93,12 +93,7 @@ import { queryMineCC, queryMineCCDetail } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useTaskFormLoader } from './composables/useTaskForm';
 
-// Define the FormItem interface if not already defined
-interface FormItem {
-	// Define the properties of FormItem based on your data structure
-}
-
-const rule = ref<FormItem[]>([]);
+const rule = ref<any[]>([]);
 const fApi = ref();
 const formData = ref({});
 const currentData = ref();

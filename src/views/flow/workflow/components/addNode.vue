@@ -43,7 +43,7 @@
 import { ref } from 'vue';
 import other from '/@/utils/other';
 
-let props = defineProps({
+const props = defineProps({
 	childNodeP: {
 		type: Object,
 		default: () => ({}),
@@ -54,12 +54,12 @@ let props = defineProps({
 	},
 });
 
-let emits = defineEmits(['update:childNodeP']);
-let visible = ref(false);
+const emits = defineEmits(['update:childNodeP']);
+const visible = ref(false);
 const addType = (type) => {
 	visible.value = false;
 	if (type !== 4 && type !== 5) {
-		var data;
+		let data;
 		if (type === 1) {
 			data = {
 				id: other.getNonDuplicateID(),
@@ -109,7 +109,7 @@ const addType = (type) => {
 		}
 		emits('update:childNodeP', data);
 	} else if (type === 4) {
-		let id = other.getNonDuplicateID();
+		const id = other.getNonDuplicateID();
 		emits('update:childNodeP', {
 			nodeName: '条件分支',
 			type: 4,
@@ -166,7 +166,7 @@ const addType = (type) => {
 			],
 		});
 	} else if (type === 5) {
-		let id = other.getNonDuplicateID();
+		const id = other.getNonDuplicateID();
 		emits('update:childNodeP', {
 			nodeName: '并行分支',
 			type: 5,
@@ -279,7 +279,7 @@ const addType = (type) => {
 }
 </style>
 <style scoped lang="scss">
-@import '/@/views/flow/workflow/css/workflow.css';
+@import '../css/workflow.css';
 
 .add-node-popover-body {
 	display: flex;

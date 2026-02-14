@@ -1,14 +1,9 @@
 const gets = {} as any;
 const modules = import.meta.glob('../../*.vue', { eager: true });
 
-async function processModules() {
-	for (let each in modules) {
-		const module = await modules[each];
-		const name = module.default.__name;
-		gets[name] = module.default;
-	}
+for (const each in modules) {
+	const name = (modules[each] as any).default.__name;
+	gets[name] = (modules[each] as any).default;
 }
-
-processModules();
 
 export default gets;
