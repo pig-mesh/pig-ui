@@ -2,7 +2,7 @@
 	<div class="flex flex-col border border-br" :style="styles">
 		<Toolbar class="border-b border-br" :editor="editorRef" :mode="mode" />
 		<Editor
-			class="flex-1 overflow-y-auto"
+			class="overflow-y-auto flex-1"
 			:mode="mode"
 			:defaultConfig="state.editorConfig"
 			v-model="state.editorVal"
@@ -20,7 +20,6 @@ import { IDomEditor } from '@wangeditor-next/editor';
 import { Toolbar, Editor } from '@wangeditor-next/editor-for-vue';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
-const { proxy } = getCurrentInstance();
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -74,10 +73,11 @@ const headers = computed(() => {
 // 定义上传需要的字段信息
 const uploadAttr = reactive({
 	fieldName: 'file',
-	server: proxy.baseURL + props.uploadFileUrl,
+	maxFileSize: 10 * 1024 * 1024, // 10M
+	server: baseURL + props.uploadFileUrl,
 	headers: headers,
 	customInsert(res, insertFn) {
-		insertFn(proxy.baseURL + res.data.url);
+		insertFn(baseURL + res.data.url);
 	},
 });
 
@@ -96,7 +96,7 @@ const state = reactive({
 const styles = computed<CSSProperties>(() => ({
 	height: other.addUnit(props.height),
 	width: other.addUnit(props.width),
-  'z-index': 1000,
+	'z-index': 1000,
 }));
 
 // 编辑器回调函数
@@ -114,19 +114,19 @@ const handleChange = (editor: IDomEditor) => {
 onBeforeUnmount(() => {
 	const editor = editorRef.value;
 	if (editor == null) return;
-  emit('update:getHtml', '');
-  emit('update:getText', '');
-  editor.destroy();
+	emit('update:getHtml', '');
+	emit('update:getText', '');
+	editor.destroy();
 });
 
 // 监听是否禁用改变
-onMounted(() =>{
-  nextTick(()=>{
-    const editor = editorRef.value;
-    if (editor == null) return;
-    props.disable ? editor.disable() : editor.enable();
-  })
-})
+onMounted(() => {
+	nextTick(() => {
+		const editor = editorRef.value;
+		if (editor == null) return;
+		props.disable ? editor.disable() : editor.enable();
+	});
+});
 
 // 监听双向绑定值改变，用于回显
 watch(

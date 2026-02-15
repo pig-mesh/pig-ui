@@ -126,7 +126,6 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import commonFunction from '/@/utils/commonFunction';
 import other from '/@/utils/other';
-const { proxy } = getCurrentInstance();
 const { copyText } = commonFunction();
 // 引入组件
 const ImageUpload = defineAsyncComponent(() => import('/@/components/Upload/Image.vue'));
@@ -192,7 +191,7 @@ const wxurl = ref();
 const access = (row: any) => {
 	dialogFormVisible.value = true;
 	let url = '/mp/wx-portal/' + row.appid;
-	wxurl.value = row.url + proxy.baseURL + other.adaptationUrl(url);
+	wxurl.value = row.url + baseURL + other.adaptationUrl(url);
 };
 
 const generate = (row: any) => {

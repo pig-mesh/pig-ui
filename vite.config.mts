@@ -31,7 +31,14 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			svgBuilder('./src/assets/icons/'), // 将 SVG 文件转换成 Vue 组件
 			vueSetupExtend(), // setup语法糖增强插件
 			AutoImport({
-				imports: ['vue', 'vue-router', 'pinia'], // 自动导入的依赖库数组
+				imports: [
+					'vue',
+					'vue-router',
+					'pinia',
+					{
+						'./src/utils/globalProperties': ['baseURL'],
+					},
+				],
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
 			}),
 			createStyleImportPlugin({
@@ -62,7 +69,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					target: env.VITE_ADMIN_PROXY_PATH, // 目标服务器地址
 					ws: true, // 是否启用 WebSocket
 					changeOrigin: true, // 是否修改请求头中的 Origin 字段
-					rewrite: (path) => path.replace(/^\/api/, ''),
+					rewrite: (path:any) => path.replace(/^\/api/, ''),
 				},
 				'^/ws/info/.*': {
 					target: env.VITE_ADMIN_PROXY_PATH, // 目标服务器地址

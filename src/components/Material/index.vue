@@ -280,7 +280,6 @@ import type {Ref} from 'vue';
 import other from '/@/utils/other';
 
 const { t } = useI18n();
-const {proxy} = getCurrentInstance();
 
 /**
  * 组件属性定义
@@ -452,7 +451,7 @@ watch(
  * @returns {string} 文件完整URL
  */
 const getFileUri = (item: any) => {
-  return `${proxy.baseURL}/admin/sys-file/oss/file?fileName=${item.fileName}`;
+  return `${baseURL}/admin/sys-file/oss/file?fileName=${item.fileName}`;
 };
 
 onMounted(() => {

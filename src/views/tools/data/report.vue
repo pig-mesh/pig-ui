@@ -6,24 +6,17 @@
 
 <script lang="ts" name="modelView" setup>
 import { Session } from '/@/utils/storage';
-const { proxy } = getCurrentInstance();
+
 const route = useRoute();
 const src = ref('');
-const isMicro = import.meta.env.VITE_IS_MICRO;
-
-watch([route], () => {
-	init();
-});
-
-onMounted(() => {
-	init();
-});
 
 const init = () => {
 	const token = Session.getToken();
 	const tenantId = Session.getTenant();
-	src.value = proxy.baseURL + `/gv?token=${token}&TENANT-ID=${tenantId}`;
+	src.value = baseURL + `/gv?token=${token}&TENANT-ID=${tenantId}`;
 };
+
+watch(route, init, { immediate: true });
 </script>
 
 <style lang="scss" scoped>
