@@ -81,7 +81,6 @@ const handleDelete = async (row: any) => {
 const open = (row: any) => {
 	state.queryForm.dictId = row.id;
 	state.queryForm.dictType = row.dictType;
-	visible.value = true;
 	getDataList();
 };
 // 暴露变量

@@ -10,13 +10,14 @@ import { LineChart } from 'echarts/charts';
 import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, TooltipComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
 import { useI18n } from 'vue-i18n';
+import { useAsyncState } from '@vueuse/core';
 
 use([TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridComponent, LineChart, CanvasRenderer]);
 
 /**
  * 国际化工具
  */
-const { t, locale } = useI18n();
+const { t } = useI18n();
 
 /**
  * 日志统计数据项接口
@@ -28,13 +29,17 @@ interface LogSumItem {
 }
 
 /**
- * 图表数据
+ * 使用 useAsyncState 自动加载日志统计数据，消除手动 onMounted + try/catch
  */
-const chartData = reactive({
-	xAxisData: [] as string[],
-	successData: [] as number[],
-	failureData: [] as number[],
-});
+const { state: logSumData } = useAsyncState(
+	() => getSum().then(({ data }) => data as LogSumItem[]),
+	[],
+	{ onError: (err) => console.error('Failed to load log statistics:', err) } // eslint-disable-line no-console
+);
+
+const xAxisData = computed(() => logSumData.value.map((item) => formatPast(new Date(item.createTime), 'mm-dd')));
+const successData = computed(() => logSumData.value.map((item) => item['0'] || 0));
+const failureData = computed(() => logSumData.value.map((item) => item['9'] || 0));
 
 /**
  * 图表配置选项（使用 computed 实现国际化动态更新）
@@ -91,7 +96,7 @@ const option = computed(() => ({
 	xAxis: {
 		type: 'category',
 		boundaryGap: false,
-		data: chartData.xAxisData,
+		data: xAxisData.value,
 		axisLine: {
 			show: false,
 		},
@@ -136,7 +141,7 @@ const option = computed(() => ({
 			name: t('syslog.success'),
 			type: 'line',
 			stack: 'Total',
-			data: chartData.successData,
+			data: successData.value,
 			smooth: true,
 			symbol: 'circle',
 			symbolSize: 8,
@@ -172,7 +177,7 @@ const option = computed(() => ({
 			name: t('syslog.failure'),
 			type: 'line',
 			stack: 'x',
-			data: chartData.failureData,
+			data: failureData.value,
 			smooth: true,
 			symbol: 'circle',
 			symbolSize: 8,
@@ -207,19 +212,6 @@ const option = computed(() => ({
 	],
 }));
 
-/**
- * 组件挂载时加载日志统计数据
- */
-onMounted(async () => {
-	try {
-		const { data } = await getSum();
-		chartData.xAxisData = data.map((item: LogSumItem) => formatPast(new Date(item.createTime), 'mm-dd'));
-		chartData.successData = data.map((item: LogSumItem) => item['0'] || 0);
-		chartData.failureData = data.map((item: LogSumItem) => item['9'] || 0);
-	} catch (err) {
-		console.error('Failed to load log statistics:', err);
-	}
-});
 </script>
 
 <style scoped>
