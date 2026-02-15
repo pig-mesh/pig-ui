@@ -44,39 +44,16 @@ import { addObj, getObj, putObj, validateExist } from '/@/api/admin/config';
 import { rule, clearMaskedFields } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 事件发射器
- */
 const emit = defineEmits(['refresh']);
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
 
-/**
- * 是否/否 字典
- */
 const { yes_no_type } = useDict('yes_no_type');
 
-/**
- * Webhook平台供应商列表
- */
 const supplierList = computed(() => [
 	{
 		value: 'ding_talk',
@@ -92,34 +69,19 @@ const supplierList = computed(() => [
 	},
 ]);
 
-/**
- * 表单数据
- */
 const form = reactive({
-	/** 配置类型 */
 	configType: 'webhook',
-	/** 配置ID */
 	id: '',
-	/** 业务编码 */
 	configKey: '',
-	/** 业务名称 */
 	configName: '',
-	/** 配置值 */
 	configValue: {
-		/** Token ID */
 		tokenId: '' || undefined,
-		/** 签名 */
 		sign: '' || undefined,
-		/** 平台供应商 */
 		supplier: '',
 	},
-	/** 启用状态 */
 	configStatus: '1',
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = computed(() => ({
 	configName: [
 		{ required: true, message: t('webhook.configNameRequired'), trigger: 'blur' },
@@ -139,29 +101,20 @@ const dataRules = computed(() => ({
 	'configValue.tokenId': [{ required: true, message: t('webhook.tokenIdRequired'), trigger: 'blur' }],
 }));
 
-/**
- * 打开对话框
- * @param id - 配置ID，为空时为新增模式
- */
 const openDialog = async (id: string): Promise<void> => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取配置详情
 	if (id) {
 		form.id = id;
 		await getConfigData(id);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
@@ -184,10 +137,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取配置详情数据
- * @param id - 配置ID
- */
 const getConfigData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -203,9 +152,6 @@ const getConfigData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 	supplierList,

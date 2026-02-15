@@ -84,34 +84,22 @@
 </template>
 
 <script lang="ts" name="SysJobDialog" setup>
-/**
- * Job Form Dialog Component
- * 作业表单对话框组件
- * Handles job creation and editing
- * 处理作业创建和编辑
- */
-
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj, validateJob } from '/@/api/daemon/job';
 import { useI18n } from 'vue-i18n';
 
-// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const Crontab = defineAsyncComponent(() => import('/@/components/Crontab/index.vue'));
 
-// 获取国际化方法
 const { t } = useI18n();
 
-// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
-// 定义字典
 const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
-// 提交表单数据
 const form = reactive({
 	jobId: '',
 	jobName: '',
@@ -128,7 +116,6 @@ const form = reactive({
 	remark: '',
 });
 
-// 定义校验规则
 const dataRules = reactive({
 	jobName: [{ required: true, message: t('job.jobNameRequired'), trigger: 'blur' }],
 	jobGroup: [{ required: true, message: t('job.jobGroupRequired'), trigger: 'blur' }],
@@ -164,31 +151,20 @@ const dataRules = reactive({
 	],
 });
 
-/**
- * Opens the dialog for job creation or editing
- * 打开作业创建或编辑对话框
- * @param id - Job ID for editing, empty for creation 作业ID（编辑时传入，创建时为空）
- */
 const openDialog = async (id: string) => {
 	visible.value = true;
 	form.jobId = '';
 
-	// 重置表单数据
 	await nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取sysJob信息
 	if (id) {
 		form.jobId = id;
 		await getsysJobData(id);
 	}
 };
 
-/**
- * Handles form submission
- * 处理表单提交
- */
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -206,11 +182,6 @@ const onSubmit = async () => {
 	}
 };
 
-/**
- * Fetches job data for editing
- * 获取作业数据进行编辑
- * @param id - Job ID 作业ID
- */
 const getsysJobData = async (id: string) => {
 	try {
 		const { data } = await getObj(id);
@@ -220,7 +191,6 @@ const getsysJobData = async (id: string) => {
 	}
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

@@ -68,20 +68,10 @@ const RouteForm = defineAsyncComponent(() => import('./form.vue'));
 
 const { t } = useI18n();
 
-/**
- * 路由列表数据
- */
 const routeList = ref<any[]>([]);
 
-/**
- * 路由表单引用
- */
 const routeFormRef = ref();
 
-/**
- * 删除路由配置
- * @param {string} id - 路由ID
- */
 const handleDelete = async (id: string) => {
 	try {
 		await deleteObj(id);
@@ -94,8 +84,7 @@ const handleDelete = async (id: string) => {
 };
 
 /**
- * 获取路由列表数据
- * @description 从API获取路由列表并解析JSON字段
+ * 从API获取路由列表并解析JSON字段
  */
 const getRouteList = async () => {
 	try {
@@ -122,17 +111,10 @@ const getRouteList = async () => {
 	}
 };
 
-/**
- * 打开新增路由对话框
- */
 const handleAdd = () => {
 	routeFormRef.value?.openDialog();
 };
 
-/**
- * 打开编辑路由对话框
- * @param {string} id - 路由ID
- */
 const handleEdit = (id: string) => {
 	routeFormRef.value?.openDialog(id);
 };

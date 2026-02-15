@@ -54,29 +54,12 @@ import { sendHook } from '/@/api/admin/message';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
 
-/**
- * 消息类型列表
- */
 const messageTypeList = computed(() => [
 	{
 		value: 'text',
@@ -92,44 +75,24 @@ const messageTypeList = computed(() => [
 	},
 ]);
 
-/**
- * 表单数据
- */
 const form = reactive({
-	/** 配置类型 */
 	configType: 'webhook',
-	/** 业务编码 */
 	configKey: 'webhook',
-	/** 业务名称 */
 	configName: '',
-	/** 配置值 */
 	configValue: {
-		/** 平台供应商 */
 		supplier: '',
 	},
-	/** 业务编码（备份） */
 	bizCode: '',
-	/** 消息类型 */
 	messageType: 'text',
-	/** 配置ID */
 	id: '',
-	/** 消息标题 */
 	messageTitle: '',
-	/** 消息内容 */
 	messageContent: '',
-	/** 是否通知全部 */
 	noticeAll: 'false',
-	/** 消息链接 */
 	messageUrl: '',
-	/** 图片链接 */
 	picUrl: '',
-	/** 提醒用户手机号列表 */
 	phoneList: [] as string[],
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = computed(() => ({
 	messageType: [
 		{ required: true, message: t('webhook.messageTypeRequired'), trigger: 'blur' },
@@ -150,9 +113,7 @@ const dataRules = computed(() => ({
 	],
 }));
 
-/**
- * 过滤消息类型列表（企微不支持链接消息）
- */
+/** 企微不支持链接消息 */
 const filteredMessageTypeList = computed(() => {
 	if (form.configValue.supplier === 'we_talk') {
 		return messageTypeList.value.filter((type) => type.value !== 'link');
@@ -160,15 +121,10 @@ const filteredMessageTypeList = computed(() => {
 	return messageTypeList.value;
 });
 
-/**
- * 打开测试推送抽屉
- * @param id - 配置ID
- */
 const openDialog = async (id: string): Promise<void> => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
@@ -179,9 +135,6 @@ const openDialog = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 提交推送消息
- */
 const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
@@ -198,10 +151,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取配置详情数据
- * @param id - 配置ID
- */
 const getConfigData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -216,9 +165,6 @@ const getConfigData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

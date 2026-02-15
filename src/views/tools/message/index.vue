@@ -61,7 +61,6 @@
 
 <script setup lang="ts" name="systemSysMessage">
 
-// 引入组件
 const InternalConfig = defineAsyncComponent(() => import('./internal/index.vue'));
 const SmsConfig = defineAsyncComponent(() => import('./sms/index.vue'));
 const EmailConfig = defineAsyncComponent(() => import('./email/index.vue'));

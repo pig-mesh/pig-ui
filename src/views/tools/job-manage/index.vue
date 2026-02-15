@@ -259,41 +259,25 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-// 引入组件
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const JobLog = defineAsyncComponent(() => import('./job-log.vue'));
 
-/**
- * Job Management Component
- * Handles job listing, operations, and management
- */
-
-// 获取国际化方法
 const { t } = useI18n();
 
-/** 表单弹窗引用 */
 const formDialogRef = ref();
-/** 作业日志引用 */
 const jobLogRef = ref();
-/** 表格视图 */
 const tableViewRef = ref(false);
-/** 搜索表单信息 */
 const queryForm = reactive({
   jobName: '',
   jobGroup: '',
   jobStatus: '',
   jobExecuteStatus: '',
 });
-/** 是否展示搜索表单 */
 const showSearch = ref(true);
 
-// 多选变量
-/** 选中的行 */
 const selectedRows = ref([]);
-/** 是否可以多选 */
 const multiple = ref(true);
 
-/** 查询字典 */
 const {
   job_status,
   job_execute_status,
@@ -301,7 +285,6 @@ const {
   job_type
 } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
 
-/** 表格状态变量 */
 const state = reactive<BasicTableProps>({
   queryForm,
   pageList: fetchList,
@@ -311,50 +294,26 @@ const state = reactive<BasicTableProps>({
   }
 });
 
-/** 获取表格数据方法 */
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
-/**
- * Resets the query form and refreshes the data list
- * 重置查询表单并刷新数据列表
- */
 const resetQuery = () => {
   Object.keys(queryForm).forEach((key) => (queryForm[key] = ''));
   getDataList();
 };
 
-/**
- * Handles row selection change
- * 处理行选中事件
- * @param rows - Selected rows 选中的行
- */
 const handleSelectionChange = (rows: any) => {
   selectedRows.value = rows;
   multiple.value = !rows.length;
 };
 
-/**
- * Exports data to Excel
- * 导出数据到Excel
- */
 const exportExcel = () => {
   downBlobFile('/job/sys-job/export', Object.assign(state.queryForm, {ids: selectedRows}), 'job.xlsx');
 };
 
-/**
- * Opens job log dialog
- * 打开作业日志对话框
- * @param row - Job row data 作业行数据
- */
 const handleJobLog = (row: any) => {
   jobLogRef.value.openDialog(row.jobId);
 };
 
-/**
- * Handles job editing
- * 处理作业编辑
- * @param row - Job row data 作业行数据
- */
 const handleEditJob = (row: any) => {
   const { jobStatus } = row;
   if (jobStatus === '1' || jobStatus === '3') {
@@ -364,11 +323,6 @@ const handleEditJob = (row: any) => {
   }
 };
 
-/**
- * Starts a job
- * 启动作业
- * @param row - Job row data 作业行数据
- */
 const handleStartJob = async (row: any) => {
   const { jobStatus, jobName, jobId } = row;
 
@@ -391,11 +345,6 @@ const handleStartJob = async (row: any) => {
   }
 };
 
-/**
- * Shuts down a running job
- * 暂停作业
- * @param row - Job row data 作业行数据
- */
 const handleShutDownJob = async (row: any) => {
   const { jobStatus, jobName, jobId } = row;
 
@@ -418,11 +367,6 @@ const handleShutDownJob = async (row: any) => {
   }
 };
 
-/**
- * Runs a job immediately
- * 立即运行作业
- * @param row - Job row data 作业行数据
- */
 const handleRunJob = async (row: any) => {
   const { jobName, jobId } = row;
 
@@ -441,11 +385,6 @@ const handleRunJob = async (row: any) => {
   }
 };
 
-/**
- * Deletes a job
- * 删除作业
- * @param row - Job row data 作业行数据
- */
 const handleDelete = async (row: any) => {
   if (!row) {
     selectedRows.value.forEach(handleDelete);

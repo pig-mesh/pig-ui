@@ -58,33 +58,21 @@
 </template>
 
 <script setup lang="ts" name="job-log">
-/**
- * Job Log Component
- * 作业日志组件
- * Displays and manages job execution logs
- * 显示和管理作业执行日志
- */
-
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList, delObjs } from '/@/api/daemon/job-log';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 
-// 获取国际化方法
 const { t } = useI18n();
 const visible = ref(false);
 
-// 定义字典
 const { job_execute_status } = useDict('job_type', 'job_execute_status');
 
-// 搜索变量
 const showSearch = ref(true);
-// 多选变量
 const selectObjs = ref([]) as any;
 const multiple = ref(true);
 
-// 表格状态变量
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
 		jobId: '',
@@ -93,35 +81,19 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	createdIsNeed: false,
 });
 
-// 获取表格数据方法
 const { getDataList, currentChangeHandle, sizeChangeHandle, tableStyle } = useTable(state);
 
-/**
- * Opens the job log dialog
- * 打开作业日志对话框
- * @param id - Job ID 作业ID
- */
 const openDialog = async (id: string) => {
 	visible.value = true;
 	state.queryForm.jobId = id;
 	await getDataList();
 };
 
-/**
- * Handles row selection change
- * 处理行选中事件
- * @param objs - Selected objects 选中的对象
- */
 const handleSelectionChange = (objs: { jobLogId: string }[]) => {
 	selectObjs.value = objs.map(({ jobLogId }) => jobLogId);
 	multiple.value = !objs.length;
 };
 
-/**
- * Deletes selected job logs
- * 删除选中的作业日志
- * @param ids - Array of job log IDs 作业日志ID数组
- */
 const handleDelete = async (ids: string[]) => {
 	try {
 		await useMessageBox().confirm(t('common.delConfirmText'));
@@ -138,7 +110,6 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 
-// 暴露变量
 defineExpose({
 	openDialog,
 });

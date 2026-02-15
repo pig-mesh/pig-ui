@@ -6,6 +6,7 @@
 
 <script lang="ts" name="modelView" setup>
 import { Session } from '/@/utils/storage';
+import { watchImmediate } from '@vueuse/core';
 
 const route = useRoute();
 const src = ref('');
@@ -16,7 +17,7 @@ const init = () => {
 	src.value = baseURL + `/gv?token=${token}&TENANT-ID=${tenantId}`;
 };
 
-watch(route, init, { immediate: true });
+watchImmediate(route, init);
 </script>
 
 <style lang="scss" scoped>

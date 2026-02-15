@@ -114,6 +114,8 @@
 // @ts-ignore
 import JsonEditor from '@axolo/json-editor-vue';
 
+import { watchDeep } from '@vueuse/core';
+
 import { addObj, fetchList, validateExist } from '/@/api/admin/route';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
@@ -122,39 +124,13 @@ import { rule } from '/@/utils/validate';
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
 
-/**
- * 当前激活的标签页名称
- */
 const activeName = ref('first');
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
-
-/**
- * JSON编辑器数据
- */
 const jsonData = ref({});
-
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 折叠面板激活状态
- */
 const collapseActive = ref('1');
 
-/**
- * 表单数据
- */
 const formData = ref({
 	routeId: '',
 	routeName: '',
@@ -167,9 +143,6 @@ const formData = ref({
 	cors: false,
 });
 
-/**
- * 演示数据模板
- */
 const demoData = reactive({
 	routeId: new Date().getTime(),
 	routeName: '路由名称',
@@ -180,14 +153,8 @@ const demoData = reactive({
 	metadata: {},
 });
 
-/**
- * 当前编辑的路由ID
- */
 const selectRouteId = ref();
 
-/**
- * 表单校验规则
- */
 const dataRules = ref({
 	routeId: [
 		{ required: true, message: t('route.routeIdRequired', '路由标识不能为空'), trigger: 'blur' },
@@ -217,11 +184,8 @@ const dataRules = ref({
 
 /**
  * 监听表单数据变化并同步更新 JSON 数据
- * @description 将表单数据转换为路由配置的 JSON 格式
  */
-watch(
-	formData,
-	(val) => {
+watchDeep(formData, (val) => {
 		jsonData.value = {
 			routeId: val.routeId,
 			routeName: val.routeName,
@@ -252,14 +216,10 @@ watch(
 				},
 			],
 		};
-	},
-	{ deep: true }
-);
+});
 
 /**
- * 处理 JSON 编辑器数据变化
- * @description 将 JSON 数据同步到表单数据
- * @param {any} val - JSON 编辑器的值
+ * 将 JSON 数据同步到表单数据
  */
 const handleJsonChange = (val: any) => {
 	formData.value.routeId = val.routeId;
@@ -294,12 +254,6 @@ const handleJsonChange = (val: any) => {
 	jsonData.value = val;
 };
 
-/**
- * 校验 JSON 数据
- * @description 验证路由配置的 JSON 数据是否合法
- * @param {any} data - 待校验的 JSON 数据
- * @returns {boolean} 是否通过校验
- */
 const validateJsonData = (data: any): boolean => {
 	// 校验 predicates 字段
 	if (!data.predicates || !Array.isArray(data.predicates) || data.predicates.length === 0) {
@@ -332,10 +286,6 @@ const validateJsonData = (data: any): boolean => {
 	return true;
 };
 
-/**
- * 提交表单
- * @description 校验并提交路由配置数据
- */
 const handleSubmit = async () => {
 	loading.value = true;
 
@@ -356,12 +306,6 @@ const handleSubmit = async () => {
 	}
 };
 
-/**
- * 获取路由配置数据
- * @description 根据路由ID获取路由配置详情并解析JSON字段
- * @param {string} id - 路由ID
- * @returns {Promise<any>} 解析后的路由配置对象
- */
 const getRouteData = async (id: string) => {
 	try {
 		const { data } = await fetchList({ routeId: id });
@@ -386,11 +330,6 @@ const getRouteData = async (id: string) => {
 	}
 };
 
-/**
- * 打开对话框
- * @description 打开路由配置对话框,支持新增和编辑模式
- * @param {string} [id] - 路由ID,如果提供则为编辑模式,否则为新增模式
- */
 const openDialog = async (id?: string) => {
 	selectRouteId.value = id;
 	visible.value = true;
@@ -415,9 +354,6 @@ const openDialog = async (id?: string) => {
 	}
 };
 
-/**
- * 暴露给父组件的方法
- */
 defineExpose({
 	openDialog,
 });

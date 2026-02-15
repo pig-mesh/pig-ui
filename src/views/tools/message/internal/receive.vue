@@ -32,42 +32,22 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchUserMessageReadList } from '/@/api/admin/message';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
 
-/**
- * 表格状态数据
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchUserMessageReadList,
 });
 
-/**
- * 表格 Hook
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle } = useTable(state);
 
-/**
- * 打开接收情况抽屉
- * @param msgId - 消息ID
- */
 const openDialog = (msgId: string): void => {
 	visible.value = true;
 	state.queryForm.messageId = msgId;
 	getDataList();
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

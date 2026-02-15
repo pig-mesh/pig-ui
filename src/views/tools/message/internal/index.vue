@@ -130,103 +130,43 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 异步组件引入
- */
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const Receive = defineAsyncComponent(() => import('./receive.vue'));
 const NewsContent = defineAsyncComponent(() => import('/@/views/home/news/content.vue'));
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 字典数据
- */
 const { message_type, yes_no_type } = useDict('message_type', 'yes_no_type');
-
-/**
- * 表单对话框引用
- */
 const formDialogRef = ref();
-
-/**
- * 查询表单引用
- */
 const queryRef = ref();
-
-/**
- * 接收列表引用
- */
 const receiveRef = ref();
-
-/**
- * 消息内容引用
- */
 const contentRef = ref();
-
-/**
- * 是否显示搜索区域
- */
 const showSearch = ref(true);
-
-/**
- * 多选选中的对象ID数组
- */
 const selectObjs = ref<string[]>([]);
-
-/**
- * 是否禁用批量删除按钮
- */
 const multiple = ref(true);
 
-/**
- * 表格状态数据
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {},
 	pageList: fetchList,
 });
 
-/**
- * 表格 Hook
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
 	useTable(state);
 
-/**
- * 重置查询条件
- */
 const resetQuery = (): void => {
-	// 清空搜索条件
 	queryRef.value?.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-/**
- * 导出 Excel
- */
 const exportExcel = (): void => {
 	downBlobFile('/admin/sysMessage/export', Object.assign(state.queryForm, { ids: selectObjs }), 'sysMessage.xlsx');
 };
 
-/**
- * 多选变更事件处理
- * @param objs - 选中的对象数组
- */
 const selectionChangHandle = (objs: { id: string }[]): void => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-/**
- * 删除操作
- * @param ids - 要删除的ID数组
- */
 const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('internal.confirmDelete'));
@@ -243,10 +183,6 @@ const handleDelete = async (ids: string[]): Promise<void> => {
 	}
 };
 
-/**
- * 推送消息给目标用户
- * @param id - 消息ID
- */
 const handleSend = async (id: string): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('internal.confirmSend'));

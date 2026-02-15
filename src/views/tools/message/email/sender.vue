@@ -52,66 +52,29 @@ import { sendEmail } from '/@/api/admin/message';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
-
-/**
- * 允许上传的文件类型
- */
 const fileType = ref(['jpeg', 'png', 'jpg', 'gif', 'md', 'doc', 'xls', 'ppt', 'txt', 'pdf', 'docx', 'xlsx', 'pptx', 'zip', 'rar']);
 
-/**
- * 表单数据
- */
 const form = reactive({
-	/** 邮件标题 */
 	title: '',
-	/** 配置类型 */
 	configType: 'email',
-	/** 业务编码 */
 	configKey: '',
-	/** 业务编码（备份） */
 	bizCode: '',
-	/** 业务名称 */
 	configName: '',
-	/** 收件人邮箱列表 */
 	mailAddress: [] as string[],
-	/** 抄送人邮箱列表 */
 	ccList: [] as string[],
-	/** 密抄送人邮箱列表 */
 	bccList: [] as string[],
-	/** 附件URL列表 */
 	attachmentList: [] as string[],
-	/** 配置ID */
 	id: '',
-	/** HTML模板值 */
 	htmlValues: {} as Record<string, any>,
-	/** 模板参数JSON字符串 */
 	params: `{
   "code": "1234"
 }`,
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = ref({
 	params: [
 		{ required: true, message: t('email.paramsRequired'), trigger: 'blur' },
@@ -124,15 +87,10 @@ const dataRules = ref({
 	mailAddress: [{ required: true, message: t('email.recipientRequired'), trigger: 'blur' }],
 });
 
-/**
- * 打开测试发送对话框
- * @param id - 配置ID
- */
 const openDialog = async (id: string): Promise<void> => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
@@ -143,9 +101,6 @@ const openDialog = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 提交发送邮件
- */
 const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef?.value.validate().catch(() => {});
 	if (!valid) return;
@@ -164,19 +119,10 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 文件上传变更事件处理
- * @param fileNames - 文件名（未使用）
- * @param fileList - 文件列表
- */
 const handleFileChange = (fileNames: string, fileList: any[]): void => {
 	form.attachmentList = fileList.map((file) => file.fileUrl);
 };
 
-/**
- * 获取配置详情数据
- * @param id - 配置ID
- */
 const getConfigData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -190,9 +136,6 @@ const getConfigData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

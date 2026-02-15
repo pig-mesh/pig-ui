@@ -61,28 +61,11 @@ import * as echarts from 'echarts';
 
 const { t } = useI18n();
 
-/**
- * Redis 基础信息
- */
 const baseInfo = ref<any>({});
-
-/**
- * 命令统计图表 DOM 引用
- */
 const commandChartRef = ref();
-
-/**
- * 内存信息图表 DOM 引用
- */
 const memoryChartRef = ref();
 
-/**
- * 图表配置选项
- */
 const chartOptions = reactive({
-	/**
-	 * 命令统计饼图配置
-	 */
 	commandChartOption: {
 		tooltip: {
 			trigger: 'item',
@@ -148,9 +131,6 @@ const chartOptions = reactive({
 		],
 	},
 
-	/**
-	 * 内存信息仪表盘配置
-	 */
 	memoryChartOption: {
 		tooltip: {
 			formatter: '{a} <br/>{b} : {c}%',
@@ -174,10 +154,6 @@ const chartOptions = reactive({
 	},
 });
 
-/**
- * 获取系统缓存监控数据
- * @description 从 API 获取 Redis 缓存信息并初始化图表
- */
 const getCacheMonitorData = async () => {
 	try {
 		const { data } = await systemCache();
@@ -202,10 +178,6 @@ const getCacheMonitorData = async () => {
 	}
 };
 
-/**
- * 初始化 ECharts 图表
- * @description 创建命令统计和内存信息图表实例
- */
 const initCharts = () => {
 	const commandChart = markRaw(echarts.init(commandChartRef.value));
 	const memoryChart = markRaw(echarts.init(memoryChartRef.value));
@@ -214,10 +186,6 @@ const initCharts = () => {
 	memoryChart.setOption(chartOptions.memoryChartOption);
 };
 
-/**
- * 统计卡片数据
- * @description 计算并返回 Redis 各项统计指标的卡片数据
- */
 const statisticsCards = computed(() => [
 	{
 		label: t('cache.redisVersion', 'Redis版本'),
@@ -245,7 +213,6 @@ const statisticsCards = computed(() => [
 	},
 ]);
 
-// 页面挂载时获取缓存监控数据
 onMounted(() => {
 	getCacheMonitorData();
 });

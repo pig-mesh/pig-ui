@@ -68,59 +68,23 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj } from '/@/api/admin/message';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 事件发射器
- */
 const emit = defineEmits(['refresh']);
-
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
-
-/**
- * 字典数据
- */
 const { yes_no_type, message_type } = useDict('yes_no_type', 'message_type');
 
-/**
- * 表单数据
- */
 const form = reactive({
-	/** 消息ID */
 	id: '',
-	/** 消息分类 */
 	category: '0',
-	/** 消息标题 */
 	title: '',
-	/** 消息内容 */
 	content: '',
-	/** 是否全部通知 */
 	allFlag: '0',
-	/** 排序 */
 	sort: 0,
-	/** 目标用户列表 */
 	userList: [] as any,
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = computed(() => ({
 	category: [{ required: true, message: t('internal.categoryRequired'), trigger: 'blur' }],
 	title: [{ required: true, message: t('internal.titleRequired'), trigger: 'blur' }],
@@ -129,30 +93,21 @@ const dataRules = computed(() => ({
 	sort: [{ required: true, message: t('internal.sortRequired'), trigger: 'blur' }],
 }));
 
-/**
- * 打开对话框
- * @param id - 消息ID，为空时为新增模式
- */
 const openDialog = async (id: string): Promise<void> => {
 	visible.value = true;
 	form.id = '';
 	form.content = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
 
-	// 获取消息详情
 	if (id) {
 		form.id = id;
 		await getSysMessageData(id);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
@@ -170,10 +125,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取消息详情数据
- * @param id - 消息ID
- */
 const getSysMessageData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -186,9 +137,6 @@ const getSysMessageData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

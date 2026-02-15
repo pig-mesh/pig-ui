@@ -40,53 +40,24 @@ import { sendSms } from '/@/api/admin/message';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
 
-/**
- * 表单数据
- */
 const form = reactive({
-	/** 配置类型 */
 	configType: 'sms',
-	/** 业务编码 */
 	configKey: 'sms',
-	/** 业务名称 */
 	configName: '',
-	/** 接收手机号列表 */
 	mobiles: [] as string[],
-	/** 业务编码（备份） */
 	bizCode: '',
-	/** 配置ID */
 	id: '',
-	/** 短信模板参数 */
 	params: {} as Record<string, any>,
-	/** 模板参数JSON字符串 */
 	data: `{
   "code": "1234"
 }`,
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = computed(() => ({
 	data: [
 		{ required: true, message: t('sms.paramsRequired'), trigger: 'blur' },
@@ -98,15 +69,10 @@ const dataRules = computed(() => ({
 	],
 }));
 
-/**
- * 打开测试发送抽屉
- * @param id - 配置ID
- */
 const openDialog = async (id: string): Promise<void> => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
@@ -117,9 +83,6 @@ const openDialog = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 提交发送短信
- */
 const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
@@ -138,10 +101,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取配置详情数据
- * @param id - 配置ID
- */
 const getConfigData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -155,9 +114,6 @@ const getConfigData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

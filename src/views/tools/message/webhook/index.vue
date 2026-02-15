@@ -99,107 +99,46 @@ import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 
-/**
- * 异步组件引入
- */
 const FormDialog = defineAsyncComponent(() => import('./form.vue'));
 const SenderDialog = defineAsyncComponent(() => import('./sender.vue'));
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 是否/否 字典
- */
 const { yes_no_type } = useDict('yes_no_type');
 
-/**
- * 表单对话框引用
- */
 const formDialogRef = ref();
-
-/**
- * 发送测试对话框引用
- */
 const senderDialogRef = ref();
-
-/**
- * 查询表单引用
- */
 const queryRef = ref();
-
-/**
- * 是否显示搜索区域
- */
 const showSearch = ref(true);
-
-/**
- * 多选选中的对象ID数组
- */
 const selectObjs = ref<string[]>([]);
-
-/**
- * 是否禁用批量删除按钮
- */
 const multiple = ref(true);
 
-/**
- * 表格状态数据
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: {
-		/** 配置类型：webhook */
 		configType: 'webhook',
-		/** 业务名称 */
 		configName: '',
 	},
 	pageList: fetchList,
 });
 
-/**
- * 表格 Hook
- * 提供表格的数据获取、分页、排序、导出等功能
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
 	useTable(state);
 
-/**
- * 重置查询条件
- * 清空搜索表单、多选状态，并重新加载列表数据
- */
 const resetQuery = (): void => {
-	// 清空搜索条件
 	queryRef.value?.resetFields();
-	// 清空多选
 	selectObjs.value = [];
 	getDataList();
 };
 
-/**
- * 导出 Excel 文件
- * 将当前查询条件和选中的数据导出为 Excel
- */
 const exportExcel = (): void => {
 	downBlobFile('/admin/sysMessage/export', Object.assign(state.queryForm, { ids: selectObjs }), 'sysMessage.xlsx');
 };
 
-/**
- * 多选变更事件处理
- * 更新选中的ID数组，并控制批量删除按钮的启用状态
- * @param objs - 选中的对象数组
- */
 const selectionChangHandle = (objs: { id: string }[]): void => {
 	selectObjs.value = objs.map(({ id }) => id);
 	multiple.value = !objs.length;
 };
 
-/**
- * 删除 Webhook 配置
- * 删除前会弹出确认对话框，删除后刷新列表并提示用户
- * @param ids - 要删除的配置ID数组
- */
 const handleDelete = async (ids: string[]): Promise<void> => {
 	try {
 		await useMessageBox().confirm(t('webhook.confirmDelete'));
@@ -216,13 +155,9 @@ const handleDelete = async (ids: string[]): Promise<void> => {
 	}
 };
 
-/**
- * 路由实例
- */
 const router = useRouter();
 
 /**
- * 跳转到 Webhook 日志页面
  * 跳转时携带 serviceId 参数用于日志筛选
  */
 const handleLog = (): void => {
