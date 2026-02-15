@@ -72,21 +72,17 @@ export default {
 
 <script setup lang="ts" name="flowData">
 import { queryTaskData } from '/@/api/flow/task';
+import { useAsyncState } from '@vueuse/core';
 
-const state = reactive({
-	pendingNum: 0,
-	copyNum: 0,
-});
-
-onMounted(async () => {
-	try {
-		const { data } = await queryTaskData();
-		state.pendingNum = Number.parseInt(data?.pendingNum || 0);
-		state.copyNum = Number.parseInt(data?.copyNum || 0);
-	} catch (error) {
-		// 避免没有启动 flow模块 vue 组件渲染 warning
-	}
-});
+const { state } = useAsyncState(
+	() => queryTaskData().then(({ data }) => ({
+		pendingNum: Number.parseInt(data?.pendingNum || 0),
+		copyNum: Number.parseInt(data?.copyNum || 0),
+	})),
+	{ pendingNum: 0, copyNum: 0 },
+	// 静默错误：避免没有启动 flow 模块时 vue 组件渲染 warning
+	{ onError: () => {} },
+);
 </script>
 <style scoped>
 .el-col {

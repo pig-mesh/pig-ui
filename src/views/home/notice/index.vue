@@ -63,7 +63,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>()
 
-// 文案配置
 const textConfig = {
   title: '演示环境说明',
   description: '当前环境仅供演示，新增、编辑、删除等操作受限。如需完整功能体验，建议本地部署私有化版本。',
@@ -73,22 +72,12 @@ const textConfig = {
   confirmButton: '我知道了'
 }
 
-// 使用 VueUse 简化 v-model 实现
 const visible = useVModel(props, 'show', emit)
-
-// 使用 VueUse 自动管理 localStorage
 const dontShowAgain = useLocalStorage('demo-notice-dont-show', false)
 
 // 初始化时检查是否需要隐藏
 onMounted(() => {
   if (dontShowAgain.value) {
-    visible.value = false
-  }
-})
-
-// 当勾选"不再提醒"时自动关闭对话框
-watch(dontShowAgain, (value) => {
-  if (value) {
     visible.value = false
   }
 })

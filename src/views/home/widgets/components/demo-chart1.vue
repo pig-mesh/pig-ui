@@ -16,8 +16,6 @@ import {use} from 'echarts/core';
 import {PieChart} from 'echarts/charts';
 import {TooltipComponent, LegendComponent} from 'echarts/components';
 import {CanvasRenderer} from 'echarts/renderers';
-import {useTagsViewRoutes} from "/@/stores/tagsViewRoutes";
-import {useMessage} from "/@/hooks/message";
 
 
 use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);

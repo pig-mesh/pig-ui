@@ -13,7 +13,6 @@
     </el-table>
     <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"/>
 
-    <!-- 消息内容 -->
     <news-content ref="contentRef" @refresh="getDataList"/>
   </el-drawer>
 </template>
@@ -25,55 +24,27 @@ import { useI18n } from 'vue-i18n';
 
 import NewsContent from './content.vue';
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
-
-/**
- * 消息内容对话框引用
- */
 const contentRef = ref();
-
-/**
- * 抽屉显示状态
- */
 const visible = ref(false);
 
-/**
- * 表格状态配置
- */
 const state: BasicTableProps = reactive<BasicTableProps>({
 	queryForm: { category: '0' },
 	pageList: fetchUserMessageList,
 });
 
-/**
- * 表格相关钩子函数
- */
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle } = useTable(state);
 
-/**
- * 打开消息列表抽屉
- * @param type - 消息类型
- */
 const openDialog = (type: string): void => {
 	state.queryForm.category = type;
 	getDataList();
 	visible.value = true;
 };
 
-/**
- * 点击表格单元格事件处理
- * @param row - 点击的行数据
- */
 const cellClick = (row: any): void => {
 	contentRef.value.openDialog(row);
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({
 	openDialog,
 });

@@ -120,9 +120,6 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
 import type { Component } from 'vue';
 
-/**
- * 部件组件接口定义
- */
 interface WidgetComponent {
 	title: string;
 	icon: Component | string;
@@ -130,9 +127,6 @@ interface WidgetComponent {
 	[key: string]: any;
 }
 
-/**
- * 部件列表项接口定义
- */
 interface WidgetListItem {
 	key: string;
 	title: string;
@@ -141,14 +135,8 @@ interface WidgetListItem {
 	disabled?: boolean;
 }
 
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 默认布局配置
- */
 const defaultGrid = ref({
 	layout: [7, 7, 10],
 	copmsList: [
@@ -158,29 +146,11 @@ const defaultGrid = ref({
 	],
 });
 
-/**
- * 是否处于自定义模式
- */
 const customizing = ref(false);
-
-/**
- * 部件容器元素引用
- */
 const widgets = ref();
-
-/**
- * 本地存储键名
- */
 const widgetsKey = ref('widgets');
-
-/**
- * 当前网格布局配置
- */
 const grid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
 
-/**
- * 所有可用部件列表（标记已添加的部件为禁用状态）
- */
 const allCompsList = computed(() => {
 	const list: WidgetListItem[] = [];
 	for (const [key, compDetails] of Object.entries(allComps as Record<string, WidgetComponent>)) {
@@ -196,9 +166,6 @@ const allCompsList = computed(() => {
 	return list;
 });
 
-/**
- * 可添加的部件列表（未禁用且在支持列表中的部件）
- */
 const myCompsList = computed(() => {
 	const myGrid = [
 		'calendar',
@@ -216,27 +183,12 @@ const myCompsList = computed(() => {
 	return allCompsList.value.filter((item: WidgetListItem) => !item.disabled && myGrid.includes(item.key));
 });
 
-/**
- * 当前已添加的部件列表
- */
 const nowCompsList = computed(() => grid.value.copmsList.flat());
 
-/**
- * 进入自定义模式
- */
 const custom = (): void => {
 	customizing.value = true;
-	nextTick(() => {
-		const oldWidth = widgets.value.offsetWidth;
-		const scale = widgets.value.offsetWidth / oldWidth;
-		widgets.value.style.transform = `scale(${scale})`;
-	});
 };
 
-/**
- * 设置网格布局
- * @param layout - 布局配置数组
- */
 const setLayout = (layout: Array<number>): void => {
 	grid.value.layout = layout;
 	if (layout.join(',') === '24') {
@@ -251,58 +203,35 @@ const setLayout = (layout: Array<number>): void => {
 	}
 };
 
-/**
- * 添加部件到布局
- * @param item - 要添加的部件项
- */
 const push = (item: WidgetListItem): void => {
 	grid.value.copmsList[0].push(item.key);
 };
 
-/**
- * 从布局中移除部件
- * @param itemKey - 要移除的部件键名
- */
 const remove = (itemKey: string): void => {
 	grid.value.copmsList = grid.value.copmsList.map((obj: string[]) => obj.filter((o: string) => o !== itemKey));
 };
 
-/**
- * 保存布局配置到本地存储
- */
 const save = (): void => {
 	customizing.value = false;
-	widgets.value.style.removeProperty('transform');
 	Local.set(widgetsKey.value, JSON.stringify(grid.value));
 };
 
-/**
- * 恢复默认布局
- */
 const backDefaul = (): void => {
 	customizing.value = false;
-	widgets.value.style.removeProperty('transform');
 	grid.value = defaultGrid.value;
 	Local.remove(widgetsKey.value);
 	window.location.reload();
 };
 
-/**
- * 关闭自定义模式
- */
 const close = (): void => {
 	customizing.value = false;
-	widgets.value.style.removeProperty('transform');
 };
 
-/**
- * 组件挂载时初始化布局
- */
 onMounted(() => {
 	const data = useUserInfo().userInfos;
-	widgetsKey.value = `${window.location.host}-${data.user.userId}-widgets}`;
-	const widgets = Local.get(widgetsKey.value);
-	grid.value = widgets ? JSON.parse(widgets) : defaultGrid.value;
+	widgetsKey.value = `${window.location.host}-${data.user.userId}-widgets`;
+	const savedGrid = Local.get(widgetsKey.value);
+	grid.value = savedGrid ? JSON.parse(savedGrid) : defaultGrid.value;
 });
 </script>
 <style scoped lang="scss">

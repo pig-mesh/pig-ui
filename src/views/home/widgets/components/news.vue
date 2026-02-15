@@ -43,8 +43,6 @@ import NewsLists from '/@/views/home/news/list.vue';
 
 const listRef = ref();
 const contentRef = ref();
-const visible = ref(false);
-const showList = ref(false);
 const newsList = ref([]);
 
 // 获取用户的信息
@@ -56,7 +54,6 @@ const getUserMessage = () => {
 };
 
 const openList = () => {
-	showList.value = true;
 	listRef.value.openDialog('0');
 };
 

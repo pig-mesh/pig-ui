@@ -56,39 +56,14 @@ import { addObj, getObj, putObj } from '/@/api/admin/schedule';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 
-/**
- * 定义组件事件
- */
 const emit = defineEmits(['refresh']);
-
-/**
- * 日程类型和状态字典
- */
 const { schedule_type, schedule_status } = useDict('schedule_type', 'schedule_status');
-
-/**
- * 国际化工具
- */
 const { t } = useI18n();
 
-/**
- * 表单引用
- */
 const dataFormRef = ref();
-
-/**
- * 对话框显示状态
- */
 const visible = ref(false);
-
-/**
- * 加载状态
- */
 const loading = ref(false);
 
-/**
- * 表单数据
- */
 const form = reactive({
 	id: '',
 	title: '',
@@ -99,9 +74,6 @@ const form = reactive({
 	scheduleDate: '',
 });
 
-/**
- * 表单验证规则
- */
 const dataRules = ref({
 	title: [{ required: true, message: t('schedule.titleRequired'), trigger: 'blur' }],
 	scheduleType: [{ required: true, message: t('schedule.typeRequired'), trigger: 'blur' }],
@@ -111,34 +83,23 @@ const dataRules = ref({
 	scheduleDate: [{ required: true, message: t('schedule.dateRequired'), trigger: 'blur' }],
 });
 
-/**
- * 打开对话框
- * @param id - 日程ID，为空时为新增模式
- * @param row - 行数据，可能包含日期等信息
- */
 const openDialog = (id: string, row: any): void => {
 	visible.value = true;
 	form.id = '';
 
-	// 重置表单数据
 	nextTick(() => dataFormRef.value?.resetFields());
 
 	if (row?.date) {
-		form.date = row.date;
+		form.scheduleDate = row.date;
 	}
 
-	// 获取日程详情
 	if (id) {
 		form.id = id;
 		getScheduleData(id);
 	}
 };
 
-/**
- * 提交表单
- */
 const onSubmit = async (): Promise<void> => {
-	// 验证表单是否符合规则
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
 
@@ -155,10 +116,6 @@ const onSubmit = async (): Promise<void> => {
 	}
 };
 
-/**
- * 获取日程详情数据
- * @param id - 日程ID
- */
 const getScheduleData = async (id: string): Promise<void> => {
 	loading.value = true;
 	try {
@@ -171,8 +128,5 @@ const getScheduleData = async (id: string): Promise<void> => {
 	}
 };
 
-/**
- * 暴露方法供父组件调用
- */
 defineExpose({ openDialog });
 </script>

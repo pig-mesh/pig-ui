@@ -89,45 +89,19 @@ export default {
 import { useUserInfo } from '/@/stores/userInfo';
 import { OfficeBuilding } from '@element-plus/icons-vue';
 
-const userData = ref({
-	postName: '',
-	name: '',
-	username: '',
-	userId: '',
-	avatar: '',
-	deptName: '',
-	tenantName: '',
-} as any);
+const { userInfos } = storeToRefs(useUserInfo());
 
-const userRoles = ref<any[]>([]);
+const userData = computed(() => {
+	const user = userInfos.value?.user;
+	if (!user) return { postName: '', name: '', username: '', userId: '', avatar: '', deptName: '', tenantName: '' };
+	return {
+		...user,
+		postName: user.postList?.map((item: any) => item.postName).join(',') || '',
+		tenantName: userInfos.value?.tenantName || '',
+	};
+});
 
-const userInfoStore = useUserInfo();
-const { userInfos } = storeToRefs(userInfoStore);
-
-// 监听 userInfo 变化，自动更新用户数据
-watch(
-	() => userInfos.value,
-	(newUserInfos) => {
-		if (newUserInfos?.user) {
-			const { user, roles, tenantName } = newUserInfos;
-			
-			// 更新用户数据
-			userData.value = user;
-			userData.value.postName = user?.postList?.map((item: any) => item.postName).join(',') || '';
-			userData.value.avatar = user.avatar;
-			userData.value.tenantName = tenantName;
-			
-			// 设置角色信息
-			if (roles && roles.length > 0) {
-				userRoles.value = roles;
-			}
-		}
-	},
-	{ 
-		immediate: true,
-		deep: true 
-	}
-);
+const userRoles = computed(() => userInfos.value?.roles || []);
 </script>
 
 <style scoped lang="scss">
