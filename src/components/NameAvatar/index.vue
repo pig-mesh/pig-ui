@@ -32,20 +32,12 @@ export default {
 			default: '',
 		},
 	},
-	data() {
-		return {};
-	},
-	watch: {},
 	computed: {
-		// eslint-disable-next-line vue/return-in-computed-property
 		text() {
 			if (this.num !== undefined) {
 				return `+${this.num}`;
-			} else {
-				if (this.name) {
-					return this.name.slice(-2);
-				}
 			}
+			return this.name ? this.name.slice(-2) : '';
 		},
 		transform() {
 			let style = {};
@@ -56,9 +48,6 @@ export default {
 		},
 		styles() {
 			let style = {};
-			if (this.size) {
-				style['font-size'] = '12px';
-			}
 			if (this.fontColor) {
 				style.color = this.fontColor;
 			}
@@ -68,7 +57,6 @@ export default {
 			return style;
 		},
 	},
-	methods: {},
 };
 </script>
 <style lang="scss" scoped>

@@ -143,12 +143,7 @@ const fontIconSheetsFilterList = computed(() => {
 });
 // 根据 tab name 类型设置图标
 const fontIconTabNameList = () => {
-	let iconList: any = [];
-	if (state.fontIconTabActive === 'ali') iconList = state.fontIconList.ali;
-	else if (state.fontIconTabActive === 'ele') iconList = state.fontIconList.ele;
-	else if (state.fontIconTabActive === 'awe') iconList = state.fontIconList.awe;
-	else if (state.fontIconTabActive === 'local') iconList = state.fontIconList.local;
-	return iconList;
+	return state.fontIconList[state.fontIconTabActive] || [];
 };
 // 处理 icon 双向绑定数值回显
 const initModeValueEcho = () => {

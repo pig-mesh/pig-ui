@@ -54,7 +54,7 @@
         <template v-for="(elem, i) in dataList" :key="i">
           <!-- 角色和岗位：仅在对应类型或混合类型下显示 -->
           <template v-if="shouldShowGroup(elem.type)">
-            <div v-for="item in elem.data" :key="item.id" class="mx-3 my-0.5 rounded-lg transition-all duration-300 relative hover:bg-[var(--next-color-hover)] hover:translate-x-0.5 has-[.el-checkbox.is-checked]:bg-[rgba(29,155,240,0.1)] has-[.el-checkbox.is-checked]:border has-[.el-checkbox.is-checked]:border-[rgba(29,155,240,0.3)] has-[.el-checkbox.is-disabled]:opacity-60 overflow-hidden before:content-[''] before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-transparent before:via-[rgba(29,155,240,0.1)] before:to-transparent before:transition-[left] before:duration-500 before:ease-in-out hover:before:left-full">
+            <div v-for="item in elem.data" :key="elem.type + '-' + item.id" class="mx-3 my-0.5 rounded-lg transition-all duration-300 relative hover:bg-[var(--next-color-hover)] hover:translate-x-0.5 has-[.el-checkbox.is-checked]:bg-[rgba(29,155,240,0.1)] has-[.el-checkbox.is-checked]:border has-[.el-checkbox.is-checked]:border-[rgba(29,155,240,0.3)] has-[.el-checkbox.is-disabled]:opacity-60 overflow-hidden before:content-[''] before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-transparent before:via-[rgba(29,155,240,0.1)] before:to-transparent before:transition-[left] before:duration-500 before:ease-in-out hover:before:left-full">
               <el-checkbox
                 v-model="item.selected"
                 @change="changeEvent(item)"

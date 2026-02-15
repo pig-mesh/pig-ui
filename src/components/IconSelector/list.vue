@@ -37,7 +37,7 @@ const props = defineProps({
 const emit = defineEmits(['get-icon']);
 
 // 当前 icon 图标点击时
-const onColClick = (v: unknown | string) => {
+const onColClick = (v: string) => {
 	emit('get-icon', v);
 };
 </script>
