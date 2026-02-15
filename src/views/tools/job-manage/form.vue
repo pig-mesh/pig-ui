@@ -56,7 +56,7 @@
 
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('job.cronExpression')" prop="cronExpression">
-						<crontab clearable @hide="popoverVis(false)" v-model="form.cronExpression"></crontab>
+						<crontab clearable v-model="form.cronExpression"></crontab>
 					</el-form-item>
 				</el-col>
 
@@ -107,7 +107,6 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
-const popoverVisible = ref(false);
 
 // 定义字典
 const { misfire_policy, job_type } = useDict('job_status', 'job_execute_status', 'misfire_policy', 'job_type');
@@ -128,15 +127,6 @@ const form = reactive({
 	jobExecuteStatus: '',
 	remark: '',
 });
-
-/**
- * Controls popover visibility
- * 控制弹出框可见性
- * @param bol - Whether popover is visible 弹出框是否可见
- */
-const popoverVis = (bol: boolean) => {
-	popoverVisible.value = bol;
-};
 
 // 定义校验规则
 const dataRules = reactive({

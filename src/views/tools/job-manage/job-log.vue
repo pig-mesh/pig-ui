@@ -78,8 +78,6 @@ const visible = ref(false);
 // 定义字典
 const { job_execute_status } = useDict('job_type', 'job_execute_status');
 
-// 定义变量内容
-const formDialogRef = ref();
 // 搜索变量
 const showSearch = ref(true);
 // 多选变量
@@ -146,4 +144,3 @@ defineExpose({
 });
 </script>
 
-<style scoped></style>

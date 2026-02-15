@@ -1,7 +1,7 @@
 <template>
   <div class="layout-padding">
     <div class="layout-padding-auto layout-padding-view">
-      <el-tabs v-model="activeName" @tab-click="handleClick">
+      <el-tabs v-model="activeName">
         <el-tab-pane lazy label="短信" name="sms">
           <template #label>
             <div class="ml-4 flex items-center gap-2">
@@ -62,16 +62,10 @@
 <script setup lang="ts" name="systemSysMessage">
 
 // 引入组件
-import {TabsPaneContext} from "element-plus";
-
 const InternalConfig = defineAsyncComponent(() => import('./internal/index.vue'));
 const SmsConfig = defineAsyncComponent(() => import('./sms/index.vue'));
 const EmailConfig = defineAsyncComponent(() => import('./email/index.vue'));
 const HookConfig = defineAsyncComponent(() => import('./webhook/index.vue'));
 
 const activeName = ref('sms')
-
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-  console.log(tab, event)
-}
 </script>

@@ -86,8 +86,8 @@ const handleDelete = async (id: string) => {
 	try {
 		await deleteObj(id);
 		useMessage().success(t('common.optSuccessText'));
-	} catch (error) {
-		console.error('Delete route failed:', error);
+	} catch {
+		// 删除失败时静默处理
 	} finally {
 		await getRouteList();
 	}
@@ -117,8 +117,8 @@ const getRouteList = async () => {
 		});
 
 		routeList.value = parsedRoutes;
-	} catch (error) {
-		console.error('Fetch route list failed:', error);
+	} catch {
+		// 获取路由列表失败时静默处理
 	}
 };
 
@@ -141,13 +141,3 @@ onMounted(() => {
 	getRouteList();
 });
 </script>
-
-<style lang="scss" scoped>
-.copy_btn {
-	position: absolute;
-	top: 60px;
-	right: 20px;
-	z-index: 9;
-	color: rgb(255, 255, 255);
-}
-</style>

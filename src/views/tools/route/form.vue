@@ -118,7 +118,6 @@ import { addObj, fetchList, validateExist } from '/@/api/admin/route';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
 import { rule } from '/@/utils/validate';
-import Tip from '/@/components/Tip/index.vue';
 
 const emit = defineEmits(['refresh']);
 const { t } = useI18n();
@@ -341,20 +340,11 @@ const handleSubmit = async () => {
 	loading.value = true;
 
 	try {
-		// 校验表单数据
 		const valid = await dataFormRef.value?.validate().catch(() => false);
-		if (!valid) {
-			loading.value = false;
-			return;
-		}
+		if (!valid) return;
 
-		// 校验 JSON 数据
-		if (!validateJsonData(jsonData.value)) {
-			loading.value = false;
-			return;
-		}
+		if (!validateJsonData(jsonData.value)) return;
 
-		// 提交路由配置
 		await addObj(jsonData.value);
 		useMessage().success(t('common.optSuccessText'));
 		visible.value = false;
@@ -365,7 +355,6 @@ const handleSubmit = async () => {
 		emit('refresh');
 	}
 };
-
 
 /**
  * 获取路由配置数据
@@ -392,9 +381,8 @@ const getRouteData = async (id: string) => {
 		}
 
 		return result;
-	} catch (error) {
-		console.error('Fetch route data failed:', error);
-		throw error;
+	} catch {
+		throw new Error('Fetch route data failed');
 	}
 };
 
@@ -418,8 +406,8 @@ const openDialog = async (id?: string) => {
 			const data = await getRouteData(id);
 			jsonData.value = data;
 			handleJsonChange(data);
-		} catch (error) {
-			console.error('Load route data failed:', error);
+		} catch {
+			// 加载路由数据失败时静默处理
 		}
 	} else {
 		// 新增模式: 使用演示数据

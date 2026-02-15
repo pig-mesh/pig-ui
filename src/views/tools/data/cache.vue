@@ -56,7 +56,6 @@
 
 <script setup lang="ts" name="cache">
 import { systemCache } from '/@/api/admin/system';
-import { markRaw } from 'vue';
 import { useI18n } from 'vue-i18n';
 import * as echarts from 'echarts';
 
@@ -198,8 +197,8 @@ const getCacheMonitorData = async () => {
 
 		// 初始化图表
 		initCharts();
-	} catch (error) {
-		console.error('Failed to fetch cache monitor data:', error);
+	} catch {
+		// 获取缓存监控数据失败时静默处理
 	}
 };
 

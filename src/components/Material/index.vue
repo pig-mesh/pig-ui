@@ -76,8 +76,8 @@
             <div>
               <span class="mr-5">{{ t('material.moveFileTo') }}</span>
               <el-select v-model="moveId" :placeholder="t('material.selectPlaceholder')">
-                <template v-for="item in cateLists" :key="item.id">
-                  <el-option v-if="item.id !== ''" :label="item.name" :value="item.id"></el-option>
+                <template v-for="item in cateLists">
+                  <el-option v-if="item.id !== ''" :key="item.id" :label="item.name" :value="item.id"></el-option>
                 </template>
               </el-select>
             </div>
