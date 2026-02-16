@@ -36,7 +36,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					'vue-router',
 					'pinia',
 					{
-						'./src/utils/globalProperties': ['baseURL'],
+						'/@/utils/globalProperties': ['baseURL'],
 					},
 				],
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
