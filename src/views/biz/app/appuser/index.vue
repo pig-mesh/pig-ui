@@ -140,7 +140,7 @@ const resetQuery = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/app/appuser/export',Object.assign( state.queryForm,{ids:selectObjs}), 'users.xlsx');
+	downBlobFile('/app/appuser/export', { ...state.queryForm, ids: selectObjs.value }, 'users.xlsx');
 };
 
 // 多选事件

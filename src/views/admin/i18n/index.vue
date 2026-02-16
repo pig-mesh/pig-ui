@@ -139,7 +139,7 @@ const handleRefreshCache = () => {
 
 // 导出excel
 const exportExcel = () => {
-	downBlobFile('/admin/i18n/export', Object.assign(state.queryForm,{ids:selectObjs}), 'i18n.xlsx');
+	downBlobFile('/admin/i18n/export', { ...state.queryForm, ids: selectObjs.value }, 'i18n.xlsx');
 };
 
 // 多选事件

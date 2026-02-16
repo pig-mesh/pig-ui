@@ -91,7 +91,7 @@ const resetQuery = () => {
 };
 
 const exportExcel = () => {
-  downBlobFile('/app/appContacts/export', Object.assign(state.queryForm, { ids: selectObjs }), 'appContacts.xlsx');
+  downBlobFile('/app/appContacts/export', { ...state.queryForm, ids: selectObjs.value }, 'appContacts.xlsx');
 };
 
 const selectionChangHandle = (objs: { id: string }[]) => {

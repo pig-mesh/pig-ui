@@ -307,7 +307,7 @@ const handleSelectionChange = (rows: any) => {
 };
 
 const exportExcel = () => {
-  downBlobFile('/job/sys-job/export', Object.assign(state.queryForm, {ids: selectedRows}), 'job.xlsx');
+  downBlobFile('/job/sys-job/export', { ...state.queryForm, ids: selectedRows.value }, 'job.xlsx');
 };
 
 const handleJobLog = (row: any) => {

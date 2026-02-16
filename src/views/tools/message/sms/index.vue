@@ -131,7 +131,7 @@ const resetQuery = (): void => {
 };
 
 const exportExcel = (): void => {
-	downBlobFile('/admin/sysMessage/export', Object.assign(state.queryForm, { ids: selectObjs }), 'sysMessage.xlsx');
+	downBlobFile('/admin/sysMessage/export', { ...state.queryForm, ids: selectObjs.value }, 'sysMessage.xlsx');
 };
 
 const selectionChangHandle = (objs: { id: string }[]): void => {

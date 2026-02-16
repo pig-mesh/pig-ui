@@ -236,7 +236,7 @@ const handleNodeClick = (e: any) => {
  * 导出用户数据为 Excel 文件
  */
 const exportExcel = () => {
-	downBlobFile('/admin/user/export', { ...state.queryForm, ids: selectObjs }, 'users.xlsx');
+	downBlobFile('/admin/user/export', { ...state.queryForm, ids: selectObjs.value }, 'users.xlsx');
 };
 
 /**

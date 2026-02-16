@@ -152,7 +152,7 @@ const resetQuery = (): void => {
  * 导出Excel文件
  */
 const exportExcel = (): void => {
-	downBlobFile('/admin/social/export', Object.assign(state.queryForm, { ids: selectObjs.value }), 'social.xlsx');
+	downBlobFile('/admin/social/export', { ...state.queryForm, ids: selectObjs.value }, 'social.xlsx');
 };
 
 /**
