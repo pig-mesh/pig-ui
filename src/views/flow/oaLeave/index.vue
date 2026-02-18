@@ -305,7 +305,7 @@ const resetQuery = () => {
 const exportExcel = () => {
   downBlobFile(
     '/flow/bpmOaLeave/export',
-    Object.assign(state.queryForm, { ids: selectObjs }),
+    { ...state.queryForm, ids: selectObjs.value },
     'oaLeave.xlsx'
   );
 };

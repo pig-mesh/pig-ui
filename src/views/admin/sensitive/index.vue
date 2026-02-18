@@ -116,7 +116,7 @@ const resetQuery = (): void => {
 const exportExcel = (): void => {
 	downBlobFile(
 		'/admin/sysSensitiveWord/export',
-		Object.assign(state.queryForm, { ids: selectObjs.value }),
+		{ ...state.queryForm, ids: selectObjs.value },
 		'sysSensitiveWord.xlsx'
 	);
 };

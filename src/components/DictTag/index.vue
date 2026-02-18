@@ -17,15 +17,16 @@
 -->
 <template>
 	<div>
-		<template v-for="(item, index) in options" :key="item.value ?? index">
+		<template v-for="(item, index) in options">
 			<template v-if="values.includes(item.value || item)">
 				<!-- 无标签样式或 default 类型：纯文本展示 -->
-				<span v-if="!item.elTagType || item.elTagType === 'default'" :class="item.elTagClass">
+				<span v-if="!item.elTagType || item.elTagType === 'default'" :key="item.value ?? index" :class="item.elTagClass">
 					{{ item.label || item }}
 				</span>
 				<!-- 其他类型：使用 el-tag 渲染带颜色的标签 -->
 				<el-tag
 					v-else
+					:key="item.value ?? index"
 					:disable-transitions="true"
 					:type="item.elTagType === 'primary' ? '' : item.elTagType"
 					:class="item.elTagClass"
