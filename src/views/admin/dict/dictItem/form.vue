@@ -21,7 +21,7 @@
       <el-form-item :label="$t('dictItem.listClass')" prop="listClass">
         <el-select v-model="dataForm.listClass" :placeholder="$t('dictItem.inputListClassTip')" clearable class="w-full">
           <el-option v-for="item in listClassOptions" :key="item.value" :label="item.label" :value="item.value">
-            <el-tag v-if="item.value" :type="item.value === 'primary' ? '' : item.value" size="small" class="ml-2">
+            <el-tag v-if="item.value" :type="item.value" size="small" class="ml-2">
               {{ item.label }}
             </el-tag>
           </el-option>
