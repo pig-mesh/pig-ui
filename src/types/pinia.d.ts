@@ -2,12 +2,40 @@
  * pinia 类型定义
  */
 
+// 角色信息
+declare interface RoleItem {
+	roleId: string;
+	roleName: string;
+	roleCode: string;
+	roleDesc: string;
+	dsType: number;
+	dsScope: string;
+}
+
+// 部门信息
+declare interface DeptItem {
+	deptId: string;
+	name: string;
+	sortOrder: number;
+	parentId: string | null;
+}
+
+// 岗位信息
+declare interface PostItem {
+	postId: string;
+	postCode: string;
+	postName: string;
+	postSort: number;
+	remark: string;
+}
+
 // 用户信息
 declare interface UserInfosState<T = any> {
 	userInfos: {
 		authBtnList: string[];
 		photo: string;
-		roles: string[];
+		roles: RoleItem[];
+		deptList: DeptItem[];
 		time: number;
 		userName: string;
 		tenantId: string;

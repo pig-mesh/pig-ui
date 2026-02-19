@@ -1,8 +1,8 @@
 <template>
-	<el-card class="h-[191px] box-card" :body-style="{ height: 'calc(100% - 50px)', padding: '8px 12px' }">
+	<el-card class="h-[190px] box-card" :body-style="{ height: 'calc(100% - 50px)', padding: '12px 16px' }">
 		<template #header>
 			<div class="card-header">
-				<span>{{ props.title }}</span>
+				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ props.title }}</span>
 			</div>
 		</template>
 		<div class="h-full pr-1 -mr-1 overflow-y-auto" v-if="showRoutes.length > 0">

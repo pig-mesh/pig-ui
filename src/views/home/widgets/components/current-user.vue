@@ -7,200 +7,67 @@ export default {
 </script>
 
 <template>
-	<el-card class="user-card">
-		<div class="flex items-center justify-center p-6 h-full relative overflow-hidden">
-			
-			<!-- 主内容区域 - 水平垂直居中 -->
-			<div class="flex items-center justify-center w-full max-w-md">
-				
-				<!-- 头像区域 -->
-				<div class="avatar-container relative flex-shrink-0 mr-24">
-					<div class="relative">
-						<img 
-							class="object-cover w-24 h-24 rounded-full shadow-lg ring-4 ring-white " 
-							:src="baseURL + userData.avatar" 
-							alt="Avatar" 
-						/>
-						<div class="status-indicator absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-3 border-white flex items-center justify-center shadow-sm">
-							<div class="w-2.5 h-2.5 bg-white rounded-full animate-pulse"></div>
-						</div>
-					</div>
-				</div>
-				
-				<!-- 信息区域 -->
-				<div class="info-section flex-1 flex flex-col justify-center space-y-3">
-					<!-- 真实姓名 -->
-					<div class="name-section">
-						<div class="flex items-center mb-1">
-													<h2 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">
-							{{ userData.name || userData.username }}
-						</h2>
-						</div>
-						<!-- 用户名 -->
-						<p class="text-sm text-gray-500 dark:text-gray-400 font-medium">
-							@{{ userData.username }}
-						</p>
-					</div>
-					
-					<!-- 部门和职位 -->
-					<div class="dept-section" v-if="userData.deptName || userData.postName">
-						<div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-							<span class="font-medium">{{ userData.deptName }}</span>
-							<span class="mx-2 text-gray-400 dark:text-gray-500" v-if="userData.deptName && userData.postName">·</span>
-							<span class="text-gray-500 dark:text-gray-400">{{ userData.postName }}</span>
-						</div>
-					</div>
-					
-					<!-- 角色信息 -->
-					<div class="roles-section" v-if="userRoles && userRoles.length > 0">
-						<div class="flex flex-wrap gap-1">
-							<el-tag 
-								v-for="role in userRoles" 
-								:key="role.roleId" 
-								size="small" 
-								type="primary" 
-								effect="plain"
-								class="text-xs"
-							>
-								{{ role.roleName }}
-							</el-tag>
-						</div>
-					</div>
-
-					<!-- 租户信息 -->
-					<div class="tenant-section" v-if="userData.tenantName">
-						<div class="flex items-center text-sm text-gray-600 dark:text-gray-300">
-							<el-icon class="mr-2 text-blue-500 dark:text-blue-400" size="16">
-								<OfficeBuilding />
-							</el-icon>
-							<span class="font-medium">{{ userData.tenantName }}</span>
-						</div>
-					</div>
-				</div>
+	<div
+		class="group h-[189px] rounded-lg border border-gray-200/60 dark:border-gray-700/50 bg-white dark:bg-gray-800 overflow-hidden transition-shadow hover:shadow-md"
+	>
+		<div class="flex items-center h-full px-6">
+			<!-- 头像 -->
+			<div class="flex-shrink-0 mr-5">
+				<img
+					class="object-cover w-16 h-16 transition-transform duration-200 rounded-full shadow-md shadow-black/5 dark:shadow-black/20 ring-2 ring-white dark:ring-gray-700 group-hover:scale-105"
+					:src="baseURL + userData.avatar"
+					alt="Avatar"
+				/>
 			</div>
-			
-			<!-- 装饰背景 -->
-			<div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100/20 to-purple-100/20 rounded-full -translate-y-16 translate-x-16 blur-2xl"></div>
+
+			<!-- 信息区域：主 → 次 → 辅 三层 -->
+			<div class="flex-1 min-w-0">
+				<!-- 主层：姓名 + 用户名 -->
+				<h2 class="text-lg font-semibold leading-tight tracking-tight text-gray-900 truncate dark:text-gray-50">
+					{{ userData.name || userData.username }}
+				</h2>
+				<p class="mt-0.5 text-xs text-gray-400 truncate dark:text-gray-500">@{{ userData.username }}</p>
+
+				<!-- 次层：角色标签 -->
+				<div v-if="userRoles.length" class="flex flex-wrap gap-1.5 mt-3">
+					<span
+						v-for="role in userRoles"
+						:key="role.roleId"
+						class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary dark:bg-primary/20"
+					>
+						{{ role.roleName }}
+					</span>
+				</div>
+
+				<!-- 辅层：部门/职位 · 租户 -->
+				<p v-if="subInfo" class="mt-2.5 text-xs text-gray-400 dark:text-gray-500 truncate">{{ subInfo }}</p>
+			</div>
 		</div>
-	</el-card>
+	</div>
 </template>
 
 <script setup lang="ts" name="currentUser">
 import { useUserInfo } from '/@/stores/userInfo';
-import { OfficeBuilding } from '@element-plus/icons-vue';
 
 const { userInfos } = storeToRefs(useUserInfo());
 
 const userData = computed(() => {
 	const user = userInfos.value?.user;
-	if (!user) return { postName: '', name: '', username: '', userId: '', avatar: '', deptName: '', tenantName: '' };
+	if (!user) return { postName: '', name: '', username: '', avatar: '', deptName: '', tenantName: '' };
 	return {
 		...user,
-		postName: user.postList?.map((item: any) => item.postName).join(',') || '',
+		postName: user.postList?.map((item: PostItem) => item.postName).join(',') || '',
 		tenantName: userInfos.value?.tenantName || '',
 	};
 });
 
 const userRoles = computed(() => userInfos.value?.roles || []);
+
+const subInfo = computed(() => {
+	const parts: string[] = [];
+	const org = [userData.value.deptName, userData.value.postName].filter(Boolean).join('/');
+	if (org) parts.push(org);
+	if (userData.value.tenantName) parts.push(userData.value.tenantName);
+	return parts.join(' · ');
+});
 </script>
-
-<style scoped lang="scss">
-.user-card {
-	border-radius: 16px;
-	overflow: hidden;
-	backdrop-filter: blur(10px);
-	
-	:deep(.el-card__body) {
-		padding: 0;
-		height: 100%;
-	}
-	
-	// 悬停效果
-	&:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-	}
-	
-	// 头像效果
-	.avatar-container {
-		img {
-			transition: all 0.3s ease;
-		}
-		
-		&:hover img {
-			transform: scale(1.05);
-		}
-	}
-	
-	// 状态指示器动画
-	.status-indicator {
-		.animate-pulse {
-			animation: pulse 2s infinite;
-		}
-	}
-	
-	// 姓名区域
-	.name-section {
-		h2 {
-			transition: color 0.2s ease;
-		}
-	}
-	
-	// 部门区域
-	.dept-section {
-		.el-icon {
-			transition: color 0.2s ease;
-		}
-	}
-	
-	// 角色标签
-	.roles-section {
-		.el-tag {
-			transition: all 0.2s ease;
-			
-			&:hover {
-				transform: translateY(-1px);
-				box-shadow: 0 4px 8px rgba(59, 130, 246, 0.2);
-			}
-		}
-	}
-	
-
-}
-
-// 脉冲动画
-@keyframes pulse {
-	0%, 100% {
-		opacity: 1;
-	}
-	50% {
-		opacity: 0.7;
-	}
-}
-
-// 响应式优化
-@media (max-width: 768px) {
-	.user-card {
-		.flex {
-			flex-direction: column;
-			text-align: center;
-		}
-		
-		// 主内容区域在移动端的调整
-		.flex.items-center.justify-center.w-full.max-w-md {
-			flex-direction: column;
-			align-items: center;
-			max-width: 100%;
-		}
-		
-		.avatar-container {
-			margin-right: 0;
-			margin-bottom: 1rem;
-		}
-		
-		.info-section {
-			align-items: center;
-		}
-	}
-}
-</style>

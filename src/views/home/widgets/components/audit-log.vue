@@ -8,16 +8,27 @@ export default {
 <template>
 	<el-card class="box-card h-96">
 		<template #header>
-			<div class="card-header">
-				<span>{{ $t('home.auditLogsTip') }}</span>
-				<el-button text class="button" @click="handleRoutr">{{ $t('home.moreTip') }}</el-button>
+			<div class="flex justify-between items-center">
+				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.auditLogsTip') }}</span>
+				<el-button text class="button" @click="handleRoutr">
+					{{ $t('home.moreTip') }}
+					<el-icon class="ml-1"><ArrowRight /></el-icon>
+				</el-button>
 			</div>
 		</template>
-		<el-timeline v-if="auditState.dataList.length > 0">
-			<el-timeline-item v-for="(item, index) in auditState.dataList" :key="index" :timestamp="item.createTime">
-				{{ item.createBy }} : {{ item.auditField }} {{ item.afterVal }} => {{ item.beforeVal }}
-			</el-timeline-item>
-		</el-timeline>
+		<div class="flex flex-col gap-3" v-if="auditState.dataList.length > 0">
+			<div v-for="(item, index) in auditState.dataList" :key="index" class="py-2 border-b border-[var(--el-border-color-extra-light)] last:border-b-0">
+				<div class="flex items-start gap-3">
+					<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
+					<div class="flex-1 min-w-0">
+						<p class="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">
+							{{ item.createBy }}：{{ item.auditField }} {{ item.afterVal }} => {{ item.beforeVal }}
+						</p>
+					</div>
+					<span class="text-xs text-gray-400 flex-shrink-0 whitespace-nowrap">{{ item.createTime }}</span>
+				</div>
+			</div>
+		</div>
 		<el-empty :image-size="120" v-else />
 	</el-card>
 </template>
@@ -48,9 +59,4 @@ const handleRoutr = () => {
 </script>
 
 <style scoped lang="scss">
-.card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
 </style>

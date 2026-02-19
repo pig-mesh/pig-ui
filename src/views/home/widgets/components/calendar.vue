@@ -15,25 +15,19 @@ export default {
 			<template v-for="{ day, cells } in Object.values(dayCells)">
 				<ul v-if="cells.length > 0" class="py-2 space-y-2" :key="day">
 					<li v-for="cell in cells" :key="cell.data.customData.id">
-						<div class="flex items-center space-x-4">
-							<div class="flex-shrink-0">
-								<div class="flex justify-center items-center w-10 h-10 rounded-lg bg-blue-100 text-blue-500 dark:bg-blue-400 dark:text-white">
-									<el-icon>
-										<CircleCheck />
-									</el-icon>
-								</div>
-							</div>
-							<div class="flex items-center justify-between flex-grow">
-								<div>
-									<p class="font-medium">
+						<div class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+							<div class="w-1 h-8 rounded-full bg-primary flex-shrink-0"></div>
+							<div class="flex items-center justify-between flex-grow min-w-0">
+								<div class="min-w-0">
+									<p class="text-[13px] font-medium text-gray-700 dark:text-gray-300 truncate">
 										{{ cell.data.customData.title }}
 									</p>
-									<p class="text-xs font-medium text-gray-400 dark:text-gray-400 leading-2">
+									<p class="text-xs text-gray-400 mt-0.5">
 										{{ cell.data.customData.scheduleDate }} {{ cell.data.customData.scheduleTime }}
 									</p>
 								</div>
 							</div>
-							<el-switch @change="changeSwitch(cell.data.customData.id)" />
+							<el-switch size="small" @change="changeSwitch(cell.data.customData.id)" />
 						</div>
 					</li>
 				</ul>

@@ -19,11 +19,27 @@ import { CanvasRenderer } from 'echarts/renderers';
 
 use([TitleComponent, ScatterChart, CanvasRenderer, GridComponent]);
 const option = reactive({
-	xAxis: {},
-	yAxis: {},
+	xAxis: {
+		axisLine: { lineStyle: { color: '#e5e7eb' } },
+		axisLabel: { color: '#9ca3af', fontSize: 12 },
+		splitLine: { lineStyle: { color: '#f3f4f6' } },
+	},
+	yAxis: {
+		axisLine: { show: false },
+		axisLabel: { color: '#9ca3af', fontSize: 12 },
+		splitLine: { lineStyle: { color: '#f3f4f6', type: 'dashed' } },
+	},
+	grid: { top: 16, right: 16, bottom: 32, left: 40 },
 	series: [
 		{
-			symbolSize: 20,
+			symbolSize: 14,
+			itemStyle: {
+				color: '#3b82f6',
+				opacity: 0.7,
+			},
+			emphasis: {
+				itemStyle: { opacity: 1, shadowBlur: 8, shadowColor: 'rgba(59,130,246,0.3)' },
+			},
 			data: [
 				[10.0, 8.04],
 				[8.07, 6.95],

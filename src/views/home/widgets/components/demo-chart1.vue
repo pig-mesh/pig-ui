@@ -20,14 +20,28 @@ import {CanvasRenderer} from 'echarts/renderers';
 
 use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
 
+const colorPalette = ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'];
+
 const option = reactive({
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b}: {c} ({d}%)',
+    backgroundColor: 'rgba(255,255,255,0.96)',
+    borderColor: '#e5e7eb',
+    borderWidth: 1,
+    textStyle: { color: '#374151', fontSize: 13 },
+    padding: [8, 12],
   },
   legend: {
     data: ['Java17', 'Java8', 'Other'],
+    bottom: 0,
+    textStyle: { fontSize: 12, color: '#9ca3af' },
+    icon: 'circle',
+    itemWidth: 8,
+    itemHeight: 8,
+    itemGap: 16,
   },
+  color: colorPalette,
   series: [
     {
       name: 'Java',
@@ -36,7 +50,8 @@ const option = reactive({
       radius: [0, '30%'],
       label: {
         position: 'inner',
-        fontSize: 14,
+        fontSize: 12,
+        color: '#fff',
       },
       labelLine: {
         show: false,
@@ -52,39 +67,13 @@ const option = reactive({
       type: 'pie',
       radius: ['45%', '60%'],
       labelLine: {
-        length: 30,
+        length: 20,
+        lineStyle: { color: '#d1d5db' },
       },
       label: {
-        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-        backgroundColor: '#F6F8FC',
-        borderColor: '#8C8D8E',
-        borderWidth: 1,
-        borderRadius: 4,
-        rich: {
-          a: {
-            color: '#6E7079',
-            lineHeight: 22,
-            align: 'center',
-          },
-          hr: {
-            borderColor: '#8C8D8E',
-            width: '100%',
-            borderWidth: 1,
-            height: 0,
-          },
-          b: {
-            color: '#4C5058',
-            fontSize: 14,
-            fontWeight: 'bold',
-            lineHeight: 33,
-          },
-          per: {
-            color: '#fff',
-            backgroundColor: '#4C5058',
-            padding: [3, 4],
-            borderRadius: 4,
-          },
-        },
+        formatter: '{b}: {d}%',
+        fontSize: 12,
+        color: '#6b7280',
       },
       data: [
         {value: 1048, name: 'Java17'},

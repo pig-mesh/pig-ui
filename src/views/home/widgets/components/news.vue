@@ -8,23 +8,33 @@ export default {
 <template>
 	<el-card class="h-96">
 		<template #header>
-			<div class="card-header">
-				<span>{{ $t('home.newsletterTip') }}</span>
-				<el-button text class="button" @click="openList">{{ $t('home.moreTip') }}</el-button>
+			<div class="flex justify-between items-center">
+				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.newsletterTip') }}</span>
+				<el-button text class="button" @click="openList">
+					{{ $t('home.moreTip') }}
+					<el-icon class="ml-1"><ArrowRight /></el-icon>
+				</el-button>
 			</div>
 		</template>
-		<el-timeline v-if="newsList.length > 0">
-			<div class="relative">
-				<el-timeline-item v-for="(item, index) in newsList" :key="index" :timestamp="item.createTime" @click="contentRef.openDialog(item)">
-					<button class="absolute right-0 px-3 rotate-[10deg] -top-2 border bg-primary text-white font-bold">
-						{{ item.readFlag === '1' ? $t('msg.readed') : $t('msg.unread') }}
-					</button>
-					<div class="p-2 border border-gray-400 purple_border">
-						{{ item.title }}
+		<div class="flex flex-col gap-1" v-if="newsList.length > 0">
+			<div
+				v-for="(item, index) in newsList"
+				:key="index"
+				class="py-2.5 px-2 rounded-lg cursor-pointer transition-colors hover:bg-fill"
+				@click="contentRef.openDialog(item)"
+			>
+				<div class="flex items-center gap-3">
+					<div class="w-1 h-8 rounded-full flex-shrink-0" :class="item.readFlag === '1' ? 'bg-gray-200 dark:bg-gray-600' : 'bg-primary'"></div>
+					<div class="flex-1 min-w-0">
+						<p class="text-[13px] text-gray-700 dark:text-gray-300 truncate">{{ item.title }}</p>
+						<p class="text-xs text-gray-400 mt-0.5">{{ item.createTime }}</p>
 					</div>
-				</el-timeline-item>
+					<el-tag size="small" :type="item.readFlag === '1' ? 'info' : 'warning'" effect="plain" round class="text-xs flex-shrink-0">
+						{{ item.readFlag === '1' ? $t('msg.readed') : $t('msg.unread') }}
+					</el-tag>
+				</div>
 			</div>
-		</el-timeline>
+		</div>
 		<el-empty :image-size="120" v-else />
 	</el-card>
 
@@ -62,9 +72,4 @@ onMounted(() => {
 });
 </script>
 <style scoped lang="scss">
-.card-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
 </style>

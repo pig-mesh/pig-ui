@@ -16,7 +16,7 @@
 						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
 							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="200"></el-empty>
 						</div>
-						<el-row :gutter="0">
+						<el-row :gutter="2">
 							<el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
 								<draggable
 									v-model="grid.copmsList[index]"
@@ -253,17 +253,17 @@ onMounted(() => {
 	flex: 1;
 	overflow: auto;
 	overflow-x: hidden;
-	padding: 5px;
+	padding: 3px;
 }
 
 .widgets-aside {
 	width: 360px;
-	background: #fff;
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-	border-radius: 8px;
+	background: var(--el-bg-color-overlay);
+	border-left: 1px solid var(--el-border-color-lighter);
+	border-radius: 12px;
 	margin-bottom: 5px;
-	min-height: 100px; /* Ensure a minimum height for better drag experience */
-	position: relative; /* Needed for customize-overlay positioning */
+	min-height: 100px;
+	position: relative;
 	overflow: auto;
 }
 
@@ -286,8 +286,9 @@ onMounted(() => {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 3px;
+	border-radius: 8px;
 	cursor: pointer;
+	transition: background 0.15s ease;
 }
 
 .widgets-aside-close:hover {
@@ -335,16 +336,21 @@ onMounted(() => {
 
 .widgets-item {
 	background: var(--el-bg-color-overlay);
-	border: 1px solid var(--el-border-color-light);
-	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.05);
-	border-radius: 8px;
-	margin-bottom: 0px; /* Reduced for tighter vertical spacing */
-	min-height: 100px; /* Ensure a minimum height for better drag experience */
-	position: relative; /* Needed for customize-overlay positioning */
+	border: 1px solid var(--el-border-color-lighter);
+	border-radius: 12px;
+	margin-bottom: 2px;
+	min-height: 100px;
+	position: relative;
+	transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+	&:hover {
+		border-color: var(--el-border-color-light);
+		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+	}
 }
 
 .widgets-item > :deep(div) {
-	border-radius: 8px; /* Ensure component content also has rounded corners if it fills the card */
+	border-radius: 12px;
 }
 
 /* Ensure components inside widgets-item are not creating extra margins or borders if not needed */
@@ -402,14 +408,14 @@ onMounted(() => {
 .widgets-list-item .item-logo {
 	width: 40px;
 	height: 40px;
-	border-radius: 50%;
-	background: rgba(180, 180, 180, 0.1);
+	border-radius: 10px;
+	background: rgba(180, 180, 180, 0.08);
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	font-size: 18px;
 	margin-right: 15px;
-	color: #6a8bad;
+	color: var(--el-color-primary);
 }
 
 .widgets-list-item .item-info {
@@ -417,8 +423,8 @@ onMounted(() => {
 }
 
 .widgets-list-item .item-info h2 {
-	font-size: 16px;
-	font-weight: normal;
+	font-size: 15px;
+	font-weight: 500;
 	cursor: default;
 }
 
@@ -429,7 +435,8 @@ onMounted(() => {
 }
 
 .widgets-list-item:hover {
-	background: rgba(180, 180, 180, 0.1);
+	background: rgba(180, 180, 180, 0.06);
+	border-radius: 8px;
 }
 
 .widgets-wrapper .sortable-ghost {
@@ -444,16 +451,19 @@ onMounted(() => {
 .selectLayout-item {
 	width: 60px;
 	height: 60px;
-	border: 2px solid var(--el-border-color-light);
+	border: 2px solid var(--el-border-color-lighter);
 	padding: 5px;
 	cursor: pointer;
 	margin-right: 15px;
+	border-radius: 8px;
+	transition: border-color 0.15s ease;
 }
 
 .selectLayout-item span {
 	display: block;
-	background: var(--el-border-color-light);
+	background: var(--el-border-color-lighter);
 	height: 46px;
+	border-radius: 3px;
 }
 
 .selectLayout-item.item02 span {
@@ -484,11 +494,12 @@ onMounted(() => {
 
 .dark {
 	.widgets-aside {
-		background: #2b2b2b;
+		background: var(--el-bg-color-overlay);
+		border-left-color: var(--el-border-color);
 	}
 
 	.customize-overlay {
-		background: rgba(43, 43, 43, 0.9);
+		background: rgba(21, 32, 43, 0.9);
 	}
 }
 
