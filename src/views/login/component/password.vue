@@ -183,7 +183,7 @@ const imgSrc = ref('');
  */
 const getVerifyImageCode = () => {
 	state.ruleForm.randomStr = generateUUID();
-	imgSrc.value = `${import.meta.env.VITE_API_URL}${import.meta.env.VITE_IS_MICRO == 'false' ? '/admin' : '/auth'}/code/image?randomStr=${
+	imgSrc.value = `${baseURL}${import.meta.env.VITE_IS_MICRO == 'false' ? '/admin' : '/auth'}/code/image?randomStr=${
 		state.ruleForm.randomStr
 	}`;
 };

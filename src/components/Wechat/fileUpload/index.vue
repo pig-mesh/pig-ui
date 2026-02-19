@@ -1,7 +1,7 @@
 <template>
 	<el-upload
 		ref="fileUpload"
-		:action="baseUrl + other.adaptationUrl(actionUrl)"
+		:action="baseURL + other.adaptationUrl(actionUrl)"
 		:headers="headers"
 		multiple
 		:limit="1"
@@ -21,7 +21,6 @@
 <script setup lang="ts" name="wx-file-upload">
 import { Session } from '/@/utils/storage';
 import { useMessage } from '/@/hooks/message';
-const baseUrl = import.meta.env.VITE_API_URL || '';
 import other from '/@/utils/other';
 
 // 根据是否是微服务，判断上传地址

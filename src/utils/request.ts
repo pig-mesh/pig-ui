@@ -17,8 +17,8 @@ export enum CommonHeaderEnum {
  * 创建并配置一个 Axios 实例对象
  */
 const service: AxiosInstance = axios.create({
-	baseURL: import.meta.env.VITE_API_URL,
-	timeout: 50000, // 全局超时时间
+	baseURL,
+	timeout: Number(import.meta.env.VITE_REQUEST_TIMEOUT) || 50000, // 全局超时时间（可通过.env配置）
 	paramsSerializer: {
 		serialize: (params: any) => {
 			return qs.stringify(params, { arrayFormat: 'repeat' });

@@ -54,7 +54,6 @@ onUnmounted(() => {
  */
 const initWebSocket = () => {
 	const { host, protocol: pageProtocol } = window.location;
-	const baseURL = import.meta.env.VITE_API_URL;
 	const protocol = pageProtocol === 'https:' ? 'wss' : 'ws';
 	const wsUri = `${protocol}://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
 

@@ -15,7 +15,7 @@
                 @node-click="handleCatSelect"
             >
               <template v-slot="{ data }">
-                <div class="flex flex-1 items-center pr-4 min-w-0">
+                <div class="flex items-center flex-1 min-w-0 pr-4">
                   <img class="w-[20px] h-[16px] mr-3" src="/@/assets/icon_folder.png"/>
                   <span class="flex-1 mr-2 truncate">
 										{{ data.name }}
@@ -95,10 +95,10 @@
             </el-button>
           </template>
         </el-input>
-        <div class="flex gap-2 items-center">
+        <div class="flex items-center gap-2">
           <el-tooltip :content="t('material.list')" placement="top">
             <div
-                class="flex justify-center items-center w-8 h-8 list-icon"
+                class="flex items-center justify-center w-8 h-8 list-icon"
                 :class="{
                   'bg-primary-light-8 text-primary': listShowType === 'table'
                 }"
@@ -111,7 +111,7 @@
           </el-tooltip>
           <el-tooltip :content="t('material.grid')" placement="top">
             <div
-                class="flex justify-center items-center w-8 h-8 list-icon"
+                class="flex items-center justify-center w-8 h-8 list-icon"
                 :class="{
                   'bg-primary-light-8 text-primary': listShowType === 'normal'
                 }"
@@ -130,7 +130,7 @@
           {{ t('material.allCheck') }}
         </el-checkbox>
       </div>
-      <div class="flex flex-col flex-1 mb-1 min-h-0 material-center__content">
+      <div class="flex flex-col flex-1 min-h-0 mb-1 material-center__content">
         <el-scrollbar v-if="pager.lists.length" v-show="listShowType == 'normal'">
           <ul class="flex flex-wrap mt-4 file-list">
             <li class="file-item-wrap" v-for="item in pager.lists" :key="item.id" :style="{ width: fileSize }">
@@ -143,10 +143,10 @@
                   </div>
                 </file-item>
               </del-wrap>
-              <div class="flex justify-center items-center mt-2">
+              <div class="flex items-center justify-center mt-2">
                 {{ item.original }}
               </div>
-              <div class="flex justify-center items-center operation-btns">
+              <div class="flex items-center justify-center operation-btns">
                 <popover-input
                     @confirm="handleFileRename($event, item.id)"
                     size="default"
@@ -218,7 +218,7 @@
           </el-table-column>
         </el-table>
 
-        <div class="flex flex-1 justify-center items-center" v-if="!pager.lists.length">{{
+        <div class="flex items-center justify-center flex-1" v-if="!pager.lists.length">{{
             t('el.transfer.noData')
           }}~
         </div>

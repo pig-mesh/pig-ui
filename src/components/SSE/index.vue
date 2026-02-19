@@ -48,7 +48,6 @@ let abortController: AbortController | null = null;
  * @param {string} uri - SSE 服务端 URI
  */
 const initSseConnection = async (uri: string) => {
-	const baseURL = import.meta.env.VITE_API_URL;
 	abortController = new AbortController();
 
 	try {

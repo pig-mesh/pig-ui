@@ -26,7 +26,7 @@
 		<el-upload
 			ref="fileUpload"
 			v-if="props.type === 'default' && !props.disabled"
-			:action="baseUrl + other.adaptationUrl(props.uploadFileUrl)"
+			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)"
 			:before-upload="handleBeforeUpload"
 			:file-list="fileList"
 			:headers="headers"
@@ -65,7 +65,7 @@
 		<el-upload
 			ref="fileUpload"
 			v-if="props.type === 'simple' && !props.disabled"
-			:action="baseUrl + other.adaptationUrl(props.uploadFileUrl)"
+			:action="baseURL + other.adaptationUrl(props.uploadFileUrl)"
 			:before-upload="handleBeforeUpload"
 			:file-list="fileList"
 			:headers="headers"
@@ -104,9 +104,6 @@ import other from '/@/utils/other';
 import { useI18n } from 'vue-i18n';
 import { ref, computed, watch } from 'vue';
 import { Document, Download } from '@element-plus/icons-vue';
-
-// 定义基础URL
-const baseUrl = import.meta.env.VITE_API_URL || '';
 
 // 获取文件名
 const getFileName = (file: any): string => {

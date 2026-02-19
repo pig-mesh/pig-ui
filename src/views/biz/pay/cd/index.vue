@@ -175,7 +175,7 @@ const getQr = async () => {
 			url.value = res.params; // 直接返回购买 API 返回的二维码链接地址
 		} else {
 			const tenantId = Session.getTenant();
-			url.value = `${protocol}//${host}${import.meta.env.VITE_API_URL}${
+			url.value = `${protocol}//${host}${baseURL}${
 				import.meta.env.VITE_IS_MICRO == 'false' ? '/admin' : '/pay'
 			}/goods/buy?amount=${amount}&TENANT-ID=${tenantId}`;
 		}

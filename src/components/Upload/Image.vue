@@ -138,7 +138,6 @@ const uploadList = ref<FileItem[]>([]);
 const imgViewVisible = ref(false);
 const imageUpload = ref<UploadInstance | null>(null);
 const loadingInstance = ref<ReturnType<typeof ElLoading.service> | null>(null);
-const baseURL = import.meta.env.VITE_API_URL || '';
 const uploadImgUrl = computed(() => baseURL + props.action);
 const fileList = ref<FileItem[]>([]);
 // 用于显示的文件列表，动态拼接 baseURL
