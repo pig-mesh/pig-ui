@@ -7,9 +7,7 @@ export default {
 </script>
 
 <template>
-	<div
-		class="group h-[189px] rounded-lg border border-gray-200/60 dark:border-gray-700/50 bg-white dark:bg-gray-800 overflow-hidden transition-shadow hover:shadow-md"
-	>
+	<el-card class="current-user-card group h-[189px]">
 		<div class="flex items-center h-full px-6">
 			<!-- 头像 -->
 			<div class="flex-shrink-0 mr-5">
@@ -43,7 +41,7 @@ export default {
 				<p v-if="subInfo" class="mt-2.5 text-xs text-gray-400 dark:text-gray-500 truncate">{{ subInfo }}</p>
 			</div>
 		</div>
-	</div>
+	</el-card>
 </template>
 
 <script setup lang="ts" name="currentUser">
@@ -71,3 +69,10 @@ const subInfo = computed(() => {
 	return parts.join(' · ');
 });
 </script>
+
+<style scoped>
+.current-user-card :deep(.el-card__body) {
+	padding: 0;
+	height: 100%;
+}
+</style>
