@@ -9,8 +9,8 @@
 				<div v-for="item in tableData" :key="item.id" class="execution" id="msgTable">
 					<div class="avue-comment" :class="item.type === '2' ? 'avue-comment--reverse' : ''">
 						<div class="avatar-div">
-							<name-avatar v-if="item.type === '1'" scale="2" :name="item.nickName" />
-							<name-avatar v-if="item.type !== '1'" scale="2" :face-url="item.appLogo" />
+							<name-avatar v-if="item.type === '1'" :size="80" :name="item.nickName" />
+							<name-avatar v-if="item.type !== '1'" :size="80" :face-url="item.appLogo" />
 						</div>
 						<div class="avue-comment__main">
 							<div class="avue-comment__header">

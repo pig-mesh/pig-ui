@@ -1,93 +1,33 @@
 <template>
-	<div :class="mode == 'square' ? 'chatface' : 'brround avatar cover-image'" :style="transform" style="overflow: hidden; width: 40px; height: 40px">
-		<img v-if="faceUrl && !num" :src="faceUrl" class="w-100 h-100" />
-		<div v-else :style="styles" class="w-100 h-100 d-flex ai-center jc-center">{{ text }}</div>
+	<div
+		class="inline-block relative text-center align-bottom select-none overflow-hidden rounded-full"
+		:style="{ width: `${size}px`, height: `${size}px`, fontSize: `${fontSize}px` }"
+	>
+		<img v-if="faceUrl" :src="faceUrl" class="w-full h-full" />
+		<div v-else class="w-full h-full flex items-center justify-center text-white bg-[#3696f2]">{{ text }}</div>
 	</div>
 </template>
 
-<script>
-export default {
-	name: 'nameAvatar',
-	props: {
-		scale: {
-			type: String,
-			default: '1',
-		},
-		num: [Number, String],
-		name: String,
-		mode: {
-			type: String,
-			default: '',
-		},
-		fontColor: {
-			type: String,
-			default: '#fff',
-		},
-		backgroundColor: {
-			type: String,
-			default: '#3696F2',
-		},
-		faceUrl: {
-			type: String,
-			default: '',
-		},
-	},
-	computed: {
-		text() {
-			if (this.num !== undefined) {
-				return `+${this.num}`;
-			}
-			return this.name ? this.name.slice(-2) : '';
-		},
-		transform() {
-			let style = {};
-			if (this.scale) {
-				style['transform'] = `scale(${this.scale}, ${this.scale})`;
-			}
-			return style;
-		},
-		styles() {
-			let style = {};
-			if (this.fontColor) {
-				style.color = this.fontColor;
-			}
-			if (this.backgroundColor) {
-				style['background'] = this.backgroundColor;
-			}
-			return style;
-		},
-	},
-};
+<script setup lang="ts" name="nameAvatar">
+const props = defineProps<{
+	name?: string;
+	faceUrl?: string;
+	size?: number;
+}>();
+
+const CJK_REGEX = /[\u4e00-\u9fff\u3400-\u4dbf]/;
+
+const size = computed(() => props.size || 40);
+const fontSize = computed(() => Math.max(12, Math.round(size.value * 0.35)));
+
+const text = computed(() => {
+	const name = props.name?.trim();
+	if (!name) return '';
+	if (CJK_REGEX.test(name)) return name.slice(-2);
+	const parts = name.split(/\s+/).filter(Boolean);
+	return parts
+		.map((p) => p[0].toUpperCase())
+		.slice(0, 2)
+		.join('');
+});
 </script>
-<style lang="scss" scoped>
-@import './base.scss';
-
-.avatar {
-	display: inline-block;
-	position: relative;
-	text-align: center;
-	vertical-align: bottom;
-	font-size: 8px;
-	user-select: none;
-	z-index: 10;
-
-	&:hover {
-		z-index: 100;
-	}
-}
-
-.brround {
-	border-radius: 50%;
-}
-
-.chatface {
-	display: block;
-	border-radius: 8px;
-	overflow: hidden;
-
-	img {
-		width: 100%;
-		height: 100%;
-	}
-}
-</style>

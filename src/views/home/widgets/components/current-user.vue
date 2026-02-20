@@ -12,10 +12,13 @@ export default {
 			<!-- 头像 -->
 			<div class="flex-shrink-0 mr-5">
 				<img
+					v-if="userData.avatar && !avatarError"
 					class="object-cover w-16 h-16 transition-transform duration-200 rounded-full shadow-md shadow-black/5 dark:shadow-black/20 ring-2 ring-white dark:ring-gray-700 group-hover:scale-105"
 					:src="baseURL + userData.avatar"
 					alt="Avatar"
+					@error="avatarError = true"
 				/>
+				<NameAvatar v-else :name="userData.name || userData.username" :size="64" class="transition-transform duration-200 shadow-md shadow-black/5 dark:shadow-black/20 ring-2 ring-white dark:ring-gray-700 group-hover:scale-105" />
 			</div>
 
 			<!-- 信息区域：主 → 次 → 辅 三层 -->
@@ -46,8 +49,11 @@ export default {
 
 <script setup lang="ts" name="currentUser">
 import { useUserInfo } from '/@/stores/userInfo';
+import NameAvatar from '/@/components/NameAvatar/index.vue';
 
 const { userInfos } = storeToRefs(useUserInfo());
+
+const avatarError = ref(false);
 
 const userData = computed(() => {
 	const user = userInfos.value?.user;

@@ -54,7 +54,8 @@
 		<div class="px-2 md:px-[6px] lg:px-2">
 			<el-dropdown :show-timeout="70" :hide-timeout="50" @command="onHandleCommandClick">
 				<span class="h-full flex items-center whitespace-nowrap cursor-pointer transition-colors duration-300 hover:bg-[var(--next-color-user-hover)]">
-					<img :src="userInfos.user.avatar?.startsWith('http') ? userInfos.user.avatar : baseURL + userInfos.user.avatar" class="w-[25px] h-[25px] rounded-full mr-[5px]" />
+					<img v-if="userInfos.user.avatar && !avatarError" :src="userInfos.user.avatar?.startsWith('http') ? userInfos.user.avatar : baseURL + userInfos.user.avatar" class="w-[25px] h-[25px] rounded-full mr-[5px]" @error="avatarError = true" />
+					<NameAvatar v-else :name="userInfos.user.name || userInfos.user.username" :size="25" class="mr-[5px]" />
 					<span class="text-sm md:text-sm">{{ userInfos.user.username }}</span>
 					<el-icon class="el-icon--right">
 						<ele-ArrowDown />
@@ -105,6 +106,7 @@ const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
 const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
+const NameAvatar = defineAsyncComponent(() => import('/@/components/NameAvatar/index.vue'));
 
 interface Tenant {
 	id: string;
@@ -129,6 +131,7 @@ const tenantSelectorRef = ref();
 const tenantList = ref<Tenant[]>([]);
 const tenantLoading = ref(false);
 const deptList = ref<Dept[]>([]);
+const avatarError = ref(false);
 
 const shouldShowTenantOption = computed(() => tenantList.value.length > 1);
 

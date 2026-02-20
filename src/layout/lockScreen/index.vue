@@ -33,7 +33,8 @@
 					<div class="m-auto text-center">
 						<!-- 头像 -->
 						<div class="mx-auto size-[180px]">
-							<img :src="baseURL + formData.avatar" class="rounded-full size-full" />
+							<img v-if="formData.avatar" :src="baseURL + formData.avatar" class="rounded-full size-full" />
+							<NameAvatar v-else :name="formData.username" :size="180" />
 						</div>
 						<!-- 用户名 -->
 						<div class="my-4 mb-8 text-2xl">{{ formData.username }}</div>
@@ -73,6 +74,7 @@ import { checkPassword } from '/@/api/admin/user';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
 import { useIntervalFn, usePointerSwipe } from '@vueuse/core';
+import NameAvatar from '/@/components/NameAvatar/index.vue';
 
 const { t } = useI18n();
 const layoutLockScreenDateRef = ref<HTMLElement>();
