@@ -18,7 +18,7 @@
 
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('area.adcode')" prop="adcode">
-            <el-input-number v-model="form.adcode" :placeholder="t('area.inputAdCodeByTip')"/>
+            <el-input v-model="form.adcode" :placeholder="t('area.inputAdCodeByTip')"/>
           </el-form-item>
         </el-col>
 
@@ -100,7 +100,7 @@ const form = reactive({
 	pid: '100000',
 	name: '',
 	letter: '',
-	adcode: 0,
+	adcode: '0',
 	location: '',
 	areaSort: 0,
 	areaStatus: '1',
@@ -170,6 +170,7 @@ const getAreaData = async (id: string): Promise<void> => {
 	try {
 		const { data } = await getObj({ id });
 		Object.assign(form, data);
+		form.areaSort = Number(form.areaSort) || 0;
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	} finally {
