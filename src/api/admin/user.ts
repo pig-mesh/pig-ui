@@ -72,12 +72,12 @@ export function password(obj: Object) {
 }
 
 
-export function unbindingUser(type) {
+export function unbindingUser(type: string) {
 	return request({
 		url: '/admin/user/unbinding',
 		method: 'post',
 		params: {
-			type,
+			type
 		},
 	});
 }
@@ -111,7 +111,7 @@ export const resetUserPassword = (userInfo: object) => {
 	});
 };
 
-export const forgetUserPassword = (userInfo: object) => {
+export const forgetUserPassword = (userInfo: {code:string}) => {
 	return request({
 		url: '/admin/register/forget/' + userInfo.code,
 		method: 'post',
