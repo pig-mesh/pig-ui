@@ -13,6 +13,7 @@
 
 <script setup lang="ts" name="layoutClassic">
 import {useThemeConfig} from '/@/stores/themeConfig';
+import { until } from '@vueuse/core';
 
 const LayoutAside = defineAsyncComponent(() => import('/@/layout/component/aside.vue'));
 const LayoutHeader = defineAsyncComponent(() => import('/@/layout/component/header.vue'));
@@ -30,16 +31,16 @@ const isTagsview = computed(() => {
 });
 
 const updateScrollbar = () => {
-	layoutMainRef.value?.layoutMainScrollbarRef.update();
+	layoutMainRef.value?.layoutMainScrollbarRef?.update();
 };
 
-const initScrollBarHeight = () => {
-	nextTick(() => {
-		setTimeout(() => {
-			updateScrollbar();
-			layoutMainRef.value!.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
-		}, 500);
-	});
+const initScrollBarHeight = async () => {
+	await until(() => layoutMainRef.value?.layoutMainScrollbarRef).toMatch(v => !!v, { timeout: 3000 });
+	await nextTick();
+	updateScrollbar();
+	if (layoutMainRef.value?.layoutMainScrollbarRef?.wrapRef) {
+		layoutMainRef.value.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
+	}
 };
 
 onMounted(() => {

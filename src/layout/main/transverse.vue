@@ -7,6 +7,7 @@
 
 <script setup lang="ts" name="layoutTransverse">
 import { useThemeConfig } from '/@/stores/themeConfig';
+import { until } from '@vueuse/core';
 
 const LayoutHeader = defineAsyncComponent(() => import('/@/layout/component/header.vue'));
 const LayoutMain = defineAsyncComponent(() => import('/@/layout/component/main.vue'));
@@ -16,16 +17,16 @@ const { themeConfig } = storeToRefs(useThemeConfig());
 const route = useRoute();
 
 const updateScrollbar = () => {
-	layoutMainRef.value!.layoutMainScrollbarRef.update();
+	layoutMainRef.value?.layoutMainScrollbarRef?.update();
 };
 
-const initScrollBarHeight = () => {
-	nextTick(() => {
-		setTimeout(() => {
-			updateScrollbar();
-			layoutMainRef.value!.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
-		}, 500);
-	});
+const initScrollBarHeight = async () => {
+	await until(() => layoutMainRef.value?.layoutMainScrollbarRef).toMatch(v => !!v, { timeout: 3000 });
+	await nextTick();
+	updateScrollbar();
+	if (layoutMainRef.value?.layoutMainScrollbarRef?.wrapRef) {
+		layoutMainRef.value.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
+	}
 };
 
 onMounted(() => {

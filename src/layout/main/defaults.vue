@@ -13,6 +13,7 @@
 <script setup lang="ts" name="layoutDefaults">
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { NextLoading } from '/@/utils/loading';
+import { until } from '@vueuse/core';
 
 const LayoutAside = defineAsyncComponent(() => import('/@/layout/component/aside.vue'));
 const LayoutHeader = defineAsyncComponent(() => import('/@/layout/component/header.vue'));
@@ -24,18 +25,20 @@ const route = useRoute();
 const { themeConfig } = storeToRefs(useThemeConfig());
 
 const updateScrollbar = () => {
-	layoutScrollbarRef.value.update();
-	layoutMainRef.value!.layoutMainScrollbarRef.update();
+	layoutScrollbarRef.value?.update();
+	layoutMainRef.value?.layoutMainScrollbarRef?.update();
 };
 
-const initScrollBarHeight = () => {
-	nextTick(() => {
-		setTimeout(() => {
-			updateScrollbar();
-			layoutScrollbarRef.value.wrapRef.scrollTop = 0;
-			layoutMainRef.value!.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
-		}, 500);
-	});
+const initScrollBarHeight = async () => {
+	await until(() => layoutMainRef.value?.layoutMainScrollbarRef).toMatch(v => !!v, { timeout: 3000 });
+	await nextTick();
+	updateScrollbar();
+	if (layoutScrollbarRef.value?.wrapRef) {
+		layoutScrollbarRef.value.wrapRef.scrollTop = 0;
+	}
+	if (layoutMainRef.value?.layoutMainScrollbarRef?.wrapRef) {
+		layoutMainRef.value.layoutMainScrollbarRef.wrapRef.scrollTop = 0;
+	}
 };
 
 onMounted(() => {
