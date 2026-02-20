@@ -27,7 +27,7 @@
 									v-model:imageUrl="item.image"
 									height="56px"
 									width="56px"
-									iconSize="16"
+									:iconSize="16"
 									class="rounded-xl overflow-hidden shadow-sm ring-2 ring-gray-100 dark:ring-gray-700 transition-all duration-300 hover:ring-primary/50 hover:scale-105"
 								/>
 								<div v-if="!item.image" class="absolute inset-0 flex items-center justify-center pointer-events-none">
