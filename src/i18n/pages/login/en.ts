@@ -130,6 +130,7 @@ export default {
 	// Expire password texts
 	expire: {
 		title: 'Password Expired',
+		tip: 'For account security, please reset your password',
 		oldPassword: 'Please enter old password',
 		newPassword: 'Please enter new password',
 		confirmPassword: 'Please confirm new password',

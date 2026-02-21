@@ -128,6 +128,7 @@ export default {
 	// 密码过期
 	expire: {
 		title: '密码已过期',
+		tip: '为了账户安全，请重新设置密码',
 		oldPassword: '请输入原密码',
 		newPassword: '请输入新密码',
 		confirmPassword: '请确认新密码',
