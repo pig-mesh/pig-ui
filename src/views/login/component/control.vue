@@ -1,5 +1,5 @@
 <template>
-	<div class="fixed top-0 right-0 z-10 flex items-center p-5 space-x-2">
+	<div class="flex items-center space-x-2">
 		<!-- 语言切换 -->
 		<el-dropdown v-if="isI18nEnabled" trigger="click" @command="onLanguageChange">
 			<div

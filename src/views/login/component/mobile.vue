@@ -2,7 +2,7 @@
 	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="loginForm"
 		@keyup.enter="handleLogin" style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
 		<!-- 手机号输入框 -->
-		<el-form-item class="mb-5 login-animation1" prop="mobile">
+		<el-form-item class="mb-6 login-animation1" prop="mobile">
 			<el-input text type="tel" :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable
 				class="transition-all duration-200 rounded-md login-input h-11" autocomplete="off">
 				<template #prefix>
@@ -30,7 +30,7 @@
 		</el-form-item>
 
 		<!-- 登录按钮 -->
-		<el-form-item class="mb-4 login-animation4">
+		<el-form-item class="mb-6 login-animation4">
 			<el-button type="primary"
 				class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200" v-waves
 				@click="handleLogin" :loading="loading">
@@ -51,8 +51,8 @@
 		</div>
 
 		<!-- 返回登录链接 -->
-		<div class="flex items-center justify-center text-[13px]">
-			<a href="#" class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
+		<div class="flex items-center justify-center mt-3 text-sm font-medium">
+			<a href="#" class="text-blue-600 cursor-pointer dark:text-blue-400 hover:underline"
 				@click.prevent="emit('change', LoginTypeEnum.PASSWORD)">
 				{{ $t('mobile.backToLogin') }}
 			</a>

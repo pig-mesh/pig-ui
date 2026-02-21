@@ -1,28 +1,41 @@
 <template>
-  <el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="passwordFormData">
-    <el-form-item class="login-animation1" prop="username">
+  <!-- 页面标题 -->
+  <div class="text-center mb-9">
+    <h2 class="text-lg font-medium text-gray-900 dark:text-white">
+      {{ $t('expire.title') || $t('password.resetBtnText') }}
+    </h2>
+    <p class="mt-2 text-xs text-gray-500 dark:text-slate-400">
+      {{ $t('expire.tip') || $t('expire.oldPassword') }}
+    </p>
+  </div>
+
+  <el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="passwordFormData"
+    style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
+    <el-form-item class="mb-6 login-animation1" prop="username">
       <el-input text :placeholder="$t('password.accountPlaceholder1')" disabled v-model="passwordFormData.username"
                 clearable
-                autocomplete="off">
+                autocomplete="off"
+                class="transition-all duration-200 rounded-md login-input h-11">
         <template #prefix>
-          <el-icon class="el-input__icon">
+          <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
             <ele-User/>
           </el-icon>
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item class="login-animation1" prop="password">
+    <el-form-item class="mb-6 login-animation1" prop="password">
       <el-input text :placeholder="$t('expire.oldPassword')" v-model="passwordFormData.password" clearable
                 :type="showPassword ? 'text' : 'password'"
-                autocomplete="off">
+                autocomplete="off"
+                class="transition-all duration-200 rounded-md login-input h-11">
         <template #prefix>
-          <el-icon class="el-input__icon">
+          <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
             <ele-Unlock/>
           </el-icon>
         </template>
         <template #suffix>
           <i
-              class="iconfont el-input__icon login-content-password"
+              class="text-gray-400 transition-colors duration-200 cursor-pointer iconfont el-input__icon login-content-password dark:text-slate-500 hover:text-gray-600 dark:hover:text-slate-300"
               :class="showPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
               @click="showPassword = !showPassword"
           >
@@ -30,34 +43,36 @@
         </template>
       </el-input>
     </el-form-item>
-    <el-form-item class="login-animation2" prop="newpassword1">
+    <el-form-item class="mb-6 login-animation2" prop="newpassword1">
       <strength-meter
           :placeholder="$t('expire.newPassword')"
           v-model="passwordFormData.newpassword1"
           autocomplete="off"
+          class="rounded-md h-11"
           :maxLength="20"
           :minLength="6"
           @score="handlePassScore"
       >
         <template #prefix>
-          <el-icon class="el-input__icon">
+          <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
             <ele-Unlock/>
           </el-icon>
         </template>
       </strength-meter>
     </el-form-item>
 
-    <el-form-item class="login-animation2" prop="newpassword2">
+    <el-form-item class="mb-6 login-animation2" prop="newpassword2">
       <strength-meter
           :placeholder="$t('expire.confirmPassword')"
           v-model="passwordFormData.newpassword2"
           autocomplete="off"
+          class="rounded-md h-11"
           :maxLength="20"
           :minLength="6"
           @score="handlePassScore"
       >
         <template #prefix>
-          <el-icon class="el-input__icon">
+          <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
             <ele-Unlock/>
           </el-icon>
         </template>
@@ -65,10 +80,10 @@
     </el-form-item>
 
     <el-form-item class="login-animation4">
-      <el-button 
-        type="primary" 
-        class="rounded-lg login-content-submit" 
-        v-waves 
+      <el-button
+        type="primary"
+        class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200"
+        v-waves
         @click="handleResetPassword"
         :loading="loading"
       >
@@ -76,6 +91,16 @@
       </el-button>
     </el-form-item>
 
+    <!-- 返回登录链接 -->
+    <div class="flex items-center justify-center mt-3 text-sm font-medium">
+      <a
+        href="#"
+        class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
+        @click.prevent="emit('change', LoginTypeEnum.PASSWORD)"
+      >
+        {{ $t('password.backToLogin') }}
+      </a>
+    </div>
   </el-form>
 </template>
 

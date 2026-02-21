@@ -1,7 +1,7 @@
 <template>
 	<el-form size="large" class="login-content-form" ref="loginFormRef" :rules="loginRules" :model="state.ruleForm" @keyup.enter="handleVerify" style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
 		<!-- 用户名输入框 -->
-		<el-form-item class="mb-5 login-animation1" prop="username">
+		<el-form-item class="mb-6 login-animation1" prop="username">
 			<el-input
 				text
 				:placeholder="$t('password.accountPlaceholder1')"
@@ -19,7 +19,7 @@
 		</el-form-item>
 
 		<!-- 密码输入框 -->
-		<el-form-item class="mb-5 login-animation2" prop="password">
+		<el-form-item class="mb-6 login-animation2" prop="password">
 			<el-input
 				:type="state.isShowPassword ? 'text' : 'password'"
 				:placeholder="$t('password.accountPlaceholder2')"
@@ -71,7 +71,7 @@
 		</el-form-item>
 
 		<!-- 登录按钮 -->
-		<el-form-item class="mb-5 login-animation4">
+		<el-form-item class="mb-6 login-animation4">
 			<el-button
 				type="primary"
 				class="login-btn w-full h-11 rounded-md font-medium text-[15px] transition-all duration-200"
@@ -84,7 +84,7 @@
 		</el-form-item>
 
 		<!-- 底部链接：找回密码 | 验证码登录 | 注册账号 -->
-		<div class="flex items-center justify-center gap-3 mb-6 text-[13px]">
+		<div class="flex items-center justify-center gap-3 mb-3 text-[13px]">
 			<a
 				href="#"
 				class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
