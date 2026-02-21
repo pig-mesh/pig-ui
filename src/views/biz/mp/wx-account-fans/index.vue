@@ -4,7 +4,7 @@
 			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('fans.nickname')" prop="nickname">
-						<el-input v-model="state.queryForm.nickname" style="max-width: 180px" :placeholder="$t('fans.inputNicknameTip')" />
+						<el-input v-model="state.queryForm.nickname" class="!w-[180px]" :placeholder="$t('fans.inputNicknameTip')" />
 					</el-form-item>
 					<el-form-item :label="$t('fans.wxAccountName')" prop="wxAccountAppid">
 						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('fans.wxAccountName')" clearable>
@@ -20,15 +20,14 @@
 				</el-form>
 			</el-row>
 			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button type="primary" class="ml10" icon="Sort" @click="asyncFans" v-auth="'mp_wxaccountfans_sync'">同步</el-button>
+				<div class="mb-2 w-full flex items-center">
+					<el-button type="primary" icon="Sort" @click="asyncFans" v-auth="'mp_wxaccountfans_sync'">同步</el-button>
 
 					<right-toolbar
 						:export="'mp_wxaccountfans_sync'"
 						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml-auto"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
@@ -36,7 +35,7 @@
 			<el-table
 				v-loading="state.loading"
 				:data="state.dataList"
-				style="width: 100%"
+				class="w-full"
 				@sort-change="sortChangeHandle"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -59,8 +58,8 @@
 				</el-table-column>
 				<el-table-column :label="t('fans.tagIds')" prop="tagIds" show-overflow-tooltip>
 					<template #default="scope">
-						<span v-for="(tag, index) in scope.row.tagList" :key="index">
-							<el-tag>{{ tag.tag }} </el-tag>&nbsp;&nbsp;
+						<span v-for="(tag, index) in scope.row.tagList" :key="index" class="mr-1">
+							<el-tag>{{ tag.tag }}</el-tag>
 						</span>
 					</template>
 				</el-table-column>
@@ -71,9 +70,9 @@
 						<el-button icon="edit-pen" text type="primary" @click="formDialogRef.openDialog(scope.row, state.queryForm.wxAccountAppid)"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-						<el-button icon="delete" text type="primary" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
+						<el-button icon="delete" text type="danger" @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }} </el-button>
 						<el-button icon="CircleCheck" text type="primary" @click="handelUnBlack([scope.row.id])" v-if="scope.row.isBlack"> 取消拉黑 </el-button>
-						<el-button icon="warning" text type="primary" @click="handelBlack([scope.row.id])" v-else> 拉黑 </el-button>
+						<el-button icon="warning" text type="danger" @click="handelBlack([scope.row.id])" v-else> 拉黑 </el-button>
 					</template>
 				</el-table-column>
 			</el-table>

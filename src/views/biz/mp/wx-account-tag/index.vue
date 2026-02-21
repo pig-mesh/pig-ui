@@ -4,7 +4,7 @@
 			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('wxAccountTag.tag')" prop="tag">
-						<el-input v-model="state.queryForm.tag" :placeholder="t('wxAccountTag.inputTagTip')" style="max-width: 180px" />
+						<el-input v-model="state.queryForm.tag" :placeholder="t('wxAccountTag.inputTagTip')" class="!w-[180px]" />
 					</el-form-item>
 					<el-form-item :label="$t('wxAccountTag.wxAccountAppid')" prop="wxAccountAppid">
 						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="t('wxAccountTag.inputWxAccountAppidTip')" clearable>
@@ -12,35 +12,32 @@
 						</el-select>
 					</el-form-item>
 					<el-form-item>
-						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button formDialogRef icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
-				<div class="mb8" style="width: 100%">
+				<div class="flex items-center w-full gap-2 mb-2">
 					<el-button
 						v-auth="'mp_wx_account_tag_add'"
-						class="ml10"
-						formDialogRef
 						icon="folder-add"
 						type="primary"
 						@click="formDialogRef.openDialog(null, state.queryForm.wxAccountAppid)"
 					>
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button v-auth="'mp_wx_account_tag_export'" class="ml10" formDialogRef icon="Download" type="primary" @click="exportExcel">
+					<el-button v-auth="'mp_wx_account_tag_export'" icon="Download" type="primary" plain @click="exportExcel">
 						{{ $t('common.exportBtn') }}
 					</el-button>
 					<el-button
 						v-auth="'mp_wx_account_tag_del'"
 						:disabled="multiple"
-						class="ml10"
-						formDialogRef
 						icon="Delete"
 						type="primary"
+						plain
 						@click="handleDelete(selectObjs)"
 					>
 						{{ $t('common.delBtn') }}
@@ -48,8 +45,7 @@
 					<el-button plain type="primary" icon="Sort" @click="asyncTag">同步</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml-auto"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
@@ -57,7 +53,7 @@
 			<el-table
 				v-loading="state.loading"
 				:data="state.dataList"
-				style="width: 100%"
+				class="w-full"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
 				border

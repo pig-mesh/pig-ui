@@ -4,12 +4,12 @@
 			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm" @keyup.enter="getDataList">
 					<el-form-item :label="$t('wxFansMsg.appName')" prop="wxAccountAppid">
-						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('wxFansMsg.appName')" clearable >
+						<el-select v-model="state.queryForm.wxAccountAppid" :placeholder="$t('wxFansMsg.appName')" clearable>
 							<el-option v-for="item in accountList" :key="item.appid" :label="item.name" :value="item.appid" />
 						</el-select>
 					</el-form-item>
 					<el-form-item :label="$t('wxFansMsg.nickName')" prop="nickName">
-						<el-input v-model="state.queryForm.nickName" :placeholder="t('wxFansMsg.inputNickNameTip')" style="max-width: 180px" />
+						<el-input v-model="state.queryForm.nickName" :placeholder="t('wxFansMsg.inputNickNameTip')" class="!w-[180px]" />
 					</el-form-item>
 					<el-form-item :label="$t('wxFansMsg.repType')" prop="repType">
 						<el-select v-model="state.queryForm.repType" :placeholder="$t('wxFansMsg.repType')" clearable>
@@ -25,25 +25,23 @@
 				</el-form>
 			</el-row>
 			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'mp_wxFansMsg_export'" class="ml10" formDialogRef icon="Download" type="primary" @click="exportExcel">
+				<div class="mb-2 w-full flex items-center gap-2">
+					<el-button v-auth="'mp_wxFansMsg_export'" icon="Download" type="primary" plain @click="exportExcel">
 						{{ $t('common.exportBtn') }}
 					</el-button>
 					<el-button
 						v-auth="'mp_wxmsg_del'"
 						:disabled="multiple"
-						class="ml10"
-						formDialogRef
 						icon="Delete"
-						type="primary"
+						type="danger"
+						plain
 						@click="handleDelete(selectObjs)"
 					>
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml-auto"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
@@ -51,7 +49,7 @@
 			<el-table
 				v-loading="state.loading"
 				:data="state.dataList"
-				style="width: 100%"
+				class="w-full"
 				@sort-change="sortChangeHandle"
 				border
 				:cell-style="tableStyle.cellStyle"
@@ -65,20 +63,20 @@
 				<el-table-column :label="t('wxFansMsg.repContent')" prop="repContent" show-overflow-tooltip>
 					<template #default="scope">
 						<div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'subscribe'"><el-tag type="success">关注</el-tag></div>
-						<div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'unsubscribe'">
+						<div v-else-if="scope.row.repType === 'event' && scope.row.repEvent === 'unsubscribe'">
 							<el-tag type="danger">取消关注</el-tag>
 						</div>
-						<div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'CLICK'"><el-tag>点击菜单</el-tag>：【{{ scope.row.repName }}】</div>
-						<div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'VIEW'"><el-tag>点击菜单链接</el-tag>：【{{ scope.row.repUrl }}】</div>
-						<div v-if="scope.row.repType === 'event' && scope.row.repEvent === 'scancode_waitmsg'">
-							<el-tag>扫码结果：</el-tag>：【{{ scope.row.repContent }}】
+						<div v-else-if="scope.row.repType === 'event' && scope.row.repEvent === 'CLICK'"><el-tag>点击菜单</el-tag>：【{{ scope.row.repName }}】</div>
+						<div v-else-if="scope.row.repType === 'event' && scope.row.repEvent === 'VIEW'"><el-tag>点击菜单链接</el-tag>：【{{ scope.row.repUrl }}】</div>
+						<div v-else-if="scope.row.repType === 'event' && scope.row.repEvent === 'scancode_waitmsg'">
+							<el-tag>扫码结果</el-tag>：【{{ scope.row.repContent }}】
 						</div>
-						<div v-if="scope.row.repType === 'text'">{{ scope.row.repContent }}</div>
-						<div v-if="scope.row.repType === 'image'">
-							<a target="_blank" :href="scope.row.repUrl"><img :src="scope.row.repUrl" style="width: 100px" /></a>
+						<div v-else-if="scope.row.repType === 'text'">{{ scope.row.repContent }}</div>
+						<div v-else-if="scope.row.repType === 'image'">
+							<a target="_blank" :href="scope.row.repUrl"><img :src="scope.row.repUrl" class="w-[100px] rounded" /></a>
 						</div>
-						<div v-if="['video', 'voice', 'link', 'shortvideo'].includes(scope.row.repType)">
-							<el-tag>链接</el-tag>：<a :href="scope.row.repUrl" target="_blank">{{ scope.row.repName }}</a>
+						<div v-else-if="['video', 'voice', 'link', 'shortvideo'].includes(scope.row.repType)">
+							<el-tag>链接</el-tag>：<a :href="scope.row.repUrl" target="_blank" class="text-primary hover:underline">{{ scope.row.repName }}</a>
 						</div>
 					</template>
 				</el-table-column>

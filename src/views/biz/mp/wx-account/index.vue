@@ -4,28 +4,27 @@
 			<el-row v-show="showSearch">
 				<el-form ref="queryRef" :inline="true" :model="state.queryForm">
 					<el-form-item :label="$t('account.name')" prop="name">
-						<el-input v-model="state.queryForm.name" :placeholder="t('account.inputNameTip')" style="max-width: 180px" />
+						<el-input v-model="state.queryForm.name" :placeholder="t('account.inputNameTip')" class="!w-[180px]" />
 					</el-form-item>
 					<el-form-item :label="$t('account.account')" prop="account">
-						<el-input v-model="state.queryForm.account" :placeholder="t('account.inputAccountTip')" style="max-width: 180px" />
+						<el-input v-model="state.queryForm.account" :placeholder="t('account.inputAccountTip')" class="!w-[180px]" />
 					</el-form-item>
 					<el-form-item>
-						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button formDialogRef icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
-				<div class="mb8" style="width: 100%">
-					<el-button v-auth="'mp_wxaccount_add'" class="ml10" icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
+				<div class="flex items-center w-full mb-2">
+					<el-button v-auth="'mp_wxaccount_add'" icon="folder-add" type="primary" @click="formDialogRef.openDialog()">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button
 						plain
 						v-auth="'mp_wxaccount_add'"
-						class="ml10"
 						icon="Delete"
 						type="primary"
 						:disabled="multiple"
@@ -37,8 +36,7 @@
 						:export="'app_social_details_del'"
 						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml-auto"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>
@@ -46,7 +44,7 @@
 			<el-table
 				v-loading="state.loading"
 				:data="state.dataList"
-				style="width: 100%"
+				class="w-full"
 				@selection-change="handleSelectionChange"
 				@sort-change="sortChangeHandle"
 				border

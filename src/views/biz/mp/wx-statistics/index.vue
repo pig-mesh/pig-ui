@@ -3,26 +3,28 @@
 		<div class="layout-padding-auto layout-padding-view">
 			<splitpanes>
 				<pane size="20">
-					<el-date-picker v-model="beginTime" placeholder="选择开始时间" @change="check" style="width: 50%"></el-date-picker>
-					<el-date-picker v-model="endTime" style="width: 50%" placeholder="选择结束时间" @change="check"></el-date-picker>
+					<div class="flex gap-1 p-2">
+						<el-date-picker v-model="beginTime" placeholder="选择开始时间" @change="check" class="!w-1/2"></el-date-picker>
+						<el-date-picker v-model="endTime" class="!w-1/2" placeholder="选择结束时间" @change="check"></el-date-picker>
+					</div>
 					<div class="layout-padding-auto layout-padding-view">
 						<el-scrollbar>
-							<query-tree class="mt10" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
+							<query-tree class="mt-2.5" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
 						</el-scrollbar>
 					</div>
 				</pane>
-				<pane size="80" class="ml10">
+				<pane size="80" class="ml-2.5">
 					<splitpanes horizontal>
 						<pane>
 							<splitpanes>
 								<pane>
-									<div class="home-card-item">
-										<div style="height: 100%" ref="userCumulateRef"></div>
+									<div class="w-full h-[400px] rounded-lg p-5 overflow-hidden bg-[var(--el-color-white)] text-[var(--el-text-color-primary)] border border-[var(--next-border-color-light)] transition-all duration-300">
+										<div class="h-full" ref="userCumulateRef"></div>
 									</div>
 								</pane>
 								<pane>
-									<div class="home-card-item">
-										<div style="height: 100%" ref="userShardRef"></div>
+									<div class="w-full h-[400px] rounded-lg p-5 overflow-hidden bg-[var(--el-color-white)] text-[var(--el-text-color-primary)] border border-[var(--next-border-color-light)] transition-all duration-300">
+										<div class="h-full" ref="userShardRef"></div>
 									</div>
 								</pane>
 							</splitpanes>
@@ -30,13 +32,13 @@
 						<pane>
 							<splitpanes>
 								<pane>
-									<div class="home-card-item">
-										<div style="height: 100%" ref="upstreamMsgDistMonthRef"></div>
+									<div class="w-full h-[400px] rounded-lg p-5 overflow-hidden bg-[var(--el-color-white)] text-[var(--el-text-color-primary)] border border-[var(--next-border-color-light)] transition-all duration-300">
+										<div class="h-full" ref="upstreamMsgDistMonthRef"></div>
 									</div>
 								</pane>
 								<pane>
-									<div class="home-card-item">
-										<div style="height: 100%" ref="interfaceSummaryRef"></div>
+									<div class="w-full h-[400px] rounded-lg p-5 overflow-hidden bg-[var(--el-color-white)] text-[var(--el-text-color-primary)] border border-[var(--next-border-color-light)] transition-all duration-300">
+										<div class="h-full" ref="interfaceSummaryRef"></div>
 									</div>
 								</pane>
 							</splitpanes>
@@ -146,17 +148,3 @@ onUnmounted(() => {
 	});
 });
 </script>
-
-<style scoped>
-.home-card-item {
-	width: 100%;
-	height: 400px;
-	border-radius: 4px;
-	transition: all ease 0.3s;
-	padding: 20px;
-	overflow: hidden;
-	background: var(--el-color-white);
-	color: var(--el-text-color-primary);
-	border: 1px solid var(--next-border-color-light);
-}
-</style>

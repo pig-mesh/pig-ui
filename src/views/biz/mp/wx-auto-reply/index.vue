@@ -4,7 +4,7 @@
 			<pane size="20">
 				<div class="layout-padding-auto layout-padding-view">
 					<el-scrollbar>
-						<query-tree class="mt10" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
+						<query-tree class="mt-2.5" :query="deptData.queryList" @node-click="handleNodeClick" placeholder="请输入微信公众号名称" />
 					</el-scrollbar>
 				</div>
 			</pane>
@@ -14,13 +14,13 @@
 						<el-tab-pane name="1" label="1">
 							<template #label>关注时回复</template>
 							<el-row>
-								<div class="mb8" style="width: 100%">
-									<el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+								<div class="mb-2 w-full">
+									<el-button icon="folder-add" type="primary" @click="handleAdd">
 										{{ $t('common.addBtn') }}
 									</el-button>
 								</div>
 							</el-row>
-							<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" max-height="600px" @sort-change="sortChangeHandle">
+							<el-table v-loading="state.loading" :data="state.dataList" class="w-full" max-height="600px" @sort-change="sortChangeHandle">
 								<el-table-column label="序号" type="index" width="60" />
 								<el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
 									<template #default="scope">
@@ -29,8 +29,8 @@
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button text icon="edit" @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button text icon="delete" @click="handleDel(scope.row)">删除 </el-button>
+										<el-button text icon="edit" type="primary" @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button text icon="delete" type="danger" @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -39,13 +39,13 @@
 						<el-tab-pane name="2" label="2">
 							<template #label>消息回复</template>
 							<el-row>
-								<div class="mb8" style="width: 100%">
-									<el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+								<div class="mb-2 w-full">
+									<el-button icon="folder-add" type="primary" @click="handleAdd">
 										{{ $t('common.addBtn') }}
 									</el-button>
 								</div>
 							</el-row>
-							<el-table v-loading="state.loading" :data="state.dataList" style="width: 100%" max-height="600px" @sort-change="sortChangeHandle">
+							<el-table v-loading="state.loading" :data="state.dataList" class="w-full" max-height="600px" @sort-change="sortChangeHandle">
 								<el-table-column label="序号" type="index" width="60" />
 								<el-table-column label="请求消息类型" prop="reqType" show-overflow-tooltip>
 									<template #default="scope">
@@ -59,8 +59,8 @@
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button icon="edit" link @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button icon="delete" link @click="handleDel(scope.row)">删除 </el-button>
+										<el-button text icon="edit" type="primary" @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button text icon="delete" type="danger" @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -69,8 +69,8 @@
 						<el-tab-pane name="3" label="3">
 							<template #label>关键词回复</template>
 							<el-row>
-								<div class="mb8" style="width: 100%">
-									<el-button class="ml10" icon="folder-add" type="primary" @click="handleAdd">
+								<div class="mb-2 w-full">
+									<el-button icon="folder-add" type="primary" @click="handleAdd">
 										{{ $t('common.addBtn') }}
 									</el-button>
 								</div>
@@ -78,7 +78,7 @@
 							<el-table
 								v-loading="state.loading"
 								:data="state.dataList"
-								style="width: 100%"
+								class="w-full"
 								max-height="600px"
 								@sort-change="sortChangeHandle"
 								border
@@ -92,15 +92,15 @@
 										<dict-tag :options="dicRepMate" :value="scope.row.repMate"></dict-tag>
 									</template>
 								</el-table-column>
-								<el-table-column label="匹配类型" prop="repMate" show-overflow-tooltip>
+								<el-table-column label="回复消息类型" prop="repType" show-overflow-tooltip>
 									<template #default="scope">
 										<dict-tag :options="dicDataRepType" :value="scope.row.repType"></dict-tag>
 									</template>
 								</el-table-column>
 								<el-table-column label="操作" prop="action" show-overflow-tooltip>
 									<template #default="scope">
-										<el-button icon="edit" link @click="handleEdit(scope.row)">编辑 </el-button>
-										<el-button icon="delete" link @click="handleDel(scope.row)">删除 </el-button>
+										<el-button text icon="edit" type="primary" @click="handleEdit(scope.row)">编辑 </el-button>
+										<el-button text icon="delete" type="danger" @click="handleDel(scope.row)">删除 </el-button>
 									</template>
 								</el-table-column>
 							</el-table>
@@ -121,7 +121,7 @@
 					</el-select>
 				</el-form-item>
 				<el-form-item v-if="type === '3'" label="匹配类型">
-					<el-select v-model="objData.repMate" placeholder="请选择" style="width: 100px">
+					<el-select v-model="objData.repMate" placeholder="请选择" class="!w-[100px]">
 						<el-option v-for="item in dicRepMate" :key="item.value" :label="item.label" :value="item.value"> </el-option>
 					</el-select>
 				</el-form-item>
@@ -349,5 +349,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-<style scoped></style>
