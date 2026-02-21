@@ -11,10 +11,10 @@
 			<template v-slot:item="{ element: item, index }">
 				<del-wrap :key="index" @close="handleDelete(index)" class="w-full">
 					<div
-						class="group relative flex items-center w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-gradient-to-br from-white to-gray-50/50 dark:from-gray-800/50 dark:to-gray-800/30 transition-all duration-300 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 dark:hover:shadow-primary/5"
+						class="group relative flex items-center w-full p-4 rounded-xl border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 transition-colors hover:border-primary/50 dark:hover:border-primary/50"
 					>
 						<!-- 拖拽手柄 -->
-						<div class="drag-handle absolute left-2 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+						<div class="drag-handle absolute left-2 top-1/2 -translate-y-1/2 cursor-move opacity-0 group-hover:opacity-100 transition-opacity">
 							<el-icon class="text-gray-400 dark:text-gray-500 text-lg">
 								<DCaret />
 							</el-icon>
@@ -28,7 +28,7 @@
 									height="56px"
 									width="56px"
 									:iconSize="16"
-									class="rounded-xl overflow-hidden shadow-sm ring-2 ring-gray-100 dark:ring-gray-700 transition-all duration-300 hover:ring-primary/50 hover:scale-105"
+									class="rounded-xl overflow-hidden shadow-sm ring-2 ring-gray-100 dark:ring-gray-700 hover:ring-primary/50"
 								/>
 								<div v-if="!item.image" class="absolute inset-0 flex items-center justify-center pointer-events-none">
 									<el-icon class="text-2xl text-gray-400 dark:text-gray-500"><Picture /></el-icon>
@@ -44,7 +44,7 @@
 									v-model="item.name"
 									placeholder="请输入服务名称"
 									clearable
-									class="flex-1 transition-all duration-200 !w-full"
+									class="flex-1 !w-full"
 								>
 									<template #prefix>
 										<el-icon class="text-gray-400"><Edit /></el-icon>
@@ -82,7 +82,7 @@
 				type="primary"
 				@click="handleAdd"
 				:disabled="navLists.length >= props.max"
-				class="!px-6 !py-2 !rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+				class="!px-6 !py-2 !rounded-lg"
 				:icon="Plus"
 			>
 				添加服务

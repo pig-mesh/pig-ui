@@ -3,7 +3,7 @@
 		<el-card shadow="never" class="!border-none flex-1 h-full dark:bg-gray-800" :body-style="{ height: '100%' }">
 			<div class="flex items-start w-full h-full min-w-0 gap-6">
 				<!-- Mobile Preview Section -->
-				<div class="flex flex-col items-center flex-shrink-0 px-[16px] py-4">
+				<div class="flex flex-col items-center flex-shrink-0 px-4 py-4">
 					<!-- 手机预览容器 -->
 					<div class="relative">
 						<!-- 手机外壳装饰 -->
@@ -33,12 +33,17 @@
 							<div
 								class="absolute bottom-0 w-full h-[60px] bg-white/95 dark:bg-gray-800/95 backdrop-blur-lg border-t border-gray-200 dark:border-gray-700 flex shadow-lg">
 								<div v-for="(item, index) in tabbar.list" :key="index"
-									class="flex flex-col items-center justify-center flex-1 py-2 transition-all duration-300 cursor-pointer hover:bg-primary/5"
-									:class="{ 'bg-primary/10': index === 0 }">
+									class="relative flex flex-col items-center justify-center flex-1 py-2 cursor-pointer transition-colors duration-200"
+									@click="selectedIndex = index">
+									<!-- 选中指示条 -->
+									<div v-if="index === selectedIndex"
+										class="absolute top-0 left-1/2 -translate-x-1/2 w-8 h-[3px] bg-primary rounded-b-full"></div>
 									<!-- 图标 -->
-									<div
-										class="flex items-center justify-center w-6 h-6 mb-1 transition-transform duration-300 hover:scale-110">
-										<img v-if="item.unselected" class="object-contain w-full h-full"
+									<div class="flex items-center justify-center w-6 h-6 mb-1">
+										<img v-if="index === selectedIndex && item.selected" class="object-contain w-full h-full"
+											:src="item.selected.includes('http') ? item.selected : baseURL + item.selected"
+											alt="" />
+										<img v-else-if="item.unselected" class="object-contain w-full h-full"
 											:src="item.unselected.includes('http') ? item.unselected : baseURL + item.unselected"
 											alt="" />
 										<el-icon v-else class="text-xl text-gray-400">
@@ -46,8 +51,8 @@
 										</el-icon>
 									</div>
 									<!-- 名称 -->
-									<div class="text-[11px] font-medium transition-colors duration-300"
-										:class="index === 0 ? 'text-primary' : 'text-gray-600 dark:text-gray-400'">
+									<div class="text-[11px] font-medium transition-colors duration-200"
+										:class="index === selectedIndex ? 'text-primary' : 'text-gray-600 dark:text-gray-400'">
 										{{ item.name || '导航' }}
 									</div>
 								</div>
@@ -60,17 +65,7 @@
 						<div class="absolute w-1 h-8 bg-gray-700 rounded-r -left-1 top-24 dark:bg-gray-800"></div>
 					</div>
 
-					<!-- 预览标签 -->
-					<div
-						class="px-4 py-2 mt-4 border rounded-lg bg-gradient-to-r from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 border-primary/20 dark:border-primary/30">
-						<div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-							<el-icon class="text-primary">
-								<View />
-							</el-icon>
-							<span class="font-medium">实时预览</span>
-						</div>
 					</div>
-				</div>
 
 				<!-- Form Section -->
 				<div class="flex flex-col flex-1 w-full max-h-full min-w-0 ml-16">
@@ -99,13 +94,14 @@
 								<template v-slot:item="{ element, index }">
 									<del-wrap @close="handleDelete(index)" class="w-full"
 										:class="{ draggable: index != 0 }">
-										<div class="relative w-full p-5 transition-all duration-300 border-2 group rounded-xl"
-											:class="index === 0
-												? 'border-primary bg-primary/5 dark:bg-primary/10 shadow-md shadow-primary/20'
-												: 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 hover:border-primary/50 dark:hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 dark:hover:shadow-primary/5'">
+										<div class="relative w-full p-5 transition-colors border-2 group rounded-xl cursor-pointer"
+											:class="index === selectedIndex
+												? 'border-primary bg-primary/5 dark:bg-primary/10'
+												: 'border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800/50 hover:border-primary/50 dark:hover:border-primary/50'"
+											@click="selectedIndex = index">
 											<!-- 拖拽手柄 (仅非首页显示) -->
 											<div v-if="index !== 0"
-												class="absolute transition-opacity duration-200 -translate-y-1/2 opacity-0 cursor-move drag-handle left-2 top-1/2 group-hover:opacity-100">
+												class="absolute -translate-y-1/2 opacity-0 cursor-move drag-handle left-2 top-1/2 group-hover:opacity-100 transition-opacity">
 												<el-icon class="text-lg text-gray-400 dark:text-gray-500">
 													<DCaret />
 												</el-icon>
@@ -113,7 +109,7 @@
 
 											<!-- 序号标识 -->
 											<div class="absolute flex items-center justify-center w-8 h-8 rounded-full shadow-md -top-3 -left-3"
-												:class="index === 0 ? 'bg-primary text-white' : 'bg-gray-500 text-white'">
+												:class="index === selectedIndex ? 'bg-primary text-white' : 'bg-gray-500 text-white'">
 												<span class="text-sm font-bold">{{ index + 1 }}</span>
 											</div>
 
@@ -192,14 +188,14 @@
 						<div class="flex items-center gap-3">
 							<!-- 保存按钮 -->
 							<el-button type="primary" @click="setData"
-								class="!px-6 !py-2 !rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+								class="!px-6 !py-2 !rounded-lg"
 								:icon="Check">
 								保存导航
 							</el-button>
 
 							<!-- 添加按钮 -->
 							<el-button v-if="tabbar.list?.length < max" type="primary" @click="handleAdd" plain
-								class="!px-6 !py-2 !rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+								class="!px-6 !py-2 !rounded-lg"
 								:icon="Plus">
 								添加导航
 							</el-button>
@@ -242,6 +238,7 @@ interface TabbarItem {
 
 const max = 5;
 const min = 2;
+const selectedIndex = ref(0);
 const tabbar = reactive<{ list: TabbarItem[] }>({
 	list: [
 		{
@@ -277,6 +274,9 @@ const handleDelete = (index: number) => {
 		return useMessage().error(`最少保留${min}个`);
 	}
 	tabbar.list.splice(index, 1);
+	if (selectedIndex.value >= tabbar.list.length) {
+		selectedIndex.value = tabbar.list.length - 1;
+	}
 };
 
 const onMove = (e: any) => {

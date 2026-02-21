@@ -1,7 +1,7 @@
 <template>
-	<div class="user-info flex items-center px-[25px]">
-		<img src="./images/default_avatar.png" class="w-[60px] h-[60px]" alt="" />
-		<div class="text-white text-[18px] ml-[10px]">未登录</div>
+	<div class="user-info flex items-center px-6">
+		<img src="./images/default_avatar.png" class="w-15 h-15" alt="" />
+		<div class="text-white text-lg ml-2.5">未登录</div>
 	</div>
 </template>
 <script lang="ts" setup></script>

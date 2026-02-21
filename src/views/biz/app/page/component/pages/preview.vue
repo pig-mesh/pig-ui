@@ -1,5 +1,5 @@
 <template>
-	<div class="flex flex-col items-center px-[16px] py-4 relative">
+	<div class="flex flex-col items-center px-4 py-4 relative">
 		<!-- 手机预览容器 -->
 		<div class="relative">
 			<!-- 手机外壳装饰 -->
@@ -17,7 +17,7 @@
 					<div
 						v-for="(widget, index) in pageData"
 						:key="widget.id"
-						class="relative transition-all duration-200"
+						class="relative"
 						:class="{
 							'cursor-pointer': !widget?.disabled,
 						}"
@@ -25,7 +25,7 @@
 					>
 						<!-- 选中/未选中边框 -->
 						<div
-							class="absolute inset-0 z-[100] pointer-events-none transition-all duration-200"
+							class="absolute inset-0 z-[100] pointer-events-none"
 							:class="{
 								'ring-2 ring-primary ring-inset shadow-lg shadow-primary/20': index == modelValue,
 								'ring-1 ring-dashed ring-gray-300 dark:ring-gray-600 ring-inset': !widget?.disabled && index != modelValue,
@@ -64,13 +64,6 @@
 			<div class="absolute w-1 h-8 bg-gray-700 rounded-r -left-1 top-24 dark:bg-gray-800"></div>
 		</div>
 
-		<!-- 预览标签 -->
-		<div class="px-4 py-2 mt-4 border rounded-lg bg-gradient-to-r from-primary/10 to-purple-500/10 dark:from-primary/20 dark:to-purple-500/20 border-primary/20 dark:border-primary/30">
-			<div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-				<el-icon class="text-primary"><View /></el-icon>
-				<span class="font-medium">实时预览</span>
-			</div>
-		</div>
 	</div>
 </template>
 <script lang="ts" setup>
