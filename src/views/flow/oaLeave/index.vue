@@ -2,7 +2,7 @@
   <div class="layout-padding">
     <div class="layout-padding-auto layout-padding-view">
       <!-- 搜索条件区域 -->
-      <el-row shadow="hover" v-show="showSearch" class="ml10">
+      <el-row shadow="hover" v-show="showSearch" class="ml-2.5">
         <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
           <el-form-item label="申请人" prop="username">
             <el-input placeholder="请输入申请人" v-model="state.queryForm.username" clearable />
@@ -33,11 +33,11 @@
 
       <!-- 操作按钮区域 -->
       <el-row>
-        <div class="mb8" style="width: 100%">
+        <div class="mb-2 w-full">
           <el-button 
             icon="folder-add" 
             type="primary" 
-            class="ml10" 
+            class="ml-2.5"
             @click="handleCreate"
             v-auth="'flow_bpmOaLeave_add'"
           >
@@ -54,12 +54,11 @@
           >
             删除
           </el-button>
-          <right-toolbar 
-            v-model:showSearch="showSearch" 
+          <right-toolbar
+            v-model:showSearch="showSearch"
             :export="'flow_bpmOaLeave_export'"
-            @exportExcel="exportExcel" 
-            class="ml10 mr20" 
-            style="float: right;"
+            @exportExcel="exportExcel"
+            class="ml-2.5 mr-5 float-right"
             @queryTable="getDataList"
           />
         </div>

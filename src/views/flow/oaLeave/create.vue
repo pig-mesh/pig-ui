@@ -11,12 +11,12 @@
           <el-col :span="24" :md="12" class="mt-8 md:mb-0">
             <el-form-item label="请假天数" prop="leaveDay">
               <el-input-number disabled v-model="formData.leaveDay" :min="1" :max="365" :step="15" placeholder="请输入请假天数"
-                style="width: 100%" class="flex-1 w-full max-w-xs" />
+                class="w-full" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-form-item label="请假类型" class="mt-4" prop="leaveType">
-          <el-select v-model="formData.leaveType" placeholder="请选择请假类型" clearable style="width: 100%">
+          <el-select v-model="formData.leaveType" placeholder="请选择请假类型" clearable class="w-full">
             <el-option label="事假" :value="1" />
             <el-option label="病假" :value="2" />
             <el-option label="年假" :value="3" />
@@ -32,13 +32,13 @@
           <el-col :span="24" :md="12" class="mb-8 md:mb-0">
             <el-form-item label="开始时间" prop="startTime">
               <el-date-picker v-model="formData.startTime" type="datetime" placeholder="请选择开始时间"
-                :value-format="dateTimeStr" style="width: 100%" />
+                :value-format="dateTimeStr" class="w-full" />
             </el-form-item>
           </el-col>
           <el-col :span="24" :md="12">
             <el-form-item label="结束时间" prop="endTime">
               <el-date-picker v-model="formData.endTime" type="datetime" placeholder="请选择结束时间"
-                :value-format="dateTimeStr" style="width: 100%" />
+                :value-format="dateTimeStr" class="w-full" />
             </el-form-item>
           </el-col>
         </el-row>

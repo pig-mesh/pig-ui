@@ -93,7 +93,7 @@ import { formatPast } from '/@/utils/formatTime';
 								<span class="ml-1 text-gray-500">(添加了评论) {{ formatPast(item1.showTime) }}</span>
 							</div>
 						</div>
-						<div class="p-3 text-sm rounded bg-gray-50">{{ item1.approveDesc }}</div>
+						<div class="p-3 text-sm rounded bg-gray-50 dark:bg-gray-800 dark:text-gray-200">{{ item1.approveDesc }}</div>
 					</div>
 				</div>
 

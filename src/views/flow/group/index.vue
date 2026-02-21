@@ -29,7 +29,7 @@
 
           <el-table
               :data="state.dataList"
-              style="width: 100%"
+              class="w-full"
               border
               :cell-style="tableStyle.cellStyle"
               :header-cell-style="tableStyle.headerCellStyle"

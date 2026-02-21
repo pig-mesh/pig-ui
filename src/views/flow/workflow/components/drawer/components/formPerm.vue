@@ -54,7 +54,7 @@ const step2FormList = computed(() => {
 				:key="item.name"
 				class="grid grid-cols-4 gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150"
 				:class="{
-					'bg-gray-25 dark:bg-gray-850': index % 2 === 0
+					'bg-gray-50/50 dark:bg-gray-800/50': index % 2 === 0
 				}"
 			>
 				<!-- 表单字段名称 -->

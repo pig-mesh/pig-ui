@@ -84,30 +84,28 @@ const submit = async () => {
 </script>
 
 <template>
-	<div>
-		<el-dialog v-model="dialogVisible" width="400px" :close-on-click-modal="false" :close-on-press-escape="false" class="transfer-dialog">
-			<div class="space-y-4">
-				<div class="w-full">
-					<label class="block pb-2">
-						<span class="text-base font-medium after:content-['*'] after:text-red-500 after:ml-1"> 选择转办人员 </span>
-					</label>
-					<select-show v-model:orgList="userList" type="user" :multiple="true"></select-show>
-				</div>
-
-				<div class="w-full">
-					<label class="block pb-2">
-						<span class="text-base font-medium after:content-['*'] after:text-red-500 after:ml-1"> 审核意见 </span>
-					</label>
-					<el-input v-model="submitDesc" type="textarea" maxlength="100" :rows="5" placeholder="请输入审核意见（2-100字）" show-word-limit />
-				</div>
+	<el-dialog v-model="dialogVisible" width="400px" :close-on-click-modal="false" :close-on-press-escape="false" class="transfer-dialog">
+		<div class="space-y-4">
+			<div class="w-full">
+				<label class="block pb-2">
+					<span class="text-base font-medium after:content-['*'] after:text-red-500 after:ml-1"> 选择转办人员 </span>
+				</label>
+				<select-show v-model:orgList="userList" type="user" :multiple="true"></select-show>
 			</div>
 
-			<template #footer>
-				<span class="flex justify-end gap-2">
-					<el-button @click="dialogVisible = false">取消</el-button>
-					<el-button type="primary" @click="submit">确定</el-button>
-				</span>
-			</template>
-		</el-dialog>
-	</div>
+			<div class="w-full">
+				<label class="block pb-2">
+					<span class="text-base font-medium after:content-['*'] after:text-red-500 after:ml-1"> 审核意见 </span>
+				</label>
+				<el-input v-model="submitDesc" type="textarea" maxlength="100" :rows="5" placeholder="请输入审核意见（2-100字）" show-word-limit />
+			</div>
+		</div>
+
+		<template #footer>
+			<span class="flex justify-end gap-2">
+				<el-button @click="dialogVisible = false">取消</el-button>
+				<el-button type="primary" @click="submit">确定</el-button>
+			</span>
+		</template>
+	</el-dialog>
 </template>

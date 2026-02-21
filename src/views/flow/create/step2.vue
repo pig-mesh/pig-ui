@@ -12,11 +12,11 @@
           <div class="flex items-start gap-3 p-4 border-2 rounded-lg transition-all duration-200
                       border-gray-200 dark:border-[var(--next-border-color)]
                       bg-white dark:bg-[var(--next-color-primary)]
-                      hover:border-blue-500 dark:hover:border-[#1d9bf0]
+                      hover:border-blue-500 dark:hover:border-primary
                       hover:shadow-md cursor-pointer">
             <div class="flex-shrink-0 mt-0.5">
               <div class="flex items-center justify-center w-4 h-4 transition-all border-2 border-gray-300 rounded-full dark:border-gray-500">
-                <div class="w-2 h-2 rounded-full bg-blue-500 dark:bg-[#1d9bf0] scale-0 transition-transform"></div>
+                <div class="w-2 h-2 rounded-full bg-blue-500 dark:bg-primary scale-0 transition-transform"></div>
               </div>
             </div>
             <div class="flex-1 min-w-0">
@@ -50,7 +50,7 @@
     <!-- 自定义表单配置 -->
     <div v-if="flowStore.step2.formType === BpmModelFormType.CUSTOM" class="mb-6">
       <div class="flex items-center text-base font-semibold text-gray-800 dark:text-[var(--next-color-white)] mb-4">
-        <el-icon class="mr-2 text-blue-500 dark:text-[#1d9bf0]"><Link /></el-icon>
+        <el-icon class="mr-2 text-blue-500 dark:text-primary"><Link /></el-icon>
         自定义表单配置
       </div>
       
@@ -81,9 +81,9 @@
       </el-form>
 
       <!-- 自定义表单示例说明 -->
-      <div class="mt-4 p-4 bg-blue-50 dark:bg-[rgba(29,155,240,0.1)] rounded-md transition-colors duration-300">
+      <div class="mt-4 p-4 bg-blue-50 dark:bg-primary/10 rounded-md transition-colors duration-300">
         <div class="flex items-center font-medium text-gray-800 dark:text-[var(--next-color-white)] mb-3">
-          <el-icon class="mr-2 text-blue-500 dark:text-[#1d9bf0]"><QuestionFilled /></el-icon>
+          <el-icon class="mr-2 text-blue-500 dark:text-primary"><QuestionFilled /></el-icon>
           使用说明
         </div>
         <div>

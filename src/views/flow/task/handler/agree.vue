@@ -45,40 +45,34 @@ const submit = async () => {
 </script>
 
 <template>
-  <div>
-    <el-dialog
-      v-model="dialogVisible"
-      title="提交审核"
-      :width="400"
-      class="rounded-lg shadow-xl"
-    >
-      <div class="p-4 space-y-4">
-        <el-input
-          v-model="submitDesc"
-          type="textarea"
-          maxlength="100"
-          :rows="5"
-          placeholder="请输入审核意见..."
-          show-word-limit
-          class="w-full transition-all duration-300 focus:ring-2 focus:ring-primary"
-        />
+  <el-dialog
+    v-model="dialogVisible"
+    title="提交审核"
+    :width="400"
+  >
+    <div class="p-4 space-y-4">
+      <el-input
+        v-model="submitDesc"
+        type="textarea"
+        maxlength="100"
+        :rows="5"
+        placeholder="请输入审核意见..."
+        show-word-limit
+      />
 
-        <div class="flex justify-end pt-4 space-x-3">
-          <el-button
-            @click="dialogVisible = false"
-            class="hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            取消
-          </el-button>
-          <el-button
-            type="primary"
-            @click="submit"
-            class="bg-primary hover:bg-primary-focus"
-          >
-            确定
-          </el-button>
-        </div>
+      <div class="flex justify-end pt-4 space-x-3">
+        <el-button
+          @click="dialogVisible = false"
+        >
+          取消
+        </el-button>
+        <el-button
+          type="primary"
+          @click="submit"
+        >
+          确定
+        </el-button>
       </div>
-    </el-dialog>
-  </div>
+    </div>
+  </el-dialog>
 </template>

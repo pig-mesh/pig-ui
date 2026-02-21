@@ -36,10 +36,10 @@
 			<!-- 条件组列表 -->
 			<div v-if="conditionConfig.conditionType === 0" class="flex flex-col gap-4">
 				<div v-for="(item, index) in conditionConfig.conditionList" :key="index"
-					class="overflow-hidden transition-shadow duration-200 border border-gray-200 rounded-lg bg-gray-50 hover:shadow-md">
+					class="overflow-hidden transition-shadow duration-200 border border-gray-200 rounded-lg dark:border-slate-600 bg-gray-50 dark:bg-slate-800 hover:shadow-md">
 					<!-- 条件组头部 -->
-					<div class="flex justify-between items-center px-4 py-2.5 bg-gray-100 border-b border-gray-200">
-						<div class="flex items-center gap-2 text-sm font-medium text-gray-700">
+					<div class="flex justify-between items-center px-4 py-2.5 bg-gray-100 dark:bg-slate-700 border-b border-gray-200 dark:border-slate-600">
+						<div class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-200">
 							<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-[var(--el-color-primary)] text-white text-[11px] font-semibold leading-none">{{ index + 1 }}</span>
 							<span>条件组</span>
 						</div>
@@ -52,14 +52,14 @@
 					<!-- 条件项列表 -->
 					<div class="px-4 pt-3 pb-1">
 						<div v-for="(item1, index1) in item.conditionList" :key="index1"
-							class="mb-2" :class="index1 > 0 ? 'pt-2 border-t border-dashed border-gray-200' : ''">
+							class="mb-2" :class="index1 > 0 ? 'pt-2 border-t border-dashed border-gray-200 dark:border-slate-600' : ''">
 							<div class="flex items-center justify-between mb-2">
-								<span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium leading-5.5"
+								<span class="inline-block px-2.5 py-0.5 rounded text-xs font-medium leading-snug"
 									:class="index1 === 0
-										? 'bg-blue-50 text-[var(--el-color-primary)] border border-blue-200'
+										? 'bg-blue-50 dark:bg-blue-900/30 text-[var(--el-color-primary)] border border-blue-200 dark:border-blue-800'
 										: item.mode
-											? 'bg-green-50 text-green-500 border border-green-200'
-											: 'bg-orange-50 text-orange-400 border border-orange-200'">
+											? 'bg-green-50 dark:bg-green-900/30 text-green-500 border border-green-200 dark:border-green-800'
+											: 'bg-orange-50 dark:bg-orange-900/30 text-orange-400 border border-orange-200 dark:border-orange-800'">
 									{{ index1 === 0 ? '当' : item.mode ? '且' : '或' }}
 								</span>
 								<el-button v-if="item.conditionList.length > 1" text type="danger" size="small"

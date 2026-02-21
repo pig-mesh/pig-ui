@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row shadow="hover" v-show="showSearch" class="ml10">
+			<el-row shadow="hover" v-show="showSearch" class="ml-2.5">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="发起时间" prop="taskTime">
 						<el-date-picker
@@ -22,11 +22,10 @@
 			</el-row>
 
 			<el-row>
-				<div class="mb8" style="width: 100%">
+				<div class="mb-2 w-full">
 					<right-toolbar
 						v-model:showSearch="showSearch"
-						class="ml10"
-						style="float: right; margin-right: 20px"
+						class="ml-2.5 float-right mr-5"
 						@queryTable="getDataList"
 					></right-toolbar>
 				</div>

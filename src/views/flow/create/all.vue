@@ -11,7 +11,7 @@
 						:class="{ 'border-b-2 border-primary text-primary': activeStep === index }"
 						@click="activeStep = index">
 						<span
-							class="mr-1.5 inline-block w-6 h-6 text-base font-normal text-center leading-[22px] border rounded-full"
+							class="mr-1.5 inline-block w-6 h-6 text-base font-normal text-center leading-6 border rounded-full"
 							:class="[activeStep === index ? 'bg-primary text-white' : 'border-current']">
 							{{ index + 1 }}
 						</span>
@@ -26,7 +26,7 @@
 			</div>
 
 			<!-- 内容区域 -->
-			<el-scrollbar class="h-[calc(100vh-20px)]">
+			<el-scrollbar class="h-[calc(100vh-120px)]">
 				<step1 v-show="activeStep === 0" :groupId="paramGroupId" ref="step1Ref" />
 				<step2 v-show="activeStep === 1" ref="step2Ref" />
 				<step3 v-show="activeStep === 2" :nodeConfigObj="step3NodeConfig" ref="step3Ref" />
