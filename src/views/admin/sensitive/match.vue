@@ -5,7 +5,7 @@
       <el-row :gutter="24">
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('sensitive.sensitiveWord')" prop="sensitiveWord">
-            <el-input type="textarea" rows="3" v-model="form.sensitiveWord" :placeholder="t('sensitive.inputSensitiveWordTip')"
+            <el-input type="textarea" :rows="3" v-model="form.sensitiveWord" :placeholder="t('sensitive.inputSensitiveWordTip')"
                       @blur="onSubmit"/>
           </el-form-item>
         </el-col>

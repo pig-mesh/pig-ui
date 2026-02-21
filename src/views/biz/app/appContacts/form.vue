@@ -12,7 +12,7 @@
         </el-form-item>
 
         <el-form-item label="备注" prop="remark" class="mb20">
-          <el-input v-model="form.remark" type="textarea" rows="3" placeholder="请输入备注"/>
+          <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注"/>
         </el-form-item>
       </el-form>
       <template #footer>

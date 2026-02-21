@@ -20,7 +20,7 @@
 				<el-input v-model="form.messageTitle" :placeholder="t('webhook.inputMessageTitleTip')" />
 			</el-form-item>
 			<el-form-item :label="t('webhook.messageContent')" prop="messageContent">
-				<el-input type="textarea" rows="5" v-model="form.messageContent" :placeholder="t('webhook.inputMessageContentTip')" />
+				<el-input type="textarea" :rows="5" v-model="form.messageContent" :placeholder="t('webhook.inputMessageContentTip')" />
 			</el-form-item>
 			<el-form-item :label="t('webhook.messageUrl')" prop="messageUrl" v-if="form.messageType === 'link'">
 				<el-input v-model="form.messageUrl" :placeholder="t('webhook.inputMessageUrlTip')" />
