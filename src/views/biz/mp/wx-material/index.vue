@@ -113,13 +113,15 @@
 							</div>
 							<news-form ref="dialogNewsRef" @ok="getDataList"></news-form>
 							<div v-loading="state.loading" class="waterfall">
-								<div v-for="item in state.dataList" :key="item.id" class="waterfall-item">
-									<wx-news :obj-data="item.content.newsItem"></wx-news>
-									<el-row class="ope-row">
-										<el-button type="primary" icon="edit" circle @click="handleEditNews(item)"></el-button>
-										<el-button type="danger" icon="delete" circle @click="delMaterial(item)"></el-button>
-									</el-row>
-								</div>
+								<template v-for="item in state.dataList" :key="item.id">
+									<div v-if="item.content && item.content.newsItem" class="waterfall-item">
+										<wx-news :obj-data="item.content.newsItem"></wx-news>
+										<el-row class="ope-row">
+											<el-button type="primary" icon="edit" circle @click="handleEditNews(item)"></el-button>
+											<el-button type="danger" icon="delete" circle @click="delMaterial(item)"></el-button>
+										</el-row>
+									</div>
+								</template>
 							</div>
 							<div v-if="state.dataList.length <= 0 && !state.loading" class="el-table__empty-block">
 								<span class="el-table__empty-text">暂无数据</span>

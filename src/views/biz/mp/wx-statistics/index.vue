@@ -49,6 +49,7 @@
 </template>
 
 <script setup lang="ts" name="wx-statistics">
+import { useResizeObserver } from '@vueuse/core';
 import { useMessage } from '/@/hooks/message';
 import { fetchAccountList, fetchStatistics } from '/@/api/mp/wx-account';
 import * as echarts from 'echarts';
@@ -89,9 +90,18 @@ const userCumulateRef = ref();
 const userShardRef = ref();
 const upstreamMsgDistMonthRef = ref();
 const interfaceSummaryRef = ref();
+const chartRefs = [userCumulateRef, userShardRef, upstreamMsgDistMonthRef, interfaceSummaryRef];
+
+useResizeObserver(chartRefs, () => {
+	chartRefs.forEach((chartRef) => {
+		if (chartRef.value) {
+			echarts.getInstanceByDom(chartRef.value)?.resize();
+		}
+	});
+});
 
 const initLineChart = (elRef: any, title: string, xData: any[], yData: any[]) => {
-	const chart = markRaw(echarts.init(elRef));
+	const chart = markRaw(echarts.getInstanceByDom(elRef) || echarts.init(elRef));
 	chart.setOption({
 		title: { text: title },
 		xAxis: { type: 'category', data: xData },
@@ -126,6 +136,14 @@ onMounted(async () => {
 	if (data?.length > 0) {
 		handleNodeClick(data[0]);
 	}
+});
+
+onUnmounted(() => {
+	chartRefs.forEach((chartRef) => {
+		if (chartRef.value) {
+			echarts.getInstanceByDom(chartRef.value)?.dispose();
+		}
+	});
 });
 </script>
 
