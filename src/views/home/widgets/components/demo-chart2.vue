@@ -16,18 +16,28 @@ import { use } from 'echarts/core';
 import { ScatterChart } from 'echarts/charts';
 import { TitleComponent, GridComponent } from 'echarts/components';
 import { CanvasRenderer } from 'echarts/renderers';
+import { useThemeConfig } from '/@/stores/themeConfig';
 
 use([TitleComponent, ScatterChart, CanvasRenderer, GridComponent]);
-const option = reactive({
+
+const storesThemeConfig = useThemeConfig();
+const { themeConfig } = storeToRefs(storesThemeConfig);
+const isDark = computed(() => themeConfig.value.isDark);
+
+const axisLineColor = computed(() => isDark.value ? '#374151' : '#e5e7eb');
+const gridLineColor = computed(() => isDark.value ? '#1f2937' : '#f3f4f6');
+const labelColor = computed(() => isDark.value ? '#9ca3af' : '#9ca3af');
+
+const option = computed(() => ({
 	xAxis: {
-		axisLine: { lineStyle: { color: '#e5e7eb' } },
-		axisLabel: { color: '#9ca3af', fontSize: 12 },
-		splitLine: { lineStyle: { color: '#f3f4f6' } },
+		axisLine: { lineStyle: { color: axisLineColor.value } },
+		axisLabel: { color: labelColor.value, fontSize: 12 },
+		splitLine: { lineStyle: { color: gridLineColor.value } },
 	},
 	yAxis: {
 		axisLine: { show: false },
-		axisLabel: { color: '#9ca3af', fontSize: 12 },
-		splitLine: { lineStyle: { color: '#f3f4f6', type: 'dashed' } },
+		axisLabel: { color: labelColor.value, fontSize: 12 },
+		splitLine: { lineStyle: { color: gridLineColor.value, type: 'dashed' } },
 	},
 	grid: { top: 16, right: 16, bottom: 32, left: 40 },
 	series: [
@@ -67,5 +77,5 @@ const option = reactive({
 			type: 'scatter',
 		},
 	],
-});
+}));
 </script>

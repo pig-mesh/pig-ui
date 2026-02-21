@@ -3,9 +3,9 @@
  -->
 <template>
 	<div>
-		<div :class="['widgets-home', customizing ? 'customizing' : '']" ref="main">
-			<div class="widgets-content">
-				<div class="widgets-top">
+		<div :class="['flex flex-row flex-1 h-full', customizing ? 'customizing' : '']" ref="main">
+			<div class="flex-1 overflow-auto overflow-x-hidden p-[3px]">
+				<div class="flex justify-between items-center">
 					<div class="flex justify-end custom_btn">
 						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
 						<el-button v-else type="primary" round @click="custom">{{ t('home.widgets.customize') }}</el-button>
@@ -14,7 +14,7 @@
 				<div class="widgets" ref="widgets">
 					<div class="widgets-wrapper">
 						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
-							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="200"></el-empty>
+							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="120"></el-empty>
 						</div>
 						<el-row :gutter="2">
 							<el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
@@ -27,7 +27,7 @@
 									dragClass="aaaaa"
 									force-fallback
 									fallbackOnBody
-									class="draggable-box"
+									class="draggable-box h-full w-full"
 								>
 									<template #item="{ element }">
 										<div class="widgets-item">
@@ -52,8 +52,8 @@
 			<div v-if="customizing" class="widgets-aside">
 				<el-container>
 					<el-header>
-						<div class="widgets-aside-title">{{ t('home.widgets.addWidget') }}</div>
-						<div class="widgets-aside-close" @click="close()">
+						<div class="text-sm flex items-center justify-center">{{ t('home.widgets.addWidget') }}</div>
+						<div class="text-lg w-[30px] h-[30px] flex items-center justify-center rounded-lg cursor-pointer transition-colors hover:bg-black/5" @click="close()">
 							<el-icon><Close /></el-icon>
 						</div>
 					</el-header>
@@ -87,15 +87,15 @@
 							<div v-if="myCompsList.length <= 0" class="p-5 text-center widgets-list-nodata">
 								<el-empty :description="t('home.widgets.allAdded')" :image-size="100"></el-empty>
 							</div>
-							<div v-for="item in myCompsList" :key="item.title" class="widgets-list-item">
-								<div class="item-logo">
+							<div v-for="item in myCompsList" :key="item.title" class="flex flex-row p-4 items-center hover:bg-black/[0.03] rounded-lg">
+								<div class="w-10 h-10 rounded-[10px] bg-black/[0.04] flex items-center justify-center text-lg mr-4 text-primary">
 									<el-icon>
 										<component :is="item.icon" />
 									</el-icon>
 								</div>
-								<div class="item-info">
-									<h2>{{ item.title }}</h2>
-									<p>{{ item.description }}</p>
+								<div class="flex-1">
+									<h2 class="text-[15px] font-medium cursor-default">{{ item.title }}</h2>
+									<p class="text-xs text-gray-400 cursor-default">{{ item.description }}</p>
 								</div>
 								<div class="item-actions">
 									<el-button type="primary" icon="el-icon-plus" size="small" @click="push(item)"></el-button>
@@ -242,78 +242,20 @@ onMounted(() => {
 	z-index: 9;
 }
 
-.widgets-home {
-	display: flex;
-	flex-direction: row;
-	flex: 1;
-	height: 100%;
-}
-
-.widgets-content {
-	flex: 1;
-	overflow: auto;
-	overflow-x: hidden;
-	padding: 3px;
-}
-
 .widgets-aside {
 	width: 360px;
 	background: var(--el-bg-color-overlay);
 	border-left: 1px solid var(--el-border-color-lighter);
 	border-radius: 12px;
-	margin-bottom: 5px;
+	margin-bottom: 4px;
 	min-height: 100px;
 	position: relative;
 	overflow: auto;
 }
 
-.widgets-aside-title {
-	font-size: 14px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-}
-
-.widgets-aside-title i {
-	margin-right: 10px;
-	font-size: 18px;
-}
-
-.widgets-aside-close {
-	font-size: 18px;
-	width: 30px;
-	height: 30px;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background 0.15s ease;
-}
-
-.widgets-aside-close:hover {
-	background: rgba(180, 180, 180, 0.1);
-}
-
-.widgets-top {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-}
-
-.widgets-top-title {
-	font-size: 18px;
-	font-weight: bold;
-}
-
 .widgets {
 	transform-origin: top left;
 	transition: transform 0.15s;
-}
-
-.draggable-box {
-	height: 100%;
-	width: 100%;
 }
 
 .customizing .widgets-wrapper {
@@ -327,7 +269,7 @@ onMounted(() => {
 
 .customizing .widgets-wrapper .draggable-box {
 	border: 1px dashed var(--el-color-primary);
-	padding: 15px;
+	padding: 16px;
 }
 
 .customizing .widgets-wrapper .no-widgets {
@@ -353,7 +295,6 @@ onMounted(() => {
 	border-radius: 12px;
 }
 
-/* Ensure components inside widgets-item are not creating extra margins or borders if not needed */
 .widgets-item > :deep(.el-card) {
 	border: none !important;
 	box-shadow: none !important;
@@ -388,55 +329,14 @@ onMounted(() => {
 }
 
 .customize-overlay label i {
-	margin-right: 15px;
+	margin-right: 16px;
 	font-size: 24px;
 }
 
 .customize-overlay .close {
 	position: absolute;
-	top: 15px;
-	left: 15px;
-}
-
-.widgets-list-item {
-	display: flex;
-	flex-direction: row;
-	padding: 15px;
-	align-items: center;
-}
-
-.widgets-list-item .item-logo {
-	width: 40px;
-	height: 40px;
-	border-radius: 10px;
-	background: rgba(180, 180, 180, 0.08);
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	font-size: 18px;
-	margin-right: 15px;
-	color: var(--el-color-primary);
-}
-
-.widgets-list-item .item-info {
-	flex: 1;
-}
-
-.widgets-list-item .item-info h2 {
-	font-size: 15px;
-	font-weight: 500;
-	cursor: default;
-}
-
-.widgets-list-item .item-info p {
-	font-size: 12px;
-	color: #999;
-	cursor: default;
-}
-
-.widgets-list-item:hover {
-	background: rgba(180, 180, 180, 0.06);
-	border-radius: 8px;
+	top: 16px;
+	left: 16px;
 }
 
 .widgets-wrapper .sortable-ghost {
@@ -454,7 +354,7 @@ onMounted(() => {
 	border: 2px solid var(--el-border-color-lighter);
 	padding: 5px;
 	cursor: pointer;
-	margin-right: 15px;
+	margin-right: 16px;
 	border-radius: 8px;
 	transition: border-color 0.15s ease;
 }

@@ -2,7 +2,7 @@
   <el-drawer v-model="visible" size="50%" direction="rtl" :title="t('home.announcement')">
     <div class="flex justify-center">
       <div class="w-full max-w-[680px]">
-        <h1 class="mb-4 text-2xl font-bold leading-tight text-gray-900">
+        <h1 class="mb-4 text-2xl font-bold leading-tight text-gray-900 dark:text-gray-50">
           {{ currentNew.title }}
         </h1>
 
@@ -13,12 +13,12 @@
           <span v-if="currentNew.readFlag === '0'" class="text-orange-400">· {{ $t('msg.unread') }}</span>
         </div>
 
-        <div class="mb-8 border-t border-gray-100"></div>
+        <div class="mb-8 border-t border-gray-100 dark:border-gray-800"></div>
 
-        <div class="text-base leading-relaxed text-gray-700" v-html="currentNew.content"></div>
+        <div class="text-base leading-relaxed text-gray-700 dark:text-gray-300" v-html="currentNew.content"></div>
 
-        <div class="pt-6 mt-12 text-center border-t border-gray-100">
-          <span class="text-xs text-gray-300">{{ t('home.thanksForReading') }}</span>
+        <div class="pt-6 mt-12 text-center border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs text-gray-400 dark:text-gray-600">{{ t('home.thanksForReading') }}</span>
         </div>
       </div>
     </div>

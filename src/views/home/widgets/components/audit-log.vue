@@ -22,7 +22,8 @@ export default {
 					<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
 					<div class="flex-1 min-w-0">
 						<p class="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">
-							{{ item.createBy }}：{{ item.auditField }} {{ item.afterVal }} => {{ item.beforeVal }}
+							<span class="text-gray-400 dark:text-gray-500">{{ item.createBy }}</span>
+							{{ item.auditField }} {{ item.afterVal }} → {{ item.beforeVal }}
 						</p>
 					</div>
 					<span class="text-xs text-gray-400 flex-shrink-0 whitespace-nowrap">{{ item.createTime }}</span>

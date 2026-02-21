@@ -16,26 +16,37 @@ import {use} from 'echarts/core';
 import {PieChart} from 'echarts/charts';
 import {TooltipComponent, LegendComponent} from 'echarts/components';
 import {CanvasRenderer} from 'echarts/renderers';
-
+import {useThemeConfig} from '/@/stores/themeConfig';
 
 use([TooltipComponent, LegendComponent, PieChart, CanvasRenderer]);
 
+const storesThemeConfig = useThemeConfig();
+const { themeConfig } = storeToRefs(storesThemeConfig);
+const isDark = computed(() => themeConfig.value.isDark);
+
+const tooltipBg = computed(() => isDark.value ? 'rgba(31,41,55,0.96)' : 'rgba(255,255,255,0.96)');
+const tooltipBorder = computed(() => isDark.value ? '#374151' : '#e5e7eb');
+const tooltipTextColor = computed(() => isDark.value ? '#e5e7eb' : '#374151');
+const labelColor = computed(() => isDark.value ? '#9ca3af' : '#9ca3af');
+const labelLineColor = computed(() => isDark.value ? '#4b5563' : '#d1d5db');
+const outerLabelColor = computed(() => isDark.value ? '#d1d5db' : '#6b7280');
+
 const colorPalette = ['#3b82f6', '#60a5fa', '#93c5fd', '#bfdbfe'];
 
-const option = reactive({
+const option = computed(() => ({
   tooltip: {
     trigger: 'item',
     formatter: '{a} <br/>{b}: {c} ({d}%)',
-    backgroundColor: 'rgba(255,255,255,0.96)',
-    borderColor: '#e5e7eb',
+    backgroundColor: tooltipBg.value,
+    borderColor: tooltipBorder.value,
     borderWidth: 1,
-    textStyle: { color: '#374151', fontSize: 13 },
+    textStyle: { color: tooltipTextColor.value, fontSize: 13 },
     padding: [8, 12],
   },
   legend: {
     data: ['Java17', 'Java8', 'Other'],
     bottom: 0,
-    textStyle: { fontSize: 12, color: '#9ca3af' },
+    textStyle: { fontSize: 12, color: labelColor.value },
     icon: 'circle',
     itemWidth: 8,
     itemHeight: 8,
@@ -68,12 +79,12 @@ const option = reactive({
       radius: ['45%', '60%'],
       labelLine: {
         length: 20,
-        lineStyle: { color: '#d1d5db' },
+        lineStyle: { color: labelLineColor.value },
       },
       label: {
         formatter: '{b}: {d}%',
         fontSize: 12,
-        color: '#6b7280',
+        color: outerLabelColor.value,
       },
       data: [
         {value: 1048, name: 'Java17'},
@@ -82,5 +93,5 @@ const option = reactive({
       ],
     },
   ],
-});
+}));
 </script>
