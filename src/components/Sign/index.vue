@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { useEventListener, useResizeObserver } from '@vueuse/core';
 import { Check, Refresh } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import type { Point } from './types';
@@ -52,7 +52,6 @@ interface Props {
 	bgColor?: string;
 	isCrop?: boolean;
 	isClearBgColor?: boolean;
-	modelValue?: string;
 	disabled?: boolean;
 }
 
@@ -64,11 +63,10 @@ const props = withDefaults(defineProps<Props>(), {
 	bgColor: '',
 	isCrop: false,
 	isClearBgColor: true,
-	modelValue: '',
 	disabled: false,
 });
 
-const emit = defineEmits(['update:modelValue']);
+const modelValue = defineModel<string>({ default: '' });
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 const ctx = ref<CanvasRenderingContext2D | null>(null);
@@ -216,7 +214,7 @@ function handleTouchEnd(e: TouchEvent): void {
 async function handleGenerate(): Promise<void> {
 	try {
 		const result = await generate();
-		emit('update:modelValue', result);
+		modelValue.value = result;
 	} catch (error) {
 		ElMessage.warning('请先进行签名');
 	}
@@ -224,7 +222,7 @@ async function handleGenerate(): Promise<void> {
 
 function handleReset(): void {
 	reset();
-	emit('update:modelValue', '');
+	modelValue.value = '';
 }
 
 function generate(): Promise<string> {
@@ -269,16 +267,12 @@ function reset(): void {
 	}
 }
 
-// Lifecycle
+// Event listeners (auto-cleanup on unmount)
+useEventListener(document, 'mouseup', () => (isDrawing.value = false));
+useResizeObserver(canvasRef, handleResize);
+
 onMounted(() => {
 	initCanvas();
-	window.addEventListener('resize', handleResize);
-	document.addEventListener('mouseup', () => (isDrawing.value = false));
-});
-
-onBeforeUnmount(() => {
-	window.removeEventListener('resize', handleResize);
-	document.removeEventListener('mouseup', () => (isDrawing.value = false));
 });
 
 // Watch
