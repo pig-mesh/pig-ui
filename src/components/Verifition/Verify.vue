@@ -363,7 +363,7 @@ export default {
 }
 
 .iconfont {
-	font-family: 'iconfont' !important;
+	font-family: 'pigx-icon' !important;
 	font-size: 16px;
 	font-style: normal;
 	-webkit-font-smoothing: antialiased;

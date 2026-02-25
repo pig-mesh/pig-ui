@@ -1,12 +1,12 @@
 @font-face {
-  font-family: "iconfont"; /* Project id 4818804 */
+  font-family: "pigx-icon"; /* Project id 4818804 */
   src: url('iconfont.woff2?t=1770778879248') format('woff2'),
        url('iconfont.woff?t=1770778879248') format('woff'),
        url('iconfont.ttf?t=1770778879248') format('truetype');
 }
 
 .iconfont {
-  font-family: "iconfont" !important;
+  font-family: "pigx-icon" !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
