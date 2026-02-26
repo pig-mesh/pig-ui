@@ -142,7 +142,7 @@ import type options from './options';
 import { useMessage } from '/@/hooks/message';
 import Draggable from 'vuedraggable';
 import { Plus } from '@element-plus/icons-vue';
-const LinkPicker = defineAsyncComponent(() => import('/@/components/Link/picker.vue'));
+import LinkPicker from '/@/components/Link/picker.vue';
 
 const limit = 5;
 type OptionsType = ReturnType<typeof options>;
