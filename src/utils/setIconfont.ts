@@ -1,8 +1,5 @@
-// 字体图标 url
-const cssCdnUrlList: Array<string> = [
-    '/assets/iconfont/iconfont.css', // 本地图标文件
-	'/assets/styles/font-awesome.min.css',
-];
+// 字体图标 url (已移至 index.html 静态加载，避免首次登录时字体加载竞态问题)
+const cssCdnUrlList: Array<string> = [];
 // 第三方 js url
 const jsCdnUrlList: Array<string> = [];
 
