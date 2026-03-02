@@ -11,7 +11,7 @@
 	>
 		<el-tabs type="border-card">
 			<el-tab-pane label="设置抄送人">
-				<select-show v-model:orgList="copyerConfig.nodeUserList" type="user" :multiple="true"></select-show>
+				<select-show v-model:orgList="copyerConfig.nodeUserList" :multiple="true"></select-show>
 			</el-tab-pane>
 			<el-tab-pane label="表单权限" v-if="isDynamicForm">
 				<form-perm :hide-key="['E']" :form-perm="copyerConfig.formPerms"></form-perm>
