@@ -11,6 +11,7 @@ export default {
 		conditionalBranching: 'conditional',
 		parallelBranch: 'parallel',
 		timer: 'timer',
+		trigger: 'trigger',
 		basicInformation: 'basic information',
 		formDesign: 'form design',
 		processDesign: 'process design',

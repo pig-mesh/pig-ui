@@ -1,14 +1,9 @@
 <template>
   <div class="app-container">
     <!-- 流程节点绘制 -->
-    <div class="fd-nav-content">
-      <el-scrollbar style="height: 600px">
+    <div class="flow-design-area">
+      <el-scrollbar ref="scrollbarRef">
         <section class="dingflow-design">
-          <div class="zoom">
-            <div class="zoom-out" :class="nowVal === 50 && 'disabled'" @click="zoomSize(1)"></div>
-            <span>{{ nowVal }}%</span>
-            <div class="zoom-in" :class="nowVal === 300 && 'disabled'" @click="zoomSize(2)"></div>
-          </div>
           <div class="box-scale" :style="`transform: scale(${nowVal / 100});`">
             <nodeWrap v-model:nodeConfig="nodeConfig"/>
             <div class="end-node">
@@ -19,6 +14,22 @@
         </section>
       </el-scrollbar>
     </div>
+
+    <!-- 缩放控件 - 始终固定在页面右下角 -->
+    <div class="fixed right-16 bottom-16 z-50 flex items-center gap-2 rounded-lg bg-white px-3 py-1.5 shadow-md">
+        <el-tooltip content="缩小" placement="top">
+          <el-button :icon="ZoomOut" :disabled="nowVal <= MIN_ZOOM" circle size="small" @click="zoomOut"/>
+        </el-tooltip>
+        <span class="inline-block min-w-[42px] text-center text-sm tabular-nums text-gray-600">{{ nowVal }}%</span>
+        <el-tooltip content="放大" placement="top">
+          <el-button :icon="ZoomIn" :disabled="nowVal >= MAX_ZOOM" circle size="small" @click="zoomIn"/>
+        </el-tooltip>
+        <el-divider direction="vertical"/>
+        <el-tooltip content="重置缩放" placement="top">
+          <el-button :icon="RefreshRight" circle size="small" @click="nowVal = 100"/>
+        </el-tooltip>
+    </div>
+
     <!-- 发起人 -->
     <promoterDrawer/>
     <!-- 审批人 -->
@@ -29,6 +40,8 @@
     <conditionDrawer/>
     <!-- 延时器 -->
     <timerDrawer/>
+    <!-- 触发器 -->
+    <triggerDrawer/>
   </div>
 </template>
 
@@ -39,8 +52,15 @@ import approverDrawer from '../workflow/components/drawer/approverDrawer.vue';
 import copyerDrawer from '../workflow/components/drawer/copyerDrawer.vue';
 import conditionDrawer from '../workflow/components/drawer/conditionDrawer.vue';
 import timerDrawer from '../workflow/components/drawer/timerDrawer.vue';
+import triggerDrawer from '../workflow/components/drawer/triggerDrawer.vue';
+import {ZoomIn, ZoomOut, RefreshRight} from '@element-plus/icons-vue';
 import {useI18n} from 'vue-i18n';
+import {useEventListener} from '@vueuse/core';
 import {useFlowStore} from "../workflow/stores/flow";
+
+const MIN_ZOOM = 50;
+const MAX_ZOOM = 300;
+const ZOOM_STEP = 10;
 
 const store = useFlowStore();
 
@@ -48,7 +68,7 @@ const {t} = useI18n();
 
 const tipList = ref<string[]>([]);
 const nowVal = ref(100);
-const nodeConfig = ref({
+const nodeConfig = ref<Record<string, any>>({
   nodeName: t('flow.initiator'),
   type: 0,
   id: 'root',
@@ -67,7 +87,9 @@ const props = defineProps({
 watch(
     () => props.nodeConfigObj,
     (val) => {
-      nodeConfig.value = val;
+      if (val) {
+        nodeConfig.value = val;
+      }
     }
 );
 
@@ -115,19 +137,25 @@ watch(() => nodeConfig.value, (v) => {
 const getProcessData = async () => {
   return nodeConfig.value;
 };
-const zoomSize = (type: number) => {
-  if (type === 1) {
-    if (nowVal.value === 50) {
-      return;
-    }
-    nowVal.value -= 10;
-  } else {
-    if (nowVal.value === 300) {
-      return;
-    }
-    nowVal.value += 10;
-  }
+const clampZoom = (val: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, val));
+
+const zoomIn = () => {
+  nowVal.value = clampZoom(nowVal.value + ZOOM_STEP);
 };
+
+const zoomOut = () => {
+  nowVal.value = clampZoom(nowVal.value - ZOOM_STEP);
+};
+
+// Ctrl/Cmd + 滚轮缩放
+const scrollbarRef = ref();
+useEventListener(scrollbarRef, 'wheel', (e: WheelEvent) => {
+  if (e.ctrlKey || e.metaKey) {
+    e.preventDefault();
+    const delta = e.deltaY > 0 ? -ZOOM_STEP : ZOOM_STEP;
+    nowVal.value = clampZoom(nowVal.value + delta);
+  }
+}, {passive: false});
 const validate = async (): Promise<void> => {
   tipList.value = [];
   if (nodeConfig.value.childNode === undefined || nodeConfig.value.childNode.id === undefined) {
@@ -144,7 +172,11 @@ defineExpose({validate, getProcessData});
 <style scoped lang="scss">
 @import '../workflow/css/workflow.css';
 
-.error-modal-list {
-  width: 455px;
+.app-container {
+  height: 100%;
+}
+
+.flow-design-area {
+  height: calc(100vh - 140px);
 }
 </style>

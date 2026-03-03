@@ -1,13 +1,14 @@
 <template>
 	<div>
 		<!--			<approval :node-config="nodeConfig" v-if="nodeConfig.type==1"></approval>-->
-		<div class="node-wrap" v-if="nodeConfig.type < 3 || nodeConfig.type === 10">
+		<div class="node-wrap" v-if="nodeConfig.type < 3 || nodeConfig.type === 10 || nodeConfig.type === 11">
 			<div class="node-wrap-box" :class="(nodeConfig.type == 0 ? 'start-node ' : '') + (nodeConfig.error ? 'active error' : '')">
 				<div class="title" :style="`background: rgb(${bgColors[nodeConfig.type]});`">
 					<span v-if="nodeConfig.type == 0">{{ nodeConfig.nodeName }}</span>
 					<template v-else>
 						<el-icon v-if="nodeConfig.type == 1"><User /></el-icon>
 						<el-icon v-else-if="nodeConfig.type == 10"><Timer /></el-icon>
+						<el-icon v-else-if="nodeConfig.type == 11"><Connection /></el-icon>
 						<el-icon v-else><Message /></el-icon>
 						<input
 							v-if="isInput"
@@ -147,7 +148,7 @@ import Approval from './node/approval.vue';
 import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
-import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval, timerStr } from '../utils/workflowHelpers';
+import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval, timerStr, triggerStr } from '../utils/workflowHelpers';
 import { useI18n } from 'vue-i18n';
 
 const _uid = getCurrentInstance().uid;
@@ -176,6 +177,9 @@ const placeHolder = computed(() => {
 	}
 	if (props.nodeConfig.type == 10) {
 		return timerStr(props.nodeConfig);
+	}
+	if (props.nodeConfig.type == 11) {
+		return triggerStr(props.nodeConfig);
 	}
 	return '';
 });
@@ -283,16 +287,19 @@ onMounted(() => {
 		resetConditionNodesErr();
 	} else if (props.nodeConfig.type == 10) {
 		props.nodeConfig.error = !timerStr(props.nodeConfig);
+	} else if (props.nodeConfig.type == 11) {
+		props.nodeConfig.error = !triggerStr(props.nodeConfig);
 	}
 });
 const emits = defineEmits(['update:nodeConfig']);
 const store = useStore();
-const { setPromoter, setApprover, setCopyer, setCondition, setTimer, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig, setTimerConfig } = store;
+const { setPromoter, setApprover, setCopyer, setCondition, setTimer, setTrigger, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig, setTimerConfig, setTriggerConfig } = store;
 const starterConfigData = computed(() => store.starterConfigData);
 const approverConfigData = computed(() => store.approverConfigData);
 const copyerConfig1 = computed(() => store.copyerConfig1);
 const conditionsConfig1 = computed(() => store.conditionsConfig1);
 const timerConfigData = computed(() => store.timerConfigData);
+const triggerConfigData = computed(() => store.triggerConfigData);
 
 watch(starterConfigData, (approver) => {
 	if (approver.flag && approver.id === _uid) {
@@ -317,6 +324,11 @@ watch(conditionsConfig1, (condition) => {
 watch(timerConfigData, (timer) => {
 	if (timer.flag && timer.id === _uid) {
 		emits('update:nodeConfig', timer.value);
+	}
+});
+watch(triggerConfigData, (trigger) => {
+	if (trigger.flag && trigger.id === _uid) {
+		emits('update:nodeConfig', trigger.value);
 	}
 });
 
@@ -446,6 +458,14 @@ const openConfigDrawer = (priorityLevel) => {
 	} else if (type == 10) {
 		setTimer(true);
 		setTimerConfig({
+			value: JSON.parse(JSON.stringify(props.nodeConfig)),
+			flag: false,
+			id: _uid,
+		});
+		return;
+	} else if (type == 11) {
+		setTrigger(true);
+		setTriggerConfig({
 			value: JSON.parse(JSON.stringify(props.nodeConfig)),
 			flag: false,
 			id: _uid,

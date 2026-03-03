@@ -9,12 +9,12 @@
  * [1] 审批人节点
  * [2] 抄送人节点
  */
-export const bgColors: string[] = ['87, 106, 149', '255, 148, 62', '50, 150, 250', '', '', '', '', '', '', '', '148, 103, 255'];
+export const bgColors: string[] = ['87, 106, 149', '255, 148, 62', '50, 150, 250', '', '', '', '', '', '', '', '148, 103, 255', '64, 158, 255'];
 
 /**
  * 节点占位符文本
  */
-export const placeholderList: string[] = ['发起人', '审批人', '抄送人', '', '', '', '', '', '', '', '延时器'];
+export const placeholderList: string[] = ['发起人', '审批人', '抄送人', '', '', '', '', '', '', '', '延时器', '触发器'];
 
 /**
  * 审批人类型选项
@@ -119,4 +119,17 @@ export const timeUnits: TimeUnit[] = [
 	{ value: 'HOUR', label: '小时' },
 	{ value: 'DAY', label: '天' },
 	{ value: 'WEEK', label: '周' },
+];
+
+/**
+ * 触发器异常处理类型
+ */
+export interface ErrorHandlerType {
+	value: string;
+	label: string;
+}
+
+export const errorHandlerTypes: ErrorHandlerType[] = [
+	{ value: 'THROW', label: '抛出异常' },
+	{ value: 'TERMINATE', label: '终止流程' },
 ];

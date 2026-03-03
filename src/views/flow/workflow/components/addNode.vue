@@ -35,6 +35,12 @@
 						</div>
 						<p>{{ $t('flow.timer') }}</p>
 					</a>
+					<a class="add-node-popover-item trigger" @click="addType(11)">
+						<div class="item-wrapper">
+							<el-icon><Connection /></el-icon>
+						</div>
+						<p>{{ $t('flow.trigger') }}</p>
+					</a>
 				</div>
 				<template #reference>
 					<button class="btn" type="button">
@@ -129,6 +135,22 @@ const addType = (type) => {
 					dateTime: null,
 					formFieldId: null,
 					formFieldName: null,
+				},
+			};
+		} else if (type === 11) {
+			data = {
+				id: other.getNonDuplicateID(),
+				parentId: props.currentNode.id,
+				nodeName: '触发器',
+				type: 11,
+				error: true,
+				childNode: props.childNodeP,
+				triggerConfig: {
+					url: '',
+					headers: [],
+					body: [],
+					returnMapping: [],
+					errorHandler: 'THROW',
 				},
 			};
 		}
@@ -387,6 +409,17 @@ const addType = (type) => {
 			&:hover .item-wrapper {
 				background: rgb(148, 103, 255);
 				box-shadow: 0 8px 16px 0 rgba(148, 103, 255, 0.35);
+			}
+		}
+
+		&.trigger {
+			.item-wrapper {
+				color: rgb(64, 158, 255);
+			}
+
+			&:hover .item-wrapper {
+				background: rgb(64, 158, 255);
+				box-shadow: 0 8px 16px 0 rgba(64, 158, 255, 0.35);
 			}
 		}
 

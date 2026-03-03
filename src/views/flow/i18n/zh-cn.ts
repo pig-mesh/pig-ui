@@ -9,6 +9,7 @@ export default {
 		conditionalBranching: '条件分支',
 		parallelBranch: '并行分支',
 		timer: '延时器',
+		trigger: '触发器',
 		basicInformation: '基础信息',
 		formDesign: '表单设计',
 		processDesign: '流程设计',

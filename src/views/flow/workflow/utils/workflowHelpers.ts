@@ -365,6 +365,21 @@ export function timerStr(nodeConfig: NodeConfig): string {
 }
 
 /**
+ * 获取触发器显示字符串
+ * @param nodeConfig 节点配置
+ */
+export function triggerStr(nodeConfig: NodeConfig): string {
+	const triggerConfig = nodeConfig.triggerConfig;
+	if (!triggerConfig || !triggerConfig.url) return '';
+	try {
+		const url = new URL(triggerConfig.url);
+		return `POST ${url.host}`;
+	} catch {
+		return triggerConfig.url;
+	}
+}
+
+/**
  * 工作流辅助函数默认导出对象
  * @deprecated 建议使用具名导出的函数,这个对象主要用于向后兼容
  */
@@ -377,6 +392,7 @@ const workflowHelpers = {
 	conditionStr,
 	copyerStr,
 	timerStr,
+	triggerStr,
 };
 
 export default workflowHelpers;

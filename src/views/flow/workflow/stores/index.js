@@ -21,6 +21,8 @@ export const useStore = defineStore('store', {
 		},
 		timerDrawer: false,
 		timerConfigData: {},
+		triggerDrawer: false,
+		triggerConfigData: {},
 	}),
 	actions: {
 		setPromoter(payload) {
@@ -53,6 +55,12 @@ export const useStore = defineStore('store', {
 		},
 		setTimerConfig(payload) {
 			this.timerConfigData = payload;
+		},
+		setTrigger(payload) {
+			this.triggerDrawer = payload;
+		},
+		setTriggerConfig(payload) {
+			this.triggerConfigData = payload;
 		},
 	},
 });
