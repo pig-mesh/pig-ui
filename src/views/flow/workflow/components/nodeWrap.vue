@@ -1,12 +1,14 @@
 <template>
 	<div>
 		<!--			<approval :node-config="nodeConfig" v-if="nodeConfig.type==1"></approval>-->
-		<div class="node-wrap" v-if="nodeConfig.type < 3">
+		<div class="node-wrap" v-if="nodeConfig.type < 3 || nodeConfig.type === 10">
 			<div class="node-wrap-box" :class="(nodeConfig.type == 0 ? 'start-node ' : '') + (nodeConfig.error ? 'active error' : '')">
 				<div class="title" :style="`background: rgb(${bgColors[nodeConfig.type]});`">
 					<span v-if="nodeConfig.type == 0">{{ nodeConfig.nodeName }}</span>
 					<template v-else>
-						<span class="iconfont">{{ nodeConfig.type == 1 ? '' : '' }}</span>
+						<el-icon v-if="nodeConfig.type == 1"><User /></el-icon>
+						<el-icon v-else-if="nodeConfig.type == 10"><Timer /></el-icon>
+						<el-icon v-else><Message /></el-icon>
 						<input
 							v-if="isInput"
 							type="text"
@@ -18,18 +20,18 @@
 							:placeholder="defaultText"
 						/>
 						<span v-else class="editable-title" @click="clickEvent()">{{ nodeConfig.nodeName }}</span>
-						<i class="anticon anticon-close close" @click="delNode"></i>
+						<el-icon class="close" @click="delNode"><Close /></el-icon>
 					</template>
 				</div>
 				<div class="content" @click="openConfigDrawer">
 					<div class="text">
 						{{ placeHolder?.length > 0 ? placeHolder: '请选择' + defaultText }}
 					</div>
-					<i class="anticon anticon-right arrow"></i>
+					<el-icon class="arrow"><ArrowRight /></el-icon>
 				</div>
 
 				<div class="error_tip" v-if="nodeConfig.error">
-					<i class="anticon anticon-exclamation-circle"></i>
+					<el-icon class="error-icon"><WarningFilled /></el-icon>
 				</div>
 			</div>
 			<addNode :current-node="nodeConfig" v-model:childNodeP="nodeConfig.childNode" />
@@ -56,7 +58,7 @@
 										/>
 										<span v-else class="editable-title" @click="clickEvent(index)">{{ item.nodeName }}</span>
 										<span class="priority-title">优先级{{ item.priorityLevel }}</span>
-										<i class="anticon anticon-close close" @click="delTerm(index)"></i>
+										<el-icon class="close" @click="delTerm(index)"><Close /></el-icon>
 									</div>
 									<div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1" @click="arrTransfer(index)">&gt;</div>
 									<div class="content" v-if="index < nodeConfig.conditionNodes.length - 1" @click="openConfigDrawer(item.priorityLevel)">
@@ -64,7 +66,7 @@
 									</div>
 									<div class="content" v-else>{{ conditionStr(nodeConfig, index) }}</div>
 									<div class="error_tip" v-if="item.error">
-										<i class="anticon anticon-exclamation-circle"></i>
+										<el-icon class="error-icon"><WarningFilled /></el-icon>
 									</div>
 								</div>
 								<addNode v-model:childNodeP="item.childNode" :current-node="item" />
@@ -109,13 +111,13 @@
 										<!--										<span class="priority-title" @click="openConfigDrawer(item.priorityLevel)">优先级{{-->
 										<!--												item.priorityLevel-->
 										<!--											}}</span>-->
-										<i class="anticon anticon-close close" @click="delTerm(index)"></i>
+										<el-icon class="close" @click="delTerm(index)"><Close /></el-icon>
 									</div>
 									<div class="sort-right" v-if="index != nodeConfig.conditionNodes.length - 1" @click="arrTransfer(index)">&gt;</div>
 
 									<div class="content">{{ item.placeHolder }}</div>
 									<div class="error_tip" v-if="item.error">
-										<i class="anticon anticon-exclamation-circle"></i>
+										<el-icon class="error-icon"><WarningFilled /></el-icon>
 									</div>
 								</div>
 								<addNode v-model:childNodeP="item.childNode" :current-node="item" />
@@ -145,7 +147,7 @@ import Approval from './node/approval.vue';
 import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
-import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval } from '../utils/workflowHelpers';
+import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval, timerStr } from '../utils/workflowHelpers';
 import { useI18n } from 'vue-i18n';
 
 const _uid = getCurrentInstance().uid;
@@ -171,6 +173,9 @@ const placeHolder = computed(() => {
 	}
 	if (props.nodeConfig.type == 2) {
 		return copyerStr(props.nodeConfig);
+	}
+	if (props.nodeConfig.type == 10) {
+		return timerStr(props.nodeConfig);
 	}
 	return '';
 });
@@ -276,15 +281,18 @@ onMounted(() => {
 		props.nodeConfig.error = !copyerStr(props.nodeConfig);
 	} else if (props.nodeConfig.type == 4) {
 		resetConditionNodesErr();
+	} else if (props.nodeConfig.type == 10) {
+		props.nodeConfig.error = !timerStr(props.nodeConfig);
 	}
 });
 const emits = defineEmits(['update:nodeConfig']);
 const store = useStore();
-const { setPromoter, setApprover, setCopyer, setCondition, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig } = store;
+const { setPromoter, setApprover, setCopyer, setCondition, setTimer, setStarterConfig, setApproverConfig, setCopyerConfig, setConditionsConfig, setTimerConfig } = store;
 const starterConfigData = computed(() => store.starterConfigData);
 const approverConfigData = computed(() => store.approverConfigData);
 const copyerConfig1 = computed(() => store.copyerConfig1);
 const conditionsConfig1 = computed(() => store.conditionsConfig1);
+const timerConfigData = computed(() => store.timerConfigData);
 
 watch(starterConfigData, (approver) => {
 	if (approver.flag && approver.id === _uid) {
@@ -304,6 +312,11 @@ watch(copyerConfig1, (copyer) => {
 watch(conditionsConfig1, (condition) => {
 	if (condition.flag && condition.id === _uid) {
 		emits('update:nodeConfig', condition.value);
+	}
+});
+watch(timerConfigData, (timer) => {
+	if (timer.flag && timer.id === _uid) {
+		emits('update:nodeConfig', timer.value);
 	}
 });
 
@@ -430,6 +443,14 @@ const openConfigDrawer = (priorityLevel) => {
 			flag: false,
 			id: _uid,
 		});
+	} else if (type == 10) {
+		setTimer(true);
+		setTimerConfig({
+			value: JSON.parse(JSON.stringify(props.nodeConfig)),
+			flag: false,
+			id: _uid,
+		});
+		return;
 	} else {
 		setCondition(true);
 		setConditionsConfig({

@@ -27,6 +27,8 @@
     <copyerDrawer/>
     <!-- 条件分支 -->
     <conditionDrawer/>
+    <!-- 延时器 -->
+    <timerDrawer/>
   </div>
 </template>
 
@@ -36,6 +38,7 @@ import promoterDrawer from '../workflow/components/drawer/promoterDrawer.vue';
 import approverDrawer from '../workflow/components/drawer/approverDrawer.vue';
 import copyerDrawer from '../workflow/components/drawer/copyerDrawer.vue';
 import conditionDrawer from '../workflow/components/drawer/conditionDrawer.vue';
+import timerDrawer from '../workflow/components/drawer/timerDrawer.vue';
 import {useI18n} from 'vue-i18n';
 import {useFlowStore} from "../workflow/stores/flow";
 

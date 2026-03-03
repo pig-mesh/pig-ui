@@ -21,6 +21,7 @@
 import { computed } from 'vue';
 import { useFlowStore } from '../stores/flow';
 import { flattenFormItems } from './formUtils';
+import { timeUnits } from './const';
 import type { FormItem } from './formUtils';
 
 /**
@@ -341,6 +342,29 @@ export function copyerStr(nodeConfig: NodeConfig): string | undefined {
 }
 
 /**
+ * 获取延时器显示字符串
+ * @param nodeConfig 节点配置
+ */
+export function timerStr(nodeConfig: NodeConfig): string {
+	const timerConfig = nodeConfig.timerConfig;
+	if (!timerConfig) return '';
+
+	const { timerType, duration, dateTime, formFieldName } = timerConfig;
+
+	if (timerType === 'DURATION' && duration) {
+		const unitLabel = timeUnits.find((u) => u.value === duration.unit)?.label ?? '分钟';
+		return `等待${duration.value}${unitLabel}`;
+	}
+	if (timerType === 'DATETIME' && dateTime) {
+		return `等待至 ${dateTime}`;
+	}
+	if (timerType === 'FORM_FIELD' && formFieldName) {
+		return `等待至「${formFieldName}」`;
+	}
+	return '';
+}
+
+/**
  * 工作流辅助函数默认导出对象
  * @deprecated 建议使用具名导出的函数,这个对象主要用于向后兼容
  */
@@ -352,6 +376,7 @@ const workflowHelpers = {
 	dealStr,
 	conditionStr,
 	copyerStr,
+	timerStr,
 };
 
 export default workflowHelpers;

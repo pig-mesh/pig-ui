@@ -8,6 +8,7 @@ export default {
 		carbonCopyRecipient: '抄送人',
 		conditionalBranching: '条件分支',
 		parallelBranch: '并行分支',
+		timer: '延时器',
 		basicInformation: '基础信息',
 		formDesign: '表单设计',
 		processDesign: '流程设计',

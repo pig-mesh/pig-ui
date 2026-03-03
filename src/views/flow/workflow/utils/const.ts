@@ -9,12 +9,12 @@
  * [1] 审批人节点
  * [2] 抄送人节点
  */
-export const bgColors: string[] = ['87, 106, 149', '255, 148, 62', '50, 150, 250'];
+export const bgColors: string[] = ['87, 106, 149', '255, 148, 62', '50, 150, 250', '', '', '', '', '', '', '', '148, 103, 255'];
 
 /**
  * 节点占位符文本
  */
-export const placeholderList: string[] = ['发起人', '审批人', '抄送人'];
+export const placeholderList: string[] = ['发起人', '审批人', '抄送人', '', '', '', '', '', '', '', '延时器'];
 
 /**
  * 审批人类型选项
@@ -90,4 +90,33 @@ export interface Opt1 {
 export const opt1s: Opt1[] = [
 	{ value: '<', label: '<' },
 	{ value: '≤', label: '≤' },
+];
+
+/**
+ * 延时类型选项
+ */
+export interface TimerType {
+	value: string;
+	label: string;
+}
+
+export const timerTypes: TimerType[] = [
+	{ value: 'DURATION', label: '固定时长' },
+	{ value: 'DATETIME', label: '指定日期时间' },
+	{ value: 'FORM_FIELD', label: '表单字段' },
+];
+
+/**
+ * 时间单位选项
+ */
+export interface TimeUnit {
+	value: string;
+	label: string;
+}
+
+export const timeUnits: TimeUnit[] = [
+	{ value: 'MINUTE', label: '分钟' },
+	{ value: 'HOUR', label: '小时' },
+	{ value: 'DAY', label: '天' },
+	{ value: 'WEEK', label: '周' },
 ];

@@ -61,7 +61,7 @@ const delNode = () => {
 			<div class="title" :style="`background: rgb(${bgColors[nodeConfig.type]});`">
 				<span v-if="nodeConfig.type == 0">{{ nodeConfig.nodeName }}</span>
 				<template v-else>
-					<span class="iconfont">{{ '' }}</span>
+					<el-icon><User /></el-icon>
 					<input
 						v-if="isInput"
 						type="text"
@@ -73,18 +73,18 @@ const delNode = () => {
 						:placeholder="defaultText"
 					/>
 					<span v-else class="editable-title" @click="clickEvent()">{{ nodeConfig.nodeName }}</span>
-					<i class="anticon anticon-close close" @click="delNode"></i>
+					<el-icon class="close" @click="delNode"><Close /></el-icon>
 				</template>
 			</div>
 			<div class="content" @click="openConfigDrawer">
 				<div class="text">
 					{{ placeHolder?.length > 0 ? placeHolder : '请选择' + defaultText }}
 				</div>
-				<i class="anticon anticon-right arrow"></i>
+				<el-icon class="arrow"><ArrowRight /></el-icon>
 			</div>
 
 			<div class="error_tip" v-if="nodeConfig.error">
-				<i class="anticon anticon-exclamation-circle"></i>
+				<el-icon class="error-icon"><WarningFilled /></el-icon>
 			</div>
 		</div>
 		<addNode :current-node="nodeConfig" v-model:childNodeP="nodeConfig.childNode" />

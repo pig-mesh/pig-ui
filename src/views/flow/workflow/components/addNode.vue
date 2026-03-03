@@ -1,38 +1,44 @@
 <template>
 	<div class="add-node-btn-box">
 		<div class="add-node-btn">
-			<el-popover placement="right-start" v-model="visible" width="250px">
+			<el-popover placement="right-start" v-model="visible" width="280px">
 				<div class="add-node-popover-body">
 					<a class="add-node-popover-item approver" @click="addType(1)">
 						<div class="item-wrapper">
-							<span class="iconfont"></span>
+							<el-icon><User /></el-icon>
 						</div>
 						<p>{{ $t('flow.approver') }}</p>
 					</a>
 					<a class="add-node-popover-item notifier" @click="addType(2)">
 						<div class="item-wrapper">
-							<span class="iconfont"></span>
+							<el-icon><Message /></el-icon>
 						</div>
 						<p>{{ $t('flow.carbonCopyRecipient') }}</p>
 					</a>
 
 					<a class="add-node-popover-item condition" @click="addType(4)">
 						<div class="item-wrapper">
-							<span class="iconfont"></span>
+							<el-icon><Share /></el-icon>
 						</div>
 						<p>{{ $t('flow.conditionalBranching') }}</p>
 					</a>
 
 					<a class="add-node-popover-item ParallelGateway" @click="addType(5)">
 						<div class="item-wrapper">
-							<span class="iconfont"></span>
+							<el-icon><Operation /></el-icon>
 						</div>
 						<p>{{ $t('flow.parallelBranch') }}</p>
+					</a>
+					<a class="add-node-popover-item timer" @click="addType(10)">
+						<div class="item-wrapper">
+							<el-icon><Timer /></el-icon>
+						</div>
+						<p>{{ $t('flow.timer') }}</p>
 					</a>
 				</div>
 				<template #reference>
 					<button class="btn" type="button">
-						<span class="iconfont"></span>
+						<el-icon><Plus /></el-icon>
 					</button>
 				</template>
 			</el-popover>
@@ -105,6 +111,25 @@ const addType = (type) => {
 				nodeUserList: [],
 				//表单权限
 				formPerms: {},
+			};
+		} else if (type === 10) {
+			data = {
+				id: other.getNonDuplicateID(),
+				parentId: props.currentNode.id,
+				nodeName: '延时器',
+				type: 10,
+				error: true,
+				childNode: props.childNodeP,
+				timerConfig: {
+					timerType: 'DURATION',
+					duration: {
+						value: 30,
+						unit: 'MINUTE',
+					},
+					dateTime: null,
+					formFieldId: null,
+					formFieldName: null,
+				},
 			};
 		}
 		emits('update:childNodeP', data);
@@ -285,27 +310,28 @@ const addType = (type) => {
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
+	gap: 4px;
 
 	.add-node-popover-item {
-		margin-right: 10px;
 		cursor: pointer;
 		text-align: center;
-		flex: 1;
+		flex: 0 0 calc(33.333% - 4px);
 
 		.item-wrapper {
 			user-select: none;
-			display: inline-block;
-			width: 80px;
-			height: 80px;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 72px;
+			height: 72px;
 			margin-bottom: 5px;
 			background: #fff;
 			border: 1px solid #e2e2e2;
 			border-radius: 50%;
-			transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+			transition: all 0.25s cubic-bezier(0.645, 0.045, 0.355, 1);
 
-			.iconfont {
-				font-size: 35px;
-				line-height: 80px;
+			.el-icon {
+				font-size: 30px;
 			}
 		}
 
@@ -313,11 +339,21 @@ const addType = (type) => {
 			.item-wrapper {
 				color: #ff943e;
 			}
+
+			&:hover .item-wrapper {
+				background: #ff943e;
+				box-shadow: 0 8px 16px 0 rgba(255, 148, 62, 0.35);
+			}
 		}
 
 		&.notifier {
 			.item-wrapper {
-				//color: #3296fa
+				color: #3296fa;
+			}
+
+			&:hover .item-wrapper {
+				background: #3296fa;
+				box-shadow: 0 8px 16px 0 rgba(50, 150, 250, 0.35);
 			}
 		}
 
@@ -325,33 +361,50 @@ const addType = (type) => {
 			.item-wrapper {
 				color: #15bc83;
 			}
+
+			&:hover .item-wrapper {
+				background: #15bc83;
+				box-shadow: 0 8px 16px 0 rgba(21, 188, 131, 0.35);
+			}
 		}
 
 		&.ParallelGateway {
 			.item-wrapper {
 				color: rgb(255, 69, 0);
 			}
+
+			&:hover .item-wrapper {
+				background: rgb(255, 69, 0);
+				box-shadow: 0 8px 16px 0 rgba(255, 69, 0, 0.35);
+			}
+		}
+
+		&.timer {
+			.item-wrapper {
+				color: rgb(148, 103, 255);
+			}
+
+			&:hover .item-wrapper {
+				background: rgb(148, 103, 255);
+				box-shadow: 0 8px 16px 0 rgba(148, 103, 255, 0.35);
+			}
 		}
 
 		&:hover {
 			.item-wrapper {
-				background: #3296fa;
-				box-shadow: 0 10px 20px 0 rgba(50, 150, 250, 0.4);
+				transform: translateY(-3px);
+				border-color: transparent;
 			}
 
-			.iconfont {
+			.el-icon {
 				color: #fff;
 			}
 		}
 
 		&:active {
 			.item-wrapper {
+				transform: translateY(0);
 				box-shadow: none;
-				background: #eaeaea;
-			}
-
-			.iconfont {
-				//color: inherit
 			}
 		}
 	}

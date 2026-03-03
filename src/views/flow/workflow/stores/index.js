@@ -19,6 +19,8 @@ export const useStore = defineStore('store', {
 		conditionsConfig1: {
 			conditionNodes: [],
 		},
+		timerDrawer: false,
+		timerConfigData: {},
 	}),
 	actions: {
 		setPromoter(payload) {
@@ -45,6 +47,12 @@ export const useStore = defineStore('store', {
 		},
 		setConditionsConfig(payload) {
 			this.conditionsConfig1 = payload;
+		},
+		setTimer(payload) {
+			this.timerDrawer = payload;
+		},
+		setTimerConfig(payload) {
+			this.timerConfigData = payload;
 		},
 	},
 });

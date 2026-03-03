@@ -1,3 +1,5 @@
+import { timer } from "d3";
+
 // 定义通用内容
 export default {
 	flow: {
@@ -8,6 +10,7 @@ export default {
 		carbonCopyRecipient: 'carbonCopy',
 		conditionalBranching: 'conditional',
 		parallelBranch: 'parallel',
+		timer: 'timer',
 		basicInformation: 'basic information',
 		formDesign: 'form design',
 		processDesign: 'process design',
