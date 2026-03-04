@@ -76,6 +76,7 @@
 						</el-button>
 						<el-button
 							:disabled="scope.row.status != 1"
+							:loading="stopLoading === scope.row.processInstanceId"
 							type="primary"
 							size="small"
 							link
@@ -199,13 +200,20 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 });
 
 const { tableStyle, getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
-function stop(row) {
-	stopProcessInstance({
-		processInstanceId: row.processInstanceId,
-	}).then((res) => {
+const stopLoading = ref('');
+async function stop(row) {
+	stopLoading.value = row.processInstanceId;
+	try {
+		await stopProcessInstance({
+			processInstanceId: row.processInstanceId,
+		});
 		useMessage().success('流程终止成功');
 		getDataList();
-	});
+	} catch (error) {
+		useMessage().error('终止流程失败，请重试');
+	} finally {
+		stopLoading.value = '';
+	}
 }
 
 const currentData = ref();

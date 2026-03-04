@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { transferTask } from '/@/api/flow/task';
 import selectShow from '/@/components/OrgSelector/index.vue';
-import { ElMessage } from 'element-plus';
+import { useMessage } from '/@/hooks/message';
 
 interface FlowFormItem {
 	id: string;
@@ -18,6 +18,7 @@ interface TaskData {
 }
 
 const dialogVisible = ref(false);
+const submitLoading = ref(false);
 const submitDesc = ref('');
 const userList = ref<Array<{ id: string }>>([]);
 const currentData = ref<TaskData>();
@@ -35,17 +36,17 @@ const emit = defineEmits(['taskSubmitEvent']);
 
 const validateForm = (): boolean => {
 	if (userList.value.length === 0) {
-		ElMessage.warning('请选择转办人员');
+		useMessage().warning('请选择转办人员');
 		return false;
 	}
 
 	if (!submitDesc.value.trim()) {
-		ElMessage.warning('请输入审核意见');
+		useMessage().warning('请输入审核意见');
 		return false;
 	}
 
 	if (submitDesc.value.trim().length < 2) {
-		ElMessage.warning('审核意见至少需要2个字符');
+		useMessage().warning('审核意见至少需要2个字符');
 		return false;
 	}
 
@@ -58,6 +59,7 @@ const submit = async () => {
 	// 表单校验
 	if (!validateForm()) return;
 
+	submitLoading.value = true;
 	try {
 		const formData: Record<string, any> = {};
 
@@ -74,11 +76,13 @@ const submit = async () => {
 		};
 
 		await transferTask(param);
-		ElMessage.success('转办成功');
+		useMessage().success('转办成功');
 		dialogVisible.value = false;
 		emit('taskSubmitEvent');
-	} catch (error) {
-		ElMessage.error('转办失败，请重试');
+	} catch (e) {
+		useMessage().error('转办失败，请重试');
+	} finally {
+		submitLoading.value = false;
 	}
 };
 </script>
@@ -104,7 +108,7 @@ const submit = async () => {
 		<template #footer>
 			<span class="flex justify-end gap-2">
 				<el-button @click="dialogVisible = false">取消</el-button>
-				<el-button type="primary" @click="submit">确定</el-button>
+				<el-button type="primary" :loading="submitLoading" @click="submit">确定</el-button>
 			</span>
 		</template>
 	</el-dialog>

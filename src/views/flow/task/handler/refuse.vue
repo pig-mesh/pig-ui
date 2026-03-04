@@ -1,9 +1,10 @@
 <script setup lang="ts">
 // defineExpose 是编译器宏，不需要导入
 import {completeTask} from '/@/api/flow/task';
+import { useMessage } from '/@/hooks/message';
 
 const dialogVisible = ref(false);
-
+const submitLoading = ref(false);
 const submitDesc = ref('');
 
 const currentData = ref();
@@ -22,7 +23,7 @@ const handle = (row, formData) => {
 defineExpose({ handle });
 const emit = defineEmits(['taskSubmitEvent']);
 
-const submit = () => {
+const submit = async () => {
   const formData: Record<string, any> = {};
   formData[`${currentData.value.nodeId}_approve_condition`] = false;
 
@@ -35,10 +36,17 @@ const submit = () => {
     },
   };
 
-  completeTask(param).then((res) => {
-		dialogVisible.value = false;
+  submitLoading.value = true;
+  try {
+    await completeTask(param);
+    dialogVisible.value = false;
     emit('taskSubmitEvent');
-	});
+  } catch (error) {
+    useMessage().error('拒绝失败，请重试');
+    console.error('拒绝任务失败:', error);
+  } finally {
+    submitLoading.value = false;
+  }
 };
 </script>
 
@@ -49,7 +57,7 @@ const submit = () => {
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button @click="dialogVisible = false">取消</el-button>
-					<el-button type="primary" @click="submit"> 确定 </el-button>
+					<el-button type="primary" :loading="submitLoading" @click="submit"> 确定 </el-button>
 				</span>
 			</template>
 		</el-dialog>

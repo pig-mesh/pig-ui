@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { completeTask } from '/@/api/flow/task'
+import { useMessage } from '/@/hooks/message'
 import type { FlowFormItem, TaskData, TaskSubmitParam } from './types'
 
 const dialogVisible = ref(false)
+const submitLoading = ref(false)
 const submitDesc = ref('')
 const currentData = ref<TaskData>()
 const currentFormData = ref({});
@@ -34,12 +36,16 @@ const submit = async () => {
     },
   }
 
+  submitLoading.value = true
   try {
     await completeTask(param)
     dialogVisible.value = false
     emit('taskSubmitEvent')
   } catch (error) {
+    useMessage().error('提交失败，请重试')
     console.error('Failed to complete task:', error)
+  } finally {
+    submitLoading.value = false
   }
 }
 </script>
@@ -68,6 +74,7 @@ const submit = async () => {
         </el-button>
         <el-button
           type="primary"
+          :loading="submitLoading"
           @click="submit"
         >
           确定

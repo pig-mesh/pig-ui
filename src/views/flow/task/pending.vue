@@ -107,7 +107,7 @@
 					<div style="flex: auto">
 						<!-- 发起人节点（驳回后重新提交场景）：显示重新提交按钮 -->
 						<template v-if="currentData?.nodeId === 'root'">
-							<el-button size="large" type="primary" icon="Check" @click="handleResubmit">重新提交</el-button>
+							<el-button size="large" type="primary" icon="Check" :loading="resubmitLoading" @click="handleResubmit">重新提交</el-button>
 						</template>
 						<!-- 普通审批节点：显示审批按钮 -->
 						<template v-else>
@@ -136,6 +136,7 @@ import RefuseHandle from './handler/refuse.vue';
 import TransferHandle from './handler/transfer.vue';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import { queryMineTask, queryTask, resubmitTask } from '/@/api/flow/task';
+import { useMessage } from '/@/hooks/message';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
@@ -155,6 +156,7 @@ const rule = ref<any[]>([]);
 const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // 动态表单组件
 
 const currentData = ref();
+const resubmitLoading = ref(false);
 const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: queryMineTask,
 	queryForm: {
@@ -229,6 +231,7 @@ const transferTask = () => {
  * 当流程被驳回到发起人时，发起人使用此方法重新编辑表单并提交
  */
 const handleResubmit = async () => {
+	resubmitLoading.value = true;
 	try {
 		await resubmitTask({
 			taskId: currentData.value.taskId,
@@ -236,7 +239,10 @@ const handleResubmit = async () => {
 		});
 		taskSubmitEvent();
 	} catch (error) {
+		useMessage().error('重新提交失败，请重试');
 		console.error('重新提交失败', error);
+	} finally {
+		resubmitLoading.value = false;
 	}
 };
 

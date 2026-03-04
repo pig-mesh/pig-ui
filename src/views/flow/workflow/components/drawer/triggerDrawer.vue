@@ -11,11 +11,11 @@
 		<div class="p-4">
 			<!-- 请求地址 -->
 			<h4 class="mb-3">请求地址</h4>
-			<div class="ml-4 mb-2">
+			<div class="mb-2 ml-4">
 				<el-input v-model="triggerConfig.triggerConfig.url" placeholder="https://example.com/api/callback" clearable>
 					<template #prepend>POST</template>
 				</el-input>
-				<div class="text-xs text-gray-400 mt-1">仅支持 POST 请求，通过请求体接收参数</div>
+				<div class="mt-1 text-xs text-gray-400">仅支持 POST 请求，通过请求体接收参数</div>
 			</div>
 
 			<el-divider />
@@ -57,7 +57,7 @@
 			<!-- 返回值映射 -->
 			<h4 class="mb-3">返回值</h4>
 			<div class="ml-4">
-				<div class="text-xs text-gray-400 mb-2">HTTP 返回 200 即视为调用成功，响应体按 JSON 解析后进行字段映射：左侧表单表示要修改的表单值，右侧字段是指接口返回的 JSON 字段名</div>
+				<div class="mb-2 text-xs text-gray-400">HTTP 返回 200 即视为调用成功，响应体按 JSON 解析后进行字段映射：左侧表单表示要修改的表单值，右侧字段是指接口返回的 JSON 字段名</div>
 				<div v-for="(item, index) in triggerConfig.triggerConfig.returnMapping" :key="index" class="flex items-center gap-2 mb-2">
 					<el-select v-model="item.formFieldId" placeholder="选择表单字段" style="width: 180px" @change="(val) => onReturnFormFieldChange(item, val)">
 						<el-option v-for="field in flatFormFields" :key="field.field" :label="field.title || field.name" :value="field.field" />
