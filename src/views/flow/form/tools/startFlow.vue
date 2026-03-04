@@ -33,7 +33,7 @@
 			<template #footer v-if="!dynamicFormComponent">
 				<div class="flex justify-center">
 					<el-button @click="drawerVisible = false">取消</el-button>
-					<el-button type="primary" @click="submitProcess">提交</el-button>
+					<el-button type="primary" :loading="submitLoading" @click="submitProcess">提交</el-button>
 				</div>
 			</template>
 		</el-drawer>
@@ -74,6 +74,7 @@ const dynamicFormComponent = shallowRef<DynamicFormComponent | null>(null); // �
 const businessFormData = ref<Record<string, any>>({}); // 业务表单数据
 
 const drawerVisible = ref<Boolean>(false);
+const submitLoading = ref(false);
 const isFullscreen = ref(false);
 const currentOpenFlow = ref<FlowData | undefined>();
 
@@ -148,9 +149,12 @@ const submitProcess = () => {
 	// 动态表单需要验证
 	if (fApi.value) {
 		fApi.value.submit().then(() => {
+			submitLoading.value = true;
 			startFlow(data).then(() => {
 				ElMessage.success('提交成功');
 				drawerVisible.value = false;
+			}).finally(() => {
+				submitLoading.value = false;
 			});
 		});
 	}
