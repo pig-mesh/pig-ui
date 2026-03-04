@@ -41,10 +41,9 @@ const submit = async () => {
     await completeTask(param)
     dialogVisible.value = false
     emit('taskSubmitEvent')
-  } catch (error: any) {
-    useMessage().error(error?.msg || '提交失败，请重试')
-    dialogVisible.value = false
-    emit('taskSubmitEvent')
+  } catch (error) {
+    useMessage().error('提交失败，请重试')
+    console.error('Failed to complete task:', error)
   } finally {
     submitLoading.value = false
   }
