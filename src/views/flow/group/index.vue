@@ -63,6 +63,9 @@
                 <el-tooltip effect="dark" content="复制" placement="top">
                   <el-button text @click="toCopyFlow(row)" :icon="DocumentCopy" circle/>
                 </el-tooltip>
+                <el-tooltip effect="dark" content="打印模板" placement="top">
+                  <el-button text @click="openPrintTemplate(row)" :icon="Printer" circle/>
+                </el-tooltip>
                 <el-tooltip v-if="row.stop === '0'" effect="dark" content="停用" placement="top">
                   <el-button @click="showDisableConfirm(row)" text :icon="Hide" circle/>
                 </el-tooltip>
@@ -80,12 +83,13 @@
           <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"/>
         </el-tab-pane>
       </el-tabs>
+      <PrintTemplateDialog v-model="printTemplateVisible" :flowId="printTemplateFlowId" />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup name="flowGroup">
-import {Star, Plus, Delete, Edit, DocumentCopy, Hide, View} from '@element-plus/icons-vue';
+import {Star, Plus, Delete, Edit, DocumentCopy, Hide, View, Printer} from '@element-plus/icons-vue';
 import {addGroup, delGroup, queryGroupList, queryGroupFlowList} from '/@/api/flow/group';
 import {disableFlow, enableFlow, deleteFlow} from '/@/api/flow/flow';
 import {GroupVO} from '/@/api/flow/group/types';
@@ -95,8 +99,18 @@ import {BasicTableProps, useTable} from '/@/hooks/table';
 import {useTagsViewRoutes} from "/@/stores/tagsViewRoutes";
 import {useMessage} from "/@/hooks/message";
 import {storeToRefs} from "pinia";
+import PrintTemplateDialog from './print/PrintTemplateDialog.vue';
+import type { ProcessInstanceRow } from '/@/api/flow/processInstance';
 
 const storesTagsViewRoutes = useTagsViewRoutes();
+
+// 打印模板
+const printTemplateVisible = ref(false);
+const printTemplateFlowId = ref('');
+const openPrintTemplate = (row: Pick<ProcessInstanceRow, 'flowId'>) => {
+  printTemplateFlowId.value = row.flowId;
+  printTemplateVisible.value = true;
+};
 
 // 默认查询
 const handleQueryFlowPage = (params: any) => {

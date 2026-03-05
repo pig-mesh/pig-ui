@@ -28,7 +28,7 @@
 			</el-row>
 
 			<el-row>
-				<div class="mb-2 w-full">
+				<div class="w-full mb-2">
 					<right-toolbar
 						v-model:showSearch="showSearch"
 						class="ml-2.5 float-right mr-5"
@@ -64,6 +64,17 @@
 				<el-table-column fixed="right" label="操作">
 					<template #default="scope">
 						<el-button type="primary" size="small" link icon="View" @click="deal(scope.row)"> 查看 </el-button>
+						<el-button
+							v-if="scope.row.hasPrintTemplate"
+							type="primary"
+							size="small"
+							link
+							icon="Printer"
+							:loading="printLoading"
+							@click="handlePrint(scope.row)"
+						>
+							打印
+						</el-button>
 						<el-button
 							v-if="scope.row.rejectToStarter"
 							type="warning"
@@ -178,6 +189,8 @@ import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { useMessage } from '/@/hooks/message';
 import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
 import { useTaskFormLoader } from './composables/useTaskForm';
+import { usePrintTemplate } from '/@/views/flow/group/print/usePrintTemplate';
+import type { ProcessInstanceRow } from '/@/api/flow/processInstance';
 
 const rule = ref([]);
 const fApi = ref();
@@ -217,6 +230,16 @@ async function stop(row) {
 }
 
 const currentData = ref();
+
+// 打印功能
+const { executePrint, loading: printLoading } = usePrintTemplate();
+const handlePrint = async (row: ProcessInstanceRow) => {
+	try {
+		await executePrint(row);
+	} catch (e: any) {
+		useMessage().warning(e.message || '打印失败');
+	}
+};
 
 // 使用通用表单加载器
 const currentOpenFlowForm = ref();

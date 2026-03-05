@@ -87,3 +87,24 @@ export function validateFlowId(flowId: string) {
 		params: { flowId },
 	});
 }
+
+/**
+ * 获取流程打印模板
+ */
+export function getPrintTemplate(flowId: string) {
+	return request({
+		url: '/task/process/printTemplate/' + flowId,
+		method: 'get',
+	});
+}
+
+/**
+ * 保存流程打印模板
+ */
+export function savePrintTemplate(data: { flowId: string; printTemplate: string }) {
+	return request({
+		url: '/task/process/printTemplate',
+		method: 'put',
+		data,
+	});
+}
