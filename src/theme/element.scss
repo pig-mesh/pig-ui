@@ -20,8 +20,8 @@
 	margin-left: 6px;
 }
 
-// 按钮增强交互效果（排除 text 类型按钮）
-.el-button:not(.el-button--text):not(.is-text) {
+// 按钮增强交互效果（排除 text / link 类型按钮）
+.el-button:not(.el-button--text):not(.is-text):not(.is-link) {
 	transition: all var(--transition-base) var(--transition-function);
 	border-radius: var(--border-radius-md);
 
@@ -78,6 +78,14 @@
 			box-shadow: 0 4px 8px rgba(245, 108, 108, 0.3);
 		}
 	}
+}
+
+// 保持 text / link 按钮的轻量样式，避免出现描边或阴影胶囊感
+.el-button.is-link,
+.el-button.is-text,
+.el-button--text {
+	box-shadow: none;
+	transform: none;
 }
 /* Input 输入框、InputNumber 计数器
 ------------------------------- */
