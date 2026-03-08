@@ -59,6 +59,7 @@ export interface DynamicFormComponent {
     businessKey?: string
     readonly?: boolean
     processInstanceId?: string
+    node?: Record<string, any>
     [key: string]: any
   }
 }
@@ -70,7 +71,7 @@ export interface DynamicFormComponent {
  * @param readonly 是否只读
  * @returns 组件配置对象
  */
-export function createDynamicFormComponent(formConfig: any, processInstanceId?: string, readonly?: boolean): DynamicFormComponent | null {
+export function createDynamicFormComponent(formConfig: any, processInstanceId?: string, readonly?: boolean, node?: Record<string, any>): DynamicFormComponent | null {
   if (!formConfig) {
     console.warn('formConfig不能为空')
     return null
@@ -108,7 +109,8 @@ export function createDynamicFormComponent(formConfig: any, processInstanceId?: 
       component,
       props: {
         processInstanceId,
-        readonly: readonly !== undefined ? readonly : true // 查看模式
+        readonly: readonly !== undefined ? readonly : true,
+        node
       }
     }
   } else if (formType === 10) { // 动态表单

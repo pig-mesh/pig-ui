@@ -81,7 +81,7 @@ export function useTaskFormLoader(config: TaskFormConfig) {
 			const isReadonly = options.readonly !== false;
 
 			// 尝试创建自定义业务表单组件
-			const dynamicComponent = createDynamicFormComponent(formConfig, processInstanceId, isReadonly);
+			const dynamicComponent = createDynamicFormComponent(formConfig, processInstanceId, isReadonly, responseData.node);
 
 			if (dynamicComponent) {
 				// 使用自定义业务表单
@@ -136,8 +136,8 @@ export function useTaskFormLoader(config: TaskFormConfig) {
 	 */
 	const loadForm = async (queryFn: () => Promise<any>, options: LoadFormOptions = {}) => {
 		try {
-			const res = await queryFn();
-			handleFormResponse(res.data, options);
+			const { data } = await queryFn();
+			handleFormResponse(data, options);
 		} catch (error) {
 			// 执行错误回调
 			if (options.onError) {

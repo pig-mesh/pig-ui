@@ -2,7 +2,7 @@
       <div class="layout-padding-auto layout-padding-view ">
    <el-card shadow="hover" header="请假申请详情" :class="className" v-loading="loading">
         <template #header>
-          <span>请假申请详情</span>
+          <span>请假申请详情 {{ processInstanceId }}</span>
         </template>
         
         <el-descriptions :column="1" border>
@@ -15,7 +15,7 @@
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="请假原因">
-            <div class="whitespace-pre-wrap break-words">{{ detailData.leaveReason }}</div>
+            <div class="break-words whitespace-pre-wrap">{{ detailData.leaveReason }}</div>
           </el-descriptions-item>
           <el-descriptions-item label="开始时间">
             {{ parseTime(detailData.startTime) }}
@@ -51,6 +51,7 @@ interface Props {
   businessKey?: string;
   processInstanceId?: string;
   readonly?: boolean;
+  node?: Record<string, any>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
