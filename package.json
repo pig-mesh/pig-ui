@@ -44,6 +44,7 @@
 		"pinia": "2.0.32",
 		"postcss": "8.4.40",
 		"qrcode": "1.5.1",
+		"snabbdom": "3.6.3",
 		"qs": "^6.11.0",
 		"screenfull": "^6.0.2",
 		"sm-crypto": "^0.3.12",
