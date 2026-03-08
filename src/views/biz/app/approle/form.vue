@@ -26,13 +26,17 @@ import { useMessage } from '/@/hooks/message';
 import { addObj, getObj, putObj, validateAppRoleCode, validateApproleName } from '/@/api/app/approle';
 import { useI18n } from 'vue-i18n';
 
+// 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
+
 const { t } = useI18n();
 
+// 定义变量内容
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 
+// 提交表单数据
 const form = reactive({
 	roleId: '',
 	roleName: '',
@@ -40,6 +44,18 @@ const form = reactive({
 	roleDesc: '',
 });
 
+// 页面对应元数据
+const dataForm = reactive({
+	deptData: [],
+	checkedDsScope: [],
+	deptProps: {
+		children: 'children',
+		label: 'name',
+		value: 'id',
+	},
+});
+
+// 定义校验规则
 const dataRules = ref({
 	roleName: [
 		{ required: true, message: '角色名称不能为空', trigger: 'blur' },
@@ -65,20 +81,23 @@ const dataRules = ref({
 	roleDesc: [{ max: 128, message: '长度在 128 个字符内', trigger: 'blur' }],
 });
 
+// 打开弹窗
 const openDialog = (id: string) => {
 	visible.value = true;
 	form.roleId = '';
 
+	// 重置表单数据
 	nextTick(() => {
 		dataFormRef.value?.resetFields();
 	});
-
+	// 获取角色信息
 	if (id) {
 		form.roleId = id;
 		getRoleData(id);
 	}
 };
 
+// 提交
 const onSubmit = async () => {
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return false;
@@ -96,12 +115,20 @@ const onSubmit = async () => {
 	}
 };
 
+// 初始化角色数据
 const getRoleData = (id: string) => {
+	// 获取部门数据
 	getObj(id).then((res: any) => {
 		Object.assign(form, res.data);
+		if (res.data.dsScope) {
+			dataForm.checkedDsScope = res.data.dsScope.split(',');
+		} else {
+			dataForm.checkedDsScope = [];
+		}
 	});
 };
 
+// 暴露变量
 defineExpose({
 	openDialog,
 });
