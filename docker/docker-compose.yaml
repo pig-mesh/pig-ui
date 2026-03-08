@@ -1,3 +1,5 @@
+name: pigx-ui
+
 services:
   pigx-ui:
     build:
