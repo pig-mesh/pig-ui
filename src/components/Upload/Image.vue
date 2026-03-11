@@ -384,13 +384,11 @@ const listToString = (list: FileItem[], separator = ','): string => {
 
 /* disabled 状态下图标居中 */
 :deep(.el-upload--picture-card.is-disabled) {
-	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 
 :deep(.el-upload--picture-card.is-disabled .el-upload-dragger) {
-	display: flex;
 	align-items: center;
 	justify-content: center;
 }
