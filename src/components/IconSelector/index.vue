@@ -1,5 +1,5 @@
 <template>
-	<div class="icon-selector w100 h100">
+	<div class="w-full h-full icon-selector">
 		<el-input
 			v-model="state.fontIconSearch"
 			:placeholder="state.fontIconPlaceholder"
@@ -11,23 +11,23 @@
 			@focus="onIconFocus"
 			@blur="onIconBlur"
 		>
-			<template #prepend>
-				<SvgIcon :name="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix" class="font14" />
+			<template #prefix>
+				<SvgIcon :name="state.fontIconPrefix === '' ? prepend : state.fontIconPrefix" class="text-base" />
 			</template>
 		</el-input>
 		<el-popover
 			placement="bottom"
 			:width="state.fontIconWidth"
 			transition="el-zoom-in-top"
-			popper-class="icon-selector-popper"
+			popper-class="!p-0"
 			trigger="click"
 			:virtual-ref="inputWidthRef"
 			virtual-triggering
 		>
 			<template #default>
-				<div class="icon-selector-warp">
-					<div class="icon-selector-warp-title">{{ title }}</div>
-					<el-tabs v-model="state.fontIconTabActive" @tab-click="onIconClick">
+				<div class="icon-selector-warp h-[260px] overflow-hidden relative">
+					<div class="absolute top-0 left-[15px] h-10 leading-10 font-medium z-10">{{ title }}</div>
+					<el-tabs v-model="state.fontIconTabActive" class="h-full pt-10" @tab-click="onIconClick">
 						<el-tab-pane lazy label="ali" name="ali">
 							<IconList :list="fontIconSheetsFilterList" :empty="emptyDescription" :prefix="state.fontIconPrefix" @get-icon="onColClick" />
 						</el-tab-pane>
@@ -48,10 +48,9 @@
 </template>
 
 <script setup lang="ts" name="iconSelector">
-import { defineAsyncComponent, ref, reactive, onMounted, nextTick, computed, watch } from 'vue';
+import { defineAsyncComponent, ref, reactive, onMounted, onUnmounted, nextTick, computed, watch } from 'vue';
 import type { TabsPaneContext } from 'element-plus';
 import initIconfont from '/@/utils/getStyleSheets';
-import '/@/theme/iconSelector.scss';
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -222,12 +221,6 @@ const getInputWidth = () => {
 		state.fontIconWidth = inputWidthRef.value.$el.offsetWidth;
 	});
 };
-// 监听页面宽度改变
-const initResize = () => {
-	window.addEventListener('resize', () => {
-		getInputWidth();
-	});
-};
 // 页面加载时
 onMounted(() => {
 	initFontIconData(initFontIconName());
@@ -247,3 +240,18 @@ watch(
 	}
 );
 </script>
+
+<style scoped>
+/* Element Plus tab header customization */
+.icon-selector-warp :deep(.el-tabs__header) {
+	@apply flex justify-end px-[15px] border-b border-br-light m-0;
+}
+
+.icon-selector-warp :deep(.el-tabs__nav-wrap::after) {
+	height: 0 !important;
+}
+
+.icon-selector-warp :deep(.el-tabs__item) {
+	@apply px-1.5;
+}
+</style>

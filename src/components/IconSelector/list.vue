@@ -1,9 +1,12 @@
 <template>
-	<div class="icon-selector-warp-row">
+	<div class="h-[230px] overflow-hidden">
 		<el-scrollbar ref="selectorScrollbarRef">
-			<el-row :gutter="10" v-if="props.list.length > 0">
+			<el-row :gutter="10" class="p-[15px]" v-if="props.list.length > 0">
 				<el-col :xs="6" :sm="4" :md="4" :lg="4" :xl="4" v-for="(v, k) in list" :key="k" @click="onColClick(v)">
-					<div class="icon-selector-warp-item" :class="{ 'icon-selector-active': prefix === v }">
+					<div
+						class="icon-selector-warp-item flex justify-center items-center border border-br rounded-[5px] mb-2.5 h-[30px] cursor-pointer hover:bg-primary-light-9 hover:border-primary-light-5 transition-colors"
+						:class="{ 'icon-selector-active bg-primary-light-9 border-primary-light-5': prefix === v }"
+					>
 						<SvgIcon :name="v" />
 					</div>
 				</el-col>
@@ -42,43 +45,19 @@ const onColClick = (v: string) => {
 };
 </script>
 
-<style scoped lang="scss">
-.icon-selector-warp-row {
-	height: 230px;
-	overflow: hidden;
-	.el-row {
-		padding: 15px;
-	}
-	.el-scrollbar__bar.is-horizontal {
-		display: none;
-	}
-	.icon-selector-warp-item {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		border: 1px solid var(--el-border-color);
-		border-radius: 5px;
-		margin-bottom: 10px;
-		height: 30px;
-		i {
-			font-size: 20px;
-			color: var(--el-text-color-regular);
-		}
-		&:hover {
-			cursor: pointer;
-			background-color: var(--el-color-primary-light-9);
-			border: 1px solid var(--el-color-primary-light-5);
-			i {
-				color: var(--el-color-primary);
-			}
-		}
-	}
-	.icon-selector-active {
-		background-color: var(--el-color-primary-light-9);
-		border: 1px solid var(--el-color-primary-light-5);
-		i {
-			color: var(--el-color-primary);
-		}
-	}
+<style scoped>
+/* Hide horizontal scrollbar */
+:deep(.el-scrollbar__bar.is-horizontal) {
+	display: none;
+}
+
+/* Icon color styling */
+.icon-selector-warp-item :deep(i) {
+	@apply text-xl text-[var(--el-text-color-regular)];
+}
+
+.icon-selector-warp-item:hover :deep(i),
+.icon-selector-active :deep(i) {
+	@apply text-primary;
 }
 </style>

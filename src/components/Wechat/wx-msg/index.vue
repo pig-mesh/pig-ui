@@ -226,8 +226,8 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-@import './comment.scss';
-@import './card.scss';
+@use './comment.scss' as *;
+@use './card.scss' as *;
 
 .msg-main {
 	margin-top: -30px;

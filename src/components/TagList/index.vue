@@ -11,7 +11,7 @@
       {{ tag }}
     </el-tag>
     <el-input
-        v-if="inputVisible"
+        v-if="inputVisible && !disableAdd"
         ref="InputRef"
         v-model="inputValue"
         class="w-20"
@@ -19,7 +19,7 @@
         @keyup.enter="handleInputConfirm"
         @blur="handleInputConfirm"
     />
-    <el-button v-else class="button-new-tag" size="small" @click="showInput">
+    <el-button v-else-if="!disableAdd" class="button-new-tag" size="small" @click="showInput">
       {{ buttonText }}
     </el-button>
   </div>
@@ -43,6 +43,10 @@ const props = defineProps({
     validator: (value: string) => {
       return ['primary', 'success', 'info', 'warning', 'danger'].includes(value);
     }
+  },
+  disableAdd: {
+    type: Boolean,
+    default: false
   }
 });
 

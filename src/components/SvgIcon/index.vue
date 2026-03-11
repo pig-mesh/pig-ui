@@ -5,8 +5,8 @@
 	<div v-else-if="isShowIconImg" :style="setIconImgOutStyle">
 		<img :src="getIconName" :style="setIconSvgInsStyle" />
 	</div>
-	<svg v-else-if="isShowLocalSvg" class="svg-icon icon" :style="setIconImgOutStyle">
-		<use :href="`#${getIconName}`" :fill="color"/>
+	<svg v-else-if="isShowLocalSvg" :class="svgClass" :style="setIconImgOutStyle">
+		<use :href="`#${getIconName}`" :fill="color" />
 	</svg>
 	<i v-else :class="getIconName" :style="setIconSvgStyle" />
 </template>
@@ -27,8 +27,13 @@ const props = defineProps({
 	},
 	// svg 颜色
 	color: {
-		type: String
-  },
+		type: String,
+	},
+	// svg 自定义类名
+	className: {
+		type: String,
+		default: '',
+	},
 });
 
 // 在线链接、本地引入地址前缀
@@ -57,4 +62,16 @@ const setIconSvgInsStyle = computed(() => {
 	compatibles.forEach((j) => filterStyle.push(`${j}-filter: drop-shadow(${props.color} 30px 0);`));
 	return `width: ${props.size}px;height: ${props.size}px;position: relative;left: -${props.size}px;${filterStyle.join('')}`;
 });
+// 设置 svg 的 class
+const svgClass = computed(() => {
+	return props.className ? `svg-icon icon ${props.className}` : 'svg-icon icon';
+});
 </script>
+
+<style scoped>
+.svg-icon {
+	fill: currentColor;
+	overflow: hidden;
+	vertical-align: middle;
+}
+</style>

@@ -11,7 +11,7 @@
 	<el-input v-model="defaultValue" v-bind="$attrs">
 		<template #append>
 			<el-dropdown size="medium" @command="handleShortcuts">
-				<el-button icon="el-icon-arrow-down"></el-button>
+				<el-button icon="arrow-down"></el-button>
 				<template #dropdown>
 					<el-dropdown-menu>
 						<el-dropdown-item command="0 * * * * ?">每分钟</el-dropdown-item>

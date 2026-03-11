@@ -145,6 +145,11 @@ const props = defineProps({
 		type: Number,
 		default: 5,
 	},
+	// 最小文件大小限制(KB)，低于此大小的文件视为无效文件
+	minFileSize: {
+		type: Number,
+		default: 0,
+	},
 	fileType: {
 		type: Array,
 		default: () => ['png', 'jpg', 'jpeg', 'doc', 'xls', 'ppt', 'txt', 'pdf', 'docx', 'xlsx', 'pptx'],
@@ -216,6 +221,11 @@ const handleBeforeUpload = (file: File) => {
 			return false;
 		}
 	}
+	// 校检最小文件大小
+	if (props.minFileSize && file.size / 1024 < props.minFileSize) {
+		useMessage().error(`文件大小不能小于 ${props.minFileSize} KB，该文件可能已损坏!`);
+		return false;
+	}
 	// 校检文件大小
 	if (props.fileSize) {
 		const isLt = file.size / 1024 / 1024 < props.fileSize;
@@ -262,7 +272,7 @@ const uploadedSuccessfully = () => {
 const handleRemove = (file: { name: string }) => {
 	fileList.value = fileList.value.filter((f) => f.name !== file.name);
 	emit('update:modelValue', listToString(fileList.value));
-	emit('change', listToString(fileList.value));
+	emit('change', listToString(fileList.value), fileList.value);
 };
 
 const handlePreview = (file: any) => {
