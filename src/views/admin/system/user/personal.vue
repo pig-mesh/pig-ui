@@ -1,6 +1,6 @@
 <template>
 	<el-drawer v-model="visible" :title="$t('personal.name')" size="40%">
-		<el-tabs style="height: 200px" class="demo-tabs">
+		<el-tabs class="demo-tabs">
 			<el-tab-pane :label="$t('personal.basicInfoTab')" v-loading="loading">
 				<template #label>
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
