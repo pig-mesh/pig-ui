@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, type PropType } from 'vue';
 import employeesDialog from './employeesDialog.vue';
 import orgItem from './orgItem.vue';
 import type { OrgItem } from './types';
@@ -58,7 +58,6 @@ const props = defineProps({
 	/** 选择类型：user / dept / role / post / org */
 	type: {
 		type: String,
-		default: 'user',
 	},
 	/** 是否多选 */
 	multiple: {

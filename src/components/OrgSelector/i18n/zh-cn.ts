@@ -4,6 +4,7 @@ export default {
 		user: '用户',
 		dept: '部门',
 		role: '角色',
+		post: '岗位',
 		select: '选择',
 		search: '搜索',
 		rootNode: '根节点',
