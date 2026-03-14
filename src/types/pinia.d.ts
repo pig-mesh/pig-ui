@@ -8,8 +8,6 @@ declare interface RoleItem {
 	roleName: string;
 	roleCode: string;
 	roleDesc: string;
-	dsType: number;
-	dsScope: string;
 }
 
 // 部门信息
