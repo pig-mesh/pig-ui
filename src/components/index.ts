@@ -11,7 +11,6 @@ import Editor from '/@/components/Editor/index.vue';
 import Tip from '/@/components/Tip/index.vue';
 import TagList from '/@/components/TagList/index.vue';
 import SvgIcon from '/@/components/SvgIcon/index.vue';
-import Sign from '/@/components/Sign/index.vue';
 import ChinaArea from '/@/components/ChinaArea/index.vue';
 import OrgSelector from '/@/components/OrgSelector/index.vue';
 
@@ -48,7 +47,6 @@ export default {
 		app.component('SvgIcon', SvgIcon);
 		app.component('ChinaArea', ChinaArea);
 		app.component('OrgSelector', OrgSelector);
-		app.component('Sign', Sign);
 
 		// 导入全部的elmenet-plus的图标
 		for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
