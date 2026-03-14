@@ -24,22 +24,10 @@ export default {
 </template>
 
 <script setup lang="ts" name="flowData">
-import request from '/@/utils/request';
-import { useAsyncState } from '@vueuse/core';
-
-const queryTaskData = () => {
-	return request({ url: '/act/task/todoData', method: 'get' });
-};
-
-const { state } = useAsyncState(
-	() => queryTaskData().then(({ data }) => ({
-		pendingNum: Number.parseInt(data?.pendingNum || 0),
-		copyNum: Number.parseInt(data?.copyNum || 0),
-	})),
-	{ pendingNum: 0, copyNum: 0 },
-	// 静默错误：避免没有启动 flow 模块时 vue 组件渲染 warning
-	{ onError: () => {} },
-);
+const state = reactive({
+	pendingNum: 0,
+	copyNum: 0,
+});
 </script>
 <style scoped>
 .stat-card {
