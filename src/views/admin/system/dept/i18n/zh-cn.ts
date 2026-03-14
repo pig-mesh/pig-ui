@@ -16,7 +16,7 @@ export default {
         addNodeText: '添加部门',
         editNodeText: '编辑部门',
         delNodeText: '删除部门',
-        tenantNodeErrorText: '当前节点不可操作，请在租户管理功能中维护',
+        tenantNodeErrorText: '根节点不可编辑或删除',
         view: '树/表视图',
         parentIdRequired: '上级部门不能为空',
         nameRequired: '部门名称不能为空',

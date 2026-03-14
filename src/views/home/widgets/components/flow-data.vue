@@ -24,8 +24,12 @@ export default {
 </template>
 
 <script setup lang="ts" name="flowData">
-import { queryTaskData } from '/@/api/flow/task';
+import request from '/@/utils/request';
 import { useAsyncState } from '@vueuse/core';
+
+const queryTaskData = () => {
+	return request({ url: '/act/task/todoData', method: 'get' });
+};
 
 const { state } = useAsyncState(
 	() => queryTaskData().then(({ data }) => ({

@@ -17,7 +17,7 @@ export default {
 		editNodeText: 'Edit Department',
 		delNodeText: 'Delete Department',
 		view: 'Tree/Table View',
-		tenantNodeErrorText: 'The current node cannot be operated. Please maintain it in tenant management',
+		tenantNodeErrorText: 'The root node cannot be edited or deleted',
 		parentIdRequired: 'Parent department is required',
 		nameRequired: 'Department name is required',
 		sortOrderRequired: 'Sort order is required',

@@ -25,8 +25,6 @@
 <script lang="ts" name="treeView" setup>
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { delObj, deptTree } from '/@/api/admin/dept';
-import { getObj } from '/@/api/admin/tenant';
-import { Session } from '/@/utils/storage';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
@@ -108,7 +106,7 @@ const handleExpand = async () => {
 /**
  * 检查节点是否可操作
  * @param {Object} node - 节点对象
- * @returns {boolean} 根租户节点（id='0'）不可编辑删除
+ * @returns {boolean} 根节点（id='0'）不可编辑删除
  */
 const checkNode = (node: any): boolean => {
 	if (node?.id === '0') {
@@ -182,14 +180,12 @@ const delNode = async (node: any) => {
 
 /**
  * 获取组织架构数据
- * @description 查询租户信息作为根节点，加载部门树作为子节点
+ * @description 加载部门树作为子节点，根节点使用静态名称
  */
 const getOrgData = async () => {
 	try {
-		// 查询当前租户信息
-		const { data: tenantData } = await getObj(Session.getTenant());
 		const { data: deptData } = await deptTree();
-		Object.assign(data, { id: '0', name: tenantData.name });
+		Object.assign(data, { id: '0', name: t('sysdept.rootDept') });
 		data.children = deptData;
 	} catch (err: any) {
 		useMessage().error(err.msg || t('common.getDataFailed'));

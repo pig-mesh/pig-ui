@@ -28,9 +28,6 @@ import { setupCalendar } from 'v-calendar';
 import vue3TreeOrg from 'vue3-tree-org';
 import 'vue3-tree-org/lib/vue3-tree-org.css';
 
-// 导入 FcDesigner
-import FcDesigner from 'form-create-designer';
-
 // 导入声明
 import { App } from 'vue';
 
@@ -65,7 +62,5 @@ export default {
 		app.use(ElementPlus); // ELEMENT 组件
 		app.use(setupCalendar, {}); // 日历组件
 		app.use(vue3TreeOrg); // 组织架构组件
-		app.use(FcDesigner);
-		app.use(FcDesigner.formCreate);
 	},
 };
