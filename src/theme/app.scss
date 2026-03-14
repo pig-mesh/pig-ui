@@ -1,0 +1,542 @@
+/* 初始化样式
+------------------------------- */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	outline: none !important;
+}
+
+:root {
+	/* Animation & Transition Tokens
+	------------------------------- */
+	--transition-fast: 150ms;
+	--transition-base: 200ms;
+	--transition-slow: 300ms;
+	--transition-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+	/* Color System - Base Colors
+	------------------------------- */
+	--next-color-white: #ffffff;
+	--next-color-black: #000000;
+	--next-text-color: #303133;
+	--next-text-color-regular: #606266;
+	--next-text-color-secondary: #909399;
+	--next-text-color-placeholder: #a8abb2;
+
+	/* Background Colors
+	------------------------------- */
+	--next-bg-main-color: #f5f7fa;
+	--next-bg-color: #ffffff;
+	--next-bg-color-page: #f0f2f5;
+	--next-bg-color-overlay: rgba(0, 0, 0, 0.5);
+
+	/* Border Colors
+	------------------------------- */
+	--next-border-color: #dcdfe6;
+	--next-border-color-light: #e4e7ed;
+	--next-border-color-lighter: #ebeef5;
+	--next-border-color-extra-light: #f2f6fc;
+
+	/* Border Radius Tokens
+	------------------------------- */
+	--border-radius-sm: 4px;
+	--border-radius-md: 8px;
+	--border-radius-lg: 12px;
+	--border-radius-xl: 16px;
+	--border-radius-full: 9999px;
+
+	/* Elevation System (Shadows)
+	------------------------------- */
+	--shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+	--shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.03);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.05);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 10px 10px rgba(0, 0, 0, 0.04);
+
+	/* Semantic Color - Primary (inherit from Element Plus)
+	------------------------------- */
+	--next-color-primary-lighter: #ecf5ff;
+	--next-color-primary-light: #a0cfff;
+
+	/* Semantic Color - Success
+	------------------------------- */
+	--next-color-success-lighter: #f0f9ff;
+	--next-color-success-light: #95d475;
+
+	/* Semantic Color - Warning
+	------------------------------- */
+	--next-color-warning-lighter: #fef5e7;
+	--next-color-warning-light: #f5c97f;
+
+	/* Semantic Color - Danger
+	------------------------------- */
+	--next-color-danger-lighter: #fef0f0;
+	--next-color-danger-light: #fab6b6;
+
+	/* Semantic Color - Info
+	------------------------------- */
+	--next-color-info-lighter: #f4f4f5;
+	--next-color-info-light: #b1b3b8;
+
+	/* Interactive States
+	------------------------------- */
+	--next-color-dark-hover: rgba(0, 0, 0, 0.06);
+	--next-color-menu-hover: rgba(0, 0, 0, 0.08);
+	--next-color-user-hover: rgba(0, 0, 0, 0.04);
+	--next-color-hover-bg: rgba(0, 0, 0, 0.02);
+
+	/* Layout Specific Colors
+	------------------------------- */
+	--next-color-seting-main: #e9eef3;
+	--next-color-seting-aside: #d3dce6;
+	--next-color-seting-header: #b3c0d1;
+}
+
+html,
+body,
+#app {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	height: 100%;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+	font-weight: 400;
+	-webkit-font-smoothing: antialiased;
+	-webkit-tap-highlight-color: transparent;
+	background-color: var(--next-bg-main-color);
+	font-size: 14px;
+	overflow: hidden;
+	position: relative;
+	color: var(--next-text-color);
+}
+
+/* 主布局样式
+------------------------------- */
+.layout-container {
+	width: 100%;
+	height: 100%;
+	.layout-pd {
+		padding: 8px !important;
+	}
+	.layout-flex {
+		display: flex;
+		flex-direction: column;
+		flex: 1;
+	}
+	.layout-aside {
+		background: var(--next-bg-menuBar);
+		box-shadow: var(--shadow-sm);
+		height: inherit;
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		overflow-x: hidden !important;
+		transition: all var(--transition-base) var(--transition-function);
+		.el-scrollbar__view {
+			overflow: hidden;
+		}
+	}
+	.layout-header {
+		padding: 0 !important;
+		height: auto !important;
+	}
+	.layout-main {
+		padding: 0 !important;
+		overflow: hidden;
+		width: 100%;
+		background-color: var(--next-bg-main-color);
+		display: flex;
+		flex-direction: column;
+		// 内层 el-scrollbar样式，用于界面高度自适应（main.vue）
+		.layout-main-scroll {
+			@extend .layout-flex;
+			.layout-parent {
+				@extend .layout-flex;
+				position: relative;
+			}
+		}
+	}
+	// 用于界面高度自适应
+	.layout-padding {
+		@extend .layout-pd;
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		overflow: hidden;
+		@extend .layout-flex;
+		&-auto {
+			height: inherit;
+			@extend .layout-flex;
+			padding: 12px;
+		}
+		&-view {
+			background: var(--next-bg-color);
+			width: 100%;
+			height: 100%;
+			border-radius: var(--border-radius-md);
+			overflow: hidden;
+			box-shadow: var(--shadow-xs);
+			transition: box-shadow var(--transition-base) var(--transition-function);
+			&:hover {
+				box-shadow: var(--shadow-sm);
+			}
+		}
+	}
+	// 用于界面高度自适应，主视图区 main 的内边距，用于 iframe
+	.layout-padding-unset {
+		padding: 0 !important;
+		&-view {
+			border-radius: 0 !important;
+			border: none !important;
+		}
+	}
+	// 用于设置 iframe loading 时的高度（loading 垂直居中显示）
+	.layout-iframe {
+		height: 100%;
+		.el-loading-parent--relative {
+			height: 100%;
+		}
+	}
+	.el-scrollbar {
+		width: 100%;
+	}
+	.layout-el-aside-br-color {
+		border-right: 1px solid var(--el-border-color-light, #ebeef5);
+	}
+	// pc端左侧导航样式
+	.layout-aside-pc-220 {
+		width: 220px !important;
+		transition: width var(--transition-base) var(--transition-function);
+	}
+	.layout-aside-pc-250 {
+		width: 250px !important;
+		transition: width var(--transition-base) var(--transition-function);
+	}
+	.layout-aside-pc-64 {
+		width: 64px !important;
+		transition: width var(--transition-base) var(--transition-function);
+	}
+	.layout-aside-pc-1 {
+		width: 1px !important;
+		transition: width var(--transition-base) var(--transition-function);
+	}
+	// 手机端左侧导航样式
+	.layout-aside-mobile {
+		position: fixed;
+		top: 0;
+		left: -220px;
+		width: 220px;
+		z-index: 9999999;
+	}
+	.layout-aside-mobile-close {
+		left: -220px;
+		transition: all var(--transition-slow) cubic-bezier(0.39, 0.58, 0.57, 1);
+	}
+	.layout-aside-mobile-open {
+		left: 0;
+		transition: all var(--transition-slow) cubic-bezier(0.22, 0.61, 0.36, 1);
+	}
+	.layout-aside-mobile-mode {
+		position: fixed;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		height: 100%;
+		background-color: var(--next-bg-color-overlay);
+		z-index: 9999998;
+		backdrop-filter: blur(4px);
+		animation: fade-in var(--transition-base);
+	}
+	.layout-mian-height-50 {
+		height: calc(100vh - 50px);
+	}
+	.layout-columns-warp {
+		flex: 1;
+		display: flex;
+		overflow: hidden;
+	}
+	.layout-hide {
+		display: none;
+	}
+}
+
+// 面包屑修改默认颜色和字体粗细
+.layout-navbars-tagsview-ul {
+	.is-active {
+		font-weight: 900;
+	}
+}
+
+/* element plus 全局样式
+------------------------------- */
+.layout-breadcrumb-seting {
+	.el-divider {
+		background-color: rgb(230, 230, 230);
+	}
+}
+
+/* nprogress 进度条跟随主题颜色
+------------------------------- */
+#nprogress {
+	.bar {
+		background: var(--el-color-primary) !important;
+		z-index: 9999999 !important;
+	}
+}
+
+/* flex 弹性布局
+------------------------------- */
+.flex {
+	display: flex;
+}
+.flex-auto {
+	flex: 1;
+	overflow: hidden;
+}
+.flex-center {
+	@extend .flex;
+	flex-direction: column !important;
+	width: 100%;
+	overflow: hidden;
+}
+.flex-margin {
+	margin: auto;
+}
+.flex-warp {
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	margin: 0 -5px;
+	.flex-warp-item {
+		padding: 5px;
+		.flex-warp-item-box {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
+
+/* cursor 鼠标形状
+------------------------------- */
+// 默认
+.cursor-default {
+	cursor: default !important;
+}
+// 帮助
+.cursor-help {
+	cursor: help !important;
+}
+// 手指
+.cursor-pointer {
+	cursor: pointer !important;
+}
+// 移动
+.cursor-move {
+	cursor: move !important;
+}
+
+/* 宽高 100%
+------------------------------- */
+.w100 {
+	width: 100% !important;
+}
+.h100 {
+	height: 100% !important;
+}
+.vh100 {
+	height: 100vh !important;
+}
+.max100vh {
+	max-height: 100vh !important;
+}
+.min100vh {
+	min-height: 100vh !important;
+}
+
+/* 颜色值
+------------------------------- */
+.color-primary {
+	color: var(--el-color-primary);
+}
+.color-success {
+	color: var(--el-color-success);
+}
+.color-warning {
+	color: var(--el-color-warning);
+}
+.color-danger {
+	color: var(--el-color-danger);
+}
+.color-info {
+	color: var(--el-color-info);
+}
+
+/* 字体大小全局样式
+------------------------------- */
+@for $i from 10 through 32 {
+	.font#{$i} {
+		font-size: #{$i}px !important;
+	}
+}
+
+/* 外边距、内边距全局样式
+------------------------------- */
+@for $i from 1 through 35 {
+	.mt#{$i} {
+		margin-top: #{$i}px !important;
+	}
+	.mr#{$i} {
+		margin-right: #{$i}px !important;
+	}
+	.mb#{$i} {
+		margin-bottom: #{$i}px !important;
+	}
+	.ml#{$i} {
+		margin-left: #{$i}px !important;
+	}
+	.pt#{$i} {
+		padding-top: #{$i}px !important;
+	}
+	.pr#{$i} {
+		padding-right: #{$i}px !important;
+	}
+	.pb#{$i} {
+		padding-bottom: #{$i}px !important;
+	}
+	.pl#{$i} {
+		padding-left: #{$i}px !important;
+	}
+}
+
+/* 圆角工具类
+------------------------------- */
+.rounded-sm {
+	border-radius: var(--border-radius-sm) !important;
+}
+.rounded-md {
+	border-radius: var(--border-radius-md) !important;
+}
+.rounded-lg {
+	border-radius: var(--border-radius-lg) !important;
+}
+.rounded-xl {
+	border-radius: var(--border-radius-xl) !important;
+}
+.rounded-full {
+	border-radius: var(--border-radius-full) !important;
+}
+
+/* 阴影工具类
+------------------------------- */
+.shadow-xs {
+	box-shadow: var(--shadow-xs) !important;
+}
+.shadow-sm {
+	box-shadow: var(--shadow-sm) !important;
+}
+.shadow-md {
+	box-shadow: var(--shadow-md) !important;
+}
+.shadow-lg {
+	box-shadow: var(--shadow-lg) !important;
+}
+.shadow-xl {
+	box-shadow: var(--shadow-xl) !important;
+}
+.shadow-none {
+	box-shadow: none !important;
+}
+
+/* 过渡动画工具类
+------------------------------- */
+.transition-fast {
+	transition: all var(--transition-fast) var(--transition-function) !important;
+}
+.transition-base {
+	transition: all var(--transition-base) var(--transition-function) !important;
+}
+.transition-slow {
+	transition: all var(--transition-slow) var(--transition-function) !important;
+}
+
+/* 毛玻璃效果
+------------------------------- */
+.backdrop-blur {
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+}
+.backdrop-blur-sm {
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+}
+.backdrop-blur-lg {
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+
+/* 动画关键帧
+------------------------------- */
+@keyframes fade-in {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+	}
+}
+
+@keyframes slide-in-up {
+	from {
+		transform: translateY(20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+@keyframes slide-in-down {
+	from {
+		transform: translateY(-20px);
+		opacity: 0;
+	}
+	to {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+/* 无障碍设计 - 减少动画
+------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* 聚焦状态优化
+------------------------------- */
+*:focus-visible {
+	outline: 2px solid var(--el-color-primary);
+	outline-offset: 2px;
+	border-radius: var(--border-radius-sm);
+}

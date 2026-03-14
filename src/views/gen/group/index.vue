@@ -1,0 +1,130 @@
+<template>
+	<div class="layout-padding">
+		<div class="layout-padding-auto layout-padding-view">
+			<el-row class="ml10" v-show="showSearch">
+				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
+					<el-form-item :label="$t('group.groupName')" prop="groupName">
+						<el-input :placeholder="t('group.inputGroupNameTip')" style="max-width: 180px" v-model="state.queryForm.groupName" />
+					</el-form-item>
+					<el-form-item>
+						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
+							{{ $t('common.queryBtn') }}
+						</el-button>
+						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
+					</el-form-item>
+				</el-form>
+			</el-row>
+			<el-row>
+				<div class="mb8" style="width: 100%">
+					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'codegen_group_add'">
+						{{ $t('common.addBtn') }}
+					</el-button>
+					<el-button
+						plain
+						:disabled="multiple"
+						@click="handleDelete(selectObjs)"
+						class="ml10"
+						formDialogRef
+						icon="Delete"
+						type="primary"
+						v-auth="'codegen_group_del'"
+					>
+						{{ $t('common.delBtn') }}
+					</el-button>
+					<right-toolbar
+						:export="'codegen_group_export'"
+						@exportExcel="exportExcel"
+						@queryTable="getDataList"
+						class="ml10"
+						style="float: right; margin-right: 20px"
+						v-model:showSearch="showSearch"
+					></right-toolbar>
+				</div>
+			</el-row>
+			<el-table
+				:data="state.dataList"
+				@selection-change="handleSelectionChange"
+				@sort-change="sortChangeHandle"
+				style="width: 100%"
+				v-loading="state.loading"
+				border
+				:cell-style="tableStyle.cellStyle"
+				:header-cell-style="tableStyle.headerCellStyle"
+			>
+				<el-table-column align="center" type="selection" width="40" />
+				<el-table-column :label="t('group.index')" type="index" width="60" />
+				<el-table-column :label="t('group.groupName')" prop="groupName" show-overflow-tooltip />
+				<el-table-column :label="t('group.groupDesc')" prop="groupDesc" show-overflow-tooltip />
+				<el-table-column :label="t('group.createTime')" prop="createTime" show-overflow-tooltip />
+				<el-table-column :label="$t('common.action')" width="200">
+					<template #default="scope">
+						<el-button icon="edit-pen" @click="formDialogRef.openDialog(scope.row.id)" text type="primary" v-auth="'codegen_group_edit'"
+							>{{ $t('common.editBtn') }}
+						</el-button>
+						<el-button icon="delete" @click="handleDelete([scope.row.id])" text type="primary" v-auth="'codegen_group_del'"
+							>{{ $t('common.delBtn') }}
+						</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
+			<pagination @current-change="currentChangeHandle" @size-change="sizeChangeHandle" v-bind="state.pagination" />
+		</div>
+
+		<!-- 编辑、新增  -->
+		<form-dialog @refresh="getDataList()" ref="formDialogRef" />
+	</div>
+</template>
+
+<script lang="ts" name="systemGenGroup" setup>
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { delObjs, fetchList } from '/@/api/gen/group';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { useI18n } from 'vue-i18n';
+
+const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const { t } = useI18n();
+const formDialogRef = ref();
+const queryRef = ref();
+const showSearch = ref(true);
+const selectObjs = ref([]) as any;
+const multiple = ref(true);
+
+const state: BasicTableProps = reactive<BasicTableProps>({
+	queryForm: {},
+	pageList: fetchList,
+	descs: ['create_time'],
+});
+
+const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } = useTable(state);
+
+const resetQuery = () => {
+	queryRef.value.resetFields();
+	selectObjs.value = [];
+	getDataList();
+};
+
+const exportExcel = () => {
+	downBlobFile('/gen/group/export', state.queryForm, 'group.xlsx');
+};
+
+const handleSelectionChange = (objs: { id: string }[]) => {
+	selectObjs.value = objs.map(({ id }) => id);
+	multiple.value = !objs.length;
+};
+
+const handleDelete = async (ids: string[]) => {
+	try {
+		await useMessageBox().confirm(t('common.delConfirmText'));
+	} catch {
+		return;
+	}
+
+	try {
+		await delObjs(ids);
+		getDataList();
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	}
+};
+</script>

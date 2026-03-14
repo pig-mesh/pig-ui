@@ -1,0 +1,20 @@
+export default {
+	orgSelecotr: {
+		org: '组织',
+		user: '用户',
+		dept: '部门',
+		role: '角色',
+		post: '岗位',
+		select: '选择',
+		search: '搜索',
+		rootNode: '根节点',
+		subLevel: '下级',
+		noData: '暂无数据',
+		unnamed: '未命名',
+		unnamedRole: '未命名角色',
+		unnamedPost: '未命名岗位',
+		selected: '已选',
+		clearAll: '清空',
+		noSelection: '暂无选中项',
+	},
+};

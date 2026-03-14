@@ -1,0 +1,439 @@
+// 用户名密码登录
+.login-content-form {
+	margin-top: 20px;
+
+	@for $i from 1 through 4 {
+		.login-animation#{$i} {
+			opacity: 0;
+			animation-name: error-num;
+			animation-duration: 0.5s;
+			animation-fill-mode: forwards;
+			animation-delay: calc($i/10) + s;
+		}
+	}
+
+	.login-content-password {
+		display: inline-block;
+		width: 20px;
+		cursor: pointer;
+
+		&:hover {
+			color: #909399;
+		}
+	}
+
+	.login-content-code {
+		width: 100%;
+		padding: 0;
+		font-weight: bold;
+		letter-spacing: 5px;
+	}
+
+	.login-content-submit {
+		width: 100%;
+		letter-spacing: 2px;
+		font-weight: 300;
+		margin-top: 15px;
+	}
+
+	.login-msg {
+		color: var(--el-text-color-placeholder);
+	}
+}
+
+// 社交登录
+.social-container {
+	margin: 20px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	.box {
+		cursor: pointer;
+	}
+
+	.iconfont {
+		color: #fff;
+		font-size: 30px;
+	}
+
+	.container {
+		$height: 50px;
+		display: inline-block;
+		width: $height;
+		height: $height;
+		line-height: $height;
+		text-align: center;
+		border-radius: 4px;
+		margin-bottom: 10px;
+	}
+
+	.title {
+		text-align: center;
+	}
+}
+.select-none {
+	user-select: none;
+}
+
+.wave {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	bottom: 0;
+	z-index: 0;
+}
+.login-container {
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	grid-gap: 18rem;
+	padding: 0 2rem;
+}
+
+.img {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+}
+
+.img img {
+	z-index: 0;
+	width: 500px;
+}
+
+.login-title {
+	font-size: 20px;
+	font-weight: 500;
+	font-family: PingFang SC, Arial, Hiragino Sans GB, Microsoft YaHei, sans-serif;
+	margin-bottom: 32px;
+}
+.login-box {
+	display: flex;
+	align-items: center;
+	text-align: center;
+}
+
+.login-form {
+	width: 400px;
+}
+
+.avatar {
+	width: 350px;
+	height: 80px;
+}
+
+.login-form h2 {
+	text-transform: uppercase;
+	margin: 15px 0;
+	color: #999;
+	font: bold 200% Consolas, Monaco, monospace;
+}
+
+@media screen and (max-width: 1180px) {
+	.login-container {
+		grid-gap: 4rem;
+	}
+	.login-form {
+		width: 400px;
+	}
+
+	.login-form h2 {
+		font-size: 2.4rem;
+		margin: 8px 0;
+	}
+
+	.img img {
+		width: 360px;
+	}
+
+	.avatar {
+		width: 280px;
+		height: 80px;
+	}
+}
+
+@media screen and (max-width: 968px) {
+	.wave {
+		display: none;
+	}
+
+	.img {
+		display: none;
+	}
+
+	.login-container {
+		grid-template-columns: 1fr;
+	}
+
+	.login-box {
+		justify-content: center;
+	}
+}
+
+/* 增强过渡动画效果 */
+.transition-all {
+	transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* 优化阴影效果 */
+.shadow-lg {
+	box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* 深色模式下的阴影效果 */
+:deep(.dark) .shadow-lg {
+	box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+/* 添加hover效果 */
+.bg-white {
+	transition: transform 0.3s ease;
+	&:hover {
+		transform: translateY(-2px);
+	}
+}
+
+/* ===== Modern Gradient 登录页样式 ===== */
+
+// 登录卡片 - 浅色模式
+.login-card {
+	background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%);
+	border: 1px solid rgba(97, 142, 255, 0.12);
+	box-shadow:
+		0 32px 64px -12px rgba(19, 51, 107, 0.15),
+		0 0 0 1px rgba(97, 142, 255, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+// 登录卡片 - 深色模式
+[data-theme='dark'] .login-card {
+	background: linear-gradient(145deg, rgba(30, 41, 59, 0.98) 0%, rgba(15, 23, 42, 0.95) 100%);
+	border: 1px solid rgba(97, 142, 255, 0.15);
+	box-shadow:
+		0 32px 64px -12px rgba(0, 0, 0, 0.4),
+		0 0 0 1px rgba(97, 142, 255, 0.1),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+// Logo 容器 - 浅色模式
+.logo-container {
+	background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+	border: 1.5px solid rgba(97, 142, 255, 0.2);
+	box-shadow:
+		0 2px 8px rgba(97, 142, 255, 0.08),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+// Logo 容器 - 深色模式
+[data-theme='dark'] .logo-container {
+	background: linear-gradient(145deg, rgba(51, 65, 85, 0.8) 0%, rgba(30, 41, 59, 0.9) 100%);
+	border: 1.5px solid rgba(97, 142, 255, 0.2);
+	box-shadow:
+		0 2px 8px rgba(0, 0, 0, 0.2),
+		inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+// 响应式调整 - 移动端无圆角和阴影
+@media (max-width: 767px) {
+	.login-card {
+		border-radius: 0;
+		border: none;
+		box-shadow: none;
+		background: rgba(255, 255, 255, 0.98);
+	}
+
+	[data-theme='dark'] .login-card {
+		background: rgba(30, 41, 59, 0.98);
+		border: none;
+		box-shadow: none;
+	}
+}
+
+// ===== 输入框样式 =====
+
+// 输入框基础样式 - 浅色模式
+.login-input {
+	.el-input__wrapper {
+		background: #ffffff;
+		border: 1px solid #e5e7eb;
+		box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+		transition: all 0.2s ease;
+
+		&:hover {
+			border-color: rgba(97, 142, 255, 0.5);
+		}
+
+		// 聚焦状态
+		&.is-focus,
+		&:focus-within {
+			border-color: #618EFF;
+			box-shadow:
+				0 0 0 3px rgba(97, 142, 255, 0.12),
+				0 1px 2px rgba(0, 0, 0, 0.04);
+		}
+	}
+}
+
+// 输入框深色模式
+[data-theme='dark'] .login-input {
+	.el-input__wrapper {
+		background: rgba(51, 65, 85, 0.6);
+		border-color: rgba(71, 85, 105, 0.8);
+
+		&:hover {
+			border-color: rgba(97, 142, 255, 0.5);
+		}
+
+		&.is-focus,
+		&:focus-within {
+			border-color: #618EFF;
+			box-shadow:
+				0 0 0 3px rgba(97, 142, 255, 0.15),
+				0 1px 2px rgba(0, 0, 0, 0.1);
+		}
+	}
+}
+
+// ===== 渐变登录按钮 =====
+
+.login-btn {
+	background: linear-gradient(135deg, #618EFF 0%, #0058FF 100%) !important;
+	border: none !important;
+	box-shadow: 0 4px 14px rgba(0, 88, 255, 0.3);
+
+	&:hover {
+		background: linear-gradient(135deg, #7398FF 0%, #1767F9 100%) !important;
+		box-shadow: 0 6px 20px rgba(0, 88, 255, 0.4);
+		transform: translateY(-1px);
+	}
+
+	&:active {
+		transform: translateY(0);
+		box-shadow: 0 2px 8px rgba(0, 88, 255, 0.35);
+	}
+
+	// 加载状态
+	&.is-loading {
+		background: linear-gradient(135deg, #7398FF 0%, #3d7aff 100%) !important;
+		box-shadow: 0 4px 14px rgba(0, 88, 255, 0.25);
+	}
+}
+
+// ===== 发送验证码按钮 =====
+
+.send-code-btn {
+	background: transparent !important;
+	border: 1px solid #e5e7eb !important;
+	color: #4b5563 !important;
+
+	&:hover:not(:disabled) {
+		border-color: rgba(97, 142, 255, 0.6) !important;
+		background: rgba(97, 142, 255, 0.05) !important;
+		color: #618EFF !important;
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+[data-theme='dark'] .send-code-btn {
+	border-color: rgba(71, 85, 105, 0.8) !important;
+	color: #94a3b8 !important;
+
+	&:hover:not(:disabled) {
+		border-color: rgba(97, 142, 255, 0.6) !important;
+		background: rgba(97, 142, 255, 0.1) !important;
+		color: #618EFF !important;
+	}
+}
+
+// ===== 验证码图片样式 =====
+
+.captcha-img {
+	border: 1px solid #e5e7eb;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+
+	&:hover {
+		border-color: rgba(97, 142, 255, 0.5);
+		opacity: 0.9;
+	}
+}
+
+[data-theme='dark'] .captcha-img {
+	border-color: rgba(71, 85, 105, 0.8);
+
+	&:hover {
+		border-color: rgba(97, 142, 255, 0.5);
+	}
+}
+
+// ===== 渐变链接悬停效果 =====
+
+.login-link:hover {
+	background: linear-gradient(135deg, #618EFF, #0058FF);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+}
+
+// ===== 社交登录按钮样式 =====
+
+// 基础按钮样式 - 浅色模式
+.social-btn {
+	background: #ffffff;
+	border: 1px solid #e5e7eb;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+	&:active {
+		transform: scale(0.95);
+	}
+}
+
+// 深色模式基础
+[data-theme='dark'] .social-btn {
+	background: rgba(51, 65, 85, 0.6);
+	border-color: rgba(71, 85, 105, 0.8);
+}
+
+// 企业微信 - 蓝色渐变悬停
+.social-btn-blue:hover {
+	background: linear-gradient(135deg, rgba(97, 142, 255, 0.1) 0%, rgba(0, 88, 255, 0.08) 100%);
+	border-color: rgba(97, 142, 255, 0.4);
+	box-shadow: 0 4px 12px rgba(97, 142, 255, 0.2);
+	transform: translateY(-2px);
+}
+
+[data-theme='dark'] .social-btn-blue:hover {
+	background: linear-gradient(135deg, rgba(97, 142, 255, 0.15) 0%, rgba(0, 88, 255, 0.1) 100%);
+	border-color: rgba(97, 142, 255, 0.5);
+}
+
+// 钉钉 - 天蓝色渐变悬停
+.social-btn-sky:hover {
+	background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(14, 165, 233, 0.08) 100%);
+	border-color: rgba(56, 189, 248, 0.4);
+	box-shadow: 0 4px 12px rgba(56, 189, 248, 0.2);
+	transform: translateY(-2px);
+}
+
+[data-theme='dark'] .social-btn-sky:hover {
+	background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(14, 165, 233, 0.1) 100%);
+	border-color: rgba(56, 189, 248, 0.5);
+}
+
+// 微信 - 绿色渐变悬停
+.social-btn-green:hover {
+	background: linear-gradient(135deg, rgba(34, 197, 94, 0.1) 0%, rgba(22, 163, 74, 0.08) 100%);
+	border-color: rgba(34, 197, 94, 0.4);
+	box-shadow: 0 4px 12px rgba(34, 197, 94, 0.2);
+	transform: translateY(-2px);
+}
+
+[data-theme='dark'] .social-btn-green:hover {
+	background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(22, 163, 74, 0.1) 100%);
+	border-color: rgba(34, 197, 94, 0.5);
+}

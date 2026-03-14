@@ -1,0 +1,47 @@
+export default {
+	sysrole: {
+		index: '#',
+		roleName: '角色名称',
+		inputRoleNameTip: '请输入角色名称',
+		permissionTip: '授权',
+		deleteDisabledTip: '角色不允许删除',
+		mustCheckOneTip: '必须选择【分配权限】菜单',
+		roleCode: '角色标识',
+		roleDesc: '角色描述',
+		data_authority: '数据权限',
+		createTime: '创建时间',
+		please_enter_a_role_name: '请输入角色名称',
+		please_enter_the_role_Code: '请输入角色标识',
+		please_enter_the_role_description: '请输入角色描述',
+		menu_authority: '数据权限',
+		please_select: '请选择',
+		importRoleTip: '导入角色',
+		assignPermission: '分配权限',
+		update: '更新',
+		cancel: '取 消',
+		// 表单验证
+		roleNameRequired: '角色名称不能为空',
+		roleNameLength: '长度在 3 到 20 个字符',
+		roleCodeRequired: '角色标识不能为空',
+		roleCodeLength: '长度在 3 到 20 个字符',
+		dsTypeRequired: '请选择数据权限类型',
+		menuAuthorityRequired: '数据权限不能为空',
+		// 数据权限类型
+		dsType: {
+			all: '全部',
+			custom: '自定义',
+			currentAndChildren: '本级及子级',
+			current: '本级',
+			self: '本人',
+		},
+		// 错误提示
+		fetchRoleDataError: '获取角色数据失败',
+		fetchDeptDataError: '获取部门数据失败',
+		fetchPermissionDataError: '获取权限数据失败',
+		permissionUpdateError: '权限分配失败',
+		roleCodeExists: '角色标识已经存在',
+		roleNameExists: '角色名称已经存在',
+		// 权限分配
+		assignPermissionMenu: '分配权限',
+	},
+};

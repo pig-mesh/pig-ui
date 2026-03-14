@@ -1,0 +1,20 @@
+export default {
+	orgSelecotr: {
+		org: 'Org',
+		user: 'User',
+		dept: 'Dept',
+		role: 'Role',
+		post: 'Post',
+		select: 'Select',
+		search: 'Search',
+		rootNode: 'Root',
+		subLevel: 'Sub-level',
+		noData: 'No data',
+		unnamed: 'Unnamed',
+		unnamedRole: 'Unnamed Role',
+		unnamedPost: 'Unnamed Post',
+		selected: 'Selected',
+		clearAll: 'Clear',
+		noSelection: 'No selection',
+	},
+};

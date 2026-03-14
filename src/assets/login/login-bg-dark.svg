@@ -1,0 +1,52 @@
+<svg width="1440" height="790" viewBox="0 0 1440 790" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#clip0_dark)">
+    <!-- 主背景 - 深色 slate -->
+    <rect width="1440" height="790" fill="#0F172A"/>
+
+    <!-- 装饰层 - 低透明度深色元素 -->
+    <g opacity="0.3">
+      <!-- 左下装饰 -->
+      <path d="M-100 790C200 600 400 500 600 790H-100Z" fill="#1E293B"/>
+
+      <!-- 右上装饰 -->
+      <path d="M1440 0C1200 200 1000 300 800 0H1440Z" fill="#1E293B"/>
+
+      <!-- 中间圆形装饰 -->
+      <circle cx="720" cy="395" r="300" fill="#1E293B" opacity="0.2"/>
+    </g>
+
+    <!-- 网格线 - 非常低的透明度 -->
+    <g opacity="0.05" stroke="#475569" stroke-width="1">
+      <line x1="0" y1="197.5" x2="1440" y2="197.5"/>
+      <line x1="0" y1="395" x2="1440" y2="395"/>
+      <line x1="0" y1="592.5" x2="1440" y2="592.5"/>
+      <line x1="360" y1="0" x2="360" y2="790"/>
+      <line x1="720" y1="0" x2="720" y2="790"/>
+      <line x1="1080" y1="0" x2="1080" y2="790"/>
+    </g>
+
+    <!-- 点状装饰 -->
+    <g opacity="0.15" fill="#475569">
+      <circle cx="200" cy="150" r="2"/>
+      <circle cx="450" cy="250" r="2"/>
+      <circle cx="800" cy="180" r="2"/>
+      <circle cx="1100" cy="300" r="2"/>
+      <circle cx="300" cy="500" r="2"/>
+      <circle cx="650" cy="600" r="2"/>
+      <circle cx="950" cy="550" r="2"/>
+      <circle cx="1200" cy="650" r="2"/>
+    </g>
+
+    <!-- 轻微的光晕效果 - 中心偏下 -->
+    <g opacity="0.08">
+      <ellipse cx="720" cy="500" rx="600" ry="300" fill="#334155"/>
+    </g>
+
+  </g>
+
+  <defs>
+    <clipPath id="clip0_dark">
+      <rect width="1440" height="790" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>
