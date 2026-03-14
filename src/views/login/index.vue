@@ -21,11 +21,6 @@
 				</div>
 			</div>
 
-			<!-- 租户选择（条件渲染） -->
-			<div class="mb-6" v-if="tenantEnable">
-				<tenant />
-			</div>
-
 			<!-- 登录表单组件 -->
 			<div class="w-full">
 				<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
@@ -73,7 +68,6 @@ const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 const Expire = defineAsyncComponent(() => import('./component/expire.vue'));
 const Forget = defineAsyncComponent(() => import('./component/forget.vue'));
-const Tenant = defineAsyncComponent(() => import('./component/tenant.vue'));
 const Control = defineAsyncComponent(() => import('./component/control.vue'));
 const Qrcode = defineAsyncComponent(() => import('./component/qrcode.vue'));
 const Footer = defineAsyncComponent(() => import('./component/footer.vue'));
@@ -84,9 +78,6 @@ const { themeConfig } = storeToRefs(storesThemeConfig);
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
-
-// 是否启用租户自动选择
-const tenantEnable = ref(import.meta.env.VITE_AUTO_TENANT === 'true');
 
 // 登录方式
 const loginType = ref(LoginTypeEnum.PASSWORD);
