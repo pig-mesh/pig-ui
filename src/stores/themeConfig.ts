@@ -103,7 +103,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启AI助手
 			isChat: false,
 			// 水印文案
-			wartermarkText: 'PigX',
+			wartermarkText: 'Pig',
 			// 首页快捷导航上限
 			quickLinkNum: 12,
 			/**

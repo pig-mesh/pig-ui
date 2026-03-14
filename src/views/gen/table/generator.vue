@@ -136,14 +136,14 @@
 				<el-form-item prop="backendPath" v-if="dataForm.generatorType === '1'">
 					<template #label>
 						<span>后端生成路径</span>
-						<tip content="后端模块biz所在文件全路径比如：D:\data\pigx\pigx-upms\pigx-upms-biz" />
+						<tip content="后端模块biz所在文件全路径比如：D:\data\pig\pig-upms\pig-upms-biz" />
 					</template>
 					<el-input placeholder="后端生成路径" v-model="dataForm.backendPath"></el-input>
 				</el-form-item>
 				<el-form-item prop="frontendPath" v-if="dataForm.generatorType === '1'">
 					<template #label>
 						<span>前端生成路径</span>
-						<tip content="前端所在文件全路径比如：D:\data\pigx-ui" />
+						<tip content="前端所在文件全路径比如：D:\data\pig-ui" />
 					</template>
 					<el-input placeholder="前端生成路径" v-model="dataForm.frontendPath"></el-input>
 				</el-form-item>
