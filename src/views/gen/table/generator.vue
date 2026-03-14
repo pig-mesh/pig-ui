@@ -102,18 +102,6 @@
 					</el-tree-select>
 				</el-form-item>
 			</el-col>
-			<el-col :span="12" class="mb20">
-				<el-form-item prop="syncRoute">
-					<template #label>
-						同步路由
-						<tip :content="`微服务架构下会自动创建一条【/${dataForm.moduleName}】的网关路由，存在则跳过`" />
-					</template>
-					<el-radio-group v-model="dataForm.syncRoute">
-						<el-radio border label="0">手动添加</el-radio>
-						<el-radio border label="1">自动创建</el-radio>
-					</el-radio-group>
-				</el-form-item>
-			</el-col>
 		</el-row>
 		<el-row>
 			<el-col :span="12" class="mb20">
@@ -204,7 +192,6 @@ const dataForm = reactive({
 	dsName: '' as string,
 	style: '', //  默认风格 element-plus
 	childTableName: '',
-	syncRoute: '0',
 	syncMenuId: '',
 	parentField: '',
 	nameField: '',
@@ -243,11 +230,6 @@ const getTable = (dsName: string, tableName: string) => {
 			if (frontendPath && backendPath) {
 				dataForm.frontendPath = frontendPath;
 				dataForm.backendPath = backendPath;
-			}
-		})
-		.then(() => {
-			if (isMicro === 'false') {
-				dataForm.syncRoute = '0';
 			}
 		})
 		.finally(() => {

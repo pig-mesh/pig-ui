@@ -28,16 +28,6 @@
 					class="w100"
 				/>
 			</el-form-item>
-			<el-form-item prop="syncRoute">
-				<template #label>
-					{{ $t('gen.syncRoute') }}
-					<tip :content="`微服务架构下会自动创建一条【/${form.moduleName}】的网关路由，存在则跳过`" />
-				</template>
-				<el-radio-group v-model="form.syncRoute">
-					<el-radio label="0">{{ $t('gen.syncRouteManual') }}</el-radio>
-					<el-radio label="1">{{ $t('gen.syncRouteAuto') }}</el-radio>
-				</el-radio-group>
-			</el-form-item>
 			<el-form-item :label="$t('gen.formLayout')" prop="formLayout">
 				<el-radio-group v-model="form.formLayout">
 					<el-radio :label="1">{{ $t('gen.formLayoutOne') }}</el-radio>
@@ -97,7 +87,6 @@ const form = reactive({
 	moduleName: 'admin', // 模块名
 	style: '', // 样式
 	syncMenuId: '', // 同步菜单ID
-	syncRoute: '0', // 同步路由方式
 	formLayout: 1, // 表单布局
 	generatorType: '0', // 生成类型
 	tableIds: [] as string[], // 表ID列表
