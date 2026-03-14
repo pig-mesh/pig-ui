@@ -213,14 +213,6 @@ watch([() => messageList.value.length, () => messageList.value[messageList.value
 const token = computed(() => {
 	return Session.getToken();
 });
-/**
- * 从会话存储中获取访问租户
- * @returns {string} 租户
- */
-const tenant = computed(() => {
-	return Session.getTenant();
-});
-
 // 解析SSE返回的数据
 function parseSSEResponse(data: string) {
 	try {
@@ -302,7 +294,6 @@ const sendMessage = async () => {
 			headers: {
 				'Content-Type': 'application/json',
 				Authorization: `Bearer ${token.value}`,
-				'TENANT-ID': tenant.value,
 			},
 			body: JSON.stringify({
 				message: userMessage,

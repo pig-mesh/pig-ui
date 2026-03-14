@@ -67,9 +67,6 @@ export async function info() {
 	const token = Session.getToken();
 	if (token) headers.Authorization = `Bearer ${token}`;
 
-	const tenantId = Session.getTenant();
-	if (tenantId) headers['TENANT-ID'] = String(tenantId);
-
 	const version = import.meta.env.VITE_GRAY_VERSION;
 	if (version) headers.VERSION = version;
 

@@ -9,7 +9,7 @@
 
 		<!-- 居中登录卡片 -->
 		<div
-			class="login-card relative z-10 w-full md:w-[560px] h-auto min-h-[690px] rounded-none md:rounded-2xl px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up">
+			class="login-card relative z-10 w-full md:w-[560px] h-auto rounded-none md:rounded-2xl px-8 py-10 md:px-[120px] md:py-[80px] transition-all duration-600 animate-slide-in-up">
 			<!-- Logo 和品牌区域 -->
 			<div class="flex items-center justify-center mb-8">
 				<div class="flex items-center justify-center rounded-lg logo-container w-14 h-14">
@@ -31,10 +31,7 @@
 				<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
 				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType" />
 
-				<!-- 社交登录（包含内置分割线） -->
-				<social @signInSuccess="signInSuccess"
-					v-if="loginType === LoginTypeEnum.PASSWORD || loginType === LoginTypeEnum.MOBILE" />
-			</div>
+				</div>
 		</div>
 
 		<!-- 小程序二维码 -->
@@ -64,7 +61,6 @@ import { LoginTypeEnum } from '/@/api/login';
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
 const Mobile = defineAsyncComponent(() => import('./component/mobile.vue'));
-const Social = defineAsyncComponent(() => import('./component/social.vue'));
 const Register = defineAsyncComponent(() => import('./component/register.vue'));
 const Expire = defineAsyncComponent(() => import('./component/expire.vue'));
 const Forget = defineAsyncComponent(() => import('./component/forget.vue'));

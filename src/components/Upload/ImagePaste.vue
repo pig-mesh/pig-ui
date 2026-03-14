@@ -119,7 +119,6 @@ const isVisible = useElementVisibility(containerRef);
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.getToken(),
-		'TENANT-ID': Session.getTenant(),
 	};
 });
 

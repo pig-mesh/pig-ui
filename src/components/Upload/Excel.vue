@@ -157,7 +157,6 @@ const show = () => {
 const headers = computed(() => {
   return {
     Authorization: 'Bearer ' + Session.getToken(),
-    'TENANT-ID': Session.getTenant(),
   };
 });
 

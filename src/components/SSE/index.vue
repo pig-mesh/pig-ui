@@ -21,14 +21,6 @@ const token = computed(() => {
 	return Session.getToken();
 });
 /**
- * 从会话存储中获取访问租户
- * @returns {string} 租户
- */
-const tenant = computed(() => {
-	return Session.getTenant();
-});
-
-/**
  * SSE 消息提醒
  * @param {string} message - 收到的消息内容
  */
@@ -55,7 +47,6 @@ const initSseConnection = async (uri: string) => {
 			method: 'GET',
 			headers: {
 				Accept: 'text/event-stream',
-				'TENANT-ID': tenant.value,
 				Authorization: `Bearer ${token.value}`,
 			},
 			signal: abortController.signal,

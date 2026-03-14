@@ -50,12 +50,12 @@ onUnmounted(() => {
 
 /**
  * 初始化 WebSocket 连接
- * 根据当前页面协议自动选择 ws/wss，URL 中携带 access_token 和 TENANT-ID 进行鉴权
+ * 根据当前页面协议自动选择 ws/wss，URL 中携带 access_token 进行鉴权
  */
 const initWebSocket = () => {
 	const { host, protocol: pageProtocol } = window.location;
 	const protocol = pageProtocol === 'https:' ? 'wss' : 'ws';
-	const wsUri = `${protocol}://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	const wsUri = `${protocol}://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${Session.getToken()}`;
 
 	state.webSocket = new WebSocket(wsUri);
 	state.webSocket.onopen = onOpen;
