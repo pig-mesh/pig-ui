@@ -105,7 +105,6 @@ export default {
 		dropdownSmall: 'Small',
 		dropdown1: 'Home Page',
 		dropdown2: 'Personal Center',
-		dropdown3: 'Tenant Switch',
 		dropdown4: 'Department Switch',
 		dropdown5: 'Log Out',
 		searchPlaceholder: 'Menu Search: Supports Chinese and Routing Path',
@@ -125,7 +124,6 @@ export default {
 		exitFullscreen: 'Exit Fullscreen',
 		lockScreen: 'Lock Screen',
 		selectDept: 'Select Department',
-		selectTenant: 'Select Tenant',
 	},
 	tagsView: {
 		refresh: 'Refresh',
@@ -210,20 +208,6 @@ export default {
 		btnOne: 'Cruel Refusal',
 		btnTwo: 'Update Now',
 		btnTwoLoading: 'Updating',
-	},
-	tenantSelector: {
-		title: 'Switch Tenant',
-		searchPlaceholder: 'Search tenant name, domain or website',
-		noData: 'No tenant data available',
-		current: 'Current',
-		selected: 'Selected',
-		loadError: 'Failed to load tenant list',
-		selectTip: 'Please select a tenant to switch',
-		sameError: 'Already in this tenant, no need to switch',
-		confirmTitle: 'Switch Tenant Confirmation',
-		confirmMessage: 'Are you sure to switch to tenant "{name}"? The page will refresh after switching.',
-		switchSuccess: 'Tenant switched successfully, refreshing page...',
-		switchError: 'Failed to switch tenant, please try again'
 	},
 	deptSelector: {
 		title: 'Switch Department',

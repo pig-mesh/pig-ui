@@ -98,7 +98,6 @@ export default {
 		dropdownSmall: '小型',
 		dropdown1: '首页',
 		dropdown2: '个人中心',
-		dropdown3: '切换租户',
 		dropdown4: '切换部门',
 		dropdown5: '退出登录',
 		searchPlaceholder: '菜单搜索：支持中文、路由路径',
@@ -118,7 +117,6 @@ export default {
 		exitFullscreen: '退出全屏',
 		lockScreen: '锁屏',
 		selectDept: '选择部门',
-		selectTenant: '选择租户',
 	},
 	tagsView: {
 		refresh: '刷新',
@@ -203,20 +201,6 @@ export default {
 		btnOne: '残忍拒绝',
 		btnTwo: '马上更新',
 		btnTwoLoading: '更新中',
-	},
-	tenantSelector: {
-		title: '切换租户',
-		searchPlaceholder: '搜索租户名称、域名或网站名',
-		noData: '暂无租户数据',
-		current: '当前租户',
-		selected: '已选择',
-		loadError: '加载租户列表失败',
-		selectTip: '请选择要切换的租户',
-		sameError: '当前已是该租户，无需切换',
-		confirmTitle: '切换租户确认',
-		confirmMessage: '确定要切换到租户 "{name}" 吗？切换后页面将刷新。',
-		switchSuccess: '租户切换成功，即将刷新页面...',
-		switchError: '租户切换失败，请重试'
 	},
 	deptSelector: {
 		title: '切换部门',

@@ -30,7 +30,6 @@ export default {
 		accountPlaceholder2: '请输入密码',
 		accountPlaceholder3: '请输入验证码',
 		phonePlaceholder4: '请输入手机号',
-		tenantPlaceholder: '请选择租户',
 		accountBtnText: '登 录',
 		resetBtnText: '重 置',
 		registerBtnText: '注 册',
@@ -84,8 +83,6 @@ export default {
 		passwordMismatch: '两次输入的密码不一致',
 		registerSuccess: '注册成功',
 		// 校验与提示
-		tenantEmpty: '请选择租户',
-		tenantLoadError: '获取租户列表失败',
 		usernameEmpty: '用户名不能为空',
 		usernameLength: '用户名称长度必须介于 5 和 20 之间',
 		phoneEmpty: '手机号不能为空',
@@ -168,17 +165,6 @@ export default {
 		wechatDesc: '使用微信扫码登录',
 		bindSuccess: '社交账号绑定成功',
 		missingParams: '缺少必要参数: code 或 state',
-	},
-
-	// 租户选择
-	tenant: {
-		placeholder: '请选择租户',
-		noData: '暂无租户数据',
-		loadError: '加载租户列表失败',
-	},
-	tenantSelect: {
-		select: '选择租户',
-		loadError: '获取租户列表失败',
 	},
 
 	// 控制组件

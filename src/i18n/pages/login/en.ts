@@ -34,7 +34,6 @@ export default {
 		accountPlaceholder2: 'Please enter password',
 		accountPlaceholder3: 'Please enter the verification code',
 		phonePlaceholder4: 'Please enter your phone number',
-		tenantPlaceholder: 'Please select tenant',
 		accountBtnText: 'Sign In',
 		resetBtnText: 'Reset',
 		registerBtnText: 'Create account',
@@ -87,8 +86,6 @@ export default {
 		backToLogin: 'Back to Login',
 		passwordMismatch: 'Passwords do not match',
 		registerSuccess: 'Registration successful',
-		tenantEmpty: 'Please select a tenant',
-		tenantLoadError: 'Failed to load tenant list',
 		usernameEmpty: 'Username cannot be empty',
 		usernameLength: 'Username length must be between 5 and 20 characters',
 		phoneEmpty: 'Phone number cannot be empty',
@@ -171,19 +168,6 @@ export default {
 		wechatDesc: 'Scan with WeChat app',
 		bindSuccess: 'Social account bound successfully',
 		missingParams: 'Missing required parameters: code or state',
-	},
-
-	// Tenant selection texts
-	tenant: {
-		placeholder: 'Please select tenant',
-		noData: 'No tenant data available',
-		loadError: 'Failed to load tenant list'
-	},
-
-	// Tenant select component texts
-	tenantSelect: {
-		select: 'Select Tenant',
-		loadError: 'Failed to get tenant list',
 	},
 
 	// Control component texts
