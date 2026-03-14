@@ -78,10 +78,10 @@ let remoteI18nLoadedKey = '';
 
 /**
  * 获取当前加载状态的唯一标识
- * @returns 租户ID和Token组合的字符串
+ * @returns Token字符串
  */
 function getCurrentLoadedKey() {
-    return `${Session.getTenant()}:${Session.getToken() || ''}`;
+    return Session.getToken() || '';
 }
 
 /**
@@ -89,21 +89,21 @@ function getCurrentLoadedKey() {
  * 使用 useMemoize 避免重复请求，相同参数只执行一次
  */
 const ensureRemoteI18nTask = useMemoize(
-    async (tenantId: string | number, token: string, retry: number) => {
-        const loadedKey = `${tenantId}:${token}`;
+    async (token: string, retry: number) => {
+        const loadedKey = token;
         if (getCurrentLoadedKey() !== loadedKey) return false;
 
         // 优先从本地缓存加载，避免白屏
-        loadRemoteMessagesFromCache(tenantId);
+        loadRemoteMessagesFromCache();
 
         // 重试机制：指数退避策略
         for (let attempt = 0; attempt <= retry; attempt++) {
             try {
                 const messageLocal = await fetchRemoteI18nMessages();
                 // 持久化到本地存储
-                Local.set(getRemoteCacheKey(tenantId), messageLocal);
+                Local.set(getRemoteCacheKey(), messageLocal);
 
-                // 二次校验：防止加载期间用户切换账号/租户
+                // 二次校验：防止加载期间用户切换账号
                 if (getCurrentLoadedKey() === loadedKey) {
                     mergeRemoteMessages(messageLocal);
                     i18n.global.locale.value = themeConfig.value.globalI18n;
@@ -118,20 +118,19 @@ const ensureRemoteI18nTask = useMemoize(
         }
 
         // 所有重试失败，清除缓存以便下次重新尝试
-        ensureRemoteI18nTask.delete(tenantId, token, retry);
+        ensureRemoteI18nTask.delete(token, retry);
         return false;
     },
     {
-        getKey: (tenantId, token, retry) => `${tenantId}:${token}:${retry}`,
+        getKey: (token, retry) => `${token}:${retry}`,
     }
 );
 
 /**
  * 生成远程 i18n 缓存的存储 key
- * @param tenantId 租户ID
  */
-function getRemoteCacheKey(tenantId: string | number) {
-    return `${I18N_REMOTE_CACHE_PREFIX}${tenantId}`;
+function getRemoteCacheKey() {
+    return I18N_REMOTE_CACHE_PREFIX;
 }
 
 /**
@@ -147,11 +146,10 @@ function mergeRemoteMessages(messageLocal: Record<string, any>) {
 
 /**
  * 从本地存储加载远程 i18n 缓存
- * @param tenantId 租户ID，默认当前租户
  * @returns 是否成功加载
  */
-function loadRemoteMessagesFromCache(tenantId: string | number = Session.getTenant()) {
-    const cached = Local.get(getRemoteCacheKey(tenantId));
+function loadRemoteMessagesFromCache() {
+    const cached = Local.get(getRemoteCacheKey());
     if (!cached) return false;
     mergeRemoteMessages(cached);
     return true;
@@ -193,12 +191,10 @@ async function fetchRemoteI18nMessages() {
  * @description 动态菜单渲染前调用，避免出现 router.xxx 之类的 key
  */
 export async function ensureRemoteI18nLoaded(options: { force?: boolean; retry?: number } = {}) {
-    const tenantId = Session.getTenant();
     const token = Session.getToken() || '';
-    const loadedKey = `${tenantId}:${token}`;
-    if (!options.force && remoteI18nLoadedKey === loadedKey) return true;
+    if (!options.force && remoteI18nLoadedKey === token) return true;
 
     const retry = Math.max(0, options.retry ?? 1);
-    if (options.force) ensureRemoteI18nTask.delete(tenantId, token, retry);
-    return ensureRemoteI18nTask(tenantId, token, retry);
+    if (options.force) ensureRemoteI18nTask.delete(token, retry);
+    return ensureRemoteI18nTask(token, retry);
 }
