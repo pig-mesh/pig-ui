@@ -38,8 +38,6 @@ declare interface UserInfosState<T = any> {
 		deptList: DeptItem[];
 		time: number;
 		userName: string;
-		tenantId: string;
-		tenantName: string;
 		[key: string]: T;
 	};
 }
