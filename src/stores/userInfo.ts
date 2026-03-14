@@ -2,7 +2,6 @@ import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
 import Cookies from 'js-cookie';
-import { useThemeConfig } from './themeConfig';
 
 /**
  * @function useUserInfo
@@ -16,8 +15,6 @@ export const useUserInfo = defineStore('userInfo', {
 			time: 0,
 			roles: [],
 			authBtnList: [],
-			tenantId: '',
-			tenantName: '',
 			deptId: '',
 			deptName: '',
 			deptList: [],
@@ -129,48 +126,21 @@ export const useUserInfo = defineStore('userInfo', {
 		async setUserInfos() {
 			await getUserInfo().then((res) => {
 				// 解构后台返回数据
-				const { deptList = [], deptId, roleList, permissions, tenantId, tenantName = '' } = res.data;
+				const { deptList = [], deptId, roleList, permissions } = res.data;
 
 				const userInfo: any = {
 					user: res.data,
 					time: new Date().getTime(),
 					roles: roleList,
 					authBtnList: permissions,
-					tenantId,
-					tenantName,
 					deptId: deptId || '',
 					deptList
 				};
 				this.userInfos = userInfo;
 
-				//设置租户
-				this.updateTenantInfo(tenantId, tenantName);
-
 				//设置部门（使用主部门）
 				this.updateDeptInfo(deptId);
 			});
-		},
-
-		/**
-		 * 更新租户信息方法（只负责状态和存储，主题由 useTenant 处理）
-		 * @function updateTenantInfo
-		 * @param {string} tenantId - 租户ID
-		 * @param {string} tenantName - 租户名称
-		 */
-		updateTenantInfo(tenantId: string, tenantName: string) {
-			// 更新 store 状态
-			this.userInfos.tenantId = tenantId;
-			this.userInfos.tenantName = tenantName;
-
-			// 保存租户信息到本地存储（Session/Local/Cookies 三端同步）
-			Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
-			Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
-			Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
-
-			// 更新主题配置中的租户信息
-			const storesThemeConfig = useThemeConfig();
-			const { themeConfig } = storeToRefs(storesThemeConfig);
-			themeConfig.value.globalTitle = tenantName || import.meta.env.VITE_GLOBAL_TITLE;
 		},
 
 		/**
