@@ -54,6 +54,9 @@ export default {
 		paramsTip: '参考短信模板参数配置',
 		paramsRequired: '参数不能为空',
 		mobileRequired: '手机号不能为空',
+		inputCaptchaTip: '请输入验证码',
+		captchaRequired: '验证码不能为空',
 		sendSuccess: '发送成功',
+		sendFailed: '发送失败',
 	},
 };

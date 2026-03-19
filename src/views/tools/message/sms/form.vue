@@ -30,7 +30,7 @@
 			</el-form-item>
 			<el-form-item :label="t('sms.configStatus')" prop="configStatus">
 				<el-radio-group v-model="form.configStatus">
-					<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{ item.label }} </el-radio>
+					<el-radio :key="index" :value="item.value" border v-for="(item, index) in yes_no_type">{{ item.label }} </el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item prop="configValue.extParams">

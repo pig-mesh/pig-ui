@@ -1,4 +1,5 @@
 import request from '/@/utils/request';
+import { sendMobileCode, type SendMobileCodeParams } from '/@/api/login';
 
 export function fetchUserMessageReadList(query?: Object) {
 	return request({
@@ -8,12 +9,8 @@ export function fetchUserMessageReadList(query?: Object) {
 	});
 }
 
-export const sendMobileInnerCode = (mobile: string) => {
-	return request({
-		url: '/admin/sysMessage/send/smsCode',
-		method: 'get',
-		params: { mobile, registered: false },
-	});
+export const sendMobileInnerCode = (params: Omit<SendMobileCodeParams, 'registered'>) => {
+	return sendMobileCode({ ...params, registered: false });
 };
 
 export function readUserMessage(params?: object) {

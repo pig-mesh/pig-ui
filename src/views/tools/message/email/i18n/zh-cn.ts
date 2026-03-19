@@ -46,6 +46,9 @@ export default {
 		paramsRequired: '参数不能为空',
 		subjectRequired: '标题不能为空',
 		recipientRequired: '收件人不能为空',
+		inputCaptchaTip: '请输入验证码',
+		captchaRequired: '验证码不能为空',
 		sendSuccess: '发送成功',
+		sendFailed: '发送失败',
 	},
 };

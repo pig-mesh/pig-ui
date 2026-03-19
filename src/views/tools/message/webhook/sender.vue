@@ -30,8 +30,8 @@
 			</el-form-item>
 			<el-form-item :label="t('webhook.noticeAll')" prop="noticeAll">
 				<el-radio-group v-model="form.noticeAll">
-					<el-radio label="true" border>{{ $t('common.yes') }}</el-radio>
-					<el-radio label="false" border>{{ $t('common.no') }}</el-radio>
+					<el-radio value="true" border>{{ $t('common.yes') }}</el-radio>
+					<el-radio value="false" border>{{ $t('common.no') }}</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item :label="t('webhook.phones')" prop="phones" v-if="form.noticeAll === 'false'">

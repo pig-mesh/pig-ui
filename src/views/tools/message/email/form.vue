@@ -30,7 +30,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('email.isSSL')" prop="configValue.isSSL">
 						<el-radio-group v-model="form.configValue.isSSL">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in yes_no_type">{{
 								item.label
 							}}</el-radio>
 						</el-radio-group>
@@ -55,7 +55,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('email.isAuth')" prop="configValue.isAuth">
 						<el-radio-group v-model="form.configValue.isAuth">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in yes_no_type">{{
 								item.label
 							}}</el-radio>
 						</el-radio-group>
@@ -64,7 +64,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('email.configStatus')" prop="configStatus">
 						<el-radio-group v-model="form.configStatus">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in yes_no_type">{{
 								item.label
 							}}</el-radio>
 						</el-radio-group>

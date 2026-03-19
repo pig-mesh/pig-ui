@@ -41,6 +41,14 @@
 			</span>
 		</template>
 	</el-drawer>
+
+	<MathCaptcha
+		ref="mathRef"
+		:placeholder="t('email.inputCaptchaTip')"
+		:emptyMessage="t('email.captchaRequired')"
+		:loading="loading"
+		@success="handleCaptchaSuccess"
+	/>
 </template>
 
 <script setup lang="ts" name="EmailSenderDialog">
@@ -49,11 +57,15 @@ import JsonEditor from '@axolo/json-editor-vue';
 import { useMessage } from '/@/hooks/message';
 import { getObj } from '/@/api/admin/config';
 import { sendEmail } from '/@/api/admin/message';
+import { CaptchaType } from '/@/stores/siteConfig';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
+const MathCaptcha = defineAsyncComponent(() => import('/@/components/Verifition/MathCaptcha.vue'));
+
 const { t } = useI18n();
 const dataFormRef = ref();
+const mathRef = ref();
 const visible = ref(false);
 const loading = ref(false);
 const fileType = ref(['jpeg', 'png', 'jpg', 'gif', 'md', 'doc', 'xls', 'ppt', 'txt', 'pdf', 'docx', 'xlsx', 'pptx', 'zip', 'rar']);
@@ -105,14 +117,29 @@ const onSubmit = async (): Promise<void> => {
 	const valid = await dataFormRef?.value.validate().catch(() => {});
 	if (!valid) return;
 
+	mathRef.value?.show();
+};
+
+const handleCaptchaSuccess = async (params: { captchaVerification: string }): Promise<void> => {
 	try {
 		loading.value = true;
 		form.htmlValues = JSON.parse(form.params);
-		await sendEmail(form);
+		const { msg, ok } = await sendEmail({
+			...form,
+			captchaType: CaptchaType.Math,
+			captchaVerification: params.captchaVerification,
+		});
+		if (!ok) {
+			useMessage().error(msg || t('email.sendFailed'));
+			mathRef.value?.refresh();
+			return;
+		}
 		useMessage().success(t('email.sendSuccess'));
+		mathRef.value?.close();
 		visible.value = false;
 	} catch (err: any) {
 		useMessage().error(err.msg);
+		mathRef.value?.refresh();
 	} finally {
 		form.params = JSON.stringify(form.htmlValues);
 		loading.value = false;

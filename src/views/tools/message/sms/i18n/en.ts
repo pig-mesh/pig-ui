@@ -54,6 +54,9 @@ export default {
 		paramsTip: 'Refer to SMS template parameter configuration',
 		paramsRequired: 'Parameters are required',
 		mobileRequired: 'Mobile number is required',
+		inputCaptchaTip: 'Please enter captcha',
+		captchaRequired: 'Captcha is required',
 		sendSuccess: 'Sent successfully',
+		sendFailed: 'Failed to send',
 	},
 };

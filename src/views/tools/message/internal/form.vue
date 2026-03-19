@@ -5,7 +5,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('internal.category')" prop="category">
 						<el-radio-group v-model="form.category">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in message_type">{{ item.label }} </el-radio>
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in message_type">{{ item.label }} </el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
@@ -13,7 +13,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('internal.allFlag')" prop="allFlag">
 						<el-radio-group v-model="form.allFlag">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in yes_no_type">{{ item.label }} </el-radio>
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in yes_no_type">{{ item.label }} </el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>

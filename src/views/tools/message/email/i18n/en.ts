@@ -46,6 +46,9 @@ export default {
 		paramsRequired: 'Parameters are required',
 		subjectRequired: 'Subject is required',
 		recipientRequired: 'Recipient is required',
+		inputCaptchaTip: 'Please enter captcha',
+		captchaRequired: 'Captcha is required',
 		sendSuccess: 'Sent successfully',
+		sendFailed: 'Failed to send',
 	},
 };
