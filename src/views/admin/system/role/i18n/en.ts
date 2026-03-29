@@ -17,6 +17,7 @@ export default {
 		please_select: 'Please select',
 		importRoleTip: 'Import Role',
 		assignPermission: 'Assign Permission',
+		homePage: 'Home Page',
 		update: 'Update',
 		cancel: 'Cancel',
 		// Form validation
@@ -43,5 +44,17 @@ export default {
 		roleNameExists: 'Role name already exists',
 		// Permission assignment
 		assignPermissionMenu: 'Assign Permission',
+		// Cache refresh
+		refreshCache: 'Refresh Cache',
+		refreshCacheSuccess: 'Cache refreshed successfully',
+		refreshCacheError: 'Failed to refresh cache',
+		// Home widget configuration (widget.vue)
+		widget: {
+			drawerTitle: 'Home Configuration for Role "{name}"',
+			availableComponents: 'Available Components',
+			searchPlaceholder: 'Search components...',
+			loadError: 'Failed to load configuration',
+			resetDefault: 'Reset default'
+		},
 	},
 };

@@ -17,6 +17,7 @@ export default {
 		please_select: '请选择',
 		importRoleTip: '导入角色',
 		assignPermission: '分配权限',
+		homePage: '首页',
 		update: '更新',
 		cancel: '取 消',
 		// 表单验证
@@ -43,5 +44,17 @@ export default {
 		roleNameExists: '角色名称已经存在',
 		// 权限分配
 		assignPermissionMenu: '分配权限',
+		// 缓存刷新
+		refreshCache: '刷新缓存',
+		refreshCacheSuccess: '缓存刷新成功',
+		refreshCacheError: '缓存刷新失败',
+		// 首页组件配置（widget.vue）
+		widget: {
+			drawerTitle: '角色「{name}」的首页配置',
+			availableComponents: '可用组件',
+			searchPlaceholder: '搜索组件...',
+			loadError: '加载配置失败',
+			resetDefault: '重置为默认'
+		},
 	},
 };

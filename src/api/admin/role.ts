@@ -109,3 +109,25 @@ export function validateRoleName(rule: any, value: any, callback: any, isEdit: b
 		}
 	});
 }
+
+export const getRoleWidget = (roleId: string | number) => {
+	return request({
+		url: `/admin/role/widget/${roleId}`,
+		method: 'get',
+	});
+};
+
+export const getCurrentUserWidget = () => {
+	return request({
+		url: '/admin/role/widget/current',
+		method: 'get',
+	});
+};
+
+export const saveRoleWidget = (data: { roleId: number | string; widgetKeys: string; layoutConfig: string }) => {
+	return request({
+		url: '/admin/role/widget',
+		method: 'put',
+		data,
+	});
+};

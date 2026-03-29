@@ -1,16 +1,32 @@
 <template>
 	<div class="system-role-dialog-container">
-		<el-dialog width="30%" v-model="state.dialog.isShowDialog" :close-on-click-modal="false" draggable>
+		<el-dialog
+			v-model="state.dialog.isShowDialog"
+			:close-on-click-modal="false"
+			draggable
+			class="!w-[90vw] sm:!w-[480px] md:!w-[520px] !max-w-[600px]"
+		>
 			<template #header>
-				<div class="flex justify-between items-center">
-					<div>{{ state.dialog.title }}</div>
-					<div class="flex mr-16">
-						<el-checkbox :label="$t('common.expand')" @change="handleExpand" />
-						<el-checkbox :label="$t('common.selectAll')" @change="handleSelectAll" />
+				<div class="flex flex-col gap-3 pr-4 sm:flex-row sm:items-center">
+					<div class="text-base font-medium">{{ state.dialog.title }}</div>
+					<div class="flex flex-wrap items-center gap-2">
+						<el-checkbox :label="$t('common.expand')" @change="handleExpand" size="small" />
+						<el-checkbox :label="$t('common.selectAll')" @change="handleSelectAll" size="small" />
+						<el-button
+							link
+							v-auth="'sys_role_edit'"
+							size="small"
+							class="ml-3"
+							:loading="cacheLoading"
+							@click="handleClearCache"
+						>
+							{{ $t('sysrole.refreshCache') }}
+						</el-button>
 					</div>
 				</div>
 			</template>
-			<el-scrollbar class="h-[400px] sm:h-[600px]">
+
+			<div class="min-h-[300px] max-h-[60vh] overflow-y-auto px-1">
 				<el-tree
 					v-loading="loading"
 					ref="menuTree"
@@ -23,12 +39,17 @@
 					highlight-current
 					show-checkbox
 				/>
-			</el-scrollbar>
+			</div>
+
 			<template #footer>
-				<span class="dialog-footer">
-					<el-button @click="state.dialog.isShowDialog = false">{{ $t('common.cancelButtonText') }}</el-button>
-					<el-button type="primary" @click="onSubmit">{{ state.dialog.submitTxt }}</el-button>
-				</span>
+				<div class="flex justify-end gap-3">
+					<el-button @click="state.dialog.isShowDialog = false">
+						{{ $t('common.cancelButtonText') }}
+					</el-button>
+					<el-button type="primary" @click="onSubmit">
+						{{ state.dialog.submitTxt }}
+					</el-button>
+				</div>
 			</template>
 		</el-dialog>
 	</div>
@@ -36,7 +57,7 @@
 
 <script setup lang="ts" name="role-permession">
 import { fetchRoleTree, permissionUpd } from '/@/api/admin/role';
-import { pageList } from '/@/api/admin/menu';
+import { pageList, clearMenuCache } from '/@/api/admin/menu';
 import { useMessage } from '/@/hooks/message';
 import { Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
@@ -53,6 +74,9 @@ const checkStrictly = ref(true);
 
 /** 加载状态 */
 const loading = ref(false);
+
+/** 刷新缓存加载状态 */
+const cacheLoading = ref(false);
 
 /**
  * 组件状态
@@ -185,6 +209,21 @@ const onSubmit = async () => {
 		useMessage().error(err.msg || t('sysrole.permissionUpdateError'));
 	} finally {
 		loading.value = false;
+	}
+};
+
+/**
+ * 刷新角色缓存
+ */
+const handleClearCache = async () => {
+	cacheLoading.value = true;
+	try {
+		await clearMenuCache(state.roleId);
+		useMessage().success(t('sysrole.refreshCacheSuccess'));
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysrole.refreshCacheError'));
+	} finally {
+		cacheLoading.value = false;
 	}
 };
 

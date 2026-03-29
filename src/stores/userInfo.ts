@@ -2,7 +2,6 @@ import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
 import Cookies from 'js-cookie';
-import { useThemeConfig } from './themeConfig';
 
 /**
  * @function useUserInfo
@@ -166,11 +165,6 @@ export const useUserInfo = defineStore('userInfo', {
 			Session.set(STORAGE_KEYS.TENANT_ID, tenantId);
 			Local.set(STORAGE_KEYS.TENANT_ID, tenantId);
 			Cookies.set(STORAGE_KEYS.TENANT_ID, tenantId);
-
-			// 更新主题配置中的租户信息
-			const storesThemeConfig = useThemeConfig();
-			const { themeConfig } = storeToRefs(storesThemeConfig);
-			themeConfig.value.globalTitle = tenantName || import.meta.env.VITE_GLOBAL_TITLE;
 		},
 
 		/**
