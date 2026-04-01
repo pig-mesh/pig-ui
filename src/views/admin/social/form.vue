@@ -88,8 +88,8 @@ const dataRules = ref({
 		{ validator: rule.url, trigger: 'blur' },
 	],
 	appSecret: [
-		{ validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: t('social.appSecretRequired'), trigger: 'blur' },
+		{ max: 1024, message: '输入内容过长，请重新输入', trigger: 'blur' },
 	],
 });
 

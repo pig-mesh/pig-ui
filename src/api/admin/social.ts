@@ -39,7 +39,7 @@ export function putObj(obj?: Object) {
 	});
 }
 
-export function getLoginAppList(id?: string) {
+export function getLoginAppList() {
 	return request({
 		url: '/admin/social/getLoginAppList',
 		method: 'get',
