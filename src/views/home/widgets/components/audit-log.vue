@@ -8,7 +8,7 @@ export default {
 <template>
 	<el-card class="box-card h-96">
 		<template #header>
-			<div class="flex justify-between items-center">
+			<div class="flex items-center justify-between">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.auditLogsTip') }}</span>
 				<el-button text class="button" @click="handleRoutr">
 					{{ $t('home.moreTip') }}
@@ -26,7 +26,7 @@ export default {
 							{{ item.auditField }} {{ item.afterVal }} → {{ item.beforeVal }}
 						</p>
 					</div>
-					<span class="text-xs text-gray-400 flex-shrink-0 whitespace-nowrap">{{ item.createTime }}</span>
+					<span class="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">{{ item.createTime }}</span>
 				</div>
 			</div>
 		</div>
@@ -37,11 +37,13 @@ export default {
 <script setup lang="ts" name="SysAuditLogDashboard">
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { fetchList } from '/@/api/admin/audit';
+import { auth } from '/@/utils/authFunction';
 
 const router = useRouter();
 
 // 创建基本表格参数对象
 const auditState: BasicTableProps = reactive({
+	createdIsNeed: auth('sys_audit_view'),
 	queryForm: {},
 	pageList: fetchList,
 	descs: ['create_time'],

@@ -19,9 +19,9 @@
           {{ textConfig.description }}
         </p>
         <div class="mt-3">
-          <a 
-            :href="textConfig.linkUrl" 
-            target="_blank" 
+          <a
+            :href="textConfig.linkUrl"
+            target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center gap-1 text-xs text-[var(--el-color-primary)] hover:text-[var(--el-color-primary-light-3)] transition-colors duration-200"
           >
@@ -32,7 +32,7 @@
       </div>
     </div>
     <template #footer>
-      <div class="flex justify-between items-center gap-4">
+      <div class="flex items-center justify-between gap-4">
         <el-checkbox v-model="dontShowAgain">
           {{ textConfig.dontShowAgain }}
         </el-checkbox>
@@ -66,7 +66,7 @@ const emit = defineEmits<Emits>()
 const textConfig = {
   title: '演示环境说明',
   description: '当前环境仅供演示，新增、编辑、删除等操作受限。如需完整功能体验，建议本地部署私有化版本。',
-  linkUrl: 'https://docs.pig4cloud.com/ai#/test',
+  linkUrl: 'https://docs.pig4cloud.com/',
   linkText: '查看部署文档',
   dontShowAgain: '不再提醒',
   confirmButton: '我知道了'
@@ -87,4 +87,3 @@ const handleConfirm = () => {
   emit('confirm')
 }
 </script>
-

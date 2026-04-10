@@ -8,7 +8,7 @@ export default {
 <template>
 	<el-card class="h-96 box-card">
 		<template #header>
-			<div class="flex justify-between items-center">
+			<div class="flex items-center justify-between">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.systemLogsTip') }}</span>
 				<el-button text class="button" @click="handleRoutr">
 					{{ $t('home.moreTip') }}
@@ -24,7 +24,7 @@ export default {
 						<p class="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{{ item.title }}</p>
 						<p class="text-xs text-gray-400 mt-0.5">{{ item.remoteAddr }}</p>
 					</div>
-					<span class="text-xs text-gray-400 flex-shrink-0 whitespace-nowrap">{{ item.createTime }}</span>
+					<span class="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">{{ item.createTime }}</span>
 				</div>
 			</div>
 		</div>
@@ -35,11 +35,13 @@ export default {
 <script setup lang="ts" name="SysLogDashboard">
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { pageList } from '/@/api/admin/log';
+import { auth } from '/@/utils/authFunction';
 
 const router = useRouter();
 
 // 创建基本表格参数对象
 const logState: BasicTableProps = reactive({
+	createdIsNeed: auth('sys_log_view'),
 	dataList: [], // Explicitly initialize dataList
 	pageList, // 分页列表数据
 	descs: ['create_time'], // 排序方式

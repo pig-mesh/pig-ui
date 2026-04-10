@@ -6,6 +6,7 @@ export default {
 		quickNavigationFlowsTip: 'quick flow bar',
 		systemLogsTip: 'system logs',
 		auditLogsTip: 'audit logs',
+		requestLineChartTip: 'Request line chart',
 		moreTip: 'more',
 		newsletterTip: 'news letter',
 		pendingTask: 'pending task✍️',

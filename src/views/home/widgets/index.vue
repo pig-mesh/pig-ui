@@ -5,7 +5,7 @@
 	<div>
 		<div :class="['flex flex-row flex-1 h-full', customizing ? 'customizing' : '']" ref="main">
 			<div class="flex-1 overflow-auto overflow-x-hidden p-[3px]">
-				<div class="flex justify-between items-center">
+				<div class="flex items-center justify-between">
 					<div class="flex justify-end custom_btn">
 						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
 						<el-button v-else type="primary" round @click="custom">{{ t('home.widgets.customize') }}</el-button>
@@ -27,7 +27,7 @@
 									dragClass="aaaaa"
 									force-fallback
 									fallbackOnBody
-									class="draggable-box h-full w-full"
+									class="w-full h-full draggable-box"
 								>
 									<template #item="{ element }">
 										<div class="widgets-item">
@@ -52,7 +52,7 @@
 			<div v-if="customizing" class="widgets-aside">
 				<el-container>
 					<el-header>
-						<div class="text-sm flex items-center justify-center">{{ t('home.widgets.addWidget') }}</div>
+						<div class="flex items-center justify-center text-sm">{{ t('home.widgets.addWidget') }}</div>
 						<div class="text-lg w-[30px] h-[30px] flex items-center justify-center rounded-lg cursor-pointer transition-colors hover:bg-black/5" @click="close()">
 							<el-icon><Close /></el-icon>
 						</div>
@@ -119,6 +119,8 @@ import { Local } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
 import { useI18n } from 'vue-i18n';
 import type { Component } from 'vue';
+import { useToggle } from '@vueuse/core';
+import { getCurrentUserWidget } from '/@/api/admin/role';
 
 interface WidgetComponent {
 	title: string;
@@ -141,12 +143,39 @@ const defaultGrid = ref({
 	layout: [7, 7, 10],
 	copmsList: [
 		['current-user', 'flow-data', 'audit-log', 'sys-log-line'],
-		['news', 'sys-log', 'demo-chart1'],
-		['calendar', 'favorite-menu', 'favorite-flow', 'demo-chart2'],
+		['news', 'sys-log', 'device-distribution'],
+		['calendar', 'favorite-menu', 'favorite-flow', 'popular-pages'],
 	],
 });
 
-const customizing = ref(false);
+const roleDefaultGrid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
+const allowedWidgetKeys = ref<Set<string> | null>(null);
+
+const loadRoleDefaultGrid = async (): Promise<boolean> => {
+	try {
+		const res = await getCurrentUserWidget();
+		const config = res?.data;
+		if (!config) return true; // API 成功但无数据，视为成功
+
+		const allowedKeys = new Set<string>(config.widgetKeys.split(',').filter(Boolean));
+
+		if (config.layoutConfig) {
+			const layout = JSON.parse(config.layoutConfig);
+			// 过滤掉不在允许列表中的组件
+			layout.copmsList = layout.copmsList.map((col: string[]) =>
+				col.filter((key: string) => allowedKeys.has(key))
+			);
+			roleDefaultGrid.value = layout;
+		}
+		allowedWidgetKeys.value = allowedKeys;
+		return true;
+	} catch {
+		// 加载失败时保留默认布局
+		return false;
+	}
+};
+
+const [customizing, toggleCustomizing] = useToggle(false);
 const widgets = ref();
 const widgetsKey = ref('widgets');
 const grid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
@@ -167,26 +196,33 @@ const allCompsList = computed(() => {
 });
 
 const myCompsList = computed(() => {
-	const myGrid = [
-		'calendar',
-		'current-user',
-		'news',
-		'audit-log',
-		'sys-log',
-		'flow-data',
-		'favorite-menu',
-		'favorite-flow',
-		'sys-log-line',
-		'demo-chart1',
-		'demo-chart2',
-	];
-	return allCompsList.value.filter((item: WidgetListItem) => !item.disabled && myGrid.includes(item.key));
+	return allCompsList.value.filter((item: WidgetListItem) => {
+		if (item.disabled) return false;
+		if (allowedWidgetKeys.value !== null) {
+			return allowedWidgetKeys.value.has(item.key);
+		}
+		// fallback：无角色配置时显示全部组件
+		const defaultKeys = [
+			'calendar',
+			'current-user',
+			'news',
+			'audit-log',
+			'sys-log',
+			'flow-data',
+			'favorite-menu',
+			'favorite-flow',
+			'sys-log-line',
+			'device-distribution',
+			'popular-pages',
+		];
+		return defaultKeys.includes(item.key);
+	});
 });
 
 const nowCompsList = computed(() => grid.value.copmsList.flat());
 
 const custom = (): void => {
-	customizing.value = true;
+	toggleCustomizing(true);
 };
 
 const setLayout = (layout: Array<number>): void => {
@@ -212,26 +248,53 @@ const remove = (itemKey: string): void => {
 };
 
 const save = (): void => {
-	customizing.value = false;
+	toggleCustomizing(false);
 	Local.set(widgetsKey.value, JSON.stringify(grid.value));
 };
 
 const backDefaul = (): void => {
-	customizing.value = false;
-	grid.value = defaultGrid.value;
-	Local.remove(widgetsKey.value);
+	toggleCustomizing(false);
+	grid.value = JSON.parse(JSON.stringify(roleDefaultGrid.value));
 	window.location.reload();
 };
 
 const close = (): void => {
-	customizing.value = false;
+	toggleCustomizing(false);
 };
 
-onMounted(() => {
+onMounted(async () => {
 	const data = useUserInfo().userInfos;
 	widgetsKey.value = `${window.location.host}-${data.user.userId}-widgets`;
-	const savedGrid = Local.get(widgetsKey.value);
-	grid.value = savedGrid ? JSON.parse(savedGrid) : defaultGrid.value;
+
+	// roleLoaded 标记 API 是否成功返回（区分"未初始化"与"加载失败"）
+	const roleLoaded = await loadRoleDefaultGrid();
+
+	const saved = Local.get(widgetsKey.value);
+	if (saved) {
+		try {
+			const local = JSON.parse(saved);
+			if (Array.isArray(local?.copmsList)) {
+				const localKeys: string[] = local.copmsList.flat();
+				// 完全一致校验：本地 key 集合与后台允许列表数量相同且完全匹配
+				// 后台新增/删除组件时，强制重置为后台配置
+				// API 失败时（roleLoaded=false）拒绝使用本地配置
+				const allowed = allowedWidgetKeys.value;
+				const allAllowed =
+					roleLoaded &&
+					allowed !== null &&
+					localKeys.length === allowed.size &&
+					localKeys.every((k) => allowed.has(k));
+				if (allAllowed) {
+					grid.value = local;
+					return;
+				}
+			}
+		} catch {
+			// 本地存储数据损坏，忽略并使用后台角色配置
+		}
+	}
+	// 本地配置不合法或不存在，使用后台角色配置
+	grid.value = JSON.parse(JSON.stringify(roleDefaultGrid.value));
 });
 </script>
 <style scoped lang="scss">
