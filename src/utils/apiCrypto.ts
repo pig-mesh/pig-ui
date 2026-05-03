@@ -1,8 +1,27 @@
 import other from './other';
+import { sm4 } from 'sm-crypto';
 
 // 从环境变量获取加密密钥
 const ENCRYPTION_KEY = import.meta.env.VITE_PWD_ENC_KEY;
-const ENCRYPTION_ENABLED = import.meta.env.VITE_API_ENC_ENABLED === 'true';
+const SM4_ENCRYPTION_KEY = import.meta.env.VITE_SM4_ENC_KEY;
+const USE_SM4 = Boolean(SM4_ENCRYPTION_KEY);
+const ENCRYPTION_ENABLED = USE_SM4 || import.meta.env.VITE_API_ENC_ENABLED === 'true';
+
+const encryptByType = (data: string): string => {
+	if (USE_SM4) {
+		return sm4.encrypt(data, SM4_ENCRYPTION_KEY);
+	}
+
+	return other.encryption(data, ENCRYPTION_KEY);
+};
+
+const decryptByType = (encryptedData: string): string => {
+	if (USE_SM4) {
+		return sm4.decrypt(encryptedData, SM4_ENCRYPTION_KEY);
+	}
+
+	return other.decryption(encryptedData, ENCRYPTION_KEY);
+};
 
 /**
  * 使用指定密钥加密数据
@@ -18,7 +37,7 @@ export function encrypt(data: any): string {
 		data = JSON.stringify(data);
 	}
 
-	return other.encryption(data, ENCRYPTION_KEY);
+	return encryptByType(data);
 }
 
 /**
@@ -30,7 +49,7 @@ export function decrypt(encryptedData: string): any {
 	if (!encryptedData) return null;
 	if (!ENCRYPTION_ENABLED) return encryptedData;
 
-	const decrypted = other.decryption(encryptedData, ENCRYPTION_KEY);
+	const decrypted = decryptByType(encryptedData);
 	try {
 		return JSON.parse(decrypted);
 	} catch {
@@ -45,13 +64,14 @@ export function decrypt(encryptedData: string): any {
  */
 export function encryptRequestParams(params: Record<string, any>): Record<string, string> {
 	if (!ENCRYPTION_ENABLED) return params;
-	
+
 	const encryptedParams: Record<string, string> = {};
 	for (const [paramKey, value] of Object.entries(params)) {
-		if (value != null) {
-			const stringValue = value.toString();
-			encryptedParams[paramKey] = ENCRYPTION_ENABLED ? encodeURIComponent(encrypt(stringValue)) : encodeURIComponent(stringValue);
-		}
+		if (value === null || value === undefined || value === '') continue;
+		if (Array.isArray(value) && value.length === 0) continue;
+
+		const stringValue = value.toString();
+		encryptedParams[paramKey] = encodeURIComponent(encrypt(stringValue));
 	}
 
 	return encryptedParams;
