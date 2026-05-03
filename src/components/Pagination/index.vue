@@ -5,29 +5,31 @@
 		class="mt15"
 		:pager-count="5"
 		:page-sizes="props.pageSizes"
-		:current-page="props.current"
+		:current-page="current"
 		background
-		:page-size="props.size"
+		:page-size="size"
 		:layout="props.layout"
-		:total="props.total"
+		:total="total"
 	>
 	</el-pagination>
 </template>
 
 <script setup lang="ts" name="pagination">
+import { useToNumber } from '@vueuse/core';
+
 const emit = defineEmits(['sizeChange', 'currentChange']);
 
 const props = defineProps({
 	current: {
-		type: Number,
+		type: [Number, String],
 		default: 1,
 	},
 	size: {
-		type: Number,
+		type: [Number, String],
 		default: 10,
 	},
 	total: {
-		type: Number,
+		type: [Number, String],
 		default: 0,
 	},
 	pageSizes: {
@@ -41,6 +43,11 @@ const props = defineProps({
 		default: 'total, sizes, prev, pager, next, jumper',
 	},
 });
+
+const current = useToNumber(() => props.current, { method: 'parseFloat', nanToZero: true });
+const size = useToNumber(() => props.size, { method: 'parseFloat', nanToZero: true });
+const total = useToNumber(() => props.total, { method: 'parseFloat', nanToZero: true });
+
 // 分页改变
 const sizeChangeHandle = (val: number) => {
 	emit('sizeChange', val);
