@@ -199,6 +199,7 @@ export default {
 	// Verification texts
 	verify: {
 		imageCode: 'Please enter verification code',
+		complete: 'Complete Verification',
 	},
 
 	// Validation messages

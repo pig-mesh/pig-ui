@@ -142,7 +142,7 @@ export default {
 	// 扫码登录
 	scan: {
 		text: '打开微信扫一扫，快速登录/注册',
-		wechatApp: '微信扫码体验移动端',
+		wechatApp: '扫码体验移动端',
 		appErrorTip: '应用未配置，登录失败',
 	},
 
@@ -194,6 +194,7 @@ export default {
 	// 校验
 	verify: {
 		imageCode: '请输入验证码',
+		complete: '完成验证',
 	},
 	validation: {
 		usernameFormat: '用户名支持小写英文、数字',

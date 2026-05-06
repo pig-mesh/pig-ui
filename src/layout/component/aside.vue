@@ -138,7 +138,7 @@ watch(
 		() => themeConfig.value.layout,
 		() => themeConfig.value.isClassicSplitMenu
 	],
-	([_routes, layout, isClassicSplitMenu]) => {
+		([, layout, isClassicSplitMenu]) => {
 		if (layout === 'classic' && isClassicSplitMenu) return;
 		setFilterRoutes();
 	}

@@ -13,27 +13,19 @@
 						}
 					"
 					:class="{ 'layout-columns-active': state.liIndex === k, 'layout-columns-hover': state.liHoverIndex === k }"
-					:title="$t(v.meta.title || v.name)"
+					:title="getColumnsAsideTitle(v)"
 				>
 					<div :class="themeConfig.columnsAsideLayout" v-if="!v.meta.isLink || (v.meta.isLink && v.meta.isIframe)">
 						<SvgIcon :name="v.meta.icon" />
-						<div class="columns-vertical-title font12">
-							{{
-								$t(v.meta.title || v.name) && $t(v.meta.title || v.name).length >= 4
-									? $t(v.meta.title).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
-									: $t(v.meta.title || v.name)
-							}}
+						<div class="columns-aside-title font12">
+							{{ getColumnsAsideTitle(v) }}
 						</div>
 					</div>
 					<div :class="themeConfig.columnsAsideLayout" v-else>
 						<a :href="v.meta.isLink" target="_blank">
 							<SvgIcon :name="v.meta.icon" />
-							<div class="columns-vertical-title font12">
-								{{
-									$t(v.meta.title) && $t(v.meta.title).length >= 4
-										? $t(v.meta.title).substr(0, themeConfig.columnsAsideLayout === 'columns-vertical' ? 4 : 3)
-										: $t(v.meta.title)
-								}}
+							<div class="columns-aside-title font12">
+								{{ getColumnsAsideTitle(v) }}
 							</div>
 						</a>
 					</div>
@@ -49,6 +41,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { useRoutesList } from '/@/stores/routesList';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import mittBus from '/@/utils/mitt';
+import { useI18n } from 'vue-i18n';
 
 const columnsAsideOffsetTopRefs = ref<RefType>([]);
 const columnsAsideActiveRef = ref();
@@ -56,6 +49,7 @@ const stores = useRoutesList();
 const storesThemeConfig = useThemeConfig();
 const { routesList, isColumnsMenuHover, isColumnsNavHover } = storeToRefs(stores);
 const { themeConfig } = storeToRefs(storesThemeConfig);
+const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const state = reactive<ColumnsAsideState>({
@@ -67,6 +61,11 @@ const state = reactive<ColumnsAsideState>({
 	difference: 0,
 	routeSplit: [],
 });
+
+const getColumnsAsideTitle = (item: RouteItem) => {
+	const title = item.meta?.title || item.name || '';
+	return t(String(title));
+};
 
 const setColumnsAsideMove = (k: number) => {
 	state.liIndex = k;
@@ -186,19 +185,16 @@ watch(
 	}
 );
 
-watch(
-	[isColumnsMenuHover, isColumnsNavHover],
-	([menuHover, navHover]) => {
-		if (!menuHover && !navHover) {
-			state.liHoverIndex = null;
-			mittBus.emit('setSendColumnsChildren', setSendChildren(route.path));
-		} else {
-			state.liHoverIndex = state.liOldIndex;
-			if (!state.liOldPath) return;
-			mittBus.emit('setSendColumnsChildren', setSendChildren(state.liOldPath));
-		}
+watch([isColumnsMenuHover, isColumnsNavHover], ([menuHover, navHover]) => {
+	if (!menuHover && !navHover) {
+		state.liHoverIndex = null;
+		mittBus.emit('setSendColumnsChildren', setSendChildren(route.path));
+	} else {
+		state.liHoverIndex = state.liOldIndex;
+		if (!state.liOldPath) return;
+		mittBus.emit('setSendColumnsChildren', setSendChildren(state.liOldPath));
 	}
-);
+});
 </script>
 
 <style scoped lang="scss">
@@ -239,10 +235,15 @@ watch(
 
 			.columns-vertical {
 				margin: auto;
-
-				.columns-vertical-title {
-					padding-top: 1px;
-				}
+				width: 100%;
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				justify-content: center;
+				gap: 2px;
+				padding: 0 4px;
+				min-width: 0;
 			}
 
 			.columns-horizontal {
@@ -250,19 +251,53 @@ watch(
 				height: 50px;
 				width: 100%;
 				align-items: center;
+				gap: 3px;
 				padding: 0 5px;
+				min-width: 0;
 
 				i {
-					margin-right: 3px;
+					flex-shrink: 0;
+				}
+
+				> :first-child {
+					flex-shrink: 0;
 				}
 
 				a {
 					display: flex;
-
-					.columns-horizontal-title {
-						padding-top: 1px;
-					}
+					align-items: center;
+					gap: 3px;
+					width: 100%;
+					min-width: 0;
 				}
+			}
+
+			.columns-aside-title {
+				flex: 1;
+				min-width: 0;
+				width: 100%;
+				max-width: 62px;
+				margin: 0 auto;
+				line-height: 14px;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				display: -webkit-box;
+				-webkit-line-clamp: 2;
+				-webkit-box-orient: vertical;
+				overflow-wrap: break-word;
+				word-break: normal;
+				hyphens: auto;
+			}
+
+			.columns-vertical .columns-aside-title {
+				flex: initial;
+				text-align: center;
+			}
+
+			.columns-horizontal .columns-aside-title {
+				max-width: none;
+				margin: 0;
+				text-align: left;
 			}
 
 			a {

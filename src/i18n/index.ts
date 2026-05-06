@@ -2,6 +2,7 @@ import {createI18n} from 'vue-i18n';
 import pinia from '/@/stores/index';
 import {storeToRefs} from 'pinia';
 import {useThemeConfig} from '/@/stores/themeConfig';
+import {useSiteConfig} from '/@/stores/siteConfig';
 import {Local, Session} from '/@/utils/storage';
 import {info} from '/@/api/admin/i18n';
 import {useMemoize, promiseTimeout} from '@vueuse/core';
@@ -167,13 +168,23 @@ loadRemoteMessagesFromCache();
 async function fetchRemoteI18nMessages() {
     const {data} = await info();
 
+    // 处理 site 配置
+    if (data.site) {
+        const siteConfigStore = useSiteConfig(pinia);
+        siteConfigStore.setSiteConfig(data.site);
+
+    }
+
+    // 处理 i18n（兼容新旧格式：新格式在 data.i18n 下，旧格式直接在 data 上）
+    const i18nData = data.i18n || data;
+
     // 构建消息对象，将数组/对象统一转为合并后的对象
     const toArray = (v: unknown) => (Array.isArray(v) ? v : v && typeof v === 'object' ? [v] : []);
     const messageLocal: Record<string, any> = {};
 
     for (const locale of SUPPORTED_LOCALES) {
-        if (data[locale]) {
-            messageLocal[locale] = {name: locale, ...mergeObjects(toArray(data[locale]))};
+        if (i18nData[locale]) {
+            messageLocal[locale] = {name: locale, ...mergeObjects(toArray(i18nData[locale]))};
         }
     }
 
