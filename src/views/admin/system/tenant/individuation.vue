@@ -46,7 +46,7 @@ import {useMessage} from '/@/hooks/message';
 import {getObj, putObj} from '/@/api/admin/tenant';
 import {useI18n} from 'vue-i18n';
 import UploadImg from "/@/components/Upload/Image.vue";
-import {useThemeConfig} from "/@/stores/themeConfig";
+import {useSiteConfig} from "/@/stores/siteConfig";
 import pinia from "/@/stores";
 import {storeToRefs} from "pinia";
 import Tip from "/@/components/Tip/index.vue";
@@ -61,8 +61,7 @@ const visible = ref(false);
 const loading = ref(false);
 
 // 导入配置文件
-const stores = useThemeConfig(pinia);
-const {themeConfig} = storeToRefs(stores);
+const {siteConfig} = storeToRefs(useSiteConfig(pinia));
 
 /**
  * 租户个性化配置表单
@@ -74,10 +73,10 @@ const {themeConfig} = storeToRefs(stores);
  */
 const form = reactive({
   id: '',
-  websiteName: themeConfig.value.globalTitle,
+  websiteName: siteConfig.value.title,
   background: '',
   miniQr: '',
-  footer: themeConfig.value.footerAuthor,
+  footer: siteConfig.value.footer,
 });
 
 
