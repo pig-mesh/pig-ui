@@ -1,5 +1,5 @@
 import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
+import path, { resolve } from 'path';
 import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
@@ -8,6 +8,7 @@ import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-impo
 import viteCompression from 'vite-plugin-compression2';
 // @ts-ignore
 import { svgBuilder } from '/@/components/IconSelector/index';
+import { viteMockServe } from 'vite-plugin-mock';
 
 import dns from 'node:dns'
 dns.setDefaultResultOrder('verbatim')
@@ -51,6 +52,10 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			viteCompression({
 				deleteOriginalAssets: false, // 压缩后是否删除原始文件
 			}),
+			viteMockServe({
+				mockPath: path.join(__dirname, './src/mock'),
+				enable: process.env.NODE_ENV === 'development',
+			})
 		],
 		root: process.cwd(), // 项目根目录
 		resolve: { alias }, // 路径别名配置
