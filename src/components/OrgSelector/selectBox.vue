@@ -32,12 +32,12 @@
           <span class="text-sm font-medium  antialiased subpixel-antialiased transition-colors duration-300">{{ t('orgSelecotr.rootNode') }}</span>
         </el-breadcrumb-item>
         <el-breadcrumb-item
-          v-for="({ id, name }, index) in departments.titleDepartments"
-          :key="index + 'a'"
-          @click="queryData(id)"
+          v-for="(item, index) in departments.titleDepartments"
+          :key="getDeptId(item) ?? index"
+          @click="queryData(getDeptId(item))"
           class="cursor-pointer transition-all duration-300 hover:[&_span]:!text-[#1d9bf0]"
         >
-          <span class="text-sm font-medium  antialiased subpixel-antialiased transition-colors duration-300">{{ name }}</span>
+          <span class="text-sm font-medium  antialiased subpixel-antialiased transition-colors duration-300">{{ item.name }}</span>
         </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -51,7 +51,7 @@
           <p class="text-sm m-0">{{ t('orgSelecotr.noData') }}</p>
         </div>
 
-        <template v-for="(elem, i) in dataList" :key="i">
+	        <template v-for="elem in dataList">
           <!-- 角色和岗位：仅在对应类型或混合类型下显示 -->
           <template v-if="shouldShowGroup(elem.type)">
             <div v-for="item in elem.data" :key="elem.type + '-' + item.id" class="mx-3 my-0.5 rounded-lg transition-all duration-300 relative hover:bg-[var(--next-color-hover)] hover:translate-x-0.5 has-[.el-checkbox.is-checked]:bg-[rgba(29,155,240,0.1)] has-[.el-checkbox.is-checked]:border has-[.el-checkbox.is-checked]:border-[rgba(29,155,240,0.3)] has-[.el-checkbox.is-disabled]:opacity-60 overflow-hidden before:content-[''] before:absolute before:top-0 before:-left-full before:w-full before:h-full before:bg-gradient-to-r before:from-transparent before:via-[rgba(29,155,240,0.1)] before:to-transparent before:transition-[left] before:duration-500 before:ease-in-out hover:before:left-full">
@@ -185,6 +185,8 @@ const shouldShowGroup = (groupType) => {
   }
   return false;
 };
+
+const getDeptId = (dept) => dept?.deptId ?? dept?.id;
 
 /**
  * 加载指定父部门下的组织树数据，并同步选中状态

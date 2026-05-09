@@ -39,8 +39,7 @@
 			</div>
 
 			<div v-else class="flex-1 overflow-y-auto py-2 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-[var(--next-border-color)] hover:scrollbar-thumb-[var(--next-text-color-regular)] scrollbar-thumb-rounded">
-				<template v-for="{ type, data, cancel } in list" :key="type">
-					<div class="mb-2">
+				<div v-for="{ type, data, cancel } in list" :key="type" class="mb-2">
 						<div v-for="item in data" :key="item.id" class="mx-3 my-0.5 rounded-lg transition-all duration-300 relative hover:bg-[var(--next-color-hover)] hover:-translate-x-0.5 hover:shadow-[0_2px_8px_rgba(0,0,0,0.1)] animate-[slideInRight_0.3s_ease-out]">
 							<div class="flex items-center p-3 gap-3">
 								<!-- 图标/头像区域：用户显示头像，其他类型显示对应图标 -->
@@ -73,8 +72,7 @@
 								/>
 							</div>
 						</div>
-					</div>
-				</template>
+				</div>
 			</div>
 		</div>
 	</div>
