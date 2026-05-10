@@ -5,7 +5,7 @@ export default () => ({
 		enabled: 1,
 		data: [
 			{
-				image: '',
+				icon: 'apps',
 				name: '导航名称',
 				link: {},
 			},

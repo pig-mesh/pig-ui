@@ -1,7 +1,7 @@
 <template>
 	<div class="h-full flex flex-col bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm overflow-hidden w-full min-w-0">
 		<!-- 标题栏 -->
-		<div class="flex-shrink-0 flex items-center px-5 py-4 text-base font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+		<div class="flex-shrink-0 flex items-center px-5 py-4 text-base font-semibold text-gray-900 dark:text-gray-100 border-b border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-800">
 		<!-- 图标 -->
 			<div class="flex items-center justify-center w-8 h-8 mr-3 rounded-lg bg-primary/10 dark:bg-primary/20 flex-shrink-0">
 				<el-icon class="text-primary text-lg">

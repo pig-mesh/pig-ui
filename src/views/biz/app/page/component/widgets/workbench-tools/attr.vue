@@ -4,8 +4,8 @@
 			<el-form label-width="70px">
 				<el-form-item label="是否启用">
 					<el-radio-group v-model="content.enabled">
-						<el-radio :label="1">开启</el-radio>
-						<el-radio :label="0">停用</el-radio>
+						<el-radio :value="1">开启</el-radio>
+						<el-radio :value="0">停用</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="标题">

@@ -34,7 +34,7 @@ const handleSelect = (index: string) => {
 
 <style scoped>
 .page-menu {
-	@apply w-40 min-h-[668px] border-r border-gray-200 bg-white transition-colors;
+	@apply w-40 h-full border-r border-gray-200 bg-white transition-colors;
 }
 
 :deep(.page-menu) {

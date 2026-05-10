@@ -4,13 +4,13 @@
 				<!-- 是否启用 -->
 				<el-form-item label="是否启用" v-if="type == 'mobile'" class="mb-6">
 					<el-radio-group v-model="content.enabled" class="!flex gap-2">
-						<el-radio :label="1" class="!mr-0" border>
+						<el-radio :value="1" class="!mr-0" border>
 							<span class="flex items-center gap-1">
 								<el-icon><Check /></el-icon>
 								开启
 							</span>
 						</el-radio>
-						<el-radio :label="0" class="!mr-0" border>
+						<el-radio :value="0" class="!mr-0" border>
 							<span class="flex items-center gap-1">
 								<el-icon><Close /></el-icon>
 								停用

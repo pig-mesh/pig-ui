@@ -6,7 +6,7 @@ export default () => ({
 		title: '我的服务',
 		data: [
 			{
-				image: '',
+				icon: 'apps',
 				name: '导航名称',
 				link: {},
 			},

@@ -20,20 +20,9 @@
 							</el-icon>
 						</div>
 
-						<!-- 图标上传区域 -->
-						<div class="ml-6 flex-shrink-0">
-							<div class="relative">
-								<upload-img
-									v-model:imageUrl="item.image"
-									height="56px"
-									width="56px"
-									:iconSize="16"
-									class="rounded-xl overflow-hidden shadow-sm ring-2 ring-gray-100 dark:ring-gray-700 hover:ring-primary/50"
-								/>
-								<div v-if="!item.image" class="absolute inset-0 flex items-center justify-center pointer-events-none">
-									<el-icon class="text-2xl text-gray-400 dark:text-gray-500"><Picture /></el-icon>
-								</div>
-							</div>
+						<!-- 图标设置区域 -->
+						<div class="ml-6 flex-shrink-0 w-[168px]">
+							<WotIconPicker v-model="item.icon" compact />
 						</div>
 
 						<!-- 表单区域 -->
@@ -73,7 +62,7 @@
 			class="flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl bg-gray-50 dark:bg-gray-800/30 transition-colors mb-4"
 		>
 			<el-icon class="text-5xl text-gray-300 dark:text-gray-600 mb-3"><Grid /></el-icon>
-			<div class="text-gray-500 dark:text-gray-400 text-sm">暂无服务项，点击下方按钮添加</div>
+			<div class="text-gray-500 dark:text-gray-400 text-sm">暂无菜单项，点击下方按钮添加</div>
 		</div>
 
 		<!-- 添加按钮 -->
@@ -85,7 +74,7 @@
 				class="!px-6 !py-2 !rounded-lg"
 				:icon="Plus"
 			>
-				添加服务
+				添加菜单
 			</el-button>
 			<span class="text-sm text-gray-500 dark:text-gray-400">
 				已添加 {{ navLists.length }} / {{ props.max }} 项
@@ -97,6 +86,7 @@
 import Draggable from 'vuedraggable';
 import { useMessage } from '/@/hooks/message';
 import { Plus } from '@element-plus/icons-vue';
+import WotIconPicker from './WotIconPicker.vue';
 const LinkPicker = defineAsyncComponent(() => import('/@/components/Link/picker.vue'));
 
 const props = defineProps({
@@ -127,7 +117,7 @@ const navLists = computed({
 const handleAdd = () => {
 	if (props.modelValue?.length < props.max) {
 		navLists.value.push({
-			image: '',
+			icon: 'apps',
 			name: '导航名称',
 			link: {},
 		});
@@ -142,4 +132,3 @@ const handleDelete = (index: number) => {
 	navLists.value.splice(index, 1);
 };
 </script>
-

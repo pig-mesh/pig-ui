@@ -1,6 +1,6 @@
 <template>
 	<div class="bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-700 px-4 py-6">
-		<div class="grid grid-cols-5 gap-4 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
+		<div class="grid grid-cols-4 gap-4 max-w-sm mx-auto sm:max-w-md md:max-w-lg lg:max-w-xl">
 			<div
 				v-for="(item, index) in content.data"
 				:key="index"
@@ -8,13 +8,7 @@
 			>
 				<!-- 图标容器 -->
 				<div class="relative mb-3 p-2 rounded-2xl bg-gray-50 dark:bg-slate-800 group-hover:bg-blue-50 dark:group-hover:bg-blue-900/20 transition-colors group-hover:scale-105">
-					<decoration-img
-						width="32px"
-						height="32px"
-						:src="item.image"
-						alt=""
-						class="w-8 h-8 object-contain"
-					/>
+					<span class="app-wot-icon text-[32px] text-primary" :class="`wd-icon-${item.icon || 'apps'}`" />
 				</div>
 
 				<!-- 文字标签 -->
@@ -28,7 +22,6 @@
 
 <script lang="ts" setup>
 import type options from './options';
-import DecorationImg from '../../decoration-img.vue';
 
 type OptionsType = ReturnType<typeof options>;
 
@@ -43,3 +36,7 @@ defineProps({
 	},
 });
 </script>
+
+<style lang="scss">
+@use '../../wot-icon-style.scss';
+</style>

@@ -22,13 +22,7 @@
 					<!-- 图标容器 -->
 					<div class="relative">
 						<div class="w-12 h-12 flex items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-primary/20">
-							<decoration-img
-								v-if="item.image"
-								width="28px"
-								height="28px"
-								:src="item.image"
-								class="transition-transform duration-300"
-							/>
+							<span v-if="item.icon" class="app-wot-icon text-[28px] text-primary" :class="`wd-icon-${item.icon}`" />
 							<el-icon v-else class="text-2xl text-primary/50"><Grid /></el-icon>
 						</div>
 					</div>
@@ -57,12 +51,7 @@
 				>
 					<!-- 图标 -->
 					<div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 dark:from-primary/20 dark:to-primary/10 transition-all duration-300 group-hover:scale-110 group-hover:shadow-md group-hover:shadow-primary/10">
-						<decoration-img
-							v-if="item.image"
-							width="24px"
-							height="24px"
-							:src="item.image"
-						/>
+						<span v-if="item.icon" class="app-wot-icon text-2xl text-primary" :class="`wd-icon-${item.icon}`" />
 						<el-icon v-else class="text-xl text-primary/50"><List /></el-icon>
 					</div>
 
@@ -88,7 +77,6 @@
 </template>
 <script lang="ts" setup>
 import type options from './options';
-import DecorationImg from '../../decoration-img.vue';
 type OptionsType = ReturnType<typeof options>;
 defineProps({
 	content: {
@@ -101,3 +89,7 @@ defineProps({
 	},
 });
 </script>
+
+<style lang="scss">
+@use '../../wot-icon-style.scss';
+</style>

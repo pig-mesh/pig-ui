@@ -9,7 +9,7 @@
 			</el-form-item>
 			<el-form-item label="是否显示" prop="isShow">
 				<el-radio-group v-model="form.isShow">
-					<el-radio :label="Number(item.value)" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
+					<el-radio :value="Number(item.value)" v-for="(item, index) in yes_no_type" border :key="index">{{ item.label }} </el-radio>
 				</el-radio-group>
 			</el-form-item>
 		</el-form>
