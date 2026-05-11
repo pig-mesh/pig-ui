@@ -7,6 +7,7 @@
 		</el-menu>
 		<div class="flex-1 pl-4">
 			<shop-pages v-model="activeLink" v-if="LinkTypeEnum.SHOP_PAGES == activeMenu" />
+			<flow-task-link v-model="activeLink" v-if="LinkTypeEnum.FLOW_TASKS == activeMenu" />
 			<custom-link v-model="activeLink" v-if="LinkTypeEnum.CUSTOM_LINK == activeMenu" />
 		</div>
 	</div>
@@ -16,6 +17,7 @@
 import type { PropType } from 'vue';
 import { LinkTypeEnum, type Link } from '.';
 import ShopPages from './shop-pages.vue';
+import FlowTaskLink from './flow-task-link.vue';
 import CustomLink from './custom-link.vue';
 
 const props = defineProps({
@@ -30,8 +32,13 @@ const emit = defineEmits<{
 
 const menus = ref([
 	{
-		name: '商城页面',
+		name: '主页',
 		type: LinkTypeEnum.SHOP_PAGES,
+		link: {},
+	},
+	{
+		name: '流程任务',
+		type: LinkTypeEnum.FLOW_TASKS,
 		link: {},
 	},
 	{

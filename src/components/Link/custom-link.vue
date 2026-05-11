@@ -3,10 +3,10 @@
 		<div class="flex flex-wrap items-center">
 			自定义链接
 			<div class="ml-4 flex-1 min-w-[100px]">
-				<el-input :model-value="modelValue.query?.url" placeholder="请输入链接地址" @input="handleInput" />
+				<el-input :model-value="modelValue.path" placeholder="请输入 http:// 或 https:// 开头的链接地址" @input="handleInput" />
 			</div>
 		</div>
-		<div class="form-tips">请填写完整的带有“https://”或“http://”的链接地址，链接的域名必须在微信公众平台设置业务域名</div>
+		<div class="form-tips">自定义链接仅用于外部网页，请填写完整的 http:// 或 https:// 地址</div>
 	</div>
 </template>
 
@@ -26,10 +26,7 @@ const emit = defineEmits<{
 
 const handleInput = (value: string) => {
 	emit('update:modelValue', {
-		path: '/pages/webview/webview',
-		query: {
-			url: value,
-		},
+		path: value,
 		type: LinkTypeEnum.CUSTOM_LINK,
 	});
 };

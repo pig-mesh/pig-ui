@@ -37,61 +37,91 @@ const linkList = ref([
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/news/news',
-		name: '文章资讯',
+		path: '/pages/workbench/index',
+		name: '工作台',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/user/user',
-		name: '个人中心',
+		path: '/pages/workbench/contacts/index',
+		name: '通讯录',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/collection/collection',
+		path: '/pages/workbench/calendar/index',
+		name: '日程',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/index',
+		name: '我的',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/index/search/index',
+		name: '搜索',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/collection/index',
 		name: '我的收藏',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/customer_service/customer_service',
-		name: '联系客服',
+		path: '/pages/user/messages/index',
+		name: '消息中心',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/user_set/user_set',
+		path: '/pages/user/messages/detail',
+		name: '消息详情',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/settings/index',
 		name: '个人设置',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/as_us/as_us',
-		name: '关于我们',
-		type: LinkTypeEnum.SHOP_PAGES,
-	},
-	{
-		path: '/pages/user_data/user_data',
+		path: '/pages/user/profile/index',
 		name: '个人资料',
 		type: LinkTypeEnum.SHOP_PAGES,
 	},
 	{
-		path: '/pages/agreement/agreement',
+		path: '/pages/user/bind-mobile/index',
+		name: '绑定手机号',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/change-password/index',
+		name: '修改密码',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/about/index',
+		name: '关于我们',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/user/customer-service/index',
+		name: '联系客服',
+		type: LinkTypeEnum.SHOP_PAGES,
+	},
+	{
+		path: '/pages/login/agreement/index',
+		name: '用户协议',
+		type: LinkTypeEnum.SHOP_PAGES,
+		query: {
+			type: 'user',
+		},
+	},
+	{
+		path: '/pages/login/agreement/index',
 		name: '隐私政策',
+		type: LinkTypeEnum.SHOP_PAGES,
 		query: {
 			type: 'privacy',
 		},
-		type: LinkTypeEnum.SHOP_PAGES,
 	},
-	{
-		path: '/pages/agreement/agreement',
-		name: '服务协议',
-		query: {
-			type: 'service',
-		},
-		type: LinkTypeEnum.SHOP_PAGES,
-	},
-	{
-		path: '/pages/search/search',
-		name: '搜索',
-		type: LinkTypeEnum.SHOP_PAGES,
-	}
 ]);
 
 const handleSelect = (value: Link) => {

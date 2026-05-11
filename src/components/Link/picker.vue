@@ -8,7 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-import {type Link, LinkTypeEnum} from '.';
+import { type Link, LinkTypeEnum } from '.';
 import LinkContent from './index.vue';
 import Popup from '/@/components/Popup/index.vue';
 
@@ -36,7 +36,7 @@ const getLink = computed(() => {
 		case LinkTypeEnum.SHOP_PAGES:
 			return props.modelValue.name;
 		case LinkTypeEnum.CUSTOM_LINK:
-			return props.modelValue.query?.url;
+			return props.modelValue.path;
 		default:
 			return props.modelValue?.name;
 	}
