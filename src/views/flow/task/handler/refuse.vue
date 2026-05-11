@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // defineExpose 是编译器宏，不需要导入
-import {completeTask} from '/@/api/flow/task';
+import { completeTask } from '/@/api/flow/task';
 import { useMessage } from '/@/hooks/message';
 
 const dialogVisible = ref(false);
@@ -8,12 +8,12 @@ const submitLoading = ref(false);
 const submitDesc = ref('');
 
 const currentData = ref();
-const currentProcessInstanceId = ref('')
+const currentProcessInstanceId = ref('');
 const currentFormData = ref({});
 
 const handle = (row, formData) => {
-  submitDesc.value = '';
-  currentProcessInstanceId.value = row.processInstanceId;
+	submitDesc.value = '';
+	currentProcessInstanceId.value = row.processInstanceId;
 	currentData.value = row;
 	currentFormData.value = formData;
 
@@ -24,30 +24,28 @@ defineExpose({ handle });
 const emit = defineEmits(['taskSubmitEvent']);
 
 const submit = async () => {
-  const formData: Record<string, any> = {};
-  formData[`${currentData.value.nodeId}_approve_condition`] = false;
+	const formData: Record<string, any> = {};
+	formData[`${currentData.value.nodeId}_approve_condition`] = false;
 
-  const param = {
+	const param = {
 		paramMap: formData,
 		formData: currentFormData.value!,
-    taskId: currentData.value.taskId,
-    taskLocalParamMap: {
-      approveDesc: '拒绝原因：' + submitDesc.value,
-    },
-  };
+		taskId: currentData.value.taskId,
+		taskLocalParamMap: {
+			approveDesc: '拒绝原因：' + submitDesc.value,
+		},
+	};
 
-  submitLoading.value = true;
-  try {
-    await completeTask(param);
-    dialogVisible.value = false;
-    emit('taskSubmitEvent');
-  } catch (error: any) {
-    useMessage().error(error?.msg || '拒绝失败，请重试');
-    dialogVisible.value = false;
-    emit('taskSubmitEvent');
-  } finally {
-    submitLoading.value = false;
-  }
+	submitLoading.value = true;
+	try {
+		await completeTask(param);
+		dialogVisible.value = false;
+		emit('taskSubmitEvent', '拒绝成功');
+	} catch (error: any) {
+		useMessage().error(error?.msg || '拒绝失败，请重试');
+	} finally {
+		submitLoading.value = false;
+	}
 };
 </script>
 

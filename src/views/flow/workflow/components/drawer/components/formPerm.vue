@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { useFlowStore } from '/@/views/flow/workflow/stores/flow';
 import { flattenFormItems } from '/@/views/flow/workflow/utils/formUtils';
 
-const props = defineProps({
+defineProps({
 	formPerm: {
 		type: Object,
 		default: () => {},
@@ -49,8 +49,8 @@ const step2FormList = computed(() => {
 
 		<!-- 表单项列表 -->
 		<div v-else class="divide-y divide-gray-200 dark:divide-gray-700">
-			<div 
-				v-for="(item, index) in step2FormList" 
+			<div
+				v-for="(item, index) in step2FormList"
 				:key="item.name"
 				class="grid grid-cols-4 gap-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors duration-150"
 				:class="{
@@ -62,8 +62,8 @@ const step2FormList = computed(() => {
 					<span class="text-sm text-gray-900 dark:text-gray-100 font-medium">
 						{{ item.title }}
 					</span>
-					<span 
-						v-if="item.required" 
+					<span
+						v-if="item.required"
 						class="text-red-500 dark:text-red-400 text-sm font-semibold"
 					>
 						*
@@ -71,14 +71,14 @@ const step2FormList = computed(() => {
 				</div>
 
 				<!-- 权限选择器 -->
-				<el-radio-group 
-					v-model="formPerm[item.field]" 
+				<el-radio-group
+					v-model="formPerm[item.field]"
 					class="col-span-3 grid grid-cols-3 gap-4"
 				>
 					<!-- 只读 -->
 					<div class="flex justify-center">
-						<el-radio 
-							label="R" 
+						<el-radio
+							value="R"
 							class="custom-radio text-blue-600 dark:text-blue-400"
 						>
 							<template #default>
@@ -86,12 +86,12 @@ const step2FormList = computed(() => {
 							</template>
 						</el-radio>
 					</div>
-					
+
 					<!-- 编辑 -->
 					<div class="flex justify-center">
-						<el-radio 
-							:disabled="!(hideKey.length == 0 || hideKey.indexOf('E') < 0)" 
-							label="E"
+						<el-radio
+							:disabled="!(hideKey.length == 0 || hideKey.indexOf('E') < 0)"
+							value="E"
 							class="custom-radio text-green-600 dark:text-green-400"
 						>
 							<template #default>
@@ -99,11 +99,11 @@ const step2FormList = computed(() => {
 							</template>
 						</el-radio>
 					</div>
-					
+
 					<!-- 隐藏 -->
 					<div class="flex justify-center">
-						<el-radio 
-							label="H"
+						<el-radio
+							value="H"
 							class="custom-radio text-gray-600 dark:text-gray-400"
 						>
 							<template #default>
@@ -116,4 +116,3 @@ const step2FormList = computed(() => {
 		</div>
 	</div>
 </template>
-

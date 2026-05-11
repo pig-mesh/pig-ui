@@ -6,7 +6,7 @@
         <el-radio
           v-for="option in BpmModelFormTypeOptions"
           :key="option.value"
-          :label="option.value"
+          :value="option.value"
           class="!m-0"
         >
           <div class="flex items-start gap-3 p-4 border-2 rounded-lg transition-all duration-200
@@ -239,8 +239,8 @@ const initDesigner = async () => {
     if (flowStore.step2.formOption) {
       designerRef.value.setOption(flowStore.step2.formOption)
     }
-  } catch (error) {
-    console.error('初始化设计器失败:', error)
+  } catch {
+    // 忽略初始化失败，保留当前设计器状态。
   }
 }
 

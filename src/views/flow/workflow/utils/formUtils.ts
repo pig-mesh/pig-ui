@@ -81,13 +81,13 @@ export function setupDynamicFormRule(
 	parsedFormData: any;
 } {
 	// 解析表单项
-	const parsedFormItems = FcDesigner.formCreate.parseJson(formItems);
+	const parsedFormItems = typeof formItems === 'string' ? FcDesigner.formCreate.parseJson(formItems) : formItems || [];
 
 	// 递归处理所有表单项的权限
 	const itemsWithPerms = processFormItemsWithPerms(parsedFormItems, formPerms);
 
 	// 解析表单数据(如果需要)
-	const parsedData = parseFormData ? FcDesigner.formCreate.parseJson(formData) : formData;
+	const parsedData = parseFormData && typeof formData === 'string' ? FcDesigner.formCreate.parseJson(formData) : formData || {};
 
 	return {
 		rule: itemsWithPerms,

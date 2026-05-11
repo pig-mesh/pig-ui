@@ -17,6 +17,15 @@ interface TaskData {
 	nodeId: string;
 }
 
+const props = withDefaults(
+	defineProps<{
+		showSuccessMessage?: boolean;
+	}>(),
+	{
+		showSuccessMessage: true,
+	}
+);
+
 const dialogVisible = ref(false);
 const submitLoading = ref(false);
 const submitDesc = ref('');
@@ -76,9 +85,9 @@ const submit = async () => {
 		};
 
 		await transferTask(param);
-		useMessage().success('转办成功');
+		if (props.showSuccessMessage) useMessage().success('转办成功');
 		dialogVisible.value = false;
-		emit('taskSubmitEvent');
+		emit('taskSubmitEvent', '转办成功');
 	} catch (e) {
 		useMessage().error('转办失败，请重试');
 	} finally {

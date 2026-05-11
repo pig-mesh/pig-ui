@@ -5,8 +5,12 @@
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
 					<el-form-item label="状态" prop="status">
 						<el-select v-model="state.queryForm.status" placeholder="请选择状态">
-							<el-option :key="1" label="进行中" :value="1" />
-							<el-option :key="2" label="已结束" :value="2" />
+							<el-option
+								v-for="option in PROCESS_INSTANCE_STATUS_OPTIONS"
+								:key="option.value"
+								:label="option.label"
+								:value="option.value"
+							/>
 						</el-select>
 					</el-form-item>
 					<el-form-item label="发起时间" prop="taskTime">
@@ -52,12 +56,9 @@
 				<el-table-column label="结束时间" prop="endTime" width="200" />
 				<el-table-column label="状态" prop="taskCreateTime" width="200">
 					<template #default="scope">
-						<el-tag v-if="scope.row.rejectToStarter" type="warning">驳回待提交</el-tag>
-						<el-tag v-else-if="scope.row.status == 1">进行中</el-tag>
-						<el-tag v-else-if="scope.row?.finishReason == '9'" type="danger">终止</el-tag>
-						<el-tag v-else-if="scope.row?.finishReason == '1'" type="success">通过</el-tag>
-						<el-tag v-else-if="scope.row?.finishReason == '0'" type="danger">拒绝</el-tag>
-						<el-tag v-else>已结束</el-tag>
+						<el-tag :type="getProcessStatusTagType(scope.row)">
+							{{ getProcessStatusLabel(scope.row) }}
+						</el-tag>
 					</template>
 				</el-table-column>
 
@@ -76,6 +77,17 @@
 							打印
 						</el-button>
 						<el-button
+							v-if="scope.row.canWithdraw"
+							:loading="withdrawLoading === scope.row.processInstanceId"
+							type="warning"
+							size="small"
+							link
+							icon="RefreshLeft"
+							@click="withdraw(scope.row)"
+						>
+							撤回
+						</el-button>
+						<el-button
 							v-if="scope.row.rejectToStarter"
 							type="warning"
 							size="small"
@@ -84,17 +96,6 @@
 							@click="handleResubmit(scope.row)"
 						>
 							重新提交
-						</el-button>
-						<el-button
-							:disabled="scope.row.status != 1"
-							:loading="stopLoading === scope.row.processInstanceId"
-							type="primary"
-							size="small"
-							link
-							icon="VideoPause"
-							@click="stop(scope.row)"
-						>
-							终止流程
 						</el-button>
 					</template>
 				</el-table-column>
@@ -105,7 +106,19 @@
 			<el-drawer v-model="rightDrawerVisible" v-if="rightDrawerVisible" direction="rtl" :size="isFullscreen ? '100%' : '70%'" destroy-on-close>
 				<template #header>
 					<div class="flex items-center justify-between w-full">
-						<h3>{{ currentData?.name }}</h3>
+						<div class="flex items-center gap-3">
+							<h3>{{ currentData?.name }}</h3>
+							<el-button
+								v-if="currentData?.canWithdraw"
+								type="warning"
+								link
+								icon="RefreshLeft"
+								:loading="withdrawLoading === currentData?.processInstanceId"
+								@click="withdraw(currentData)"
+							>
+								撤回
+							</el-button>
+						</div>
 						<el-button :icon="isFullscreen ? 'ScaleToOriginal' : 'FullScreen'" text @click="isFullscreen = !isFullscreen" />
 					</div>
 				</template>
@@ -182,13 +195,14 @@
 </template>
 <script setup lang="ts">
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
-import { queryMineStarted, stopProcessInstance, resubmitTask } from '/@/api/flow/task';
+import { queryMineStarted, withdrawProcessInstance, resubmitTask } from '/@/api/flow/task';
 import { detail } from '/@/api/flow/processInstance';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
-import { useMessage } from '/@/hooks/message';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
 import { useTaskFormLoader } from './composables/useTaskForm';
+import { getProcessStatusLabel, getProcessStatusTagType, PROCESS_INSTANCE_STATUS_OPTIONS } from './composables/flowStatus';
 import { usePrintTemplate } from '/@/views/flow/group/print/usePrintTemplate';
 import type { ProcessInstanceRow } from '/@/api/flow/processInstance';
 
@@ -208,24 +222,31 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	pageList: queryMineStarted,
 	queryForm: {
 		taskTime: undefined,
-		status: 1,
+		status: PROCESS_INSTANCE_STATUS_OPTIONS[0].value,
 	},
 });
 
-const { tableStyle, getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
-const stopLoading = ref('');
-async function stop(row) {
-	stopLoading.value = row.processInstanceId;
+const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
+const withdrawLoading = ref('');
+async function withdraw(row: ProcessInstanceRow) {
 	try {
-		await stopProcessInstance({
+		await useMessageBox().confirm('仅首个审批节点尚未处理时可撤回。撤回后流程将结束，且不可恢复。');
+	} catch {
+		return;
+	}
+
+	withdrawLoading.value = row.processInstanceId;
+	try {
+		await withdrawProcessInstance({
 			processInstanceId: row.processInstanceId,
 		});
-		useMessage().success('流程终止成功');
+		useMessage().success('流程撤回成功');
+		rightDrawerVisible.value = false;
 		getDataList();
 	} catch (error) {
-		useMessage().error('终止流程失败，请重试');
+		useMessage().error(error?.msg || '流程撤回失败，请重试');
 	} finally {
-		stopLoading.value = '';
+		withdrawLoading.value = '';
 	}
 }
 
@@ -319,9 +340,9 @@ const doResubmit = async () => {
 		useMessage().success('重新提交成功');
 		resubmitDrawerVisible.value = false;
 		getDataList();
-	} catch (error) {
-		console.error('重新提交失败:', error);
-	} finally {
+		} catch {
+			useMessage().error('重新提交失败');
+		} finally {
 		resubmitLoading.value = false;
 	}
 };

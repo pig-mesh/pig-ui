@@ -1,6 +1,6 @@
 import other from "/@/utils/other";
 
-export function inputValidate(configValue: any, proxy: any) {
+export function inputValidate(configValue: any) {
 	let minLength = configValue.props.minLength;
 	let maxLength = configValue.props.maxLength;
 	let value = configValue.props.value;
@@ -54,7 +54,7 @@ export function inputValidate(configValue: any, proxy: any) {
 	};
 }
 
-export function descriptionValidate(configValue: any, proxy: any) {
+export function descriptionValidate(configValue: any) {
 	let placeHolder = configValue.placeholder;
 	if (!placeHolder) {
 		return {
@@ -66,7 +66,7 @@ export function descriptionValidate(configValue: any, proxy: any) {
 		valid: true,
 	};
 }
-export function numberValidate(configValue: any, proxy: any) {
+export function numberValidate(configValue: any) {
 	let min = configValue.props.min;
 	let max = configValue.props.max;
 	let defaultValue = configValue.props.value;
@@ -167,7 +167,7 @@ export function layoutValidate(configValue: any, proxy: any) {
 		valid: true,
 	};
 }
-export function selectValidate(configValue: any, proxy: any) {
+export function selectValidate(configValue: any) {
 	var options = configValue.props.options;
 	if (!options) {
 		options = [];
@@ -201,9 +201,9 @@ export function selectValidate(configValue: any, proxy: any) {
 	}
 
 	{
-		var keyList = options.map((w) => w.value);
-		let newList = Array.from(new Set(keyList));
-		if (keyList.length > newList.length) {
+			var valueList = options.map((w) => w.value);
+			let newList = Array.from(new Set(valueList));
+			if (valueList.length > newList.length) {
 			return {
 				valid: false,
 				msg: configValue.name + ':选项标签不能重复',
@@ -214,7 +214,7 @@ export function selectValidate(configValue: any, proxy: any) {
 		valid: true,
 	};
 }
-export function fileValidate(configValue: any, proxy: any) {
+export function fileValidate(configValue: any) {
 	let min = configValue.props.min;
 	let max = configValue.props.max;
 

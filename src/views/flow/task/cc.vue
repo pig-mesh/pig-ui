@@ -104,9 +104,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
   },
 });
 
-const { tableStyle ,getDataList, currentChangeHandle,
-  sortChangeHandle,
-  sizeChangeHandle, } = useTable(state);
+const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
 const rightDrawerVisible = ref(false);
 const isFullscreen = ref(false);

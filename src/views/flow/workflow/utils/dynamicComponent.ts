@@ -15,7 +15,6 @@ const viewsModules: Record<string, any> = import.meta.glob('/src/views/**/*.{vue
  */
 export function registerComponent(path: string): any {
   if (!path) {
-    console.warn('组件路径不能为空')
     return null
   }
 
@@ -40,14 +39,10 @@ export function registerComponent(path: string): any {
 
   // 多个匹配，需要更精确的路径
   if (matchKeys?.length > 1) {
-    console.error(`多个组件匹配路径 "${normalizedPath}":`, matchKeys)
-    console.error('请使用更精确的路径，或检查是否存在重复的组件路径')
     return null
   }
 
   // 未找到匹配
-  console.error(`未找到组件: ${normalizedPath}`)
-  console.error('可用的组件路径:', keys)
   return null
 }
 
@@ -73,7 +68,6 @@ export interface DynamicFormComponent {
  */
 export function createDynamicFormComponent(formConfig: any, processInstanceId?: string, readonly?: boolean, node?: Record<string, any>): DynamicFormComponent | null {
   if (!formConfig) {
-    console.warn('formConfig不能为空')
     return null
   }
 
@@ -83,8 +77,7 @@ export function createDynamicFormComponent(formConfig: any, processInstanceId?: 
   if (typeof formConfig === 'string') {
     try {
       config = JSON.parse(formConfig)
-    } catch (error) {
-      console.error('解析formConfig失败:', error)
+    } catch {
       return null
     }
   } else {
@@ -99,7 +92,6 @@ export function createDynamicFormComponent(formConfig: any, processInstanceId?: 
     const componentPath = readonly ? formCustomViewPath: formCustomCreatePath
     
     if (!componentPath) {
-      console.warn('自定义表单路径不能为空')
       return null
     }
 
@@ -118,6 +110,5 @@ export function createDynamicFormComponent(formConfig: any, processInstanceId?: 
     return null
   }
 
-  console.warn('未知的表单类型:', formType)
   return null
 }

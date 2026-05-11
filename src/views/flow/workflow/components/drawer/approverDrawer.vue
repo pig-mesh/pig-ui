@@ -13,7 +13,7 @@
 				<el-radio-group v-model="approverConfig.assignedType" class="ml-4" @change="assignedTypeChangeEvent">
 					<el-row>
 						<el-col v-for="{ value, label } in setTypes" :key="value" :span="8">
-							<el-radio :label="value" :disabled="value === 8 && !isDynamicForm">{{ label}} </el-radio>
+							<el-radio :value="value" :disabled="value === 8 && !isDynamicForm">{{ label}} </el-radio>
 						</el-col>
 					</el-row>
 				</el-radio-group>
@@ -65,8 +65,8 @@
 				<template v-if="approverConfig.assignedType === 4">
 					<h4>选择方式</h4>
 					<el-radio-group v-model="approverConfig.multiple" class="ml-4">
-						<el-radio :label="false" size="large">单选</el-radio>
-						<el-radio :label="true" size="large">多选</el-radio>
+						<el-radio :value="false" size="large">单选</el-radio>
+						<el-radio :value="true" size="large">多选</el-radio>
 					</el-radio-group>
 				</template>
 				<template
@@ -83,13 +83,13 @@
 					<h4>多人审批时采用的审批方式</h4>
 					<el-radio-group v-model="approverConfig.multipleMode" class="ml-4">
 						<p style="display: block; width: 100%">
-							<el-radio :label="1" size="large">会签(需要所有审批人同意)</el-radio>
+							<el-radio :value="1" size="large">会签(需要所有审批人同意)</el-radio>
 						</p>
 						<p style="display: block; width: 100%">
-							<el-radio :label="2" size="large">或签(一名审批人同意即可)</el-radio>
+							<el-radio :value="2" size="large">或签(一名审批人同意即可)</el-radio>
 						</p>
 						<p style="display: block; width: 100%">
-							<el-radio :label="3" size="large">依次审批(按顺序依次审批)</el-radio>
+							<el-radio :value="3" size="large">依次审批(按顺序依次审批)</el-radio>
 						</p>
 					</el-radio-group>
 				</template>
@@ -97,11 +97,11 @@
 
 				<h4>审批人为空时</h4>
 				<el-radio-group v-model="approverConfig.nobody.handler" class="ml-4">
-					<el-radio label="TO_PASS" size="large">自动通过</el-radio>
-					<el-radio label="TO_REFUSE" size="large">自动拒绝</el-radio>
-					<el-radio label="TO_END" size="large">自动结束</el-radio>
-					<el-radio label="TO_ADMIN" size="large">转交给管理员</el-radio>
-					<el-radio label="TO_USER" size="large">指定人员</el-radio>
+					<el-radio value="TO_PASS" size="large">自动通过</el-radio>
+					<el-radio value="TO_REFUSE" size="large">自动拒绝</el-radio>
+					<el-radio value="TO_END" size="large">自动结束</el-radio>
+					<el-radio value="TO_ADMIN" size="large">转交给管理员</el-radio>
+					<el-radio value="TO_USER" size="large">指定人员</el-radio>
 				</el-radio-group>
 				<select-show
 				  class="mt-4 ml-2"
@@ -119,7 +119,7 @@
 						<div class="flex items-center">
 							<el-radio
 								v-model="approverConfig.refuse.handler"
-								label="TO_END"
+								value="TO_END"
 								size="large"
 								class="!mr-6"
 							>
@@ -129,7 +129,7 @@
 						<div class="flex items-center gap-3" v-if="rejectNodeList.length > 0">
 							<el-radio
 								v-model="approverConfig.refuse.handler"
-								label="TO_NODE"
+								value="TO_NODE"
 								size="large"
 								class="!mr-0 whitespace-nowrap"
 							>
@@ -147,7 +147,7 @@
 						<div class="flex items-center">
 							<el-radio
 								v-model="approverConfig.refuse.handler"
-								label="TO_START"
+								value="TO_START"
 								size="large"
 								class="!mr-6"
 							>
@@ -285,9 +285,7 @@ const openEvent = () => {
 
 	approverConfig.value.formPerms = formPerms;
 
-	// 处理表单项权限
-	const processedFormItems = processFormPermissions();
-	// 这里可以进一步使用处理后的表单项
+		processFormPermissions();
 };
 
 let approverConfig = ref({

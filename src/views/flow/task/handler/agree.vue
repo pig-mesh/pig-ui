@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { completeTask } from '/@/api/flow/task'
 import { useMessage } from '/@/hooks/message'
-import type { FlowFormItem, TaskData, TaskSubmitParam } from './types'
+import type { TaskData, TaskSubmitParam } from './types'
 
 const dialogVisible = ref(false)
 const submitLoading = ref(false)

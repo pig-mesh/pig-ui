@@ -101,7 +101,7 @@
 <script setup lang="ts">
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
-import { queryMineEndTask, queryTask, stopProcessInstance } from '/@/api/flow/task';
+import { queryMineEndTask, queryTask } from '/@/api/flow/task';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';
 import { useTaskFormLoader } from './composables/useTaskForm';
@@ -117,7 +117,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	},
 });
 
-const { tableStyle, getDataList, currentChangeHandle, sortChangeHandle, sizeChangeHandle } = useTable(state);
+const { tableStyle, getDataList, currentChangeHandle, sizeChangeHandle } = useTable(state);
 
 const rightDrawerVisible = ref(false);
 const isFullscreen = ref(false);

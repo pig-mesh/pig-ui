@@ -1,11 +1,10 @@
 import { h, VNode } from 'snabbdom';
-import { IDomEditor } from '@wangeditor-next/editor';
 import { MentionElement } from './mention-element';
 
 /**
  * 渲染 mention 元素为蓝色标签
  */
-function renderMention(elem: MentionElement, _children: VNode[] | null, _editor: IDomEditor): VNode {
+function renderMention(elem: MentionElement): VNode {
 	const { label } = elem;
 
 	return h(

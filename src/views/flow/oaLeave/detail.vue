@@ -27,8 +27,8 @@
             <el-tag type="info">{{ detailData.leaveDay }} 天</el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="请假状态">
-            <el-tag :type="getStatusTagType(detailData.leaveStatus)">
-              {{ getStatusLabel(detailData.leaveStatus) }}
+            <el-tag :type="getLeaveFlowStatusTagType(detailData.leaveStatus)">
+              {{ getLeaveFlowStatusLabel(detailData.leaveStatus) }}
             </el-tag>
           </el-descriptions-item>
           <el-descriptions-item label="流程实例编号">
@@ -43,6 +43,7 @@
 // ========== 1. 导入语句 ==========
 import { useMessage } from "/@/hooks/message";
 import { getObj } from '/@/api/flow/oaLeave';
+import { getLeaveFlowStatusLabel, getLeaveFlowStatusTagType } from '/@/views/flow/task/composables/flowStatus';
 import { useRoute } from 'vue-router';
 
 // ========== 2. Props 定义 ==========
@@ -110,29 +111,6 @@ const getTypeTagType = (type: number | string) => {
   };
   return typeMap[String(type)] || 'primary';
 };
-
-// 获取状态标签
-const getStatusLabel = (status: number | string) => {
-  const statusMap: Record<string, string> = {
-    '0': '待审批',
-    '1': '进行中',
-    '2': '已结束'
-  };
-  return statusMap[String(status)] || String(status) || '待审批';
-};
-
-// 获取状态标签类型
-const getStatusTagType = (status: number | string) => {
-  const statusMap: Record<string, string> = {
-    '0': 'warning',
-    '1': 'success',
-    '2': 'danger',
-    '3': 'info'
-  };
-  return statusMap[String(status)] || 'warning';
-};
-
-
 
 // ========== 5. 生命周期 ==========
 onMounted(() => {

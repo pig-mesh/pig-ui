@@ -17,9 +17,12 @@
           </el-form-item>
           <el-form-item label="请假结果" prop="leaveStatus">
             <el-select v-model="state.queryForm.leaveStatus" placeholder="请选择请假结果" clearable>
-              <el-option label="待审批" :value="0" />
-              <el-option label="进行中" :value="1" />
-              <el-option label="已结束" :value="2" />
+              <el-option
+                v-for="option in LEAVE_FLOW_STATUS_OPTIONS"
+                :key="option.value"
+                :label="option.label"
+                :value="option.value"
+              />
             </el-select>
           </el-form-item>
           <el-form-item>
@@ -33,7 +36,7 @@
 
       <!-- 操作按钮区域 -->
       <el-row>
-        <div class="mb-2 w-full">
+        <div class="w-full mb-2">
           <el-button 
             icon="folder-add" 
             type="primary" 
@@ -126,11 +129,8 @@
           show-overflow-tooltip
         >
           <template #default="scope">
-            <el-tag 
-              :type="scope.row.leaveStatus === 2 ? 'success' : scope.row.leaveStatus === 1 ? 'warning' : 'info'" 
-              size="small"
-            >
-              {{ getStatusLabel(scope.row.leaveStatus) }}
+            <el-tag :type="getLeaveFlowStatusTagType(scope.row.leaveStatus)" size="small">
+              {{ getLeaveFlowStatusLabel(scope.row.leaveStatus) }}
             </el-tag>
           </template>
         </el-table-column>
@@ -190,7 +190,7 @@
 import { BasicTableProps, useTable } from "/@/hooks/table";
 import { fetchList, delObjs } from "/@/api/flow/oaLeave";
 import { useMessage, useMessageBox } from "/@/hooks/message";
-import { useDict } from '/@/hooks/dict';
+import { LEAVE_FLOW_STATUS_OPTIONS, getLeaveFlowStatusLabel, getLeaveFlowStatusTagType } from '/@/views/flow/task/composables/flowStatus';
 import { useRouter } from 'vue-router';
 
 // ========== 路由实例 ==========
@@ -205,15 +205,6 @@ const getTypeLabel = (type: number | string) => {
     '4': '调休'
   };
   return typeMap[String(type)] || String(type);
-};
-
-const getStatusLabel = (status: number | string) => {
-  const statusMap: Record<string, string> = {
-    '0': '待审批',
-    '1': '进行中',
-    '2': '已结束'
-  };
-  return statusMap[String(status)] || String(status) || '待审批';
 };
 
 // ========== 组件引用 ==========

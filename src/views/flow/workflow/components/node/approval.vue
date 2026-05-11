@@ -19,7 +19,7 @@ const blurEvent = (index?: number) => {
 		props.nodeConfig.nodeName = props.nodeConfig.nodeName || defaultText;
 	}
 };
-import { bgColors, placeholderList, conditionStr, setApproverStr, copyerStr, arrToStr } from '/@/views/flow/workflow/utils';
+import { bgColors, placeholderList, setApproverStr, copyerStr, arrToStr } from '/@/views/flow/workflow/utils';
 import { computed } from 'vue';
 import addNode from '../addNode.vue';
 import { useI18n } from 'vue-i18n';

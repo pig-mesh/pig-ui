@@ -52,6 +52,15 @@ export function stopProcessInstance(param: any) {
 	});
 }
 
+// 撤回流程
+export function withdrawProcessInstance(param: { processInstanceId: string }) {
+	return request({
+		url: '/task/task/withdrawProcessInstance',
+		method: 'post',
+		data: param,
+	});
+}
+
 /**
  * 查询我发起的任务
  *

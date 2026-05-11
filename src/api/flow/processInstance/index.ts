@@ -16,10 +16,20 @@ export interface ProcessInstanceRow {
 	endTime?: string;
 	/** 流程状态: 1=进行中, 2=已结束 */
 	status: number;
-	/** 结束原因: 0=拒绝, 1=通过, 9=终止 */
+	/** 结束原因: 0=拒绝, 1=通过, 3=撤回, 9=终止 */
 	finishReason?: string;
 	/** 发起人姓名 */
 	starterName?: string;
+	/** 是否驳回待提交 */
+	rejectToStarter?: boolean;
+	/** 重新提交任务 ID */
+	resubmitTaskId?: string;
+	/** 是否存在打印模板 */
+	hasPrintTemplate?: boolean;
+	/** 是否允许撤回 */
+	canWithdraw?: boolean;
+	/** 不可撤回原因 */
+	withdrawDisabledReason?: string;
 }
 
 /**

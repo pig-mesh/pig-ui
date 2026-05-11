@@ -60,6 +60,12 @@ export interface LoadFormOptions {
 export function useTaskFormLoader(config: TaskFormConfig) {
 	const { rule, formData, option, dynamicFormComponent, currentOpenFlowForm } = config;
 
+	const parseFormConfig = (formConfig: any) => {
+		if (!formConfig) return {};
+		if (typeof formConfig === 'string') return JSON.parse(formConfig);
+		return formConfig;
+	};
+
 	/**
 	 * 处理表单响应数据
 	 * 根据响应数据中的formConfig判断使用动态表单还是自定义表单
@@ -73,7 +79,7 @@ export function useTaskFormLoader(config: TaskFormConfig) {
 		// 检查是否有formConfig，判断表单类型
 		if (formConfig) {
 			// 解析表单配置选项
-			option.value = JSON.parse(formConfig).formOption;
+			option.value = parseFormConfig(formConfig).formOption || {};
 
 			// 根据 readonly 参数决定使用详情路径还是提交路径
 			// readonly=true（默认）：使用 formCustomViewPath（详情路径）

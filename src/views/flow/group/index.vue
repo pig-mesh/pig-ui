@@ -225,7 +225,7 @@ const showDisableConfirm = (flow) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    disableFlow(flow.flowId).then((res) => {
+	    disableFlow(flow.flowId).then(() => {
       handleQuery();
     });
   });
@@ -238,7 +238,7 @@ const showEnableConfirm = (flow) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    enableFlow(flow.flowId).then((res) => {
+	    enableFlow(flow.flowId).then(() => {
       handleQuery();
     });
   });
@@ -251,7 +251,7 @@ const showDeleteConfirm = (flow) => {
     cancelButtonText: '取消',
     type: 'warning',
   }).then(() => {
-    deleteFlow(flow.flowId).then((res) => {
+	    deleteFlow(flow.flowId).then(() => {
       handleQuery();
     });
   });

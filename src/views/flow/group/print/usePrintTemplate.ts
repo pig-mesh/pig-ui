@@ -1,5 +1,6 @@
 import { getPrintTemplate, savePrintTemplate, getFlowDetail } from '/@/api/flow/flow';
 import { detail } from '/@/api/flow/processInstance';
+import { getProcessStatusLabel } from '/@/views/flow/task/composables/flowStatus';
 import { formatStartNodeShow } from '/@/api/flow/task';
 import type { VariableItem } from './VariablePanel.vue';
 import type { ProcessInstanceRow, ApprovalNode } from '/@/api/flow/processInstance';
@@ -16,17 +17,6 @@ function escapeHtml(str: string): string {
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#39;');
-}
-
-/**
- * 流程状态码转文字
- */
-function statusToText(status: number, finishReason?: string): string {
-	if (status === 1) return '进行中';
-	if (finishReason === '9') return '终止';
-	if (finishReason === '1') return '通过';
-	if (finishReason === '0') return '拒绝';
-	return '已结束';
 }
 
 /**
@@ -122,7 +112,7 @@ export function buildVariableData(
 	data['process.name'] = row.name || '';
 	data['process.createTime'] = row.createTime || '';
 	data['process.endTime'] = row.endTime || '';
-	data['process.status'] = statusToText(row.status, row.finishReason);
+	data['process.status'] = getProcessStatusLabel(row);
 
 	// 发起人：优先从审批节点 type=0 的 userVoList 中获取
 	const starterNode = approvalNodes.find((n) => n.type === 0);

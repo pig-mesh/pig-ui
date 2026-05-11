@@ -10,8 +10,8 @@
 			<el-form label-width="100px" class="mb-2">
 				<el-form-item label="设置类型">
 					<el-radio-group v-model="conditionConfig.conditionType" :disabled="isBusinessForm">
-						<el-radio-button :label="0">条件组方式</el-radio-button>
-						<el-radio-button :label="1">表达式方式</el-radio-button>
+						<el-radio-button :value="0">条件组方式</el-radio-button>
+						<el-radio-button :value="1">表达式方式</el-radio-button>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="组间关系" v-if="conditionConfig.conditionType === 0">

@@ -44,7 +44,7 @@ import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormatData.vue';
 import { getFlowDetail, startFlow } from '/@/api/flow/flow';
 import { ElMessage } from 'element-plus';
 import FcDesigner from 'form-create-designer';
-import { Api, Rule } from '@form-create/element-ui';
+import { Api } from '@form-create/element-ui';
 import FormCreate from '/@/views/flow/workflow/components/FormCreate.vue';
 import { processFormItemsWithPerms } from '/@/views/flow/workflow/utils/formPermissions';
 import { createDynamicFormComponent, type DynamicFormComponent } from '/@/views/flow/workflow/utils/dynamicComponent';

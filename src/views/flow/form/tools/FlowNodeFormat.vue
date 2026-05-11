@@ -24,7 +24,7 @@ interface FlowNode {
 	branch: FlowNode[];
 }
 
-const props = defineProps<{
+defineProps<{
 	nodeUser: Record<string, any>;
 	row: FlowNode[];
 	disableSelect: boolean;

@@ -1,5 +1,3 @@
-import { timer } from "d3";
-
 // 定义通用内容
 export default {
 	flow: {

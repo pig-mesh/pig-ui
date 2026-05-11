@@ -24,8 +24,9 @@
 								:key="index1"
 								class="relative flex items-start p-4 shadow-lg bg-white rounded-xl dark:bg-slate-800 hover:scale-[1.02] hover:shadow-xl transition-transform duration-200"
 							>
-								<div class="flex items-center justify-center w-12 h-12 ml-4 border border-blue-100 rounded-full bg-blue-50 dark:bg-slate-700 dark:border-slate-600">
-									<upload-img v-model:imageUrl="flow.logo" disabled width="50px" height="50px"></upload-img>
+								<div class="flex items-center justify-center w-12 h-12 ml-4 border border-blue-100 rounded-full bg-blue-50 dark:bg-slate-700 dark:border-slate-600 overflow-hidden shrink-0">
+									<img v-if="flow.logo" :src="flow.logo.includes('http') ? flow.logo : baseURL + flow.logo" class="w-full h-full object-cover" />
+									<el-icon v-else :size="24" class="text-blue-400"><Promotion /></el-icon>
 								</div>
 								<div class="ml-4">
 									<h2 class="font-semibold dark:text-slate-200">{{ flow.name }}</h2>
@@ -46,6 +47,7 @@
 <script lang="ts" setup name="flowList">
 import { queryMineStartGroupFlowList } from '/@/api/flow/group';
 import { GroupVO } from '/@/api/flow/group/types';
+import { Promotion } from '@element-plus/icons-vue';
 import Start from '/@/views/flow/form/tools/startFlow.vue';
 
 const startRef = ref();

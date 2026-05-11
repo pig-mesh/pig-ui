@@ -177,16 +177,35 @@ const { loadForm } = useTaskFormLoader({
 	currentOpenFlowForm,
 });
 
+function validateCurrentTask(requireNodeId = true) {
+	if (!currentData.value?.taskId) {
+		useMessage().warning('缺少任务标识');
+		return false;
+	}
+	if (requireNodeId && !currentData.value?.nodeId) {
+		useMessage().warning('缺少节点标识');
+		return false;
+	}
+	return true;
+}
+
 /**
  * 点击开始处理
  * @param row
  */
 const deal = (row: any) => {
+	if (!row?.taskId) {
+		useMessage().warning('缺少任务标识');
+		return;
+	}
 	currentData.value = row;
 	loadForm(() => queryTask(row.taskId, false), {
 		parseFormData: false,
 		onSuccess: () => {
 			rightDrawerVisible.value = true;
+		},
+		onError: (error: any) => {
+			useMessage().error(error?.msg || error?.message || '任务详情加载失败');
 		},
 	});
 };
@@ -210,20 +229,23 @@ const taskSubmitEvent = () => {
  * 提交任务
  */
 const submitTask = () => {
-	agreeHandler.value.handle(currentData.value,formData.value);
+	if (!validateCurrentTask()) return;
+	agreeHandler.value.handle(currentData.value, formData.value);
 };
 /**
  * 拒绝任务
  */
 const refuseTask = () => {
-	refuseHandler.value.handle(currentData.value,formData.value);
+	if (!validateCurrentTask()) return;
+	refuseHandler.value.handle(currentData.value, formData.value);
 };
 
 /**
  * 转办任务
  */
 const transferTask = () => {
-	transferHandler.value.handle(currentData.value,formData.value);
+	if (!validateCurrentTask()) return;
+	transferHandler.value.handle(currentData.value, formData.value);
 };
 
 /**
@@ -231,6 +253,7 @@ const transferTask = () => {
  * 当流程被驳回到发起人时，发起人使用此方法重新编辑表单并提交
  */
 const handleResubmit = async () => {
+	if (!validateCurrentTask(false)) return;
 	resubmitLoading.value = true;
 	try {
 		await resubmitTask({
@@ -238,9 +261,8 @@ const handleResubmit = async () => {
 			formData: formData.value,
 		});
 		taskSubmitEvent();
-	} catch (error) {
+	} catch {
 		useMessage().error('重新提交失败，请重试');
-		console.error('重新提交失败', error);
 	} finally {
 		resubmitLoading.value = false;
 	}

@@ -143,9 +143,7 @@
 </template>
 <script setup>
 import addNode from './addNode.vue';
-import Approval from './node/approval.vue';
-
-import { onMounted, ref, watch, getCurrentInstance, computed } from 'vue';
+import { onMounted, ref, watch, computed } from 'vue';
 import { useStore } from '../stores/index';
 import { bgColors, placeholderList } from '../utils/const';
 import { conditionStr, arrToStr, setApproverStr, copyerStr, checkApproval, timerStr, triggerStr } from '../utils/workflowHelpers';
@@ -184,7 +182,7 @@ const placeHolder = computed(() => {
 	return '';
 });
 
-watch(placeHolder, (value, oldValue, onCleanup) => {
+watch(placeHolder, (value) => {
 	props.nodeConfig.placeHolder = value;
 });
 
@@ -348,8 +346,6 @@ const blurEvent = (index) => {
 		props.nodeConfig.nodeName = props.nodeConfig.nodeName || defaultText;
 	}
 };
-const { proxy } = getCurrentInstance();
-
 const delNode = () => {
 	emits('update:nodeConfig', props.nodeConfig.childNode);
 };

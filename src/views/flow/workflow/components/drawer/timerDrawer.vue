@@ -11,7 +11,7 @@
 		<div class="p-4">
 			<h4 class="mb-3">延时方式</h4>
 			<el-radio-group v-model="timerConfig.timerConfig.timerType" class="ml-4" @change="timerTypeChange">
-				<el-radio v-for="{ value, label } in timerTypes" :key="value" :label="value">{{ label }}</el-radio>
+				<el-radio v-for="{ value, label } in timerTypes" :key="value" :value="value">{{ label }}</el-radio>
 			</el-radio-group>
 
 			<el-divider />
@@ -119,7 +119,6 @@ const step2FormList = computed(() => {
 });
 
 const dateFormFields = computed(() => {
-	console.log('step2FormList', step2FormList.value);
 	return step2FormList.value.filter((item) => item.type === 'datePicker' || item.type === 'dateTimePicker' || item.type === 'timePicker');
 });
 

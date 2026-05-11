@@ -261,9 +261,9 @@ onMounted(() => {
 							store.step2[field] = formConfig[field];
 						}
 					}
-				} catch (error) {
-					console.error('解析 formConfig 失败:', error);
-				}
+					} catch {
+						// 忽略无法解析的表单配置，继续加载流程设计。
+					}
 			}
 
 			// 加载流程设计

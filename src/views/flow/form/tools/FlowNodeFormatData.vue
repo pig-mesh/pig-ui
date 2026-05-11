@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from 'vue';
+import { watchDebounced } from '@vueuse/core';
 import FlowNodeFormat from '/@/views/flow/form/tools/FlowNodeFormat.vue';
 import { formatStartNodeShow } from '/@/api/flow/task';
 
@@ -31,11 +32,23 @@ const props = defineProps({
 });
 const row = ref([]);
 
-const queryData = (p: Record<string, any>) => {
+const hasQueryCondition = computed(() => !!props.flowId || !!props.processInstanceId);
+
+const normalizeParamMap = (p: unknown) => {
+	if (!p || typeof p !== 'object' || Array.isArray(p)) return {};
+	return p as Record<string, any>;
+};
+
+const queryData = (p: unknown = {}) => {
+	if (!hasQueryCondition.value) {
+		row.value = [];
+		return;
+	}
+
 	const data = {
 		flowId: props.flowId,
 		processInstanceId: props.processInstanceId,
-		paramMap: p,
+		paramMap: normalizeParamMap(p),
 		taskId: props.taskId,
 	};
 	formatStartNodeShow(data).then((res) => {
@@ -43,18 +56,11 @@ const queryData = (p: Record<string, any>) => {
 	});
 };
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-watch(
-	() => props.formData,
-	(val) => {
-		if (debounceTimer) clearTimeout(debounceTimer);
-		debounceTimer = setTimeout(() => queryData(val), 500);
-	}
+watchDebounced(
+	() => [props.flowId, props.processInstanceId, props.taskId, props.formData],
+	([, , , formData]) => queryData(formData),
+	{ immediate: true, deep: true, debounce: 500 }
 );
-
-onMounted(() => {
-	queryData({});
-});
 
 const validate = () => {
 	for (const k of props.selectUserNodeId) {
