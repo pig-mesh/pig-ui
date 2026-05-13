@@ -169,3 +169,31 @@ Internationalization is configured via `vue-i18n` in `src/i18n/`, supporting bot
 ### Icon System
 
 SVG icons are processed via custom `svgBuilder` plugin and located in `src/assets/icons/`.
+
+## Behavioral Guidelines
+
+The following four rules apply to all tasks and take precedence over other default behaviors.
+
+### 1. Think Before Coding
+
+- When requirements are ambiguous, ask first — never make silent assumptions
+- If a simpler solution exists, say so explicitly rather than quietly picking a direction
+- When something is unclear, surface the confusion instead of pushing forward with guesswork
+
+### 2. Prefer Simplicity
+
+- Use the minimum code needed to solve the current problem; add nothing unrequested
+- Do not introduce abstractions for one-off code or design for hypothetical future needs
+- Ask yourself: would a senior engineer call this over-engineered?
+
+### 3. Surgical Changes
+
+- Only touch what the task requires; do not refactor adjacent code as a side effect
+- Do not alter style or structure unrelated to the current task
+- Every changed line must trace directly to a stated requirement
+
+### 4. Goal-Driven Execution
+
+- Convert vague instructions into verifiable goals — prefer tests as the success criterion
+- "Fix a bug" → write a failing test that reproduces it, then make it pass
+- "Add validation" → write tests covering invalid inputs, then make them pass
