@@ -49,9 +49,8 @@
           v-model="passwordFormData.newpassword1"
           autocomplete="off"
           class="rounded-md h-11"
-          :maxLength="20"
-          :minLength="6"
-          @score="handlePassScore"
+          :maxLength="12"
+          :minLength="10"
       >
         <template #prefix>
           <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
@@ -67,9 +66,8 @@
           v-model="passwordFormData.newpassword2"
           autocomplete="off"
           class="rounded-md h-11"
-          :maxLength="20"
-          :minLength="6"
-          @score="handlePassScore"
+          :maxLength="12"
+          :minLength="10"
       >
         <template #prefix>
           <el-icon class="text-gray-400 el-input__icon dark:text-slate-500">
@@ -110,6 +108,8 @@ import {useMessage} from '/@/hooks/message';
 import {useI18n} from 'vue-i18n';
 import {LoginTypeEnum} from "/@/api/login";
 import type { FormInstance } from 'element-plus';
+import { useSiteConfig } from '/@/stores/siteConfig';
+import { createPasswordRuleValidator } from '/@/utils/passwordRule';
 
 // 注册生命周期事件
 const emit = defineEmits(['afterSuccess', 'change']);
@@ -119,15 +119,13 @@ const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthM
 
 // 使用i18n
 const {t} = useI18n();
+const { siteConfig } = storeToRefs(useSiteConfig());
 
 // 表单引用
 const dataFormRef = ref<FormInstance | null>(null);
 
 // 加载中状态
 const loading = ref(false);
-
-// 密码强度得分
-const score = ref('0');
 
 const props = defineProps({
   // 当前的值
@@ -149,41 +147,20 @@ const validatorPassword2 = (rule: any, value: any, callback: any) => {
     callback();
   }
 };
-const validatorScore = (rule: any, value: any, callback: any) => {
-  if (Number(score.value) <= 1) {
-    callback(new Error(t('expire.passwordScore')));
-  } else {
-    callback();
-  }
-};
+const passwordRuleValidator = createPasswordRuleValidator(() => siteConfig.value.passwordRule, t);
 
 // 表单验证规则
 const dataRules = reactive({
   password: [{required: true, message: t('expire.oldPassword'), trigger: 'blur'}],
   newpassword1: [
-    {
-      min: 6,
-      max: 20,
-      message: t('register.passwordLength'),
-      trigger: 'blur',
-    },
-    {validator: validatorScore, trigger: 'blur'},
+    {required: true, message: t('register.passwordEmpty'), trigger: 'blur'},
+    {validator: passwordRuleValidator, trigger: 'blur'},
   ],
   newpassword2: [
-    {
-      min: 6,
-      max: 20,
-      message: t('register.passwordLength'),
-      trigger: 'blur',
-    },
+    {required: true, message: t('register.passwordEmpty'), trigger: 'blur'},
     {validator: validatorPassword2, trigger: 'blur'},
   ]
 });
-
-// 处理密码强度得分变化事件
-const handlePassScore = (e: string) => {
-  score.value = e;
-};
 
 /**
  * @name handleResetPassword

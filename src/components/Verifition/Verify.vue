@@ -1,35 +1,37 @@
 <template>
-  <div v-show="showBox" class="verify-root" :class="mode == 'pop' ? 'mask' : ''" @click="handleMaskClick">
-    <div :class="mode == 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }" @click.stop>
-      <div
-          v-if="mode == 'pop'"
-          class="flex items-center justify-between h-12 px-4 text-base font-semibold text-gray-800 border-b border-gray-200 dark:text-gray-100 dark:border-gray-700 dark:bg-gray-800"
-      >
-        <span>{{ t('verify.complete') }}</span>
-        <span class="verifybox-close" @click="closeBox">
-					<i class="iconfont icon-close"></i>
-				</span>
-      </div>
-      <div :style="{ padding: mode == 'pop' ? '5px 10px' : '0' }" class="verifybox-bottom">
-        <!-- 验证码容器 -->
-        <component
-            :is="componentType"
-            v-if="componentType"
-            ref="instance"
-            :arith="arith"
-            :barSize="barSize"
-            :blockSize="blockSize"
-            :captchaType="captchaType"
-            :explain="explain"
-            :figure="figure"
-            :imgSize="imgSize"
-            :mode="mode"
-            :type="verifyType"
-            :vSpace="vSpace"
-        ></component>
+  <Teleport to="body" :disabled="mode !== 'pop'">
+    <div v-show="showBox" class="verify-root" :class="mode == 'pop' ? 'mask' : ''" @click="handleMaskClick">
+      <div :class="mode == 'pop' ? 'verifybox' : ''" :style="{ 'max-width': parseInt(imgSize.width) + 30 + 'px' }" @click.stop>
+        <div
+            v-if="mode == 'pop'"
+            class="flex items-center justify-between h-12 px-4 text-base font-semibold text-gray-800 border-b border-gray-200 dark:text-gray-100 dark:border-gray-700 dark:bg-gray-800"
+        >
+          <span>{{ t('verify.complete') }}</span>
+          <span class="verifybox-close" @click="closeBox">
+					  <i class="iconfont icon-close"></i>
+				  </span>
+        </div>
+        <div :style="{ padding: mode == 'pop' ? '5px 10px' : '0' }" class="verifybox-bottom">
+          <!-- 验证码容器 -->
+          <component
+              :is="componentType"
+              v-if="componentType"
+              ref="instance"
+              :arith="arith"
+              :barSize="barSize"
+              :blockSize="blockSize"
+              :captchaType="captchaType"
+              :explain="explain"
+              :figure="figure"
+              :imgSize="imgSize"
+              :mode="mode"
+              :type="verifyType"
+              :vSpace="vSpace"
+          ></component>
+        </div>
       </div>
     </div>
-  </div>
+  </Teleport>
 </template>
 <script>
 /**

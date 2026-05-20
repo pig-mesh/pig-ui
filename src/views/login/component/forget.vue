@@ -45,15 +45,11 @@
 						</el-icon>
 					</template>
 				</el-input>
-				<el-button
-					v-waves
-					@click="handleSendCode"
-					:loading="msgKey"
-					:disabled="msgKey"
+				<SmsCodeButton
+					:mobile="forgetFormData.phone"
+					:validate="() => dataFormRef?.validateField('phone')"
 					class="w-[120px] h-11 text-sm rounded-md font-medium border border-gray-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-600 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-				>
-					<span class="text-xs font-semibold">{{ msgText }}</span>
-				</el-button>
+				/>
 			</div>
 		</el-form-item>
 
@@ -64,9 +60,8 @@
 				v-model="forgetFormData.newpassword1"
 				autocomplete="off"
 				class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
-				:maxLength="20"
-				:minLength="6"
-				@score="handlePassScore"
+				:maxLength="12"
+				:minLength="10"
 			>
 				<template #prefix>
 					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
@@ -83,9 +78,8 @@
 				v-model="forgetFormData.newpassword2"
 				autocomplete="off"
 				class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
-				:maxLength="20"
-				:minLength="6"
-				@score="handlePassScore"
+				:maxLength="12"
+				:minLength="10"
 			>
 				<template #prefix>
 					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
@@ -120,17 +114,20 @@
 		</div>
 	</el-form>
 </template>
-  
+
   <script setup lang="ts" name="forget">
-  import {LoginTypeEnum, sendMobileCode} from '/@/api/login';
+  import {LoginTypeEnum} from '/@/api/login';
   import {forgetUserPassword} from '/@/api/admin/user';
+  import SmsCodeButton from '/@/components/Verifition/SmsCodeButton.vue';
   import {useMessage} from '/@/hooks/message';
   import {rule} from '/@/utils/validate';
   import {useI18n} from 'vue-i18n';
-  import { useIntervalFn } from '@vueuse/core';
   import type { FormInstance } from 'element-plus';
+  import { useSiteConfig } from '/@/stores/siteConfig';
+  import { createPasswordRuleValidator } from '/@/utils/passwordRule';
   
   const {t} = useI18n();
+  const { siteConfig } = storeToRefs(useSiteConfig());
   const emit = defineEmits(['afterSuccess', 'change']);
   
   // 按需加载组件
@@ -142,37 +139,12 @@
   // 加载中状态
   const loading = ref(false);
 
-  // 密码强度得分
-  const score = ref<string>('0');
-
   const forgetFormData = reactive({
     phone: '',
     code: '',
     newpassword1: '',
     newpassword2: '',
   });
-
-  // 定义响应式对象 - 使用 ref 替代 reactive 以配合 VueUse
-  const msgText = ref(t('mobile.codeText'));
-  const msgTime = ref(60);
-  const msgKey = ref(false);
-
-  // 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
-  const { pause, resume } = useIntervalFn(
-    () => {
-      msgTime.value--;
-      msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-
-      if (msgTime.value === 0) {
-        msgTime.value = 60;
-        msgText.value = t('mobile.codeText');
-        msgKey.value = false;
-        pause();
-      }
-    },
-    1000,
-    { immediate: false }
-  );
 
   const validatorPassword2 = (rule: any, value: any, callback: any) => {
     if (value !== forgetFormData.newpassword1) {
@@ -182,13 +154,7 @@
     }
   };
 
-  const validatorScore = (rule: any, value: any, callback: any) => {
-    if (Number(score.value) <= 1) {
-        callback(new Error(t('forget.passwordScore')));
-    } else {
-        callback();
-    }
-  };
+  const passwordRuleValidator = createPasswordRuleValidator(() => siteConfig.value.passwordRule, t);
 
   // 表单验证规则
   const dataRules = reactive({
@@ -206,13 +172,7 @@
             message: t('forget.passwordEmpty'),
             trigger: 'blur',
         },
-        {
-            min: 6,
-            max: 20,
-            message: t('forget.passwordLength'),
-            trigger: 'blur',
-        },
-        {validator: validatorScore, trigger: 'blur'},
+        {validator: passwordRuleValidator, trigger: 'blur'},
     ],
     newpassword2: [
         {
@@ -220,56 +180,9 @@
             message: t('forget.passwordEmpty'),
             trigger: 'blur',
         },
-        {
-            min: 6,
-            max: 20,
-            message: t('forget.passwordLength'),
-            trigger: 'blur',
-        },
         {validator: validatorPassword2, trigger: 'blur'},
     ]
   });
-  
-  /**
-   * 处理发送验证码事件
-   * @description 验证手机号格式并发送验证码
-   */
-  const handleSendCode = async () => {
-    if (!dataFormRef.value) return;
-
-    try {
-      await dataFormRef.value.validateField('phone');
-
-      const {msg, data} = await sendMobileCode(forgetFormData.phone);
-      if (data !== false) {
-        useMessage().success(t('mobile.sendSuccess'));
-        timeCacl();
-      } else {
-        useMessage().error(msg);
-      }
-    } catch (error: any) {
-      const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
-      useMessage().error(errorMsg);
-    }
-  };
-  
-  /**
-   * 计算并更新倒计时
-   * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
-   */
-  const timeCacl = () => {
-    msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-    msgKey.value = true;
-    resume();
-  };
-
-  /**
-   * 处理密码强度得分变化事件
-   * @param e - 密码强度得分
-   */
-  const handlePassScore = (e: string) => {
-    score.value = e;
-  };
 
   /**
    * 处理重置密码事件
@@ -279,11 +192,11 @@
   const handleResetPassword = async () => {
     if (!dataFormRef.value) return false;
 
-    try {
-        // 验证表单是否符合规则
-        const valid = await dataFormRef.value.validate();
-        if (!valid) return false;
+    // 验证表单是否符合规则
+    const valid = await dataFormRef.value.validate().catch(() => false);
+    if (!valid) return false;
 
+    try {
         // 开始加载
         loading.value = true;
         // 调用重置密码API
@@ -303,4 +216,3 @@
     }
   };
   </script>
-  

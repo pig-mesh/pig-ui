@@ -2,7 +2,7 @@ import request from '/@/utils/request';
 import { Session } from '/@/utils/storage';
 import { validateNull } from '/@/utils/validate';
 import { useUserInfo } from '/@/stores/userInfo';
-import other from '/@/utils/other';
+import { encryptPassword } from '/@/utils/passwordCrypto';
 import { refAutoReset } from '@vueuse/core';
 
 /**
@@ -70,7 +70,7 @@ export enum SocialLoginEnum {
 export const login = (data: any) => {
 	const basicAuth = getBasicAuth(OAuth2ClientType.PASSWORD);
 	// 密码加密
-	const encPassword = other.encryption(data.password, import.meta.env.VITE_PWD_ENC_KEY);
+	const encPassword = encryptPassword(data.password);
 	const { username, randomStr, code, grant_type, scope } = data;
 	return request({
 		url: '/auth/oauth2/token',
@@ -123,11 +123,19 @@ export const loginBySocial = (state: SocialLoginEnum, code: string) => {
 	});
 };
 
-export const sendMobileCode = (mobile: string) => {
+export interface SendMobileCodeParams {
+	mobile: string;
+	registered?: boolean;
+	captchaType: string;
+	captchaVerification: string;
+}
+
+export const sendMobileCode = (params: SendMobileCodeParams) => {
+	const { mobile, registered = true, captchaType, captchaVerification } = params;
 	return request({
 		url: '/admin/sysMessage/send/smsCode',
 		method: 'get',
-		params: { mobile },
+		params: { mobile, registered, captchaType, captchaVerification },
 	});
 };
 

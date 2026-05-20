@@ -84,7 +84,7 @@ onMounted(async () => {
 	const stateParam = getParam('state');
 
 	if (!code || !stateParam) {
-		console.error(t('socialLogin.missingParams'));
+		useMessage().error(t('socialLogin.missingParams'));
 		return;
 	}
 

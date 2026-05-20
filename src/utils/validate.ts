@@ -108,6 +108,21 @@ export const rule = {
 	},
 
 	/**
+	 * 校验大小写英文、数字、中划线、下划线
+	 * @param rule - 校验规则
+	 * @param value - 输入值
+	 * @param callback - 回调函数
+	 */
+	validatorLowerHyphen(rule: any, value: any, callback: any) {
+		const acount = /^[A-Za-z0-9_-]+$/;
+		if (value && !acount.test(value)) {
+			callback(new Error(getErrorMsg('validatorLowerHyphen', '请输入大小写英文、数字、中划线、下划线')));
+		} else {
+			callback();
+		}
+	},
+
+	/**
 	 * 校验首尾空白字符
 	 * @param rule - 校验规则
 	 * @param value - 输入值

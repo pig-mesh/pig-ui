@@ -22,10 +22,11 @@
 						</el-icon>
 					</template>
 				</el-input>
-				<el-button v-waves @click="handleSendCode" :loading="msgKey" :disabled="msgKey"
+				<SmsCodeButton
+					:mobile="loginForm.mobile"
+					:validate="() => loginFormRef?.validateField('mobile')"
 					class="send-code-btn w-[120px] h-11 text-[13px] rounded-md font-medium transition-all duration-200">
-					<span class="font-semibold">{{ msgText }}</span>
-				</el-button>
+				</SmsCodeButton>
 			</div>
 		</el-form-item>
 
@@ -61,12 +62,12 @@
 </template>
 
 <script setup lang="ts" name="loginMobile">
-import { LoginTypeEnum, sendMobileCode } from '/@/api/login';
+import { LoginTypeEnum } from '/@/api/login';
+import SmsCodeButton from '/@/components/Verifition/SmsCodeButton.vue';
 import { useMessage } from '/@/hooks/message';
 import { useUserInfo } from '/@/stores/userInfo';
 import { rule } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
-import { useIntervalFn } from '@vueuse/core';
 import type { FormInstance } from 'element-plus';
 
 const { t } = useI18n();
@@ -95,77 +96,25 @@ const loginRules = reactive({
 });
 
 /**
- * 处理发送验证码事件
- * @description 验证手机号格式并发送验证码
- */
-const handleSendCode = async () => {
-	if (!loginFormRef.value) return;
-
-	try {
-		await loginFormRef.value.validateField('mobile');
-
-		const { msg, ok } = await sendMobileCode(loginForm.mobile);
-		if (ok) {
-			useMessage().success(t('mobile.sendSuccess'));
-			timeCacl();
-		} else {
-			useMessage().error(msg);
-		}
-	} catch (error: any) {
-		const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
-		useMessage().error(errorMsg);
-	}
-};
-
-/**
  * 处理登录事件
  * @description 验证表单并执行手机号登录
  */
 const handleLogin = async () => {
 	if (!loginFormRef.value) return;
 
+	const valid = await loginFormRef.value.validate().catch(() => false);
+	if (!valid) return;
+
 	try {
-		await loginFormRef.value.validate();
 		loading.value = true;
 		await useUserInfo().loginByMobile(loginForm);
 		useMessage().success(t('mobile.loginSuccess'));
 		emit('signInSuccess');
-	} catch (error) {
+	} catch {
 		useMessage().error(t('errors.loginFailed'));
 	} finally {
 		loading.value = false;
 	}
 };
 
-// 定义响应式对象 - 使用 ref 替代 reactive 以配合 VueUse
-const msgText = ref(t('mobile.codeText'));
-const msgTime = ref(60);
-const msgKey = ref(false);
-
-// 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
-const { pause, resume } = useIntervalFn(
-	() => {
-		msgTime.value--;
-		msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-
-		if (msgTime.value === 0) {
-			msgTime.value = 60;
-			msgText.value = t('mobile.codeText');
-			msgKey.value = false;
-			pause();
-		}
-	},
-	1000,
-	{ immediate: false }
-);
-
-/**
- * 计算并更新倒计时
- * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
- */
-const timeCacl = () => {
-	msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-	msgKey.value = true;
-	resume();
-};
 </script>

@@ -13,11 +13,15 @@
 			<!-- Logo 和品牌区域 -->
 			<div class="flex items-center justify-center mb-8">
 				<div class="flex items-center justify-center rounded-lg logo-container w-14 h-14">
-					<img class="object-contain w-9 h-9" :src="!themeConfig.logo ? logo : baseURL + themeConfig.logo"
-						alt="Logo" />
+					<img v-if="!logoError"
+						class="object-contain w-9 h-9"
+						:src="logoSrc"
+						alt="Logo"
+						@error="logoError = true" />
+					<img v-else class="object-contain w-9 h-9" :src="logo" alt="Logo" />
 				</div>
 				<div class="ml-5 text-4xl font-bold text-gray-900 dark:text-white">
-					{{ themeConfig.globalTitle }}
+					{{ siteConfig.title }}
 				</div>
 			</div>
 
@@ -28,17 +32,18 @@
 
 			<!-- 登录表单组件 -->
 			<div class="w-full">
-				<register v-if="loginType === LoginTypeEnum.REGISTER" @change="changeLoginType" />
+				<register v-if="loginType === LoginTypeEnum.REGISTER && siteConfig.registerEnable"
+					@change="changeLoginType" />
 				<password v-if="loginType === LoginTypeEnum.PASSWORD" @signInSuccess="signInSuccess"
 					@change="changeLoginType" />
-				<mobile v-if="loginType === LoginTypeEnum.MOBILE" @signInSuccess="signInSuccess"
-					@change="changeLoginType" />
+				<mobile v-if="loginType === LoginTypeEnum.MOBILE && siteConfig.smsLoginEnable"
+					@signInSuccess="signInSuccess" @change="changeLoginType" />
 				<expire v-if="loginType === LoginTypeEnum.EXPIRE" :username="username" @change="changeLoginType" />
-				<forget v-if="loginType === LoginTypeEnum.FORGET" @change="changeLoginType" />
+				<forget v-if="loginType === LoginTypeEnum.FORGET && siteConfig.resetPassword"
+					@change="changeLoginType" />
 
 				<!-- 社交登录（包含内置分割线） -->
-				<social @signInSuccess="signInSuccess"
-					v-if="loginType === LoginTypeEnum.PASSWORD || loginType === LoginTypeEnum.MOBILE" />
+				<social @signInSuccess="signInSuccess" v-if="siteConfig.socialLoginEnable" />
 			</div>
 		</div>
 
@@ -65,6 +70,7 @@ import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { LoginTypeEnum } from '/@/api/login';
+import { getHomePage } from '/@/api/admin/menu';
 
 // 引入组件
 const Password = defineAsyncComponent(() => import('./component/password.vue'));
@@ -81,6 +87,8 @@ const Footer = defineAsyncComponent(() => import('./component/footer.vue'));
 // 定义变量内容
 const storesThemeConfig = useThemeConfig();
 const { themeConfig } = storeToRefs(storesThemeConfig);
+import { useSiteConfig } from '/@/stores/siteConfig';
+const { siteConfig } = storeToRefs(useSiteConfig());
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
@@ -90,6 +98,10 @@ const tenantEnable = ref(import.meta.env.VITE_AUTO_TENANT === 'true');
 
 // 登录方式
 const loginType = ref(LoginTypeEnum.PASSWORD);
+const logoError = ref(false);
+const logoSrc = computed(() =>
+  siteConfig.value.logo ? baseURL + siteConfig.value.logo : logo
+);
 // 用户名
 const username = ref('');
 
@@ -141,14 +153,23 @@ const signInSuccess = async () => {
 		// 初始化登录成功时间问候语
 		const currentTimeInfo = formatAxisI18n(new Date(), t);
 
-		// 处理路由跳转
-		if (route.query?.redirect) {
-			await router.push({
-				path: <string>route.query?.redirect
-			});
-		} else {
-			await router.push('/');
+		// 确定跳转目标路径
+		let targetPath: string | null = null;
+
+		// 开启自定义首页功能时，尝试获取配置的首页
+		if (import.meta.env.VITE_CUSTOM_HOMEPAGE_ENABLE === 'true') {
+			try {
+				const { data } = await getHomePage();
+				if (data?.path) {
+					targetPath = data.path;
+				}
+			} catch {
+				// 获取失败，使用默认逻辑
+			}
 		}
+
+		// 优先使用 redirect 参数，其次自定义首页，最后默认首页
+		await router.push((route.query?.redirect as string) || targetPath || '/home');
 
 		// 登录成功提示
 		const signInText = t('signInText');
@@ -156,10 +177,9 @@ const signInSuccess = async () => {
 
 		// 添加 loading，防止第一次进入界面时出现短暂空白
 		NextLoading.start();
-	} catch (error) {
-		console.error('Login success handling error:', error);
-		useMessage().error(t('errors.networkError'));
-	}
+		} catch {
+			useMessage().error(t('errors.networkError'));
+		}
 };
 
 /**

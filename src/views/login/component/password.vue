@@ -85,21 +85,25 @@
 
 		<!-- 底部链接：找回密码 | 验证码登录 | 注册账号 -->
 		<div class="flex items-center justify-center gap-3 mb-3 text-[13px]">
-			<a
-				href="#"
-				class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
-				@click.prevent="emit('change',LoginTypeEnum.FORGET)"
-			>
-				{{ $t('password.forgetPassword') }}
-			</a>
-			<span class="text-gray-300 dark:text-slate-600">|</span>
-			<a
-				href="#"
-				class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
-				@click.prevent="emit('change', LoginTypeEnum.MOBILE)"
-			>
-				{{ $t('password.mobileLogin') }}
-			</a>
+			<template v-if="siteConfig.resetPassword">
+				<a
+					href="#"
+					class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
+					@click.prevent="emit('change',LoginTypeEnum.FORGET)"
+				>
+					{{ $t('password.forgetPassword') }}
+				</a>
+			</template>
+			<template v-if="siteConfig.smsLoginEnable">
+				<span class="text-gray-300 dark:text-slate-600">|</span>
+				<a
+					href="#"
+					class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400"
+					@click.prevent="emit('change', LoginTypeEnum.MOBILE)"
+				>
+					{{ $t('password.mobileLogin') }}
+				</a>
+			</template>
 			<template v-if="autoRegisterEnable">
 				<span class="text-gray-300 dark:text-slate-600">|</span>
 				<a
@@ -113,12 +117,8 @@
 		</div>
 
 		<!-- 服务协议提示 -->
-		<div class="flex items-center justify-center">
-			<span class="text-xs leading-relaxed text-center text-gray-400 dark:text-slate-500">
-				{{ $t('password.agreement') }}
-				<a href="#" class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400">{{ $t('password.serviceAgreement') }}</a>
-				{{ $t('password.and') }}
-				<a href="#" class="text-gray-500 transition-all duration-200 login-link dark:text-slate-400">{{ $t('password.privacyPolicy') }}</a>
+		<div v-if="siteConfig.privacyTip" class="flex items-center justify-center">
+			<span class="text-xs leading-relaxed text-center text-gray-400 dark:text-slate-500" v-html="siteConfig.privacyTip">
 			</span>
 		</div>
 	</el-form>
@@ -143,10 +143,13 @@ const { t } = useI18n();
 
 // 动态加载滑块验证码组件
 const Verify = defineAsyncComponent(() => import('/@/components/Verifition/Verify.vue'));
-const captchaType = import.meta.env.VITE_CAPTCHA_TYPE || 'clickWord';
+import { useSiteConfig, CaptchaType } from '/@/stores/siteConfig';
+const { siteConfig } = storeToRefs(useSiteConfig());
+
+const captchaType = computed(() => siteConfig.value.captchaType || CaptchaType.ClickWord);
 
 // 定义变量内容
-const autoRegisterEnable = ref(import.meta.env.VITE_REGISTER_ENABLE === 'true');
+const autoRegisterEnable = computed(() => siteConfig.value.registerEnable);
 const emit = defineEmits(['signInSuccess', 'change']); // 声明事件名称
 const loginFormRef = ref(); // 定义LoginForm表单引用
 const loading = ref(false); // 定义是否正在登录中
@@ -161,7 +164,7 @@ const state = reactive({
 		username: previewUserName, // 用户名
 		password: previewPassword, // 密码
 		code: '', // 验证码
-		randomStr: captchaType, // 验证码随机数
+		randomStr: 'clickWord', // 验证码随机数
 	},
 });
 
@@ -173,8 +176,11 @@ const loginRules = reactive({
 
 const verifyref = ref<InstanceType<typeof Verify>>(null); // 定义verify组件引用
 // 是否开启验证码
-const verifyEnable = ref(import.meta.env.VITE_VERIFY_ENABLE === 'true');
-const verifyImageEnable = ref(import.meta.env.VITE_VERIFY_IMAGE_ENABLE === 'true');
+const verifyEnable = computed(() => {
+  const t = siteConfig.value.captchaType;
+  return t && t !== CaptchaType.None && t !== CaptchaType.Math;
+});
+const verifyImageEnable = computed(() => siteConfig.value.captchaType === CaptchaType.Math);
 const imgSrc = ref('');
 
 /**
@@ -193,17 +199,13 @@ const getVerifyImageCode = () => {
  * @description 先进行表单验证，然后根据配置决定是否显示滑块验证码
  */
 const handleVerify = async () => {
-	try {
-		const valid = await loginFormRef.value.validate();
+	const valid = await loginFormRef.value.validate().catch(() => false);
+	if (!valid) return;
 
-		if (valid && verifyEnable.value) {
-			verifyref.value.show(); // 显示验证组件
-		} else if (valid) {
-			await onSignIn(); // 调用登录方法
-		}
-	} catch (error) {
-		// 表单验证失败，无需额外处理
-		console.debug('Form validation failed:', error);
+	if (verifyEnable.value) {
+		verifyref.value.show(); // 显示验证组件
+	} else {
+		await onSignIn(); // 调用登录方法
 	}
 };
 
@@ -247,4 +249,3 @@ onMounted(() => {
 	}
 });
 </script>
-

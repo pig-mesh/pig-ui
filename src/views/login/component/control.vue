@@ -51,8 +51,11 @@ const state = reactive({
 });
 
 // 环境变量控制功能开关
-const isI18nEnabled = import.meta.env.VITE_I18N_ENABLE === 'true';
-const isDarkModeEnabled = import.meta.env.VITE_DARK_MODE_ENABLE === 'true';
+import { useSiteConfig } from '/@/stores/siteConfig';
+const { siteConfig } = storeToRefs(useSiteConfig());
+
+const isI18nEnabled = computed(() => siteConfig.value.i18nEnable);
+const isDarkModeEnabled = computed(() => siteConfig.value.darkModeEnable);
 
 // 语言切换处理
 const onLanguageChange = (lang: string) => {
@@ -67,7 +70,7 @@ const onLanguageChange = (lang: string) => {
 // 主题切换
 const isDark = useDark();
 const onThemeClick = () => {
-	if (!isDarkModeEnabled) return; // 如果未启用暗黑模式，直接返回
+	if (!isDarkModeEnabled.value) return; // 如果未启用暗黑模式，直接返回
 
 	const body = document.documentElement as HTMLElement;
 	themeConfig.value.isDark = !themeConfig.value.isDark;
@@ -89,7 +92,7 @@ const onThemeClick = () => {
 
 // 在 script setup 中添加
 const initLanguage = () => {
-	if (!isI18nEnabled) return; // 如果未启用多语言，直接返回
+	if (!isI18nEnabled.value) return; // 如果未启用多语言，直接返回
 
 	if (Local.get('themeConfig')) {
 		state.disabledI18n = Local.get('themeConfig').globalI18n;

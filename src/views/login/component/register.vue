@@ -37,7 +37,7 @@
 		<el-form-item class="mb-6 login-animation2" prop="password">
 			<strength-meter :placeholder="$t('password.accountPlaceholder2')" v-model="state.ruleForm.password"
 				autocomplete="off" class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200"
-				:maxLength="20" :minLength="6" @score="handlePassScore">
+				:maxLength="12" :minLength="10">
 				<template #prefix>
 					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
 						<ele-Unlock />
@@ -70,10 +70,13 @@
 						</el-icon>
 					</template>
 				</el-input>
-				<el-button v-waves @click="handleSendCode" :loading="msgKey" :disabled="msgKey"
+				<SmsCodeButton
+					:mobile="state.ruleForm.phone"
+					:registered="false"
+					:validate="() => dataFormRef?.validateField('phone')"
+					text-key="register"
 					class="w-[120px] h-11 text-[13px] rounded-md font-medium transition-all duration-200">
-					<span class="font-semibold">{{ msgText }}</span>
-				</el-button>
+				</SmsCodeButton>
 			</div>
 		</el-form-item>
 
@@ -107,14 +110,15 @@
 
 <script setup lang="ts" name="register">
 import { registerUser, validatePhone, validateUsername } from '/@/api/admin/user';
-import {sendMobileInnerCode} from "/@/api/admin/message";
 import { fetchList } from '/@/api/admin/tenant';
 import { LoginTypeEnum } from '/@/api/login';
+import SmsCodeButton from '/@/components/Verifition/SmsCodeButton.vue';
 import { useMessage } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { rule } from '/@/utils/validate';
-import { useIntervalFn } from '@vueuse/core';
 import type { FormInstance } from 'element-plus';
+import { useSiteConfig } from '/@/stores/siteConfig';
+import { createPasswordRuleValidator } from '/@/utils/passwordRule';
 
 // 注册生命周期事件
 const emit = defineEmits(['afterSuccess', 'change']);
@@ -124,6 +128,7 @@ const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthM
 
 // 使用i18n
 const { t } = useI18n();
+const { siteConfig } = storeToRefs(useSiteConfig());
 
 // 表单引用
 const dataFormRef = ref<FormInstance>();
@@ -131,9 +136,6 @@ const dataFormRef = ref<FormInstance>();
 // 加载中状态
 const loading = ref(false);
 const tenantLoading = ref(false);
-
-// 密码强度得分
-const score = ref('0');
 
 // 租户列表
 const tenantList = ref<{ id: string; name: string }[]>([]);
@@ -167,6 +169,7 @@ type ValidateRule = {
 	field: string;
 	fullField: string;
 };
+const passwordRuleValidator = createPasswordRuleValidator(() => siteConfig.value.passwordRule, t);
 
 // 表单验证规则
 const dataRules = reactive({
@@ -204,22 +207,7 @@ const dataRules = reactive({
 	],
 	password: [
 		{ required: true, message: t('register.passwordEmpty'), trigger: 'blur' },
-		{
-			min: 6,
-			max: 20,
-			message: t('register.passwordLength'),
-			trigger: 'blur',
-		},
-		{
-			validator: (_rule: ValidateRule, _value: string, callback: ValidateCallback) => {
-				if (Number(score.value) < 2) {
-					callback(t('register.passwordStrength'));
-				} else {
-					callback();
-				}
-			},
-			trigger: 'blur',
-		},
+		{ validator: passwordRuleValidator, trigger: 'blur' },
 	],
 	checked: [
 		{ required: true, message: t('register.termsRequired'), trigger: 'change' },
@@ -255,69 +243,6 @@ const getTenantList = async () => {
 	} finally {
 		tenantLoading.value = false;
 	}
-};
-
-// 验证码倒计时相关
-const msgText = ref(t('register.codeText'));
-const msgTime = ref(60);
-const msgKey = ref(false);
-
-// 使用 VueUse 的 useIntervalFn 实现倒计时
-const { pause, resume } = useIntervalFn(
-	() => {
-		msgTime.value--;
-		msgText.value = `${msgTime.value}${t('register.seconds')}`;
-		if (msgTime.value === 0) {
-			msgTime.value = 60;
-			msgText.value = t('register.codeText');
-			msgKey.value = false;
-			pause();
-		}
-	},
-	1000,
-	{ immediate: false }
-);
-
-/**
- * 启动倒计时
- */
-const timeCacl = () => {
-	msgText.value = `${msgTime.value}${t('register.seconds')}`;
-	msgKey.value = true;
-	resume();
-};
-
-/**
- * 处理发送验证码事件
- * @description 验证手机号格式并发送验证码
- */
-const handleSendCode = async () => {
-	// 验证表单是否符合规则
-	const valid = await dataFormRef.value?.validateField('phone').catch(() => { });
-	if (!valid) {
-		return false;
-	}
-
-	try {
-		const { msg, ok } = await sendMobileInnerCode(state.ruleForm.phone);
-		if (ok) {
-			useMessage().success(t('register.sendSuccess'));
-			timeCacl();
-		} else {
-			useMessage().error(msg);
-		}
-	} catch (err: any) {
-		useMessage().error(err.msg || t('errors.networkError'));
-		return false;
-	}
-};
-
-/**
- * 处理密码强度得分变化事件
- * @param e - 密码强度得分
- */
-const handlePassScore = (e: string) => {
-	score.value = e;
 };
 
 /**
