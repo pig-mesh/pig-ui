@@ -51,5 +51,10 @@ export default {
         sortOrderRequired: 'Sort order is required',
         componentLengthInvalid: 'Component name length must be between 5 and 255',
         componentRequired: 'Please enter component name',
+        setHomePage: 'Set as Home',
+        currentHomePage: 'Current Home',
+        setHomePageConfirm: 'Are you sure to set this menu as homepage?',
+        setHomePageSuccess: 'Set homepage successfully',
+        setHomePageFailed: 'Failed to set homepage',
     },
 };

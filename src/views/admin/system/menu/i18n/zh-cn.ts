@@ -32,6 +32,8 @@ export default {
         inputMenuTypeTip: '请选择菜单类型',
         inputEmbeddedTip: '请选择是否内嵌',
         inputComponentTip: '请输入组件名称',
+        deleteProtectedTip: '系统内置菜单不能删除',
+        deleteCascadeConfirm: '确定删除此菜单及所有子菜单吗?',
         deleteDisabledTip: '系统内置菜单不能删除',
         menuTypeLeft: '左菜单',
         menuTypeTop: '顶菜单',

@@ -1,5 +1,10 @@
 import request from '/@/utils/request';
 
+export interface MenuSortPayload {
+	parentId: string | number;
+	menuIds: Array<string | number>;
+}
+
 export const pageList = (params?: Object) => {
     return request({
         url: '/admin/menu/tree',
@@ -30,6 +35,14 @@ export const putObj = (data: Object) => {
         method: 'put',
         data: data,
     });
+};
+
+export const sortMenu = (data: MenuSortPayload) => {
+	return request({
+		url: '/admin/menu/sort',
+		method: 'put',
+		data,
+	});
 };
 
 export const addObj = (data: Object) => {
@@ -76,3 +89,34 @@ export function validateExist(rule: any, value: any, callback: any, isEdit: bool
         }
     });
 }
+
+/**
+ * 设置首页菜单
+ * @param menuId 菜单ID
+ */
+export const setHomePage = (menuId: string) => {
+    return request({
+        url: `/admin/menu/homepage/${menuId}`,
+        method: 'put',
+    });
+};
+
+/**
+ * 获取首页菜单
+ */
+export const getHomePage = () => {
+    return request({
+        url: '/admin/menu/homepage',
+        method: 'get',
+    });
+};
+
+/**
+ * 刷新指定角色的菜单权限缓存
+ */
+export const clearMenuCache = (roleId: string | number) => {
+	return request({
+		url: `/admin/menu/cache/${roleId}`,
+		method: 'delete',
+	});
+};

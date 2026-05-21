@@ -34,12 +34,23 @@
 				:load="load"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 				row-key="id"
+				:row-class-name="getMenuRowClassName"
 				style="width: 100%"
 				v-loading="state.loading"
 				border
 				:cell-style="tableStyle.cellStyle"
 				:header-cell-style="tableStyle?.headerCellStyle"
 			>
+				<el-table-column type="index" width="52" align="center" fixed>
+					<template #header>
+						<span class="sort-header-placeholder"></span>
+					</template>
+					<template #default>
+						<el-icon class="sort-handle" :class="{ 'is-disabled': state.queryForm.menuName }">
+							<Rank />
+						</el-icon>
+					</template>
+				</el-table-column>
 				<el-table-column :label="$t('sysmenu.name')" fixed prop="name" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.sortOrder')" prop="sortOrder" show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('sysmenu.icon')" prop="icon" show-overflow-tooltip>
@@ -63,7 +74,7 @@
 					</template>
 				</el-table-column>
 				<el-table-column :label="$t('sysmenu.permission')" :show-overflow-tooltip="true" prop="permission"></el-table-column>
-				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="250">
+				<el-table-column :label="$t('common.action')" show-overflow-tooltip width="320">
 					<template #default="scope">
 						<el-button icon="folder-add" @click="onOpenMenuDialog('add', scope.row)" text type="primary" v-auth="'sys_menu_add'">
 							{{ $t('common.addBtn') }}
@@ -71,7 +82,28 @@
 						<el-button icon="edit-pen" @click="onOpenMenuDialog('edit', scope.row)" text type="primary" v-auth="'sys_menu_edit'"
 							>{{ $t('common.editBtn') }}
 						</el-button>
-
+						<template v-if="scope.row.menuType === '0' && customHomePageEnable">
+							<el-button
+								v-if="scope.row.isHomePage === '1'"
+								icon="HomeFilled"
+								@click="handleSetHomePage(scope.row)"
+								text
+								type="success"
+								v-auth="'sys_menu_edit'"
+							>
+								{{ $t('sysmenu.currentHomePage') }}
+							</el-button>
+							<el-button
+								v-else
+								icon="HomeFilled"
+								@click="handleSetHomePage(scope.row)"
+								text
+								type="primary"
+								v-auth="'sys_menu_edit'"
+							>
+								{{ $t('sysmenu.setHomePage') }}
+							</el-button>
+						</template>
 						<el-tooltip icon="delete" :content="$t('sysmenu.deleteDisabledTip')" :disabled="!deleteMenuDisabled(scope.row)" placement="top">
 							<span style="margin-left: 12px">
 								<el-button
@@ -95,20 +127,28 @@
 </template>
 
 <script lang="ts" name="systemMenu" setup>
-import { delObj, pageList } from '/@/api/admin/menu';
+import { delObj, pageList, setHomePage, sortMenu } from '/@/api/admin/menu';
 import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { useDebounceFn } from '@vueuse/core';
+import { Rank } from '@element-plus/icons-vue';
+import Sortable from 'sortablejs';
 
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('./form.vue'));
 const { t } = useI18n();
+
+// 自定义首页功能开关
+const customHomePageEnable = import.meta.env.VITE_CUSTOM_HOMEPAGE_ENABLE === 'true';
+
 // 定义变量内容
 const tableRef = ref();
 const menuDialogRef = ref();
 const showSearch = ref(true);
 const queryRef = ref();
+const sortableRef = shallowRef<Sortable | null>(null);
+const blockedSortMove = shallowRef(false);
 
 /**
  * 表格状态配置
@@ -169,6 +209,59 @@ const tableList = computed(() => {
 	return list;
 });
 
+const getLazyChildrenMap = () => tableRef.value?.store?.states?.lazyTreeNodeMap?.value || {};
+
+const getRowKey = (row: any) => String(row?.id);
+
+const getMenuRowClassName = ({ row }: { row: any }) => `menu-sort-row menu-sort-row-${getRowKey(row)}`;
+
+const getRowKeyFromElement = (element?: HTMLElement) => {
+	const rowClass = Array.from(element?.classList || []).find((className) => className.startsWith('menu-sort-row-'));
+	return rowClass?.replace('menu-sort-row-', '');
+};
+
+const getSortableTbody = () => {
+	const handle = tableRef.value?.$el?.querySelector('.sort-handle');
+	return handle?.closest('tbody') || tableRef.value?.$el?.querySelector('.el-table__body-wrapper tbody');
+};
+
+const collectRows = (rows: any[], rowMap = new Map<string, any>()) => {
+	rows.forEach((row) => {
+		rowMap.set(getRowKey(row), row);
+		const lazyChildren = getLazyChildrenMap()[row.id];
+		if (Array.isArray(lazyChildren)) {
+			collectRows(lazyChildren, rowMap);
+		}
+		if (Array.isArray(row.children)) {
+			collectRows(row.children, rowMap);
+		}
+	});
+	return rowMap;
+};
+
+const findRowByKey = (key: string) => collectRows(state.dataList || []).get(key);
+
+const getSiblingRows = (parentId: any) => {
+	if (!parentId || String(parentId) === '-1') {
+		return state.dataList || [];
+	}
+	return getLazyChildrenMap()[parentId] || treeNodeMap.get(parentId)?.row?.children || [];
+};
+
+const getOrderedSiblingRows = (parentId: any) => {
+	const tbody = getSortableTbody();
+	const rows = Array.from(tbody?.querySelectorAll('tr.menu-sort-row') || []) as HTMLElement[];
+	const orderedRows = rows
+		.map((row) => findRowByKey(getRowKeyFromElement(row) || ''))
+		.filter((row) => row && String(row.parentId) === String(parentId));
+
+	const siblingRows = getSiblingRows(parentId);
+	if (orderedRows.length !== siblingRows.length) {
+		return siblingRows;
+	}
+	return orderedRows;
+};
+
 /**
  * 打开新增/编辑菜单弹窗
  * @param {string} [type] - 操作类型
@@ -176,6 +269,91 @@ const tableList = computed(() => {
  */
 const onOpenMenuDialog = (type?: string, row?: any) => {
 	menuDialogRef.value.openDialog(type, row);
+};
+
+const canMoveMenuRow = (event: Sortable.MoveEvent) => {
+	if (state.queryForm.menuName) {
+		return false;
+	}
+
+	const draggedKey = getRowKeyFromElement(event.dragged);
+	const relatedKey = getRowKeyFromElement(event.related);
+	const draggedRow = draggedKey ? findRowByKey(draggedKey) : undefined;
+	const relatedRow = relatedKey ? findRowByKey(relatedKey) : undefined;
+	const canMove = Boolean(draggedRow && relatedRow && String(draggedRow.parentId) === String(relatedRow.parentId));
+
+	if (!canMove) {
+		blockedSortMove.value = true;
+	}
+	return canMove;
+};
+
+const handleSortEnd = async (event: Sortable.SortableEvent) => {
+	if (blockedSortMove.value) {
+		blockedSortMove.value = false;
+		useMessage().warning('仅支持同级菜单排序');
+		nextTick(initMenuSortable);
+		return;
+	}
+
+	if (state.queryForm.menuName) {
+		return;
+	}
+
+	const rowKey = getRowKeyFromElement(event.item);
+	const dragRow = rowKey ? findRowByKey(rowKey) : undefined;
+	if (!dragRow) {
+		return;
+	}
+
+	const parentId = dragRow.parentId || '-1';
+	const siblingRows = getSiblingRows(parentId);
+	const orderedRows = getOrderedSiblingRows(parentId);
+	const previousIds = siblingRows.map((row) => getRowKey(row)).join(',');
+	const orderedIds = orderedRows.map((row) => getRowKey(row)).join(',');
+
+	if (previousIds === orderedIds) {
+		nextTick(initMenuSortable);
+		return;
+	}
+
+	try {
+		await sortMenu({
+			parentId,
+			menuIds: orderedRows.map((row) => row.id),
+		});
+		useMessage().success(t('common.optSuccessText'));
+		if (String(parentId) === '-1') {
+			getDataList();
+		} else {
+			refreshTreeNodeInternal(parentId);
+		}
+	} catch (err: any) {
+		if (String(parentId) === '-1') {
+			getDataList();
+		} else {
+			refreshTreeNodeInternal(parentId);
+		}
+		useMessage().error(err?.msg || t('common.optFailText'));
+	} finally {
+		nextTick(initMenuSortable);
+	}
+};
+
+const initMenuSortable = () => {
+	sortableRef.value?.destroy();
+	sortableRef.value = null;
+
+	const tbody = getSortableTbody();
+	if (!tbody) return;
+
+	sortableRef.value = Sortable.create(tbody, {
+		handle: '.sort-handle',
+		animation: 300,
+		disabled: Boolean(state.queryForm.menuName),
+		onMove: canMoveMenuRow,
+		onEnd: handleSortEnd,
+	});
 };
 
 /**
@@ -325,6 +503,28 @@ const clearChildCache = (nodeId: any) => {
 };
 
 /**
+ * 设置首页
+ * @description 将指定菜单设置为首页
+ * @param {any} row - 要设置为首页的菜单行数据
+ */
+const handleSetHomePage = async (row: any) => {
+	try {
+		await useMessageBox().confirm(t('sysmenu.setHomePageConfirm'));
+	} catch {
+		return;
+	}
+
+	try {
+		const { msg } = await setHomePage(row.id);
+		useMessage().success(msg);
+		// 刷新菜单树
+		getDataList();
+	} catch (err: any) {
+		useMessage().error(err.msg || t('sysmenu.setHomePageFailed'));
+	}
+};
+
+/**
  * 删除菜单
  * @description 删除菜单节点，并清理缓存，刷新父节点或整个表格
  * @param {any} row - 要删除的菜单行数据
@@ -411,6 +611,16 @@ const handleRefresh = (refreshInfo?: any) => {
 	}
 };
 
+watch(
+	() => [state.dataList, state.queryForm.menuName, state.loading],
+	() => {
+		if (!state.loading) {
+			nextTick(initMenuSortable);
+		}
+	},
+	{ deep: true }
+);
+
 // 页面加载时获取数据
 onMounted(() => {
 	getDataList();
@@ -418,6 +628,24 @@ onMounted(() => {
 
 // 组件卸载时清理内存
 onUnmounted(() => {
+	sortableRef.value?.destroy();
 	treeNodeMap.clear();
 });
 </script>
+
+<style scoped>
+.sort-handle {
+	cursor: move;
+	color: var(--el-text-color-secondary);
+}
+
+.sort-handle.is-disabled {
+	cursor: not-allowed;
+	opacity: 0.45;
+}
+
+.sort-header-placeholder {
+	display: inline-block;
+	width: 1px;
+}
+</style>

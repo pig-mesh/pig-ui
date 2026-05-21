@@ -23,6 +23,19 @@ export function fetchItemList(query: any) {
 	});
 }
 
+export interface DictItemSortPayload {
+	dictId: string | number;
+	itemIds: Array<string | number>;
+}
+
+export function sortDictItem(data: DictItemSortPayload) {
+	return request({
+		url: '/admin/dict/item/sort',
+		method: 'put',
+		data,
+	});
+}
+
 export function addItemObj(obj: any) {
 	return request({
 		url: '/admin/dict/item',
