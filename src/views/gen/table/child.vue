@@ -42,17 +42,18 @@ import {useMessage} from "/@/hooks/message";
 
 const emit = defineEmits(['update:modelValue']);
 
-defineProps({
+const props = defineProps({
 	modelValue: Object,
 });
 
 const visible = ref(false);
 const dataFormRef = ref();
-const form = reactive({
+const createDefaultForm = () => ({
 	childTableName: '',
 	mainField: '',
 	childField: '',
 });
+const form = reactive(createDefaultForm());
 
 const dataRules = ref({
 	childTableName: [{ required: true, message: '请选择子表', trigger: 'blur' }],
@@ -127,9 +128,17 @@ const onClear = () => {
 };
 
 watch(
+	() => props.modelValue,
+	(val) => {
+		Object.assign(form, createDefaultForm(), val || {});
+	},
+	{ deep: true, immediate: true }
+);
+
+watch(
 	() => form,
 	(val) => {
-		emit('update:modelValue', val);
+		emit('update:modelValue', { ...val });
 	},
 	{ deep: true, immediate: true }
 );

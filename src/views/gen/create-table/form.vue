@@ -39,16 +39,16 @@
                   <el-input v-model="scope.row.comment" :placeholder="t('createTable.comment')"/>
                 </template>
               </el-table-column>
-              <el-table-column prop="typeName" :label="t('createTable.typeName')" show-overflow-tooltip>
+              <el-table-column prop="type" :label="t('createTable.typeName')" show-overflow-tooltip>
                 <template #default="scope">
-                  <el-select v-model="scope.row.typeName" :placeholder="t('createTable.typeName')" clearable filterable>
+                  <el-select v-model="scope.row.type" :placeholder="t('createTable.typeName')" clearable filterable>
                     <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value"/>
                   </el-select>
                 </template>
               </el-table-column>
-              <el-table-column prop="precision" :label="t('createTable.precision')" show-overflow-tooltip>
+              <el-table-column prop="length" :label="t('createTable.precision')" show-overflow-tooltip>
                 <template #default="scope">
-                  <el-input-number :min="0" :max="10000" v-model="scope.row.precision"
+                  <el-input-number :min="0" :max="10000" v-model="scope.row.length"
                                    :placeholder="t('createTable.precision')"></el-input-number>
                 </template>
               </el-table-column>
@@ -66,7 +66,7 @@
               <el-table-column prop="primary" :label="t('createTable.primary')" show-overflow-tooltip>
                 <template #default="scope">
                   <el-radio-group v-model="scope.row.primary">
-                    <el-radio v-for="(item, index) in tableDict" :key="index" :label="item.value" class="w-5">
+                    <el-radio v-for="(item, index) in tableDict" :key="index" :value="item.value" class="w-5">
                       {{ item.label }}
                     </el-radio>
                   </el-radio-group>
@@ -75,7 +75,7 @@
               <el-table-column prop="nullable" :label="t('createTable.nullable')" show-overflow-tooltip>
                 <template #default="scope">
                   <el-radio-group v-model="scope.row.nullable">
-                    <el-radio v-for="(item, index) in tableDict" :key="index" :label="item.value" class="w-5">
+                    <el-radio v-for="(item, index) in tableDict" :key="index" :value="item.value" class="w-5">
                       {{ item.label }}
                     </el-radio>
                   </el-radio-group>
@@ -99,28 +99,72 @@
 </template>
 
 <script setup lang="ts" name="CreateTableDialog">
+import {useArrayUnique, useToggle} from '@vueuse/core';
 import {useMessage, useMessageBox} from "/@/hooks/message";
-import {getObj, addObj, putObj} from '/@/api/gen/create-table'
+import {getObj, addObj} from '/@/api/gen/create-table'
 import {useI18n} from "vue-i18n"
 import {rule, validateNull} from '/@/utils/validate';
-import {useDict} from "/@/hooks/dict";
 import {list} from "/@/api/gen/fieldtype";
 import {fetchList} from '/@/api/gen/table';
 
 const emit = defineEmits(['refresh']);
 
 const {t} = useI18n();
-const {yes_no_type} = useDict('yes_no_type');
 
-const tableDict = [{value: -1, label: '否'}, {value: 1, label: '是'}]
+const tableDict = [{value: false, label: '否'}, {value: true, label: '是'}]
+
+interface CreateTableColumn {
+  name: string;
+  comment: string;
+  type: string;
+  length: number;
+  scale: number;
+  defaultValue?: any;
+  primary: boolean;
+  nullable: boolean;
+  autoIncrement?: boolean;
+}
+
+interface CreateTablePayloadColumn {
+  name: string;
+  comment: string;
+  type: string;
+  length?: number;
+  precision?: number;
+  scale?: number;
+  defaultValue?: any;
+  primary: boolean;
+  nullable: boolean;
+  autoIncrement?: boolean;
+}
+
+const DEFAULT_COLUMNS: CreateTableColumn[] = [
+  {name: 'id', comment: '主键', type: 'bigint', length: 20, scale: 0, defaultValue: null, primary: true, nullable: false},
+  {name: 'create_by', comment: '创建人', type: 'varchar', length: 64, scale: 0, defaultValue: null, primary: false, nullable: true},
+  {name: 'create_time', comment: '创建时间', type: 'datetime', length: 0, scale: 0, defaultValue: null, primary: false, nullable: true},
+  {name: 'update_by', comment: '修改人', type: 'varchar', length: 64, scale: 0, defaultValue: null, primary: false, nullable: true},
+  {name: 'update_time', comment: '修改时间', type: 'datetime', length: 0, scale: 0, defaultValue: null, primary: false, nullable: true},
+  {name: 'del_flag', comment: '删除标记', type: 'char', length: 1, scale: 0, defaultValue: '0', primary: false, nullable: false},
+  {name: 'tenant_id', comment: '租户ID', type: 'bigint', length: 0, scale: 0, defaultValue: null, primary: false, nullable: false},
+];
+
+const FIELD_TYPE_RULES: Array<{pattern: RegExp; type: string; length: number}> = [
+  {pattern: /(time|date)/i, type: 'datetime', length: 0},
+  {pattern: /id/i, type: 'bigint', length: 20},
+  {pattern: /(flag|status)/i, type: 'char', length: 1},
+];
 
 // 定义变量内容
 const dataFormRef = ref();
-const visible = ref(false);
-const loading = ref(false);
+const [visible, toggleVisible] = useToggle(false);
+const [loading, toggleLoading] = useToggle(false);
 const operType = ref();
 const title = ref('');
-const typeList = ref([]) as any;
+const fieldTypeValues = ref<string[]>([]);
+const uniqueFieldTypeValues = useArrayUnique(fieldTypeValues);
+const typeList = computed(() =>
+  uniqueFieldTypeValues.value.map((columnType) => ({label: columnType, value: columnType}))
+);
 
 // 提交表单数据
 const form = reactive({
@@ -131,16 +175,33 @@ const form = reactive({
   databaseType: '',
   pkPolicy: '',
   primary: '',
-  columnsInfo: '',
-  columnInfo: '',
-  columns: [] as any
+  columnInfo: [] as CreateTablePayloadColumn[],
+  columns: [] as CreateTableColumn[]
+});
+const hasIdColumn = computed(() => form.columns.some((column) => column.name === 'id'));
+
+const createEmptyColumn = (): CreateTableColumn => ({
+  name: '',
+  comment: '',
+  type: 'varchar',
+  length: 255,
+  scale: 0,
+  defaultValue: null,
+  primary: false,
+  nullable: true,
 });
 
+const cloneDefaultColumns = () => DEFAULT_COLUMNS.map((column) => ({...column}));
+
+const getInsertIndex = () => {
+  const idIndex = form.columns.findIndex((column) => column.name === 'id');
+  return idIndex >= 0 ? idIndex + 1 : form.columns.length;
+};
+
 /**
- * 校验数据源名
- * @param {校验数据源名} rule
- * @param {*} value
- * @param {*} callback
+ * 校验表名
+ * @param value 表名
+ * @param callback 校验回调
  */
 const validateTableName = async (_rule: any, value: string, callback: (error?: Error) => void) => {
   const {data} = await fetchList({tableName: value})
@@ -171,11 +232,10 @@ const dataRules = ref({
 
 // 打开弹窗
 const openDialog = (type: string, id: string, dsName: string) => {
-  visible.value = true
+  toggleVisible(true)
   operType.value = type;
   form.id = ''
   form.dsName = dsName
-  index = 1
   if (type === 'add') {
     title.value = t('common.addBtn');
   } else if (type === 'edit') {
@@ -213,78 +273,44 @@ const onSubmit = async () => {
   }
 
   try {
-    loading.value = true;
-    form.columnInfo = JSON.stringify(form.columns)
-    let columns = {} as any
-    form.columns.forEach(each => {
-      if (validateNull(each.defaultValue)) each.defaultValue = null
-      columns[each.name] = each
-    })
-    form.columnsInfo = JSON.stringify(columns)
+    toggleLoading(true)
+    form.columnInfo = form.columns.map(toColumnPayload)
     await addObj(form);
     useMessage().success(t(form.id ? 'common.editSuccessText' : 'common.addSuccessText'));
-    visible.value = false;
+    toggleVisible(false);
     emit('refresh');
   } catch (err: any) {
     useMessage().error(err.msg);
   } finally {
-    loading.value = false;
+    toggleLoading(false);
   }
 };
 
 // 初始化表单数据
 const getCreateTableData = (id: string) => {
   // 获取数据
-  loading.value = true
+  toggleLoading(true)
   getObj(id).then((res: any) => {
     let columnInfo = res.data.columnInfo;
-    res.data.columns = validateNull(columnInfo) ? [] : JSON.parse(columnInfo);
+    res.data.columns = parseColumnList(columnInfo);
     Object.assign(form, res.data)
   }).finally(() => {
-    loading.value = false
+    toggleLoading(false)
   })
 };
 
-const DEFAULT_COLUMNS = [
-  { name: 'id', comment: '主键', typeName: 'bigint', precision: 20, scale: 0, defaultValue: null, primary: 1, nullable: -1 },
-  { name: 'create_by', comment: '创建人', typeName: 'varchar', precision: 64, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
-  { name: 'create_time', comment: '创建时间', typeName: 'datetime', precision: 0, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
-  { name: 'update_by', comment: '修改人', typeName: 'varchar', precision: 64, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
-  { name: 'update_time', comment: '修改时间', typeName: 'datetime', precision: 0, scale: 0, defaultValue: null, primary: -1, nullable: 1 },
-  { name: 'del_flag', comment: '删除标记', typeName: 'char', precision: 1, scale: 0, defaultValue: '0', primary: -1, nullable: -1 },
-  { name: 'tenant_id', comment: '租户ID', typeName: 'bigint', precision: 0, scale: 0, primary: -1, nullable: -1 },
-];
-
-let index = 1;
 const onAddItem = () => {
-  const hasId = form.columns.find(f => f.name === 'id');
-  if (hasId) {
-    form.columns.splice(index++, 0, {
-      name: '',
-      comment: '',
-      typeName: 'varchar',
-      precision: 255,
-      scale: 0,
-      defaultValue: null,
-      primary: -1,
-      nullable: 1,
-    });
+  if (!hasIdColumn.value) {
+    form.columns.push(...cloneDefaultColumns());
     return;
   }
-  form.columns.push(...DEFAULT_COLUMNS.map(col => ({ ...col })));
+
+  form.columns.splice(getInsertIndex(), 0, createEmptyColumn());
 }
 
 const getFieldTypeList = async () => {
-  typeList.value = [];
   const {data} = await list();
-  const typeMap = new Map();
-  data.forEach((item: any) => {
-    const {columnType} = item;
-    if (!typeMap.has(columnType)) {
-      typeMap.set(columnType, true);
-      typeList.value.push({label: columnType, value: columnType});
-    }
-  });
+  fieldTypeValues.value = data.map((item: any) => item.columnType).filter(Boolean);
 };
 
 const handleDelete = (index: number) => {
@@ -292,21 +318,72 @@ const handleDelete = (index: number) => {
 }
 
 // 字段建议
-const suggestedFieldType = (row: { name: string, typeName: string, precision: number }) => {
-  // 如果fieldName 包含 time,date  ，则默认为时间类型， 如果包含id ，则默认是 bigint
-  if (row.name.includes('time') || row.name.includes('date')) {
-    row.typeName = 'datetime'
-    row.precision = 0
-  } else if (row.name.includes('id')) {
-    row.typeName = 'bigint'
-    row.precision = 20
-  } else if(row.name.includes('flag') || row.name.includes('status')){
-    row.typeName = 'char'
-    row.precision = 1
-  } else {
-    row.typeName = 'varchar'
-    row.precision = 255
+const suggestedFieldType = (row: CreateTableColumn) => {
+  const rule = FIELD_TYPE_RULES.find((item) => item.pattern.test(row.name));
+  if (rule) {
+    row.type = rule.type
+    row.length = rule.length
+    return;
   }
+
+  row.type = 'varchar'
+  row.length = 255
+}
+
+const parseColumnList = (columnInfo: string) => {
+  if (validateNull(columnInfo)) return [];
+  try {
+    const columns = JSON.parse(columnInfo);
+    const columnList = Array.isArray(columns) ? columns : Object.values(columns);
+    return columnList.map(normalizeColumn);
+  } catch {
+    return [];
+  }
+}
+
+const normalizeColumn = (column: any): CreateTableColumn => {
+  return {
+    name: column.name || '',
+    comment: column.comment || '',
+    type: getColumnType(column),
+    length: column.length ?? column.precision ?? 0,
+    scale: column.scale ?? 0,
+    defaultValue: validateNull(column.defaultValue) ? null : column.defaultValue,
+    primary: toColumnBoolean(column.primary),
+    nullable: toColumnBoolean(column.nullable),
+    autoIncrement: toColumnBoolean(column.autoIncrement),
+  };
+}
+
+const toColumnPayload = (column: CreateTableColumn): CreateTablePayloadColumn => {
+  const length = column.length ?? 0;
+  const isPrecision = isPrecisionType(column.type);
+
+  return {
+    name: column.name,
+    comment: column.comment,
+    type: column.type,
+    length: isPrecision || length <= 0 ? undefined : length,
+    precision: isPrecision && length > 0 ? length : undefined,
+    scale: isPrecision ? column.scale ?? 0 : undefined,
+    defaultValue: validateNull(column.defaultValue) ? null : column.defaultValue,
+    primary: Boolean(column.primary),
+    nullable: column.primary ? false : Boolean(column.nullable),
+    autoIncrement: column.autoIncrement ? true : undefined,
+  };
+}
+
+const toColumnBoolean = (value: any) => {
+  return value === true || value === 1;
+}
+
+const getColumnType = (column: any) => {
+  const type = column.type || column.Type;
+  return typeof type === 'string' && type ? type : column.typeName || 'varchar';
+}
+
+const isPrecisionType = (type: string) => {
+  return ['decimal', 'number', 'numeric'].includes(String(type).toLowerCase());
 }
 
 // 暴露变量

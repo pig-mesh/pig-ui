@@ -34,20 +34,20 @@
 					<tip :content="`微服务架构下会自动创建一条【/${form.moduleName}】的网关路由，存在则跳过`" />
 				</template>
 				<el-radio-group v-model="form.syncRoute">
-					<el-radio label="0">{{ $t('gen.syncRouteManual') }}</el-radio>
-					<el-radio label="1">{{ $t('gen.syncRouteAuto') }}</el-radio>
+					<el-radio value="0">{{ $t('gen.syncRouteManual') }}</el-radio>
+					<el-radio value="1">{{ $t('gen.syncRouteAuto') }}</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item :label="$t('gen.formLayout')" prop="formLayout">
 				<el-radio-group v-model="form.formLayout">
-					<el-radio :label="1">{{ $t('gen.formLayoutOne') }}</el-radio>
-					<el-radio :label="2">{{ $t('gen.formLayoutTwo') }}</el-radio>
+					<el-radio :value="1">{{ $t('gen.formLayoutOne') }}</el-radio>
+					<el-radio :value="2">{{ $t('gen.formLayoutTwo') }}</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item :label="$t('gen.genType')" prop="generatorType">
 				<el-radio-group v-model="form.generatorType">
-					<el-radio label="0">{{ $t('gen.genTypeZip') }}</el-radio>
-					<el-radio label="1">{{ $t('gen.genTypeCustom') }}</el-radio>
+					<el-radio value="0">{{ $t('gen.genTypeZip') }}</el-radio>
+					<el-radio value="1">{{ $t('gen.genTypeCustom') }}</el-radio>
 				</el-radio-group>
 			</el-form-item>
 			<el-form-item prop="backendPath" v-if="form.generatorType === '1'">

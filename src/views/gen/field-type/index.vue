@@ -46,6 +46,8 @@
 				<el-table-column :label="t('fieldtype.columnType')" prop="columnType" show-overflow-tooltip />
 				<el-table-column :label="t('fieldtype.attrType')" prop="attrType" show-overflow-tooltip />
 				<el-table-column :label="t('fieldtype.packageName')" prop="packageName" show-overflow-tooltip />
+				<el-table-column :label="t('fieldtype.defaultFormType')" prop="defaultFormType" show-overflow-tooltip />
+				<el-table-column :label="t('fieldtype.defaultQueryFormType')" prop="defaultQueryFormType" show-overflow-tooltip />
 				<el-table-column :label="t('fieldtype.createTime')" prop="createTime" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">

@@ -47,7 +47,7 @@
         <el-table-column prop="primary" :label="t('createTable.primary')" show-overflow-tooltip>
           <template #default="scope">
             <!--  获取主键列名称-->
-            {{ JSON.parse(scope.row.columnInfo).find(col => col.primary === 1)?.name }}
+            {{ getPrimaryColumnName(scope.row.columnInfo) }}
           </template>
         </el-table-column>
         <el-table-column prop="createTime" :label="t('createTable.createTime')" show-overflow-tooltip/>
@@ -79,6 +79,7 @@
 </template>
 
 <script setup lang="ts" name="systemCreateTable">
+import {useToggle} from '@vueuse/core';
 import {BasicTableProps, useTable} from "/@/hooks/table";
 import {fetchList, delObjs} from "/@/api/gen/create-table";
 import {useMessage, useMessageBox} from "/@/hooks/message";
@@ -94,7 +95,7 @@ const formDialogRef = ref()
 const datasourceList = ref();
 const router = useRouter();
 const queryRef = ref()
-const showSearch = ref(true)
+const [showSearch] = useToggle(true)
 const selectObjs = ref([]) as any
 const multiple = ref(true)
 
@@ -122,6 +123,20 @@ const resetQuery = () => {
 
 const exportExcel = () => {
   downBlobFile('/order/create-table/export', state.queryForm, 'create-table.xlsx')
+}
+
+const getPrimaryColumnName = (columnInfo?: string) => {
+  return parseColumnList(columnInfo).find((col: any) => col.primary === true || col.primary === 1)?.name || '';
+}
+
+const parseColumnList = (columnInfo?: string) => {
+  if (validateNull(columnInfo)) return [];
+  try {
+    const columns = JSON.parse(columnInfo as string);
+    return Array.isArray(columns) ? columns : Object.values(columns);
+  } catch {
+    return [];
+  }
 }
 
 const handleSelectionChange = (objs: { id: string }[]) => {

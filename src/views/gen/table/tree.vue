@@ -35,16 +35,17 @@ import Tip from '/@/components/Tip/index.vue';
 
 const emit = defineEmits(['update:modelValue']);
 
-defineProps({
+const props = defineProps({
 	modelValue: Object,
 });
 
 const visible = ref(false);
 const dataFormRef = ref();
-const form = reactive({
+const createDefaultForm = () => ({
 	parentField: '',
 	nameField: '',
 });
+const form = reactive(createDefaultForm());
 
 const dataRules = ref({
 	parentField: [{ required: true, message: '请选择父编号字段', trigger: 'blur' }],
@@ -62,7 +63,7 @@ const openDialog = (row: any) => {
 	visible.value = true;
 
 	getAllField(row.dsName, row.tableName);
-	
+
 	// 如果已有配置，回显数据
 	if (row.parentField) {
 		form.parentField = row.parentField;
@@ -76,11 +77,11 @@ const getAllField = (dsName: string, tableName: string) => {
 		tableColumnList.value = res.data.map((item: any) => {
 			return item.name;
 		});
-		
+
 		// 检查是否有parent_id和name字段，如果有则自动设置为默认值
 		const hasParentId = tableColumnList.value.includes('parent_id');
 		const hasName = tableColumnList.value.includes('name');
-		
+
 		if (hasParentId && !form.parentField) {
 			form.parentField = 'parent_id';
 		}
@@ -107,9 +108,17 @@ const onClear = () => {
 };
 
 watch(
+	() => props.modelValue,
+	(val) => {
+		Object.assign(form, createDefaultForm(), val || {});
+	},
+	{ deep: true, immediate: true }
+);
+
+watch(
 	() => form,
 	(val) => {
-		emit('update:modelValue', val);
+		emit('update:modelValue', { ...val });
 	},
 	{ deep: true, immediate: true }
 );
@@ -117,4 +126,4 @@ watch(
 defineExpose({
 	openDialog,
 });
-</script> 
+</script>

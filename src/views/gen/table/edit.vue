@@ -1,118 +1,156 @@
 <template>
-	<el-tabs v-model="activeName">
-		<!-- 属性设置面板 -->
-		<el-tab-pane label="属性设置" name="field">
-			<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" drag-sort placeholder="暂无数据">
-				<el-table-column label="主键" prop="primaryPk" width="80" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.primaryPk" true-label="1" false-label="0" disabled></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="字段名" prop="fieldName" show-overflow-tooltip></el-table-column>
-				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-input v-model="row.attrName" placeholder="请输入属性名"></el-input>
-					</template>
-				</el-table-column>
-				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-input v-model="row.fieldComment" placeholder="请输入说明"></el-input>
-					</template>
-				</el-table-column>
-				<el-table-column label="字段类型" prop="fieldType" show-overflow-tooltip></el-table-column>
-				<el-table-column label="属性类型" prop="attrType" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.attrType" placeholder="请选择属性类型" @change="handleChangeRow(row)">
-							<el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-				<el-table-column label="自动填充" prop="autoFill" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.autoFill" placeholder="请选择类型">
-							<el-option v-for="item in fillList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-				<el-table-column label="字典名称" prop="fieldDict" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable :disabled="row.primaryPk === '1'">
-							<template #prefix>
-								<el-button icon="Plus" type="primary" link @click.stop="handleAddDict(row)"></el-button>
-							</template>
-							<el-option v-for="item in fieldDictList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-			</sc-form-table>
-		</el-tab-pane>
-		<!-- 列表设置面板 -->
-		<el-tab-pane label="列表查询" name="third">
-			<sc-form-table ref="gridTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
-				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
-				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
-				<el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.gridItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="是否排序" prop="gridSort" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.gridSort" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="查询显示" prop="gridSort" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.queryItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="查询表单类型" prop="queryFormType" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.queryFormType" placeholder="请选择查询表单类型" :disabled="row.primaryPk === '1'">
-							<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-				<el-table-column label="查询方式" prop="queryType" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.queryType" placeholder="请选择查询方式" :disabled="row.primaryPk === '1'">
-							<el-option v-for="item in queryList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-			</sc-form-table>
-		</el-tab-pane>
-		<el-tab-pane label="表单页面" name="form">
-			<sc-form-table ref="formTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" placeholder="暂无数据">
-				<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
-				<el-table-column label="说明" prop="fieldComment" show-overflow-tooltip></el-table-column>
-				<el-table-column label="表单类型" prop="formType" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.formType" placeholder="请选择表单类型" :disabled="row.primaryPk === '1'">
-							<el-option v-for="item in formTypeList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-				<el-table-column label="是否显示" prop="formItem" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.formItem" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="表单必填" prop="formRequired" width="100" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-checkbox v-model="row.formRequired" true-label="1" false-label="0" :disabled="row.primaryPk === '1'"></el-checkbox>
-					</template>
-				</el-table-column>
-				<el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
-					<template #default="{ row }">
-						<el-select v-model="row.formValidator" placeholder="请选择表单效验" :disabled="row.primaryPk === '1'" clearable>
-							<el-option v-for="item in formValidatorList" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</template>
-				</el-table-column>
-			</sc-form-table>
-		</el-tab-pane>
-	</el-tabs>
+	<div class="relative">
+		<!-- 编辑列按钮：绝对定位到 tabs 导航栏右端 -->
+		<div class="absolute top-0 right-0 z-10 flex items-center h-10">
+			<el-popover placement="bottom-end" :width="180" trigger="click">
+				<template #reference>
+					<el-button size="small" plain icon="Setting">编辑列</el-button>
+				</template>
+				<div class="flex flex-col gap-1">
+					<el-checkbox v-model="fieldColVisible.fieldType">字段类型</el-checkbox>
+					<el-checkbox v-model="fieldColVisible.autoFill">自动填充</el-checkbox>
+				</div>
+			</el-popover>
+		</div>
+
+		<el-tabs v-model="activeName">
+			<!-- 属性设置面板 -->
+			<el-tab-pane label="字段设置" name="field">
+				<sc-form-table ref="fieldTable" v-model="fieldList" :hideAdd="true" :hideDelete="true" drag-sort
+					placeholder="暂无数据">
+					<el-table-column label="主键" prop="primaryPk" width="80" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.primaryPk" true-value="1" false-value="0" disabled></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="字段名" prop="fieldName" width="150" show-overflow-tooltip></el-table-column>
+					<el-table-column label="属性名" prop="attrName" width="150" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-input v-model="row.attrName" placeholder="请输入属性名"></el-input>
+						</template>
+					</el-table-column>
+					<el-table-column label="标题" prop="fieldComment" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-input v-model="row.fieldComment" placeholder="请输入说明"></el-input>
+						</template>
+					</el-table-column>
+					<el-table-column v-if="fieldColVisible.fieldType" label="字段类型" prop="fieldType" width="150"
+						show-overflow-tooltip></el-table-column>
+					<el-table-column label="属性类型" prop="attrType" width="150" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.attrType" placeholder="请选择属性类型" @change="handleChangeRow(row)">
+								<el-option v-for="item in typeList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+					<el-table-column v-if="fieldColVisible.autoFill" label="自动填充" prop="autoFill" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.autoFill" placeholder="请选择类型">
+								<el-option v-for="item in fillList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+					<el-table-column label="字典名称" prop="fieldDict" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.fieldDict" placeholder="请选择类型" filterable clearable
+								:disabled="row.primaryPk === '1'">
+								<template #prefix>
+									<el-button icon="Plus" type="primary" link
+										@click.stop="handleAddDict(row)"></el-button>
+								</template>
+								<el-option v-for="item in fieldDictList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+				</sc-form-table>
+			</el-tab-pane>
+			<!-- 列表设置面板 -->
+			<el-tab-pane label="表格页面" name="third">
+				<sc-form-table ref="gridTable" v-model="fieldList" :hideAdd="true" :hideDelete="true"
+					placeholder="暂无数据">
+					<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
+					<el-table-column label="标题" prop="fieldComment" show-overflow-tooltip></el-table-column>
+					<el-table-column label="列表显示" prop="gridItem" width="100" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.gridItem" true-value="1" false-value="0"
+								:disabled="row.primaryPk === '1'"></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="是否排序" prop="gridSort" width="100" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.gridSort" true-value="1" false-value="0"
+								:disabled="row.primaryPk === '1'"></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="查询显示" prop="gridSort" width="100" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.queryItem" true-value="1" false-value="0"
+								:disabled="row.primaryPk === '1'"></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="查询类型" prop="queryFormType" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.queryFormType" placeholder="请选择查询表单类型"
+								:disabled="row.primaryPk === '1' || row.queryItem !== '1'"
+								@change="handleQueryFormTypeChange(row)">
+								<el-option v-for="item in queryTypeList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+					<el-table-column label="查询方式" prop="queryType" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.queryType" placeholder="请选择查询方式"
+								:disabled="row.primaryPk === '1' || row.queryItem !== '1' || isRangeQueryFormType(row.queryFormType)">
+								<el-option v-for="item in queryList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+				</sc-form-table>
+			</el-tab-pane>
+			<el-tab-pane label="表单页面" name="form">
+				<sc-form-table ref="formTable" v-model="fieldList" :hideAdd="true" :hideDelete="true"
+					placeholder="暂无数据">
+					<el-table-column label="属性名" prop="attrName" show-overflow-tooltip></el-table-column>
+					<el-table-column label="标题" prop="fieldComment" show-overflow-tooltip></el-table-column>
+					<el-table-column label="是否显示" prop="formItem" width="100" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.formItem" true-value="1" false-value="0"
+								:disabled="row.primaryPk === '1'"></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="表单类型" prop="formType" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.formType" placeholder="请选择表单类型"
+								:disabled="row.primaryPk === '1' || row.formItem !== '1'">
+								<el-option v-for="item in formTypeList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+					<el-table-column label="表单必填" prop="formRequired" width="100" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-checkbox v-model="row.formRequired" true-value="1" false-value="0"
+								:disabled="row.primaryPk === '1' || row.formItem !== '1'"></el-checkbox>
+						</template>
+					</el-table-column>
+					<el-table-column label="表单效验" prop="formValidator" show-overflow-tooltip>
+						<template #default="{ row }">
+							<el-select v-model="row.formValidator" placeholder="请选择表单效验"
+								:disabled="row.primaryPk === '1' || row.formItem !== '1'" clearable>
+								<el-option v-for="item in formValidatorList" :key="item.value" :label="item.label"
+									:value="item.value" />
+							</el-select>
+						</template>
+					</el-table-column>
+				</sc-form-table>
+			</el-tab-pane>
+		</el-tabs>
+	</div>
 
 	<!-- 新增字典  -->
 	<form-dialog ref="formDialogRef" @refresh="handleDictRefresh" />
@@ -129,6 +167,9 @@ const FormDialog = defineAsyncComponent(() => import('./add-dict.vue'));
 const activeName = ref();
 const tableId = ref('');
 
+// 属性设置面板列显隐：字段类型和自动填充默认隐藏
+const fieldColVisible = reactive({ fieldType: false, autoFill: false });
+
 const props = defineProps({
 	tableName: {
 		type: String,
@@ -141,6 +182,7 @@ const props = defineProps({
 const sortable = ref() as any;
 const formDialogRef = ref();
 const typeList = ref([]) as any;
+const fieldTypeRuleMap = ref<Record<string, { formType?: string; queryFormType?: string }>>({});
 const fieldDictList = ref([]) as any;
 const selectRow = ref();
 const dsName = ref();
@@ -188,9 +230,9 @@ const queryTypeList = reactive([
 	{ label: '单选按钮', value: 'radio' },
 	{ label: '复选框', value: 'checkbox' },
 	{ label: '日期', value: 'date' },
-	{ label: '日期范围', value: 'date-range' },
+	{ label: '日期范围', value: 'daterange' },
 	{ label: '日期时间', value: 'datetime' },
-	{ label: '日期时间范围', value: 'datetime-range' },
+	{ label: '日期时间范围', value: 'datetimerange' },
 ]);
 
 const formValidatorList = reactive([
@@ -206,38 +248,27 @@ const formValidatorList = reactive([
 	{ label: 'URL网址', value: 'url' },
 ]);
 
-const propToType: Record<string, string> = reactive({
-	tinyint: 'number',
-	smallint: 'number',
-	mediumint: 'number',
-	int: 'number',
-	integer: 'number',
-	bigint: 'number',
-	float: 'number',
-	datetime: 'datetime',
-	LocalDateTime: 'datetime',
-	date: 'date',
-	LocalDate: 'date',
-	Long: 'number',
-	Float: 'number',
-	Double: 'number',
-	BigDecimal: 'number',
-	text: 'textarea',
-	String: 'text',
-	longtext: 'editor',
-	bit: 'radio',
-	Boolean: 'radio',
-	char: 'radio',
-	varchar: 'text',
-});
+const isRangeQueryFormType = (queryFormType: string) => {
+	return queryFormType === 'daterange' || queryFormType === 'datetimerange';
+};
+
+const handleQueryFormTypeChange = (row: any) => {
+	if (isRangeQueryFormType(row.queryFormType)) {
+		row.queryType = '=';
+	}
+};
 
 /**
  * 属性修改触发事件
  * @param row
  */
 const handleChangeRow = (row: any) => {
-	row.queryFormType = propToType[row.attrType];
-	row.formType = propToType[row.attrType];
+	const fieldTypeRule = fieldTypeRuleMap.value[String(row.fieldType || '').toLowerCase()];
+	if (!fieldTypeRule) {
+		return;
+	}
+	row.queryFormType = fieldTypeRule.queryFormType ?? row.queryFormType;
+	row.formType = fieldTypeRule.formType ?? row.formType;
 };
 
 /**
@@ -253,8 +284,8 @@ const handleAddDict = (row: object) => {
  * 刷新字典
  * @param dictType
  */
-const handleDictRefresh = async (dictType: string) => {
-	await getDictList();
+const handleDictRefresh = (dictType: string) => {
+	getDictList();
 	selectRow.value.fieldDict = dictType;
 };
 
@@ -301,11 +332,7 @@ const getTable = (dsName: string, tableName: string) => {
 	useTableApi(dsName, tableName)
 		.then((res) => {
 			tableId.value = res.data.id;
-			fieldList.value = res.data.fieldList.map((item:any) => {
-				item.queryFormType ??= propToType[item.fieldType];
-				item.formType ??= propToType[item.fieldType];
-				return item;
-			});
+			fieldList.value = res.data.fieldList;
 		})
 		.finally(() => {
 			loading.value = false;
@@ -314,12 +341,17 @@ const getTable = (dsName: string, tableName: string) => {
 
 const getFieldTypeList = async () => {
 	typeList.value = [];
+	fieldTypeRuleMap.value = {};
 	// 获取数据
 	const { data } = await list();
 	// 设置属性类型值
 	const typeMap = new Map();
 	data.forEach((item: any) => {
-		const { attrType, columnType } = item;
+		const { attrType, columnType, defaultFormType, defaultQueryFormType } = item;
+		fieldTypeRuleMap.value[String(columnType).toLowerCase()] = {
+			formType: defaultFormType,
+			queryFormType: defaultQueryFormType,
+		};
 		if (!typeMap.has(attrType)) {
 			typeMap.set(attrType, columnType);
 			typeList.value.push({ label: attrType, value: attrType });
@@ -337,10 +369,10 @@ const getDictList = () => {
 
 // 表单提交
 const submitHandle = () => {
-	return new Promise((resolve) => {
-		useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value).then(() => {
-			resolve(tableId.value);
-		});
+	return new Promise((resolve, reject) => {
+		useTableFieldSubmitApi(dsName.value, tableName.value, fieldList.value)
+			.then(() => resolve(tableId.value))
+			.catch(reject);
 	});
 };
 

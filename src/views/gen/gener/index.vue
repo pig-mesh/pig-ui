@@ -1,125 +1,133 @@
 <template>
 	<div class="layout-padding">
-		<el-card class="layout-padding-auto" shadow="hover">
-			<el-steps :active="active" finish-status="success" simple>
-				<el-step title="基础信息" @click="go(0)">
-					<template #icon>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"
-							/>
-						</svg>
-					</template>
-				</el-step>
-				<el-step title="数据修改" @click="go(1)">
-					<template #icon>
-						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
-								d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 0 1-1.125-1.125M3.375 19.5h7.5c.621 0 1.125-.504 1.125-1.125m-9.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-7.5A1.125 1.125 0 0 1 12 18.375m9.75-12.75c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125m19.5 0v1.5c0 .621-.504 1.125-1.125 1.125M2.25 5.625v1.5c0 .621.504 1.125 1.125 1.125m0 0h17.25m-17.25 0h7.5c.621 0 1.125.504 1.125 1.125M3.375 8.25c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m17.25-3.75h-7.5c-.621 0-1.125.504-1.125 1.125m8.625-1.125c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M12 10.875v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125M13.125 12h7.5m-7.5 0c-.621 0-1.125.504-1.125 1.125M20.625 12c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h7.5M12 14.625v-1.5m0 1.5c0 .621-.504 1.125-1.125 1.125M12 14.625c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m0 1.5v-1.5m0 0c0-.621.504-1.125 1.125-1.125m0 0h7.5"
-							/>
-						</svg>
-					</template>
-				</el-step>
-			</el-steps>
-		</el-card>
+		<div class="layout-padding-auto layout-padding-view">
+			<!-- 主内容区：flex-1 撑满剩余高度，左右各自独立滚动 -->
+			<div class="flex flex-1 min-h-0">
+				<!-- 左侧：基础配置，可折叠 -->
+				<div class="flex flex-col flex-shrink-0 min-h-0 transition-all duration-300"
+					:class="collapsed ? 'w-10' : 'w-96'">
+					<el-card shadow="hover" class="gen-card flex flex-col flex-1 min-h-0 !overflow-hidden">
+						<template #header>
+							<div class="flex items-center" :class="collapsed ? 'justify-center' : 'justify-between'">
+								<div v-if="!collapsed" class="flex items-center flex-1 min-w-0 gap-2">
+									<span
+										class="flex-shrink-0 text-sm font-semibold text-gray-700 dark:text-gray-200">基础配置</span>
+									<span class="text-xs text-gray-400 truncate dark:text-gray-500">{{ tableNameStr
+									}}</span>
+								</div>
+								<el-tooltip :content="collapsed ? '展开配置' : '收起配置'" placement="right">
+									<el-button :icon="collapsed ? 'DArrowRight' : 'DArrowLeft'" circle size="small"
+										plain @click="collapsed = !collapsed" />
+								</el-tooltip>
+							</div>
+						</template>
+						<div v-show="!collapsed" class="h-full pr-1 overflow-y-auto">
+							<Generator ref="generatorRef" :tableName="tableName" :dsName="dsName" />
+						</div>
+					</el-card>
+				</div>
 
-		<el-card class="layout-padding-auto mt5" shadow="hover">
-			<!-- 生成基本信息设置 -->
-			<generator ref="generatorRef" :tableName="tableName" :dsName="dsName" v-if="active === 0" />
-			<!-- 字段编辑设置 -->
-			<edit-table ref="editTableRef" :tableName="tableName" :dsName="dsName" v-if="active === 1" />
-
-			<div class="flex justify-center gap-4 mt-6">
-				<el-button v-if="active === 0" plain type="primary" size="large" icon="ArrowRight" @click="go(1)"> 下一步 </el-button>
-				<el-button v-if="active === 1" plain icon="ArrowLeft" size="large" @click="go(0)"> 上一步 </el-button>
-				<el-button v-if="active === 1" type="primary" size="large" icon="View" @click="preview"> 保存并预览 </el-button>
-				<el-button v-if="active === 1" plain type="primary" size="large" icon="Download" @click="generatorHandle"> 保存并生成 </el-button>
+				<!-- 右侧：字段配置 -->
+				<div class="flex flex-col flex-1 min-w-0 min-h-0">
+					<el-card shadow="hover" class="gen-card flex flex-col flex-1 min-h-0 !overflow-hidden">
+						<div class="h-full overflow-y-auto">
+							<EditTable ref="editTableRef" :tableName="tableName" :dsName="dsName" />
+						</div>
+					</el-card>
+				</div>
 			</div>
-		</el-card>
 
-		<!-- 预览基本信息 -->
-		<preview-dialog ref="previewDialogRef" />
+			<!-- 吸底操作栏 -->
+			<ActionFooter :loading="isLoading" @back="handleBack" @preview="handlePreview" @generate="handleGenerate" />
+
+			<!-- 预览弹窗 -->
+			<PreviewDialog ref="previewDialogRef" />
+		</div>
 	</div>
 </template>
 
 <script lang="ts" setup>
+import { useAsyncState } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 import { useGeneratorCodeApi } from '/@/api/gen/table';
 import { useMessage } from '/@/hooks/message';
+import mittBus from '/@/utils/mitt';
 import { downBlobFile } from '/@/utils/other';
+import Generator from '../table/generator.vue';
+import EditTable from '../table/edit.vue';
+import PreviewDialog from '../table/preview.vue';
+import ActionFooter from './components/ActionFooter.vue';
 
 const { t } = useI18n();
-const Generator = defineAsyncComponent(() => import('../table/generator.vue'));
-const EditTable = defineAsyncComponent(() => import('../table/edit.vue'));
-const PreviewDialog = defineAsyncComponent(() => import('../table/preview.vue'));
-const previewDialogRef = ref();
-const generatorRef = ref();
+const message = useMessage();
 
 const route = useRoute();
-const active = ref(0);
-const tableId = ref();
-const tableName = ref();
-const dsName = ref();
-const editTableRef = ref();
-const generatorType = ref();
+const tableName = computed(() => String(route.query.tableName ?? ''));
+const dsName = computed(() => String(route.query.dsName ?? ''));
 
-// 跳转
-const go = async (activeNum: number) => {
+const collapsed = ref(false);
+const tableNameStr = computed(() => tableName.value || dsName.value);
+const previewDialogRef = ref();
+const generatorRef = ref();
+const editTableRef = ref();
+const tableId = ref('');
+const generatorType = ref('');
+
+const { isLoading, execute: submitAll } = useAsyncState(
+	async () => {
+		const data = await generatorRef.value.submitHandle();
+		tableId.value = data.id;
+		generatorType.value = data.generatorType;
+		await editTableRef.value.submitHandle();
+	},
+	undefined,
+	{ immediate: false, throwError: true }
+);
+
+const executeWithSubmit = async (action: () => void) => {
+	if (isLoading.value) return;
 	try {
-		if (activeNum === 0) {
-			await editTableRef.value.submitHandle();
-		} else if (activeNum === 1) {
-			const dataform = await generatorRef.value.submitHandle();
-			tableId.value = dataform.id;
-			generatorType.value = dataform.generatorType;
-		}
-		if (active.value === activeNum) return;
-		active.value = activeNum;
-	} catch (e) {
-		console.error(e);
+		await submitAll();
+		action();
+	} catch {
+		// Error already handled by useAsyncState
 	}
 };
 
-// 预览代码
-const preview = async () => {
-	await editTableRef.value.submitHandle();
-	previewDialogRef.value.openDialog(tableId.value);
+const handleBack = () => {
+	mittBus.emit('onCurrentContextmenuClick', { contextMenuClickId: 1, ...route });
 };
 
-// 生成
-const generatorHandle = async () => {
-	await editTableRef.value.submitHandle();
-	// 生成代码，zip压缩包
+const handlePreview = () => executeWithSubmit(() => {
+	previewDialogRef.value.openDialog(tableId.value);
+});
+
+const handleGenerate = () => executeWithSubmit(() => {
 	if (generatorType.value === '0') {
-		downBlobFile(`/gen/generator/download?tableIds=${[tableId.value].join(',')}`, {}, `${tableName.value}.zip`).catch((msg) => {
-			useMessage().error(msg);
+		downBlobFile(`/gen/generator/download?tableIds=${tableId.value}`, {}, `${tableName.value}.zip`).catch((msg) => {
+			message.error(msg);
 		});
 	}
-
-	// 写入到指定目录
 	if (generatorType.value === '1') {
-		useGeneratorCodeApi([tableId.value].join(','))
-			.then(() => {
-				useMessage().success(t('common.optSuccessText'));
-			})
-			.catch(({ msg }) => {
-				useMessage().error(msg);
-			});
+		useGeneratorCodeApi(tableId.value)
+			.then(() => message.success(t('common.optSuccessText')))
+			.catch(({ msg }) => message.error(msg));
 	}
-};
-
-onMounted(() => {
-	tableName.value = route.query.tableName;
-	dsName.value = route.query.dsName;
 });
 </script>
 
 <style scoped>
-.layout-padding {
-	height: auto !important;
+/* el-card 自身参与 flex 伸缩，body 区域独立滚动 */
+:deep(.gen-card.el-card) {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}
+
+:deep(.gen-card .el-card__body) {
+	flex: 1;
+	min-height: 0;
+	overflow: hidden;
+	padding: 12px;
 }
 </style>

@@ -44,7 +44,7 @@
 			<el-table
 				ref="tableRef"
 				:data="state.dataList"
-				row-key="id"
+				row-key="name"
 				style="width: 100%"
 				v-loading="state.loading"
 				border
@@ -146,7 +146,7 @@ const exportExcel = () => {
 };
 
 const handleRowClick = (row: any) => {
-	tableRef.value.toggleRowSelection(row);
+	tableRef.value?.toggleRowSelection(row);
 };
 
 const handleSelectionChange = (selection: any[]) => {
@@ -159,4 +159,5 @@ const handleSelectionChange = (selection: any[]) => {
 const openBatchGenDialog = () => {
 	batchGenDialogRef.value.openDialog(state.selectObjs, state.queryForm.dsName);
 };
+
 </script>

@@ -1,5 +1,7 @@
 import request from '/@/utils/request';
 
+export type DatasourceParserPlugins = Record<string, boolean>;
+
 export function fetchList(query?: Object) {
 	return request({
 		url: '/gen/dsconf/page',
@@ -21,6 +23,13 @@ export function listTable(query?: Object) {
 		url: '/gen/dsconf/table/list',
 		method: 'get',
 		params: query,
+	});
+}
+
+export function getParserPlugins() {
+	return request({
+		url: '/gen/dsconf/parser-plugins',
+		method: 'get',
 	});
 }
 
