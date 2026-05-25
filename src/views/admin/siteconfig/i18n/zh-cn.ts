@@ -1,13 +1,8 @@
 export default {
 	siteconfig: {
 		// 页面骨架
-		pageTitle: '网站配置',
-		pageDesc: '控制对外品牌、登录方式、安全策略与体验设置。修改将在保存后立即生效。',
 		pageSections: '页面分区',
 		quickActions: '快捷操作',
-		searchPlaceholder: '搜索设置项（如：验证码、登录、Clarity...）',
-		noSearchResult: '没有匹配的设置项',
-		clearSearch: '清空搜索',
 		enabledCount: '{count} 项启用',
 		modifiedCount: '你修改了 {count} 项',
 		remove: '移除',

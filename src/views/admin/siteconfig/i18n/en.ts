@@ -1,13 +1,8 @@
 export default {
 	siteconfig: {
 		// Page shell
-		pageTitle: 'Website Config',
-		pageDesc: 'Control external branding, login methods, security policies, and experience settings. Changes take effect after saving.',
 		pageSections: 'Sections',
 		quickActions: 'Quick Actions',
-		searchPlaceholder: 'Search settings, e.g. captcha, login, Clarity...',
-		noSearchResult: 'No matching settings',
-		clearSearch: 'Clear Search',
 		enabledCount: '{count} enabled',
 		modifiedCount: 'You changed {count} items',
 		remove: 'Remove',

@@ -158,7 +158,7 @@
 
 					{{ $t('personal.socialAccountTab') }}
 				</template>
-				<el-table :data="socialList" class="mt10">
+				<el-table :data="socialList" border class="personal-table mt10" :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle">
 					<el-table-column type="index" :label="$t('personal.indexColumn')" width="80"></el-table-column>
 					<el-table-column prop="name" :label="$t('personal.platformColumn')"></el-table-column>
 					<el-table-column :label="$t('personal.statusColumn')">
@@ -195,7 +195,7 @@
 						:data="apiKeyList"
 						v-loading="apiKeyLoading"
 						border
-						class="api-key-table"
+						class="personal-table api-key-table"
 						:cell-style="tableStyle.cellStyle"
 						:header-cell-style="tableStyle.headerCellStyle"
 					>
@@ -780,6 +780,7 @@ defineExpose({
 	:deep(.el-table) {
 		--el-table-tr-bg-color: var(--el-bg-color);
 		--el-table-row-hover-bg-color: var(--el-fill-color-light);
+		--el-table-header-bg-color: var(--el-table-row-hover-bg-color);
 	}
 
 	:deep(.el-table__empty-text) {
@@ -792,11 +793,18 @@ defineExpose({
 
 	[data-theme='dark'] & {
 		:deep(.el-table) {
-			--el-table-border-color: var(--el-border-color);
-			--el-table-header-bg-color: var(--el-fill-color-light);
-			--el-table-row-hover-bg-color: var(--el-fill-color);
+			--el-table-border-color: var(--next-border-color);
+			--el-table-header-bg-color: var(--next-color-primary);
+			--el-table-row-hover-bg-color: var(--next-color-hover);
 			color: var(--el-text-color-primary);
 		}
+	}
+}
+
+.personal-table {
+	:deep(th.el-table__cell) {
+		background-color: var(--el-table-header-bg-color) !important;
+		color: var(--el-text-color-primary);
 	}
 }
 </style>
