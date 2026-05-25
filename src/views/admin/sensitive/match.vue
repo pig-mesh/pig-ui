@@ -91,7 +91,7 @@ const dataRules = ref({
  * 打开对话框
  * @param id - 预留参数，暂未使用
  */
-const openDialog = (id: string): void => {
+const openDialog = (): void => {
 	visible.value = true;
 	form.sensitiveId = '';
 

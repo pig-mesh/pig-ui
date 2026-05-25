@@ -1,6 +1,6 @@
 <template>
   <div class="layout-logo" v-if="setShowLogo" @click="onThemeConfigChange">
-    <span :style="{color:setFontColor}">{{ themeConfig.globalTitle }}</span>
+    <span :style="{color:setFontColor}">{{ siteConfig.title }}</span>
   </div>
   <div class="layout-logo-size" v-else @click="onThemeConfigChange">
     <img :src="logoMini" class="layout-logo-size-img"/>
@@ -9,10 +9,12 @@
 
 <script setup lang="ts" name="layoutLogo">
 import {useThemeConfig} from '/@/stores/themeConfig';
+import {useSiteConfig} from '/@/stores/siteConfig';
 import { useWindowSize } from '@vueuse/core';
 import logoMini from '/@/assets/logo-mini.svg';
 
 const {themeConfig} = storeToRefs(useThemeConfig());
+const {siteConfig} = storeToRefs(useSiteConfig());
 const { width: windowWidth } = useWindowSize();
 
 const setShowLogo = computed(() => {

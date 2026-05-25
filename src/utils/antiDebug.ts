@@ -30,16 +30,10 @@ const SECURITY_WARNING_TEMPLATE = `
  * 通过ddtk 参数来控制绕过反调试功能,
  * http://localhost/?ddtk=pig#/flow/task/started
  */
-export function initAntiDebug(): void {
-    if (import.meta.env.VITE_ENABLE_ANTI_DEBUG !== 'true') {
-        return;
-    }
-
-    const debugKey = import.meta.env.VITE_ANTI_DEBUG_KEY || 'pig';
-
-    DisableDevtool({
-        md5: DisableDevtool.md5(debugKey),
-        disableMenu: false,
-        rewriteHTML: SECURITY_WARNING_TEMPLATE,
-    });
+export function initAntiDebug(debugKey?: string): void {
+  DisableDevtool({
+    md5: DisableDevtool.md5(debugKey || 'pig'),
+    disableMenu: false,
+    rewriteHTML: SECURITY_WARNING_TEMPLATE,
+  });
 }

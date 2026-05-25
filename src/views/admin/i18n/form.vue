@@ -69,7 +69,7 @@ const dataRules = ref({
 	en: [
 		{ validator: rule.overLength, trigger: 'blur' },
 		{ required: true, message: t('i18n.enRequired'), trigger: 'blur' },
-		{ validator: rule.letter, trigger: 'blur' },
+		{ validator: rule.noChinese, trigger: 'blur' },
 		{
 			validator: (rule: any, value: any, callback: any) => {
 				validateEn(rule, value, callback, form.id !== '', t);

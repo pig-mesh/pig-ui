@@ -214,9 +214,9 @@ const onDeptChange = async (deptId: string) => {
 		stores.updateDeptInfo(deptId);
 		// 刷新页面
 		window.location.reload();
-	} catch (error) {
-		console.error('切换部门失败:', error);
-	}
+		} catch {
+			return;
+		}
 };
 
 const rollback = (msg: string) => {
@@ -235,9 +235,8 @@ const loadTenantList = async () => {
 		tenantLoading.value = true;
 		const response = await getPersonalTenant();
 		tenantList.value = response.data || [];
-	} catch (error) {
-		console.error('加载租户列表失败:', error);
-		tenantList.value = [];
+		} catch {
+			tenantList.value = [];
 	} finally {
 		tenantLoading.value = false;
 	}

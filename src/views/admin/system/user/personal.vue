@@ -61,10 +61,13 @@
 										</template>
 									</el-input>
 
-									<el-button v-if="showPhoneCodeInput" v-waves @click="handleSendPhoneCode"
-										:loading="msgKey" :disabled="msgKey" style="width: 20%">
-										<span class="text-xs font-semibold">{{ msgText }}</span>
-									</el-button>
+									<SmsCodeButton
+										v-if="showPhoneCodeInput"
+										:mobile="formData.phone"
+										:registered="false"
+										:validate="() => formdataRef?.validateField('phone')"
+										class="w-1/5"
+									/>
 								</div>
 							</el-form-item>
 						</el-col>
@@ -123,15 +126,15 @@
 						</el-col>
 						<el-col :span="24" class="mb20">
 							<el-form-item :label="$t('personal.newPasswordLabel')" prop="newpassword1">
-								<strength-meter v-model="passwordFormData.newpassword1" :minlength="6" :maxlength="16"
+								<strength-meter v-model="passwordFormData.newpassword1" :minlength="10" :maxlength="12"
 									:placeholder="$t('personal.newPasswordPlaceholder')"
-									@score="passwordScore"></strength-meter>
+								></strength-meter>
 								<!--									<el-input v-model="passwordFormData.newpassword1" clearable type="password"></el-input>-->
 							</el-form-item>
 						</el-col>
 						<el-col :span="24" class="mb20">
 							<el-form-item :label="$t('personal.confirmPasswordLabel')" prop="newpassword2">
-								<strength-meter v-model="passwordFormData.newpassword2" :minlength="6" :maxlength="16"
+								<strength-meter v-model="passwordFormData.newpassword2" :minlength="10" :maxlength="12"
 									:placeholder="$t('personal.confirmPasswordPlaceholder')"></strength-meter>
 							</el-form-item>
 						</el-col>
@@ -174,6 +177,117 @@
 					</el-table-column>
 				</el-table>
 			</el-tab-pane>
+			<el-tab-pane :label="$t('personal.apiKeyTab')">
+				<template #label>
+					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+						stroke="currentColor" class="size-4">
+						<path stroke-linecap="round" stroke-linejoin="round"
+							d="M15.75 5.25a3 3 0 0 1 3 3m3 0a6 6 0 0 1-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1 1 21.75 8.25Z" />
+					</svg>
+					{{ $t('personal.apiKeyTab') }}
+				</template>
+				<div class="mt10 api-key-section">
+					<el-button type="primary" size="small" @click="handleCreateApiKey" class="mb10"
+						:disabled="apiKeyList.length >= 5">
+						{{ $t('personal.createApiKey') }}
+					</el-button>
+					<el-table
+						:data="apiKeyList"
+						v-loading="apiKeyLoading"
+						border
+						class="api-key-table"
+						:cell-style="tableStyle.cellStyle"
+						:header-cell-style="tableStyle.headerCellStyle"
+					>
+						<el-table-column type="index" :label="$t('personal.indexColumn')" width="60" />
+						<el-table-column prop="name" :label="$t('personal.apiKeyName')" width="120" />
+						<el-table-column prop="allowedIps" :label="$t('personal.allowedIps')" width="200" show-overflow-tooltip>
+							<template #default="scope">
+								{{ scope.row.allowedIps || $t('personal.noIpLimit') }}
+							</template>
+						</el-table-column>
+						<el-table-column prop="expiresAt" :label="$t('personal.expiresAt')" width="170">
+							<template #default="scope">
+								{{ scope.row.expiresAt ? parseTime(scope.row.expiresAt) : $t('personal.neverExpire') }}
+							</template>
+						</el-table-column>
+						<el-table-column prop="status" :label="$t('personal.statusColumn')" width="80">
+							<template #default="scope">
+								<el-tag :type="scope.row.status === '0' ? 'success' : 'danger'">
+									{{ scope.row.status === '0' ? $t('personal.enabled') : $t('personal.disabled') }}
+								</el-tag>
+							</template>
+						</el-table-column>
+						<el-table-column prop="lastUsedAt" :label="$t('personal.lastUsedAt')" width="170">
+							<template #default="scope">
+								{{ scope.row.lastUsedAt ? parseTime(scope.row.lastUsedAt) : $t('personal.neverUsed') }}
+							</template>
+						</el-table-column>
+						<el-table-column prop="createTime" :label="$t('personal.createTime')" width="170">
+							<template #default="scope">
+								{{ parseTime(scope.row.createTime) }}
+							</template>
+						</el-table-column>
+						<el-table-column :label="$t('personal.actionColumn')" width="150">
+							<template #default="scope">
+								<el-button text type="primary" @click="handleEditApiKey(scope.row)">
+									{{ $t('common.editBtn') }}
+								</el-button>
+								<el-button text type="primary" @click="handleDeleteApiKey(scope.row)">
+									{{ $t('common.delBtn') }}
+								</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
+
+				<!-- 创建/编辑 API-KEY 弹窗 -->
+				<el-dialog v-model="apiKeyDialogVisible" :title="apiKeyDialogTitle" width="500px" draggable>
+					<el-form :model="apiKeyForm" label-width="100px" ref="apiKeyFormRef">
+						<el-form-item :label="$t('personal.apiKeyName')" prop="name"
+							:rules="[{ required: true, message: $t('personal.apiKeyNameRequired'), trigger: 'blur' }]">
+							<el-input v-model="apiKeyForm.name" :placeholder="$t('personal.apiKeyNamePlaceholder')" clearable />
+						</el-form-item>
+						<el-form-item :label="$t('personal.allowedIps')" prop="allowedIps">
+							<el-input
+								v-model="apiKeyForm.allowedIps"
+								type="textarea"
+								:rows="3"
+								:placeholder="$t('personal.allowedIpsPlaceholder')"
+							/>
+							<div class="mt-1 text-xs leading-relaxed text-gray-400">
+								{{ $t('personal.allowedIpsHint') }}
+							</div>
+						</el-form-item>
+						<el-form-item :label="$t('personal.expiresAt')" prop="expiresAt">
+							<el-date-picker v-model="apiKeyForm.expiresAt" type="datetime" :value-format="dateTimeStr" :placeholder="$t('personal.expiresAtPlaceholder')" style="width: 100%" />
+						</el-form-item>
+						<el-form-item :label="$t('personal.statusColumn')" prop="status" v-if="apiKeyForm.id">
+							<el-switch v-model="apiKeyForm.status" active-value="0" inactive-value="1"
+								:active-text="$t('personal.enabled')" :inactive-text="$t('personal.disabled')" />
+						</el-form-item>
+						<el-form-item v-if="!apiKeyForm.id" :label="$t('personal.currentPassword')" prop="password"
+							:rules="[{ required: true, message: $t('personal.currentPasswordRequired'), trigger: 'blur' }]">
+							<el-input v-model="apiKeyForm.password" type="password" show-password
+								:placeholder="$t('personal.currentPasswordPlaceholder')" clearable />
+						</el-form-item>
+					</el-form>
+					<template #footer>
+						<el-button @click="apiKeyDialogVisible = false">{{ $t('common.cancelButtonText') }}</el-button>
+						<el-button type="primary" @click="handleSubmitApiKey" :loading="apiKeySubmitting">{{ $t('common.confirmButtonText') }}</el-button>
+					</template>
+				</el-dialog>
+
+				<!-- 创建成功 — 显示明文 Key -->
+				<el-dialog v-model="apiKeyResultVisible" :title="$t('personal.apiKeyCreated')" width="600px" :close-on-click-modal="false">
+					<el-alert :title="$t('personal.apiKeyOnceWarning')" type="warning" show-icon :closable="false" class="mb10" />
+					<el-input v-model="apiKeyResult" readonly>
+						<template #append>
+							<el-button @click="handleCopyApiKey">{{ $t('personal.copyBtn') }}</el-button>
+						</template>
+					</el-input>
+				</el-dialog>
+			</el-tab-pane>
 		</el-tabs>
 	</el-drawer>
 </template>
@@ -181,18 +295,25 @@
 <script setup lang="ts" name="personal">
 import { useUserInfo } from '/@/stores/userInfo';
 import { editInfo, getObj, password, unbindingUser, validatePhone } from '/@/api/admin/user';
-import { useMessage } from '/@/hooks/message';
+import SmsCodeButton from '/@/components/Verifition/SmsCodeButton.vue';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { rule, validateNull, clearMaskedField } from '/@/utils/validate';
 import other from '/@/utils/other';
 import { Session } from '/@/utils/storage';
 import { useI18n } from 'vue-i18n';
 import { getLoginAppList } from "/@/api/admin/social";
 import { SocialLoginEnum } from '/@/api/login';
-import { useEventListener, useIntervalFn } from '@vueuse/core';
-import { sendMobileInnerCode } from '/@/api/admin/message';
+import { useEventListener } from '@vueuse/core';
+import { fetchApiKeyList, createApiKey, updateApiKey, deleteApiKey } from '/@/api/admin/apikey';
+import { useClipboard } from '@vueuse/core';
+import { BasicTableProps, useTable } from '/@/hooks/table';
+import { useSiteConfig } from '/@/stores/siteConfig';
+import { createPasswordRuleValidator } from '/@/utils/passwordRule';
 
 // 国际化函数
 const { t } = useI18n();
+const { tableStyle } = useTable({ createdIsNeed: false } as BasicTableProps);
+const { siteConfig } = storeToRefs(useSiteConfig());
 
 // 异步加载组件
 const StrengthMeter = defineAsyncComponent(() => import('/@/components/StrengthMeter/index.vue'));
@@ -230,9 +351,6 @@ const initialPhone = ref<string | undefined>(undefined);
 
 // 验证码相关状态
 const phoneCode = ref('');
-const msgText = ref(t('mobile.codeText'));
-const msgTime = ref(60);
-const msgKey = ref(false);
 
 // 判断是否显示验证码输入框（仅当手机号被修改时显示）
 const showPhoneCodeInput = computed(() => {
@@ -310,53 +428,20 @@ const validatorPassword2 = (_rule: any, value: any, callback: any) => {
 	}
 };
 
-/**
- * 自定义验证器：验证密码强度评分是否达标
- * @param rule 验证规则
- * @param value 当前输入值
- * @param callback 回调函数
- */
-const validatorScore = (_rule: any, _value: any, callback: any) => {
-	if (score.value <= 1) {
-		callback(new Error(t('personal.passwordScore')));
-	} else {
-		callback();
-	}
-};
+const passwordRuleValidator = createPasswordRuleValidator(() => siteConfig.value.passwordRule, t);
 
 // 修改密码表单验证规则
 const passwordRuleForm = reactive({
 	password: [{ required: true, message: t('personal.passwordRequired'), trigger: 'blur' }],
 	newpassword1: [
-		{
-			min: 6,
-			max: 20,
-			message: t('personal.passwordLengthRule'),
-			trigger: 'blur',
-		},
-		{ validator: validatorScore, trigger: 'blur' }, // 验证密码强度
+		{ required: true, message: t('personal.passwordRequired'), trigger: 'blur' },
+		{ validator: passwordRuleValidator, trigger: 'blur' },
 	],
 	newpassword2: [
-		{
-			min: 6,
-			max: 20,
-			message: t('personal.passwordLengthRule'),
-			trigger: 'blur',
-		},
-		{ validator: validatorPassword2, trigger: 'blur' }, // 验证两次密码是否一致
+		{ required: true, message: t('personal.passwordRequired'), trigger: 'blur' },
+		{ validator: validatorPassword2, trigger: 'blur' },
 	],
 });
-
-// 密码强度评分（0-4，0最弱，4最强）
-const score = ref(0);
-
-/**
- * 密码强度评分回调函数
- * @param e 密码强度评分值
- */
-const passwordScore = (e: any) => {
-	score.value = e;
-};
 
 /**
  * 处理修改密码操作
@@ -385,57 +470,6 @@ const handleChangePassword = async () => {
 	}
 };
 
-// 使用 VueUse 的 useIntervalFn 实现倒计时，自动处理清理
-const { pause, resume } = useIntervalFn(
-	() => {
-		msgTime.value--;
-		msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-
-		if (msgTime.value === 0) {
-			msgTime.value = 60;
-			msgText.value = t('mobile.codeText');
-			msgKey.value = false;
-			pause();
-		}
-	},
-	1000,
-	{ immediate: false }
-);
-
-/**
- * 计算并更新倒计时
- * @description 处理验证码发送后的倒计时逻辑，使用 VueUse 自动管理定时器生命周期
- */
-const timeCacl = () => {
-	msgText.value = `${msgTime.value}${t('mobile.seconds')}`;
-	msgKey.value = true;
-	resume();
-};
-
-/**
- * 处理发送手机验证码事件
- * @description 验证新手机号格式并发送验证码
- */
-const handleSendPhoneCode = async () => {
-	if (!formdataRef.value) return;
-
-	try {
-		// 验证新手机号格式
-		await formdataRef.value.validateField('phone');
-
-		const { msg, ok } = await sendMobileInnerCode(formData.value.phone as string);
-		if (ok) {
-			useMessage().success(t('mobile.sendSuccess'));
-			timeCacl();
-		} else {
-			useMessage().error(msg);
-		}
-	} catch (error: any) {
-		const errorMsg = error?.msg || error?.message || t('mobile.sendFailed');
-		useMessage().error(errorMsg);
-	}
-};
-
 /**
  * 处理手机号输入框获得焦点事件
  * @description 如果手机号是脱敏值，清空输入框让用户重新输入
@@ -458,13 +492,7 @@ const handleResetPhone = () => {
 	// 2. 清空验证码
 	phoneCode.value = '';
 
-	// 3. 停止倒计时并重置状态
-	pause();
-	msgTime.value = 60;
-	msgText.value = t('mobile.codeText');
-	msgKey.value = false;
-
-	// 4. 清除验证错误提示
+	// 3. 清除验证错误提示
 	formdataRef.value?.clearValidate(['phone', 'code']);
 };
 
@@ -608,6 +636,7 @@ const open = () => {
 	visible.value = true;
 	const data = useUserInfo().userInfos;
 	initUserInfo(data.user.userId);
+	loadApiKeyList();
 };
 
 // 加载状态标识
@@ -654,8 +683,120 @@ useEventListener(window, 'message', (event) => {
 	}
 });
 
+// ============ API-KEY 管理 ============
+const apiKeyList = ref<any[]>([]);
+const apiKeyLoading = ref(false);
+const apiKeyDialogVisible = ref(false);
+const apiKeyDialogTitle = ref('');
+const apiKeyForm = ref<any>({});
+const apiKeyFormRef = ref();
+const apiKeySubmitting = ref(false);
+const apiKeyResultVisible = ref(false);
+const apiKeyResult = ref('');
+const { copy } = useClipboard();
+
+const loadApiKeyList = async () => {
+	apiKeyLoading.value = true;
+	try {
+		const { data } = await fetchApiKeyList();
+		apiKeyList.value = data || [];
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		apiKeyLoading.value = false;
+	}
+};
+
+const handleCreateApiKey = () => {
+	if (apiKeyList.value.length >= 5) {
+		useMessage().warning(t('personal.apiKeyLimitReached'));
+		return;
+	}
+	apiKeyForm.value = { name: '', allowedIps: '', expiresAt: null, password: '' };
+	apiKeyDialogTitle.value = t('personal.createApiKey');
+	apiKeyDialogVisible.value = true;
+};
+
+const handleEditApiKey = (row: any) => {
+	apiKeyForm.value = { ...row };
+	apiKeyDialogTitle.value = t('personal.editApiKey');
+	apiKeyDialogVisible.value = true;
+};
+
+const handleSubmitApiKey = async () => {
+	const valid = await apiKeyFormRef.value?.validate().catch(() => false);
+	if (!valid) return;
+
+	apiKeySubmitting.value = true;
+	try {
+		if (apiKeyForm.value.id) {
+			await updateApiKey(apiKeyForm.value);
+			useMessage().success(t('personal.updateSuccess'));
+		} else {
+			const { password, ...apiKeyData } = apiKeyForm.value;
+			const { data } = await createApiKey(apiKeyData, password);
+			apiKeyResult.value = data;
+			apiKeyResultVisible.value = true;
+		}
+		apiKeyDialogVisible.value = false;
+		loadApiKeyList();
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		apiKeySubmitting.value = false;
+	}
+};
+
+const handleDeleteApiKey = async (row: any) => {
+	try {
+		await useMessageBox().confirm(t('personal.deleteApiKeyConfirm'));
+		await deleteApiKey(row.id);
+		useMessage().success(t('personal.deleteSuccess'));
+		loadApiKeyList();
+	} catch (err: any) {
+		if (err !== 'cancel' && err?.msg) {
+			useMessage().error(err.msg);
+		}
+	}
+};
+
+const handleCopyApiKey = async () => {
+	try {
+		await copy(apiKeyResult.value);
+		useMessage().success(t('personal.copySuccess'));
+	} catch {
+		useMessage().error(t('personal.copyFailed'));
+	}
+};
+
 // 暴露变量
 defineExpose({
 	open,
 });
 </script>
+
+<style scoped lang="scss">
+.api-key-section {
+	:deep(.el-table) {
+		--el-table-tr-bg-color: var(--el-bg-color);
+		--el-table-row-hover-bg-color: var(--el-fill-color-light);
+	}
+
+	:deep(.el-table__empty-text) {
+		color: var(--el-text-color-secondary);
+	}
+
+	:deep(.el-table__cell .cell) {
+		word-break: break-word;
+	}
+
+	[data-theme='dark'] & {
+		:deep(.el-table) {
+			--el-table-border-color: var(--el-border-color);
+			--el-table-header-bg-color: var(--el-fill-color-light);
+			--el-table-row-hover-bg-color: var(--el-fill-color);
+			color: var(--el-text-color-primary);
+		}
+	}
+}
+</style>

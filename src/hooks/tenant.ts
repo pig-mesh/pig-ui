@@ -2,6 +2,7 @@ import { ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { fetchList, switchPersonalTenant } from '/@/api/admin/tenant';
 import { useThemeConfig } from '/@/stores/themeConfig';
+import { useSiteConfig } from '/@/stores/siteConfig';
 import { useUserInfo } from '/@/stores/userInfo';
 import { Local, Session } from '/@/utils/storage';
 import { validateNull } from '/@/utils/validate';
@@ -83,8 +84,9 @@ export function useTenant() {
 		const { themeConfig } = storeToRefs(stores);
 
 		// 设置主题配置
-		themeConfig.value.globalTitle = tenant.websiteName || tenant.name || import.meta.env.VITE_GLOBAL_TITLE;
-		themeConfig.value.footerAuthor = tenant.footer || import.meta.env.VITE_FOOTER_TITLE;
+		const siteConfigStore = useSiteConfig();
+		siteConfigStore.siteConfig.title = tenant.websiteName || tenant.name || import.meta.env.VITE_GLOBAL_TITLE;
+		siteConfigStore.siteConfig.footer = tenant.footer || import.meta.env.VITE_FOOTER_TITLE;
 		themeConfig.value.background = tenant.background || '';
 		themeConfig.value.miniQr = tenant.miniQr || '';
 

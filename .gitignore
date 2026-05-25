@@ -33,6 +33,11 @@ pnpm-lock.yaml
 final_review_gate.py
 .claude/settings.local.json
 
+# planning docs
+docs
+
+# local brainstorm cache
+.superpowers
 
 ### test
 *-aitest*

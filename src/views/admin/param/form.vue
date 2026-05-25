@@ -23,7 +23,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.status')" prop="status">
 						<el-radio-group v-model="form.status">
-							<el-radio :label="item.value" border v-for="(item, index) in status_type" :key="index">{{ item.label }}</el-radio>
+							<el-radio :value="item.value" border v-for="(item, index) in status_type" :key="index">{{ item.label }}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
@@ -45,7 +45,7 @@
 				<el-col :span="12" class="mb20">
 					<el-form-item :label="t('param.systemFlag')" prop="systemFlag">
 						<el-radio-group v-model="form.systemFlag">
-							<el-radio :label="item.value" border v-for="(item, index) in dict_type" :key="index">{{ item.label }}</el-radio>
+							<el-radio :value="item.value" border v-for="(item, index) in dict_type" :key="index">{{ item.label }}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>

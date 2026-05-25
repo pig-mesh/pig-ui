@@ -1,3 +1,4 @@
+import { useToNumber } from '@vueuse/core';
 import { CellStyle, ElMessage } from 'element-plus';
 import other from '/@/utils/other';
 
@@ -135,16 +136,18 @@ export function useTable(options?: BasicTableProps) {
 				if (res.data) {
 					state.dataList = state.isPage ? res.data[state.props.item] || [] : res.data;
 					// 设置分页信息中的总数据条数
-					state.pagination!.total = state.isPage ? res.data[state.props.totalCount] || 0 : 0;
+					state.pagination!.total = state.isPage
+						? useToNumber(String(res.data[state.props.totalCount] ?? 0), { method: 'parseFloat', nanToZero: true }).value
+						: 0;
 				} else {
 					// 如果 res.data 为 null，设置默认值
 					state.dataList = [];
 					state.pagination!.total = 0;
 				}
 			} catch (err: any) {
-				// 捕获异常并显示错误提示
-				if (err?.data?.msg) {
-					ElMessage.error(err.data.msg);
+				// 表格捕获异常并显示错误提示
+				if (err?.msg || err?.data) {
+					ElMessage.error(err.msg || err.data);
 				}
 			} finally {
 				// 结束加载数据，设置state.loading为false

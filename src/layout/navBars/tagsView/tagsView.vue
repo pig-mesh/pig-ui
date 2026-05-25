@@ -50,7 +50,6 @@
 import Sortable from 'sortablejs';
 import { ElMessage } from 'element-plus';
 import { storeToRefs } from 'pinia';
-import pinia from '/@/stores/index';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import { useKeepALiveNames } from '/@/stores/keepAliveNames';
@@ -571,15 +570,12 @@ onBeforeRouteUpdate(async (to) => {
 	await addTagsView(to.path, <RouteToFrom>to);
 	getTagsRefsIndex(getThemeConfig.value.isShareTagsView ? state.routePath : state.routeActive);
 });
-// 监听路由的变化，动态赋值给 tagsView
+// 监听 tagsViewRoutes 长度变化，动态赋值给 tagsView
 watch(
-	pinia.state,
-	(val) => {
-		if (val.tagsViewRoutes.tagsViewRoutes.length === state.tagsViewRoutesList.length) return false;
+	() => tagsViewRoutes.value.length,
+	(newLength) => {
+		if (newLength === state.tagsViewRoutesList.length) return;
 		getTagsViewRoutes();
-	},
-	{
-		deep: true,
 	}
 );
 </script>

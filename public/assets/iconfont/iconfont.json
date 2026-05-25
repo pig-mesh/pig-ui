@@ -6,13 +6,6 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "44379365",
-      "name": "AI技能库",
-      "font_class": "AIjinengku",
-      "unicode": "e6ae",
-      "unicode_decimal": 59054
-    },
-    {
       "icon_id": "42800214",
       "name": "code-review",
       "font_class": "code-review",
@@ -209,25 +202,11 @@
       "unicode_decimal": 59058
     },
     {
-      "icon_id": "19110345",
-      "name": "icon_icon_提问_s",
-      "font_class": "icon_icon_tiwen_s",
-      "unicode": "e692",
-      "unicode_decimal": 59026
-    },
-    {
       "icon_id": "26506747",
       "name": "镶嵌数据集",
       "font_class": "xiangqianshujuji",
       "unicode": "ee49",
       "unicode_decimal": 61001
-    },
-    {
-      "icon_id": "43401588",
-      "name": "智能体",
-      "font_class": "zhinengti",
-      "unicode": "e691",
-      "unicode_decimal": 59025
     },
     {
       "icon_id": "8052132",
@@ -249,41 +228,6 @@
       "font_class": "Television",
       "unicode": "ea94",
       "unicode_decimal": 60052
-    },
-    {
-      "icon_id": "43790171",
-      "name": "AI知识库",
-      "font_class": "AIzhishiku",
-      "unicode": "e6a8",
-      "unicode_decimal": 59048
-    },
-    {
-      "icon_id": "41157799",
-      "name": "UI-AI配置",
-      "font_class": "UI-AIpeizhi",
-      "unicode": "ea4f",
-      "unicode_decimal": 59983
-    },
-    {
-      "icon_id": "43699525",
-      "name": "mcp",
-      "font_class": "mcp",
-      "unicode": "e8ed",
-      "unicode_decimal": 59629
-    },
-    {
-      "icon_id": "6810171",
-      "name": "知识库",
-      "font_class": "zhishiku",
-      "unicode": "e68d",
-      "unicode_decimal": 59021
-    },
-    {
-      "icon_id": "34424737",
-      "name": "分析-词向量化",
-      "font_class": "xiangliang",
-      "unicode": "e68b",
-      "unicode_decimal": 59019
     },
     {
       "icon_id": "23951713",
@@ -361,13 +305,6 @@
       "font_class": "zhangdanguanli",
       "unicode": "e78d",
       "unicode_decimal": 59277
-    },
-    {
-      "icon_id": "7319076",
-      "name": "知识库",
-      "font_class": "zhishi",
-      "unicode": "e67a",
-      "unicode_decimal": 59002
     },
     {
       "icon_id": "9365778",
@@ -991,13 +928,6 @@
       "font_class": "zhongyingzhuanhuan",
       "unicode": "e638",
       "unicode_decimal": 58936
-    },
-    {
-      "icon_id": "41006844",
-      "name": "AIshiyanshi",
-      "font_class": "AIshiyanshi",
-      "unicode": "e69c",
-      "unicode_decimal": 59036
     },
     {
       "icon_id": "335291",

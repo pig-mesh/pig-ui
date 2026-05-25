@@ -9,7 +9,6 @@ import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
 import { useMenuApi } from '/@/api/admin/menu';
-import { ensureRemoteI18nLoaded } from '/@/i18n';
 
 // 后端控制路由
 
@@ -40,8 +39,6 @@ export async function initBackEndControlRoutes() {
 	if (!Session.getToken()) return false;
 	// 触发初始化用户信息 pinia
 	await useUserInfo().setUserInfos();
-	// 确保远程 i18n 词条就绪（菜单 title 通常为 i18n key）
-	await ensureRemoteI18nLoaded({ retry: 1 });
 	// 获取路由菜单数据
 	const res = await getBackEndControlRoutes();
 	// 无登录权限时，添加判断

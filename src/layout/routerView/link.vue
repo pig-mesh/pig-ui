@@ -13,8 +13,7 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="layoutLinkView">
-import { verifyUrl } from '/@/utils/toolsValidate';
+	<script setup lang="ts" name="layoutLinkView">
 
 const route = useRoute();
 const state = reactive<LinkViewState>({

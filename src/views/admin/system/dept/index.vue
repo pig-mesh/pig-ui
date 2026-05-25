@@ -59,14 +59,12 @@
 
 <script lang="ts" name="systemDept" setup>
 import { downBlobFile } from '/@/utils/other';
-import { useMessage } from '/@/hooks/message';
-import { useI18n } from 'vue-i18n';
+import { useSiteConfig } from '/@/stores/siteConfig';
 
-const { t } = useI18n();
-
-// 环境变量配置
-const enableDingTalkSync = import.meta.env.VITE_SYNC_DINGTALK_ENABLED === 'true';
-const enableWeChatSync = import.meta.env.VITE_SYNC_WECHAT_ENABLED === 'true';
+// 从 siteConfig store 读取导入开关
+const { siteConfig } = storeToRefs(useSiteConfig());
+const enableDingTalkSync = computed(() => siteConfig.value.syncDingtalkEnabled);
+const enableWeChatSync = computed(() => siteConfig.value.syncWechatEnabled);
 
 const TreeView = defineAsyncComponent(() => import('./tree-view.vue'));
 const TableView = defineAsyncComponent(() => import('./table-view.vue'));

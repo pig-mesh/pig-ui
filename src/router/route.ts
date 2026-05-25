@@ -57,24 +57,24 @@ export const dynamicRoutes: Array<RouteRecordRaw> = [
 			isHide: true,
 		},
 	},
-    {
-        path: '/flow/oaLeave/create',
-        name: '创建工单',
-        component: () => import('/@/views/flow/oaLeave/create.vue'),
-        meta: {
-            isAuth: true,
-            isHide: true,
-        },
-    },
-    {
-        path: '/flow/oaLeave/detail',
-        name: '工单详情',
-        component: () => import('/@/views/flow/oaLeave/detail.vue'),
-        meta: {
-            isAuth: true,
-            isHide: true,
-        }
-    }
+	{
+		path: '/flow/oaLeave/create',
+		name: '创建工单',
+		component: () => import('/@/views/flow/oaLeave/create.vue'),
+		meta: {
+			isAuth: true,
+			isHide: true,
+		},
+	},
+	{
+		path: '/flow/oaLeave/detail',
+		name: '工单详情',
+		component: () => import('/@/views/flow/oaLeave/detail.vue'),
+		meta: {
+			isAuth: true,
+			isHide: true,
+		},
+	},
 ];
 
 /**
@@ -95,6 +95,24 @@ export const staticRoutes: Array<RouteRecordRaw> = [
 		component: () => import('/@/views/login/component/authredirect.vue'),
 		meta: {
 			isAuth: false,
+		},
+	},
+	{
+		path: '/flow/mobile/start',
+		name: 'flowMobileStart',
+		component: () => import('/@/views/flow/mobile/start.vue'),
+		meta: {
+			isAuth: true,
+			isHide: true,
+		},
+	},
+	{
+		path: '/flow/mobile/task',
+		name: 'flowMobileTask',
+		component: () => import('/@/views/flow/mobile/task.vue'),
+		meta: {
+			isAuth: true,
+			isHide: true,
 		},
 	},
 ];
@@ -137,4 +155,5 @@ export const baseRoutes: Array<RouteRecordRaw> = [
 		},
 		children: [],
 	},
+
 ];

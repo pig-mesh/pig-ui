@@ -3,6 +3,7 @@ import router from '/@/router/index';
 import pinia from '/@/stores/index';
 import {storeToRefs} from 'pinia';
 import {useThemeConfig} from '/@/stores/themeConfig';
+import {useSiteConfig} from '/@/stores/siteConfig';
 import {i18n} from '/@/i18n/index';
 import {Local} from '/@/utils/storage';
 import {verifyUrl} from '/@/utils/toolsValidate';
@@ -18,11 +19,10 @@ import {validateNull} from './validate';
  * @method const title = useTitle(); ==> title()
  */
 export function useTitle() {
-    const stores = useThemeConfig(pinia);
-    const {themeConfig} = storeToRefs(stores);
+    const {siteConfig} = storeToRefs(useSiteConfig(pinia));
     nextTick(() => {
-        let globalTitle: string = themeConfig.value.globalTitle;
-        let webTitle = setTagsViewNameI18n(router.currentRoute.value);
+        const globalTitle: string = siteConfig.value.title;
+        const webTitle = setTagsViewNameI18n(router.currentRoute.value);
         document.title = `${webTitle} - ${globalTitle}` || globalTitle;
     });
 }

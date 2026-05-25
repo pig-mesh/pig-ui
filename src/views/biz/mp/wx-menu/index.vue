@@ -524,5 +524,5 @@ onMounted(async () => {
 </script>
 
 <style lang="scss" scoped>
-@import './assets/wx-menu.scss';
+@use './assets/wx-menu.scss' as *;
 </style>

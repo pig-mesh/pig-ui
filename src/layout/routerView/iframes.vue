@@ -82,8 +82,5 @@ watch(
 			closeIframeLoading(route.fullPath, item);
 		});
 	},
-	{
-		deep: true,
-	}
 );
 </script>

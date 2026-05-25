@@ -317,12 +317,12 @@
 						<el-switch v-model="getThemeConfig.isCacheTagsView" size="small" @change="setLocalThemeConfig"></el-switch>
 					</div>
 				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt15" :style="{ opacity: state.isMobile ? 0.5 : 1 }">
+				<div class="layout-breadcrumb-seting-bar-flex mt15" :style="{ opacity: isMobile ? 0.5 : 1 }">
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsSortableTagsView') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-switch
 							v-model="getThemeConfig.isSortableTagsView"
-							:disabled="!!state.isMobile"
+							:disabled="isMobile"
 							size="small"
 							@change="onSortableTagsViewChange"
 						></el-switch>
@@ -356,12 +356,6 @@
 					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsWartermark') }}</div>
 					<div class="layout-breadcrumb-seting-bar-flex-value">
 						<el-switch v-model="getThemeConfig.isWartermark" size="small" @change="onWartermarkChange"></el-switch>
-					</div>
-				</div>
-				<div class="layout-breadcrumb-seting-bar-flex mt15">
-					<div class="layout-breadcrumb-seting-bar-flex-label">{{ $t('layout.fourIsChat') }}</div>
-					<div class="layout-breadcrumb-seting-bar-flex-value">
-						<el-switch v-model="getThemeConfig.isChat" size="small" @change="onChatChange"></el-switch>
 					</div>
 				</div>
 				<!-- 其它设置 -->
@@ -441,22 +435,29 @@ import { ElMessage } from 'element-plus';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
+import { useSiteConfig } from '/@/stores/siteConfig';
 import { useChangeColor } from '/@/utils/theme';
 import { Local } from '/@/utils/storage';
 import Watermark from '/@/utils/wartermark';
 import commonFunction from '/@/utils/commonFunction';
-import other from '/@/utils/other';
 import mittBus from '/@/utils/mitt';
 import { useUserInfo } from '/@/stores/userInfo';
-import { useDark } from '@vueuse/core';
+import { useDark, useMediaQuery, useTimeoutFn, watchImmediate } from '@vueuse/core';
 
 const { locale } = useI18n();
 const { themeConfig } = storeToRefs(useThemeConfig());
+const { siteConfig } = storeToRefs(useSiteConfig());
+const { userInfos } = storeToRefs(useUserInfo());
 const { copyText } = commonFunction();
 const { getLightColor, getDarkColor } = useChangeColor();
-const state = reactive({ isMobile: false });
 
 const getThemeConfig = computed(() => themeConfig.value);
+const isMobile = useMediaQuery('(max-width: 999px)');
+const watermarkText = computed(() => userInfos.value.user?.username || siteConfig.value.title);
+
+const syncWatermark = () => {
+	getThemeConfig.value.isWartermark ? Watermark.set(watermarkText.value) : Watermark.del();
+};
 // 全局主题色
 const onColorPickerChange = () => {
 	if (!getThemeConfig.value.primary) return ElMessage.warning('全局主题 primary 颜色值不能为空');
@@ -578,13 +579,6 @@ const onAddDarkChange = () => {
 };
 // 水印
 const onWartermarkChange = () => {
-	const username = useUserInfo().userInfos.user?.username || getThemeConfig.value.globalTitle;
-	getThemeConfig.value.isWartermark ? Watermark.set(username) : Watermark.del();
-	setLocalThemeConfig();
-};
-
-// AI 助手
-const onChatChange = () => {
 	setLocalThemeConfig();
 };
 
@@ -661,6 +655,20 @@ const initSetStyle = () => {
 	onMenuBarGradualChange();
 	onColumnsMenuBarGradualChange();
 };
+
+watchImmediate([watermarkText, () => getThemeConfig.value.isWartermark], () => {
+	syncWatermark();
+});
+
+const { start: startInitialStyleSync } = useTimeoutFn(() => {
+	onColorPickerChange();
+	if (getThemeConfig.value.isGrayscale) onAddFilterChange('grayscale');
+	if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
+	onAddDarkChange();
+	if (Local.get('themeConfig')) locale.value = Local.get('themeConfig').globalI18n;
+	initSetStyle();
+}, 100, { immediate: false });
+
 onMounted(() => {
 	nextTick(() => {
 		// 判断当前布局是否不相同，不相同则初始化样式
@@ -670,17 +678,8 @@ onMounted(() => {
 			getThemeConfig.value.layout = res.layout;
 			getThemeConfig.value.isDrawer = false;
 			initLayoutChangeFun();
-			state.isMobile = other.isMobile();
 		});
-		setTimeout(() => {
-			onColorPickerChange();
-			if (getThemeConfig.value.isGrayscale) onAddFilterChange('grayscale');
-			if (getThemeConfig.value.isInvert) onAddFilterChange('invert');
-			onAddDarkChange();
-			onWartermarkChange();
-			if (Local.get('themeConfig')) locale.value = Local.get('themeConfig').globalI18n;
-			initSetStyle();
-		}, 100);
+		startInitialStyleSync();
 	});
 });
 onUnmounted(() => {

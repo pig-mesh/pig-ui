@@ -33,7 +33,7 @@
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar
-						:export="'app_social_details_del'"
+						:export="'mp_wxaccount_del'"
 						@exportExcel="exportExcel"
 						v-model:showSearch="showSearch"
 						class="ml-auto"

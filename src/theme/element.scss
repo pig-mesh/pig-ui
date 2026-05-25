@@ -96,6 +96,8 @@
 
 // 输入框增强聚焦效果
 .el-input {
+	--el-input-border-radius: var(--border-radius-md);
+
 	.el-input__wrapper {
 		transition: all var(--transition-base) var(--transition-function);
 		border-radius: var(--border-radius-md);
@@ -106,6 +108,38 @@
 
 		&.is-focus {
 			box-shadow: 0 0 0 1px var(--el-color-primary) inset, 0 0 0 3px rgba(64, 158, 255, 0.1);
+		}
+	}
+}
+
+.el-input-group--prepend > .el-input__wrapper {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+
+.el-input-group--append > .el-input__wrapper {
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+// 恢复 Input 组 append/prepend 中按钮的原生拼接样式，避免和全局按钮增强冲突
+.el-input-group__append,
+.el-input-group__prepend {
+	.el-button:not(.el-button--text):not(.is-text):not(.is-link) {
+		color: inherit;
+		background-color: transparent;
+		border-color: transparent;
+		border-radius: 0;
+		box-shadow: none;
+		transform: none;
+
+		&:hover:not(.is-disabled),
+		&:active:not(.is-disabled) {
+			color: inherit;
+			background-color: transparent;
+			border-color: transparent;
+			box-shadow: none;
+			transform: none;
 		}
 	}
 }
@@ -266,7 +300,7 @@
 	padding: 0 16px !important;
 	border-radius: var(--border-radius-md);
 	font-size: 14px;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: background-color 0.2s ease, color 0.2s ease;
 	position: relative;
 
 	// 激活状态
@@ -275,10 +309,9 @@
 		font-weight: 600;
 	}
 
-	// hover 状态 - 增强动画效果
+	// hover 状态
 	&:hover:not(.is-active) {
 		background-color: var(--next-bg-menuBarActiveColor) !important;
-		transform: translateX(2px);
 	}
 }
 
@@ -290,13 +323,12 @@
 	padding: 0 16px !important;
 	border-radius: var(--border-radius-md);
 	font-size: 14px;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	transition: background-color 0.2s ease, color 0.2s ease;
 	position: relative;
 
-	// hover 状态 - 增强动画效果
+	// hover 状态
 	&:hover {
 		background-color: var(--next-bg-menuBarActiveColor) !important;
-		transform: translateX(2px);
 	}
 }
 
@@ -321,17 +353,60 @@
 // 修复点击左侧菜单折叠再展开时，宽度不跟随问题
 .el-menu--collapse {
 	width: 64px !important;
+
 	.el-menu-item {
-		margin: 4px 8px;
+		margin: 4px 0 !important;
+		padding: 0 !important;
+		width: 100%;
+		display: flex !important;
+		align-items: center;
+		justify-content: center;
+
 		.el-menu-tooltip__trigger {
-			left: -4px;
+			left: 0 !important;
+			width: 100%;
+			display: flex !important;
+			align-items: center;
+			justify-content: center;
 		}
 	}
-	// 折叠时移除间距
+
+	// 折叠时移除间距，确保完全居中对齐
 	.el-sub-menu__title {
-		margin: 4px 8px;
+		margin: 4px 0 !important;
 		padding: 0 !important;
+		width: 100%;
+		display: flex !important;
+		align-items: center;
 		justify-content: center;
+	}
+
+	// 折叠时移除所有图标的边距，确保图标完全居中对齐在 32px 位置
+	.el-menu-item,
+	.el-sub-menu__title {
+		// 移除所有可能的图标边距
+		.iconfont,
+		.fa,
+		.svg-icon,
+		.el-icon,
+		i,
+		svg {
+			margin: 0 !important;
+			padding: 0 !important;
+		}
+
+		// 确保嵌套的 tooltip trigger 内的图标也居中
+		.el-menu-tooltip__trigger {
+			.iconfont,
+			.fa,
+			.svg-icon,
+			.el-icon,
+			i,
+			svg {
+				margin: 0 !important;
+				padding: 0 !important;
+			}
+		}
 	}
 }
 
@@ -357,6 +432,16 @@
 	width: 20px !important;
 	text-align: center;
 	justify-content: center;
+	margin-right: 10px;
+	flex-shrink: 0;
+}
+
+// Element Plus 原生图标间距优化
+.el-menu-item .el-icon,
+.el-sub-menu .el-icon {
+	margin-right: 10px;
+	flex-shrink: 0;
+	font-size: 16px;
 }
 
 // 菜单层级样式（使用 CSS 层级选择器自动处理）
@@ -503,16 +588,6 @@
 	}
 }
 
-/* Steps 步骤条
-------------------------------- */
-.el-step__icon-inner {
-	font-size: 30px !important;
-	font-weight: 400 !important;
-}
-
-.el-step__title {
-	font-size: 14px;
-}
 
 /* Dialog 对话框
 ------------------------------- */

@@ -14,11 +14,10 @@ const { pause } = useIntervalFn(
 			if (shouldStop) {
 				pause(); // 停止定时器
 			}
-		} catch (err) {
-			// Token 检查失败时停止定时器，避免持续错误
-			console.error('Token check failed:', err);
-			pause();
-		}
+			} catch {
+				// Token 检查失败时停止定时器，避免持续错误
+				pause();
+			}
 	},
 	60000, // 60秒检查一次
 	{ immediate: true } // 立即执行第一次检查

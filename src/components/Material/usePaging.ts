@@ -1,3 +1,4 @@
+import { useToNumber } from '@vueuse/core';
 import { isFunction } from 'lodash';
 import { reactive, toRaw } from 'vue';
 
@@ -152,9 +153,10 @@ export function usePaging(options: Options) {
 			...requestParams,
 		})
 			.then(({ data }) => {
+				const total = useToNumber(String(data?.total ?? 0), { method: 'parseFloat', nanToZero: true }).value;
 				// 更新分页数据
-				pager.count = data?.total;
-				pager.total = data?.total;
+				pager.count = total;
+				pager.total = total;
 				pager.lists = data?.records;
 				pager.extend = data?.extend;
 

@@ -13,10 +13,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-AIjinengku:before {
-  content: "\e6ae";
-}
-
 .icon-code-review:before {
   content: "\e7ef";
 }
@@ -129,16 +125,8 @@
   content: "\e6b2";
 }
 
-.icon-icon_icon_tiwen_s:before {
-  content: "\e692";
-}
-
 .icon-xiangqianshujuji:before {
   content: "\ee49";
-}
-
-.icon-zhinengti:before {
-  content: "\e691";
 }
 
 .icon-liandong:before {
@@ -151,26 +139,6 @@
 
 .icon-Television:before {
   content: "\ea94";
-}
-
-.icon-AIzhishiku:before {
-  content: "\e6a8";
-}
-
-.icon-UI-AIpeizhi:before {
-  content: "\ea4f";
-}
-
-.icon-mcp:before {
-  content: "\e8ed";
-}
-
-.icon-zhishiku:before {
-  content: "\e68d";
-}
-
-.icon-xiangliang:before {
-  content: "\e68b";
 }
 
 .icon-DevOps:before {
@@ -215,10 +183,6 @@
 
 .icon-zhangdanguanli:before {
   content: "\e78d";
-}
-
-.icon-zhishi:before {
-  content: "\e67a";
 }
 
 .icon-zhuantikumoxingpeizhi:before {
@@ -575,10 +539,6 @@
 
 .icon-zhongyingzhuanhuan:before {
   content: "\e638";
-}
-
-.icon-AIshiyanshi:before {
-  content: "\e69c";
 }
 
 .icon-shidu:before {

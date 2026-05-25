@@ -1,6 +1,3 @@
-// 定义全局属性的类型
-import { ComponentCustomProperties } from 'vue';
-
 declare module '@vue/runtime-core' {
 	interface ComponentCustomProperties {
 		parseTime: Function;

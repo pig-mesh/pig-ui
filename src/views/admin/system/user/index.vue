@@ -155,6 +155,7 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { clearMaskedFields } from '/@/utils/validate';
+import { useSiteConfig } from '/@/stores/siteConfig';
 
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
@@ -163,9 +164,10 @@ const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInp
 
 const { t } = useI18n();
 
-// 环境变量配置
-const enableDingTalkSync = import.meta.env.VITE_SYNC_DINGTALK_ENABLED === 'true';
-const enableWeChatSync = import.meta.env.VITE_SYNC_WECHAT_ENABLED === 'true';
+// 从 siteConfig store 读取导入开关
+const { siteConfig } = storeToRefs(useSiteConfig());
+const enableDingTalkSync = computed(() => siteConfig.value.syncDingtalkEnabled);
+const enableWeChatSync = computed(() => siteConfig.value.syncWechatEnabled);
 
 // 定义变量内容
 const userDialogRef = ref();

@@ -25,10 +25,9 @@
 <script lang="ts" name="treeView" setup>
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { delObj, deptTree } from '/@/api/admin/dept';
-import { getObj } from '/@/api/admin/tenant';
-import { Session } from '/@/utils/storage';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
+import { useSiteConfig } from '/@/stores/siteConfig';
 import { useThemeConfig } from '/@/stores/themeConfig';
 
 const DeptForm = defineAsyncComponent(() => import('./form.vue'));
@@ -187,9 +186,9 @@ const delNode = async (node: any) => {
 const getOrgData = async () => {
 	try {
 		// 查询当前租户信息
-		const { data: tenantData } = await getObj(Session.getTenant());
+		const siteConfig = useSiteConfig();
 		const { data: deptData } = await deptTree();
-		Object.assign(data, { id: '0', name: tenantData.name });
+		Object.assign(data, { id: '0', name: siteConfig.siteConfig.title });
 		data.children = deptData;
 	} catch (err: any) {
 		useMessage().error(err.msg || t('common.getDataFailed'));

@@ -8,7 +8,7 @@
           </el-form-item>
           <el-form-item :label="t('sensitive.sensitiveType')" prop="sensitiveType">
             <el-radio-group v-model="state.queryForm.sensitiveType">
-              <el-radio :label="item.value" v-for="(item, index) in sensitive_type" border :key="index">{{ item.label }}
+              <el-radio :value="item.value" v-for="(item, index) in sensitive_type" border :key="index">{{ item.label }}
               </el-radio>
             </el-radio-group>
           </el-form-item>

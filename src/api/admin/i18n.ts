@@ -74,7 +74,7 @@ export async function info() {
 	if (version) headers.VERSION = version;
 
 	const timeout = Number(import.meta.env.VITE_REQUEST_TIMEOUT) || 50000;
-	const res = await axios.get(`${baseURL}/admin/i18n/info`, { headers, timeout });
+	const res = await axios.get(`${baseURL}/admin/system/config`, { headers, timeout });
 
 	if (res.data?.encryption) {
 		return decrypt(res.data.encryption);

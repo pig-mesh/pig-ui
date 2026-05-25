@@ -10,7 +10,7 @@
 					</el-col>
 					<el-col :span="12" class="mb20">
 						<el-form-item :label="$t('sysuser.password')" prop="password">
-							<el-input clearable :placeholder="$t('sysuser.inputPasswordTip')" type="password" v-model="dataForm.password"></el-input>
+							<el-input clearable :placeholder="$t('sysuser.inputPasswordTip')" type="password" show-password :maxlength="12" v-model="dataForm.password"></el-input>
 						</el-form-item>
 					</el-col>
 					<el-col :span="12" class="mb20">
@@ -91,8 +91,11 @@ import { useDict } from '/@/hooks/dict';
 import { useI18n } from 'vue-i18n';
 import { useMessage } from '/@/hooks/message';
 import { rule, clearMaskedFields } from '/@/utils/validate';
+import { useSiteConfig } from '/@/stores/siteConfig';
+import { createPasswordRuleValidator } from '/@/utils/passwordRule';
 
 const { t } = useI18n();
+const { siteConfig } = storeToRefs(useSiteConfig());
 
 // 定义刷新表格emit
 const emit = defineEmits(['refresh']);
@@ -147,6 +150,14 @@ const dataForm = reactive({
 	post: [] as string[],
 	role: [] as string[],
 });
+const basePasswordRuleValidator = createPasswordRuleValidator(() => siteConfig.value.passwordRule, t);
+const passwordRuleValidator = (rule: any, value: string, callback: (error?: Error) => void) => {
+	if (dataForm.userId && value === '******') {
+		callback();
+		return;
+	}
+	basePasswordRuleValidator(rule, value, callback);
+};
 
 const dataRules = ref({
 	// 用户名校验，不能为空 、长度 5-20、不能和已有数据重复
@@ -162,12 +173,7 @@ const dataRules = ref({
 	],
 	password: [
 		{ required: true, message: t('sysuser.passwordRequired'), trigger: 'blur' },
-		{
-			min: 6,
-			max: 20,
-			message: t('sysuser.passwordLength'),
-			trigger: 'blur',
-		},
+		{ validator: passwordRuleValidator, trigger: 'blur' },
 	],
 	// 姓名校验，不能为空、只能是中文
 	name: [
