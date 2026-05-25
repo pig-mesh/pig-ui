@@ -10,7 +10,6 @@
 		</el-scrollbar>
 		<el-backtop :target="setBacktopClass" />
 		<check-token />
-    <chat/>
 	</el-main>
 </template>
 
@@ -21,7 +20,6 @@ import { NextLoading } from '/@/utils/loading';
 
 const LayoutParentView = defineAsyncComponent(() => import('/@/layout/routerView/parent.vue'));
 const CheckToken = defineAsyncComponent(() => import('/@/components/CheckToken/index.vue'));
-const Chat = defineAsyncComponent(() => import('/@/components/Chat/index.vue'));
 
 const layoutMainScrollbarRef = ref();
 const { themeConfig } = storeToRefs(useThemeConfig());
