@@ -105,7 +105,7 @@ import {getObj, addObj} from '/@/api/gen/create-table'
 import {useI18n} from "vue-i18n"
 import {rule, validateNull} from '/@/utils/validate';
 import {list} from "/@/api/gen/fieldtype";
-import {fetchList} from '/@/api/gen/table';
+import {useListTableApi} from '/@/api/gen/table';
 
 const emit = defineEmits(['refresh']);
 
@@ -204,13 +204,22 @@ const getInsertIndex = () => {
  * @param callback 校验回调
  */
 const validateTableName = async (_rule: any, value: string, callback: (error?: Error) => void) => {
-  const {data} = await fetchList({tableName: value})
-  if (data.total === 0) {
-    callback()
-  } else {
-    callback(new Error('表名已存在'))
+  const tableName = normalizeTableName(value);
+  if (!tableName || !form.dsName) {
+    callback();
+    return;
+  }
+
+  try {
+    const {data = []} = await useListTableApi(form.dsName);
+    const exists = data.some((item: any) => normalizeTableName(item.name ?? item.tableName) === tableName);
+    callback(exists ? new Error('表名已存在') : undefined);
+  } catch (err: any) {
+    callback(new Error(err?.msg || '表名校验失败'));
   }
 }
+
+const normalizeTableName = (value: string) => String(value || '').trim().toLowerCase();
 
 // 定义校验规则
 const dataRules = ref({
