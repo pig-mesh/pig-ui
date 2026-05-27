@@ -20,8 +20,11 @@
   Props：
   - modelValue  : Array   - 表格数据（v-model）
   - addTemplate : Object  - 新增行模板对象
+  - addMethod   : Function - 自定义新增方法
   - placeholder : string  - 空数据提示文本
+  - maxHeight   : string/number - 表格最大高度
   - dragSort    : boolean - 是否启用拖拽排序
+  - showIndex   : boolean - 是否显示序号
   - hideAdd     : boolean - 是否隐藏新增按钮
   - hideDelete  : boolean - 是否隐藏删除按钮
 
@@ -42,18 +45,20 @@
 				background: 'var(--el-table-row-hover-bg-color)',
 				color: 'var(--el-text-color-primary)',
 			}"
+			:max-height="maxHeight"
 			style="width: 100%"
 			table-layout="auto"
 		>
 			<!-- 序号列：含新增/删除按钮 -->
-			<el-table-column type="index" width="50" fixed="left">
+			<el-table-column type="index" width="60" fixed="left">
 				<template #header>
 					<el-button v-if="!hideAdd" type="primary" icon="Plus" size="small" circle @click="rowAdd" />
-					<el-tooltip v-else :content="t('formTable.index')" placement="top"> # </el-tooltip>
+					<el-tooltip v-else-if="showIndex" :content="t('formTable.index')" placement="top"> # </el-tooltip>
+					<span v-else />
 				</template>
 				<template #default="{ row, $index }">
 					<div :class="['form-table-handle', { 'form-table-handle-delete': !hideDelete }]">
-						<span>{{ $index + 1 }}</span>
+						<span v-if="showIndex">{{ $index + 1 }}</span>
 						<el-button
 							v-if="!hideDelete"
 							type="danger"
@@ -91,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, type PropType } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, shallowRef, watch, type PropType } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVModel } from '@vueuse/core';
 import Sortable from 'sortablejs';
@@ -109,15 +114,30 @@ const props = defineProps({
 		type: Object as PropType<Record<string, any>>,
 		default: () => ({}),
 	},
+	/** 自定义新增方法 */
+	addMethod: {
+		type: Function as PropType<() => void>,
+		default: undefined,
+	},
 	/** 空数据提示语，默认使用 i18n */
 	placeholder: {
 		type: String,
 		default: '',
 	},
+	/** 表格最大高度 */
+	maxHeight: {
+		type: [String, Number],
+		default: undefined,
+	},
 	/** 是否启用拖拽排序 */
 	dragSort: {
 		type: Boolean,
 		default: false,
+	},
+	/** 是否显示序号 */
+	showIndex: {
+		type: Boolean,
+		default: true,
 	},
 	/** 是否隐藏新增按钮 */
 	hideAdd: {
@@ -138,21 +158,32 @@ const data = useVModel(props, 'modelValue', emit, { deep: true });
 
 const scFormTableRef = ref<HTMLDivElement>();
 const tableRef = ref();
+const sortableRef = shallowRef<Sortable | null>(null);
+
+const destroyDragSort = () => {
+	sortableRef.value?.destroy();
+	sortableRef.value = null;
+};
 
 /**
  * 初始化拖拽排序
  * 通过 Sortable.js 实现表格行拖拽，拖拽结束后重新排列数组并刷新渲染
  */
-const initDragSort = () => {
+const initDragSort = async () => {
+	destroyDragSort();
+	if (!props.dragSort) return;
+
+	await nextTick();
 	const tbody = tableRef.value?.$el.querySelector('.el-table__body-wrapper tbody');
 	if (!tbody) return;
 
-	Sortable.create(tbody, {
+	sortableRef.value = Sortable.create(tbody, {
 		handle: '.move',
 		animation: 300,
 		ghostClass: 'ghost',
 		onEnd({ newIndex, oldIndex }) {
 			if (newIndex == null || oldIndex == null) return;
+			if (newIndex === oldIndex) return;
 			// 移动数组元素并就地更新，避免清空数组产生中间状态
 			const item = data.value.splice(oldIndex, 1)[0];
 			data.value.splice(newIndex, 0, item);
@@ -161,13 +192,30 @@ const initDragSort = () => {
 };
 
 onMounted(() => {
-	if (props.dragSort) {
+	initDragSort();
+});
+
+watch(
+	() => [props.dragSort, data.value.length],
+	() => {
 		initDragSort();
-	}
+	},
+	{ flush: 'post' }
+);
+
+onBeforeUnmount(() => {
+	destroyDragSort();
 });
 
 /** 通过 addTemplate 深拷贝新增一行 */
-const rowAdd = () => pushRow();
+const rowAdd = () => {
+	if (props.addMethod) {
+		props.addMethod();
+		return;
+	}
+
+	pushRow();
+};
 
 /** 删除指定行并触发 delete 事件 */
 const rowDel = (row: Record<string, any>, index: number) => {

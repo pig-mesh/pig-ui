@@ -18,54 +18,46 @@
 
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('createTable.columnInfo')" prop="columns">
-            <el-table :data="form.columns" border style="width: 100%" max-height="500">
-              <el-table-column type="index" :label="t('createTable.index')" width="80">
-                <template #header>
-                  <el-button icon="Plus" size="small" type="primary" circle @click="onAddItem"></el-button>
-                </template>
-                <template #default="scope">
-                  <el-button icon="Minus" size="small" type="danger" circle
-                             @click="handleDelete(scope.$index, scope.row)"></el-button>
-                </template>
-              </el-table-column>
+            <sc-form-table v-model="form.columns" :add-method="onAddItem" :drag-sort="operType !== 'view'"
+                           :show-index="false" :max-height="500">
               <el-table-column prop="name" :label="t('createTable.name')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-input v-model="scope.row.name" :placeholder="t('createTable.name')"
-                            @blur="suggestedFieldType(scope.row)"/>
+                <template #default="{ row }">
+                  <el-input v-model="row.name" :placeholder="t('createTable.name')"
+                            @blur="suggestedFieldType(row)"/>
                 </template>
               </el-table-column>
               <el-table-column prop="comment" :label="t('createTable.comment')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-input v-model="scope.row.comment" :placeholder="t('createTable.comment')"/>
+                <template #default="{ row }">
+                  <el-input v-model="row.comment" :placeholder="t('createTable.comment')"/>
                 </template>
               </el-table-column>
               <el-table-column prop="type" :label="t('createTable.typeName')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-select v-model="scope.row.type" :placeholder="t('createTable.typeName')" clearable filterable>
+                <template #default="{ row }">
+                  <el-select v-model="row.type" :placeholder="t('createTable.typeName')" clearable filterable>
                     <el-option v-for="item in typeList" :key="item.value" :label="item.label" :value="item.value"/>
                   </el-select>
                 </template>
               </el-table-column>
               <el-table-column prop="length" :label="t('createTable.precision')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-input-number :min="0" :max="10000" v-model="scope.row.length"
+                <template #default="{ row }">
+                  <el-input-number :min="0" :max="10000" v-model="row.length"
                                    :placeholder="t('createTable.precision')"></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column prop="scale" :label="t('createTable.scale')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-input-number :min="0" :max="10000" v-model="scope.row.scale"
+                <template #default="{ row }">
+                  <el-input-number :min="0" :max="10000" v-model="row.scale"
                                    :placeholder="t('createTable.scale')"></el-input-number>
                 </template>
               </el-table-column>
               <el-table-column prop="defaultValue" :label="t('createTable.defaultValue')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-input v-model="scope.row.defaultValue" :placeholder="t('createTable.defaultValue')"/>
+                <template #default="{ row }">
+                  <el-input v-model="row.defaultValue" :placeholder="t('createTable.defaultValue')"/>
                 </template>
               </el-table-column>
               <el-table-column prop="primary" :label="t('createTable.primary')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-radio-group v-model="scope.row.primary">
+                <template #default="{ row }">
+                  <el-radio-group v-model="row.primary">
                     <el-radio v-for="(item, index) in tableDict" :key="index" :value="item.value" class="w-5">
                       {{ item.label }}
                     </el-radio>
@@ -73,15 +65,15 @@
                 </template>
               </el-table-column>
               <el-table-column prop="nullable" :label="t('createTable.nullable')" show-overflow-tooltip>
-                <template #default="scope">
-                  <el-radio-group v-model="scope.row.nullable">
+                <template #default="{ row }">
+                  <el-radio-group v-model="row.nullable">
                     <el-radio v-for="(item, index) in tableDict" :key="index" :value="item.value" class="w-5">
                       {{ item.label }}
                     </el-radio>
                   </el-radio-group>
                 </template>
               </el-table-column>
-            </el-table>
+            </sc-form-table>
           </el-form-item>
         </el-col>
 
@@ -107,6 +99,7 @@ import {rule, validateNull} from '/@/utils/validate';
 import {list} from "/@/api/gen/fieldtype";
 import {useListTableApi} from '/@/api/gen/table';
 
+const ScFormTable = defineAsyncComponent(() => import('/@/components/FormTable/index.vue'));
 const emit = defineEmits(['refresh']);
 
 const {t} = useI18n();
@@ -321,10 +314,6 @@ const getFieldTypeList = async () => {
   const {data} = await list();
   fieldTypeValues.value = data.map((item: any) => item.columnType).filter(Boolean);
 };
-
-const handleDelete = (index: number) => {
-  form.columns.splice(index, 1)
-}
 
 // 字段建议
 const suggestedFieldType = (row: CreateTableColumn) => {
