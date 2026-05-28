@@ -277,15 +277,8 @@ const sectionCount = (id: SectionId) => {
 };
 
 const sectionToneClass = (tone: SectionMeta['tone']) => {
-	const classMap = {
-		blue: 'bg-blue-50 text-blue-600 border-blue-100',
-		green: 'bg-emerald-50 text-emerald-600 border-emerald-100',
-		amber: 'bg-amber-50 text-amber-600 border-amber-100',
-		purple: 'bg-violet-50 text-violet-600 border-violet-100',
-		slate: 'bg-slate-100 text-slate-600 border-slate-200',
-		red: 'bg-red-50 text-red-600 border-red-100',
-	};
-	return classMap[tone];
+	if (tone === 'red') return 'bg-red-50 text-red-600 border-red-100';
+	return 'bg-slate-100 text-slate-600 border-slate-200';
 };
 
 const setSectionRef = (id: SectionId, el: Element | ComponentPublicInstance | null) => {
@@ -596,8 +589,8 @@ onUnmounted(() => {
 								</template>
 
 								<template v-if="section.id === 'security'">
-									<div class="px-6 py-5">
-										<div class="mb-4">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_auto] lg:items-center">
+										<div>
 											<div class="flex items-center gap-1 text-sm font-semibold text-base-content">
 												{{ rowMeta('captchaMode')?.label }}
 												<Tip :content="t('siteconfig.captchaModeTip')" />
@@ -690,62 +683,42 @@ onUnmounted(() => {
 								</template>
 
 								<template v-if="section.id === 'appearance'">
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_280px] lg:items-center">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
 										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('i18nSwitch')?.label }}</div>
 											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('i18nSwitch')?.desc }}</div>
 										</div>
-										<div class="flex items-center gap-3 lg:justify-end">
-											<el-select :model-value="t('siteconfig.defaultLanguage')" disabled class="!w-48">
-												<el-option :label="t('siteconfig.defaultLanguage')" :value="t('siteconfig.defaultLanguage')" />
-											</el-select>
-											<el-switch v-model="form.i18nEnable" :aria-label="t('siteconfig.i18nSwitch')" />
-										</div>
+										<el-switch v-model="form.i18nEnable" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.i18nSwitch')" />
 									</div>
 
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_420px] lg:items-center">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
 										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('darkMode')?.label }}</div>
 											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('darkMode')?.desc }}</div>
 										</div>
-										<div class="flex items-center gap-3 lg:justify-end">
-											<div class="inline-flex p-1 border rounded-lg border-base-300 bg-base-200">
-												<span class="px-4 py-2 text-sm font-semibold rounded-md text-base-content/50">{{ $t('siteconfig.lightMode') }}</span>
-												<span class="px-4 py-2 text-sm font-semibold rounded-md text-base-content/50">{{ $t('siteconfig.darkModeDefault') }}</span>
-												<span class="px-4 py-2 text-sm font-semibold rounded-md shadow-sm bg-base-100 text-base-content">{{
-													$t('siteconfig.followSystem')
-												}}</span>
-											</div>
-											<el-switch v-model="form.darkModeEnable" :aria-label="t('siteconfig.darkMode')" />
-										</div>
+										<el-switch v-model="form.darkModeEnable" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.darkMode')" />
 									</div>
 								</template>
 
 								<template v-if="section.id === 'integration'">
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_260px] lg:items-center">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
 										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('syncDingtalk')?.label }}</div>
 											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('syncDingtalk')?.desc }}</div>
 										</div>
-										<div class="flex items-center gap-3 lg:justify-end">
-											<el-button>{{ $t('siteconfig.configAppKey') }}</el-button>
-											<el-switch v-model="form.syncDingtalkEnabled" :aria-label="t('siteconfig.syncDingtalk')" />
-										</div>
+										<el-switch v-model="form.syncDingtalkEnabled" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.syncDingtalk')" />
 									</div>
 
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_260px] lg:items-center">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
 										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('syncWechat')?.label }}</div>
 											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('syncWechat')?.desc }}</div>
 										</div>
-										<div class="flex items-center gap-3 lg:justify-end">
-											<el-button>{{ $t('siteconfig.configCorpId') }}</el-button>
-											<el-switch v-model="form.syncWechatEnabled" :aria-label="t('siteconfig.syncWechat')" />
-										</div>
+										<el-switch v-model="form.syncWechatEnabled" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.syncWechat')" />
 									</div>
 
-									<div class="px-6 py-5">
-										<div class="mb-4">
+									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_380px] lg:items-center">
+										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('clarityId')?.label }}</div>
 											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('clarityId')?.desc }}</div>
 										</div>
