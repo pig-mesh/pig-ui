@@ -303,15 +303,21 @@
 	transition: background-color 0.2s ease, color 0.2s ease;
 	position: relative;
 
-	// 激活状态
+	// 激活状态 - primary 色系
 	&.is-active {
-		background-color: var(--next-bg-menuBarActiveColor) !important;
+		background-color: #eff6ff !important;
+		color: var(--el-color-primary) !important;
 		font-weight: 600;
+
+		// 激活态图标跟随 primary 色
+		.iconfont, .fa, .svg-icon, .el-icon, i, svg {
+			color: var(--el-color-primary) !important;
+		}
 	}
 
 	// hover 状态
 	&:hover:not(.is-active) {
-		background-color: var(--next-bg-menuBarActiveColor) !important;
+		background-color: #f8fafc !important;
 	}
 }
 
@@ -328,7 +334,7 @@
 
 	// hover 状态
 	&:hover {
-		background-color: var(--next-bg-menuBarActiveColor) !important;
+		background-color: #f8fafc !important;
 	}
 }
 
@@ -340,7 +346,8 @@
 
 // 激活状态的子菜单
 .el-sub-menu.is-active > .el-sub-menu__title {
-	background-color: var(--next-bg-menuBarActiveColor) !important;
+	background-color: #eff6ff !important;
+	color: var(--el-color-primary) !important;
 	font-weight: 600;
 }
 

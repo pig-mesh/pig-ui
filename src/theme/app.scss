@@ -15,33 +15,33 @@
 	--transition-slow: 300ms;
 	--transition-function: cubic-bezier(0.4, 0, 0.2, 1);
 
-	/* Color System - Base Colors
+	/* Color System - Base Colors (Slate)
 	------------------------------- */
 	--next-color-white: #ffffff;
 	--next-color-black: #000000;
-	--next-text-color: #303133;
-	--next-text-color-regular: #606266;
-	--next-text-color-secondary: #909399;
-	--next-text-color-placeholder: #a8abb2;
+	--next-text-color: #1e293b;
+	--next-text-color-regular: #64748b;
+	--next-text-color-secondary: #94a3b8;
+	--next-text-color-placeholder: #cbd5e1;
 
 	/* Background Colors
 	------------------------------- */
-	--next-bg-main-color: #f5f7fa;
+	--next-bg-main-color: #f8fafc;
 	--next-bg-color: #ffffff;
-	--next-bg-color-page: #f0f2f5;
+	--next-bg-color-page: #f1f5f9;
 	--next-bg-color-overlay: rgba(0, 0, 0, 0.5);
 
 	/* Border Colors
 	------------------------------- */
-	--next-border-color: #dcdfe6;
-	--next-border-color-light: #e4e7ed;
-	--next-border-color-lighter: #ebeef5;
-	--next-border-color-extra-light: #f2f6fc;
+	--next-border-color: #e2e8f0;
+	--next-border-color-light: #e2e8f0;
+	--next-border-color-lighter: #f1f5f9;
+	--next-border-color-extra-light: #f8fafc;
 
 	/* Border Radius Tokens
 	------------------------------- */
 	--border-radius-sm: 4px;
-	--border-radius-md: 8px;
+	--border-radius-md: 6px;
 	--border-radius-lg: 12px;
 	--border-radius-xl: 16px;
 	--border-radius-full: 9999px;
@@ -81,9 +81,9 @@
 
 	/* Interactive States
 	------------------------------- */
-	--next-color-dark-hover: rgba(0, 0, 0, 0.06);
-	--next-color-menu-hover: rgba(0, 0, 0, 0.08);
-	--next-color-user-hover: rgba(0, 0, 0, 0.04);
+	--next-color-dark-hover: rgba(0, 0, 0, 0.04);
+	--next-color-menu-hover: #f8fafc;
+	--next-color-user-hover: rgba(0, 0, 0, 0.03);
 	--next-color-hover-bg: rgba(0, 0, 0, 0.02);
 
 	/* Layout Specific Colors
@@ -100,7 +100,7 @@ body,
 	padding: 0;
 	width: 100%;
 	height: 100%;
-	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+	font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
 	font-weight: 400;
 	-webkit-font-smoothing: antialiased;
 	-webkit-tap-highlight-color: transparent;
@@ -117,7 +117,7 @@ body,
 	width: 100%;
 	height: 100%;
 	.layout-pd {
-		padding: 8px !important;
+		padding: 12px !important;
 	}
 	.layout-flex {
 		display: flex;
@@ -267,7 +267,7 @@ body,
 // 面包屑修改默认颜色和字体粗细
 .layout-navbars-tagsview-ul {
 	.is-active {
-		font-weight: 900;
+		font-weight: 600;
 	}
 }
 
