@@ -4,14 +4,12 @@ import { defineConfig, loadEnv, ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
 import topLevelAwait from 'vite-plugin-top-level-await';
-import { createStyleImportPlugin, VxeTableResolve } from 'vite-plugin-style-import';
 import viteCompression from 'vite-plugin-compression2';
 // @ts-ignore
 import { svgBuilder } from '/@/components/IconSelector/index';
-import { viteMockServe } from 'vite-plugin-mock';
 
-import dns from 'node:dns'
-dns.setDefaultResultOrder('verbatim')
+import dns from 'node:dns';
+dns.setDefaultResultOrder('verbatim');
 
 const pathResolve = (dir: string) => {
 	return resolve(__dirname, '.', dir);
@@ -25,7 +23,7 @@ const alias: Record<string, string> = {
 const viteConfig = defineConfig((mode: ConfigEnv) => {
 	const env = loadEnv(mode.mode, process.cwd());
 	// 判断是否开发环境
-	const isDev = env.ENV === 'development'
+	const isDev = env.ENV === 'development';
 	return {
 		plugins: [
 			vue(), // Vue 插件
@@ -42,9 +40,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				],
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
 			}),
-			createStyleImportPlugin({
-				resolves: [VxeTableResolve()], // 配置vxetable 按需加载
-			}),
 			topLevelAwait({
 				promiseExportName: '__tla', // TLA Promise 变量名
 				promiseImportName: (i: number) => `__tla_${i}`, // TLA Promise 导入名
@@ -52,10 +47,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			viteCompression({
 				deleteOriginalAssets: false, // 压缩后是否删除原始文件
 			}),
-			viteMockServe({
-				mockPath: path.join(__dirname, './src/mock'),
-				enable: process.env.NODE_ENV === 'development',
-			})
 		],
 		root: process.cwd(), // 项目根目录
 		resolve: { alias }, // 路径别名配置
@@ -88,15 +79,15 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			chunkSizeWarningLimit: 1500, // 代码分包阈值
 			assetsInlineLimit: 0, // 禁止资源内联，确保所有 SVG 生成独立文件
 			// 开发使用 esbuild 更快，生产环境打包使用 terser 可以删除更多注释
-			minify: isDev ? 'esbuild' as const : 'terser' as const,
+			minify: isDev ? ('esbuild' as const) : ('terser' as const),
 			terserOptions: {
 				compress: {
 					drop_console: true, // 删除 console
 					drop_debugger: true, // 删除 debugger
 				},
 				format: {
-					comments: false // 删除所有注释
-				}
+					comments: false, // 删除所有注释
+				},
 			},
 			rollupOptions: {
 				output: {
@@ -116,8 +107,8 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 				css: { charset: false },
 				scss: {
 					api: 'modern-compiler', // 使用现代 Sass API,消除 legacy-js-api 警告
-				}
-			}
+				},
+			},
 		},
 		define: {
 			__VUE_I18N_LEGACY_API__: JSON.stringify(false),

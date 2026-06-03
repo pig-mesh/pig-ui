@@ -157,10 +157,6 @@ The `/@/` alias resolves to `src/` directory (configured in `vite.config.ts`).
 - **Code Splitting**: Vue ecosystem and Echarts are split into separate chunks
 - **Compression**: Gzip compression enabled via `vite-plugin-compression`
 
-### Mock Server
-
-Mock APIs are available in development mode via `vite-plugin-mock` (stored in `src/mock/`).
-
 ### i18n Support
 
 Internationalization is configured via `vue-i18n` in `src/i18n/`, supporting both Chinese and English locales.

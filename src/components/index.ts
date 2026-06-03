@@ -11,7 +11,6 @@ import Editor from '/@/components/Editor/index.vue';
 import Tip from '/@/components/Tip/index.vue';
 import TagList from '/@/components/TagList/index.vue';
 import SvgIcon from '/@/components/SvgIcon/index.vue';
-import Sign from '/@/components/Sign/index.vue';
 import ChinaArea from '/@/components/ChinaArea/index.vue';
 import OrgSelector from '/@/components/OrgSelector/index.vue';
 
@@ -27,9 +26,6 @@ import { setupCalendar } from 'v-calendar';
 // 部门树组件
 import vue3TreeOrg from 'vue3-tree-org';
 import 'vue3-tree-org/lib/vue3-tree-org.css';
-
-// 导入 FcDesigner
-import FcDesigner from 'form-create-designer';
 
 // 导入声明
 import { App } from 'vue';
@@ -51,7 +47,6 @@ export default {
 		app.component('SvgIcon', SvgIcon);
 		app.component('ChinaArea', ChinaArea);
 		app.component('OrgSelector', OrgSelector);
-		app.component('Sign', Sign);
 
 		// 导入全部的elmenet-plus的图标
 		for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
@@ -65,7 +60,5 @@ export default {
 		app.use(ElementPlus); // ELEMENT 组件
 		app.use(setupCalendar, {}); // 日历组件
 		app.use(vue3TreeOrg); // 组织架构组件
-		app.use(FcDesigner);
-		app.use(FcDesigner.formCreate);
 	},
 };
