@@ -1,6 +1,6 @@
 {
 	"name": "pig-ui",
-	"version": "6.0.0",
+	"version": "4.0.0",
 	"description": "Pig 开源权限管理与微服务脚手架",
 	"author": "pig4cloud",
 	"license": "Apache-2.0",
