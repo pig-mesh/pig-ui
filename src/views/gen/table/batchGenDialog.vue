@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="$t('gen.batchGenBtn')" v-model="visible" :close-on-click-modal="false" width="600px">
-		<el-form :model="form" ref="dataFormRef" label-width="120px">
+		<el-form :model="form" :rules="formRules" ref="dataFormRef" label-width="120px">
 			<el-form-item :label="$t('gen.author')" prop="author">
 				<el-input v-model="form.author" :placeholder="$t('gen.inputAuthorTip')" />
 			</el-form-item>
@@ -78,7 +78,7 @@
 import { useI18n } from 'vue-i18n';
 import { ElMessage } from 'element-plus';
 import { useDebounceFn } from '@vueuse/core';
-import { groupList, useSyncTableApi, putObj, useGeneratorCodeApi } from '/@/api/gen/table';
+import { checkGeneratorPath, groupList, useSyncTableApi, putObj, useGeneratorCodeApi } from '/@/api/gen/table';
 import { pageList as menuListApi } from '/@/api/admin/menu';
 import { downBlobFile } from '/@/utils/other';
 import { Local } from '/@/utils/storage';
@@ -105,6 +105,52 @@ const form = reactive({
 	frontendPath: '', // 前端路径
 	backendPath: '', // 后端路径
 });
+
+type GeneratorPathField = 'backendPath' | 'frontendPath';
+
+const generatorPathFieldMap: Record<GeneratorPathField, { label: string }> = {
+	backendPath: { label: t('gen.backendPath') },
+	frontendPath: { label: t('gen.frontendPath') },
+};
+
+const createRequiredPathValidator = (field: GeneratorPathField) => (_rule: any, value: string, callback: (error?: Error) => void) => {
+	if (form.generatorType !== '1' || value) {
+		callback();
+		return;
+	}
+
+	callback(new Error(`${generatorPathFieldMap[field].label}不能为空`));
+};
+
+const createGeneratorPathValidator = (field: GeneratorPathField) => async (_rule: any, value: string, callback: (error?: Error) => void) => {
+	if (form.generatorType !== '1' || !value) {
+		callback();
+		return;
+	}
+
+	const pathConfig = generatorPathFieldMap[field];
+	try {
+		const { data } = await checkGeneratorPath(value);
+		if (data) {
+			callback();
+			return;
+		}
+		callback(new Error(`${pathConfig.label}不存在`));
+	} catch (error) {
+		callback(new Error((error as { msg?: string })?.msg || `${pathConfig.label}检测失败`));
+	}
+};
+
+const formRules = {
+	backendPath: [
+		{ validator: createRequiredPathValidator('backendPath'), trigger: 'blur' },
+		{ validator: createGeneratorPathValidator('backendPath'), trigger: 'blur' },
+	],
+	frontendPath: [
+		{ validator: createRequiredPathValidator('frontendPath'), trigger: 'blur' },
+		{ validator: createGeneratorPathValidator('frontendPath'), trigger: 'blur' },
+	],
+};
 
 // 数据存储
 const styleList = ref<{ id: string; groupName: string }[]>([]); // 样式列表
@@ -201,6 +247,13 @@ watch(
 	}
 );
 
+watch(
+	() => form.generatorType,
+	() => {
+		dataFormRef.value?.clearValidate(['backendPath', 'frontendPath']);
+	}
+);
+
 /**
  * 获取代码生成样式分组列表
  */
@@ -227,7 +280,7 @@ const getMenuList = async () => {
  */
 const handleSubmit = async () => {
 	// 表单验证
-	const valid = await dataFormRef.value.validate();
+	const valid = await dataFormRef.value.validate().catch(() => false);
 	if (!valid) return;
 
 	// 确保有已同步的表

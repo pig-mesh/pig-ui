@@ -137,7 +137,7 @@
 
 <script lang="ts" setup>
 import { useDebounceFn, useLocalStorage, watchIgnorable, watchImmediate } from '@vueuse/core';
-import { putObj, useTableApi } from '/@/api/gen/table';
+import { checkGeneratorPath, putObj, useTableApi } from '/@/api/gen/table';
 import { list as groupList } from '/@/api/gen/group';
 import { Local } from '/@/utils/storage';
 import { rule } from '/@/utils/validate';
@@ -212,6 +212,32 @@ const createDefaultDataForm = () => ({
 	nameField: '',
 });
 const dataForm = reactive(createDefaultDataForm());
+
+type GeneratorPathField = 'backendPath' | 'frontendPath';
+
+const generatorPathFieldMap: Record<GeneratorPathField, { label: string }> = {
+	backendPath: { label: '后端路径' },
+	frontendPath: { label: '前端路径' },
+};
+
+const createGeneratorPathValidator = (field: GeneratorPathField) => async (_rule: any, value: string, callback: (error?: Error) => void) => {
+	if (dataForm.generatorType !== '1' || !value) {
+		callback();
+		return;
+	}
+
+	const pathConfig = generatorPathFieldMap[field];
+	try {
+		const { data } = await checkGeneratorPath(value);
+		if (data) {
+			callback();
+			return;
+		}
+		callback(new Error(`${pathConfig.label}不存在`));
+	} catch (error) {
+		callback(new Error((error as { msg?: string })?.msg || `${pathConfig.label}检测失败`));
+	}
+};
 
 type GeneratorBaseInfoDraft = {
 	generatorType: string;
@@ -538,6 +564,7 @@ const dataRules = ref({
 			message: '必填项不能为空',
 			trigger: 'blur',
 		},
+		{ validator: createGeneratorPathValidator('backendPath'), trigger: 'blur' },
 	],
 	frontendPath: [
 		{ validator: rule.overLength, trigger: 'blur' },
@@ -546,6 +573,7 @@ const dataRules = ref({
 			message: '必填项不能为空',
 			trigger: 'blur',
 		},
+		{ validator: createGeneratorPathValidator('frontendPath'), trigger: 'blur' },
 	],
 	style: [{ required: true, message: '必填项不能为空', trigger: 'blur' }],
 });
@@ -763,6 +791,13 @@ watchImmediate(
 		Object.assign(leftTreeRightTableForm.value, createDefaultLeftTreeRightTableForm());
 
 		getTable(currentDsName, currentTableName);
+	}
+);
+
+watch(
+	() => dataForm.generatorType,
+	() => {
+		dataFormRef.value?.clearValidate(['backendPath', 'frontendPath']);
 	}
 );
 

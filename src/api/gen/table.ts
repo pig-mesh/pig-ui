@@ -70,6 +70,14 @@ export const useGeneratorCodeApi = (tableIds: any) => {
 	});
 };
 
+export const checkGeneratorPath = (path: string) => {
+	return request({
+		url: '/gen/generator/check-path',
+		method: 'get',
+		params: { path },
+	});
+};
+
 export const useGeneratorVFormApi = (dsName: any, tableName: any) => {
 	return request({
 		url: '/gen/generator/vform',
@@ -137,4 +145,3 @@ export function groupList() {
 		method: 'get',
 	});
 }
-
