@@ -10,7 +10,6 @@ export default {
 		createBy: 'Operator',
 		createTime: 'Operation Time',
 		delFlag: 'Delete Flag',
-		tenantId: 'Tenant ID',
 		inputIdTip: 'Please enter ID',
 		inputAuditNameTip: 'Please enter audit name',
 		inputAuditFieldTip: 'Please enter field name',
@@ -19,6 +18,5 @@ export default {
 		inputCreateByTip: 'Please enter operator',
 		inputCreateTimeTip: 'Please enter operation time',
 		inputDelFlagTip: 'Please enter delete flag',
-		inputTenantIdTip: 'Please enter tenant ID',
 	},
 };

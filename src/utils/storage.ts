@@ -4,18 +4,17 @@ import Cookies from 'js-cookie';
 export const STORAGE_KEYS = {
 	TOKEN: 'token',
 	REFRESH_TOKEN: 'refresh_token',
-	TENANT_ID: 'tenantId',
 	DEPT_ID: 'deptId',
 } as const;
 
 /**
  * 判断 key 是否需要同步写入 Cookie
- * @description token、refresh_token、tenantId、deptId 在写入 sessionStorage 的同时也需要写入 Cookie，
+ * @description token、refresh_token、deptId 在写入 sessionStorage 的同时也需要写入 Cookie，
  * 原因是请求拦截器（request.ts）通过 Cookies 读取这些值来注入请求头；
  * 普通 key 仅存 sessionStorage，不需要跨请求访问。
  */
 function isCookieBackedSessionKey(key: string) {
-	return key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.TENANT_ID || key === STORAGE_KEYS.DEPT_ID;
+	return key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.DEPT_ID;
 }
 
 /**
@@ -107,23 +106,18 @@ export const Session = {
 		window.sessionStorage.removeItem(key);
 	},
 	// 移除全部临时缓存
-	clear() {
-		Cookies.remove(STORAGE_KEYS.TOKEN);
-		Cookies.remove(STORAGE_KEYS.REFRESH_TOKEN);
-		Cookies.remove(STORAGE_KEYS.TENANT_ID);
-		Cookies.remove(STORAGE_KEYS.DEPT_ID);
-		window.sessionStorage.clear();
-	},
+		clear() {
+			Cookies.remove(STORAGE_KEYS.TOKEN);
+			Cookies.remove(STORAGE_KEYS.REFRESH_TOKEN);
+			Cookies.remove(STORAGE_KEYS.DEPT_ID);
+			window.sessionStorage.clear();
+		},
 	// 获取当前存储的 token
 	getToken() {
 		return this.get(STORAGE_KEYS.TOKEN);
 	},
-	// 获取当前的租户
-	getTenant() {
-		return Local.get(STORAGE_KEYS.TENANT_ID) ? Local.get(STORAGE_KEYS.TENANT_ID) : 1;
-	},
-	// 获取当前的部门
-	getDeptId() {
+		// 获取当前的部门
+		getDeptId() {
 		return Local.get(STORAGE_KEYS.DEPT_ID) ? Local.get(STORAGE_KEYS.DEPT_ID) : '';
 	},
 };

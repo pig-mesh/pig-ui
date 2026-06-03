@@ -101,7 +101,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 是否开启水印
 			isWartermark: true,
 			// 水印文案
-			wartermarkText: 'PigX',
+			wartermarkText: 'Pig',
 			// 首页快捷导航上限
 			quickLinkNum: 12,
 			/**
@@ -135,7 +135,7 @@ export const useThemeConfig = defineStore('themeConfig', {
 			// 默认全局组件大小，可选值"<large|'default'|small>"，默认 'default'
 			globalComponentSize: 'default',
 			// 网站主标题（菜单导航、浏览器当前网页标题、登录form顶部右侧）
-			globalTitle: 'PIGX',
+			globalTitle: 'PIG ADMIN',
 			// footer 标题内容
 			footerAuthor: 'pig4cloud.com',
 		},

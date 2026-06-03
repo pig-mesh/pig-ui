@@ -31,11 +31,10 @@ export default {
 		passwordLabel: 'Password',
 		codeLabel: 'Verification Code',
 		accountPlaceholder1: 'Please enter username',
-		accountPlaceholder2: 'Please enter password',
-		accountPlaceholder3: 'Please enter the verification code',
-		phonePlaceholder4: 'Please enter your phone number',
-		tenantPlaceholder: 'Please select tenant',
-		accountBtnText: 'Sign In',
+			accountPlaceholder2: 'Please enter password',
+			accountPlaceholder3: 'Please enter the verification code',
+			phonePlaceholder4: 'Please enter your phone number',
+			accountBtnText: 'Sign In',
 		resetBtnText: 'Reset',
 		registerBtnText: 'Create account',
 		mobileLogin: 'Mobile Login',
@@ -84,12 +83,10 @@ export default {
 		mobile: 'Mobile Number',
 		email: 'Email',
 		submit: 'Register',
-		backToLogin: 'Back to Login',
-		passwordMismatch: 'Passwords do not match',
-		registerSuccess: 'Registration successful',
-		tenantEmpty: 'Please select a tenant',
-		tenantLoadError: 'Failed to load tenant list',
-		usernameEmpty: 'Username cannot be empty',
+			backToLogin: 'Back to Login',
+			passwordMismatch: 'Passwords do not match',
+			registerSuccess: 'Registration successful',
+			usernameEmpty: 'Username cannot be empty',
 		usernameLength: 'Username length must be between 5 and 20 characters',
 		phoneEmpty: 'Phone number cannot be empty',
 		passwordEmpty: 'Password cannot be empty',
@@ -173,20 +170,7 @@ export default {
 		missingParams: 'Missing required parameters: code or state',
 	},
 
-	// Tenant selection texts
-	tenant: {
-		placeholder: 'Please select tenant',
-		noData: 'No tenant data available',
-		loadError: 'Failed to load tenant list'
-	},
-
-	// Tenant select component texts
-	tenantSelect: {
-		select: 'Select Tenant',
-		loadError: 'Failed to get tenant list',
-	},
-
-	// Control component texts
+		// Control component texts
 	control: {
 		theme: 'Theme',
 		language: 'Language',

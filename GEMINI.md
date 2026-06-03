@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-This project is the frontend for the PIGCLOUD microservices platform, a comprehensive enterprise-level solution. It is a feature-rich single-page application (SPA) built with modern web technologies.
+This project is the frontend for Pig, an open-source permission management and microservices scaffold. It keeps the core admin, authentication, code generation, monitoring, and system tooling features needed for straightforward deployment.
 
 **Key Technologies:**
 
@@ -16,21 +16,21 @@ This project is the frontend for the PIGCLOUD microservices platform, a comprehe
 
 **Architecture:**
 
-The application features a modular architecture with a clear separation of concerns. It utilizes a flexible routing system that can be configured to be either frontend-controlled or backend-controlled. State management is handled by Pinia, with dedicated stores for user information, routes, and other application-level concerns. The UI is built using the Element Plus component library and styled with Tailwind CSS.
+The application features a modular architecture with a clear separation of concerns. It uses Vue Router with backend-provided menu routes, while local static routes cover login and error pages. State management is handled by Pinia, with dedicated stores for user information, routes, and other application-level concerns. The UI is built using the Element Plus component library and styled with Tailwind CSS.
 
 ## Building and Running
 
 **Prerequisites:**
 
 *   Node.js (>=16.0.0)
-*   npm (>=7.0.0)
+*   pnpm
 
 **Development:**
 
 To run the project in development mode with hot-reloading, use the following command:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 **Building for Production:**
@@ -38,7 +38,7 @@ npm run dev
 To build the application for production, use the following command:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The production-ready files will be generated in the `dist` directory.
@@ -48,7 +48,7 @@ The production-ready files will be generated in the `dist` directory.
 To lint the code and fix any issues, run the following command:
 
 ```bash
-npm run lint:eslint
+pnpm lint:eslint
 ```
 
 ## Development Conventions

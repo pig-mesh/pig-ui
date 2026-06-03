@@ -105,9 +105,9 @@ const handleExpand = async () => {
 };
 
 /**
- * 检查节点是否可操作
- * @param {Object} node - 节点对象
- * @returns {boolean} 根租户节点（id='0'）不可编辑删除
+	 * 检查节点是否可操作
+	 * @param {Object} node - 节点对象
+	 * @returns {boolean} 系统根节点（id='0'）不可编辑删除
  */
 const checkNode = (node: any): boolean => {
 	if (node?.id === '0') {
@@ -179,13 +179,12 @@ const delNode = async (node: any) => {
 	}
 };
 
-/**
- * 获取组织架构数据
- * @description 查询租户信息作为根节点，加载部门树作为子节点
- */
+	/**
+	 * 获取组织架构数据
+	 * @description 使用系统名称作为根节点，加载部门树作为子节点
+	 */
 const getOrgData = async () => {
 	try {
-		// 查询当前租户信息
 		const siteConfig = useSiteConfig();
 		const { data: deptData } = await deptTree();
 		Object.assign(data, { id: '0', name: siteConfig.siteConfig.title });

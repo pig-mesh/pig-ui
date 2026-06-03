@@ -59,7 +59,7 @@ const getGlobalI18n = computed(() => {
 });
 // 设置初始化，防止刷新时恢复默认
 onBeforeMount(() => {
-	// 预加载远程 i18n 词条（无需登录即可触发，有 token 时加载当前租户词条）
+	// 预加载远程 i18n 词条（无需登录即可触发，有 token 时加载账号词条）
 	ensureRemoteI18nLoaded({ retry: 1 });
 	// 设置批量第三方 icon 图标
 	setIntroduction.cssCdn();

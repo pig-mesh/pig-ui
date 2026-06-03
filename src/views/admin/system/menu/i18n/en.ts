@@ -29,7 +29,6 @@ export default {
         inputUpdateByTip: 'Please enter updater',
         inputUpdateTimeTip: 'Please enter update time',
         inputDelFlagTip: 'Please enter delete flag',
-        inputTenantIdTip: 'Please enter tenant ID',
         inputEmbeddedTip: 'Please select embedded status',
         inputComponentTip: 'Please enter component name',
         deleteDisabledTip: 'System built-in menus cannot be deleted',

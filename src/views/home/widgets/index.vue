@@ -139,14 +139,14 @@ interface WidgetListItem {
 
 const { t } = useI18n();
 
-const defaultGrid = ref({
-	layout: [7, 7, 10],
-	copmsList: [
-		['current-user', 'flow-data', 'audit-log', 'sys-log-line'],
-		['news', 'sys-log', 'device-distribution'],
-		['calendar', 'favorite-menu', 'favorite-flow', 'popular-pages'],
-	],
-});
+	const defaultGrid = ref({
+		layout: [7, 7, 10],
+		copmsList: [
+			['current-user', 'audit-log', 'sys-log-line'],
+			['news', 'sys-log', 'device-distribution'],
+			['calendar', 'favorite-menu', 'popular-pages'],
+		],
+	});
 
 const roleDefaultGrid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
 const allowedWidgetKeys = ref<Set<string> | null>(null);
@@ -202,18 +202,16 @@ const myCompsList = computed(() => {
 			return allowedWidgetKeys.value.has(item.key);
 		}
 		// fallback：无角色配置时显示全部组件
-		const defaultKeys = [
-			'calendar',
-			'current-user',
-			'news',
-			'audit-log',
-			'sys-log',
-			'flow-data',
-			'favorite-menu',
-			'favorite-flow',
-			'sys-log-line',
-			'device-distribution',
-			'popular-pages',
+			const defaultKeys = [
+				'calendar',
+				'current-user',
+				'news',
+				'audit-log',
+				'sys-log',
+				'favorite-menu',
+				'sys-log-line',
+				'device-distribution',
+				'popular-pages',
 		];
 		return defaultKeys.includes(item.key);
 	});

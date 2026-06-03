@@ -17,13 +17,9 @@ export default {
 		editNodeText: 'Edit Department',
 		delNodeText: 'Delete Department',
 		view: 'Tree/Table View',
-		tenantNodeErrorText: 'The current node cannot be operated. Please maintain it in tenant management',
+			tenantNodeErrorText: 'The system root node cannot be operated',
 		parentIdRequired: 'Parent department is required',
 		nameRequired: 'Department name is required',
-		sortOrderRequired: 'Sort order is required',
-		syncDingTalkBtn: 'Sync DingTalk Depts',
-		syncWeChatBtn: 'Sync WeChat Depts',
-		syncDingTalkSuccess: 'DingTalk departments synced successfully',
-		syncWeChatSuccess: 'WeChat departments synced successfully'
+		sortOrderRequired: 'Sort order is required'
 	},
 };

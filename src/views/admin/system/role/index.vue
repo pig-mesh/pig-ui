@@ -40,17 +40,12 @@
 				<el-table-column type="index" :label="$t('sysrole.index')" width="80" />
 				<el-table-column prop="roleName" :label="$t('sysrole.roleName')"
 					show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleCode" :label="$t('sysrole.roleCode')"
-					show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleDesc" :label="$t('sysrole.roleDesc')"
-					show-overflow-tooltip></el-table-column>
-				<el-table-column prop="data_authority" :label="$t('sysrole.data_authority')" show-overflow-tooltip>
-					<template #default="scope">
-						<dict-tag :options="dictType" :value="scope.row.dsType"></dict-tag>
-					</template>
-				</el-table-column>
-				<el-table-column prop="createTime" :label="$t('sysrole.createTime')"
-					show-overflow-tooltip></el-table-column>
+					<el-table-column prop="roleCode" :label="$t('sysrole.roleCode')"
+						show-overflow-tooltip></el-table-column>
+					<el-table-column prop="roleDesc" :label="$t('sysrole.roleDesc')"
+						show-overflow-tooltip></el-table-column>
+					<el-table-column prop="createTime" :label="$t('sysrole.createTime')"
+						show-overflow-tooltip></el-table-column>
 				<el-table-column :label="$t('common.action')" width="320">
 					<template #default="scope">
 						<el-button text type="primary" icon="edit-pen" v-auth="'sys_role_edit'"
@@ -137,34 +132,7 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 	descs: ['create_time'],
 });
 
-/**
- * 数据权限类型字典
- * @description 定义角色可访问的数据范围
- */
-const dictType = computed(() => [
-	{
-		label: t('sysrole.dsType.all'),
-		value: '0',
-	},
-	{
-		label: t('sysrole.dsType.custom'),
-		value: '1',
-	},
-	{
-		label: t('sysrole.dsType.currentAndChildren'),
-		value: '2',
-	},
-	{
-		label: t('sysrole.dsType.current'),
-		value: '3',
-	},
-	{
-		label: t('sysrole.dsType.self'),
-		value: '4',
-	},
-]);
-
-//  table hook
+	//  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
 
 /**

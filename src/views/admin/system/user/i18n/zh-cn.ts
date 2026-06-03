@@ -20,7 +20,6 @@ export default {
 		inputNicknameTip: '请输入昵称',
 		importUserTip: '用户导入',
 		deleteDisabledTip: 'admin 不允许被删除',
-		noDataScopeTip: '没有数据权限',
 		passwordBtn: '密码',
 		passwordLength: '用户密码长度必须介于 5 和 20 之间',
 		nameRequired: '姓名不能为空',
@@ -35,15 +34,7 @@ export default {
 		passwordRequired: '密码不能为空',
 		selectDept: '请选择所属部门（可多选）',
 		selectRole: '请选择角色',
-		selectPost: '请选择岗位',
-		syncDingTalkBtn: '同步钉钉用户',
-		syncWeChatBtn: '同步企微用户',
-		syncDingTalkSuccess: '钉钉用户同步成功',
-		syncWeChatSuccess: '企业微信用户同步成功',
-		importDingTalkBtn: '导入钉钉用户',
-		importDingTalkTip: '导入钉钉用户数据',
-		importWeChatBtn: '导入企微用户',
-		importWeChatTip: '导入企业微信用户数据'
+		selectPost: '请选择岗位'
 	},
 	personal: {
 		name: '个人信息',

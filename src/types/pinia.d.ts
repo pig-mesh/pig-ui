@@ -8,8 +8,6 @@ declare interface RoleItem {
 	roleName: string;
 	roleCode: string;
 	roleDesc: string;
-	dsType: number;
-	dsScope: string;
 }
 
 // 部门信息
@@ -35,14 +33,12 @@ declare interface UserInfosState<T = any> {
 		authBtnList: string[];
 		photo: string;
 		roles: RoleItem[];
-		deptList: DeptItem[];
-		time: number;
-		userName: string;
-		tenantId: string;
-		tenantName: string;
-		[key: string]: T;
-	};
-}
+			deptList: DeptItem[];
+			time: number;
+			userName: string;
+			[key: string]: T;
+		};
+	}
 
 // 路由缓存列表
 declare interface KeepAliveNamesState {

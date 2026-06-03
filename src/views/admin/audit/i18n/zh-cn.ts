@@ -10,7 +10,6 @@ export default {
 		createBy: '操作人',
 		createTime: '操作时间',
 		delFlag: '删除标记',
-		tenantId: '租户ID',
 		inputIdTip: '请输入主键',
 		inputAuditNameTip: '请输入审计名称',
 		inputAuditFieldTip: '请输入字段名称',
@@ -19,6 +18,5 @@ export default {
 		inputCreateByTip: '请输入操作人',
 		inputCreateTimeTip: '请输入操作时间',
 		inputDelFlagTip: '请输入删除标记',
-		inputTenantIdTip: '请输入租户ID',
 	},
 };

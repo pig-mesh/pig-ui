@@ -20,7 +20,6 @@ export default {
 		inputNicknameTip: 'Please enter nickname',
 		importUserTip: 'Import User',
 		deleteDisabledTip: 'Admin user cannot be deleted',
-		noDataScopeTip: 'No data permissions',
 		passwordBtn: 'Password',
 		passwordLength: 'Password length must be between 5 and 20 characters',
 		nameRequired: 'Name cannot be empty',
@@ -36,10 +35,6 @@ export default {
 		selectDept: 'Please select departments (multiple)',
 		selectRole: 'Please select roles',
 		selectPost: 'Please select posts',
-		syncDingTalkBtn: 'Sync DingTalk Users',
-		syncWeChatBtn: 'Sync WeChat Users',
-		syncDingTalkSuccess: 'DingTalk users synced successfully',
-		syncWeChatSuccess: 'WeChat users synced successfully',
 	},
 	personal: {
 		name: 'Personal Info',

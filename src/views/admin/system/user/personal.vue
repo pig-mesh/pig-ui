@@ -571,13 +571,13 @@ const initSocialList = () => {
 
 /**
  * 处理社交账号绑定操作
- * 1. 获取租户配置的第三方应用信息
+ * 1. 获取第三方应用信息
  * 2. 根据不同的第三方平台类型构建授权URL
  * 3. 打开新窗口进行OAuth授权
- * @param thirdpart 第三方平台类型（企业微信、钉钉等）
+ * @param thirdpart 第三方平台类型
  */
 const handleClick = async (thirdpart: SocialLoginEnum) => {
-	// 获取租户配置的账号信息
+	// 获取第三方账号配置
 	const { data } = await getLoginAppList();
 	const result = data.find((item: any) => item.type === thirdpart);
 

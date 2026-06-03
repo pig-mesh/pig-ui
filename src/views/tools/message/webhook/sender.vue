@@ -113,8 +113,8 @@ const dataRules = computed(() => ({
 	],
 }));
 
-/** 企微不支持链接消息 */
 const filteredMessageTypeList = computed(() => {
+	// 企微不支持链接消息
 	if (form.configValue.supplier === 'we_talk') {
 		return messageTypeList.value.filter((type) => type.value !== 'link');
 	}
@@ -169,4 +169,3 @@ defineExpose({
 	openDialog,
 });
 </script>
-

@@ -200,7 +200,6 @@ const { t } = useI18n();
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.get('token'),
-		'TENANT-ID': Session.getTenant(),
 	};
 });
 

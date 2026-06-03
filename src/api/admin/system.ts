@@ -19,8 +19,6 @@ export type SiteConfigForm = {
 	darkModeEnable: boolean;
 	antiDebugEnable: boolean;
 	antiDebugKey: string;
-	syncDingtalkEnabled: boolean;
-	syncWechatEnabled: boolean;
 	title: string;
 	footer: string;
 	privacyTip: string;

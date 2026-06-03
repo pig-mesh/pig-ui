@@ -138,7 +138,6 @@ const DEFAULT_COLUMNS: CreateTableColumn[] = [
   {name: 'update_by', comment: '修改人', type: 'varchar', length: 64, scale: 0, defaultValue: null, primary: false, nullable: true},
   {name: 'update_time', comment: '修改时间', type: 'datetime', length: 0, scale: 0, defaultValue: null, primary: false, nullable: true},
   {name: 'del_flag', comment: '删除标记', type: 'char', length: 1, scale: 0, defaultValue: '0', primary: false, nullable: false},
-  {name: 'tenant_id', comment: '租户ID', type: 'bigint', length: 0, scale: 0, defaultValue: null, primary: false, nullable: false},
 ];
 
 const FIELD_TYPE_RULES: Array<{pattern: RegExp; type: string; length: number}> = [

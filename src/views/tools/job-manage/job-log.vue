@@ -4,7 +4,6 @@
 			<el-row>
 				<div class="mb8" style="width: 100%">
 					<el-button
-						formDialogRef
 						:disabled="multiple"
 						icon="Delete"
 						type="primary"
@@ -45,9 +44,6 @@
 				<el-table-column prop="createTime" :label="t('log.createTime')" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="150">
 					<template #default="scope">
-						<el-button text type="primary" v-auth="'pigx_log_edit'" @click="formDialogRef.openDialog(scope.row.jobLogId)"
-							>{{ $t('common.editBtn') }}
-						</el-button>
 						<el-button text type="primary" v-auth="'sys_log_del'" @click="handleDelete([scope.row.jobLogId])">{{ $t('common.delBtn') }} </el-button>
 					</template>
 				</el-table-column>
@@ -114,4 +110,3 @@ defineExpose({
 	openDialog,
 });
 </script>
-

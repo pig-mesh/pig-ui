@@ -66,7 +66,6 @@ const emit = defineEmits(['update:getHtml', 'update:getText']);
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.get('token'),
-		'TENANT-ID': Session.getTenant(),
 	};
 });
 

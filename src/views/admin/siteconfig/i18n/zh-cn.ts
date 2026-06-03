@@ -21,8 +21,8 @@ export default {
 		securitySectionDesc: '登录防护与密码强度规则',
 		appearanceSection: '外观与体验',
 		appearanceSectionDesc: '语言、主题及前端界面偏好',
-		integrationSection: '集成同步',
-		integrationSectionDesc: '第三方服务的数据接入与同步',
+		integrationSection: '第三方集成',
+		integrationSectionDesc: '外部统计服务配置',
 		maintenanceSection: '系统维护',
 		maintenanceSectionDesc: '高风险操作，请谨慎执行',
 
@@ -95,16 +95,6 @@ export default {
 		antiDebugKey: '绕过密钥',
 		antiDebugKeyPlaceholder: '请输入绕过密钥（URL 参数 ddtk=密钥 可绕过）',
 		antiDebugKeyTip: '通过 URL 参数 ?ddtk=密钥 可临时绕过反调试限制',
-
-		// 数据导入
-		dataImport: '数据导入',
-		dataImportDesc: '第三方平台通讯录同步',
-		syncDingtalk: '钉钉',
-		syncDingtalkDesc: '同步组织架构、部门与人员',
-		syncWechat: '企业微信',
-		syncWechatDesc: '同步通讯录及部门结构',
-		configAppKey: '配置 AppKey',
-		configCorpId: '配置 CorpID',
 
 		// 数据分析
 		analytics: '数据分析',

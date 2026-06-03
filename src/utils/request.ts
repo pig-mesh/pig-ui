@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
+import { Session } from '/@/utils/storage';
 import { useMessageBox } from '/@/hooks/message';
 import qs from 'qs';
 import other from './other';
@@ -7,7 +7,6 @@ import { wrapEncryption, encryptRequestParams, decrypt } from './apiCrypto';
 
 // 常用header
 export enum CommonHeaderEnum {
-	'TENANT_ID' = 'TENANT-ID',
 	'ENC_FLAG' = 'Enc-Flag',
 	'AUTHORIZATION' = 'Authorization',
 	'VERSION' = 'VERSION',
@@ -29,7 +28,7 @@ const service: AxiosInstance = axios.create({
 /**
  * Axios请求拦截器，对请求进行处理
  * 1. 序列化get请求参数
- * 2. 统一增加Authorization和TENANT-ID请求头
+ * 2. 统一增加Authorization请求头
  * 3. 自动适配单体、微服务架构不同的URL
  * @param config AxiosRequestConfig对象，包含请求配置信息
  */
@@ -42,14 +41,8 @@ service.interceptors.request.use(
 			config.headers![CommonHeaderEnum.AUTHORIZATION] = `Bearer ${token}`;
 		}
 
-		// 统一增加TENANT-ID请求头, skipTenant 跳过增加租户ID
-		const tenantId = Session.getTenant();
-		if (tenantId && !config.headers?.skipTenant) {
-			config.headers![CommonHeaderEnum.TENANT_ID] = tenantId;
-		}
-
-		// 增加 gray_version 请求头
-		const version = import.meta.env.VITE_GRAY_VERSION;
+			// 增加 gray_version 请求头
+			const version = import.meta.env.VITE_GRAY_VERSION;
 		if (version) {
 			config.headers![CommonHeaderEnum.VERSION] = version;
 		}
@@ -109,17 +102,6 @@ service.interceptors.response.use(handleResponse, (error) => {
 			.confirm('令牌状态已过期，请点击重新登录')
 			.then(() => {
 				Session.clear(); // 清除浏览器全部临时缓存
-				window.location.href = '/'; // 去登录页
-				return;
-			});
-	}
-
-	if (status === 426) {
-		useMessageBox()
-			.confirm('租户状态已过期，请联系管理员')
-			.then(() => {
-				Session.clear(); // 清除浏览器全部临时缓存
-				Local.remove(STORAGE_KEYS.TENANT_ID);
 				window.location.href = '/'; // 去登录页
 				return;
 			});

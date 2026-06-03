@@ -6,8 +6,8 @@
   全局 WebSocket 组件
   功能：与后端建立 WebSocket 长连接，支持心跳保活、断线自动重连、消息通知。
   用法：<Websocket uri="/ws/endpoint" @rollback="handleMessage" />
-  流程：
-    1. 组件挂载时，携带 token 和租户信息建立 WebSocket 连接
+	  流程：
+	    1. 组件挂载时，携带 token 建立 WebSocket 连接
     2. 连接成功后启动心跳机制，每 30s 发送 ping，等待 10s 内收到 pong
     3. 若心跳超时或连接异常，自动重连（最多 6 次，间隔 5s）
     4. 收到业务消息时弹出 ElNotification 通知，并通过 rollback 事件传递给父组件
@@ -50,12 +50,12 @@ onUnmounted(() => {
 
 /**
  * 初始化 WebSocket 连接
- * 根据当前页面协议自动选择 ws/wss，URL 中携带 access_token 和 TENANT-ID 进行鉴权
- */
+	 * 根据当前页面协议自动选择 ws/wss，URL 中携带 access_token 进行鉴权
+	 */
 const initWebSocket = () => {
 	const { host, protocol: pageProtocol } = window.location;
 	const protocol = pageProtocol === 'https:' ? 'wss' : 'ws';
-	const wsUri = `${protocol}://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${Session.getToken()}&TENANT-ID=${Session.getTenant()}`;
+	const wsUri = `${protocol}://${host}${baseURL}${other.adaptationUrl(props.uri)}?access_token=${Session.getToken()}`;
 
 	state.webSocket = new WebSocket(wsUri);
 	state.webSocket.onopen = onOpen;

@@ -21,7 +21,6 @@ export default {
         inputUpdateByTip: '请输入更新人',
         inputUpdateTimeTip: '请输入更新时间',
         inputDelFlagTip: '请输入删除标识',
-        inputTenantIdTip: '请输入租户ID',
         inputPermissionTip: '请输入权限标识',
         inputPathTip: '请输入路由路径',
         inputParentIdTip: '请选择上级菜单',

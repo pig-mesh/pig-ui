@@ -32,8 +32,6 @@ export interface SiteConfig {
 	darkModeEnable: boolean;
 	antiDebugEnable: boolean;
 	antiDebugKey: string;
-	syncDingtalkEnabled: boolean;
-	syncWechatEnabled: boolean;
 	title: string;
 	footer: string;
 	privacyTip: string;
@@ -55,9 +53,7 @@ const DEFAULT_SITE_CONFIG: SiteConfig = {
 	darkModeEnable: true,
 	antiDebugEnable: false,
 	antiDebugKey: 'pig',
-	syncDingtalkEnabled: false,
-	syncWechatEnabled: false,
-	title: 'PIGX',
+	title: 'PIG ADMIN',
 	footer: 'pig4cloud.com',
 	privacyTip: '',
 	logo: '',

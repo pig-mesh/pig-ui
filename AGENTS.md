@@ -31,7 +31,7 @@
 
 ## Security & Configuration Tips
 - Configure via `.env*` (`VITE_PORT`, `VITE_API_URL`, `VITE_PUBLIC_PATH`, proxies); never commit secrets.
-- Auth headers, tenant IDs, and request encryption are centralized in `/@/utils/request.ts`; do not duplicate auth logic in components or new APIs.
+- Auth headers and request encryption are centralized in `/@/utils/request.ts`; do not duplicate auth logic in components or new APIs.
 
 ## Agent-Specific Notes
 - Keep changes minimal and aligned with the structure above. Place new APIs in `src/api/`, types in `src/types/`, and integrate routes via `src/router/` while following backend-controlled routing.

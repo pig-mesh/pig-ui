@@ -92,8 +92,8 @@ const dataFormRef = ref(); // 表单引用
 
 // 表单数据
 const form = reactive({
-	author: 'pigx', // 作者
-	packageName: 'com.pig4cloud.pigx', // 包名
+	author: 'pig', // 作者
+	packageName: 'com.pig4cloud.pig', // 包名
 	moduleName: 'admin', // 模块名
 	style: '', // 样式
 	syncMenuId: '', // 同步菜单ID

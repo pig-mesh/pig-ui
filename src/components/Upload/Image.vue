@@ -151,7 +151,6 @@ const previewImageList = ref<string[]>([]);
 const headers = computed(() => {
 	return {
 		Authorization: 'Bearer ' + Session.getToken(),
-		'TENANT-ID': Session.getTenant(),
 	};
 });
 

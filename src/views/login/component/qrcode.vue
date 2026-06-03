@@ -5,7 +5,7 @@
 			<img class="object-contain w-24 h-24 rounded-md" :src="qrCodeSrc" :alt="t('scan.wechatApp')" />
 			<div
 				class="absolute left-1/2 top-1/2 flex h-[26px] w-[26px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-[9px] border border-blue-600/20 bg-white shadow-[0_6px_14px_rgba(37,99,235,0.16)]">
-				<img class="object-contain w-4 h-4" :src="logo" alt="PIGX" />
+				<img class="object-contain w-4 h-4" :src="logo" alt="Pig" />
 			</div>
 		</div>
 		<div class="mt-2 text-xs font-medium leading-5 text-center text-slate-500 dark:text-slate-300">

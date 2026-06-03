@@ -43,8 +43,6 @@ const form = reactive<SiteConfigForm>({
 	darkModeEnable: true,
 	antiDebugEnable: false,
 	antiDebugKey: 'pig',
-	syncDingtalkEnabled: false,
-	syncWechatEnabled: false,
 	title: '',
 	footer: '',
 	privacyTip: '',
@@ -202,18 +200,6 @@ const settingRows = computed<SettingRowMeta[]>(() => [
 		desc: t('siteconfig.darkModeDesc'),
 	},
 	{
-		key: 'syncDingtalk',
-		section: 'integration',
-		label: t('siteconfig.syncDingtalk'),
-		desc: t('siteconfig.syncDingtalkDesc'),
-	},
-	{
-		key: 'syncWechat',
-		section: 'integration',
-		label: t('siteconfig.syncWechat'),
-		desc: t('siteconfig.syncWechatDesc'),
-	},
-	{
 		key: 'clarityId',
 		section: 'integration',
 		label: 'Microsoft Clarity',
@@ -245,8 +231,6 @@ const buildSnapshot = (): Snapshot => ({
 	darkModeEnable: form.darkModeEnable,
 	antiDebugEnable: form.antiDebugEnable,
 	antiDebugKey: form.antiDebugKey,
-	syncDingtalkEnabled: form.syncDingtalkEnabled,
-	syncWechatEnabled: form.syncWechatEnabled,
 	title: form.title,
 	footer: form.footer,
 	privacyTip: form.privacyTip,
@@ -272,7 +256,7 @@ const sectionCount = (id: SectionId) => {
 		return [form.captchaType !== CaptchaType.None, form.forceResetPwd, form.loginFailureLock, form.antiDebugEnable].filter(Boolean).length;
 	}
 	if (id === 'appearance') return [form.i18nEnable, form.darkModeEnable].filter(Boolean).length;
-	if (id === 'integration') return [form.syncDingtalkEnabled, form.syncWechatEnabled, form.clarityId].filter(Boolean).length;
+	if (id === 'integration') return [form.clarityId].filter(Boolean).length;
 	return 0;
 };
 
@@ -701,22 +685,6 @@ onUnmounted(() => {
 								</template>
 
 								<template v-if="section.id === 'integration'">
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
-										<div>
-											<div class="text-sm font-semibold text-base-content">{{ rowMeta('syncDingtalk')?.label }}</div>
-											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('syncDingtalk')?.desc }}</div>
-										</div>
-										<el-switch v-model="form.syncDingtalkEnabled" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.syncDingtalk')" />
-									</div>
-
-									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_80px] lg:items-center">
-										<div>
-											<div class="text-sm font-semibold text-base-content">{{ rowMeta('syncWechat')?.label }}</div>
-											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('syncWechat')?.desc }}</div>
-										</div>
-										<el-switch v-model="form.syncWechatEnabled" class="justify-self-start lg:justify-self-end" :aria-label="t('siteconfig.syncWechat')" />
-									</div>
-
 									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[1fr_380px] lg:items-center">
 										<div>
 											<div class="text-sm font-semibold text-base-content">{{ rowMeta('clarityId')?.label }}</div>

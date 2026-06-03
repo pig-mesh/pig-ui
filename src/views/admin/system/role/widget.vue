@@ -108,30 +108,30 @@ const layoutOptions = [
 	{
 		key: '7,7,10',
 		cols: [7, 7, 10],
-		spans: [8, 8, 8],
-		defaultComps: [
-			['current-user', 'flow-data', 'audit-log', 'sys-log-line'],
-			['news', 'sys-log', 'device-distribution'],
-			['calendar', 'favorite-menu', 'favorite-flow', 'popular-pages'],
-		],
-	},
+			spans: [8, 8, 8],
+			defaultComps: [
+				['current-user', 'audit-log', 'sys-log-line'],
+				['news', 'sys-log', 'device-distribution'],
+				['calendar', 'favorite-menu', 'popular-pages'],
+			],
+		},
 	{
 		key: '24,16,8',
 		cols: [24, 16, 8],
-		spans: [24, 16, 8],
-		defaultComps: [
-			['current-user', 'flow-data'],
-			['news', 'sys-log', 'audit-log', 'sys-log-line', 'device-distribution'],
-			['calendar', 'favorite-menu', 'favorite-flow', 'popular-pages'],
-		],
-	},
+			spans: [24, 16, 8],
+			defaultComps: [
+				['current-user'],
+				['news', 'sys-log', 'audit-log', 'sys-log-line', 'device-distribution'],
+				['calendar', 'favorite-menu', 'popular-pages'],
+			],
+		},
 	{
-		key: '24',
-		cols: [24],
-		spans: [24],
-		defaultComps: [['current-user', 'flow-data', 'news', 'audit-log', 'sys-log', 'sys-log-line', 'device-distribution', 'calendar', 'favorite-menu', 'favorite-flow', 'popular-pages']],
-	},
-];
+			key: '24',
+			cols: [24],
+			spans: [24],
+			defaultComps: [['current-user', 'news', 'audit-log', 'sys-log', 'sys-log-line', 'device-distribution', 'calendar', 'favorite-menu', 'popular-pages']],
+		},
+	];
 
 interface GridConfig {
 	layout: number[];

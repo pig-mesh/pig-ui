@@ -24,14 +24,6 @@
 					<el-button plain icon="upload-filled" type="primary" class="ml10" @click="excelUploadRef.show()">
 						{{ $t('common.importBtn') }}
 					</el-button>
-					<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
-						@click="dingUploadRef.show()">
-						{{ $t('sysdept.syncDingTalkBtn') }}
-					</el-button>
-					<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
-						@click="wechatUploadRef.show()">
-						{{ $t('sysdept.importWeChatBtn') }}
-					</el-button>
 					<el-button @click="handleExpand"> {{ $t('common.expandBtn') }}</el-button>
 					<right-toolbar v-model:showSearch="showSearch" :export="'sys_dept_add'" @exportExcel="exportExcel"
 						class="ml10" style="float: right; margin-right: 20px" @queryTable="getDataList">
@@ -47,24 +39,12 @@
 
 			<upload-excel ref="excelUploadRef" :title="$t('sysdept.importTip')" url="/admin/dept/import"
 				temp-url="/admin/sys-file/local/file/dept.xlsx" @refreshDataList="getDataList" />
-			<upload-excel ref="wechatUploadRef" :title="$t('sysdept.importWeChatTip')"
-				temp-url="/admin/sys-file/local/file/cp.xlsx" url="/admin/connect/import/wecom/dept"
-				@refreshDataList="getDataList" />
-			<upload-excel ref="dingUploadRef" :title="$t('sysdept.importDingTalkTip')"
-				temp-url="/admin/sys-file/local/file/dingtalk.xlsx" url="/admin/connect/import/ding/dept"
-				@refreshDataList="getDataList" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts" name="systemDept" setup>
 import { downBlobFile } from '/@/utils/other';
-import { useSiteConfig } from '/@/stores/siteConfig';
-
-// 从 siteConfig store 读取导入开关
-const { siteConfig } = storeToRefs(useSiteConfig());
-const enableDingTalkSync = computed(() => siteConfig.value.syncDingtalkEnabled);
-const enableWeChatSync = computed(() => siteConfig.value.syncWechatEnabled);
 
 const TreeView = defineAsyncComponent(() => import('./tree-view.vue'));
 const TableView = defineAsyncComponent(() => import('./table-view.vue'));
@@ -80,12 +60,6 @@ const tableViewRef = ref();
 
 /** Excel上传组件引用 */
 const excelUploadRef = ref();
-
-/** 企业微信上传组件引用 */
-const wechatUploadRef = ref();
-
-/** 钉钉上传组件引用 */
-const dingUploadRef = ref();
 
 /** 是否显示搜索区域 */
 const showSearch = ref(true);

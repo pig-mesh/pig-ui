@@ -365,7 +365,7 @@ export default {
 }
 
 .verify-root .iconfont {
-  font-family: 'pigx-icon' !important;
+  font-family: 'iconfont' !important;
   font-size: 16px;
   font-style: normal;
   -webkit-font-smoothing: antialiased;

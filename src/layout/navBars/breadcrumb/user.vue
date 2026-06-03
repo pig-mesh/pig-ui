@@ -62,28 +62,19 @@
 					</el-icon>
 				</span>
 			<template #dropdown>
-				<el-dropdown-menu>
-					<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
-          <el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
-          <el-dropdown-item v-if="shouldShowTenantOption" command="tenant">
-						{{ $t('user.dropdown3') }}
-					</el-dropdown-item>
-					<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
-				</el-dropdown-menu>
+					<el-dropdown-menu>
+						<el-dropdown-item command="/home">{{ $t('user.dropdown1') }}</el-dropdown-item>
+	          <el-dropdown-item command="personal">{{ $t('user.dropdown2') }}</el-dropdown-item>
+						<el-dropdown-item divided command="logOut">{{ $t('user.dropdown5') }}</el-dropdown-item>
+					</el-dropdown-menu>
 			</template>
 		</el-dropdown>
 		</div>
-		<Search ref="searchRef" />
-		<global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
-		<personal-drawer ref="personalDrawerRef"></personal-drawer>
-		<tenant-selector
-			ref="tenantSelectorRef"
-			:tenant-list="tenantList"
-			:loading="tenantLoading"
-			@change="onTenantChange"
-		></tenant-selector>
-	</div>
-</template>
+			<Search ref="searchRef" />
+			<global-websocket uri="/admin/ws/info" v-if="websocketEnable" @rollback="rollback" />
+			<personal-drawer ref="personalDrawerRef"></personal-drawer>
+		</div>
+	</template>
 
 <script setup lang="ts" name="layoutBreadcrumbUser">
 import { logout } from '/@/api/login';
@@ -93,30 +84,18 @@ import { useUserInfo } from '/@/stores/userInfo';
 import { useThemeConfig } from '/@/stores/themeConfig';
 import mittBus from '/@/utils/mitt';
 import { Session } from '/@/utils/storage';
-import { formatAxisI18n } from '/@/utils/formatTime';
-import { useMsg } from '/@/stores/msg';
-import { fetchUserMessageList } from '/@/api/admin/message';
-import { getPersonalTenant } from '/@/api/admin/tenant';
-import { switchPersonalDept } from '/@/api/admin/dept';
-import type { Dept } from '/@/api/admin/dept';
+	import { formatAxisI18n } from '/@/utils/formatTime';
+	import { useMsg } from '/@/stores/msg';
+	import { fetchUserMessageList } from '/@/api/admin/message';
+	import { switchPersonalDept } from '/@/api/admin/dept';
+	import type { Dept } from '/@/api/admin/dept';
 
 // 引入组件
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
 const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
-const TenantSelector = defineAsyncComponent(() => import('./tenantSelector.vue'));
 const NameAvatar = defineAsyncComponent(() => import('/@/components/NameAvatar/index.vue'));
-
-interface Tenant {
-	id: string;
-	name: string;
-	tenantDomain?: string;
-	websiteName?: string;
-	footer?: string;
-	background?: string;
-	miniQr?: string;
-}
 
 const { t } = useI18n();
 const router = useRouter();
@@ -126,14 +105,9 @@ const { themeConfig } = storeToRefs(useThemeConfig());
 const searchRef = ref();
 const newsRef = ref();
 const personalDrawerRef = ref();
-const tenantSelectorRef = ref();
 
-const tenantList = ref<Tenant[]>([]);
-const tenantLoading = ref(false);
 const deptList = ref<Dept[]>([]);
 const avatarError = ref(false);
-
-const shouldShowTenantOption = computed(() => tenantList.value.length > 1);
 
 const currentDeptId = computed(() => Session.getDeptId() || userInfos.value.deptId);
 
@@ -189,17 +163,12 @@ const onHandleCommandClick = (path: string) => {
 				window.location.reload();
 			})
 			.catch(() => {});
-	} else if (path === 'personal') {
-		// 打开个人页面
-		personalDrawerRef.value.open();
-	} else if (path === 'tenant') {
-		// 只有在租户数量大于1时才打开租户选择器
-		if (shouldShowTenantOption.value) {
-			tenantSelectorRef.value.open();
+		} else if (path === 'personal') {
+			// 打开个人页面
+			personalDrawerRef.value.open();
+		} else {
+			router.push(path);
 		}
-	} else {
-		router.push(path);
-	}
 };
 
 const onSearchClick = () => {
@@ -230,29 +199,12 @@ const getIsDot = () => {
 	});
 };
 
-const loadTenantList = async () => {
-	try {
-		tenantLoading.value = true;
-		const response = await getPersonalTenant();
-		tenantList.value = response.data || [];
-		} catch {
-			tenantList.value = [];
-	} finally {
-		tenantLoading.value = false;
-	}
-};
-
-const onTenantChange = () => {
-	loadTenantList();
-};
-
 const loadDeptList = () => {
 	deptList.value = userInfos.value.deptList || [];
 };
 
 onMounted(() => {
 	getIsDot();
-	loadTenantList();
 	loadDeptList();
 });
 </script>

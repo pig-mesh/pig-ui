@@ -4,19 +4,12 @@
 			<pane size="15">
 				<div class="layout-padding-auto layout-padding-view">
 					<el-scrollbar>
-						<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList"
-							:show-expand="true" @node-click="handleNodeClick">
-							<!-- 没有数据权限提示 -->
-							<template #default="{ node, data }">
-								<el-tooltip v-if="data.isLock" class="item" effect="dark"
-									:content="$t('sysuser.noDataScopeTip')" placement="right-start">
-									<span>{{ node.label }}
-										<SvgIcon name="ele-Lock" />
-									</span>
-								</el-tooltip>
-								<span v-if="!data.isLock">{{ node.label }}</span>
-							</template>
-						</query-tree>
+							<query-tree :placeholder="$t('common.queryDeptTip')" :query="deptData.queryList"
+								:show-expand="true" @node-click="handleNodeClick">
+								<template #default="{ node }">
+									<span>{{ node.label }}</span>
+								</template>
+							</query-tree>
 					</el-scrollbar>
 				</div>
 			</pane>
@@ -48,14 +41,6 @@
 							<el-button plain v-auth="'sys_user_add'" class="ml10" icon="upload-filled" type="primary"
 								@click="excelUploadRef.show()">
 								{{ $t('common.importBtn') }}
-							</el-button>
-							<el-button v-if="enableDingTalkSync" plain icon="upload-filled" type="primary" class="ml10"
-								@click="dingUploadRef.show()">
-								{{ $t('sysuser.importDingTalkBtn') }}
-							</el-button>
-							<el-button v-if="enableWeChatSync" plain icon="upload-filled" type="primary" class="ml10"
-								@click="wechatUploadRef.show()">
-								{{ $t('sysuser.importWeChatBtn') }}
 							</el-button>
 
 							<el-button plain v-auth="'sys_user_del'" :disabled="multiple" class="ml10" icon="Delete"
@@ -139,12 +124,6 @@
 
 		<upload-excel ref="excelUploadRef" :title="$t('sysuser.importUserTip')"
 			temp-url="/admin/sys-file/local/file/user.xlsx" url="/admin/user/import" @refreshDataList="getDataList" />
-		<upload-excel ref="wechatUploadRef" :title="$t('sysuser.importWeChatTip')"
-			temp-url="/admin/sys-file/local/file/cp.xlsx" url="/admin/connect/import/wecom/user"
-			@refreshDataList="getDataList" />
-		<upload-excel ref="dingUploadRef" :title="$t('sysuser.importDingTalkTip')"
-			temp-url="/admin/sys-file/local/file/dingtalk.xlsx" url="/admin/connect/import/ding/user"
-			@refreshDataList="getDataList" />
 	</div>
 </template>
 
@@ -155,7 +134,6 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { clearMaskedFields } from '/@/utils/validate';
-import { useSiteConfig } from '/@/stores/siteConfig';
 
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
@@ -164,16 +142,9 @@ const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInp
 
 const { t } = useI18n();
 
-// 从 siteConfig store 读取导入开关
-const { siteConfig } = storeToRefs(useSiteConfig());
-const enableDingTalkSync = computed(() => siteConfig.value.syncDingtalkEnabled);
-const enableWeChatSync = computed(() => siteConfig.value.syncWechatEnabled);
-
 // 定义变量内容
 const userDialogRef = ref();
 const excelUploadRef = ref();
-const wechatUploadRef = ref();
-const dingUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const inputPassword = ref();

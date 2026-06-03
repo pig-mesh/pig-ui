@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-PIGX UI Pro is a Vue 3 enterprise admin platform built on top of the PIGCLOUD microservices framework. The application uses backend-controlled routing where menu permissions are determined by API responses.
+Pig UI is a Vue 3 admin platform for the Pig open-source microservices framework. The application uses backend-controlled routing where menu permissions are determined by API responses.
 
 **Tech Stack**: Vue 3 (Composition API), TypeScript, Element Plus, Pinia, Vue Router, Vite, Tailwind CSS, DaisyUI
 
@@ -47,9 +47,8 @@ export function fetchList(query?: Object) {
 - **Always use `await` syntax** when calling API methods, then destructure the result
 - The centralized axios instance at `src/utils/request.ts` handles:
   - Automatic token injection (`Authorization` header)
-  - Tenant ID management (`TENANT-ID` header)
   - Request/response encryption/decryption
-  - Token expiration (424) and tenant expiration (426) handling
+  - Token expiration (424) handling
   - URL adaptation for single/microservice architecture
 
 ### Routing Architecture
@@ -82,7 +81,7 @@ All stores use Pinia with persistence enabled via `pinia-plugin-persist`.
 ### Component Structure
 
 - `src/components/` - Reusable components (auto-registered globally via `src/components/index.ts`)
-- `src/views/` - Page-level components organized by feature modules (admin, knowledge, flow, gen, etc.)
+- `src/views/` - Page-level components organized by feature modules (admin, gen, home, login, tools, etc.)
 - `src/layout/` - Application layout components and route views
 
 ### Global Properties
@@ -135,7 +134,7 @@ Environment variables are defined in `.env.development`, `.env.local`, etc.:
 
 - All API logic resides in `src/api/` (never inline in components)
 - Use `await` with proper error handling
-- Authentication token and tenant ID are injected automatically
+- Authentication token is injected automatically
 - Request encryption is enabled by default (disable with `Enc-Flag: false` header)
 
 ### Vue Router

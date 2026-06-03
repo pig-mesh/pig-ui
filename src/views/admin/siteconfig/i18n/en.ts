@@ -21,8 +21,8 @@ export default {
 		securitySectionDesc: 'Login protection and password strength rules',
 		appearanceSection: 'Appearance & Experience',
 		appearanceSectionDesc: 'Language, theme, and frontend UI preferences',
-		integrationSection: 'Integration & Sync',
-		integrationSectionDesc: 'Third-party service access and synchronization',
+		integrationSection: 'Third-party Integration',
+		integrationSectionDesc: 'External analytics service settings',
 		maintenanceSection: 'System Maintenance',
 		maintenanceSectionDesc: 'High-risk operations. Proceed carefully.',
 
@@ -98,16 +98,6 @@ export default {
 		antiDebugKey: 'Bypass Key',
 		antiDebugKeyPlaceholder: 'Enter bypass key (URL param ddtk=key to bypass)',
 		antiDebugKeyTip: 'Use URL parameter ?ddtk=key to temporarily bypass anti-debug',
-
-		// Data import
-		dataImport: 'Data Import',
-		dataImportDesc: 'Sync contacts from third-party platforms',
-		syncDingtalk: 'DingTalk',
-		syncDingtalkDesc: 'Sync organization structure, departments, and users',
-		syncWechat: 'WeCom',
-		syncWechatDesc: 'Sync contacts and department structure',
-		configAppKey: 'Configure AppKey',
-		configCorpId: 'Configure CorpID',
 
 		// Analytics
 		analytics: 'Analytics',

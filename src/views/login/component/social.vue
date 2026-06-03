@@ -126,7 +126,7 @@ const cleanup = () => {
  * @param thirdpart - 第三方平台类型
  */
 const handleClick = async (thirdpart: SocialLoginEnum) => {
-	// 获取租户配置的账号信息
+	// 获取第三方账号配置
 	const { data } = await getLoginAppList();
 	const result = data.find((item: any) => item.type === thirdpart);
 	if (validateNull(result)) {
@@ -181,4 +181,3 @@ onUnmounted(() => {
 	cleanup();
 });
 </script>
-

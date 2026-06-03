@@ -48,34 +48,6 @@ export const putObj = (obj: Object) => {
     });
 };
 
-export const syncUser = () => {
-    return request({
-        url: '/admin/connect/sync/ding/user',
-        method: 'post',
-    });
-};
-
-export const syncDept = () => {
-    return request({
-        url: '/admin/connect/sync/ding/dept',
-        method: 'post',
-    });
-};
-
-export const syncCpUser = () => {
-    return request({
-        url: '/admin/connect/sync/cp/user',
-        method: 'post',
-    });
-};
-
-export const syncCpDept = () => {
-    return request({
-        url: '/admin/connect/sync/cp/dept',
-        method: 'post',
-    });
-};
-
 export const orgTree = (type: String, deptId: Number) => {
     return request({
         url: '/admin/dept/org',

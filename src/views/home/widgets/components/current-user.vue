@@ -40,8 +40,8 @@ export default {
 					</span>
 				</div>
 
-				<!-- 辅层：部门/职位 · 租户 -->
-				<p v-if="subInfo" class="mt-2.5 text-xs text-gray-400 dark:text-gray-500 truncate">{{ subInfo }}</p>
+					<!-- 辅层：部门/职位 -->
+					<p v-if="subInfo" class="mt-2.5 text-xs text-gray-400 dark:text-gray-500 truncate">{{ subInfo }}</p>
 			</div>
 		</div>
 	</el-card>
@@ -57,11 +57,10 @@ const avatarError = ref(false);
 
 const userData = computed(() => {
 	const user = userInfos.value?.user;
-	if (!user) return { postName: '', name: '', username: '', avatar: '', deptName: '', tenantName: '' };
+	if (!user) return { postName: '', name: '', username: '', avatar: '', deptName: '' };
 	return {
 		...user,
 		postName: user.postList?.map((item: PostItem) => item.postName).join(',') || '',
-		tenantName: userInfos.value?.tenantName || '',
 	};
 });
 
@@ -71,7 +70,6 @@ const subInfo = computed(() => {
 	const parts: string[] = [];
 	const org = [userData.value.deptName, userData.value.postName].filter(Boolean).join('/');
 	if (org) parts.push(org);
-	if (userData.value.tenantName) parts.push(userData.value.tenantName);
 	return parts.join(' · ');
 });
 </script>

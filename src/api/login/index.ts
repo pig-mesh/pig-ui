@@ -52,15 +52,14 @@ export enum LoginErrorEnum {
  */
 export enum SocialLoginEnum {
 	SMS = 'SMS', // 验证码登录
-	DINGTALK = 'DINGTALK', // 钉钉
-	WEIXIN_CP = 'WEIXIN_CP', // 企业微信
 	APP_SMS = 'APP-SMS', // APP验证码登录
 	QQ = 'QQ', // QQ登录
 	WECHAT = 'WX', // 微信登录
+	DINGTALK = 'DINGTALK', // 钉钉登录
+	WEIXIN_CP = 'WEIXIN_CP', // 企业微信登录
 	MINI_APP = 'MINI', // 微信小程序
 	GITEE = 'GITEE', // 码云登录
 	OSC = 'OSC', // 开源中国登录
-	CAS = 'CAS', // CAS 登录
 }
 
 /**
@@ -79,7 +78,6 @@ export const login = (data: any) => {
 		data: { password: encPassword },
 		headers: {
 			skipToken: true,
-			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 			"Enc-Flag": "false",
@@ -96,7 +94,6 @@ export const loginByMobile = (mobile: any, code: any) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -114,7 +111,6 @@ export const loginBySocial = (state: SocialLoginEnum, code: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -149,7 +145,6 @@ export const refreshTokenApi = (refresh_token: string) => {
 		url: '/auth/oauth2/token',
 		headers: {
 			skipToken: true,
-			skipTenant: true,
 			Authorization: basicAuth,
 			'Content-Type': FORM_CONTENT_TYPE,
 		},
@@ -172,7 +167,6 @@ export const checkToken = async (): Promise<boolean> => {
 			url: '/auth/token/check_token',
 			headers: {
 				skipToken: true,
-				skipTenant: true,
 				Authorization: basicAuth,
 				'Content-Type': FORM_CONTENT_TYPE,
 			},
