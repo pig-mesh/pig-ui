@@ -540,6 +540,13 @@
 		font-weight: 600;
 	}
 
+	// 顶部横向一级菜单不展示 Element Plus 默认展开箭头
+	> .el-sub-menu > .el-sub-menu__title {
+		.el-sub-menu__icon-arrow {
+			display: none !important;
+		}
+	}
+
 	// 横向菜单不激活时的hover
 	.el-menu-item:not(.is-active):hover,
 	.el-sub-menu:not(.is-active):hover .el-sub-menu__title {

@@ -261,7 +261,7 @@ const sectionCount = (id: SectionId) => {
 };
 
 const sectionToneClass = (tone: SectionMeta['tone']) => {
-	if (tone === 'red') return 'bg-red-50 text-red-600 border-red-100';
+	if (tone === 'red') return 'border-red-100 bg-red-50 text-red-600 dark:border-red-500/50 dark:bg-red-500/15 dark:text-red-300';
 	return 'bg-slate-100 text-slate-600 border-slate-200';
 };
 
@@ -455,19 +455,25 @@ onUnmounted(() => {
 							:ref="(el) => setSectionRef(section.id, el)"
 							:data-section-id="section.id"
 							class="overflow-hidden border shadow-sm scroll-mt-5 rounded-xl bg-base-100"
-							:class="section.id === 'maintenance' ? 'border-red-200' : 'border-base-300'"
+							:class="section.id === 'maintenance' ? 'border-red-200 dark:border-red-500/50 dark:bg-red-950/20' : 'border-base-300'"
 						>
 							<div
 								class="flex items-center justify-between gap-4 px-6 py-5 border-b"
-								:class="section.id === 'maintenance' ? 'border-red-100 bg-red-50/40' : 'border-base-300'"
+								:class="
+									section.id === 'maintenance' ? 'border-red-100 bg-red-50/40 dark:border-red-500/40 dark:bg-red-500/[0.08]' : 'border-base-300'
+								"
 							>
 								<div class="flex items-center min-w-0 gap-4">
 									<div class="flex items-center justify-center border h-11 w-11 shrink-0 rounded-xl" :class="sectionToneClass(section.tone)">
 										<component :is="section.icon" class="w-5 h-5" />
 									</div>
 									<div class="min-w-0">
-										<h2 class="text-lg font-bold truncate text-base-content">{{ section.title }}</h2>
-										<p class="mt-1 text-sm text-base-content/55">{{ section.desc }}</p>
+										<h2 class="text-lg font-bold truncate text-base-content" :class="section.id === 'maintenance' ? 'dark:text-red-50' : ''">
+											{{ section.title }}
+										</h2>
+										<p class="mt-1 text-sm text-base-content/55" :class="section.id === 'maintenance' ? 'dark:text-red-100/70' : ''">
+											{{ section.desc }}
+										</p>
 									</div>
 								</div>
 								<span
@@ -478,7 +484,7 @@ onUnmounted(() => {
 								</span>
 							</div>
 
-							<div class="divide-y divide-base-300">
+							<div class="divide-y divide-base-300" :class="section.id === 'maintenance' ? 'dark:divide-red-500/30' : ''">
 								<template v-if="section.id === 'brand'">
 									<div class="grid gap-4 px-6 py-5 lg:grid-cols-[160px_minmax(0,1fr)]">
 										<div>
@@ -697,12 +703,18 @@ onUnmounted(() => {
 								</template>
 
 								<template v-if="section.id === 'maintenance'">
-									<div class="grid gap-4 bg-red-50/20 px-6 py-5 lg:grid-cols-[1fr_180px] lg:items-center">
+									<div class="grid gap-4 bg-red-50/20 px-6 py-5 dark:bg-red-500/[0.04] lg:grid-cols-[1fr_180px] lg:items-center">
 										<div>
-											<div class="text-sm font-semibold text-base-content">{{ rowMeta('clearCache')?.label }}</div>
-											<div class="mt-1 text-xs leading-5 text-base-content/50">{{ rowMeta('clearCache')?.desc }}</div>
+											<div class="text-sm font-semibold text-base-content dark:text-red-50">{{ rowMeta('clearCache')?.label }}</div>
+											<div class="mt-1 text-xs leading-5 text-base-content/50 dark:text-red-100/70">{{ rowMeta('clearCache')?.desc }}</div>
 										</div>
-										<el-button type="danger" plain :loading="refreshing" @click="handleRefresh">
+										<el-button
+											class="dark:!border-red-400/70 dark:!bg-red-500/15 dark:!text-red-100 dark:hover:!border-red-300 dark:hover:!bg-red-500/25 dark:focus:!border-red-300 dark:focus:!bg-red-500/25"
+											type="danger"
+											plain
+											:loading="refreshing"
+											@click="handleRefresh"
+										>
 											{{ $t('siteconfig.clearCacheAction') }}
 										</el-button>
 									</div>
