@@ -170,35 +170,45 @@ export default {
 						pointJson: secretKey.value ? aesEncrypt(JSON.stringify(checkPosArr), secretKey.value) : JSON.stringify(checkPosArr),
 						token: backToken.value,
 					};
-					reqCheck(data).then((response) => {
-						let res = response.data;
-						if (res.repCode == '0000') {
-							barAreaColor.value = '#4cae4c';
-							barAreaBorderColor.value = '#5cb85c';
-							text.value = t('verify.points.success');
-							bindingClick.value = false;
-							showRefresh.value = false;
-							if (mode.value == 'pop') {
+					reqCheck(data)
+						.then((response) => {
+							let res = response.data;
+							if (res.repCode == '0000') {
+								barAreaColor.value = '#4cae4c';
+								barAreaBorderColor.value = '#5cb85c';
+								text.value = t('verify.points.success');
+								bindingClick.value = false;
+								showRefresh.value = false;
+								if (mode.value == 'pop') {
+									setTimeout(() => {
+										proxy.$parent.clickShow = false;
+										refresh();
+									}, 1500);
+								}
 								setTimeout(() => {
-									proxy.$parent.clickShow = false;
+									text.value = '';
+									proxy.$parent.$parent.closeBox();
+									proxy.$parent.$parent.$emit('success', { captchaVerification });
+								}, 1000);
+							} else {
+								proxy.$parent.$parent.$emit('error', proxy);
+								barAreaColor.value = '#d9534f';
+								barAreaBorderColor.value = '#d9534f';
+								text.value = t('verify.points.fail');
+								setTimeout(() => {
 									refresh();
-								}, 1500);
+								}, 700);
 							}
-							setTimeout(() => {
-								text.value = '';
-								proxy.$parent.$parent.closeBox();
-								proxy.$parent.$parent.$emit('success', { captchaVerification });
-							}, 1000);
-						} else {
-							proxy.$parent.$parent.$emit('error', proxy);
+						})
+						.catch(() => {
+							proxy.$parent?.$parent?.$emit('error', proxy);
 							barAreaColor.value = '#d9534f';
 							barAreaBorderColor.value = '#d9534f';
 							text.value = t('verify.points.fail');
 							setTimeout(() => {
 								refresh();
 							}, 700);
-						}
-					});
+						});
 				}, 400);
 			}
 			if (num.value < checkNum.value) {
@@ -234,21 +244,26 @@ export default {
 			let data = {
 				captchaType: captchaType.value,
 			};
-			reqGet(data).then((response) => {
-				let res = response.data;
-				if (res.repCode == '0000') {
-					pointBackImgBase.value = res.repData.originalImageBase64;
-					backToken.value = res.repData.token;
-					secretKey.value = res.repData.secretKey;
-					poinTextList.value = res.repData.wordList;
-					// 使用国际化 + 关键字彩色高亮
-					const wordsStr = poinTextList.value.join(',');
-					const highlightWords = `<span class="text-blue-600 dark:text-blue-400 font-semibold">${wordsStr}</span>`;
-					text.value = t('verify.points.explain', { words: highlightWords });
-				} else {
-					text.value = res.repMsg;
-				}
-			});
+			reqGet(data)
+				.then((response) => {
+					let res = response.data;
+					if (res.repCode == '0000') {
+						pointBackImgBase.value = res.repData.originalImageBase64;
+						backToken.value = res.repData.token;
+						secretKey.value = res.repData.secretKey;
+						poinTextList.value = res.repData.wordList;
+						// 使用国际化 + 关键字彩色高亮
+						const wordsStr = poinTextList.value.join(',');
+						const highlightWords = `<span class="text-blue-600 dark:text-blue-400 font-semibold">${wordsStr}</span>`;
+						text.value = t('verify.points.explain', { words: highlightWords });
+					} else {
+						text.value = res.repMsg;
+					}
+				})
+				.catch(() => {
+					proxy.$parent?.$parent?.$emit('error', proxy);
+					text.value = t('verify.points.fail');
+				});
 		}
 		//坐标转换函数
 		const pointTransfrom = function (pointArr, imgSize) {

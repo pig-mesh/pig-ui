@@ -3,7 +3,7 @@ import pinia from '/@/stores/index';
 import {storeToRefs} from 'pinia';
 import {useThemeConfig} from '/@/stores/themeConfig';
 import {useSiteConfig} from '/@/stores/siteConfig';
-import {Local, Session} from '/@/utils/storage';
+import {Local} from '/@/utils/storage';
 import {info} from '/@/api/admin/i18n';
 import {useMemoize, promiseTimeout} from '@vueuse/core';
 
@@ -75,14 +75,15 @@ export const i18n = createI18n({
 });
 
 const I18N_REMOTE_CACHE_PREFIX = 'i18nRemoteMessages:';
-let remoteI18nLoadedKey = '';
+const I18N_REMOTE_LOADED_KEY = 'global';
+let remoteI18nLoadedKey: string | undefined;
 
 /**
  * 获取当前加载状态的唯一标识
- * @returns Token 状态标识
+ * @returns 全局配置加载状态标识
  */
 function getCurrentLoadedKey() {
-    return Session.getToken() || '';
+    return I18N_REMOTE_LOADED_KEY;
 }
 
 /**
@@ -90,10 +91,7 @@ function getCurrentLoadedKey() {
  * 使用 useMemoize 避免重复请求，相同参数只执行一次
  */
 const ensureRemoteI18nTask = useMemoize(
-    async (token: string, retry: number) => {
-        const loadedKey = token;
-        if (getCurrentLoadedKey() !== loadedKey) return false;
-
+    async (retry: number) => {
         // 优先从本地缓存加载，避免白屏
         loadRemoteMessagesFromCache();
 
@@ -104,12 +102,9 @@ const ensureRemoteI18nTask = useMemoize(
                 // 持久化到本地存储
                 Local.set(getRemoteCacheKey(), messageLocal);
 
-                // 二次校验：防止加载期间用户切换账号
-                if (getCurrentLoadedKey() === loadedKey) {
-                    mergeRemoteMessages(messageLocal);
-                    i18n.global.locale.value = themeConfig.value.globalI18n;
-                    remoteI18nLoadedKey = loadedKey;
-                }
+                mergeRemoteMessages(messageLocal);
+                i18n.global.locale.value = themeConfig.value.globalI18n;
+                remoteI18nLoadedKey = getCurrentLoadedKey();
 
                 return true;
             } catch {
@@ -119,11 +114,11 @@ const ensureRemoteI18nTask = useMemoize(
         }
 
         // 所有重试失败，清除缓存以便下次重新尝试
-        ensureRemoteI18nTask.delete(token, retry);
+        ensureRemoteI18nTask.delete(retry);
         return false;
     },
     {
-        getKey: (token, retry) => `${token}:${retry}`,
+        getKey: (retry) => `${retry}`,
     }
 );
 
@@ -198,15 +193,14 @@ async function fetchRemoteI18nMessages() {
 }
 
 /**
- * 确保远程 i18n 词条已加载（支持账号切换 + 简单重试）
+ * 确保远程 i18n 词条已加载（支持全局配置刷新 + 简单重试）
  * @description 动态菜单渲染前调用，避免出现 router.xxx 之类的 key
  */
 export async function ensureRemoteI18nLoaded(options: { force?: boolean; retry?: number } = {}) {
-    const token = Session.getToken() || '';
-    const loadedKey = token;
+    const loadedKey = getCurrentLoadedKey();
     if (!options.force && remoteI18nLoadedKey === loadedKey) return true;
 
     const retry = Math.max(0, options.retry ?? 1);
-    if (options.force) ensureRemoteI18nTask.delete(token, retry);
-    return ensureRemoteI18nTask(token, retry);
+    if (options.force) ensureRemoteI18nTask.delete(retry);
+    return ensureRemoteI18nTask(retry);
 }

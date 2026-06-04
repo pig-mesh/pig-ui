@@ -49,6 +49,7 @@ export default {
     VerifySlide,
     VerifyPoints,
   },
+  emits: ['ready', 'success', 'error'],
   props: {
     captchaType: {
       type: String,

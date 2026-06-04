@@ -286,57 +286,71 @@ export default {
 						: JSON.stringify({ x: moveLeftDistance, y: 5.0 }),
 					token: backToken.value,
 				};
-				reqCheck(data).then((response) => {
-					let res = response.data;
-					if (res.repCode == '0000') {
-						moveBlockBackgroundColor.value = '#5cb85c';
-						leftBarBorderColor.value = '#5cb85c';
-						iconColor.value = '#fff';
-						iconClass.value = 'icon-check';
-						showRefresh.value = false;
-						isEnd.value = true;
-						if (mode.value == 'pop') {
+				reqCheck(data)
+					.then((response) => {
+						let res = response.data;
+						if (res.repCode == '0000') {
+							moveBlockBackgroundColor.value = '#5cb85c';
+							leftBarBorderColor.value = '#5cb85c';
+							iconColor.value = '#fff';
+							iconClass.value = 'icon-check';
+							showRefresh.value = false;
+							isEnd.value = true;
+							if (mode.value == 'pop') {
+								setTimeout(() => {
+									proxy.$parent.clickShow = false;
+									refresh();
+								}, 1500);
+							}
+							passFlag.value = true;
+							const time = ((endMovetime.value - startMoveTime.value) / 1000).toFixed(2);
+							tipWords.value = t('verify.slide.time', { time });
+							var captchaVerification = secretKey.value
+								? aesEncrypt(
+										backToken.value +
+											'---' +
+											JSON.stringify({
+												x: moveLeftDistance,
+												y: 5.0,
+											}),
+										secretKey.value
+										// eslint-disable-next-line no-mixed-spaces-and-tabs
+								  )
+								: backToken.value + '---' + JSON.stringify({ x: moveLeftDistance, y: 5.0 });
 							setTimeout(() => {
-								proxy.$parent.clickShow = false;
+								tipWords.value = '';
+								proxy.$parent.$parent.closeBox();
+								proxy.$parent.$parent.$emit('success', { captchaVerification });
+							}, 1000);
+						} else {
+							moveBlockBackgroundColor.value = '#d9534f';
+							leftBarBorderColor.value = '#d9534f';
+							iconColor.value = '#fff';
+							iconClass.value = 'icon-close';
+							passFlag.value = false;
+							setTimeout(function () {
 								refresh();
-							}, 1500);
+							}, 1000);
+							proxy.$parent.$emit('error', proxy);
+							tipWords.value = t('verify.slide.fail');
+							setTimeout(() => {
+								tipWords.value = '';
+							}, 1000);
 						}
-						passFlag.value = true;
-						const time = ((endMovetime.value - startMoveTime.value) / 1000).toFixed(2);
-						tipWords.value = t('verify.slide.time', { time });
-						var captchaVerification = secretKey.value
-							? aesEncrypt(
-									backToken.value +
-										'---' +
-										JSON.stringify({
-											x: moveLeftDistance,
-											y: 5.0,
-										}),
-									secretKey.value
-									// eslint-disable-next-line no-mixed-spaces-and-tabs
-							  )
-							: backToken.value + '---' + JSON.stringify({ x: moveLeftDistance, y: 5.0 });
-						setTimeout(() => {
-							tipWords.value = '';
-							proxy.$parent.$parent.closeBox();
-							proxy.$parent.$parent.$emit('success', { captchaVerification });
-						}, 1000);
-					} else {
+					})
+					.catch(() => {
 						moveBlockBackgroundColor.value = '#d9534f';
 						leftBarBorderColor.value = '#d9534f';
 						iconColor.value = '#fff';
 						iconClass.value = 'icon-close';
 						passFlag.value = false;
-						setTimeout(function () {
-							refresh();
-						}, 1000);
-						proxy.$parent.$emit('error', proxy);
+						proxy.$parent?.$emit('error', proxy);
 						tipWords.value = t('verify.slide.fail');
 						setTimeout(() => {
+							refresh();
 							tipWords.value = '';
 						}, 1000);
-					}
-				});
+					});
 				status.value = false;
 			}
 		}
@@ -370,17 +384,23 @@ export default {
 			let data = {
 				captchaType: captchaType.value,
 			};
-			reqGet(data).then((response) => {
-				let res = response.data;
-				if (res.repCode == '0000') {
-					backImgBase.value = res.repData.originalImageBase64;
-					blockBackImgBase.value = res.repData.jigsawImageBase64;
-					backToken.value = res.repData.token;
-					secretKey.value = res.repData.secretKey;
-				} else {
-					tipWords.value = res.repMsg;
-				}
-			});
+			reqGet(data)
+				.then((response) => {
+					let res = response.data;
+					if (res.repCode == '0000') {
+						backImgBase.value = res.repData.originalImageBase64;
+						blockBackImgBase.value = res.repData.jigsawImageBase64;
+						backToken.value = res.repData.token;
+						secretKey.value = res.repData.secretKey;
+					} else {
+						tipWords.value = res.repMsg;
+					}
+				})
+				.catch(() => {
+					proxy.$parent?.$parent?.$emit('error', proxy);
+					tipWords.value = t('verify.slide.fail');
+					text.value = t('verify.slide.fail');
+				});
 		}
 
 		return {
