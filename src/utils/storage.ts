@@ -1,11 +1,16 @@
 import Cookies from 'js-cookie';
 
+declare const __NEXT_NAME__: string;
+declare const __VERSION__: string;
+
 // 存储键常量
 export const STORAGE_KEYS = {
 	TOKEN: 'token',
 	REFRESH_TOKEN: 'refresh_token',
 	DEPT_ID: 'deptId',
 } as const;
+
+const LOCAL_STORAGE_KEY_PREFIX = `${__NEXT_NAME__}${__VERSION__}:`;
 
 /**
  * 判断 key 是否需要同步写入 Cookie
@@ -44,11 +49,7 @@ function getSessionStorageValue(key: string) {
 export const Local = {
 	// 查看 v2.4.3版本更新日志
 	setKey(key: string) {
-		// @ts-ignore
-		if (key.startsWith(`${__NEXT_NAME__}:`)) {
-			return key;
-		}
-		return `${__NEXT_NAME__}:${key}`;
+		return `${LOCAL_STORAGE_KEY_PREFIX}${key}`;
 	},
 	// 设置永久缓存
 	set<T>(key: string, val: T) {
