@@ -1,7 +1,5 @@
 # 验证码组件
 
-> 当前 `boot4` 分支基于 Vue 3.5 + Element Plus 2.13 开发，验证码组件对接 Spring Boot 4 后端的行为验证码、数学图形验证码和短信验证码发送接口。
-
 <p align="center">
  <img src="https://img.shields.io/badge/Pig%20UI-4.0-success.svg" alt="Pig UI">
  <img src="https://img.shields.io/badge/Vue-3.5-blue.svg" alt="Vue">
