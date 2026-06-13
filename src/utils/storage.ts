@@ -13,6 +13,26 @@ export const STORAGE_KEYS = {
 const LOCAL_STORAGE_KEY_PREFIX = `${__NEXT_NAME__}${__VERSION__}:`;
 
 /**
+ * js-cookie 统一包装
+ * @description 全局 Cookie 读写统一走此对象，业务代码不直接 import 'js-cookie'，
+ * 便于后续统一调整 Cookie 属性（path、expires、secure 等）
+ */
+export const Cookie = {
+	// 写入 Cookie，options 透传 js-cookie 的属性配置
+	set(key: string, val: string, options?: object) {
+		Cookies.set(key, val, options);
+	},
+	// 读取 Cookie，不存在时返回 undefined
+	get(key: string): string | undefined {
+		return Cookies.get(key);
+	},
+	// 移除 Cookie
+	remove(key: string) {
+		Cookies.remove(key);
+	},
+};
+
+/**
  * 判断 key 是否需要同步写入 Cookie
  * @description token、refresh_token、deptId 在写入 sessionStorage 的同时也需要写入 Cookie，
  * 原因是请求拦截器（request.ts）通过 Cookies 读取这些值来注入请求头；
@@ -20,6 +40,17 @@ const LOCAL_STORAGE_KEY_PREFIX = `${__NEXT_NAME__}${__VERSION__}:`;
  */
 function isCookieBackedSessionKey(key: string) {
 	return key === STORAGE_KEYS.TOKEN || key === STORAGE_KEYS.REFRESH_TOKEN || key === STORAGE_KEYS.DEPT_ID;
+}
+
+/**
+ * 为存储键统一追加应用前缀，localStorage 与 sessionStorage 共用
+ * @description 已带前缀的 key 原样返回，避免重复拼接
+ */
+function setStorageKey(key: string) {
+	if (key.startsWith(LOCAL_STORAGE_KEY_PREFIX)) {
+		return key;
+	}
+	return `${LOCAL_STORAGE_KEY_PREFIX}${key}`;
 }
 
 /**
@@ -49,7 +80,7 @@ function getSessionStorageValue(key: string) {
 export const Local = {
 	// 查看 v2.4.3版本更新日志
 	setKey(key: string) {
-		return `${LOCAL_STORAGE_KEY_PREFIX}${key}`;
+		return setStorageKey(key);
 	},
 	// 设置永久缓存
 	set<T>(key: string, val: T) {
@@ -86,39 +117,43 @@ export const Local = {
  * @method clear 移除全部临时缓存
  */
 export const Session = {
+	// 与 Local 保持一致的键名前缀规则；Cookie 键保持原名，供网关和请求拦截器按原名读取
+	setKey(key: string) {
+		return setStorageKey(key);
+	},
 	// 设置临时缓存
 	set(key: string, val: any) {
 		if (val === undefined || val === null) {
 			return;
 		}
 		if (isCookieBackedSessionKey(key)) {
-			Cookies.set(key, val);
+			Cookie.set(key, val);
 		}
-		window.sessionStorage.setItem(key, JSON.stringify(val));
+		window.sessionStorage.setItem(Session.setKey(key), JSON.stringify(val));
 	},
 	// 获取临时缓存
 	get(key: string) {
-		if (isCookieBackedSessionKey(key)) return Cookies.get(key) || getSessionStorageValue(key);
-		return getSessionStorageValue(key);
+		if (isCookieBackedSessionKey(key)) return Cookie.get(key) || getSessionStorageValue(Session.setKey(key));
+		return getSessionStorageValue(Session.setKey(key));
 	},
 	// 移除临时缓存
 	remove(key: string) {
-		if (isCookieBackedSessionKey(key)) Cookies.remove(key);
-		window.sessionStorage.removeItem(key);
+		if (isCookieBackedSessionKey(key)) Cookie.remove(key);
+		window.sessionStorage.removeItem(Session.setKey(key));
 	},
 	// 移除全部临时缓存
-		clear() {
-			Cookies.remove(STORAGE_KEYS.TOKEN);
-			Cookies.remove(STORAGE_KEYS.REFRESH_TOKEN);
-			Cookies.remove(STORAGE_KEYS.DEPT_ID);
-			window.sessionStorage.clear();
-		},
+	clear() {
+		Cookie.remove(STORAGE_KEYS.TOKEN);
+		Cookie.remove(STORAGE_KEYS.REFRESH_TOKEN);
+		Cookie.remove(STORAGE_KEYS.DEPT_ID);
+		window.sessionStorage.clear();
+	},
 	// 获取当前存储的 token
 	getToken() {
 		return this.get(STORAGE_KEYS.TOKEN);
 	},
-		// 获取当前的部门
-		getDeptId() {
+	// 获取当前的部门
+	getDeptId() {
 		return Local.get(STORAGE_KEYS.DEPT_ID) ? Local.get(STORAGE_KEYS.DEPT_ID) : '';
 	},
 };

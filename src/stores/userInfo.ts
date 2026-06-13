@@ -1,7 +1,6 @@
-import { Local, Session, STORAGE_KEYS } from '/@/utils/storage';
+import { Cookie, Local, Session, STORAGE_KEYS } from '/@/utils/storage';
 import { getUserInfo, login, loginByMobile, loginBySocial, refreshTokenApi, SocialLoginEnum } from '/@/api/login/index';
 import { useMessage } from '/@/hooks/message';
-import Cookies from 'js-cookie';
 
 /**
  * @function useUserInfo
@@ -148,13 +147,13 @@ export const useUserInfo = defineStore('userInfo', {
 		 * @function updateDeptInfo
 		 * @param {string} deptId - 部门ID
 		 */
-		updateDeptInfo(deptId: String) {
+		updateDeptInfo(deptId: string) {
 			this.userInfos.deptId = deptId;
 
 			// 保存部门信息到本地
 			Session.set(STORAGE_KEYS.DEPT_ID, deptId);
 			Local.set(STORAGE_KEYS.DEPT_ID, deptId);
-			Cookies.set(STORAGE_KEYS.DEPT_ID, deptId);
+			Cookie.set(STORAGE_KEYS.DEPT_ID, deptId);
 		},
 	},
 });

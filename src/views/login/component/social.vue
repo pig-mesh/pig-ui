@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang="ts" name="loginSocial">
-import Cookies from 'js-cookie';
+import { Cookie, STORAGE_KEYS } from '/@/utils/storage';
 import other from '/@/utils/other';
 import { getLoginAppList } from '/@/api/admin/social';
 import { useMessage } from '/@/hooks/message';
@@ -167,7 +167,7 @@ const { pause, resume } = useIntervalFn(
 		// 检查弹出窗口是否已关闭
 		if (winOpen.value && winOpen.value.closed) {
 			cleanup();
-			if (Cookies.get('token')) {
+			if (Cookie.get(STORAGE_KEYS.TOKEN)) {
 				emit('signInSuccess');
 			}
 		}
