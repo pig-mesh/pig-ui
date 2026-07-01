@@ -18,7 +18,7 @@
 		"@vueuse/core": "10.11.1",
 		"@wangeditor-next/editor": "5.6.56",
 		"@wangeditor-next/editor-for-vue": "5.1.14",
-		"axios": "1.15.2",
+		"axios": "1.16.0",
 		"codemirror": "5.65.21",
 		"crypto-js": "4.2.0",
 		"disable-devtool": "0.3.9",
@@ -38,7 +38,7 @@
 		"vue": "3.5.35",
 		"vue-clipboard3": "2.0.0",
 		"vue-echarts": "7.0.3",
-		"vue-i18n": "9.2.2",
+		"vue-i18n": "9.14.3",
 		"vue-router": "4.6.4",
 		"vue3-tree-org": "4.2.2",
 		"vuedraggable": "4.1.0"
