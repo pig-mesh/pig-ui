@@ -38,7 +38,7 @@
 				style="width: 100%"
 				v-loading="state.loading"
 				border
-				:cell-style="tableStyle.cellStyle"
+				:cell-style="menuTableCellStyle"
 				:header-cell-style="tableStyle?.headerCellStyle"
 			>
 				<el-table-column type="index" width="52" align="center" fixed>
@@ -189,6 +189,14 @@ const loadingNodes = ref(new Set());
 const loadingSet = new Set();
 
 const { getDataList, tableStyle } = useTable(state);
+
+// 树形展开图标渲染在 name 列，保持左对齐避免列宽变化后层级缩进错位。
+const menuTableCellStyle = ({ column }: { column: { property?: string } }) => {
+	if (column.property === 'name') {
+		return { ...tableStyle.cellStyle, textAlign: 'left' };
+	}
+	return tableStyle.cellStyle;
+};
 
 /**
  * 根据菜单类型设置是否有子节点
