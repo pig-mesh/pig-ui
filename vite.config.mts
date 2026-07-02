@@ -1,12 +1,11 @@
 import vue from '@vitejs/plugin-vue';
 import path, { resolve } from 'path';
-import { defineConfig, loadEnv, ConfigEnv } from 'vite';
+import { defineConfig, loadEnv, type ConfigEnv } from 'vite';
 import vueSetupExtend from 'vite-plugin-vue-setup-extend';
 import AutoImport from 'unplugin-auto-import/vite';
-import topLevelAwait from 'vite-plugin-top-level-await';
 import viteCompression from 'vite-plugin-compression2';
 // @ts-ignore
-import { svgBuilder } from '/@/components/IconSelector/index';
+import { svgBuilder } from './src/components/IconSelector/index';
 
 import dns from 'node:dns';
 dns.setDefaultResultOrder('verbatim');
@@ -39,10 +38,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					},
 				],
 				dts: './auto-imports.d.ts', // 自动导入类型定义文件路径
-			}),
-			topLevelAwait({
-				promiseExportName: '__tla', // TLA Promise 变量名
-				promiseImportName: (i: number) => `__tla_${i}`, // TLA Promise 导入名
 			}),
 			viteCompression({
 				deleteOriginalAssets: false, // 压缩后是否删除原始文件
@@ -78,6 +73,7 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			outDir: 'dist', // 打包输出目录
 			chunkSizeWarningLimit: 1500, // 代码分包阈值
 			assetsInlineLimit: 0, // 禁止资源内联，确保所有 SVG 生成独立文件
+			cssMinify: 'esbuild', // 避免 Lightning CSS 误判 Vue :deep() 选择器
 			// 开发使用 esbuild 更快，生产环境打包使用 terser 可以删除更多注释
 			minify: isDev ? ('esbuild' as const) : ('terser' as const),
 			terserOptions: {
@@ -89,15 +85,24 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 					comments: false, // 删除所有注释
 				},
 			},
-			rollupOptions: {
+			rolldownOptions: {
 				output: {
 					entryFileNames: `assets/[name].[hash].js`,
 					chunkFileNames: `assets/[name].[hash].js`,
 					assetFileNames: `assets/[name].[hash].[ext]`,
-					compact: true,
-					manualChunks: {
-						vue: ['vue', 'vue-router', 'pinia'],
-						echarts: ['echarts'],
+					codeSplitting: {
+						groups: [
+							{
+								name: 'vue',
+								test: /node_modules[\\/](vue|vue-router|pinia)[\\/]/,
+								priority: 2,
+							},
+							{
+								name: 'echarts',
+								test: /node_modules[\\/]echarts[\\/]/,
+								priority: 1,
+							},
+						],
 					},
 				},
 			},

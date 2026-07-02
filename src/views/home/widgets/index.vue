@@ -142,9 +142,9 @@ const { t } = useI18n();
 	const defaultGrid = ref({
 		layout: [7, 7, 10],
 		copmsList: [
-			['current-user', 'sys-log-line'],
+			['current-user', 'favorite-menu', 'sys-log-line', 'session-uv-summary'],
 			['news', 'sys-log', 'device-distribution'],
-			['calendar', 'favorite-menu', 'popular-pages'],
+			['calendar', 'popular-pages', 'browser-distribution'],
 		],
 	});
 
@@ -202,15 +202,17 @@ const myCompsList = computed(() => {
 			return allowedWidgetKeys.value.has(item.key);
 		}
 		// fallback：无角色配置时显示全部组件
-			const defaultKeys = [
-				'calendar',
-				'current-user',
-				'news',
-				'sys-log',
-				'favorite-menu',
-				'sys-log-line',
-				'device-distribution',
-				'popular-pages',
+		const defaultKeys = [
+			'calendar',
+			'current-user',
+			'news',
+			'sys-log',
+			'favorite-menu',
+			'sys-log-line',
+			'session-uv-summary',
+			'device-distribution',
+			'browser-distribution',
+			'popular-pages',
 		];
 		return defaultKeys.includes(item.key);
 	});

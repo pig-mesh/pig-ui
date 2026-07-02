@@ -110,9 +110,9 @@ const layoutOptions = [
 		cols: [7, 7, 10],
 			spans: [8, 8, 8],
 			defaultComps: [
-				['current-user', 'sys-log-line'],
+				['current-user', 'favorite-menu', 'sys-log-line', 'session-uv-summary'],
 				['news', 'sys-log', 'device-distribution'],
-				['calendar', 'favorite-menu', 'popular-pages'],
+				['calendar', 'popular-pages', 'browser-distribution'],
 			],
 		},
 	{
@@ -120,16 +120,16 @@ const layoutOptions = [
 		cols: [24, 16, 8],
 			spans: [24, 16, 8],
 			defaultComps: [
-				['current-user'],
-				['news', 'sys-log', 'sys-log-line', 'device-distribution'],
-				['calendar', 'favorite-menu', 'popular-pages'],
+				['current-user', 'favorite-menu'],
+				['news', 'sys-log-line', 'sys-log', 'device-distribution'],
+				['calendar', 'popular-pages', 'session-uv-summary', 'browser-distribution'],
 			],
 		},
 	{
 			key: '24',
 			cols: [24],
 			spans: [24],
-			defaultComps: [['current-user', 'news', 'sys-log', 'sys-log-line', 'device-distribution', 'calendar', 'favorite-menu', 'popular-pages']],
+			defaultComps: [['current-user', 'favorite-menu', 'news', 'calendar', 'sys-log-line', 'sys-log', 'popular-pages', 'session-uv-summary', 'device-distribution', 'browser-distribution']],
 		},
 	];
 
