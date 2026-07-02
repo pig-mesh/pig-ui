@@ -30,14 +30,14 @@ pnpm prettier            # 使用 Prettier 格式化所有文件
 
 ### API Integration
 
-All API calls must be placed in `src/api/` directory and follow this pattern (refer to `src/api/admin/audit.ts`):
+All API calls must be placed in `src/api/` directory and follow this pattern (refer to `src/api/admin/log.ts`):
 
 ```typescript
 import request from '/@/utils/request';
 
 export function fetchList(query?: Object) {
   return request({
-    url: '/admin/audit/page',
+    url: '/admin/log/page',
     method: 'get',
     params: query,
   });

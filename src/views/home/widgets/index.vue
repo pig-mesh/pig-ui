@@ -142,7 +142,7 @@ const { t } = useI18n();
 	const defaultGrid = ref({
 		layout: [7, 7, 10],
 		copmsList: [
-			['current-user', 'audit-log', 'sys-log-line'],
+			['current-user', 'sys-log-line'],
 			['news', 'sys-log', 'device-distribution'],
 			['calendar', 'favorite-menu', 'popular-pages'],
 		],
@@ -206,7 +206,6 @@ const myCompsList = computed(() => {
 				'calendar',
 				'current-user',
 				'news',
-				'audit-log',
 				'sys-log',
 				'favorite-menu',
 				'sys-log-line',

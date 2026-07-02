@@ -5,7 +5,6 @@ export default {
 		quickNavigationToolsTip: '常用功能',
 		quickNavigationFlowsTip: '常用流程',
 		systemLogsTip: '系统日志',
-		auditLogsTip: '审计日志',
 		requestLineChartTip: '请求折线图',
 		moreTip: '更多',
 		newsletterTip: '公告',

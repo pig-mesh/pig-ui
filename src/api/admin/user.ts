@@ -1,11 +1,5 @@
 import request from '/@/utils/request';
 
-export const list = () => {
-	return request({
-		url: '/admin/user/list',
-		method: 'get',
-	});
-};
 export const pageList = (params?: Object) => {
 	return request({
 		url: '/admin/user/page',
