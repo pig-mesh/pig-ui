@@ -111,8 +111,8 @@ const layoutOptions = [
 			spans: [8, 8, 8],
 			defaultComps: [
 				['current-user', 'favorite-menu', 'sys-log-line', 'session-uv-summary'],
-				['news', 'sys-log', 'device-distribution'],
-				['calendar', 'popular-pages', 'browser-distribution'],
+				['news', 'sys-log', 'popular-pages'],
+				['calendar', 'device-distribution', 'browser-distribution'],
 			],
 		},
 	{
