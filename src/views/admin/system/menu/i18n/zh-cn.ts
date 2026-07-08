@@ -15,6 +15,7 @@ export default {
         component: '组件',
         visible: '显示',
         icon: '图标',
+        copyIcon: '复制图标名称',
         inputMenuIdTip: '请输入菜单ID',
         inputCreateByTip: '请输入创建人',
         inputCreateTimeTip: '请输入创建时间',
