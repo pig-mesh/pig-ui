@@ -143,8 +143,8 @@ const { t } = useI18n();
 		layout: [7, 7, 10],
 		copmsList: [
 			['current-user', 'favorite-menu', 'sys-log-line', 'session-uv-summary'],
-			['news', 'sys-log', 'device-distribution'],
-			['calendar', 'popular-pages', 'browser-distribution'],
+			['news', 'sys-log', 'popular-pages'],
+			['calendar', 'device-distribution', 'browser-distribution'],
 		],
 	});
 
