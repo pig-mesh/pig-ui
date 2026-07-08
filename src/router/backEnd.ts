@@ -88,13 +88,33 @@ export function setFilterRouteEnd() {
 }
 
 /**
+ * 递归过滤 path 为空的路由（含嵌套 children），避免 addRoute 报错
+ * @param routes 待过滤的路由数组
+ * @returns 过滤后的路由数组
+ */
+function filterEmptyPathRoutes(routes: RouteRecordRaw[]): RouteRecordRaw[] {
+	return routes
+		.filter((route) => {
+			if (!route.path) {
+				console.error('[router] 跳过 path 为空的路由，请检查后端菜单配置:', route); // eslint-disable-line no-console
+				return false;
+			}
+			return true;
+		})
+		.map((route) => {
+			if (route.children?.length) route.children = filterEmptyPathRoutes(route.children);
+			return route;
+		});
+}
+
+/**
  * 添加动态路由
  * @method router.addRoute
  * @description 此处循环为 baseRoutes（/@/router/route）第一个顶级 children 的路由一维数组，非多级嵌套
  * @link 参考：https://next.router.vuejs.org/zh/api/#addroute
  */
 export async function setAddRoute() {
-	await setFilterRouteEnd().forEach((route: RouteRecordRaw) => {
+	await filterEmptyPathRoutes(setFilterRouteEnd()).forEach((route: RouteRecordRaw) => {
 		router.addRoute(route);
 	});
 }

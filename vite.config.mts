@@ -78,7 +78,8 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 			minify: isDev ? ('esbuild' as const) : ('terser' as const),
 			terserOptions: {
 				compress: {
-					drop_console: true, // 删除 console
+					// 只删除 log/info/debug，保留 console.error / console.warn 便于生产排查
+					pure_funcs: ['console.log', 'console.info', 'console.debug'],
 					drop_debugger: true, // 删除 debugger
 				},
 				format: {

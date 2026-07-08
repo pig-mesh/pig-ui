@@ -41,6 +41,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
+						console.error('[login] 登录失败:', err); // eslint-disable-line no-console
 						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
@@ -64,6 +65,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
+						console.error('[login] 登录失败:', err); // eslint-disable-line no-console
 						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
@@ -88,6 +90,7 @@ export const useUserInfo = defineStore('userInfo', {
 						resolve(res);
 					})
 					.catch((err) => {
+						console.error('[login] 登录失败:', err); // eslint-disable-line no-console
 						useMessage().error(err?.msg || '系统异常请联系管理员');
 						reject(err);
 					});
