@@ -46,7 +46,10 @@
         <el-input-number v-model="state.ruleForm.sortOrder" :min="0" controls-position="right"/>
       </el-form-item>
       <el-form-item :label="$t('sysmenu.icon')" prop="icon" v-if="state.ruleForm.menuType === '0'">
-        <IconSelector :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon"/>
+        <div class="flex w-full items-center gap-2">
+          <IconSelector class="flex-1" :placeholder="$t('sysmenu.inputIconTip')" v-model="state.ruleForm.icon"/>
+          <el-button icon="document-copy" :title="$t('sysmenu.copyIcon')" :disabled="!state.ruleForm.icon" @click="copyText(state.ruleForm.icon)" />
+        </div>
       </el-form-item>
       <el-row>
         <el-col :span="12">
@@ -117,11 +120,13 @@ import {useI18n} from 'vue-i18n';
 import {getObj, pageList, putObj, addObj, validateExist} from '/@/api/admin/menu';
 import {useMessage} from '/@/hooks/message';
 import {rule, validateNull} from "/@/utils/validate";
+import commonFunction from '/@/utils/commonFunction';
 import Tip from "/@/components/Tip/index.vue";
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
 const {t} = useI18n();
+const {copyText} = commonFunction();
 // 引入组件
 const IconSelector = defineAsyncComponent(() => import('/@/components/IconSelector/index.vue'));
 

@@ -1,5 +1,5 @@
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-4.0-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Pig-4.1-success.svg" alt="Build Status">
  <img src="https://img.shields.io/badge/Spring%20Cloud-2025.1-blue.svg" alt="Coverage Status">
  <img src="https://img.shields.io/badge/Spring%20Boot-4.0-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/badge/Vue-3.5-blue.svg" alt="Downloads">
@@ -23,7 +23,7 @@
 
 ### 先决条件
 
-- **Node.js**: 版本 18.0.0。
+- **Node.js**: 版本 20.19.0 或更高。
 - **npm**: 版本 8.0.0 或更高。
 
 ### 使用文档

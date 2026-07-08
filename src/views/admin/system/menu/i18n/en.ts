@@ -15,6 +15,7 @@ export default {
         component: 'Component',
         visible: 'Visible',
         icon: 'Icon',
+        copyIcon: 'Copy Icon Name',
         inputMenuIdTip: 'Please enter menu ID',
         inputPermissionTip: 'Please enter permission',
         inputPathTip: 'Please enter path',

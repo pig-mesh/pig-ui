@@ -1,7 +1,7 @@
 # 验证码组件
 
 <p align="center">
- <img src="https://img.shields.io/badge/Pig%20UI-4.0-success.svg" alt="Pig UI">
+ <img src="https://img.shields.io/badge/Pig%20UI-4.1-success.svg" alt="Pig UI">
  <img src="https://img.shields.io/badge/Vue-3.5-blue.svg" alt="Vue">
  <img src="https://img.shields.io/badge/Element%20Plus-2.13-blue.svg" alt="Element Plus">
  <img src="https://img.shields.io/badge/Vite-5.4-blue.svg" alt="Vite">
@@ -24,7 +24,7 @@
 
 | 依赖 | 版本 | 用途 |
 | --- | --- | --- |
-| Pig UI | 4.0.0 | 当前前端工程版本 |
+| Pig UI | 4.1.0 | 当前前端工程版本 |
 | Vue | 3.5.34 | 组件运行框架 |
 | Element Plus | 2.13.7 | 弹窗、按钮、输入框等基础组件 |
 | Vite | 5.4.21 | 本地开发与构建 |
