@@ -320,7 +320,16 @@ const dateRangeLabel = computed(() => {
 	return `${fmt(start)}  ～  ${fmt(today)}`;
 });
 
-const formatPercent = (val: number | null | undefined) => (val != null ? `${val}%` : '-');
+const formatMetricNumber = (val: number | string | null | undefined) => {
+	if (val == null) return '-';
+	const num = Number(val);
+	return Number.isFinite(num) ? new Intl.NumberFormat('zh-CN', { maximumSignificantDigits: 2 }).format(num) : '-';
+};
+
+const formatPercent = (val: number | string | null | undefined) => {
+	const text = formatMetricNumber(val);
+	return text === '-' ? text : `${text}%`;
+};
 
 function makeBars(seed: number): number[] {
 	const base = [38, 52, 42, 65, 48, 80];
@@ -335,7 +344,7 @@ const statisticsCards = computed(() => {
 	return [
 		{ label: t('clarity.totalSessions', '总会话数'), value: d?.totalSessions?.toLocaleString() ?? '-', bars: makeBars(d?.totalSessions ?? 42) },
 		{ label: t('clarity.distinctUsers', '独立访客 UV'), value: d?.distinctUsers?.toLocaleString() ?? '-', bars: makeBars(d?.distinctUsers ?? 31) },
-		{ label: t('clarity.pagesPerSession', '每会话页面数'), value: d?.pagesPerSession ?? '-', bars: makeBars((d?.pagesPerSession ?? 4.8) * 10) },
+		{ label: t('clarity.pagesPerSession', '每会话页面数'), value: formatMetricNumber(d?.pagesPerSession), bars: makeBars((d?.pagesPerSession ?? 4.8) * 10) },
 		{ label: t('clarity.scrollDepth', '平均滚动深度'), value: formatPercent(d?.scrollDepth), bars: makeBars((d?.scrollDepth ?? 64) * 2) },
 		{ label: t('clarity.deadClickRate', '死点击率'), value: formatPercent(d?.deadClickRate), bars: makeBars((d?.deadClickRate ?? 28) * 3) },
 		{ label: t('clarity.rageClickRate', '激怒点击率'), value: formatPercent(d?.rageClickRate), bars: makeBars((d?.rageClickRate ?? 0.4) * 100) },
