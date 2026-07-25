@@ -94,7 +94,7 @@ import { Session } from '/@/utils/storage';
 const GlobalWebsocket = defineAsyncComponent(() => import('/@/components/Websocket/index.vue'));
 const UserNews = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/userNews.vue'));
 const Search = defineAsyncComponent(() => import('/@/layout/navBars/breadcrumb/search.vue'));
-const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/personal.vue'));
+const PersonalDrawer = defineAsyncComponent(() => import('/@/views/admin/system/user/components/personal.vue'));
 const NameAvatar = defineAsyncComponent(() => import('/@/components/NameAvatar/index.vue'));
 
 const { t } = useI18n();
