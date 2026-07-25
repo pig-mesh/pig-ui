@@ -1,156 +1,270 @@
-<template>
-  <div class="layout-padding">
-    <div class="layout-padding-auto layout-padding-view">
-      <el-row v-show="showSearch">
-        <el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="getDataList">
-          <el-form-item :label="t('area.pid')" prop="adcode">
-            <china-area :type="3" :placeholder="t('area.inputPidByTip')" v-model="pid" :plus="true" @change="handleChange"/>
-          </el-form-item>
-          <el-form-item :label="t('area.name')" prop="name">
-            <el-input :placeholder="t('area.inputNameByTip')" v-model="state.queryForm.name"/>
-          </el-form-item>
-          <el-form-item>
-            <el-button icon="search" type="primary" @click="getDataList">
-              {{ $t('common.queryBtn') }}
-            </el-button>
-            <el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
-          </el-form-item>
-        </el-form>
-      </el-row>
-      <el-row>
-        <div class="mb8" style="width: 100%">
-          <el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog()"
-                     v-auth="'sys_sysArea_add'">
-            {{ $t('common.addBtn') }}
-          </el-button>
-          <el-button plain :disabled="multiple" icon="Delete" type="primary"
-                     v-auth="'sys_sysArea_del'" @click="handleDelete(selectObjs)">
-            {{ $t('common.delBtn') }}
-          </el-button>
-          <right-toolbar v-model:showSearch="showSearch" :export="'sys_sysArea_export'"
-                         @exportExcel="exportExcel" class="ml10 mr20" style="float: right;"
-                         @queryTable="getDataList"></right-toolbar>
-        </div>
-      </el-row>
-      <el-table :data="state.dataList" v-loading="state.loading" border
-                :cell-style="tableStyle.cellStyle" :header-cell-style="tableStyle.headerCellStyle"
-                @selection-change="selectionChangHandle"
-                @sort-change="sortChangeHandle">
-        <el-table-column type="selection" width="40" align="center"/>
-        <el-table-column type="index" label="#" width="40"/>
-        <el-table-column prop="name" :label="t('area.name')" show-overflow-tooltip/>
-        <el-table-column prop="adcode" :label="t('area.adcode')" show-overflow-tooltip/>
-        <el-table-column prop="areaType" :label="t('area.areaType')" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="area_type_dict" :value="scope.row.areaType"></dict-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="hot" :label="t('area.hot')" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="yes_no_type" :value="scope.row.hot"></dict-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="areaStatus" :label="t('area.areaStatus')" show-overflow-tooltip>
-          <template #default="scope">
-            <dict-tag :options="yes_no_type" :value="scope.row.areaStatus"></dict-tag>
-          </template>
-        </el-table-column>
-        <el-table-column prop="areaSort" :label="t('area.areaSort')" width="100" sortable="custom"
-                         show-overflow-tooltip/>
-        <el-table-column :label="$t('common.action')" width="150">
-          <template #default="scope">
-            <el-button icon="edit-pen" text type="primary" v-auth="'sys_sysArea_edit'"
-                       @click="formDialogRef.openDialog(scope.row.id)">{{ $t('common.editBtn') }}
-            </el-button>
-            <el-button icon="delete" text type="primary" v-auth="'sys_sysArea_del'"
-                       @click="handleDelete([scope.row.id])">{{ $t('common.delBtn') }}
-            </el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"/>
-    </div>
-
-    <!-- 编辑、新增  -->
-    <form-dialog ref="formDialogRef" @refresh="getDataList(false)"/>
-
-  </div>
-</template>
-
 <script setup lang="ts" name="systemSysArea">
-import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObjs, fetchList } from '/@/api/admin/sysArea';
+import type { SysAreaManageNode } from '/@/api/admin/sysArea';
 import { useMessage, useMessageBox } from '/@/hooks/message';
-import { useDict } from '/@/hooks/dict';
+import { auth } from '/@/utils/authFunction';
+import { downBlobFile } from '/@/utils/other';
 import { useI18n } from 'vue-i18n';
+import AreaChildrenTable from './components/AreaChildrenTable.vue';
+import AreaTreePanel from './components/AreaTreePanel.vue';
+import FormDialog from './form.vue';
+import { useAreaManagement } from './components/useAreaManagement';
 
+type FormRefreshMode = 'add' | 'current' | 'child';
+
+const treePanelRef = useTemplateRef<InstanceType<typeof AreaTreePanel>>('treePanelRef');
 const { t } = useI18n();
+const formDialogRef = useTemplateRef<InstanceType<typeof FormDialog>>('formDialogRef');
+const selectedRows = ref<SysAreaManageNode[]>([]);
+const formRefreshMode = shallowRef<FormRefreshMode>('add');
+const formTargetPath = ref<Array<string | number>>([]);
 
-const ChinaArea = defineAsyncComponent(() => import('/@/components/ChinaArea/index.vue'));
-const FormDialog = defineAsyncComponent(() => import('./form.vue'));
+const {
+	rootNodes,
+	childRows,
+	selectedNode,
+	selectedPath,
+	rootLoading,
+	childLoading,
+	searching,
+	sortSaving,
+	searchActive,
+	searchKeyword,
+	initialize,
+	loadChildren,
+	loadSelectedChildren,
+	selectNode,
+	search,
+	saveOrder,
+	remove,
+} = useAreaManagement();
 
-const { yes_no_type } = useDict('yes_no_type');
+const tableLoading = computed(() => childLoading.value || searching.value);
 
-const area_type_dict = [
-	{ value: '0', label: t('area.country') },
-	{ value: '1', label: t('area.province') },
-	{ value: '2', label: t('area.city') },
-	{ value: '3', label: t('area.county') },
-	{ value: '4', label: t('area.street') },
-];
+const canEdit = computed(() => auth('sys_sysArea_edit'));
+const canEditCurrent = computed(() => canEdit.value && Boolean(selectedNode.value) && String(selectedNode.value?.adcode) !== '100000');
+const canAddChild = computed(() => Boolean(selectedNode.value) && Number(selectedNode.value?.areaType) < 4);
+const canDeleteCurrent = computed(
+	() => Boolean(selectedNode.value) && String(selectedNode.value?.adcode) !== '100000' && !selectedNode.value?.hasChildren
+);
 
-const formDialogRef = ref();
-const queryRef = ref();
-const showSearch = ref(true);
-const selectObjs = ref<string[]>([]);
-const multiple = ref(true);
-const pid = ref();
-
-const state: BasicTableProps = reactive<BasicTableProps>({
-	queryForm: {
-		adcode: '',
-		name: '',
-	},
-	ascs: ['adcode'],
-	pageList: fetchList,
-});
-
-const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle, downBlobFile, tableStyle } =
-	useTable(state);
-
-const resetQuery = (): void => {
-	queryRef.value?.resetFields();
-	pid.value = '';
-	selectObjs.value = [];
-	getDataList();
-};
-
-const exportExcel = (): void => {
-	downBlobFile('/admin/sysArea/export', { ...state.queryForm, ids: selectObjs.value }, 'sysArea.xlsx');
-};
-
-const selectionChangHandle = (objs: { id: string }[]): void => {
-	selectObjs.value = objs.map(({ id }) => id);
-	multiple.value = !objs.length;
-};
-
-const handleDelete = async (ids: string[]): Promise<void> => {
+const refreshTreeChildren = async (adcode: string | number): Promise<void> => {
 	try {
-		await useMessageBox().confirm(t('common.delConfirmText'));
+		await treePanelRef.value?.refreshChildren(adcode);
+	} catch (err: any) {
+		useMessage().error(err?.msg || t('area.treeRefreshFailed'));
+	}
+};
+
+const refreshCurrentView = async (): Promise<void> => {
+	if (searchActive.value) {
+		await search(searchKeyword.value);
+		return;
+	}
+	if (!selectedNode.value) return;
+	await Promise.all([loadSelectedChildren(), refreshTreeChildren(selectedNode.value.adcode)]);
+};
+
+const handleSelect = async (node: SysAreaManageNode, path: SysAreaManageNode[]): Promise<void> => {
+	selectedRows.value = [];
+	await selectNode(node, path);
+};
+
+const handleSearch = async (keyword: string): Promise<void> => {
+	selectedRows.value = [];
+	await search(keyword);
+};
+
+const handleAdd = (): void => {
+	if (!selectedNode.value || !canAddChild.value) return;
+	formRefreshMode.value = 'add';
+	formTargetPath.value = [...selectedNode.value.pathCodes];
+	formDialogRef.value?.openDialog(undefined, {
+		adcode: selectedNode.value.adcode,
+		name: selectedNode.value.name,
+		areaType: selectedNode.value.areaType,
+	});
+};
+
+const handleEditCurrent = (): void => {
+	if (!selectedNode.value || !canEditCurrent.value) return;
+	formRefreshMode.value = 'current';
+	formTargetPath.value = [...selectedNode.value.pathCodes];
+	formDialogRef.value?.openDialog(String(selectedNode.value.id));
+};
+
+const handleEditChild = (row: SysAreaManageNode): void => {
+	formRefreshMode.value = 'child';
+	formTargetPath.value = [...row.pathCodes];
+	formDialogRef.value?.openDialog(String(row.id));
+};
+
+const confirmDelete = async (): Promise<boolean> => {
+	try {
+		await useMessageBox().confirm(t('area.deleteConfirm'));
+		return true;
 	} catch {
+		return false;
+	}
+};
+
+const handleDeleteRows = async (rows: SysAreaManageNode[]): Promise<void> => {
+	if (!rows.length) return;
+	if (rows.some((row) => row.hasChildren || String(row.adcode) === '100000')) {
+		useMessage().warning(t('area.nonLeafDeleteWarning'));
+		return;
+	}
+	if (!(await confirmDelete())) return;
+
+	try {
+		await remove(rows.map((row) => row.id));
+		selectedRows.value = [];
+		if (selectedNode.value) await refreshTreeChildren(selectedNode.value.adcode);
+		useMessage().success(t('common.delSuccessText'));
+	} catch (err: any) {
+		useMessage().error(err?.msg || t('common.optFailText'));
+	}
+};
+
+const handleDeleteCurrent = async (): Promise<void> => {
+	if (!selectedNode.value || !canDeleteCurrent.value || !(await confirmDelete())) return;
+	const parent = selectedPath.value.at(-2);
+	try {
+		await remove([selectedNode.value.id]);
+		useMessage().success(t('common.delSuccessText'));
+		if (!parent) {
+			await initialize();
+			return;
+		}
+		await refreshTreeChildren(parent.adcode);
+		await treePanelRef.value?.focusPath(parent.pathCodes);
+	} catch (err: any) {
+		useMessage().error(err?.msg || t('common.optFailText'));
+	}
+};
+
+const handleDeleteAction = async (): Promise<void> => {
+	if (selectedRows.value.length) {
+		await handleDeleteRows(selectedRows.value);
+		return;
+	}
+	await handleDeleteCurrent();
+};
+
+const handleSort = async (rows: SysAreaManageNode[]): Promise<void> => {
+	await saveOrder(rows);
+	if (selectedNode.value) await refreshTreeChildren(selectedNode.value.adcode);
+};
+
+const handleFormRefresh = async (): Promise<void> => {
+	if (formRefreshMode.value !== 'current') {
+		await refreshCurrentView();
 		return;
 	}
 
-	try {
-		await delObjs(ids);
-		getDataList();
-		useMessage().success(t('common.delSuccessText'));
-	} catch (err: any) {
-		useMessage().error(err.msg);
+	const parent = selectedPath.value.at(-2);
+	if (parent) {
+		await refreshTreeChildren(parent.adcode);
+		await treePanelRef.value?.focusPath(formTargetPath.value);
+		return;
 	}
+
+	await initialize();
+	await nextTick();
+	await treePanelRef.value?.focusPath(formTargetPath.value);
 };
 
-const handleChange = (data: string): void => {
-	state.queryForm.adcode = data.split(',').at(-1);
+const exportExcel = (): void => {
+	downBlobFile(
+		'/admin/sysArea/export',
+		{
+			pid: selectedNode.value?.adcode,
+			ids: selectedRows.value.map((row) => row.id),
+		},
+		'sysArea.xlsx'
+	);
 };
+
+onMounted(async () => {
+	await initialize();
+	await nextTick();
+	if (selectedNode.value) await treePanelRef.value?.focusPath(selectedNode.value.pathCodes);
+});
 </script>
+
+<template>
+	<div class="layout-padding h-full">
+		<div class="layout-padding-auto layout-padding-view !flex min-h-[620px] !flex-row !overflow-hidden !p-0">
+			<AreaTreePanel
+				ref="treePanelRef"
+				:root-nodes="rootNodes"
+				:loading="rootLoading"
+				:selected-code="selectedNode?.adcode"
+				:search-active="searchActive"
+				:load-children="loadChildren"
+				@select="handleSelect"
+				@search="handleSearch"
+			/>
+
+			<main class="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+				<div class="min-w-0 px-4 pt-5 pb-1">
+					<el-breadcrumb v-if="!searchActive" separator-icon="ArrowRight">
+						<el-breadcrumb-item v-for="item in selectedPath" :key="item.id">
+							{{ item.name }}
+						</el-breadcrumb-item>
+					</el-breadcrumb>
+					<p v-else class="text-sm font-medium">{{ t('area.searchTitle') }}</p>
+				</div>
+
+				<el-row class="mt-2">
+					<div class="mb8" style="width: 100%">
+						<el-button v-auth="'sys_sysArea_add'" class="ml10" type="primary" icon="folder-add" :disabled="!canAddChild" @click="handleAdd">
+							{{ t('area.addChild') }}
+						</el-button>
+						<el-button v-auth="'sys_sysArea_edit'" class="ml10" icon="edit-pen" :disabled="!canEditCurrent" @click="handleEditCurrent">
+							{{ t('area.editCurrent') }}
+						</el-button>
+						<el-tooltip :disabled="selectedRows.length > 0 || canDeleteCurrent" :content="t('area.deleteDisabled')" placement="top">
+							<span class="ml10 inline-flex">
+								<el-button
+									v-auth="'sys_sysArea_del'"
+									plain
+									type="primary"
+									icon="Delete"
+									:disabled="selectedRows.length === 0 && !canDeleteCurrent"
+									@click="handleDeleteAction"
+								>
+									{{ selectedRows.length ? t('area.batchDelete') : t('common.delBtn') }}
+								</el-button>
+							</span>
+						</el-tooltip>
+
+						<right-toolbar
+							:search="false"
+							:export="'sys_sysArea_export'"
+							class="ml10"
+							style="float: right; margin-right: 20px"
+							@queryTable="refreshCurrentView"
+							@exportExcel="exportExcel"
+						/>
+					</div>
+				</el-row>
+
+				<div class="min-h-0 flex-1 overflow-hidden px-2 pb-3">
+					<AreaChildrenTable
+						:rows="childRows"
+						:loading="tableLoading"
+						:saving="sortSaving"
+						:search-active="searchActive"
+						:can-edit="canEdit"
+						@sort="handleSort"
+						@selection-change="selectedRows = $event"
+						@edit="handleEditChild"
+						@delete="handleDeleteRows([$event])"
+					/>
+				</div>
+			</main>
+		</div>
+
+		<FormDialog ref="formDialogRef" @refresh="handleFormRefresh" />
+	</div>
+</template>

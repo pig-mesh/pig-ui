@@ -11,6 +11,7 @@ import { GridComponent, LegendComponent, TitleComponent, ToolboxComponent, Toolt
 import { CanvasRenderer } from 'echarts/renderers';
 import { useI18n } from 'vue-i18n';
 import { useAsyncState } from '@vueuse/core';
+import { useThemeConfig } from '/@/stores/themeConfig';
 
 use([TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridComponent, LineChart, CanvasRenderer]);
 
@@ -18,6 +19,7 @@ use([TitleComponent, TooltipComponent, LegendComponent, ToolboxComponent, GridCo
  * 国际化工具
  */
 const { t } = useI18n();
+const { themeConfig } = storeToRefs(useThemeConfig());
 
 /**
  * 日志统计数据项接口
@@ -41,34 +43,76 @@ const xAxisData = computed(() => logSumData.value.map((item) => formatPast(new D
 const successData = computed(() => logSumData.value.map((item) => item['0'] || 0));
 const failureData = computed(() => logSumData.value.map((item) => item['9'] || 0));
 
+const chartPalette = computed(() => {
+	if (themeConfig.value.isDark) {
+		return {
+			primary: '#60a5fa',
+			failure: '#9ca3af',
+			textPrimary: '#f3f4f6',
+			textRegular: '#d1d5db',
+			textSecondary: '#9ca3af',
+			tooltipBackground: '#273340',
+			tooltipBorder: '#38444d',
+			grid: '#38444d',
+			axisPointer: '#536471',
+			pointBorder: '#1e2732',
+			shadow: 'rgba(0, 0, 0, 0.35)',
+			primaryAreaStart: 'rgba(96, 165, 250, 0.26)',
+			primaryAreaEnd: 'rgba(96, 165, 250, 0.03)',
+			failureAreaStart: 'rgba(156, 163, 175, 0.18)',
+			failureAreaEnd: 'rgba(156, 163, 175, 0.02)',
+		};
+	}
+
+	return {
+		primary: themeConfig.value.primary || '#2e5cf6',
+		failure: '#6b7280',
+		textPrimary: '#303133',
+		textRegular: '#606266',
+		textSecondary: '#6b7280',
+		tooltipBackground: '#ffffff',
+		tooltipBorder: '#e5e7eb',
+		grid: '#e5e7eb',
+		axisPointer: '#d1d5db',
+		pointBorder: '#ffffff',
+		shadow: 'rgba(15, 23, 42, 0.12)',
+		primaryAreaStart: 'rgba(46, 92, 246, 0.22)',
+		primaryAreaEnd: 'rgba(46, 92, 246, 0.02)',
+		failureAreaStart: 'rgba(107, 114, 128, 0.18)',
+		failureAreaEnd: 'rgba(107, 114, 128, 0.02)',
+	};
+});
+
 /**
  * 图表配置选项（使用 computed 实现国际化动态更新）
  */
 const option = computed(() => ({
+	backgroundColor: 'transparent',
 	title: {
 		textStyle: {
 			fontSize: 16,
 			fontWeight: 500,
-			color: '#303133',
+			color: chartPalette.value.textPrimary,
 		},
 		padding: [20, 0, 0, 20],
 	},
 	tooltip: {
 		trigger: 'axis',
-		backgroundColor: '#ffffff',
+		backgroundColor: chartPalette.value.tooltipBackground,
+		borderColor: chartPalette.value.tooltipBorder,
 		borderRadius: 8,
 		padding: [12, 16],
-		borderWidth: 0,
-		shadowColor: 'rgba(0, 0, 0, 0.1)',
+		borderWidth: 1,
+		shadowColor: chartPalette.value.shadow,
 		shadowBlur: 12,
 		shadowOffsetY: 4,
 		textStyle: {
-			color: '#303133',
+			color: chartPalette.value.textPrimary,
 		},
 		axisPointer: {
 			type: 'line',
 			lineStyle: {
-				color: '#ebeef5',
+				color: chartPalette.value.axisPointer,
 				width: 1,
 				type: 'dashed',
 			},
@@ -80,7 +124,7 @@ const option = computed(() => ({
 		itemWidth: 8,
 		itemHeight: 8,
 		textStyle: {
-			color: '#606266',
+			color: chartPalette.value.textRegular,
 			fontSize: 12,
 		},
 		right: '20px',
@@ -104,14 +148,14 @@ const option = computed(() => ({
 			show: false,
 		},
 		axisLabel: {
-			color: '#909399',
+			color: chartPalette.value.textSecondary,
 			fontSize: 12,
 			margin: 16,
 		},
 		splitLine: {
 			show: true,
 			lineStyle: {
-				color: '#ebeef5',
+				color: chartPalette.value.grid,
 				type: 'dashed',
 			},
 		},
@@ -120,12 +164,12 @@ const option = computed(() => ({
 		type: 'value',
 		splitLine: {
 			lineStyle: {
-				color: '#ebeef5',
+				color: chartPalette.value.grid,
 				type: 'dashed',
 			},
 		},
 		axisLabel: {
-			color: '#909399',
+			color: chartPalette.value.textSecondary,
 			fontSize: 12,
 			margin: 16,
 		},
@@ -146,8 +190,8 @@ const option = computed(() => ({
 			symbol: 'circle',
 			symbolSize: 8,
 			itemStyle: {
-				color: '#79bbff',
-				borderColor: '#fff',
+				color: chartPalette.value.primary,
+				borderColor: chartPalette.value.pointBorder,
 				borderWidth: 2,
 			},
 			lineStyle: {
@@ -163,11 +207,11 @@ const option = computed(() => ({
 					colorStops: [
 						{
 							offset: 0,
-							color: 'rgba(121, 187, 255, 0.2)',
+							color: chartPalette.value.primaryAreaStart,
 						},
 						{
 							offset: 1,
-							color: 'rgba(121, 187, 255, 0.02)',
+							color: chartPalette.value.primaryAreaEnd,
 						},
 					],
 				},
@@ -182,8 +226,8 @@ const option = computed(() => ({
 			symbol: 'circle',
 			symbolSize: 8,
 			itemStyle: {
-				color: '#909399',
-				borderColor: '#fff',
+				color: chartPalette.value.failure,
+				borderColor: chartPalette.value.pointBorder,
 				borderWidth: 2,
 			},
 			lineStyle: {
@@ -199,11 +243,11 @@ const option = computed(() => ({
 					colorStops: [
 						{
 							offset: 0,
-							color: 'rgba(144, 147, 153, 0.2)',
+							color: chartPalette.value.failureAreaStart,
 						},
 						{
 							offset: 1,
-							color: 'rgba(144, 147, 153, 0.02)',
+							color: chartPalette.value.failureAreaEnd,
 						},
 					],
 				},
@@ -211,7 +255,6 @@ const option = computed(() => ({
 		},
 	],
 }));
-
 </script>
 
 <style scoped>

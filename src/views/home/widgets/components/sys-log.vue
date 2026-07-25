@@ -6,7 +6,7 @@ export default {
 };
 </script>
 <template>
-	<el-card class="h-96 box-card">
+	<el-card class="min-h-[300px] min-[992px]:h-96 box-card">
 		<template #header>
 			<div class="flex items-center justify-between">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.systemLogsTip') }}</span>
@@ -22,9 +22,9 @@ export default {
 					<div class="w-2 h-2 rounded-full bg-primary mt-1.5 flex-shrink-0"></div>
 					<div class="flex-1 min-w-0">
 						<p class="text-[13px] text-gray-700 dark:text-gray-300 leading-relaxed">{{ item.title }}</p>
-						<p class="text-xs text-gray-400 mt-0.5">{{ item.remoteAddr }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.remoteAddr }}</p>
 					</div>
-					<span class="flex-shrink-0 text-xs text-gray-400 whitespace-nowrap">{{ item.createTime }}</span>
+					<span class="flex-shrink-0 text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">{{ item.createTime }}</span>
 				</div>
 			</div>
 		</div>

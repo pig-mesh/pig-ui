@@ -7,7 +7,7 @@ export default {
 </script>
 
 <template>
-	<el-card class="h-96 box-card">
+	<el-card class="h-[360px] min-[992px]:h-96 box-card">
 		<Calendar :first-day-of-week="1" view="weekly" :locale="locale" :attributes="reminders" ref="calendar"
 			title-position="center" @did-move="weeknumberClick" @dayclick="dayClick" :masks="masks"
 			v-bind="themeConfig?.isDark ? { 'is-dark': true } : {}" transparent borderless expanded />
@@ -22,7 +22,7 @@ export default {
 									<p class="text-[13px] font-medium text-gray-700 dark:text-gray-300 truncate">
 										{{ cell.data.customData.title }}
 									</p>
-									<p class="text-xs text-gray-400 mt-0.5">
+									<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
 										{{ cell.data.customData.scheduleDate }} {{ cell.data.customData.scheduleTime }}
 									</p>
 								</div>

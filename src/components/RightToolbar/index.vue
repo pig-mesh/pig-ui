@@ -1,6 +1,9 @@
 <template>
 	<div class="top-right-btn" :style="style">
 		<el-row>
+			<!-- 搜索按钮前置操作 -->
+			<slot name="before-search"></slot>
+
 			<!-- 搜索框控制 -->
 			<el-tooltip
 				class="item"
