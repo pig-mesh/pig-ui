@@ -50,7 +50,12 @@
 
 							<right-toolbar v-model:showSearch="showSearch" :export="'sys_user_export'"
 								@exportExcel="exportExcel" @queryTable="getDataList" class="ml10 mr20"
-								style="float: right" />
+								style="float: right">
+								<template #before-search>
+									<UserColumnSettings :columns="columns" @reorder="reorderColumns"
+										@visibility-change="setColumnVisibility" @reset="resetColumns" />
+								</template>
+							</right-toolbar>
 						</div>
 					</el-row>
 					<el-table v-loading="state.loading" :data="state.dataList" @selection-change="handleSelectionChange"
@@ -58,28 +63,21 @@
 						:header-cell-style="tableStyle.headerCellStyle">
 						<el-table-column :selectable="handleSelectable" type="selection" width="40" />
 						<el-table-column :label="$t('sysuser.index')" type="index" width="60" fixed="left" />
-						<el-table-column :label="$t('sysuser.username')" prop="username" fixed="left"
-							show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.name')" prop="name"
-							show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.phone')" prop="phone"
-							show-overflow-tooltip></el-table-column>
-						<el-table-column :label="$t('sysuser.post')" show-overflow-tooltip>
+						<el-table-column v-for="(column, columnIndex) in visibleColumns" :key="column.key"
+							:label="$t(column.labelKey)" :prop="column.prop"
+							:fixed="columnIndex === 0 ? column.fixed : undefined" show-overflow-tooltip>
 							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName
-									}}</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.role')" show-overflow-tooltip>
-							<template #default="scope">
-								<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName
-									}}</el-tag>
-							</template>
-						</el-table-column>
-						<el-table-column :label="$t('sysuser.lockFlag')" show-overflow-tooltip>
-							<template #default="scope">
-								<el-switch v-model="scope.row.lockFlag" @change="changeSwitch(scope.row)"
-									active-value="0" inactive-value="9"></el-switch>
+								<template v-if="column.key === 'post'">
+									<el-tag v-for="(item, index) in scope.row.postList" :key="index">{{ item.postName
+										}}</el-tag>
+								</template>
+								<template v-else-if="column.key === 'role'">
+									<el-tag v-for="(item, index) in scope.row.roleList" :key="index">{{ item.roleName
+										}}</el-tag>
+								</template>
+								<el-switch v-else-if="column.key === 'lockFlag'" v-model="scope.row.lockFlag"
+									@change="changeSwitch(scope.row)" active-value="0" inactive-value="9"></el-switch>
+								<span v-else>{{ scope.row[column.prop || column.key] }}</span>
 							</template>
 						</el-table-column>
 						<el-table-column :label="$t('common.action')" width="200" fixed="right">
@@ -134,11 +132,13 @@ import { BasicTableProps, useTable } from '/@/hooks/table';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 import { clearMaskedFields } from '/@/utils/validate';
+import { useUserTableColumns } from './components/useUserTableColumns';
 
 // 动态引入组件
 const UserForm = defineAsyncComponent(() => import('./form.vue'));
 const QueryTree = defineAsyncComponent(() => import('/@/components/QueryTree/index.vue'));
 const PopoverInput = defineAsyncComponent(() => import('/@/components/PopoverInput/index.vue'));
+const UserColumnSettings = defineAsyncComponent(() => import('./components/UserColumnSettings.vue'));
 
 const { t } = useI18n();
 
@@ -148,6 +148,8 @@ const excelUploadRef = ref();
 const queryRef = ref();
 const showSearch = ref(true);
 const inputPassword = ref();
+
+const { columns, visibleColumns, reorderColumns, setColumnVisibility, resetColumns } = useUserTableColumns();
 
 /**
  * 多选相关变量
