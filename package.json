@@ -31,7 +31,7 @@
 		"nprogress": "0.2.0",
 		"pinia": "2.0.36",
 		"qs": "6.15.3",
-		"sm-crypto": "0.4.0",
+		"sm-crypto": "0.5.0",
 		"sortablejs": "1.15.7",
 		"splitpanes": "3.2.0",
 		"v-calendar": "3.1.2",
