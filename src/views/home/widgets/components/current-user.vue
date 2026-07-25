@@ -27,7 +27,7 @@ export default {
 				<h2 class="text-lg font-semibold leading-tight tracking-tight text-gray-900 truncate dark:text-gray-50">
 					{{ userData.name || userData.username }}
 				</h2>
-				<p class="mt-0.5 text-xs text-gray-400 truncate dark:text-gray-500">@{{ userData.username }}</p>
+				<p class="mt-0.5 text-xs text-gray-500 truncate dark:text-gray-400">@{{ userData.username }}</p>
 
 				<!-- 次层：角色标签 -->
 				<div v-if="userRoles.length" class="flex flex-wrap gap-1.5 mt-3">
@@ -40,8 +40,8 @@ export default {
 					</span>
 				</div>
 
-					<!-- 辅层：部门/职位 -->
-					<p v-if="subInfo" class="mt-2.5 text-xs text-gray-400 dark:text-gray-500 truncate">{{ subInfo }}</p>
+				<!-- 辅层：部门/职位 -->
+				<p v-if="subInfo" class="mt-2.5 text-xs text-gray-500 dark:text-gray-400 truncate">{{ subInfo }}</p>
 			</div>
 		</div>
 	</el-card>

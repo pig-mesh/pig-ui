@@ -6,7 +6,7 @@ export default {
 };
 </script>
 <template>
-	<el-card class="h-96">
+	<el-card class="min-h-[280px] min-[992px]:h-96">
 		<template #header>
 			<div class="flex justify-between items-center">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">{{ $t('home.newsletterTip') }}</span>
@@ -27,7 +27,7 @@ export default {
 					<div class="w-1 h-8 rounded-full flex-shrink-0" :class="item.readFlag === '1' ? 'bg-gray-200 dark:bg-gray-600' : 'bg-primary'"></div>
 					<div class="flex-1 min-w-0">
 						<p class="text-[13px] text-gray-700 dark:text-gray-300 truncate">{{ item.title }}</p>
-						<p class="text-xs text-gray-400 mt-0.5">{{ item.createTime }}</p>
+						<p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{{ item.createTime }}</p>
 					</div>
 					<el-tag size="small" :type="item.readFlag === '1' ? 'info' : 'warning'" effect="plain" round class="text-xs flex-shrink-0">
 						{{ item.readFlag === '1' ? $t('msg.readed') : $t('msg.unread') }}

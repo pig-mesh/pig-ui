@@ -6,7 +6,7 @@ export default {
 };
 </script>
 <template>
-	<el-card v-loading="loading" class="box-card h-96">
+	<el-card v-loading="loading" class="box-card h-[340px] min-[992px]:h-96">
 		<template #header>
 			<div class="flex items-center justify-between">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">热门页面</span>

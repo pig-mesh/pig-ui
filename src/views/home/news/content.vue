@@ -6,7 +6,7 @@
           {{ currentNew.title }}
         </h1>
 
-        <div class="flex items-center mb-8 space-x-4 text-sm text-gray-400">
+        <div class="flex items-center mb-8 space-x-4 text-sm text-gray-500 dark:text-gray-400">
           <span>{{ currentNew.createBy }}</span>
           <span>·</span>
           <span>{{ currentNew.createTime }}</span>
@@ -18,7 +18,7 @@
         <div class="text-base leading-relaxed text-gray-700 dark:text-gray-300" v-html="currentNew.content"></div>
 
         <div class="pt-6 mt-12 text-center border-t border-gray-100 dark:border-gray-800">
-          <span class="text-xs text-gray-400 dark:text-gray-600">{{ t('home.thanksForReading') }}</span>
+          <span class="text-xs text-gray-500 dark:text-gray-400">{{ t('home.thanksForReading') }}</span>
         </div>
       </div>
     </div>

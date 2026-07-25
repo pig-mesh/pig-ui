@@ -6,7 +6,7 @@ export default {
 };
 </script>
 <template>
-	<el-card v-loading="loading" class="box-card h-96">
+	<el-card v-loading="loading" class="box-card h-[340px] min-[992px]:h-96">
 		<template #header>
 			<div class="flex items-center justify-between">
 				<span class="text-[15px] font-semibold text-gray-800 dark:text-gray-100">设备分布</span>
@@ -28,11 +28,11 @@ export default {
 					<div v-for="(item, i) in deviceList.slice(0, 3)" :key="i" class="w-full px-1 py-1">
 						<div class="flex items-center gap-2 text-[13px]">
 							<span class="h-2.5 w-2.5 shrink-0 rounded-full" :style="{ background: colors[i % colors.length] }" />
-							<span class="truncate text-slate-500 dark:text-slate-400">{{ item.name }}</span>
+							<span class="truncate text-gray-500 dark:text-gray-400">{{ item.name }}</span>
 						</div>
 						<div class="flex items-end justify-between gap-2 mt-1">
-							<span class="text-lg font-semibold text-slate-900 dark:text-slate-100">{{ getPct(item.value) }}%</span>
-							<span class="text-xs text-slate-400 dark:text-slate-500">{{ item.value }}</span>
+							<span class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ getPct(item.value) }}%</span>
+							<span class="text-xs text-gray-500 dark:text-gray-400">{{ item.value }}</span>
 						</div>
 					</div>
 				</div>

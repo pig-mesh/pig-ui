@@ -3,8 +3,8 @@
  -->
 <template>
 	<div>
-		<div :class="['flex flex-row flex-1 h-full', customizing ? 'customizing' : '']" ref="main">
-			<div class="flex-1 overflow-auto overflow-x-hidden p-[3px]">
+		<div :class="['dashboard-widgets flex flex-row flex-1 h-full', customizing ? 'customizing' : '']" ref="main">
+			<div class="flex-1 min-w-0 overflow-auto overflow-x-hidden p-3">
 				<div class="flex items-center justify-between">
 					<div class="flex justify-end custom_btn">
 						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
@@ -16,7 +16,7 @@
 						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
 							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="120"></el-empty>
 						</div>
-						<el-row :gutter="2">
+						<el-row :gutter="12">
 							<el-col v-for="(item, index) in grid.layout" v-bind:key="index" :md="item" :xs="24">
 								<draggable
 									v-model="grid.copmsList[index]"
@@ -33,7 +33,16 @@
 										<div class="widgets-item">
 											<component :is="allComps[element as keyof typeof allComps]"></component>
 											<div v-if="customizing" class="customize-overlay">
-												<el-button class="close" type="danger" plain icon="Close" size="small" @click="remove(element)"></el-button>
+												<el-button
+													class="close"
+													type="danger"
+													circle
+													size="small"
+													:aria-label="`${t('common.delBtn')} ${getWidgetTitle(element)}`"
+													@click.stop="remove(element)"
+												>
+													<el-icon><Close /></el-icon>
+												</el-button>
 												<label v-if="allComps[element as keyof typeof allComps]">
 													<el-icon v-if="allComps[element as keyof typeof allComps].icon">
 														<component :is="allComps[element as keyof typeof allComps].icon" />
@@ -50,12 +59,12 @@
 				</div>
 			</div>
 			<div v-if="customizing" class="widgets-aside">
-				<el-container>
-					<el-header>
+				<el-container class="h-full">
+					<el-header class="flex items-center justify-between">
 						<div class="flex items-center justify-center text-sm">{{ t('home.widgets.addWidget') }}</div>
-						<div class="text-lg w-[30px] h-[30px] flex items-center justify-center rounded-lg cursor-pointer transition-colors hover:bg-black/5" @click="close()">
+						<el-button class="widgets-aside-close" text circle size="small" :aria-label="t('tagsView.close')" @click="close">
 							<el-icon><Close /></el-icon>
-						</div>
+						</el-button>
 					</el-header>
 					<el-header style="height: auto">
 						<div class="p-3 selectLayout">
@@ -87,18 +96,24 @@
 							<div v-if="myCompsList.length <= 0" class="p-5 text-center widgets-list-nodata">
 								<el-empty :description="t('home.widgets.allAdded')" :image-size="100"></el-empty>
 							</div>
-							<div v-for="item in myCompsList" :key="item.title" class="flex flex-row p-4 items-center hover:bg-black/[0.03] rounded-lg">
-								<div class="w-10 h-10 rounded-[10px] bg-black/[0.04] flex items-center justify-center text-lg mr-4 text-primary">
+							<div
+								v-for="item in myCompsList"
+								:key="item.title"
+								class="flex flex-row p-4 items-center rounded-lg transition-colors hover:bg-fill-lighter"
+							>
+								<div class="w-10 h-10 rounded-[10px] bg-fill-lighter flex items-center justify-center text-lg mr-4 text-primary">
 									<el-icon>
 										<component :is="item.icon" />
 									</el-icon>
 								</div>
 								<div class="flex-1">
 									<h2 class="text-[15px] font-medium cursor-default">{{ item.title }}</h2>
-									<p class="text-xs text-gray-400 cursor-default">{{ item.description }}</p>
+									<p class="text-xs text-gray-500 dark:text-gray-400 cursor-default">{{ item.description }}</p>
 								</div>
 								<div class="item-actions">
-									<el-button type="primary" icon="el-icon-plus" size="small" @click="push(item)"></el-button>
+									<el-button type="primary" circle size="small" :aria-label="`${t('common.addBtn')} ${item.title}`" @click="push(item)">
+										<el-icon><Plus /></el-icon>
+									</el-button>
 								</div>
 							</div>
 						</div>
@@ -220,6 +235,10 @@ const myCompsList = computed(() => {
 
 const nowCompsList = computed(() => grid.value.copmsList.flat());
 
+const getWidgetTitle = (itemKey: string): string => {
+	return (allComps as Record<string, WidgetComponent>)[itemKey]?.title || itemKey;
+};
+
 const custom = (): void => {
 	toggleCustomizing(true);
 };
@@ -304,6 +323,11 @@ onMounted(async () => {
 	z-index: 9;
 }
 
+.dashboard-widgets {
+	min-width: 0;
+	position: relative;
+}
+
 .widgets-aside {
 	width: 360px;
 	background: var(--el-bg-color-overlay);
@@ -325,8 +349,8 @@ onMounted(async () => {
 	width: 100%;
 }
 
-.customizing .widgets-wrapper .el-col {
-	padding-bottom: 10px;
+.widgets-wrapper .el-col {
+	padding-bottom: 0;
 }
 
 .customizing .widgets-wrapper .draggable-box {
@@ -342,7 +366,7 @@ onMounted(async () => {
 	background: var(--el-bg-color-overlay);
 	border: 1px solid var(--el-border-color-lighter);
 	border-radius: 12px;
-	margin-bottom: 2px;
+	margin-bottom: 12px;
 	min-height: 100px;
 	position: relative;
 	transition: box-shadow 0.2s ease, border-color 0.2s ease;
@@ -408,6 +432,7 @@ onMounted(async () => {
 .selectLayout {
 	width: 100%;
 	display: flex;
+	gap: 16px;
 }
 
 .selectLayout-item {
@@ -416,7 +441,6 @@ onMounted(async () => {
 	border: 2px solid var(--el-border-color-lighter);
 	padding: 5px;
 	cursor: pointer;
-	margin-right: 16px;
 	border-radius: 8px;
 	transition: border-color 0.15s ease;
 }
@@ -470,11 +494,20 @@ onMounted(async () => {
 		transform: scale(1) !important;
 	}
 	.customizing .widgets-aside {
-		width: 100%;
-		position: absolute;
-		top: 50%;
+		position: fixed;
+		z-index: 20;
+		top: auto;
 		right: 0;
 		bottom: 0;
+		left: 0;
+		width: 100%;
+		height: min(60vh, 520px);
+		max-height: calc(100vh - 80px);
+		margin: 0;
+		border-top: 1px solid var(--el-border-color);
+		border-left: 0;
+		border-radius: 16px 16px 0 0;
+		box-shadow: 0 -12px 32px rgba(15, 23, 42, 0.18);
 	}
 	.customizing .widgets-wrapper {
 		margin-right: 0;
