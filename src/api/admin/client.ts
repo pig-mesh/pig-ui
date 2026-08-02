@@ -77,13 +77,14 @@ export function refreshCache() {
 
 /**
  * Gets client details by client ID
- * @param obj - Client ID
+ * @param clientId - Client ID
  * @returns Promise with client details
  */
-export function getDetails(obj: Object) {
+export function getDetails(clientId: string) {
 	return request({
-		url: '/admin/client/getClientDetailsById/' + obj,
+		url: '/admin/client/details',
 		method: 'get',
+		params: { clientId },
 	});
 }
 
