@@ -682,7 +682,7 @@ const submitHandle = async () => {
 const genGroupList = () => {
 	groupList().then(({ data }) => {
 		if (data && data.length > 0) {
-			groupDataList.value = data.filter((group: { groupName: String }) => !group.groupName.includes('vform'));
+			groupDataList.value = data;
 		}
 	});
 };

@@ -78,22 +78,6 @@ export const checkGeneratorPath = (path: string) => {
 	});
 };
 
-export const useGeneratorVFormApi = (dsName: any, tableName: any) => {
-	return request({
-		url: '/gen/generator/vform',
-		method: 'get',
-		params: { dsName: dsName, tableName: tableName },
-	});
-};
-
-export const useGeneratorVFormSfcApi = (id: string) => {
-	return request({
-		url: '/gen/generator/vform/sfc',
-		method: 'get',
-		params: { formId: id },
-	});
-};
-
 export const useGeneratorPreviewApi = (tableId: any) => {
 	return request({
 		url: '/gen/generator/preview',
@@ -106,36 +90,6 @@ export function fetchDictList() {
 	return request({
 		url: '/admin/dict/list',
 		method: 'get',
-	});
-}
-
-export function useFormConfSaveApi(obj?: Object) {
-	return request({
-		url: '/gen/form',
-		method: 'post',
-		data: obj,
-	});
-}
-
-export function fetchFormList(query?: Object) {
-	return request({
-		url: '/gen/form/page',
-		method: 'get',
-		params: query,
-	});
-}
-
-export function fetchFormById(id?: string) {
-	return request({
-		url: '/gen/form/' + id,
-		method: 'get',
-	});
-}
-
-export function delFormObj(id?: string) {
-	return request({
-		url: '/gen/form/' + id,
-		method: 'delete',
 	});
 }
 
