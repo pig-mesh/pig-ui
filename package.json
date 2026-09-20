@@ -30,7 +30,7 @@
 		"mitt": "3.0.1",
 		"nprogress": "0.2.0",
 		"pinia": "2.0.36",
-		"qs": "6.15.3",
+		"qs": "6.16.0",
 		"sm-crypto": "0.5.6",
 		"sortablejs": "1.15.7",
 		"splitpanes": "3.2.0",
