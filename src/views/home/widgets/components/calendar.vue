@@ -17,7 +17,14 @@ export default {
 					<li v-for="cell in cells" :key="cell.data.customData.id">
 						<div class="flex items-center gap-3 py-2 px-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
 							<div class="w-1 h-8 rounded-full bg-primary flex-shrink-0"></div>
-							<div class="flex items-center justify-between flex-grow min-w-0">
+							<div
+								class="flex items-center justify-between flex-grow min-w-0 cursor-pointer"
+								role="button"
+								tabindex="0"
+								@click="scheduleFormRef.openDialog(cell.data.customData.id, undefined, true)"
+								@keydown.enter.prevent="scheduleFormRef.openDialog(cell.data.customData.id, undefined, true)"
+								@keydown.space.prevent="scheduleFormRef.openDialog(cell.data.customData.id, undefined, true)"
+							>
 								<div class="min-w-0">
 									<p class="text-[13px] font-medium text-gray-700 dark:text-gray-300 truncate">
 										{{ cell.data.customData.title }}

@@ -1,6 +1,6 @@
 <template>
-	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
+	<el-dialog :title="readOnly ? '日程明细' : form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" :disabled="readOnly" formDialogRef label-width="90px" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('schedule.title')" prop="title">
@@ -44,15 +44,18 @@
 		<template #footer>
 			<span class="dialog-footer">
 				<el-button @click="visible = false">{{ $t('common.cancelButtonText') }}</el-button>
-				<el-button type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
+				<el-button v-if="readOnly" type="danger" icon="Delete" @click="onDelete" :disabled="loading || !detailLoaded" :loading="deleting">
+					{{ $t('common.delBtn') }}
+				</el-button>
+				<el-button v-else type="primary" @click="onSubmit" :disabled="loading">{{ $t('common.confirmButtonText') }}</el-button>
 			</span>
 		</template>
 	</el-dialog>
 </template>
 
 <script setup lang="ts" name="SysScheduleDialog">
-import { useMessage } from '/@/hooks/message';
-import { addObj, getObj, putObj } from '/@/api/admin/schedule';
+import { useMessage, useMessageBox } from '/@/hooks/message';
+import { addObj, delObjs, getObj, putObj } from '/@/api/admin/schedule';
 import { useI18n } from 'vue-i18n';
 import { useDict } from '/@/hooks/dict';
 
@@ -63,6 +66,9 @@ const { t } = useI18n();
 const dataFormRef = ref();
 const visible = ref(false);
 const loading = ref(false);
+const readOnly = ref(false);
+const detailLoaded = ref(false);
+const deleting = ref(false);
 
 const form = reactive({
 	id: '',
@@ -83,11 +89,14 @@ const dataRules = ref({
 	scheduleDate: [{ required: true, message: t('schedule.dateRequired'), trigger: 'blur' }],
 });
 
-const openDialog = (id: string, row: any): void => {
+const openDialog = async (id: string, row?: any, viewOnly = false): Promise<void> => {
+	readOnly.value = viewOnly;
+	detailLoaded.value = false;
 	visible.value = true;
 	form.id = '';
 
-	nextTick(() => dataFormRef.value?.resetFields());
+	await nextTick();
+	dataFormRef.value?.resetFields();
 
 	if (row?.date) {
 		form.scheduleDate = row.date;
@@ -95,11 +104,12 @@ const openDialog = (id: string, row: any): void => {
 
 	if (id) {
 		form.id = id;
-		getScheduleData(id);
+		await getScheduleData(id);
 	}
 };
 
 const onSubmit = async (): Promise<void> => {
+	if (readOnly.value) return;
 	const valid = await dataFormRef.value.validate().catch(() => {});
 	if (!valid) return;
 
@@ -121,10 +131,32 @@ const getScheduleData = async (id: string): Promise<void> => {
 	try {
 		const { data } = await getObj(id);
 		Object.assign(form, data);
+		detailLoaded.value = true;
 	} catch (err: any) {
 		useMessage().error(err.msg);
 	} finally {
 		loading.value = false;
+	}
+};
+
+const onDelete = async (): Promise<void> => {
+	if (loading.value || deleting.value || !detailLoaded.value || !form.id) return;
+	const id = form.id;
+	deleting.value = true;
+	try {
+		try {
+			await useMessageBox().confirm(t('common.delConfirmText'));
+		} catch {
+			return;
+		}
+		await delObjs([id]);
+		useMessage().success(t('common.delSuccessText'));
+		visible.value = false;
+		emit('refresh');
+	} catch (err: any) {
+		useMessage().error(err.msg);
+	} finally {
+		deleting.value = false;
 	}
 };
 
