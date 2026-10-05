@@ -261,6 +261,11 @@ const openDialog = (type: string, id: string, dsName: string) => {
 
 // 提交
 const onSubmit = async () => {
+  const names = form.columns.map((column) => normalizeTableName(column.name));
+  if (new Set(names).size !== names.length) {
+    useMessage().error('字段名称不能重复');
+    return;
+  }
   const valid = await dataFormRef.value.validate().catch(() => {
   });
   if (!valid) return false;
