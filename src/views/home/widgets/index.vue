@@ -8,11 +8,20 @@
 				<div class="flex items-center justify-between">
 					<div class="flex justify-end custom_btn">
 						<el-button v-if="customizing" type="primary" round @click="save">{{ t('home.widgets.done') }}</el-button>
-						<el-button v-else type="primary" round @click="custom">{{ t('home.widgets.customize') }}</el-button>
+						<el-button v-else type="primary" round :disabled="!layoutReady" @click="custom">{{ t('home.widgets.customize') }}</el-button>
 					</div>
 				</div>
 				<div class="widgets" ref="widgets">
-					<div class="widgets-wrapper">
+					<el-row v-if="!layoutReady" :gutter="12" aria-busy="true">
+						<el-col v-for="(width, index) in defaultGrid.layout" :key="index" :md="width" :xs="24">
+							<el-skeleton>
+								<template #template>
+									<el-skeleton-item variant="rect" class="!h-96 mb-3" />
+								</template>
+							</el-skeleton>
+						</el-col>
+					</el-row>
+					<div v-else class="widgets-wrapper">
 						<div v-if="nowCompsList.length <= 0" class="p-5 text-center no-widgets">
 							<el-empty :description="t('home.widgets.emptyDashboard')" :image-size="120"></el-empty>
 						</div>
@@ -194,6 +203,7 @@ const [customizing, toggleCustomizing] = useToggle(false);
 const widgets = ref();
 const widgetsKey = ref('widgets');
 const grid = ref(JSON.parse(JSON.stringify(defaultGrid.value)));
+const layoutReady = ref(false);
 
 const allCompsList = computed(() => {
 	const list: WidgetListItem[] = [];
@@ -304,6 +314,7 @@ onMounted(async () => {
 					localKeys.every((k) => allowed.has(k));
 				if (allAllowed) {
 					grid.value = local;
+					layoutReady.value = true;
 					return;
 				}
 			}
@@ -313,6 +324,7 @@ onMounted(async () => {
 	}
 	// 本地配置不合法或不存在，使用后台角色配置
 	grid.value = JSON.parse(JSON.stringify(roleDefaultGrid.value));
+	layoutReady.value = true;
 });
 </script>
 <style scoped lang="scss">
