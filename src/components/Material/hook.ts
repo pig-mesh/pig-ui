@@ -1,3 +1,4 @@
+import { trimText } from '/@/utils/validate';
 import { fileGroupAdd, fileGroupDelete, fileGroupUpdate, fileCateLists, fileDelete, fileList, fileMove, fileRename } from '/@/api/admin/file';
 import { usePaging } from './usePaging';
 import { ElMessage, ElTree, type CheckboxValueType } from 'element-plus';
@@ -87,6 +88,11 @@ export function useCate(type: number) {
 	 * ```
 	 */
 	const handleAddCate = async (value: string) => {
+		value = trimText(value);
+		if (!value || value.length > 20) {
+			ElMessage.error('分组名称需为 1–20 个字符');
+			return;
+		}
 		try {
 			await fileGroupAdd({
 				type,
@@ -114,6 +120,11 @@ export function useCate(type: number) {
 	 * ```
 	 */
 	const handleEditCate = async (value: string, id: number) => {
+		value = trimText(value);
+		if (!value || value.length > 20) {
+			ElMessage.error('分组名称需为 1–20 个字符');
+			return;
+		}
 		try {
 			await fileGroupUpdate({
 				id,
