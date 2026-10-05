@@ -54,12 +54,14 @@
 									</el-input>
 
 									<!-- 验证码输入框 - 仅在修改手机号时显示 -->
-									<el-input v-if="showPhoneCodeInput" v-model="phoneCode" maxlength="4"
-										:placeholder="$t('mobile.placeholder2')" clearable style="width: 30%">
-										<template #prefix>
-											<el-icon><ele-Position /></el-icon>
-										</template>
-									</el-input>
+									<el-form-item v-if="showPhoneCodeInput" prop="code" style="width: 30%">
+										<el-input v-model="formData.code" maxlength="4"
+											:placeholder="$t('mobile.placeholder2')" clearable style="width: 100%">
+											<template #prefix>
+												<el-icon><ele-Position /></el-icon>
+											</template>
+										</el-input>
+									</el-form-item>
 
 									<SmsCodeButton
 										v-if="showPhoneCodeInput"
@@ -344,13 +346,11 @@ const formData = ref({
 	wxCpUserid: '',
 	wxOpenid: '',
 	phone: undefined as string | undefined,
+	code: '',
 });
 
 // 保存初始手机号，用于判断是否修改了手机号
 const initialPhone = ref<string | undefined>(undefined);
-
-// 验证码相关状态
-const phoneCode = ref('');
 
 // 判断是否显示验证码输入框（仅当手机号被修改时显示）
 const showPhoneCodeInput = computed(() => {
@@ -490,7 +490,7 @@ const handleResetPhone = () => {
 	formData.value.phone = initialPhone.value;
 
 	// 2. 清空验证码
-	phoneCode.value = '';
+	formData.value.code = '';
 
 	// 3. 清除验证错误提示
 	formdataRef.value?.clearValidate(['phone', 'code']);
@@ -519,10 +519,11 @@ const handleSaveUser = async () => {
 
 		// 如果手机号被修改，添加验证码参数
 		if (formData.value.phone !== initialPhone.value) {
-			submitData.code = phoneCode.value;
+			submitData.code = formData.value.code;
 		} else {
 			// 否则移除手机号参数，避免接口报错
 			delete submitData.phone;
+			delete submitData.code;
 		}
 
 		// 调用编辑用户信息接口
@@ -533,7 +534,7 @@ const handleSaveUser = async () => {
 		initialPhone.value = formData.value.phone;
 
 		// 清空验证码输入
-		phoneCode.value = '';
+		formData.value.code = '';
 
 		// 更新上下文的 user信息
 		useUserInfo().setUserInfos();
@@ -654,13 +655,10 @@ const initUserInfo = async (userId: any) => {
 	try {
 		// 解构获取用户详细信息
 		const { data } = await getObj(userId);
-		formData.value = data;
+		formData.value = { ...data, code: '' };
 
 		// 保存初始手机号，用于判断是否修改
 		initialPhone.value = data.phone;
-
-		// 清空验证码输入
-		phoneCode.value = '';
 
 		// 初始化社交账号绑定状态
 		initSocialList();
