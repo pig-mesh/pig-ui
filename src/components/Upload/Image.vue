@@ -207,20 +207,17 @@ onMounted(() => {
 
 // 上传前loading加载
 const handleBeforeUpload = (file: UploadRawFile) => {
-	let isImg = false;
-	if (props.fileType.length) {
-		let fileExtension = '';
-		if (file.name.lastIndexOf('.') > -1) {
-			fileExtension = file.name.slice(file.name.lastIndexOf('.') + 1);
-		}
-		isImg = props.fileType.some((type: string) => {
-			if (file.type.indexOf(type) > -1) return true;
-			if (fileExtension && fileExtension.indexOf(type) > -1) return true;
-			return false;
-		});
-	} else {
-		isImg = file.type.indexOf('image') > -1;
+	if (file.size <= 0) {
+		ElMessage.error('不能上传空文件');
+		return false;
 	}
+	const extension = file.name.includes('.') ? file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase() : '';
+	const isImg = props.fileType.length
+		? props.fileType.some((type: string) => {
+			const normalized = type.toLowerCase().replace(/^image\//, '').replace(/^\./, '');
+			return extension === normalized || (normalized === 'jpeg' && extension === 'jpg');
+		})
+		: file.type.startsWith('image/');
 
 	if (!isImg) {
 		ElMessage.error(t('invalidFormatError', { fileType: props.fileType.join('/') }));
