@@ -373,14 +373,14 @@ const handleSave = async () => {
 	saving.value = true;
 	try {
 		const { forceResetPwd, passwordExpireDays, loginFailureLock, loginErrorTimes, ...siteConfig } = form;
-		await updateSiteConfig({ ...siteConfig, forceResetPwd });
-
-		if (forceResetPwd) {
-			const { data: param } = await getObjDetails({ publicKey: 'PASSWORD_EXPIRE_DAYS' });
-			await putObj({ ...param, publicValue: String(passwordExpireDays) });
-		}
-
 		const { data: loginErrorTimesParam } = await getObjDetails({ publicKey: 'LOGIN_ERROR_TIMES' });
+		const passwordParam = forceResetPwd ? (await getObjDetails({ publicKey: 'PASSWORD_EXPIRE_DAYS' })).data : null;
+		if (!loginErrorTimesParam?.publicId || (forceResetPwd && !passwordParam?.publicId)) {
+			message.error('关联参数不存在，请先检查参数管理配置');
+			return;
+		}
+		await updateSiteConfig({ ...siteConfig, forceResetPwd });
+		if (forceResetPwd) await putObj({ ...passwordParam, publicValue: String(passwordExpireDays) });
 		await putObj({ ...loginErrorTimesParam, publicValue: loginFailureLock ? String(loginErrorTimes) : '0' });
 
 		savedSnapshot.value = buildSnapshot();
