@@ -58,7 +58,7 @@ import { useMessage } from '/@/hooks/message';
 import { getObj } from '/@/api/admin/config';
 import { sendEmail } from '/@/api/admin/message';
 import { CaptchaType } from '/@/stores/siteConfig';
-import { rule } from '/@/utils/validate';
+import { rule, trimText, trimTextFields } from '/@/utils/validate';
 import { useI18n } from 'vue-i18n';
 
 const MathCaptcha = defineAsyncComponent(() => import('/@/components/Verifition/MathCaptcha.vue'));
@@ -87,6 +87,11 @@ const form = reactive({
 }`,
 });
 
+const validateAddresses = (_rule: unknown, value: string[], callback: (error?: Error) => void) => {
+	const invalid = (value || []).find((address) => !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimText(address)));
+	callback(invalid !== undefined ? new Error(`邮箱地址格式错误：${invalid || '空地址'}`) : undefined);
+};
+
 const dataRules = ref({
 	params: [
 		{ required: true, message: t('email.paramsRequired'), trigger: 'blur' },
@@ -96,7 +101,12 @@ const dataRules = ref({
 		{ required: true, message: t('email.subjectRequired'), trigger: 'blur' },
 		{ validator: rule.overLength, trigger: 'blur' },
 	],
-	mailAddress: [{ required: true, message: t('email.recipientRequired'), trigger: 'blur' }],
+	mailAddress: [
+		{ required: true, message: t('email.recipientRequired'), trigger: 'blur' },
+		{ validator: validateAddresses, trigger: 'change' },
+	],
+	ccList: [{ validator: validateAddresses, trigger: 'change' }],
+	bccList: [{ validator: validateAddresses, trigger: 'change' }],
 });
 
 const openDialog = async (id: string): Promise<void> => {
@@ -123,6 +133,9 @@ const onSubmit = async (): Promise<void> => {
 const handleCaptchaSuccess = async (params: { captchaVerification: string }): Promise<void> => {
 	try {
 		loading.value = true;
+		const valid = await dataFormRef.value.validate().catch(() => false);
+		if (!valid) return;
+		trimTextFields(form, ['mailAddress', 'ccList', 'bccList']);
 		form.htmlValues = JSON.parse(form.params);
 		const { msg, ok } = await sendEmail({
 			...form,
