@@ -160,6 +160,7 @@
   const dataRules = reactive({
     phone: [{required: true, trigger: 'blur', validator: rule.validatePhone}],
     code: [
+      { pattern: /^\d{4}$/, message: t('mobile.codeLength'), trigger: 'blur' },
       {
         required: true,
         trigger: 'blur',
