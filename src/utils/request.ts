@@ -52,8 +52,8 @@ service.interceptors.request.use(
 			config.data = wrapEncryption(config.data);
 		}
 
-		// 如果是 GET ，加密 config.param 的每一个参数，并URLencode
-		if (config.method === 'get' && config.params) {
+		// GET 参数加密沿用请求体的 Enc-Flag 跳过规则
+		if (config.method === 'get' && config.params && !config.headers![CommonHeaderEnum.ENC_FLAG]) {
 			config.params = encryptRequestParams(config.params);
 		}
 
