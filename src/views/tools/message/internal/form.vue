@@ -62,6 +62,7 @@
 </template>
 
 <script setup lang="ts" name="SysMessageDialog">
+import { hasRichTextContent } from '/@/utils/validate';
 import orgSelector from '/@/components/OrgSelector/index.vue';
 import { useDict } from '/@/hooks/dict';
 import { useMessage } from '/@/hooks/message';
@@ -88,7 +89,7 @@ const form = reactive({
 const dataRules = computed(() => ({
 	category: [{ required: true, message: t('internal.categoryRequired'), trigger: 'blur' }],
 	title: [{ required: true, message: t('internal.titleRequired'), trigger: 'blur' }],
-	content: [{ required: true, message: t('internal.contentRequired'), trigger: 'blur' }],
+	content: [{ validator: (_rule: unknown, value: string, callback: (error?: Error) => void) => callback(hasRichTextContent(value, 'img') ? undefined : new Error(t('internal.contentRequired'))), trigger: 'blur' }],
 	allFlag: [{ required: true, message: t('internal.allFlagRequired'), trigger: 'blur' }],
 	sort: [{ required: true, message: t('internal.sortRequired'), trigger: 'blur' }],
 }));

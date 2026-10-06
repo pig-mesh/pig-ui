@@ -133,7 +133,7 @@ export function validateUsername(rule: any, value: any, callback: any, isEdit: b
 		} else {
 			callback();
 		}
-	});
+	}).catch(() => callback(new Error('唯一性校验失败，请重试')));
 }
 
 export function validatePhone(rule: any, value: any, callback: any, isEdit: boolean, originalPhone?: string, t?: any) {
@@ -149,5 +149,5 @@ export function validatePhone(rule: any, value: any, callback: any, isEdit: bool
 		} else {
 			callback();
 		}
-	});
+	}).catch(() => callback(new Error('唯一性校验失败，请重试')));
 }

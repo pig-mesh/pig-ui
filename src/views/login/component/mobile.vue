@@ -91,7 +91,7 @@ const loginRules = reactive({
 	],
 	code: [
 		{ required: true, message: t('mobile.codeRequired'), trigger: 'blur' },
-		{ min: 4, max: 4, message: t('mobile.codeLength'), trigger: 'blur' },
+		{ pattern: /^\d{4}$/, message: t('mobile.codeLength'), trigger: 'blur' },
 	],
 });
 

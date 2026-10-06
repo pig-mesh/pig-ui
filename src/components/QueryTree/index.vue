@@ -35,6 +35,7 @@
 			ref="deptTreeRef"
 			:loading="state.localLoading"
 			node-key="id"
+			:current-node-key="currentNodeKey"
 			highlight-current
 			default-expand-all
 			@node-click="handleNodeClick"
@@ -51,6 +52,11 @@ import { useMessage } from '/@/hooks/message';
 const emit = defineEmits(['search', 'nodeClick']);
 
 const props = defineProps({
+	/** 当前高亮节点，不传时沿用点击选中行为。 */
+	currentNodeKey: {
+		type: [String, Number],
+		default: undefined,
+	},
 	/**
 	 * 树结构属性配置。
 	 *

@@ -179,7 +179,7 @@ const dataRules = reactive({
 	],
 	code: [
 		{ required: true, message: t('register.codeRequired'), trigger: 'blur' },
-		{ min: 4, max: 4, message: t('register.codeLength'), trigger: 'blur' },
+		{ pattern: /^\d{4}$/, message: t('register.codeLength'), trigger: 'blur' },
 	],
 	password: [
 		{ required: true, message: t('register.passwordEmpty'), trigger: 'blur' },

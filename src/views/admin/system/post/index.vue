@@ -36,20 +36,25 @@
 				</div>
 			</el-row>
 			<el-table
+				ref="tableRef"
 				:data="state.dataList"
 				@selection-change="handleSelectionChange"
 				style="width: 100%"
-				v-loading="state.loading"
-        row-key="postId"
+				v-loading="state.loading || sortSaving"
+				row-key="postId"
 				border
 				:cell-style="tableStyle?.cellStyle"
 				:header-cell-style="tableStyle?.headerCellStyle"
 			>
+				<el-table-column v-if="canSort" width="52" align="center">
+					<template #default>
+						<el-button class="table-sort-handle" text :icon="Rank" :disabled="state.loading || sortSaving" aria-label="拖动排序" title="拖动排序" />
+					</template>
+				</el-table-column>
 				<el-table-column align="center" type="selection" width="40" />
 				<el-table-column :label="t('post.index')" type="index" width="60" />
 				<el-table-column :label="t('post.postCode')" prop="postCode" show-overflow-tooltip />
 				<el-table-column :label="t('post.postName')" prop="postName" show-overflow-tooltip />
-				<el-table-column :label="t('post.postSort')" prop="postSort" show-overflow-tooltip />
 				<el-table-column :label="t('post.remark')" prop="remark" show-overflow-tooltip />
 				<el-table-column :label="$t('common.action')" width="200">
 					<template #default="scope">
@@ -80,8 +85,10 @@
 </template>
 
 <script lang="ts" name="systemPost" setup>
+import { Rank } from '@element-plus/icons-vue';
+import { useTableSort } from '/@/hooks/tableSort';
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { delObj, fetchList } from '/@/api/admin/post';
+import { delObj, fetchList, sortObjs } from '/@/api/admin/post';
 import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useI18n } from 'vue-i18n';
 
@@ -106,6 +113,12 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 
 //  table hook
 const { getDataList, currentChangeHandle, sizeChangeHandle, downBlobFile, tableStyle } = useTable(state);
+const { tableRef, sortSaving, canSort } = useTableSort(state, {
+	permission: 'sys_post_edit',
+	rowKey: 'postId',
+	save: sortObjs,
+	refresh: () => getDataList(false),
+});
 
 // 清空搜索条件
 const resetQuery = () => {
@@ -141,3 +154,16 @@ const handleDelete = async (ids: string[]) => {
 	}
 };
 </script>
+
+<style scoped>
+.table-sort-handle {
+	cursor: grab;
+	color: var(--el-text-color-secondary);
+}
+.table-sort-handle:active {
+	cursor: grabbing;
+}
+.table-sort-handle.is-disabled {
+	cursor: not-allowed;
+}
+</style>

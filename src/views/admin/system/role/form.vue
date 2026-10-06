@@ -71,7 +71,7 @@ const createUniqueValidator = (field: string, errorKey: string) => {
 			const { data } = await getObjDetails({ [field]: value });
 			data !== null ? callback(new Error(t(errorKey))) : callback();
 		} catch {
-			callback();
+			callback(new Error('唯一性校验失败，请重试'));
 		}
 	};
 };

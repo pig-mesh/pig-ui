@@ -34,6 +34,36 @@ const getErrorMsg = (key: string, defaultMsg: string): string => {
 	return i18n.global.t(`validate.${key}`) || defaultMsg;
 };
 
+/** 去除文本首尾空白；非字符串按空文本处理，不隐式转换数字或对象。 */
+export const trimText = (value: unknown): string => (typeof value === 'string' ? value.trim() : '');
+
+/** 原地裁剪指定字段的文本或文本数组，保留非字符串值及未指定字段。 */
+export const trimTextFields = <T extends Record<string, unknown>>(obj: T, fields: (keyof T)[]): T => {
+	fields.forEach((field) => {
+		const value = obj[field];
+		if (typeof value === 'string') obj[field] = trimText(value) as T[keyof T];
+		else if (Array.isArray(value)) obj[field] = value.map((item) => (typeof item === 'string' ? trimText(item) : item)) as T[keyof T];
+	});
+	return obj;
+};
+
+/** 文本字段专用判空，不改变通用 validateNull 对数字、布尔值的约定。 */
+export const isBlankText = (value: unknown): boolean => trimText(value).length === 0;
+
+/** 富文本需包含可见文字或带有效地址的媒体。 */
+export const hasRichTextContent = (value: unknown, media = 'img,video,audio,iframe'): boolean => {
+	if (isBlankText(value)) return false;
+	const document = new DOMParser().parseFromString(value as string, 'text/html');
+	document.querySelectorAll('script,style,template').forEach((element) => element.remove());
+	if ((document.body.textContent || '').replace(/[\s\u200b-\u200d\ufeff]/g, '')) return true;
+	return Array.from(document.body.querySelectorAll(media)).some((element) =>
+		[element, ...Array.from(element.querySelectorAll('source'))].some((source) => {
+			const src = trimText(source.getAttribute('src'));
+			return !!src && !/^(javascript|vbscript):/i.test(src);
+		})
+	);
+};
+
 export const rule = {
 	/**
 	 * 校验用户输入的长度避免超长

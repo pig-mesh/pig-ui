@@ -11,7 +11,8 @@ import request from '/@/utils/request';
 import {useMessage} from '/@/hooks/message';
 import * as CryptoJS from 'crypto-js';
 import {sm4} from 'sm-crypto'
-import {validateNull} from './validate';
+import { validateNull, isBlankText, hasRichTextContent } from './validate';
+export { isBlankText, hasRichTextContent } from './validate';
 
 
 /**
@@ -392,6 +393,8 @@ const other = {
     addUnit: (value: string | number, unit = 'px') => {
         return addUnit(value, unit);
     },
+    isBlankText,
+    hasRichTextContent,
     validateNull: (value: any) => {
         return validateNull(value);
     },

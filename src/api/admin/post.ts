@@ -84,3 +84,11 @@ export function validatePostCode(rule: any, value: any, callback: any, isEdit: b
 		}
 	});
 }
+
+export function sortObjs(ids: (string | number)[]) {
+	return request({
+		url: '/admin/post/sort',
+		method: 'put',
+		data: ids,
+	});
+}
