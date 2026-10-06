@@ -390,7 +390,7 @@ const validatorPhoneCode = (_rule: any, value: any, callback: any) => {
 	// 手机号已修改，验证码为必填
 	if (!value || value.trim() === '') {
 		callback(new Error(t('mobile.codeRequired')));
-	} else if (value.length !== 4) {
+	} else if (!/^\d{4}$/.test(value)) {
 		callback(new Error(t('mobile.codeLength')));
 	} else {
 		callback();
