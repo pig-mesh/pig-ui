@@ -228,7 +228,10 @@ watch(
       tabKey.value = 0;
       if (type.value) {
         currentType.value = type.value;
-        getDepartmentList(0, type.value);
+        // 首次挂载由 selectBox 初始化加载，再次打开时刷新数据
+        if (selectBoxRef.value) {
+          getDepartmentList(0, type.value);
+        }
       }
     }
   }
