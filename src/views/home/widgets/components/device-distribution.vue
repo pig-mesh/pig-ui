@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '设备分布',
-	icon: 'Monitor',
-	description: 'Clarity 设备分布统计',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["device-distribution"];
 </script>
 <template>
 	<el-card v-loading="loading" class="box-card h-[340px] min-[992px]:h-96">

@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '浏览器分布',
-	icon: 'ChromeFilled',
-	description: 'Clarity 浏览器访问分布',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["browser-distribution"];
 </script>
 <template>
 	<el-card v-loading="loading" class="box-card h-96">

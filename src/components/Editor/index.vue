@@ -1,7 +1,8 @@
 <template>
 	<div class="flex flex-col border border-br" :style="styles">
-		<Toolbar class="border-b border-br" :editor="editorRef" :mode="mode" />
+		<Toolbar :key="locale" class="border-b border-br" :editor="editorRef" :mode="mode" />
 		<Editor
+			:key="locale"
 			class="overflow-y-auto flex-1"
 			:mode="mode"
 			:defaultConfig="state.editorConfig"
@@ -16,10 +17,14 @@
 import '@wangeditor-next/editor/dist/css/style.css';
 import { reactive, shallowRef, watch, onBeforeUnmount, CSSProperties } from 'vue';
 // @ts-ignore
-import { IDomEditor } from '@wangeditor-next/editor';
+import { IDomEditor, i18nChangeLanguage } from '@wangeditor-next/editor';
+import { useI18n } from 'vue-i18n';
 import { Toolbar, Editor } from '@wangeditor-next/editor-for-vue';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
+
+const { t, locale } = useI18n();
+i18nChangeLanguage(locale.value === 'en' ? 'en' : 'zh-CN');
 
 // 定义父组件传过来的值
 const props = defineProps({
@@ -31,7 +36,7 @@ const props = defineProps({
 	// 内容框默认 placeholder
 	placeholder: {
 		type: String,
-		default: () => '请输入内容...',
+		default: undefined,
 	},
 	// https://www.wangeditor.com/v5/getting-started.html#mode-%E6%A8%A1%E5%BC%8F
 	// 模式，可选 <default|simple>，默认 default
@@ -83,7 +88,9 @@ const uploadAttr = reactive({
 const editorRef = shallowRef();
 const state = reactive({
 	editorConfig: {
-		placeholder: props.placeholder,
+		get placeholder() {
+			return props.placeholder ?? t('richTextEditor.placeholder');
+		},
 		MENU_CONF: {
 			uploadImage: uploadAttr,
 			uploadVideo: uploadAttr,
@@ -101,6 +108,7 @@ const styles = computed<CSSProperties>(() => ({
 // 编辑器回调函数
 const handleCreated = (editor: IDomEditor) => {
 	editorRef.value = editor;
+	if (props.disable) editor.disable();
 };
 
 // 编辑器内容改变时
@@ -108,6 +116,17 @@ const handleChange = (editor: IDomEditor) => {
 	emit('update:getHtml', editor.getHtml());
 	emit('update:getText', editor.getText());
 };
+
+// 切换语言时重建编辑器，保留当前内容及禁用状态。
+watch(locale, (value) => {
+	const editor = editorRef.value;
+	if (editor) {
+		state.editorVal = editor.getHtml();
+		editor.destroy();
+		editorRef.value = null;
+	}
+	i18nChangeLanguage(value === 'en' ? 'en' : 'zh-CN');
+});
 
 // 页面销毁时
 onBeforeUnmount(() => {

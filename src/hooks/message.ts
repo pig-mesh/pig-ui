@@ -1,8 +1,6 @@
 import { ElMessage, ElMessageBox } from 'element-plus';
 import { i18n } from '../i18n';
 
-const { t } = i18n.global;
-
 const defaultOptions = {
 	duration: 3000,
 	showClose: true,
@@ -25,6 +23,7 @@ export function useMessage() {
 }
 
 export function useMessageBox() {
+	const { t } = i18n.global;
 	const { alert, confirm, prompt } = ElMessageBox;
 	const title = () => t('message.box.title');
 	const buttons = () => ({

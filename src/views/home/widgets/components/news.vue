@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '系统公告',
-	icon: 'MuteNotification',
-	description: '系统公告展示',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["news"];
 </script>
 <template>
 	<el-card class="min-h-[280px] min-[992px]:h-96">

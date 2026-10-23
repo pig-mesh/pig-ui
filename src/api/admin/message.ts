@@ -107,3 +107,11 @@ export function list(params?: object) {
 		params: params,
 	});
 }
+
+/** 仅移除当前用户的消息接收记录。 */
+export function deleteUserMessage(id: string | number) {
+	return request({
+		url: '/admin/sysMessage/user/' + id,
+		method: 'delete',
+	});
+}

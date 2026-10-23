@@ -6,7 +6,7 @@
 			wrap-class="layout-main-scroll"
 			view-class="layout-main-scroll"
 		>
-			<LayoutParentView />
+			<LayoutParentView data-ui-annotation-scope />
 		</el-scrollbar>
 		<el-backtop :target="setBacktopClass" />
 		<check-token />

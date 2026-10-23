@@ -45,3 +45,11 @@ export function getLoginAppList() {
 		method: 'get',
 	});
 }
+
+export function bindSocialAccount(state: string, code: string) {
+	return request({
+		url: '/admin/social/bind',
+		method: 'post',
+		params: { state, code },
+	});
+}

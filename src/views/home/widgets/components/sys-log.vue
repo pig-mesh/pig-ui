@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '系统日志',
-	icon: 'Monitor',
-	description: '系统日志列表',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["sys-log"];
 </script>
 <template>
 	<el-card class="min-h-[300px] min-[992px]:h-96 box-card">

@@ -379,7 +379,11 @@ const handleSave = async () => {
 			message.error('关联参数不存在，请先检查参数管理配置');
 			return;
 		}
-		await updateSiteConfig({ ...siteConfig, forceResetPwd });
+		await updateSiteConfig({
+			...siteConfig,
+			forceResetPwd,
+			captchaClientId: (import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT as string)?.split(':')[0],
+		});
 		if (forceResetPwd) await putObj({ ...passwordParam, publicValue: String(passwordExpireDays) });
 		await putObj({ ...loginErrorTimesParam, publicValue: loginFailureLock ? String(loginErrorTimes) : '0' });
 

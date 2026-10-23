@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '热门页面',
-	icon: 'TrendCharts',
-	description: 'Clarity 热门页面访问排行',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["popular-pages"];
 </script>
 <template>
 	<el-card v-loading="loading" class="box-card h-[340px] min-[992px]:h-96">

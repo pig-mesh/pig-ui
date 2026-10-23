@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '日程管理',
-	icon: 'Calendar',
-	description: '日历组件展示',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["calendar"];
 </script>
 
 <template>

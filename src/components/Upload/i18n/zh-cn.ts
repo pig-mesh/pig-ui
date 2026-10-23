@@ -1,5 +1,20 @@
 export default {
+	uploadValidation: {
+		maxSize: '文件大小不能超过 {size} MB',
+		types: '支持的文件格式：{types}',
+		invalidType: '文件类型错误，请上传 {types} 格式的文件',
+		count: '最多可上传 {count} 个文件',
+		emptyFile: '不能上传空文件',
+		uploadFailed: '上传文件失败',
+		minSize: '文件大小不能小于 {size} KB，该文件可能已损坏',
+		totalSize: '文件总大小不能超过 {size} MB',
+		templateFailed: '模板下载失败，请先维护模板文件',
+		invalidUpload: '上传失败，数据格式不合法',
+		invalidImport: '导入失败，以下数据不合法',
+		imported: '导入成功',
+	},
 	excel: {
+		noFiles: '暂无文件',
 		downloadTemplate: '下载模板',
 		fileFormat: '仅允许导入xls、xlsx格式文件。',
 		operationNotice: '将文件拖到此处，或',

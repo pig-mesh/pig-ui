@@ -1,5 +1,6 @@
 export default {
 	client: {
+		captchaManagedBySite: '当前登录终端的验证码由网站配置统一管理，请到网站配置修改。',
 		index: '#',
 		importsysOauthClientDetailsTip: '导入终端信息表',
 		id: 'ID',

@@ -36,7 +36,7 @@
 				</el-button>
 				<right-toolbar
 					v-model:showSearch="showSearch"
-					:export="'admin_sysMessage_export'"
+					:export="'sys_message_export'"
 					@exportExcel="exportExcel"
 					class="ml10 mr20"
 					style="float: right"

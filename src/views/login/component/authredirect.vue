@@ -1,8 +1,8 @@
 <script setup lang="ts" name="authredirect">
-import request from '/@/utils/request';
+import { bindSocialAccount as bindSocialAccountRequest } from '/@/api/admin/social';
 import { Session } from '/@/utils/storage';
 import { useUserInfo } from '/@/stores/userInfo';
-import { useMessageBox } from '/@/hooks/message';
+import { useMessage, useMessageBox } from '/@/hooks/message';
 import { useUrlSearchParams } from '@vueuse/core';
 import { SocialLoginEnum } from '/@/api/login';
 import { useI18n } from 'vue-i18n';
@@ -48,11 +48,7 @@ const notifyParentWindow = (message: Record<string, any>) => {
  * 绑定社交账号
  */
 const bindSocialAccount = async (state: string, code: string) => {
-		await request({
-			url: '/admin/social/bind',
-			method: 'post',
-			params: { state, code },
-		});
+		await bindSocialAccountRequest(state, code);
 
 		await useMessageBox().confirm(t('socialLogin.bindSuccess'));
 

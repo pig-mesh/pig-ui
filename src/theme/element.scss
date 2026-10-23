@@ -607,7 +607,10 @@
 ------------------------------- */
 .el-overlay {
 	overflow: hidden;
-	z-index: 1000 !important;
+	// 删除确认框使用 Element Plus 动态层级，避免被消息抽屉遮挡。
+	&:not(.user-message-delete-confirm) {
+		z-index: 1000 !important;
+	}
 	backdrop-filter: blur(4px);
 	animation: fade-in var(--transition-base);
 

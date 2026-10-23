@@ -16,13 +16,6 @@ export function addObj(obj?: Object) {
   })
 }
 
-export function tempStore(obj: any) {
-  return request({
-    url: '/gen/create-table/temp-store',
-    method: 'post',
-    data: obj
-  })
-}
 
 export function getObj(id: any) {
   return request({
@@ -31,25 +24,11 @@ export function getObj(id: any) {
   })
 }
 
-export function delObj(id: any) {
-  return request({
-    url: '/gen/create-table/' + id,
-    method: 'delete'
-  })
-}
 
 export function delObjs(ids?: Object) {
   return request({
     url: '/gen/create-table',
     method: 'delete',
     data: ids
-  })
-}
-
-export function putObj(obj?: Object) {
-  return request({
-    url: '/gen/create-table',
-    method: 'put',
-    data: obj
   })
 }

@@ -50,14 +50,12 @@
 			</div>
 			<template #tip>
 				<div class="el-upload__tip" v-if="props.isShowTip">
-					{{ $t('excel.pleaseUpload') }}
-					<template v-if="props.fileSize">
-						{{ $t('excel.size') }} <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template
-					>
-					<template v-if="props.fileType">
-						{{ $t('excel.format') }} <b style="color: #f56c6c">{{ props.fileType.join('/') }}</b>
-					</template>
-					{{ $t('excel.file') }}
+					<i18n-t v-if="props.fileSize" keypath="uploadValidation.maxSize" tag="span" scope="global">
+						<template #size><b style="color: #f56c6c">{{ props.fileSize }}</b></template>
+					</i18n-t>
+					<i18n-t v-if="props.fileType.length" keypath="uploadValidation.types" tag="span" scope="global">
+						<template #types><b style="color: #f56c6c">{{ props.fileType.join('/') }}</b></template>
+					</i18n-t>
 				</div>
 			</template>
 		</el-upload>
@@ -83,14 +81,12 @@
 			<el-button type="primary" link>{{ $t('excel.clickUpload') }}</el-button>
 			<template #tip>
 				<div class="el-upload__tip" v-if="props.isShowTip">
-					{{ $t('excel.pleaseUpload') }}
-					<template v-if="props.fileSize">
-						{{ $t('excel.size') }} <b style="color: #f56c6c">{{ props.fileSize }}MB</b></template
-					>
-					<template v-if="props.fileType">
-						{{ $t('excel.format') }} <b style="color: #f56c6c">{{ props.fileType.join('/') }}</b>
-					</template>
-					{{ $t('excel.file') }}
+					<i18n-t v-if="props.fileSize" keypath="uploadValidation.maxSize" tag="span" scope="global">
+						<template #size><b style="color: #f56c6c">{{ props.fileSize }}</b></template>
+					</i18n-t>
+					<i18n-t v-if="props.fileType.length" keypath="uploadValidation.types" tag="span" scope="global">
+						<template #types><b style="color: #f56c6c">{{ props.fileType.join('/') }}</b></template>
+					</i18n-t>
 				</div>
 			</template>
 		</el-upload>
@@ -101,7 +97,7 @@
 import { useMessage } from '/@/hooks/message';
 import { Session } from '/@/utils/storage';
 import other from '/@/utils/other';
-import { useI18n } from 'vue-i18n';
+import { useI18n, Translation as I18nT } from 'vue-i18n';
 import { ref, computed, watch } from 'vue';
 import { Document, Download } from '@element-plus/icons-vue';
 
@@ -216,20 +212,20 @@ const handleBeforeUpload = (file: File) => {
 		const fileExt = fileName[fileName.length - 1];
 		const isTypeOk = props.fileType.indexOf(fileExt) >= 0;
 		if (!isTypeOk) {
-			useMessage().error(`${t('excel.typeErrorText')} ${props.fileType.join('/')}!`);
+			useMessage().error(t('uploadValidation.invalidType', { types: props.fileType.join('/') }));
 			return false;
 		}
 	}
 	// 校检最小文件大小
 	if (props.minFileSize && file.size / 1024 < props.minFileSize) {
-		useMessage().error(`文件大小不能小于 ${props.minFileSize} KB，该文件可能已损坏!`);
+		useMessage().error(t('uploadValidation.minSize', { size: props.minFileSize }));
 		return false;
 	}
 	// 校检文件大小
 	if (props.fileSize) {
 		const isLt = file.size / 1024 / 1024 < props.fileSize;
 		if (!isLt) {
-			useMessage().error(`${t('excel.sizeErrorText')} ${props.fileSize} MB!`);
+			useMessage().error(t('uploadValidation.maxSize', { size: props.fileSize }));
 			return false;
 		}
 	}
@@ -280,7 +276,7 @@ const handlePreview = (file: any) => {
 
 // 添加 handleExceed 函数
 const handleExceed = () => {
-	useMessage().warning(`${t('excel.uploadLimit')} ${props.limit} ${t('excel.files')}`);
+	useMessage().warning(t('uploadValidation.count', { count: props.limit }));
 };
 
 /**
@@ -297,7 +293,7 @@ const listToString = (list: FileItem[], separator = ','): string => {
 };
 
 const handleUploadError = () => {
-	useMessage().error('上传文件失败');
+	useMessage().error(t('uploadValidation.uploadFailed'));
 };
 
 /**

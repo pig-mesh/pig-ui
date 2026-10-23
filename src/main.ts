@@ -24,3 +24,8 @@ app
 	.use(Components) // 全局引入自定义的组件&第三方的组件
 	.use(i18n) // 国际化
 	.mount('#app');
+
+// 默认关闭，开发环境下通过 VITE_PIN_DEVTOOLS_ENABLED=true 显式启用。
+if (import.meta.env.DEV && import.meta.env.VITE_PIN_DEVTOOLS_ENABLED === 'true') {
+	import('pin-devtools').then(({ mount }) => mount({ scope: '[data-ui-annotation-scope]' }));
+}

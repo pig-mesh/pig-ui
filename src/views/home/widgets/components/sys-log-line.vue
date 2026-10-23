@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '请求折线图',
-	icon: 'DocumentCopy',
-	description: '折线图示例',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["sys-log-line"];
 </script>
 <template>
 	<el-card class="box-card h-[340px] min-[992px]:h-96">

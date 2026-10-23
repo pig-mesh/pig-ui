@@ -18,13 +18,6 @@ export function list(query?: Object) {
 	});
 }
 
-export function listTable(query?: Object) {
-	return request({
-		url: '/gen/dsconf/table/list',
-		method: 'get',
-		params: query,
-	});
-}
 
 export function getParserPlugins() {
 	return request({

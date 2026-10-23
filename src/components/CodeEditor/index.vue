@@ -13,7 +13,7 @@
 			v-if="showCopyBtn"
 			class="absolute z-10 transition-all cursor-pointer top-2 right-2 text-white/60 hover:text-white"
 			@click="copy(contentValue)"
-			:title="copied ? '已复制' : '复制'"
+			:title="copied ? $t('codeEditor.copied') : $t('codeEditor.copy')"
 		>
 			<el-icon :size="16">
 				<!-- 根据复制状态切换图标 -->

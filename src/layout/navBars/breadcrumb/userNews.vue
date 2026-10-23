@@ -12,8 +12,9 @@
                 class="py-1 px-3 -left-8 -top-2 border bg-primary text-white font-bold">
               {{parseDate(v.createTime)}}
             </button>
-            <div class="purple_border p-2 border border-gray-400">
-              {{ v.title }}
+            <div class="purple_border flex items-start gap-2 p-2 border border-gray-400">
+              <span class="min-w-0 flex-1 break-words">{{ v.title }}</span>
+              <el-button type="danger" link class="shrink-0" :disabled="deleting" @click.stop="removeMessage(v.id)">{{ $t('user.newDelete') }}</el-button>
             </div>
           </div>
         </div>
@@ -22,7 +23,7 @@
     </div>
 
     <!-- 消息列表 -->
-    <news-lists ref="listRef"/>
+    <news-lists ref="listRef" @refresh="getUserMessage"/>
 
     <!-- 消息内容 -->
     <news-content ref="contentRef" @refresh="getUserMessage"/>
@@ -30,7 +31,13 @@
 </template>
 
 <script setup lang="ts" name="layoutBreadcrumbUserNews">
-import {fetchUserMessageList} from "/@/api/admin/message";
+import { fetchUserMessageList, deleteUserMessage } from '/@/api/admin/message';
+import { ElMessageBox } from 'element-plus';
+import { useI18n } from 'vue-i18n';
+import { useMessage } from '/@/hooks/message';
+
+const { t } = useI18n();
+const emit = defineEmits(['refresh']);
 
 const NewsContent = defineAsyncComponent(() => import('/@/views/home/news/content.vue'));
 const NewsLists = defineAsyncComponent(() => import('/@/views/home/news/list.vue'));
@@ -44,8 +51,29 @@ const getUserMessage = () => {
   // 取前五条数据
   return fetchUserMessageList({current: 1, size: 5, category: '1', readFlag: '0'}).then(res => {
     newsList.value = res.data.records;
+    emit('refresh');
   })
 }
+
+
+const deleting = ref(false);
+const removeMessage = async (id: string | number) => {
+	if (deleting.value) return;
+	deleting.value = true;
+	try {
+		await ElMessageBox.confirm(t('user.newDeleteConfirm'), t('user.newDeleteTitle'), {
+			type: 'warning',
+			modalClass: 'user-message-delete-confirm',
+		});
+		await deleteUserMessage(id);
+		await getUserMessage();
+		useMessage().success(t('user.newDeleteSuccess'));
+	} catch (error) {
+		if (error !== 'cancel' && error !== 'close') useMessage().error(t('user.newDeleteFailed'));
+	} finally {
+		deleting.value = false;
+	}
+};
 
 onMounted(() => {
   getUserMessage()

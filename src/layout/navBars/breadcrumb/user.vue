@@ -17,7 +17,7 @@
 					</el-badge>
 				</template>
 				<template #default>
-					<UserNews ref="newsRef" />
+					<UserNews ref="newsRef" @refresh="getIsDot" />
 				</template>
 			</el-popover>
 		</div>

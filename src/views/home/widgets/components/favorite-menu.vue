@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '常用功能',
-	icon: 'Star',
-	description: '常用功能收藏',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["favorite-menu"];
 </script>
 <template>
 	<Shortcut :title="$t('home.quickNavigationToolsTip')" :empty-description="$t('home.addFavoriteRoutesTip')" type="menu"></Shortcut>

@@ -58,6 +58,7 @@
 		"daisyui": "3.9.4",
 		"eslint": "8.34.0",
 		"eslint-plugin-vue": "9.9.0",
+		"pin-devtools": "0.1.1",
 		"pinia-plugin-persist": "1.0.0",
 		"esbuild": "0.28.2",
 		"postcss": "8.5.30",

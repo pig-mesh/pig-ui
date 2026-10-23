@@ -1,5 +1,6 @@
 export default {
 	client: {
+		captchaManagedBySite: 'Captcha for this login client is managed in Site Configuration. Please change it there.',
 		index: '#',
 		importsysOauthClientDetailsTip: 'Import Client Details',
 		id: 'ID',

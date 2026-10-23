@@ -73,11 +73,12 @@
 					<el-row>
 						<el-col :span="12" class="mb20">
 							<el-form-item :label="t('client.captchaFlag')" prop="captchaFlag">
-								<el-radio-group v-model="form.captchaFlag">
+								<el-radio-group v-model="form.captchaFlag" :disabled="isPasswordClient">
 									<el-radio :key="index" :label="item.value" border v-for="(item, index) in captcha_flag_types">
 										{{ item.label }}
 									</el-radio>
 								</el-radio-group>
+								<div v-if="isPasswordClient" class="el-upload__tip">{{ t('client.captchaManagedBySite') }}</div>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12" class="mb20">
@@ -155,6 +156,9 @@ const form = reactive({
 	captchaFlag: '1',
 	encFlag: '1',
 });
+
+const passwordClientId = (import.meta.env.VITE_OAUTH2_PASSWORD_CLIENT as string)?.split(':')[0] ?? '';
+const isPasswordClient = computed(() => !!passwordClientId && form.clientId === passwordClientId);
 
 const collapseActive = ref('1');
 

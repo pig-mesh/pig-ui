@@ -8,27 +8,8 @@ export function fetchList(query?: Object) {
 	});
 }
 
-export function addObj(obj?: Object) {
-	return request({
-		url: '/gen/table',
-		method: 'post',
-		data: obj,
-	});
-}
 
-export function getObj(id?: string) {
-	return request({
-		url: '/gen/table/' + id,
-		method: 'get',
-	});
-}
 
-export function delObj(id?: string) {
-	return request({
-		url: '/gen/table/' + id,
-		method: 'delete',
-	});
-}
 
 export function putObj(obj?: Object) {
 	return request({

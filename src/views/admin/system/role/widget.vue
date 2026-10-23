@@ -92,7 +92,7 @@
 import draggable from 'vuedraggable';
 import { useToggle, computedEager } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
-import allComps from '/@/views/home/widgets/components/index';
+import { dashboardWidgets as allComps } from '/@/utils/dashboardWidgets';
 import { getRoleWidget, saveRoleWidget } from '/@/api/admin/role';
 import { useMessage } from '/@/hooks/message';
 

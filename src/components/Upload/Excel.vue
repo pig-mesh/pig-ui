@@ -57,6 +57,9 @@
 </template>
 
 <script setup lang="ts" name="upload-excel">
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+
 import {useMessage} from '/@/hooks/message';
 import other from '/@/utils/other';
 import {Session} from '/@/utils/storage';
@@ -94,7 +97,7 @@ const downExcelTemp = async () => {
   try {
     await other.downBlobFile(other.adaptationUrl(prop.tempUrl), {}, 'temp.xlsx');
   } catch (error) {
-    useMessage().error('模板下载失败，请先维护模板文件');
+    useMessage().error(t('uploadValidation.templateFailed'));
   }
 };
 
@@ -109,7 +112,7 @@ const handleFileUploadProgress = () => {
  * 上传失败事件处理
  */
 const handleFileError = () => {
-  useMessage().error('上传失败,数据格式不合法!');
+  useMessage().error(t('uploadValidation.invalidUpload'));
   state.upload.open = false;
 };
 
@@ -124,14 +127,14 @@ const handleFileSuccess = (response: any) => {
 
   // 校验失败
   if (response.code === 1) {
-    useMessage().error('导入失败，以下数据不合法');
+    useMessage().error(t('uploadValidation.invalidImport'));
     state.errorVisible = true;
     state.errorData = response.data;
     uploadRef.value.clearFiles();
     // 刷新表格
     emit('refreshDataList');
   } else {
-    useMessage().success(response.msg ? response.msg : '导入成功');
+    useMessage().success(response.msg ? response.msg : t('uploadValidation.imported'));
     emit('refreshDataList');
   }
 };

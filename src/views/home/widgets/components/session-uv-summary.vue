@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '会话访客',
-	icon: 'DataLine',
-	description: 'Clarity 总会话数与独立访客',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["session-uv-summary"];
 </script>
 <template>
 	<el-card v-loading="loading" class="box-card h-96">

@@ -228,6 +228,7 @@ watch(
       tabKey.value = 0;
       if (type.value) {
         currentType.value = type.value;
+        getDepartmentList(0, type.value);
       }
     }
   }

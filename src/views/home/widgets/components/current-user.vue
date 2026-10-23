@@ -1,9 +1,6 @@
 <script lang="ts">
-export default {
-	title: '当前用户',
-	icon: 'User',
-	description: '获取当前用户信息展示',
-};
+import { dashboardWidgets } from "/@/utils/dashboardWidgets";
+export default dashboardWidgets["current-user"];
 </script>
 
 <template>

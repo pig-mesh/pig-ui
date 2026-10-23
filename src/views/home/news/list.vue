@@ -10,17 +10,26 @@
         </template>
       </el-table-column>
       <el-table-column prop="createTime" :label="t('home.newsTime')"/>
+      <el-table-column :label="t('common.action')" width="90">
+        <template #default="scope">
+          <el-button type="danger" link :disabled="deleting || state.loading" @click.stop="removeMessage(scope.row.id)">{{ t('user.newDelete') }}</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <pagination @size-change="sizeChangeHandle" @current-change="currentChangeHandle" v-bind="state.pagination"/>
 
-    <news-content ref="contentRef" @refresh="getDataList"/>
+    <news-content ref="contentRef" @refresh="refreshMessages"/>
   </el-drawer>
 </template>
 
 <script setup lang="ts" name="newsList">
 import { BasicTableProps, useTable } from '/@/hooks/table';
-import { fetchUserMessageList } from '/@/api/admin/message';
+import { fetchUserMessageList, deleteUserMessage } from '/@/api/admin/message';
 import { useI18n } from 'vue-i18n';
+import { ElMessageBox } from 'element-plus';
+import { useMessage } from '/@/hooks/message';
+
+const emit = defineEmits(['refresh']);
 
 import NewsContent from './content.vue';
 
@@ -35,10 +44,37 @@ const state: BasicTableProps = reactive<BasicTableProps>({
 
 const { getDataList, currentChangeHandle, sizeChangeHandle, sortChangeHandle } = useTable(state);
 
+
+const deleting = ref(false);
+const removeMessage = async (id: string | number) => {
+	if (deleting.value) return;
+	deleting.value = true;
+	try {
+		await ElMessageBox.confirm(t('user.newDeleteConfirm'), t('user.newDeleteTitle'), {
+			type: 'warning',
+			modalClass: 'user-message-delete-confirm',
+		});
+		await deleteUserMessage(id);
+		if (state.dataList?.length === 1 && state.pagination!.current! > 1) state.pagination!.current!--;
+		getDataList(false);
+		emit('refresh');
+		useMessage().success(t('user.newDeleteSuccess'));
+	} catch (error) {
+		if (error !== 'cancel' && error !== 'close') useMessage().error(t('user.newDeleteFailed'));
+	} finally {
+		deleting.value = false;
+	}
+};
+
 const openDialog = (type: string): void => {
 	state.queryForm.category = type;
 	getDataList();
 	visible.value = true;
+};
+
+const refreshMessages = () => {
+	getDataList(false);
+	emit('refresh');
 };
 
 const cellClick = (row: any): void => {

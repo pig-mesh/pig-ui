@@ -231,7 +231,7 @@ const uploadPastedFile = async (file: File) => {
 			};
 			fileList.value = [...fileList.value, newFile];
 			emitUpdate();
-			ElMessage.success(t('uploadSuccess') || '上传成功');
+			ElMessage.success(t('uploadSuccess'));
 		} else {
 			ElMessage.error(t('uploadFailRetry'));
 		}

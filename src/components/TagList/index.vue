@@ -20,7 +20,7 @@
         @blur="handleInputConfirm"
     />
     <el-button v-else-if="!disableAdd" class="button-new-tag" size="small" @click="showInput">
-      {{ buttonText }}
+      {{ buttonText ?? $t('tagList.add') }}
     </el-button>
   </div>
 </template>
@@ -35,7 +35,7 @@ const props = defineProps({
   },
   buttonText: {
     type: String,
-    default: '+ New Tag'
+    default: undefined
   },
   tagType: {
     type: String,

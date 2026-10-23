@@ -208,7 +208,7 @@ onMounted(() => {
 // 上传前loading加载
 const handleBeforeUpload = (file: UploadRawFile) => {
 	if (file.size <= 0) {
-		ElMessage.error('不能上传空文件');
+		ElMessage.error(t('uploadValidation.emptyFile'));
 		return false;
 	}
 	const extension = file.name.includes('.') ? file.name.slice(file.name.lastIndexOf('.') + 1).toLowerCase() : '';
