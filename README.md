@@ -28,13 +28,13 @@
 
 ### 使用文档
 
-PIG 提供了详尽的部署文档 👉 [wiki.pig4cloud.com](https://wiki.pig4cloud.com)，涵盖开发环境配置、服务端启动、前端运行等关键步骤。
+PIG 提供了详尽的部署文档 👉 [docs.pig4cloud.com/open](https://docs.pig4cloud.com/open)，涵盖开发环境配置、服务端启动、前端运行等关键步骤。
 
 重要的事情说三遍：
 
-- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
-- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
-- 🔥 [ 配套文档 wiki.pig4cloud.com](https://wiki.pig4cloud.com)
+- 🔥 [ 配套文档 docs.pig4cloud.com/open](https://docs.pig4cloud.com/open)
+- 🔥 [ 配套文档 docs.pig4cloud.com/open](https://docs.pig4cloud.com/open)
+- 🔥 [ 配套文档 docs.pig4cloud.com/open](https://docs.pig4cloud.com/open)
 
 
 ## 浏览器支持
