@@ -1,8 +1,8 @@
 <p align="center">
- <img src="https://img.shields.io/badge/Pig-4.1.3-success.svg" alt="Build Status">
- <img src="https://img.shields.io/badge/Spring%20Cloud-2025.1.4-blue.svg" alt="Coverage Status">
- <img src="https://img.shields.io/badge/Spring%20Boot-4.1.2-blue.svg" alt="Downloads">
- <img src="https://img.shields.io/badge/Vue-3.5.44-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Pig-4.2.0-success.svg" alt="Build Status">
+ <img src="https://img.shields.io/badge/Spring%20Cloud-2026.0.0-blue.svg" alt="Coverage Status">
+ <img src="https://img.shields.io/badge/Spring%20Boot-4.2.0-blue.svg" alt="Downloads">
+ <img src="https://img.shields.io/badge/Vue-3.5.45-blue.svg" alt="Downloads">
  <img src="https://img.shields.io/github/license/pig-mesh/pig"/>
  <img src="https://gitcode.com/pig-mesh/pig/star/badge.svg"/>
 </p>
@@ -11,19 +11,21 @@
 
 **pig-ui** 是一个为 PIGCLOUD 微服务开发平台开发的前端项目。它利用了现代 Web 技术，包括 Vue.js 3、Element Plus 和 Vite，提供了一个健壮且高效的开发环境。
 
-## 功能特性
+## 核心依赖
 
-- **Vue 3**: 利用最新版本的 Vue.js 实现现代化的响应式体验。
-- **Element Plus**: 集成了 Element Plus，提供丰富的 UI 组件。
-- **Vite**: 使用 Vite 进行快速构建和模块热替换。
-- **TypeScript**: 支持 TypeScript，提升代码质量和可维护性。
-- **Tailwind CSS**: 使用 Tailwind CSS 进行样式设计。
+| 依赖 | 版本 |
+| --- | --- |
+| Vue | 3.5.45 |
+| Element Plus | 2.13.7 |
+| Vite | 8.1.6 |
+| TypeScript | 4.9.5 |
+| Tailwind CSS | 3.4.19 |
 
 ## 快速开始
 
 ### 先决条件
 
-- **Node.js**: 版本 20.19.0 或更高。
+- **Node.js**: 版本 22.12.0 或更高。
 - **npm**: 版本 7.0.0 或更高。
 
 ### 使用文档
