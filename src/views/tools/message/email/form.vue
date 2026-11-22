@@ -5,7 +5,7 @@
 		:close-on-click-modal="false"
 		draggable
 	>
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="100px" v-loading="loading">
 			<el-form-item :label="t('email.configName')" prop="configName">
 				<el-input v-model="form.configName" :placeholder="t('email.inputConfigNameTip')" />
 			</el-form-item>

@@ -15,19 +15,19 @@
 						<el-input :placeholder="t('schedule.inputTitleTip')" v-model="state.queryForm.title" style="max-width: 180px" />
 					</el-form-item>
 					<el-form-item>
-						<el-button formDialogRef icon="search" type="primary" @click="getDataList">
+						<el-button icon="search" type="primary" @click="getDataList">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button icon="Refresh" formDialogRef @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
+						<el-button icon="Refresh" @click="resetQuery">{{ $t('common.resetBtn') }}</el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button formDialogRef icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog(null, state.queryForm)">
+					<el-button icon="folder-add" type="primary" class="ml10" @click="formDialogRef.openDialog(null, state.queryForm)">
 						{{ $t('common.addBtn') }}
 					</el-button>
-					<el-button formDialogRef :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(selectObjs)">
+					<el-button :disabled="multiple" icon="Delete" type="primary" class="ml10" @click="handleDelete(selectObjs)">
 						{{ $t('common.delBtn') }}
 					</el-button>
 					<right-toolbar

@@ -445,7 +445,7 @@ html.dark {
   /* .verifybox-top 暗黑模式样式已迁移到 Tailwind CSS（见模板第 6 行）*/
 
   .verify-bar-area {
-    background: var(--el-bg-color-darker);
+    background: var(--el-fill-color-darker);
     border: none;
   }
 
@@ -463,7 +463,7 @@ html.dark {
 
   .verify-img-panel {
     border: none;
-    background-color: var(--el-bg-color-darker);
+    background-color: var(--el-fill-color-darker);
   }
 
   .verify-img-panel .verify-gap {

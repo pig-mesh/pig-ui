@@ -1,6 +1,6 @@
 <template>
 	<el-dialog fullscreen :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" ref="dataFormRef" v-loading="loading">
 			<el-container>
 				<el-aside width="80%">
 					<code-editor v-model="form.templateCode" theme="darcula" mode="velocity" height="700"></code-editor>

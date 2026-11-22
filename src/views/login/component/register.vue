@@ -9,7 +9,7 @@
 	<el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="state.ruleForm">
 		<!-- 用户名 -->
 		<el-form-item class="mb-6 login-animation1" prop="username">
-			<el-input text :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
+			<el-input :placeholder="$t('password.accountPlaceholder1')" v-model="state.ruleForm.username" clearable
 				autocomplete="off" class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200">
 				<template #prefix>
 					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
@@ -34,7 +34,7 @@
 
 		<!-- 手机号 -->
 		<el-form-item class="mb-6 login-animation3" prop="phone">
-			<el-input text type="tel" :placeholder="$t('password.phonePlaceholder4')" v-model="state.ruleForm.phone"
+			<el-input type="tel" :placeholder="$t('password.phonePlaceholder4')" v-model="state.ruleForm.phone"
 				clearable autocomplete="off" class="rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200">
 				<template #prefix>
 					<el-icon class="text-gray-400 el-input__icon dark:text-slate-400">
@@ -47,7 +47,7 @@
 		<!-- 验证码 -->
 		<el-form-item class="mb-6 login-animation3" prop="code">
 			<div class="flex w-full gap-3">
-				<el-input text maxlength="4" :placeholder="$t('register.codePlaceholder')" v-model="state.ruleForm.code"
+				<el-input maxlength="4" :placeholder="$t('register.codePlaceholder')" v-model="state.ruleForm.code"
 					clearable autocomplete="off"
 					class="flex-1 rounded-md h-11 bg-gray-50 dark:bg-slate-700 dark:text-slate-200">
 					<template #prefix>

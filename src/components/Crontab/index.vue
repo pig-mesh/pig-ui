@@ -10,7 +10,7 @@
 <template>
 	<el-input v-model="defaultValue" v-bind="$attrs">
 		<template #append>
-			<el-dropdown size="medium" @command="handleShortcuts">
+			<el-dropdown @command="handleShortcuts">
 				<el-button icon="arrow-down"></el-button>
 				<template #dropdown>
 					<el-dropdown-menu>
@@ -23,7 +23,7 @@
 						<el-dropdown-item v-for="(item, index) in shortcuts" :key="item.value" :divided="index == 0" :command="item.value">{{
 							item.text
 						}}</el-dropdown-item>
-						<el-dropdown-item icon="el-icon-plus" divided command="custom">自定义</el-dropdown-item>
+						<el-dropdown-item icon="Plus" divided command="custom">自定义</el-dropdown-item>
 					</el-dropdown-menu>
 				</template>
 			</el-dropdown>

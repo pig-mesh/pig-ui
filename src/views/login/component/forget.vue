@@ -13,7 +13,6 @@
 		<!-- 手机号 -->
 		<el-form-item class="mb-6 login-animation1" prop="phone">
 			<el-input
-				text
 				type="tel"
 				:placeholder="$t('mobile.placeholder1')"
 				v-model="forgetFormData.phone"
@@ -31,7 +30,6 @@
 		<el-form-item class="mb-6 login-animation2" prop="code">
 			<div class="flex gap-2">
 				<el-input
-					text
 					maxlength="4"
 					:placeholder="$t('mobile.placeholder2')"
 					v-model="forgetFormData.code"

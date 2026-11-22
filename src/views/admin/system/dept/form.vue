@@ -17,7 +17,7 @@
 				<el-input v-model="dataForm.name" :placeholder="$t('sysdept.inputnameTip')" clearable />
 			</el-form-item>
 			<el-form-item :label="$t('sysdept.sortOrder')" prop="sortOrder">
-				<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" clearable />
+				<el-input-number v-model="dataForm.sortOrder" :placeholder="$t('sysdept.inputsortOrderTip')" />
 			</el-form-item>
 		</el-form>
 		<template #footer>

@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible" :close-on-click-modal="false" draggable>
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="100px" v-loading="loading">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="100px" v-loading="loading">
 			<el-form-item :label="t('sms.configName')" prop="configName">
 				<el-input v-model="form.configName" :placeholder="t('sms.inputConfigNameTip')" />
 			</el-form-item>

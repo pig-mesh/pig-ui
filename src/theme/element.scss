@@ -751,11 +751,6 @@
 	&::before {
 		background-color: var(--next-border-color-light);
 	}
-
-	.el-table__fixed-right::before,
-	.el-table__fixed::before {
-		background-color: transparent;
-	}
 }
 
 /* scrollbar

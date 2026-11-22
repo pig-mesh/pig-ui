@@ -43,7 +43,7 @@
 			drag
 			multiple
 		>
-			<i class="el-icon-upload"></i>
+			<el-icon class="el-icon--upload"><upload-filled /></el-icon>
 			<div class="el-upload__text">
 				{{ $t('excel.operationNotice') }}
 				<em>{{ $t('excel.clickUpload') }}</em>

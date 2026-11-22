@@ -187,7 +187,7 @@
           </el-table-column>
           <el-table-column :label="t('material.fileName')" min-width="100" show-overflow-tooltip>
             <template #default="{ row }">
-              <el-link @click.stop="handlePreview(getFileUri(row))" :underline="false">
+              <el-link @click.stop="handlePreview(getFileUri(row))" underline="never">
                 {{ row.original }}
               </el-link>
             </template>

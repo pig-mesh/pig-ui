@@ -11,7 +11,7 @@
 				<el-input-number v-model="form.postSort" :placeholder="t('post.inputpostSortTip')" />
 			</el-form-item>
 			<el-form-item :label="t('post.remark')" prop="remark">
-				<el-input type="textarea" maxlength="100" row="3" v-model="form.remark" :placeholder="t('post.inputremarkTip')" />
+				<el-input type="textarea" maxlength="100" rows="3" v-model="form.remark" :placeholder="t('post.inputremarkTip')" />
 			</el-form-item>
 		</el-form>
 		<template #footer>

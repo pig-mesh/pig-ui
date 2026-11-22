@@ -13,7 +13,7 @@
 						<el-input :placeholder="t('i18n.inputEnTip')" style="max-width: 180px" v-model="state.queryForm.en" />
 					</el-form-item>
 					<el-form-item>
-						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
+						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
 						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
@@ -22,7 +22,7 @@
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'sys_i18n_add'">
+					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'sys_i18n_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button plain @click="handleRefreshCache()" class="ml10" icon="refresh-left" type="primary">
@@ -32,7 +32,6 @@
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
-						formDialogRef
 						icon="Delete"
 						type="primary"
 						v-auth="'sys_i18n_del'"

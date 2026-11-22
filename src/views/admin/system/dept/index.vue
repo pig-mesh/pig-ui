@@ -1,7 +1,7 @@
 <template>
 	<div class="layout-padding">
 		<div class="layout-padding-auto layout-padding-view">
-			<el-row shadow="hover" v-show="showSearch" class="ml10">
+			<el-row v-show="showSearch" class="ml10">
 				<el-form :model="state.queryForm" ref="queryRef" :inline="true" @keyup.enter="filter">
 					<el-form-item prop="deptName" :label="$t('sysdept.name')">
 						<el-input :placeholder="$t('sysdept.inputdeptNameTip')" style="max-width: 180px"

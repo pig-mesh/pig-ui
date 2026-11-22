@@ -14,7 +14,7 @@
         :auto-upload="false"
         drag
     >
-      <i class="el-icon-upload"></i>
+      <el-icon class="el-icon--upload"><upload-filled /></el-icon>
       <div class="el-upload__text">
         {{ $t('excel.operationNotice') }}
         <em>{{ $t('excel.clickUpload') }}</em>
@@ -22,7 +22,7 @@
       <template #tip>
         <div class="text-center el-upload__tip">
           <span>{{ $t('excel.fileFormat') }}</span>
-          <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline"
+          <el-link type="primary" underline="never" style="font-size: 12px; vertical-align: baseline"
                    @click="downExcelTemp" v-if="tempUrl"
           >{{ $t('excel.downloadTemplate') }}
           </el-link>

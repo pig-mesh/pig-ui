@@ -3,7 +3,6 @@
 		<!-- 用户名输入框 -->
 		<el-form-item class="mb-6 login-animation1" prop="username">
 			<el-input
-				text
 				:placeholder="$t('password.accountPlaceholder1')"
 				v-model="state.ruleForm.username"
 				clearable
@@ -47,7 +46,6 @@
 		<el-form-item class="mb-6 login-animation2" prop="code" v-if="verifyImageEnable">
 			<div class="flex gap-3">
 				<el-input
-					text
 					maxlength="4"
 					:placeholder="$t('mobile.placeholder2')"
 					v-model="state.ruleForm.code"

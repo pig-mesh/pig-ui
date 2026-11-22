@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :close-on-click-modal="false" width="600" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" draggable v-model="visible">
-		<el-form :model="form" :rules="dataRules" formDialogRef label-width="90px" ref="dataFormRef" v-loading="loading">
+		<el-form :model="form" :rules="dataRules" label-width="90px" ref="dataFormRef" v-loading="loading">
 			<el-form-item :label="t('i18n.name')" prop="name">
 				<el-input :placeholder="t('i18n.inputKeyTip')" v-model="form.name" />
 			</el-form-item>

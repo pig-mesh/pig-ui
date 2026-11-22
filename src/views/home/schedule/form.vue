@@ -1,6 +1,6 @@
 <template>
 	<el-dialog :title="readOnly ? '日程明细' : form.id ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible">
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" :disabled="readOnly" formDialogRef label-width="90px" v-loading="loading">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" :disabled="readOnly" label-width="90px" v-loading="loading">
 			<el-row :gutter="24">
 				<el-col :span="24" class="mb20">
 					<el-form-item :label="t('schedule.title')" prop="title">

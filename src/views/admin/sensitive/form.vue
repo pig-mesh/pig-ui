@@ -1,7 +1,7 @@
 <template>
   <el-dialog :title="form.sensitiveId ? $t('common.editBtn') : $t('common.addBtn')" v-model="visible"
              :close-on-click-modal="false" draggable>
-    <el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
+    <el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px" v-loading="loading">
       <el-row :gutter="24">
         <el-col :span="24" class="mb20">
           <el-form-item :label="t('sensitive.sensitiveWord')" prop="sensitiveWord">

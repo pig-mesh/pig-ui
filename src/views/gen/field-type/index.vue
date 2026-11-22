@@ -4,13 +4,13 @@
 			<el-row class="ml10" v-show="showSearch">
 				<el-form :inline="true" :model="state.queryForm" @keyup.enter="getDataList" ref="queryRef">
 					<el-form-item :label="$t('fieldtype.columnType')" prop="columnType">
-						<el-input :placeholder="$t('fieldtype.inputcolumnTypeTip')" formDialogRef style="max-width: 180px" v-model="state.queryForm.columnType" />
+						<el-input :placeholder="$t('fieldtype.inputcolumnTypeTip')" style="max-width: 180px" v-model="state.queryForm.columnType" />
 					</el-form-item>
 					<el-form-item>
 						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
+						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>

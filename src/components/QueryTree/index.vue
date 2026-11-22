@@ -33,7 +33,7 @@
 			:props="props.props"
 			:expand-on-click-node="false"
 			ref="deptTreeRef"
-			:loading="state.localLoading"
+			v-loading="state.localLoading"
 			node-key="id"
 			:current-node-key="currentNodeKey"
 			highlight-current
@@ -135,23 +135,22 @@ const handleNodeClick = (item: any) => {
 /**
  * 获取部门树形结构数据。
  */
-const getdeptTree = () => {
-	if (props.query instanceof Function) {
-		state.localLoading = true;
+let latestQuery = 0;
+const getdeptTree = async () => {
+	if (typeof props.query !== 'function') return;
 
-		// 调用传入的查询函数，并将查询关键字作为参数传入
+	const queryId = ++latestQuery;
+	state.localLoading = true;
+	try {
 		const result = props.query(unref(searchName));
-
-		// 如果查询结果为 Promise 类型，则进行后续处理
-		if ((typeof result === 'object' || typeof result === 'function') && typeof result.then === 'function') {
-			result
-				.then((r: any) => {
-					state.List = r.data;
-				})
-				.catch((err) => {
-					useMessage().error(err.msg);
-				});
+		if (typeof result?.then === 'function') {
+			const response = await result;
+			if (queryId === latestQuery) state.List = response.data;
 		}
+	} catch (err: any) {
+		useMessage().error(err?.msg ?? err?.message);
+	} finally {
+		if (queryId === latestQuery) state.localLoading = false;
 	}
 };
 

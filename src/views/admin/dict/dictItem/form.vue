@@ -15,8 +15,7 @@
         <el-input v-model="dataForm.description" :placeholder="$t('dictItem.inputDescriptionTip')" clearable></el-input>
       </el-form-item>
       <el-form-item :label="$t('dictItem.sortOrder')" prop="sortOrder">
-        <el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')"
-                         clearable></el-input-number>
+        <el-input-number v-model="dataForm.sortOrder" :placeholder="$t('dictItem.inputSortOrderTip')"></el-input-number>
       </el-form-item>
       <el-form-item :label="$t('dictItem.listClass')" prop="listClass">
         <el-select v-model="dataForm.listClass" :placeholder="$t('dictItem.inputListClassTip')" clearable class="w-full">

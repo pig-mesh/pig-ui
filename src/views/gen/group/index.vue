@@ -7,16 +7,16 @@
 						<el-input :placeholder="t('group.inputGroupNameTip')" style="max-width: 180px" v-model="state.queryForm.groupName" />
 					</el-form-item>
 					<el-form-item>
-						<el-button @click="getDataList" formDialogRef icon="search" type="primary">
+						<el-button @click="getDataList" icon="search" type="primary">
 							{{ $t('common.queryBtn') }}
 						</el-button>
-						<el-button @click="resetQuery" formDialogRef icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
+						<el-button @click="resetQuery" icon="Refresh">{{ $t('common.resetBtn') }} </el-button>
 					</el-form-item>
 				</el-form>
 			</el-row>
 			<el-row>
 				<div class="mb8" style="width: 100%">
-					<el-button @click="formDialogRef.openDialog()" class="ml10" formDialogRef icon="folder-add" type="primary" v-auth="'codegen_group_add'">
+					<el-button @click="formDialogRef.openDialog()" class="ml10" icon="folder-add" type="primary" v-auth="'codegen_group_add'">
 						{{ $t('common.addBtn') }}
 					</el-button>
 					<el-button
@@ -24,7 +24,6 @@
 						:disabled="multiple"
 						@click="handleDelete(selectObjs)"
 						class="ml10"
-						formDialogRef
 						icon="Delete"
 						type="primary"
 						v-auth="'codegen_group_del'"

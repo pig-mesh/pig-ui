@@ -1,6 +1,6 @@
 <template>
 	<el-dialog v-model="visible" :title="form.id ? $t('common.editBtn') : $t('common.addBtn')" width="600">
-		<el-form ref="dataFormRef" :model="form" :rules="dataRules" formDialogRef label-width="90px" v-loading="loading">
+		<el-form ref="dataFormRef" :model="form" :rules="dataRules" label-width="90px" v-loading="loading">
 			<el-form-item :label="t('group.groupName')" prop="actualGroupName">
 				<el-input v-model="form.actualGroupName" :placeholder="t('group.inputGroupNameTip')">
 					<template #prepend>

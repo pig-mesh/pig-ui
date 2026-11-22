@@ -12,7 +12,7 @@
   <el-form size="large" class="login-content-form" :rules="dataRules" ref="dataFormRef" :model="passwordFormData"
     style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
     <el-form-item class="mb-6 login-animation1" prop="username">
-      <el-input text :placeholder="$t('password.accountPlaceholder1')" disabled v-model="passwordFormData.username"
+      <el-input :placeholder="$t('password.accountPlaceholder1')" disabled v-model="passwordFormData.username"
                 clearable
                 autocomplete="off"
                 class="transition-all duration-200 rounded-md login-input h-11">
@@ -24,7 +24,7 @@
       </el-input>
     </el-form-item>
     <el-form-item class="mb-6 login-animation1" prop="password">
-      <el-input text :placeholder="$t('expire.oldPassword')" v-model="passwordFormData.password" clearable
+      <el-input :placeholder="$t('expire.oldPassword')" v-model="passwordFormData.password" clearable
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="off"
                 class="transition-all duration-200 rounded-md login-input h-11">

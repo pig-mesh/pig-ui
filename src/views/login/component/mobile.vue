@@ -3,7 +3,7 @@
 		@keyup.enter="handleLogin" style="font-family: 'IBM Plex Sans', system-ui, -apple-system, sans-serif;">
 		<!-- 手机号输入框 -->
 		<el-form-item class="mb-6 login-animation1" prop="mobile">
-			<el-input text type="tel" :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable
+			<el-input type="tel" :placeholder="$t('mobile.placeholder1')" v-model="loginForm.mobile" clearable
 				class="transition-all duration-200 rounded-md login-input h-11" autocomplete="off">
 				<template #prefix>
 					<i class="text-gray-400 iconfont icon-dianhua el-input__icon dark:text-slate-500"></i>
@@ -14,7 +14,7 @@
 		<!-- 验证码输入框 + 获取验证码按钮 -->
 		<el-form-item class="mb-6 login-animation2" prop="code">
 			<div class="flex gap-3">
-				<el-input text maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="loginForm.code" clearable
+				<el-input maxlength="4" :placeholder="$t('mobile.placeholder2')" v-model="loginForm.code" clearable
 					class="flex-1 transition-all duration-200 rounded-md login-input h-11" autocomplete="off">
 					<template #prefix>
 						<el-icon class="text-gray-400 el-input__icon dark:text-slate-500">

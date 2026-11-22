@@ -43,7 +43,7 @@
 				<el-col :span="12" class="mb20" v-if="form.authorizedGrantTypes.includes('authorization_code')">
 					<el-form-item :label="t('client.autoapprove')" prop="autoapprove">
 						<el-radio-group v-model="form.autoapprove">
-							<el-radio :key="index" :label="item.value" border v-for="(item, index) in common_status">{{ item.label }} </el-radio>
+							<el-radio :key="index" :value="item.value" border v-for="(item, index) in common_status">{{ item.label }} </el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
@@ -74,7 +74,7 @@
 						<el-col :span="12" class="mb20">
 							<el-form-item :label="t('client.captchaFlag')" prop="captchaFlag">
 								<el-radio-group v-model="form.captchaFlag" :disabled="isPasswordClient">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in captcha_flag_types">
+									<el-radio :key="index" :value="item.value" border v-for="(item, index) in captcha_flag_types">
 										{{ item.label }}
 									</el-radio>
 								</el-radio-group>
@@ -84,7 +84,7 @@
 						<el-col :span="12" class="mb20">
 							<el-form-item :label="t('client.encFlag')" prop="encFlag">
 								<el-radio-group v-model="form.encFlag">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in enc_flag_types">
+									<el-radio :key="index" :value="item.value" border v-for="(item, index) in enc_flag_types">
 										{{ item.label }}
 									</el-radio>
 								</el-radio-group>
@@ -93,7 +93,7 @@
 						<el-col :span="12" class="mb20">
 							<el-form-item :label="t('client.onlineQuantity')" prop="onlineQuantity">
 								<el-radio-group v-model="form.onlineQuantity">
-									<el-radio :key="index" :label="item.value" border v-for="(item, index) in enc_flag_types">
+									<el-radio :key="index" :value="item.value" border v-for="(item, index) in enc_flag_types">
 										{{ item.label }}
 									</el-radio>
 								</el-radio-group>
